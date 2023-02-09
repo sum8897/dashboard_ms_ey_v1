@@ -1,8 +1,15 @@
 export const rbacConfig = {
-  "baseHierarchy": 2,
+  "baseHierarchy": 1,
   "filters": [
     {
-      "query": "select distinct(m.district_id), district_name from ingestion.dimension_master as m left join ingestion.dimension_district as d on m.district_id = d.district_id",
+      "query": "select distinct(m.state_id), state_name from ingestion.dimension_master as m left join ingestion.dimension_state as s on m.state_id = s.state_id",
+      "hierarchyLevel": 1,
+      "name": "State",
+      "labelProp": "state_name",
+      "valueProp": "state_id"
+    },
+    {
+      "query": "select distinct(m.district_id), district_name from ingestion.dimension_master as m left join ingestion.dimension_district as d on m.district_id = d.district_id where state_id = {master_id}",
       "hierarchyLevel": 2,
       "name": "District",
       "labelProp": "district_name",
@@ -34,6 +41,10 @@ export const rbacConfig = {
     {
       label: "Overall",
       value: 0
+    },
+    {
+      label: "State Officer",
+      value: 1
     },
     {
       label: "District Officer",

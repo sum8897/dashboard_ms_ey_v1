@@ -8,8 +8,8 @@
 
 <div class="tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)">
-        <mat-tab label="Average Attendance Complaince" *ngIf="tabs.includes('Average Attendance Complaince')">
-            <app-average-attendance-compliance *ngIf="selectedTabLabel === 'Average Attendance Complaince'"></app-average-attendance-compliance>
+        <mat-tab label="Average Attendance Compliance" *ngIf="tabs.includes('Average Attendance Compliance')">
+            <app-average-attendance-compliance *ngIf="selectedTabLabel === 'Average Attendance Compliance'"></app-average-attendance-compliance>
         </mat-tab>
     </mat-tab-group>
 </div>

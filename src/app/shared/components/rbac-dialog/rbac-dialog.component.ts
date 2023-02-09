@@ -23,6 +23,7 @@ export class RbacDialogComponent implements OnInit {
     this.rbacForm = this.fb.group({
       name: [null, Validators.required],
       role: [null, Validators.required],
+      state: [null],
       district: [null],
       block: [null],
       cluster: [null],
