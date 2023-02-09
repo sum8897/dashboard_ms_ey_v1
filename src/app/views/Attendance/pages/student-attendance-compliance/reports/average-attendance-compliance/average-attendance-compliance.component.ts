@@ -12,7 +12,7 @@ import { config } from '../../config/attendance_config';
   styleUrls: ['./average-attendance-compliance.component.scss']
 })
 export class AverageAttendanceComplianceComponent implements OnInit {
-  reportName: string = 'student_attendance_complaince';
+  reportName: string = 'average_attendance_compliance';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -49,10 +49,11 @@ export class AverageAttendanceComplianceComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = filter?.actions?.queries
+          timeSeriesQueries = filter?.timeSeriesQueries
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
+            timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
           });
-          timeSeriesQueries = filter?.timeSeriesQueries
           return false
         }
         return true
