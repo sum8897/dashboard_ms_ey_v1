@@ -47,6 +47,13 @@ var routes: Routes = [];
               (module) => module.StudentAttendanceComplianceModule
             )
         },
+        {
+          path: 'attendance/tac',
+          loadChildren: () =>
+            import('./views/Attendance/pages/teacher-attendance-compliance/teacher-attendance-compliance.module').then(
+              (module) => module.TeacherAttendanceComplianceModule
+            )
+        },
       ],
     },
   ];
