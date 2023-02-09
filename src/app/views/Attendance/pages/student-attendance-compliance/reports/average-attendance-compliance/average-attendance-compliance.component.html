@@ -1,8 +1,5 @@
 <div class="grid grid-cols-12">
     <div class="col-span-full" appFullScreen>
-        <!-- <div class="grid grid-cols-12 button-right">
-            <app-download-button [data]="pmPoshanStateData?.data" fileName="PM_Poshan_Progress_Status" [reportType]="'map'"></app-download-button>
-        </div> -->
         <div class="grid grid-cols-12">
             <div class="xs:col-span-full xmd:col-span-5">
                 <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
