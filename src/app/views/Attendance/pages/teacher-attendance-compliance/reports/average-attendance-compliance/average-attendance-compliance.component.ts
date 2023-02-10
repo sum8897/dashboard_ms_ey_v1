@@ -161,6 +161,7 @@ export class AverageAttendanceComplianceComponent implements OnInit  {
           }
         })
       }
+      console.log('data ',this.tableReportData);
     });
   }
 
