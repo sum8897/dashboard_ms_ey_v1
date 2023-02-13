@@ -21,11 +21,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   legend: any;
   countryGeoJSON: any;
   noData = false;
+  config = 'state'
 
   @Input() mapData!: any;
   @Input() level = 'state';
   @Input() perCapitaReport: any = false;
-  @Input() hierarchyLevel: any = environment.config === 'national' ? 1 : 2;
+  @Input() hierarchyLevel: any = this.config === 'national' ? 1 : 2;
 
   @Output() drillDownFilter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -78,7 +79,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if ((environment.config === 'national' && this.level === 'district') || environment.config === 'state') {
+      if ((this.config === 'national' && this.level === 'district') || this.config === 'state') {
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 3) {
@@ -111,7 +112,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getLayerColor(e: any, legend?: boolean) {
-    if (environment.config === 'national' && this.level === 'district' && !legend) {
+    if (this.config === 'national' && this.level === 'district' && !legend) {
       return '#fff'
     }
     else {
@@ -142,7 +143,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     return new Promise(async (resolve, reject) => {
       try {
         let body;
-        if (environment.config === 'national') {
+        if (this.config === 'national') {
           const response = await fetch(`${environment.apiURL}/assets/geo-locations/IN.json`);
           body = await response.json();
         }
@@ -240,7 +241,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
           });
-          if (parent.level === 'state' || environment.config === 'state') {
+          if (parent.level === 'state' || this.config === 'state') {
             return {
               fillColor: singleColor ? (color === '#fff' ? color : singleColor) : color,
               weight: 1,
@@ -272,7 +273,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.countryGeoJSON = L.geoJSON(data['features'], {
           onEachFeature: function (feature: any, layer: any) {
-            if (!(environment.config === 'national' && parent.level === 'district')) {
+            if (!(this.config === 'national' && parent.level === 'district')) {
               if (getPopUp(feature)) {
                 layer.bindTooltip(getPopUp(feature), { classname: "app-leaflet-tooltip", sticky: true });
               }
@@ -524,7 +525,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       ...this.mapData,
       data: temp
     }
-    if ((environment.config === 'national' && this.level === 'district') || environment.config === 'state') {
+    if ((this.config === 'national' && this.level === 'district') || this.config === 'state') {
       this.markers.clearLayers();
       this.createMarkers(filteredData, rangeColour);
     }

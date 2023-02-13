@@ -54,6 +54,13 @@ var routes: Routes = [];
               (module) => module.TeacherAttendanceComplianceModule
             )
         },
+        {
+          path: 'attendance/sas',
+          loadChildren: () =>
+            import('./views/Attendance/pages/student-attendance-summary/student-attendance-summary.module').then(
+              (module) => module.StudentAttendanceSummaryModule
+            )
+        },
       ],
     },
   ];

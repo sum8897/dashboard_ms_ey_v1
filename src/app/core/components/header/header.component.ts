@@ -24,7 +24,7 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 })
 export class HeaderComponent implements OnInit {
   stateName: any;
-  config: string = environment.config
+  config: string = 'state'
   national: boolean = true;
 
   faBars = faBars;
@@ -34,10 +34,10 @@ export class HeaderComponent implements OnInit {
   dropdown: boolean = false;
   environment = environment;
 
-  constructor(private router:Router, private readonly _authenticationService: AuthenticationService) { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
-    if(environment.config === 'state'){
+    if(this.config === 'state'){
       this.national = false
       // // this.stateName = false;
       // this.stateName=environment.stateCode
@@ -57,9 +57,6 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  logout() {
-    this._authenticationService.logout();
-  }
 
   onMouseOver(){
     this.withinTime=true;

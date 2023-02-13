@@ -14,8 +14,8 @@ export var globalMap;
   providedIn: 'root'
 })
 export class MapService {
-  mapName = environment.mapName;
-  mapCenterLatlng = config.default[`${environment.stateName}`];
+  mapName = 'leafletmap';
+  mapCenterLatlng = config.default[`${environment.stateCode}`];
   zoomLevel = this.mapCenterLatlng.zoomLevel;
 
   latitude;
@@ -36,34 +36,32 @@ export class MapService {
   //Initialisation of Map  
   initMap(map, maxBounds) {
     let ref = this;
-    if (environment.mapName !== 'none') {
-      console.log(map)
-      if (this.mapName == 'leafletmap') {
-        globalMap = L.map(map, { zoomSnap: 0.25, zoomControl: false, touchZoom: false, dragging: environment.stateName == 'UP' ? false : true }).setView([maxBounds[0][0], maxBounds[0][1]], this.mapCenterLatlng.zoomLevel);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          subdomains: 'abcd'
-        }).addTo(globalMap);
-        this.featureGrp = new L.FeatureGroup().addTo(globalMap)
-      } else {
-        globalMap = new MapmyIndia.Map(map, { hasTip: false, touchZoom: false, autoPan: false, offset: [15, 20], dragging: environment.stateName == 'UP' ? false : true }, {
-          zoomControl: false,
-          hybrid: false,
-        }).setView([maxBounds[0][0], maxBounds[0][1]], this.mapCenterLatlng.zoomLevel);
-      }
-      var data = mapData.default;
-      function applyCountryBorder(map) {
-        ref.geoJSON = L.geoJSON(data[`${environment.stateName}`]['features'], {
-          color: "#6e6d6d",
-          weight: 2,
-          fillOpacity: 0,
-          fontWeight: "bold"
-        })
-        ref.geoJSON.addTo(map);
-      }
-      globalMap.attributionControl.setPrefix(false);
-      applyCountryBorder(globalMap);
-      this.fitBoundsToCountryBorder(globalMap);
+    console.log(map)
+    if (this.mapName == 'leafletmap') {
+      globalMap = L.map(map, { zoomSnap: 0.25, zoomControl: false, touchZoom: false, dragging: environment.stateCode == 'UP' ? false : true }).setView([maxBounds[0][0], maxBounds[0][1]], this.mapCenterLatlng.zoomLevel);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd'
+      }).addTo(globalMap);
+      this.featureGrp = new L.FeatureGroup().addTo(globalMap)
+    } else {
+      globalMap = new MapmyIndia.Map(map, { hasTip: false, touchZoom: false, autoPan: false, offset: [15, 20], dragging: environment.stateCode == 'UP' ? false : true }, {
+        zoomControl: false,
+        hybrid: false,
+      }).setView([maxBounds[0][0], maxBounds[0][1]], this.mapCenterLatlng.zoomLevel);
     }
+    var data = mapData.default;
+    function applyCountryBorder(map) {
+      ref.geoJSON = L.geoJSON(data[`${environment.stateCode}`]['features'], {
+        color: "#6e6d6d",
+        weight: 2,
+        fillOpacity: 0,
+        fontWeight: "bold"
+      })
+      ref.geoJSON.addTo(map);
+    }
+    globalMap.attributionControl.setPrefix(false);
+    applyCountryBorder(globalMap);
+    this.fitBoundsToCountryBorder(globalMap);
   }
 
   restrictZoom(globalMap) {
@@ -101,7 +99,7 @@ export class MapService {
   getBoundsByMarkers() {
     let bounds = this.featureGrp.getBounds();
     if (bounds && Object.keys(bounds).length > 0) {
-      globalMap.fitBounds(bounds, {padding: [50, 50]});
+      globalMap.fitBounds(bounds, { padding: [50, 50] });
     }
   }
 
@@ -283,27 +281,6 @@ export class MapService {
   //     return this.circleIcon;
   //   }
 
-  //goog
-  jsonMapData: any = googleMapData.default;
-  public geoJson = environment.mapName === 'googlemap' ? {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {
-          color: "transparent",
-          ascii: "111"
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [
-            this.jsonMapData[`${environment.stateName}`]['features'][0].geometry.coordinates[0]
-          ]
-
-        }
-      }
-    ]
-  } : {};
 
 
 

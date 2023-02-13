@@ -24,7 +24,7 @@ export class AverageAttendanceComplianceComponent implements OnInit {
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
-  level = environment.config === 'national' ? 'state' : 'district';
+  // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
 

@@ -36,8 +36,15 @@ export class RbacDialogComponent implements OnInit {
   }
 
   onSubmit() {
+    const invalid = [];
+    const controls = this.rbacForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    console.log(invalid)
     if (this.rbacForm.valid) {
-      // console.log(this.rbacForm.value)
       this._rbacService.setRbacDetails(this.rbacForm.value);
       this.router.navigate(['/dashboard'])
     }
@@ -59,7 +66,7 @@ export class RbacDialogComponent implements OnInit {
       const controls = this.rbacForm.controls;
       for (const name in controls) {
         console.log(name)
-        if(name !== 'name' && name !== 'role'){
+        if (name !== 'name' && name !== 'role') {
           controls[name].clearValidators()
           controls[name].updateValueAndValidity()
         }
@@ -111,7 +118,7 @@ export class RbacDialogComponent implements OnInit {
     let endIndex = query.indexOf('}');
     let masterRE = new RegExp(`{master_id}`, "g");
     if (query && masterLevel && startIndex != -1 && endIndex != -1) {
-      query = query.replace(masterRE, masterLevel);
+      query = query.replace(masterRE, '\'' + masterLevel + '\'');
     }
     return query;
   }
@@ -120,6 +127,8 @@ export class RbacDialogComponent implements OnInit {
     let { filters } = rbacConfig;
     filters.forEach((filter: any) => {
       form.controls[filter.name.toLowerCase()].reset()
+      form.controls[filter.name.toLowerCase()].clearValidators();
+      form.controls[filter.name.toLowerCase()].updateValueAndValidity();
     })
   }
 

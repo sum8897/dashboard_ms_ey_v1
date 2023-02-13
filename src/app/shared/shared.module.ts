@@ -36,8 +36,6 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { BubblesComponent } from './components/core-components/bubbles/bubbles.component';
 import { ProgressCircleComponent } from './components/core-components/progress-circle/progress-circle.component';
 import { NgApexchartsModule } from "ng-apexcharts";
-
-import { ManagementSelectorComponent } from './components/core-components/management-selector/management-selector.component';
 import { DownloadButtonComponent } from './components/buttons/download-button/download-button.component';
 import { TimeSeriesFilterPanelComponent } from './components/time-series-filter-panel/time-series-filter-panel.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
@@ -93,7 +91,6 @@ const DECLARATIONS = [
   LineChartComponent,
   BubblesComponent,
   ProgressCircleComponent,
-  ManagementSelectorComponent,
   DownloadButtonComponent,
   TimeSeriesFilterPanelComponent,
   BigNumberComponent
