@@ -19,15 +19,13 @@ declare const $;
 export class AppServiceComponent {
   toggleMenu = new BehaviorSubject<any>(false);
   callProgressCard = new BehaviorSubject<any>(false);
-  public baseUrl = environment.apiEndpoint;
   public token;
   telemetryData: any;
   showBack = true;
   showHome = true;
-  mapCenterLatlng = config.default[`${environment.stateName}`];
+  mapCenterLatlng = config.default[`${environment.stateCode}`];
 
   public state = this.mapCenterLatlng.name;
-  public mapName = environment.mapName;
   date = new Date();
   dateAndTime: string;
   static state: any;
@@ -37,9 +35,6 @@ export class AppServiceComponent {
     private route: ActivatedRoute,
     private router: Router,
   ) {
-    if (environment.auth_api === 'cqube') {
-   
-    }
 
     this.dateAndTime = `${("0" + this.date.getDate()).slice(-2)}-${(
       "0" +
@@ -73,52 +68,6 @@ export class AppServiceComponent {
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
 
     return (Math.round(dateNow.getTime() / 1000)) >= expiry;
-  }
-
-//   logoutOnTokenExpire() {
-//     if (environment.auth_api === 'cqube') {
-//       if (this.keyCloakService.kc.isTokenExpired()) {
-//         localStorage.removeItem("management");
-//         localStorage.removeItem("category");
-//         let options = {
-//           redirectUri: environment.appUrl,
-//         };
-//         sessionStorage.clear();
-//         this.keyCloakService.kc.clearToken();
-//         this.keyCloakService.kc.logout(options);
-//       }
-//     } else {
-//       if (this.tokenExpired(localStorage.getItem('token'))) {
-//         localStorage.removeItem("management");
-//         localStorage.removeItem("category");
-//         sessionStorage.clear();
-//         localStorage.removeItem('roleName')
-//         localStorage.removeItem('token')
-//         this.router.navigate(['/signin'])
-//       }
-//     }
-
-
-
-//   }
-
-  changePassword(data, id) {
-    // this.logoutOnTokenExpire();
-    return this.http.post(`${this.baseUrl}/changePassword/${id}`, data);
-  }
-
-  getRoles() {
-    // this.logoutOnTokenExpire();
-    return this.http.get(`${this.baseUrl}/changePassword/roles`);
-  }
-
-  addRole(id, role, otpConfig) {
-    // this.logoutOnTokenExpire();
-    return this.http.post(`${this.baseUrl}/changePassword/setRoles`, {
-      userId: id,
-      role: role,
-      otpConfig: otpConfig,
-    });
   }
   //localStorage.getItem('user_id'), this.roleIds.find(o => o.name == 'report_viewer'), this.otpConfig
   // to load and hide the spinner
@@ -793,67 +742,8 @@ export class AppServiceComponent {
     return colors;
   }
 
-  //capturing telemetry.....
-  telemetry(date) {
-    // this.logoutOnTokenExpire();
-    return this.http.post(`${this.baseUrl}/telemetry`, {
-      telemetryData: this.telemetryData,
-      date: date,
-    });
-  }
-
-  getTelemetry(data) {
-    // this.logoutOnTokenExpire();
-    return this.http.post(`${this.baseUrl}/telemetry/data`, { period: data });
-  }
-
-  //data-source::::::::::::
-  getDataSource() {
-    // this.logoutOnTokenExpire();
-    return this.http.get(`${this.baseUrl}/dataSource`, {});
-  }
 
   edate;
-  getTelemetryData(reportId, event) {
-    this.telemetryData = [];
-    var obj = {};
-    this.edate = new Date();
-    var dateObj = {
-      year: this.edate.getFullYear(),
-      month: ("0" + (this.edate.getMonth() + 1)).slice(-2),
-      date: ("0" + this.edate.getDate()).slice(-2),
-      hour: ("0" + this.edate.getHours()).slice(-2),
-      minut: ("0" + this.edate.getMinutes()).slice(-2),
-      seconds: ("0" + this.edate.getSeconds()).slice(-2),
-    };
-    obj = {
-
-    //   uid: environment.auth_api === 'cqube' ? this.keyCloakService.kc.tokenParsed.sub : localStorage.getItem('userid'),
-      eventType: event,
-      reportId: reportId,
-      time:
-        dateObj.year +
-        "-" +
-        dateObj.month +
-        "-" +
-        dateObj.date +
-        " " +
-        dateObj.hour +
-        ":" +
-        dateObj.minut +
-        ":" +
-        dateObj.seconds,
-    };
-
-    this.telemetryData.push(obj);
-
-    this.telemetry(dateObj).subscribe(
-      (res) => { },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
 
   public commonColors: any = {
     1: "#cfddf5",
@@ -985,17 +875,7 @@ export class AppServiceComponent {
     return my_columns;
   }
 
-  //management category metadata
-  management_category_metaData() {
-    // this.logoutOnTokenExpire();
-    return this.http.post(`${this.baseUrl}/management-category-meta`, {});
-  }
 
-  //getDefaultOptions
-  getDefault() {
-    // this.logoutOnTokenExpire();
-    return this.http.get(`${this.baseUrl}/getDefault`);
-  }
 
   setProgressCardValue(status) {
     this.callProgressCard.next(status);

@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class MaterialButtonGroupComponent implements OnInit {
 
-  config: string = environment.config
+  config: string = 'state'
   national: boolean = true;  
   @Input() buttons: any;
   @Output() select: EventEmitter<any> = new EventEmitter<any>();

@@ -12,11 +12,12 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardComponent implements OnInit {
   dashboardMenu: IDashboardMenu[] | any;
-  isNvsk = environment.config.toLocaleLowerCase() === 'nvsk';
+  // isNvsk = environment.config.toLocaleLowerCase() === 'nvsk';
+  isNvsk = false;
   constructor(private readonly _configService: ConfigService, private readonly _router: Router) {
-    this._configService.getDashboardMetrics().subscribe((dashboardMenuResult: any) => {
-      this.dashboardMenu = dashboardMenuResult.result.data;
-    });
+    // this._configService.getDashboardMetrics().subscribe((dashboardMenuResult: any) => {
+    //   this.dashboardMenu = dashboardMenuResult.result.data;
+    // });
   }
 
   ngOnInit(): void {

@@ -29,7 +29,7 @@ export class StudentAttendanceBarComponent implements OnInit {
   endDate: any;
   minDate: any;
   maxDate: any;
-  level = environment.config === 'national' ? 'state' : 'district';
+  level = 'state';
   filterIndex: any;
   currentHierarchyLevel: any = this.level === 'state' ? 1 : 1;
 

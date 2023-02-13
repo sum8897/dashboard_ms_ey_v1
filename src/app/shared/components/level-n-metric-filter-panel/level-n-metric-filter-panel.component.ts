@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./level-n-metric-filter-panel.component.scss']
 })
 export class LevelNMetricFilterPanelComponent implements OnInit {
-  config: string = environment.config
+  config: string = 'state'
   national: boolean = true;
 
   @Input() metricFilter: any;

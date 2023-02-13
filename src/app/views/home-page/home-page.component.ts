@@ -22,12 +22,12 @@ export class HomePageComponent implements OnInit {
   role;
   storage
   hideAdmin
-  constructor(public router: Router, public service: AppServiceComponent, public logInservice: AuthenticationService) {
+  constructor(public router: Router, public service: AppServiceComponent) {
 
   }
 
   ngOnInit(): void {
-    this.adminUrl = environment.adminUrl;
+    // this.adminUrl = environment.adminUrl;
     this.storage = window.localStorage;
     this.hideAdmin = localStorage.getItem('roleName') === 'admin' ? true : false;
     if (localStorage.getItem('roleName') !== 'admin') {
@@ -57,14 +57,6 @@ export class HomePageComponent implements OnInit {
     }
 
 
-
-    this.logInservice.postUserDetails(obj).subscribe(res => {
-      try {
-        window.location.href = `${environment.adminUrl}/#/admin-dashboard?userid=${obj.userid}`;
-      } catch (error) {
-        console.log(error)
-      }
-    })
 
   }
 }

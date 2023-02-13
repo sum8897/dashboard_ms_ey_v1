@@ -15,6 +15,7 @@ export class LayoutComponent implements OnInit {
   menu: IMenuItem[] | undefined;
   national: boolean = true;
   role: any;
+  config = 'state'
 // Font Increase Decrease Variables
 fontSize: any;
 defaultFontSize = 16;
@@ -26,33 +27,31 @@ decreaseFontSize!: ElementRef;
 resetFontSize!: ElementRef;
 environment = environment;
 
-
-  chngePswdRoute = `${environment.appUrl}/#/change-password`
 // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
-  constructor(private readonly _configService: ConfigService, private renderer: Renderer2, private readonly _authService: AuthenticationService) {
-    this._configService.getDashboardMetrics(true).subscribe((menuResult: any) => {
-      this.menu = [];
-      let menuToDisplay: IMenuItem | any = {};
-      menuToDisplay.label = "Dashboard";
-      menuToDisplay.path = "/dashboard";
-      menuToDisplay.icon = 'dashboard.png';
-      menuToDisplay.isSelected = true;
-      menuToDisplay.basepath = "dasboard";
-      this.menu.push(menuToDisplay);
-      menuResult?.result?.data?.forEach((dasboardMenu:IDashboardMenu)=>{
-        let menuToDisplay: IMenuItem | any = {};
-        menuToDisplay.label = dasboardMenu.title;
-        menuToDisplay.path = dasboardMenu.navigationURL;
-        menuToDisplay.icon = dasboardMenu.icon;
-        menuToDisplay.isSelected = false;
-        this.menu?.push(menuToDisplay);
-      });
-      //this.menu = menuResult.result;
-    });
+  constructor(private readonly _configService: ConfigService, private renderer: Renderer2) {
+    // this._configService.getDashboardMetrics(true).subscribe((menuResult: any) => {
+    //   this.menu = [];
+    //   let menuToDisplay: IMenuItem | any = {};
+    //   menuToDisplay.label = "Dashboard";
+    //   menuToDisplay.path = "/dashboard";
+    //   menuToDisplay.icon = 'dashboard.png';
+    //   menuToDisplay.isSelected = true;
+    //   menuToDisplay.basepath = "dasboard";
+    //   this.menu.push(menuToDisplay);
+    //   menuResult?.result?.data?.forEach((dasboardMenu:IDashboardMenu)=>{
+    //     let menuToDisplay: IMenuItem | any = {};
+    //     menuToDisplay.label = dasboardMenu.title;
+    //     menuToDisplay.path = dasboardMenu.navigationURL;
+    //     menuToDisplay.icon = dasboardMenu.icon;
+    //     menuToDisplay.isSelected = false;
+    //     this.menu?.push(menuToDisplay);
+    //   });
+    //   //this.menu = menuResult.result;
+    // });
   }
 
   ngOnInit(): void {
-    if(environment.config === 'state'){
+    if(this.config === 'state'){
       this.national = false;
     }
     this.role = localStorage.getItem('roleName');
@@ -130,9 +129,6 @@ environment = environment;
         this.renderer.removeAttribute(this.decreaseFontSize.nativeElement, 'disabled');
         this.renderer.removeAttribute(this.resetFontSize.nativeElement, 'disabled');
       }
-    }
-    signOut() {
-      this._authService.logout();
     }
 
     backToHome() {
