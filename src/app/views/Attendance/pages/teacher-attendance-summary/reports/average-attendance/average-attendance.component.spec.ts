@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AverageAttendanceComponent } from './average-attendance.component';
+import { AverageAttendanceSummaryComponent } from './average-attendance.component';
 
 describe('AverageAttendanceComponent', () => {
-  let component: AverageAttendanceComponent;
-  let fixture: ComponentFixture<AverageAttendanceComponent>;
+  let component: AverageAttendanceSummaryComponent;
+  let fixture: ComponentFixture<AverageAttendanceSummaryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AverageAttendanceComponent ]
+      declarations: [ AverageAttendanceSummaryComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AverageAttendanceComponent);
+    fixture = TestBed.createComponent(AverageAttendanceSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

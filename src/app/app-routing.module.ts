@@ -61,6 +61,13 @@ var routes: Routes = [];
               (module) => module.StudentAttendanceSummaryModule
             )
         },
+        {
+          path: 'attendance/tas',
+          loadChildren: () =>
+            import('./views/Attendance/pages/teacher-attendance-summary/teacher-attendance-summary.module').then(
+              (module) => module.TeacherAttendanceSummaryModule
+            )
+        },
       ],
     },
   ];

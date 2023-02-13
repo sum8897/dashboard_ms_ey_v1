@@ -103,7 +103,7 @@ export class AverageAttendanceComplianceComponent implements OnInit  {
       let re = new RegExp(`{${propertyName}}`, "g");
       Object.keys(this.rbacDetails).forEach((key: any) => {
         if (propertyName === key + '_id') {
-          newQuery = newQuery.replace(re, this.rbacDetails[key]);
+          newQuery = newQuery.replace(re, '\''+ this.rbacDetails[key] +'\'');
         }
       });
     }
