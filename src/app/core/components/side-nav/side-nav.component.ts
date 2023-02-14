@@ -26,9 +26,9 @@ export class SideNavComponent implements OnInit {
     this.toggleSideBar();
   }
   
-  toggleSideBar(menuIconlicked?:string): void {
+  toggleSideBar(menuIconclicked?:string): void {
     let ckbox=document.getElementById('openSidebarMenu') as HTMLInputElement;
-    if(document.body.classList.contains("sidebaractive") && !menuIconlicked) {
+    if(document.body.classList.contains("sidebaractive") && !menuIconclicked) {
       return;
     } else {
       if(document.body.classList.contains("sidebaractive")) {

@@ -14,5 +14,8 @@
         <mat-tab label="Gender Wise Average Attendance" *ngIf="tabs.includes('Gender Wise Average Attendance')">
             <app-gender-wise-average-attendance *ngIf="selectedTabLabel === 'Gender Wise Average Attendance'"></app-gender-wise-average-attendance>
         </mat-tab>
+        <mat-tab label="Grade Wise Average Attendance" *ngIf="tabs.includes('Grade Wise Average Attendance')">
+            <app-gender-wise-average-attendance *ngIf="selectedTabLabel === 'Grade Wise Average Attendance'"></app-gender-wise-average-attendance>
+        </mat-tab>
     </mat-tab-group>
 </div>
