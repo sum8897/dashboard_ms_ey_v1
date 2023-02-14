@@ -20,11 +20,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/metadata-interceptor.service';
+import { SacAttendanceComponent } from './views/sac-attendance/sac-attendance.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomePageComponent,
+    SacAttendanceComponent,
    
   ],
   imports: [
