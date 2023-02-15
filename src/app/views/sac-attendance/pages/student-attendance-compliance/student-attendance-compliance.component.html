@@ -1,1 +1,13 @@
-<p>student-attendance-compliance works!</p>
+<div class="col-span-full tab-wrapper" appFullScreen>
+    <div class="filter-wrapper">
+        <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
+    </div>
+    <div class="grid grid-cols-5 gap-8 reports-wrapper">
+        <div class="col-span-5 xs:col-span-2 lg:col-span-1" *ngIf="bigNumberReports?.length > 0">
+            <app-big-number [bigNumberReportData]="bigNumberReports[0]"></app-big-number>
+        </div>
+        <div class="col-span-5 lg:col-span-4">
+            <app-sac-average-atendance-compliance #child [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" (bigNumberReport)="appendBigNumber($event)"></app-sac-average-atendance-compliance>
+        </div>
+    </div>
+</div>
