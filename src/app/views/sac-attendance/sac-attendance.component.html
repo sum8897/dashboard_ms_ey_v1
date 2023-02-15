@@ -14,5 +14,11 @@
         <mat-tab label="Student Attendance Summary" *ngIf="tabs.includes('Student Attendance Summary')">
             <app-student-attendance-summary *ngIf="selectedTabLabel === 'Student Attendance Summary'"></app-student-attendance-summary>
         </mat-tab>
+        <mat-tab label="Teacher Attendance Compliance" *ngIf="tabs.includes('Teacher Attendance Compliance')">
+            <app-teacher-attendance-compliance *ngIf="selectedTabLabel === 'Teacher Attendance Compliance'"></app-teacher-attendance-compliance>
+        </mat-tab>
+        <mat-tab label="Teacher Attendance Summary" *ngIf="tabs.includes('Teacher Attendance Summary')">
+            <app-teacher-attendance-summary *ngIf="selectedTabLabel === 'Teacher Attendance Summary'"></app-teacher-attendance-summary>
+        </mat-tab>
     </mat-tab-group>
 </div>
