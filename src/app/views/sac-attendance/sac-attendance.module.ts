@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { SacAttendanceRoutingModule } from './sac-attendance-routing.module';
 import { StudentAttendanceSummaryComponent } from './pages/student-attendance-summary/student-attendance-summary.component';
@@ -13,6 +14,7 @@ import { SasAverageAttendanceComponent } from './pages/student-attendance-summar
 import { TasAverageAttendanceComponent } from './pages/teacher-attendance-summary/reports/tas-average-attendance/tas-average-attendance.component';
 import { StudentAttendanceComplianceComponent } from './pages/student-attendance-compliance/student-attendance-compliance.component';
 import { SacAttendanceComponent } from './sac-attendance.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { SacAttendanceComponent } from './sac-attendance.component';
     TasAverageAttendanceComponent
   ],
   imports: [
+    SharedModule,
+    MatTabsModule,
     CommonModule,
     SacAttendanceRoutingModule
   ]

@@ -24,7 +24,7 @@ export class SACStudentsAttendanceComplianceComponent implements OnInit {
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
-  level = environment.config === 'national' ? 'state' : 'district';
+  level = 'state';
   filterIndex: any;
   rbacDetails: any;
 

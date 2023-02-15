@@ -24,7 +24,7 @@ export class BigNumberComponent implements OnInit, OnChanges {
 
   updateValues(): void {
     this.averagePercentage = this.bigNumberReportData?.averagePercentage;
-    this.valueSuffix = this.bigNumberReportData.valueSuffix ? this.bigNumberReportData.valueSuffix : '';
+    this.valueSuffix = this.bigNumberReportData?.valueSuffix ? this.bigNumberReportData?.valueSuffix : '';
     if(this.bigNumberReportData && this.bigNumberReportData.differencePercentage && this.bigNumberReportData.averagePercentage) {
       this.differenceInPercentage = (this.bigNumberReportData.averagePercentage - this.bigNumberReportData.differencePercentage).toFixed(2);
     }

@@ -14,9 +14,11 @@ import { StudentAttendanceMapComponent } from './pages/student-attendance-map/st
 import { StudentAttendanceBarComponent } from './pages/student-attendance-bar/student-attendance-bar.component';
 import { DashletModule} from '@project-sunbird/sb-dashlet-v14';
 import { DataService } from 'src/app/core/services/data.service';
+import { SACStudentsAttendanceComplianceComponent } from './pages/sac-students-attendance-compliance/sac-students-attendance-compliance.component';
 
 @NgModule({
   declarations: [
+    SACStudentsAttendanceComplianceComponent,
     AttendanceComponent,
     StudentAttendanceNewComponent,
     StudentAttendanceMapComponent,
