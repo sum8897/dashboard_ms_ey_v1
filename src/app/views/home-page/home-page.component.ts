@@ -22,6 +22,39 @@ export class HomePageComponent implements OnInit {
   role;
   storage
   hideAdmin
+
+  cards = [
+    {
+      title: 'stateOffcer',
+      description: 'This is the description for card 1',
+      imageUrl: 'state.png'
+    },
+    {
+      title: 'districtOffcer',  
+      description: 'This is the description for card 2',
+      imageUrl: 'district.png'
+    },
+    {
+      title: 'Card 3',
+      description: 'This is the description for card 3',
+      imageUrl: 'block.png'
+    },
+    {
+      title: 'Card 4',
+      description: 'This is the description for card 4',
+      imageUrl: 'cluster.png'
+    },
+    {
+      title: 'Card 5',
+      description: 'This is the description for card 5',
+      imageUrl: 'principle.png'
+    },
+    {
+      title: 'Card 6',
+      description: 'This is the description for card 6',
+      imageUrl: 'class.png'
+    }
+  ];
   constructor(public router: Router, public service: AppServiceComponent) {
 
   }
@@ -59,4 +92,5 @@ export class HomePageComponent implements OnInit {
 
 
   }
+  
 }

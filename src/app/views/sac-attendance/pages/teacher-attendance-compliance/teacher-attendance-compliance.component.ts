@@ -13,7 +13,7 @@ export class TeacherAttendanceComplianceComponent implements OnInit  {
   maxDate: any;
   minDate: any;
   startDate: any;
-  endDate: any
+  endDate: any;
 
   @ViewChild('child') child:TacAverageAtendanceComplianceComponent;
   constructor() { }
