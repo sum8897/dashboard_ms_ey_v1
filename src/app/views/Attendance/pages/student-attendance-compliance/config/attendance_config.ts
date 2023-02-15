@@ -165,5 +165,6 @@ export const config = {
           "valueSuffix": '%'
         }
       }
-    }
+    },
+    
   }
