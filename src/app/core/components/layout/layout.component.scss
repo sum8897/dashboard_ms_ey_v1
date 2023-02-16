@@ -55,6 +55,9 @@
     .mat-tab-nav-bar, .mat-tab-header{
         border-bottom: none !important;
     }
+    .mat-tab-header{
+        margin-bottom: 0.5rem !important;
+    }
     .mat-tab-label{
         opacity: 1 !important;
         min-width: 120px !important;

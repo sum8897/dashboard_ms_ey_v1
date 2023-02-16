@@ -15,6 +15,8 @@ import { TasAverageAttendanceComponent } from './pages/teacher-attendance-summar
 import { StudentAttendanceComplianceComponent } from './pages/student-attendance-compliance/student-attendance-compliance.component';
 import { SacAttendanceComponent } from './sac-attendance.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DashletModule } from '@project-sunbird/sb-dashlet-v14';
+import { DataService } from 'src/app/core/services/data.service';
 
 
 @NgModule({
@@ -32,6 +34,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TasAverageAttendanceComponent
   ],
   imports: [
+    DashletModule.forRoot({
+      dataService: DataService
+    }),
     SharedModule,
     MatTabsModule,
     CommonModule,

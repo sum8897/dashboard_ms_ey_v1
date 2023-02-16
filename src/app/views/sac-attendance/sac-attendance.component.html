@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="tab-group-wrapper">
+<div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)">
         <mat-tab label="Student Attendance Compliance" *ngIf="tabs.includes('Student Attendance Compliance')">
             <app-student-attendance-compliance *ngIf="selectedTabLabel === 'Student Attendance Compliance'"></app-student-attendance-compliance>

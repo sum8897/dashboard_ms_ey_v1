@@ -1,5 +1,5 @@
 body {
-    background: #e6e8e5!important;
+    background: #e6e8e5 !important;
     overflow-y: hidden !important;
 }
 
@@ -7,19 +7,22 @@ body {
     padding: 10px 0;
 }
 
-.metric-card-wrapper{
+.metric-card-wrapper {
     padding: 10px;
     background-color: white;
-    .h4{
+
+    .h4 {
         font-weight: bold;
         color: #67bbe1;
     }
 }
 
-.tab-group-wrapper{
-    margin-top: 10px;
-    padding: 30px;
-    background-color: white;
+.custom-tab-group-wrapper {
+    background-color: #CFCFCF !important;
+    margin-top: 2rem !important;
+    border-radius: 2rem 0 0 2rem;
+    padding: 1.5rem !important;
+    row-gap: 1rem;
 }
 
 .full-screen:fullscreen {
@@ -47,7 +50,9 @@ body {
 
     .leaflet-control-container {
         a {
-            .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+
+            .leaflet-control-zoom-in,
+            .leaflet-control-zoom-out {
                 width: 40px;
                 height: 40px;
                 line-height: 40px;
@@ -64,7 +69,9 @@ body {
 
     .leaflet-control-container {
         a {
-            .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+
+            .leaflet-control-zoom-in,
+            .leaflet-control-zoom-out {
                 width: 50px;
                 height: 50px;
                 line-height: 50px;
@@ -81,7 +88,9 @@ body {
 
     .leaflet-control-container {
         a {
-            &.leaflet-control-zoom-in, &.leaflet-control-zoom-out {
+
+            &.leaflet-control-zoom-in,
+            &.leaflet-control-zoom-out {
                 width: 60px;
                 height: 60px;
                 line-height: 60px;
@@ -98,7 +107,9 @@ body {
 
     .leaflet-control-container {
         a {
-            &.leaflet-control-zoom-in, &.leaflet-control-zoom-out {
+
+            &.leaflet-control-zoom-in,
+            &.leaflet-control-zoom-out {
                 width: 80px;
                 height: 80px;
                 line-height: 80px;
@@ -115,7 +126,9 @@ body {
 
     .leaflet-control-container {
         a {
-            &.leaflet-control-zoom-in, &.leaflet-control-zoom-out {
+
+            &.leaflet-control-zoom-in,
+            &.leaflet-control-zoom-out {
                 width: 100px;
                 height: 100px;
                 line-height: 100px;
