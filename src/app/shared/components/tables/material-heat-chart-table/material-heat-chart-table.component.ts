@@ -2,6 +2,7 @@ import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, V
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TableHeatMapDirective } from 'src/app/shared/directives/table-heat-map/table-heat-map.directive';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-material-heat-chart-table',
@@ -23,9 +24,12 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
   constructor() { }
 
   ngOnInit(): void {
+    // this.dataSource.paginator = this.paginator;
   }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngAfterViewInit(): void {
+
+  ngAfterViewInit() {
     this.constructTable();
   }
 
@@ -34,18 +38,21 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
   }
 
   ngAfterViewChecked(): void {
-      if (this.table) {
-        this.table.updateStickyColumnStyles();
-      }
+    if (this.table) {
+      this.table.updateStickyColumnStyles();
+    }
   }
+
+
 
   constructTable(): void {
     if (this.tableData && this.sort) {
       setTimeout(() => {
         this.dataSource = new MatTableDataSource(this.tableData.data);
-        this.sort.sortChange.subscribe(v=> console.log(v) );
-        this.dataSource.sortingDataAccessor = (item, property) => {        
-          switch(property) {
+        this.dataSource.paginator = this.paginator;
+        this.sort.sortChange.subscribe(v => console.log(v));
+        this.dataSource.sortingDataAccessor = (item, property) => {
+          switch (property) {
             default: return item[property].value;
           }
         };
@@ -67,8 +74,8 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
         //this.columnProperties = [...['id'], ...this.tableData.columns.map((column: any) => column.property)];
         this.columnProperties = this.tableData.columns.map((column: any) => column.property);
         this.matSortActive = this.tableData.sortByProperty;
-        this.matSortDirection = this.tableData.sortDirection;  
-      });    
+        this.matSortDirection = this.tableData.sortDirection;
+      });
     }
   }
 

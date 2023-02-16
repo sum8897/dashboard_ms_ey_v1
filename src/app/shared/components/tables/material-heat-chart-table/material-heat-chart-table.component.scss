@@ -1,11 +1,12 @@
-$light-grey: #eee;
+$light-grey: #FCFDFF;
 
 ::ng-deep {
     .mat-table {
-        border: 1px solid rgba(0,0,0,.12);
+        border: 1px solid rgba(0, 0, 0, .12);
     }
 
-    tr.mat-row, tr.mat-footer-row {
+    tr.mat-row,
+    tr.mat-footer-row {
         height: 40px !important;
     }
 
@@ -17,7 +18,8 @@ $light-grey: #eee;
         min-width: 100px;
     }
 
-    th.mat-header-cell, td.mat-cell {
+    th.mat-header-cell,
+    td.mat-cell {
         padding: 0 5px !important;
     }
 
@@ -25,17 +27,25 @@ $light-grey: #eee;
         font-size: 0.7rem;
         width: 200px;
     }
-    .mat-table{
+
+    .mat-table {
         min-width: stretch;
     }
-    .mat-sort-header-container{
+
+    .mat-sort-header-container {
         justify-content: center !important;
     }
+
     // th.mat-header-cell, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
     //     z-index: 102 !important;
     // }
-    td.mat-cell:hover{
+    td.mat-cell:hover {
         z-index: 9999 !important;
     }
-    
- }
+
+}
+
+.Mattable {
+    box-shadow: 0px 7.16865px 19.7138px rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+}

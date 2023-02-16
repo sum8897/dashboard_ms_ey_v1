@@ -143,15 +143,15 @@ export const config = {
               type: "percentage",
               values: [
                 {
-                  color: "#00FF00",
+                  color: "#D6FFD6",
                   breakPoint: 75
                 },
                 {
-                  color: "#FFFF00",
+                  color: "#FFFBD6",
                   breakPoint: 50
                 },
                 {
-                  color: "#FF0000",
+                  color: "#FFD6D6",
                   breakPoint: 0
                 }
               ]
@@ -310,15 +310,15 @@ export const config = {
               type: "percentage",
               values: [
                 {
-                  color: "#00FF00",
+                  color: "#D6FFD6",
                   breakPoint: 75
                 },
                 {
-                  color: "#FFFF00",
+                  color: "#FFFBD6",
                   breakPoint: 50
                 },
                 {
-                  color: "#FF0000",
+                  color: "#FFD6D6",
                   breakPoint: 0
                 }
               ]
@@ -477,15 +477,15 @@ export const config = {
               type: "percentage",
               values: [
                 {
-                  color: "#00FF00",
+                  color: "#D6FFD6",
                   breakPoint: 75
                 },
                 {
-                  color: "#FFFF00",
+                  color: "#FFFBD6",
                   breakPoint: 50
                 },
                 {
-                  color: "#FF0000",
+                  color: "#FFD6D6",
                   breakPoint: 0
                 }
               ]
@@ -655,7 +655,7 @@ export const config = {
             class: "text-center"
           },
           {
-            name: "Teacher Attendance Complaince",
+            name: "Teacher Attendance Compliance",
             property: "percentage",
             sticky: true,
             class: "text-center",
@@ -664,15 +664,15 @@ export const config = {
               type: "percentage",
               values: [
                 {
-                  color: "#00FF00",
+                  color: "#D6FFD6",
                   breakPoint: 75
                 },
                 {
-                  color: "#FFFF00",
+                  color: "#FFFBD6",
                   breakPoint: 50
                 },
                 {
-                  color: "#FF0000",
+                  color: "#FFD6D6",
                   breakPoint: 0
                 }
               ]

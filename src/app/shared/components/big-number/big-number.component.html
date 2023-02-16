@@ -1,9 +1,10 @@
 <div class="report-wrapper">
-    <div class="report-name text-center">
-        {{bigNumberReportData?.reportName}}
-    </div>
+   
     <div class="average-wrapper">
         <h1 class="average-percentage">{{averagePercentage + this.valueSuffix}}</h1>
+    </div>
+    <div class="report-name text-center">
+        {{bigNumberReportData?.reportName}}
     </div>
     <div class="difference-wrapper">
         <div *ngIf="differenceInPercentage !== undefined">
@@ -21,5 +22,5 @@
             </div>
         </div>
     </div>
-    
+
 </div>
