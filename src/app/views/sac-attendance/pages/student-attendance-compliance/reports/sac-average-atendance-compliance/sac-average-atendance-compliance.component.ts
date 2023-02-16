@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -16,7 +16,7 @@ export class SacAverageAtendanceComplianceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Student Attendance Complaince"
+    reportName: "Average Attendance Complaince"
   };
   minDate: any;
   maxDate: any;
@@ -40,10 +40,9 @@ export class SacAverageAtendanceComplianceComponent implements OnInit {
     this.getReportData();
   }
 
-  async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
-    console.log(startDate, endDate)
-    this.startDate = (startDate !== undefined) ? startDate : this.startDate;
-    this.endDate = (endDate !== undefined) ? endDate : this.endDate;
+  getReportData(startDate = undefined, endDate = undefined): void {
+    this.startDate = startDate;
+    this.endDate = endDate;
     let reportConfig = config
 
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -110,22 +109,6 @@ export class SacAverageAtendanceComplianceComponent implements OnInit {
       });
     }
     return newQuery
-  }
-
-  // filtersUpdated(filters: any): void {
-  //   this.filters = filters;
-  //   this.getReportData();
-  // }
-
-  // onSelectLevel(event: any): void {
-  //   this.levels = event.items;
-  //   this.getReportData();
-  // }
-
-  timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    this.getReportData();
   }
 
   getTableReportData(query, options): void {

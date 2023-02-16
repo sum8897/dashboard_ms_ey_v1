@@ -14,7 +14,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   startDate: any;
   endDate: any
 
-  @ViewChild('child') child:TasAverageAttendanceComponent;
+  @ViewChild('averageAttendance') averageAttendance:TasAverageAttendanceComponent;
   constructor() { }
 
   ngOnInit(): void {
@@ -32,7 +32,9 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   timeSeriesUpdated(event: any): void {
     this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    this.child?.getReportData(this.startDate, this.endDate);
+    if (event?.startDate !== null && event?.endDate !== null) {
+      this.averageAttendance?.getReportData(this.startDate, this.endDate);
+    }
   }
 
 }
