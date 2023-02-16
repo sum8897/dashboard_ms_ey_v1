@@ -21,8 +21,8 @@ export class StudentAttendanceMapComponent implements OnInit {
   endDate: any;
   minDate: any;
   maxDate: any;
-  level = environment.config === 'national' ? 'state' : 'district';
-  currentHierarchyLevel: any = this.level === 'state' ? 1 : 2;
+  level: string = 'state'
+  currentHierarchyLevel: any = 1;
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService) { }
 
@@ -190,6 +190,6 @@ export class StudentAttendanceMapComponent implements OnInit {
       });
       this.filtersUpdated(filters)
     }
-  }
+  } 
 
 }

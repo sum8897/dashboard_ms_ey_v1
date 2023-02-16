@@ -31,6 +31,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   filterIndex: any;
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
+  pageSize: any;
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -197,7 +198,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   }
 
   onPageChange(event: any): void {
-    // let originalSeries = cloneDeep(this.series);
+    // console.log('console.og',event);
     // this.pageSize = event.pageSize;
     // (this.options as Highcharts.Options).series = originalSeries?.map(
     //   (series: any) => {

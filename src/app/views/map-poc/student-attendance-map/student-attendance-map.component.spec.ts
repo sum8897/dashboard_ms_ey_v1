@@ -15,7 +15,7 @@ describe('StudentAttendanceMapComponent', () => {
     fixture = TestBed.createComponent(StudentAttendanceMapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }); 
 
   it('should create', () => {
     expect(component).toBeTruthy();

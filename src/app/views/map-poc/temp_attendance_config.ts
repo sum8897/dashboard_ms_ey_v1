@@ -236,7 +236,7 @@ export const config = {
     ],
     "options": {
       "chart": {
-        "type": "map",
+        "type": "map", 
         "title": "Student Attendance"
       },
       "map": {
