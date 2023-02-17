@@ -8,7 +8,7 @@ import { TasAverageAttendanceComponent } from './reports/tas-average-attendance/
 })
 export class TeacherAttendanceSummaryComponent implements OnInit {
 
-  bigNumberReports: any = [];
+  bigNumberReports: any = {};
   maxDate: any;
   minDate: any;
   startDate: any;
@@ -20,8 +20,14 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  appendBigNumber(bigNumberData: any) {
-    this.bigNumberReports.push(bigNumberData)
+  appendBigNumber({data,reportName}) {
+    this.bigNumberReports = { 
+      ...this.bigNumberReports,
+      [reportName]:data
+    }
+  }
+  getObjectlen(object:Object){
+    return Object.keys(object).length
   }
 
   settimeSeriesDates(dates: any) {
