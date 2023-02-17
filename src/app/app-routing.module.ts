@@ -12,19 +12,19 @@ var routes: Routes = [];
       path: '', redirectTo: `home`, pathMatch: 'full'
     },
     {
-      path: 'rbac', component: RbacDialogComponent
-    },
-    {
-      path: 'home', component: HomePageComponent
-    },
-    {
       path: '',
       component: LayoutComponent,
       children: [
         {
           path: '',
-          redirectTo: 'dashboard',
+          redirectTo: 'home',
           pathMatch: 'full',
+        },
+        {
+          path: 'rbac', component: RbacDialogComponent
+        },
+        {
+          path: 'home', component: HomePageComponent
         },
         {
           path: 'dashboard',
@@ -33,48 +33,20 @@ var routes: Routes = [];
               (module) => module.DashboardModule
             ),
         },
-        // {
-        //   path: 'attendance',
-        //   loadChildren: () =>
-        //     import('./views/attendance/attendance.module').then(
-        //       (module) => module.AttendanceModule
-        //     ),
-        // },
-        // {
-        //   path: 'attendance/sac',
-        //   loadChildren: () =>
-        //     import('./views/Attendance/pages/student-attendance-compliance/student-attendance-compliance.module').then(
-        //       (module) => module.StudentAttendanceComplianceModule
-        //     )
-        // },
-        // {
-        //   path: 'attendance/tac',
-        //   loadChildren: () =>
-        //     import('./views/Attendance/pages/teacher-attendance-compliance/teacher-attendance-compliance.module').then(
-        //       (module) => module.TeacherAttendanceComplianceModule
-        //     )
-        // },
-        // {
-        //   path: 'attendance/sas',
-        //   loadChildren: () =>
-        //     import('./views/Attendance/pages/student-attendance-summary/student-attendance-summary.module').then(
-        //       (module) => module.StudentAttendanceSummaryModule
-        //     )
-        // },
-        // {
-        //   path: 'attendance/tas',
-        //   loadChildren: () =>
-        //     import('./views/Attendance/pages/teacher-attendance-summary/teacher-attendance-summary.module').then(
-        //       (module) => module.TeacherAttendanceSummaryModule
-        //     )
-        // },
         {
-          path: 'sac-attendance',
+          path: 'student-attendance',
           loadChildren: () => 
-            import('./views/sac-attendance/sac-attendance.module').then(
-              (module) => module.SacAttendanceModule
+            import('./views/student-attendance/student-attendance.module').then(
+              (module) => module.StudentAttendanceModule
             )
-        }
+        },
+        {
+          path: 'teacher-attendance',
+          loadChildren: () => 
+            import('./views/teacher-attendance/teacher-attendance.module').then(
+              (module) => module.TeacherAttendanceModule
+            )
+        },
       ],
     },
   ];

@@ -24,12 +24,13 @@ export class DashboardComponent implements OnInit {
       this.dashboardMenu=[]
       dashboardMenuResult?.data.forEach((dasboardMenu) => {
         let menuToDisplay: IDashboardMenu | any = {};
-        menuToDisplay.title = dasboardMenu['Menu Name'];
-        menuToDisplay.navigationURL = dasboardMenu['Navigation URL'];
-        menuToDisplay.icon = dasboardMenu['Image URL'];
-        menuToDisplay.isSelected = false;
+        menuToDisplay.title = dasboardMenu.programName;
+        menuToDisplay.navigationURL = dasboardMenu.navigationUrl;
+        menuToDisplay.icon = dasboardMenu.imageUrl;
+        menuToDisplay.metrics = [];
         this.dashboardMenu?.push(menuToDisplay);
       });
+      console.log(this.dashboardMenu)
     });
   }
 
