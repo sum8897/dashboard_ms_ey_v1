@@ -17,18 +17,23 @@ export class RbacDialogComponent implements OnInit {
   rbacRoles: any = rbacConfig.roles
 
 
-  constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) { }
+  constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
+    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+      this.selectedRoleLevel = rbacDetails?.role
+    })
+  }
 
   ngOnInit(): void {
     this.rbacForm = this.fb.group({
-      name: [null, Validators.required],
-      role: [null, Validators.required],
       state: [null],
       district: [null],
       block: [null],
       cluster: [null],
-      school: [null]
+      school: [null],
+      class: [null]
     })
+    this.resetFilterForm(this.rbacForm);
+    this.getFilters();
   }
 
   get f() {
@@ -45,6 +50,7 @@ export class RbacDialogComponent implements OnInit {
     }
     console.log(invalid)
     if (this.rbacForm.valid) {
+      this.rbacForm.value.role = this.selectedRoleLevel
       this._rbacService.setRbacDetails(this.rbacForm.value);
       this.router.navigate(['/dashboard'])
     }
@@ -53,26 +59,19 @@ export class RbacDialogComponent implements OnInit {
     }
   }
 
-  onRoleSelect(roleLevel: any) {
-    this.selectedRoleLevel = roleLevel;
-    this.filters = [];
-    this.resetFilterForm(this.rbacForm);
-    this.getFilters();
-  }
-
   async getFilters() {
-    if (this.selectedRoleLevel === 0) {
-      this.filters = [];
-      const controls = this.rbacForm.controls;
-      for (const name in controls) {
-        console.log(name)
-        if (name !== 'name' && name !== 'role') {
-          controls[name].clearValidators()
-          controls[name].updateValueAndValidity()
-        }
-      }
-      return
-    }
+    // if (this.selectedRoleLevel === 0) {
+    //   this.filters = [];
+    //   const controls = this.rbacForm.controls;
+    //   for (const name in controls) {
+    //     console.log(name)
+    //     if (name !== 'name' && name !== 'role') {
+    //       controls[name].clearValidators()
+    //       controls[name].updateValueAndValidity()
+    //     }
+    //   }
+    //   return
+    // }
     let { filters, baseHierarchy } = rbacConfig;
     let oldFilters = this.filters.filter((filter: any) => {
       return this.rbacForm.value[filter.name?.toLowerCase()] != null
@@ -94,13 +93,13 @@ export class RbacDialogComponent implements OnInit {
           })
         }
         else if (masterFilter?.length > 0 && this.rbacForm.value[masterFilter[0].name.toLowerCase()] === null) {
+          // console.log(constructedFilters, filters[i])
           constructedFilters.splice(i, 1);
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.clearValidators()
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
         }
         if (filters[i].hierarchyLevel === baseHierarchy && !this.rbacForm.value[filters[i].name.toLowerCase()]) {
           await this._commonService.getReportDataNew(filters[i].query).subscribe((res: any) => {
-            console.log(res);
             let rows = res;
             filters[i]['options'] = rows;
             constructedFilters.push(filters[i])
@@ -130,6 +129,20 @@ export class RbacDialogComponent implements OnInit {
       form.controls[filter.name.toLowerCase()].clearValidators();
       form.controls[filter.name.toLowerCase()].updateValueAndValidity();
     })
+  }
+
+  changeFilter(filter: any) {
+    let { filters } = rbacConfig
+    this.filters.splice(this.filters.indexOf(filter) + 1);
+    filters.forEach((fil: any) => {
+      if (fil.hierarchyLevel > filter.hierarchyLevel) {
+        this.rbacForm.controls[fil?.name?.toLowerCase()].reset()
+        this.rbacForm.controls[filter.name.toLowerCase()].clearValidators();
+        this.rbacForm.controls[filter.name.toLowerCase()].updateValueAndValidity();
+      }
+    });
+    console.log(this.rbacForm.value)
+    this.getFilters();
   }
 
 }

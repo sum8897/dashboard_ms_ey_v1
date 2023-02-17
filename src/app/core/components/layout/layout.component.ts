@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ConfigService } from 'src/app/core/services/config/config.service';
 import { environment } from 'src/environments/environment';
@@ -16,7 +17,9 @@ export class LayoutComponent implements OnInit {
   menu: IMenuItem[] | undefined;
   national: boolean = true;
   role: any;
-  config = 'state'
+  config = 'state';
+  isHome: boolean = false;
+  showBackBtn: boolean = false;
   // Font Increase Decrease Variables
   fontSize: any;
   defaultFontSize = 16;
@@ -29,26 +32,7 @@ export class LayoutComponent implements OnInit {
   environment = environment;
 
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
-  constructor(private readonly _commonService: CommonService, private renderer: Renderer2) {
-    // this._configService.getDashboardMetrics(true).subscribe((menuResult: any) => {
-    //   this.menu = [];
-    //   let menuToDisplay: IMenuItem | any = {};
-    //   menuToDisplay.label = "Dashboard";
-    //   menuToDisplay.path = "/dashboard";
-    //   menuToDisplay.icon = 'dashboard.png';
-    //   menuToDisplay.isSelected = true;
-    //   menuToDisplay.basepath = "dasboard";
-    //   this.menu.push(menuToDisplay);
-    //   menuResult?.result?.data?.forEach((dasboardMenu:IDashboardMenu)=>{
-    //     let menuToDisplay: IMenuItem | any = {};
-    //     menuToDisplay.label = dasboardMenu.title;
-    //     menuToDisplay.path = dasboardMenu.navigationURL;
-    //     menuToDisplay.icon = dasboardMenu.icon;
-    //     menuToDisplay.isSelected = false;
-    //     this.menu?.push(menuToDisplay);
-    //   });
-    //   //this.menu = menuResult.result;
-    // });
+  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router) {
 
     this._commonService.getDashboardMetrics().subscribe((menuResult: any) => {
       console.log('data is ========', menuResult);
@@ -60,16 +44,29 @@ export class LayoutComponent implements OnInit {
       menuToDisplay.isSelected = true;
       menuToDisplay.basepath = "dasboard";
       this.menu.push(menuToDisplay);
-      menuResult?.data?.forEach((dasboardMenu: IDashboardMenu) => {
+      menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
         let menuToDisplay: IMenuItem | any = {};
-        menuToDisplay.label = dasboardMenu['Menu Name'];
-        menuToDisplay.path = dasboardMenu['Navigation URL'];
-        menuToDisplay.icon = dasboardMenu['Image URL'];
+        menuToDisplay.label = dasboardMenu.menuName;
+        menuToDisplay.path = dasboardMenu.navigationUrl;
+        menuToDisplay.icon = dasboardMenu.imageUrl;
         menuToDisplay.isSelected = false;
         this.menu?.push(menuToDisplay);
       });
       //this.menu = menuResult.result;
     })
+    if (this._router.url === '/home' || this._router.url === '/rbac') {
+      this.isHome = true;
+    }
+    else {
+      this.isHome = false;
+    }
+
+    if (this._router.url !== '/home') {
+      this.showBackBtn = true
+    }
+    else {
+      this.showBackBtn = false
+    }
 
   }
 
@@ -154,8 +151,19 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  backToHome() {
-
+  activate() {
+    if (this._router.url === '/home' || this._router.url === '/rbac') {
+      this.isHome = true;
+    }
+    else {
+      this.isHome = false;
+    }
+    if (this._router.url !== '/home') {
+      this.showBackBtn = true
+    }
+    else {
+      this.showBackBtn = false
+    }
   }
 
 }

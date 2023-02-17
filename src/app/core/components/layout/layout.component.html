@@ -7,7 +7,7 @@
         </div>
 
         <div class="btnGroup">
-            <i class="fa fa-arrow-left" aria-hidden="true" routerLink="/home"></i>
+            <i *ngIf="showBackBtn" class="fa fa-arrow-left" aria-hidden="true" routerLink="/home"></i>
             <button type="button" [attr.aria-pressed]="false" tabindex="0" attr.aria-label="A-"
                 class="fontResizeBtn fontResizeBtn_A-" title="Decrease font size" (click)="changeFontSize('decrease');"
                 id="font-size-decrease" name="font-size-decrease" #decreaseFontSize>A-</button>
@@ -34,10 +34,10 @@
         </div>
     </div>
     <app-header></app-header>
-    <app-side-nav [menu]="menu"></app-side-nav>
+    <app-side-nav [isHome]="isHome" [menu]="menu"></app-side-nav>
     <div class="app-content-wrapper">
         <div class="app-content">
-            <router-outlet></router-outlet>
+            <router-outlet (activate)="activate()"></router-outlet>
         </div>
         <!-- <app-footer></app-footer> -->
     </div>

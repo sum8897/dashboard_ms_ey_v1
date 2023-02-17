@@ -1,14 +1,11 @@
 
 
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { KeycloakSecurityService } from '../keycloak-security.service';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
-import { CookieService } from 'ngx-cookie-service';
-
 import { AppServiceComponent } from 'src/app/app.service';
-import { AuthenticationService } from 'src/app/core/services/authentication/authentication.service';
+import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
+import { RbacService } from 'src/app/core/services/rbac-service.service';
 
 @Component({
   selector: 'app-home-page',
@@ -23,39 +20,8 @@ export class HomePageComponent implements OnInit {
   storage
   hideAdmin
 
-  cards = [
-    {
-      title: 'stateOffcer',
-      description: 'This is the description for card 1',
-      imageUrl: 'state.png'
-    },
-    {
-      title: 'districtOffcer',  
-      description: 'This is the description for card 2',
-      imageUrl: 'district.png'
-    },
-    {
-      title: 'Card 3',
-      description: 'This is the description for card 3',
-      imageUrl: 'block.png'
-    },
-    {
-      title: 'Card 4',
-      description: 'This is the description for card 4',
-      imageUrl: 'cluster.png'
-    },
-    {
-      title: 'Card 5',
-      description: 'This is the description for card 5',
-      imageUrl: 'principle.png'
-    },
-    {
-      title: 'Card 6',
-      description: 'This is the description for card 6',
-      imageUrl: 'class.png'
-    }
-  ];
-  constructor(public router: Router, public service: AppServiceComponent) {
+  roles = rbacConfig.roles
+  constructor(public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
 
   }
 
@@ -88,9 +54,11 @@ export class HomePageComponent implements OnInit {
       'userName': localStorage.getItem('userName'),
       'token': localStorage.getItem('token')
     }
-
-
-
   }
+
+  onRoleSelect(value: any) {
+    this._rbacService.setRbacDetails({role: value})
+    this.router.navigate(['/rbac'])
+  } 
   
 }

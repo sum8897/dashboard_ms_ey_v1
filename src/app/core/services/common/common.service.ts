@@ -22,6 +22,6 @@ export class CommonService {
   }
   
   getDashboardMetrics(): Observable<ResponseType<any>> {
-    return this._http.get<ResponseType<any>>('http://localhost:3000/ingestion/csvtojson');
+    return this._http.get<ResponseType<any>>('http://localhost:3000/ingestion/metric');
   }
 }

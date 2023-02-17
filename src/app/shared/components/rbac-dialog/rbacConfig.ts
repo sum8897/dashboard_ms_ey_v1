@@ -39,28 +39,34 @@ export const rbacConfig = {
   ],
   "roles": [
     {
-      label: "Overall",
-      value: 0
+      name: "State Officer",
+      value: 1,
+      imageUrl: 'state.png'
     },
     {
-      label: "State Officer",
-      value: 1
+      name: "District Officer",
+      value: 2,
+      imageUrl: 'district.png'
     },
     {
-      label: "District Officer",
-      value: 2
+      name: "Block Officer",
+      value: 3,
+      imageUrl: 'block.png'
     },
     {
-      label: "Block Officer",
-      value: 3
+      name: "Cluster Officer",
+      value: 4,
+      imageUrl: 'cluster.png'
     },
     {
-      label: "Cluster Officer",
-      value: 4
+      name: "School Principle",
+      value: 5,
+      imageUrl: 'principle.png'
     },
     {
-      label: "School HM",
-      value: 5
+      name: "Class Teacher",
+      value: 6,
+      imageUrl: 'class.png'
     }
   ]
 }
