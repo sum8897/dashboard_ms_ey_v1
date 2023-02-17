@@ -4,11 +4,11 @@
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="bigNumberReports?.length > 0">
-                <app-big-number [bigNumberReportData]="bigNumberReports[0]"></app-big-number>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">
+                <app-big-number [bigNumberReportData]="bigNumberReports['sac_average_attendance_compliance']"></app-big-number>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-sac-average-atendance-compliance #averageAttendanceCompliance [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" (bigNumberReport)="appendBigNumber($event)"></app-sac-average-atendance-compliance>
+                <app-sac-average-atendance-compliance #averageAttendanceCompliance (bigNumberReport)="appendBigNumber($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" ></app-sac-average-atendance-compliance>
             </div>
         </div>
     </div>

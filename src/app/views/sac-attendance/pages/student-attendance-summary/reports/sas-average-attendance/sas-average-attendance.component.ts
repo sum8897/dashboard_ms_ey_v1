@@ -166,6 +166,10 @@ export class SasAverageAttendanceComponent implements OnInit {
             ...this.bigNumberReportData,
             averagePercentage: rows[0].percentage
           }
+          this.bigNumberReport.emit({
+            data: this.bigNumberReportData,
+            reportName:this.reportName
+          })
         }
       })
     }
@@ -177,7 +181,10 @@ export class SasAverageAttendanceComponent implements OnInit {
             ...this.bigNumberReportData,
             differencePercentage: rows[0].percentage
           }
-          this.bigNumberReport.emit(this.bigNumberReportData)
+          this.bigNumberReport.emit({
+            data: this.bigNumberReportData,
+            reportName:this.reportName
+          })
         }
       })
     }
