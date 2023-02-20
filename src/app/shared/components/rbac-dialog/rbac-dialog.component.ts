@@ -15,11 +15,23 @@ export class RbacDialogComponent implements OnInit {
   filters: any = [];
   selectedRoleLevel: any = 0;
   rbacRoles: any = rbacConfig.roles
-
+  selectedRoleObject: any;
+  availableFilters: string = '';
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.selectedRoleLevel = rbacDetails?.role
+    })
+    this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
+      return roleObj.value === this.selectedRoleLevel;
+    })?.[0]
+    let selectableFilters = rbacConfig.filters.filter((filter: any) => {
+      return filter.hierarchyLevel <= this.selectedRoleLevel
+    })
+    selectableFilters?.forEach((filter: any, index: any) => {
+      this.availableFilters += index === selectableFilters?.length - 1 ? filter?.name?.toLowerCase() :
+        index === selectableFilters?.length - 2 ? filter?.name?.toLowerCase() + ' & ' :
+          filter?.name?.toLowerCase() + ', '
     })
   }
 
@@ -41,14 +53,6 @@ export class RbacDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    const invalid = [];
-    const controls = this.rbacForm.controls;
-    for (const name in controls) {
-      if (controls[name].invalid) {
-        invalid.push(name);
-      }
-    }
-    console.log(invalid)
     if (this.rbacForm.valid) {
       this.rbacForm.value.role = this.selectedRoleLevel
       this._rbacService.setRbacDetails(this.rbacForm.value);
@@ -93,7 +97,6 @@ export class RbacDialogComponent implements OnInit {
           })
         }
         else if (masterFilter?.length > 0 && this.rbacForm.value[masterFilter[0].name.toLowerCase()] === null) {
-          // console.log(constructedFilters, filters[i])
           constructedFilters.splice(i, 1);
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.clearValidators()
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
@@ -141,7 +144,6 @@ export class RbacDialogComponent implements OnInit {
         this.rbacForm.controls[filter.name.toLowerCase()].updateValueAndValidity();
       }
     });
-    console.log(this.rbacForm.value)
     this.getFilters();
   }
 

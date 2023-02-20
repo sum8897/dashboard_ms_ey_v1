@@ -336,10 +336,10 @@ export const config = {
     sas_gender_wise_average_attendance: {
         "label": "Gender Wise Average Attendance",
         "queries": {
-            "barChart": "select min(date) as min_date, max(date) as max_date, state_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id, state_name",
+            "barChart": "select min(date) as min_date, max(date) as max_date, state_name as location,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id, state_name, t.gender",
         },
         "timeSeriesQueries": {
-            "barChart": "select state_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id where date between startDate and endDate group by t.state_id, state_name",
+            "barChart": "select state_name as location,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id where date between startDate and endDate group by t.state_id, state_name, t.gender",
         },
         "defaultLevel": "state",
         "filters": [
@@ -348,13 +348,13 @@ export const config = {
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
-                "query": "select t.state_id, state_name from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id,state_name",
+                "query": "select t.state_id, state_name, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id,state_name",
                 "timeSeriesQueries": {
-                    "barChart": "select district_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by t.district_id,district_name",
+                    "barChart": "select district_name as location, round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by t.district_id,district_name, t.gender",
                 },
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, district_name as location, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, district_name as location, state_name,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name, t.gender",
                     },
                     "level": "district"
                 }
@@ -365,12 +365,12 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": "select block_name as location, district_name, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = t2.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by t.block_id,block_name",
+                    "barChart": "select block_name as location, district_name, state_name,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = t2.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by t.block_id,block_name, t.gender",
                 },
-                "query": "select t.district_id, district_name from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
+                "query": "select t.district_id, district_name, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, block_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, block_name as location,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name, t.gender",
                     },
                     "level": "block"
                 }
@@ -381,12 +381,12 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": "select cluster_name as location, block_name, district_name, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by t.cluster_id,cluster_name",
+                    "barChart": "select cluster_name as location, block_name, district_name, state_name,round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by t.cluster_id,cluster_name, t.gender",
                 },
-                "query": "select t.block_id, block_name from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
+                "query": "select t.block_id, block_name, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, cluster_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, cluster_name as location, round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name, t.gender",
                     },
                     "level": "cluster"
                 }
@@ -397,12 +397,12 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "barChart": "select school_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by t.school_id,school_name",
+                    "barChart": "select school_name as location, round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by t.school_id,school_name, t.gender",
                 },
-                "query": "select t.cluster_id, cluster_name from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
+                "query": "select t.cluster_id, cluster_name, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, school_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id} group by t.school_id,school_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, school_name as location, round(avg(percentage),2) as percentage, t.gender from ingestion.sac_stds_avg_atd_gender_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id} group by t.school_id,school_name, t.gender",
                     },
                     "level": "school"
                 }
@@ -410,17 +410,24 @@ export const config = {
         ],
         "options": {
             "barChart": {
+                "isMultibar": true,
+                "metricLabel": "gender",
+                "metricValue": "percentage",
                 "yAxis": {
-                    "title": "level",
-                    "label": "location",
-                    "value": "location"
+                    "title": "level"
                 },
                 "xAxis": {
                     "title": "Number",
+                    "label": "location",
+                    "value": "location",
                     "metrics": [
                         {
-                            "label": "Average Percentage",
-                            "value": "percentage"
+                            "label": "Male",
+                            "value": "male"
+                        },
+                        {
+                            "label": "Female",
+                            "value": "female"
                         }
                     ]
                 }
@@ -430,10 +437,10 @@ export const config = {
     sas_grade_wise_average_attendance: {
         "label": "Grade Wise Average Attendance",
         "queries": {
-            "barChart": "select min(date) as min_date, max(date) as max_date, state_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id, state_name",
+            "barChart": "select min(date) as min_date, max(date) as max_date, state_name as location,round(avg(percentage),2) as percentage, t.school_category, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id, state_name, t.school_category",
         },
         "timeSeriesQueries": {
-            "barChart": "select state_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id where date between startDate and endDate group by t.state_id, state_name",
+            "barChart": "select state_name as location,round(avg(percentage),2) as percentage, t.school_category, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id where date between startDate and endDate group by t.state_id, state_name, t.school_category",
         },
         "defaultLevel": "state",
         "filters": [
@@ -442,13 +449,13 @@ export const config = {
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
-                "query": "select t.state_id, state_name from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id,state_name",
+                "query": "select t.state_id, state_name, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_state as t left join ingestion.dimension_state as s on t.state_id = s.state_id group by t.state_id,state_name",
                 "timeSeriesQueries": {
-                    "barChart": "select district_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by t.district_id,district_name",
+                    "barChart": "select district_name as location, round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by t.district_id,district_name, t.school_category",
                 },
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, district_name as location, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, district_name as location, state_name,round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name, t.school_category",
                     },
                     "level": "district"
                 }
@@ -459,12 +466,12 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": "select block_name as location, district_name, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = t2.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by t.block_id,block_name",
+                    "barChart": "select block_name as location, district_name, state_name,round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = t2.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by t.block_id,block_name, t.school_category",
                 },
-                "query": "select t.district_id, district_name from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
+                "query": "select t.district_id, district_name, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, block_name as location,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, block_name as location,round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name, t.school_category",
                     },
                     "level": "block"
                 }
@@ -475,12 +482,12 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": "select cluster_name as location, block_name, district_name, state_name,round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by t.cluster_id,cluster_name",
+                    "barChart": "select cluster_name as location, block_name, district_name, state_name,round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by t.cluster_id,cluster_name, t.school_category",
                 },
-                "query": "select t.block_id, block_name from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
+                "query": "select t.block_id, block_name, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by t.block_id,block_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, cluster_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, cluster_name as location, round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name, t.school_category",
                     },
                     "level": "cluster"
                 }
@@ -491,12 +498,12 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "barChart": "select school_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by t.school_id,school_name",
+                    "barChart": "select school_name as location, round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by t.school_id,school_name, t.school_category",
                 },
-                "query": "select t.cluster_id, cluster_name from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
+                "query": "select t.cluster_id, cluster_name, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by t.cluster_id,cluster_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, school_name as location, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id} group by t.school_id,school_name",
+                        "barChart": "select min(date) as min_date, max(date) as max_date, school_name as location, round(avg(percentage),2) as percentage, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id} group by t.school_id,school_name, t.school_category",
                     },
                     "level": "school"
                 }
@@ -504,18 +511,33 @@ export const config = {
         ],
         "options": {
             "barChart": {
+                "isMultibar": true,
+                "metricLabel": "school_category",
+                "metricValue": "percentage",
                 "yAxis": {
                     "title": "level",
-                    "label": "location",
-                    "value": "location"
                 },
                 "xAxis": {
+                    "label": "location",
+                    "value": "location",
                     "title": "Number",
                     "metrics": [
                         {
-                            "label": "Average Percentage",
-                            "value": "percentage"
-                        }
+                            "label": "Primary",
+                            "value": "primary"
+                        },
+                        {
+                            "label": "Upper Primary",
+                            "value": "upper_primary"
+                        },
+                        {
+                            "label": "Secondary",
+                            "value": "secondary"
+                        },
+                        {
+                            "label": "Senior Secondary",
+                            "value": "senior_secondary"
+                        },
                     ]
                 }
             }
