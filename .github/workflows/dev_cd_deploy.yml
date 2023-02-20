@@ -17,7 +17,7 @@ jobs:
         username: ${{secrets.DOCKER_USER}}
         password: ${{secrets.DOCKER_PASSWORD}}
 
-    - name: adding aws credentials
+    - name: adding api_end_point credentials
       run: sed -i 's|"api_end_point"|"${{secrets.DEV_API_END_POINT}}"|g' src/environments/environment.prod.ts 
       shell: bash
 
