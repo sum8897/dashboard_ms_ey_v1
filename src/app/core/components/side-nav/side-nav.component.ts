@@ -14,7 +14,6 @@ export class SideNavComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.isHome)
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
     }

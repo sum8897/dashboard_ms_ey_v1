@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
         menuToDisplay.navigationURL = dasboardMenu.navigationUrl;
         menuToDisplay.icon = dasboardMenu.imageUrl;
         menuToDisplay.metrics = [];
+        menuToDisplay.tooltip = dasboardMenu.tooltip
         this.dashboardMenu?.push(menuToDisplay);
       });
       console.log(this.dashboardMenu)

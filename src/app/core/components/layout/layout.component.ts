@@ -35,7 +35,6 @@ export class LayoutComponent implements OnInit {
   constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router) {
 
     this._commonService.getDashboardMetrics().subscribe((menuResult: any) => {
-      console.log('data is ========', menuResult);
       this.menu = [];
       let menuToDisplay: IMenuItem | any = {};
       menuToDisplay.label = "Dashboard";
@@ -75,7 +74,6 @@ export class LayoutComponent implements OnInit {
       this.national = false;
     }
     this.role = localStorage.getItem('roleName');
-    console.log(this.role);
   }
 
 

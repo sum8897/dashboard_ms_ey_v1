@@ -1,11 +1,39 @@
-<div class="grid grid-cols-3 mb-2">
-    <div class="col-start-2 col-end-3 wrapper">
-        <div class="d-flex justify-content-center">
-            <p class="h3">Your Location</p>
+<div class="container-fluid" style=" height: 100%;">
+    <div class="justify-center">
+        <div class="row ">
+            <div class="col-4">
+                <div class="pull-right">
+                    <img src="../../../assets/images/Line 1png" alt="" srcset="">
+                    <img src="../../../assets/images/Line 2.png" alt="" srcset="">
+                </div>
+            </div>
+            <div class="col-4 text-center">
+                <span class="welcometxt">Welcome</span><br>
+            </div>
+            <div class="col-4">
+                <img src="../../../assets/images/Line 3.png" alt="" srcset="">
+                <img src="../../../assets/images/Line 4.png" alt="" srcset="">
+            </div>
         </div>
+    </div>
+    <div class="flex justify-center mb-2">
+        <div class="text-center">
+            <span class="tostyle">to</span><br>
+            <span class="samikshadiv">VIDYA SAMIKSHA KENDRA</span><br>
+        </div>
+    </div>
+</div>
+<div class="role-info-div my-3">
+    <img heigt="50px" width="50px" [src]="'../../../assets/images/' + selectedRoleObject?.roleImageUrl"><br>
+    <span>{{'Hello ' + selectedRoleObject?.name}}</span>
+    <span> {{'Please select your ' + availableFilters}}</span>
+</div>
+
+<div class="grid grid-cols-3">
+    <div class="col-start-2 col-end-3 wrapper">
         <form class="form theme-form" [formGroup]="rbacForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
             <div class="mb-4" *ngFor="let filter of filters; let ind = index" [attr.data-index]="ind">
-                <!-- <label class="form-label" [for]="filter?.name?.toLowerCase()">{{filter?.name}}</label> -->
+                <label class="form-label" [for]="filter?.name?.toLowerCase()">{{filter?.name}}</label>
                 <ng-select class="ng-select-control" [formControlName]="filter?.name?.toLowerCase()"
                     [id]="filter?.name?.toLowerCase()" [placeholder]="'Select ' + filter?.name" (change)="changeFilter(filter)">
                     <ng-option *ngFor="let option of filter?.options" [value]="option[filter.valueProp]">
@@ -21,3 +49,4 @@
         </form>
     </div>
 </div>
+

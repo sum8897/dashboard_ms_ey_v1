@@ -1,4 +1,4 @@
-
+import * as _ from 'lodash';
 
 export const buildQuery = (query: string, defaultLevel: any = undefined, levels: any, filters: any = [], startDate: any, endDate: any, key: any, compareDateRange: any = undefined) => {
     let level = "state";
@@ -153,4 +153,21 @@ function addMasterProps(query: string, selectedLevel: any, levelConfig: any): st
     }
     return newQuery
 }
+
+export function multibarGroupBy(data: any, groupByLabel: string, metricLabel: string, metricValue: string){
+    let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
+      data = {
+        [groupByLabel]: key
+      }
+      objs?.forEach((obj: any) => {
+        data = {
+          ...data,
+          [obj[metricLabel]]: obj[metricValue]
+        }
+      });
+      return data;
+    }).value()
+    console.log(result)
+    return result;
+  }
 

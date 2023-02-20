@@ -4,7 +4,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
-import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
 
 @Component({
@@ -88,7 +88,7 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   getBarChartReportData(query, options, filters, defaultLevel): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      let { barChart: { yAxis, xAxis } } = options;
+      let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
       rows.forEach(row => {
         if (this.minDate !== undefined && this.maxDate !== undefined) {
           if (row['min_date'] < this.minDate) {
@@ -103,12 +103,14 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
           this.maxDate = row['max_date']
         }
       });
+      if(isMultibar){
+        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      }
       this.tableReportData = {
         values: rows
       }
-      console.log(this.tableReportData)
       this.config = getChartJSConfig({
-        labelExpr: yAxis.value,
+        labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(xAxis?.metrics?.map((metric: any) => {
           return {
             dataExpr: metric.value, label: metric.label
@@ -151,7 +153,6 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
 
   async filtersUpdated(filters: any): Promise<void> {
     await new Promise(r => setTimeout(r, 100));
-    console.log(filters)
     this.filters = [...filters]
     let tempLevel = 1;
     filters.forEach((filter: any) => {
@@ -186,14 +187,11 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
 
   getYaxisTitle(filters: any): string {
     let title: string;
-    console.log(this.currentHierarchyLevel)
     filters.forEach((filter: any) => {
       if (Number(filter.hierarchyLevel) === this.currentHierarchyLevel - 1) {
         title = filter?.actions?.level;
-        console.log(title)
       }
     });
     return title;
   }
-
 }
