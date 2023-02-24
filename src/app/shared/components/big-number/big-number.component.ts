@@ -19,7 +19,6 @@ export class BigNumberComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    console.log('console ',this.bigNumberReportData);
     this.updateValues();
   }
 

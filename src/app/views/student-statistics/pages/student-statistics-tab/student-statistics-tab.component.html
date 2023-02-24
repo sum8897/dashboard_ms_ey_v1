@@ -1,0 +1,28 @@
+<div class="col-span-full tab-wrapper" appFullScreen>
+    <div class="h-full">
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="bigNumberReports['students_enrolled_and_cwsn_enrollment']">
+                <app-big-number [bigNumberReportData]="bigNumberReports['students_enrolled_and_cwsn_enrollment']"></app-big-number>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-total-students-enrolled (bigNumberReport)="appendBigNumber($event)"></app-total-students-enrolled>
+                <app-students-and-cwsn-enrollment (bigNumberReport)="appendBigNumber($event)"></app-students-and-cwsn-enrollment>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="bigNumberReports['total_students_enrolled']">
+                <app-big-number [bigNumberReportData]="bigNumberReports['total_students_enrolled']"></app-big-number>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-gender-wise-student-enrollment ></app-gender-wise-student-enrollment>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-grade-category-wise-enrollment></app-grade-category-wise-enrollment>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-student-category-wise-enrollment></app-student-category-wise-enrollment>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-rank-students-and-cwsn-enrollment></app-rank-students-and-cwsn-enrollment>
+            </div>
+        </div>
+    </div>
+</div>

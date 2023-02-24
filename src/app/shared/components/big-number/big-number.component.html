@@ -1,10 +1,10 @@
-<div class="report-wrapper">
+<div class="report-wrapper" *ngIf="averagePercentage">
    
     <div class="average-wrapper">
         <h1 class="average-percentage">{{averagePercentage + this.valueSuffix}}</h1>
     </div>
-    <div class="difference-wrapper">
-        <div *ngIf="differenceInPercentage !== undefined">
+    <div class="difference-wrapper" *ngIf="differenceInPercentage !== undefined && differenceInPercentage !==  null">
+        <div>
             <h4 class="difference-percentage">{{differenceInPercentage + this.valueSuffix}}</h4>
         </div>
         <div [ngSwitch]="differenceIndicator">

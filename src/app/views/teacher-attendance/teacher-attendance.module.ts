@@ -11,6 +11,8 @@ import { DashletModule } from '@project-sunbird/sb-dashlet-v14';
 import { DataService } from 'src/app/core/services/data.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TacAttendanceComplianceRankComponent } from './pages/teacher-attendance-compliance/reports/tac-attendance-compliance-rank/tac-attendance-compliance-rank.component';
+import { TacAverageAttendanceRankComponent } from './pages/teacher-attendance-summary/reports/tac-average-attendance-rank/tac-average-attendance-rank.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TeacherAttendanceComplianceComponent,
     TeacherAttendanceSummaryComponent,
     TacAverageAttendanceComplianceComponent,
-    TasAverageAttendanceComponent
+    TasAverageAttendanceComponent,
+    TacAttendanceComplianceRankComponent,
+    TacAverageAttendanceRankComponent
   ],
   imports: [
     DashletModule.forRoot({

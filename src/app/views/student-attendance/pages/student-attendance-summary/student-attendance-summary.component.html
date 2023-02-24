@@ -13,10 +13,13 @@
         </div>
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-gender-wise-average-attendance #genderWiseAverageAttendance (exportDates)="settimeSeriesDates($event)"></app-gender-wise-average-attendance>
+                <app-gender-wise-average-attendance #genderWiseAverageAttendance (exportDates)="settimeSeriesDates($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-gender-wise-average-attendance>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-grade-wise-average-attendance #gradeWiseAverageAttendance (exportDates)="settimeSeriesDates($event)"></app-grade-wise-average-attendance>
+                <app-grade-wise-average-attendance #gradeWiseAverageAttendance (exportDates)="settimeSeriesDates($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-grade-wise-average-attendance>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-sas-average-attendance-rank #averageAttendanceRank [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-sas-average-attendance-rank>
             </div>
         </div>
     </div>

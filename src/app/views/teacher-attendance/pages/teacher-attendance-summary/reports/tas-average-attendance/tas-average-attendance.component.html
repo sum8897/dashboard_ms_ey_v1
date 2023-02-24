@@ -3,3 +3,6 @@
         <app-material-heat-chart-table [tableData]="tableReportData"></app-material-heat-chart-table>
     </div>
 </div>
+<div class="noData" *ngIf="tableReportData?.data?.length <= 0">
+    No Data Found
+</div>
