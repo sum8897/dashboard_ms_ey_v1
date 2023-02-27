@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { SacAttendanceComplianceRankComponent } from './reports/sac-attendance-compliance-rank/sac-attendance-compliance-rank.component';
 import { SacAverageAttendanceComplianceComponent } from './reports/sac-average-attendance-compliance/sac-average-attendance-compliance.component';
 
 @Component({
@@ -15,6 +16,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
   endDate: any
 
   @ViewChild('averageAttendanceCompliance') averageAttendanceCompliance: SacAverageAttendanceComplianceComponent;
+  @ViewChild('attendanceComplianceRank') attendanceComplianceRank: SacAttendanceComplianceRankComponent
   constructor() { }
 
   ngOnInit(): void {
@@ -40,6 +42,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
       this.averageAttendanceCompliance?.getReportData(this.startDate, this.endDate);
+      this.attendanceComplianceRank?.getReportData(this.startDate, this.endDate)
     }
   }
 

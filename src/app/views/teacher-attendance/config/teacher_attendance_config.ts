@@ -154,7 +154,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Teacher Attendance Complaince",
+                        name: "Teacher Attendance Compliance",
                         property: "percentage",
                         sticky: true,
                         class: "text-center",
@@ -350,6 +350,224 @@ export const config = {
             },
             "bigNumber": {
                 "valueSuffix": '%'
+            }
+        }
+    },
+    tac_attendance_compliance_rank: {
+        "label": "Teacher Attendance Compliance",
+        "defaultLevel": "district",
+        "filters": [
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where (date between startDate and endDate) and state_id = {state_id} group by t.district_id, district_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name",
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} and (date between startDate and endDate) group by t.block_id, block_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name",
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where (date between startDate and endDate) and block_id = {block_id} group by t.cluster_id, cluster_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name",
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where (date between startDate and endDate) and cluster_id = {cluster_id} group by t.school_id, school_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_atd_cmp_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name",
+                    },
+                    "level": "class"
+                }
+            }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Grade",
+                        property: "grade",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Rank in Attendance Compliance",
+                        property: "rank",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: '#fff'
+                    }
+                ],
+            }
+        }
+    },
+    tas_average_attendance_rank: {
+        "label": "Teacher Attendance SUmmary",
+        "defaultLevel": "district",
+        "filters": [
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where (date between startDate and endDate) and state_id = {state_id} group by t.district_id, district_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name",
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} and (date between startDate and endDate) group by t.block_id, block_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name",
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where (date between startDate and endDate) and block_id = {block_id} group by t.cluster_id, cluster_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name",
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where (date between startDate and endDate) and cluster_id = {cluster_id} group by t.school_id, school_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank from ingestion.sac_tchs_avg_atd_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name",
+                    },
+                    "level": "class"
+                }
+            }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Grade",
+                        property: "grade",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Rank in Average Attendance",
+                        property: "rank",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: '#fff'
+                    }
+                ],
             }
         }
     }

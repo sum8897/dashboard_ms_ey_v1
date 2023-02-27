@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SacAverageAttendanceComplianceComponent } from '../student-attendance-compliance/reports/sac-average-attendance-compliance/sac-average-attendance-compliance.component';
 import { GenderWiseAverageAttendanceComponent } from './reports/gender-wise-average-attendance/gender-wise-average-attendance.component';
 import { GradeWiseAverageAttendanceComponent } from './reports/grade-wise-average-attendance/grade-wise-average-attendance.component';
+import { SasAverageAttendanceRankComponent } from './reports/sas-average-attendance-rank/sas-average-attendance-rank.component';
+import { SasAverageAttendanceComponent } from './reports/sas-average-attendance/sas-average-attendance.component';
 
 @Component({
   selector: 'app-student-attendance-summary',
@@ -16,9 +17,11 @@ export class StudentAttendanceSummaryComponent implements OnInit {
   startDate: any;
   endDate: any;
 
-  @ViewChild('averageAttendance') averageAttendanceCompliance:SacAverageAttendanceComplianceComponent;
+  @ViewChild('averageAttendance') averageAttendanceCompliance:SasAverageAttendanceComponent;
   @ViewChild('genderWiseAverageAttendance') genderWiseAverageAttendance: GenderWiseAverageAttendanceComponent;
   @ViewChild('gradeWiseAverageAttendance') gradeWiseAverageAttendance: GradeWiseAverageAttendanceComponent;
+  @ViewChild('averageAttendanceRank') averageAttendanceComplianceRank:SasAverageAttendanceRankComponent;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class StudentAttendanceSummaryComponent implements OnInit {
       this.averageAttendanceCompliance?.getReportData(this.startDate, this.endDate);
       this.genderWiseAverageAttendance?.getReportData(this.startDate, this.endDate);
       this.gradeWiseAverageAttendance?.getReportData(this.startDate, this.endDate);
+      this.averageAttendanceComplianceRank?.getReportData(this.startDate, this.endDate);
     }
   }
 

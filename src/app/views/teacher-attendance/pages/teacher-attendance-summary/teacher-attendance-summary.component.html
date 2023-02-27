@@ -10,6 +10,9 @@
             <div class="col-span-2 xmd:col-span-1 div-shadow">
                 <app-tas-average-attendance #averageAttendance [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" (bigNumberReport)="appendBigNumber($event)"></app-tas-average-attendance>
             </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-tac-average-attendance-rank #averageAttendanceRank [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-tac-average-attendance-rank>
+            </div>
         </div>
         
     </div>

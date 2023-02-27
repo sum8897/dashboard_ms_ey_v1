@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -24,13 +24,15 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   filters: any = [];
   levels: any;
   tableReportData: any;
-  startDate: any;
-  endDate: any;
   minDate: any;
   maxDate: any;
   filterIndex: any;
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
+
+  @Output() exportDates = new EventEmitter<any>();
+  @Input() startDate: any;
+  @Input() endDate: any;
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -53,7 +55,7 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = filter?.actions?.queries
+          queries = {...filter?.actions?.queries}
           timeSeriesQueries = filter?.timeSeriesQueries
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
@@ -86,9 +88,9 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
+    let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
       rows.forEach(row => {
         if (this.minDate !== undefined && this.maxDate !== undefined) {
           if (row['min_date'] < this.minDate) {
@@ -147,6 +149,10 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
             }]
           }
         }
+      });
+      this.exportDates.emit({
+        minDate: this.minDate,
+        maxDate: this.maxDate
       });
     });
   }
