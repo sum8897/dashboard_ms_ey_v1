@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery} from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseFilterToQuery} from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
 @Component({
   selector: 'app-ts-average-pupil-teacher-ratio',
@@ -22,6 +22,7 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  dropDownFilter :string
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -38,7 +39,7 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
     this.getReportData();
   }
 
-  getReportData(): void {
+  getReportData(value?:string): void {
     let reportConfig = config
 
     let {  queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -63,10 +64,21 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
       if (query && key === 'table') {
-        this.getTableReportData(query, options);
+        if(this.dropDownFilter == undefined){
+          this.getTableReportData(query, options);
+        }
+        let params = {columnName: "academic_year", value: this.dropDownFilter};
+        let updatedquery= parseFilterToQuery(query,params)
+        this.getTableReportData(updatedquery, options);
       }
       else if (query && key === 'bigNumber') {
-        this.getBigNumberReportData(query, options, 'averagePercentage');
+        if(this.dropDownFilter == undefined){
+          this.getBigNumberReportData(query, options, 'averagePercentage');
+        }
+
+        let params = {columnName: "academic_year", value: this.dropDownFilter};
+        let updatedquery= parseFilterToQuery(query,params)
+        this.getBigNumberReportData(updatedquery, options, 'averagePercentage');
       }
 
     })
@@ -126,14 +138,15 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
         if (res) {
           let rows = res;
-          console.log('rowd data',res);
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0].pupil_teacher_ratio
+            averagePercentage: rows[0].pupil_teacher_ratio,
+            dropwownfilterDate:[{min_year:rows[0].min_year,max_year:rows[0].max_year}]
+
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
-            reportName:this.reportName
+            reportName:this.reportName,
           })
         }
       })

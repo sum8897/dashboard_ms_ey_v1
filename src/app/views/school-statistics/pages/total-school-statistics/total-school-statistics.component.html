@@ -6,16 +6,13 @@
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
                 <app-total-schools  #totalschools (bigNumberReport)="appendBigNumber($event)"></app-total-schools>
-                <!-- <app-total-schools></app-total-schools> -->
             </div>
         </div>
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <!-- <app-category-wise-total-schools #genderWiseAverageAttendance (exportDates)="settimeSeriesDates($event)"></app-category-wise-total-schools> -->
                 <app-category-wise-total-schools></app-category-wise-total-schools>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <!-- <app-grade-wise-average-attendance #gradeWiseAverageAttendance (exportDates)="settimeSeriesDates($event)"></app-grade-wise-average-attendance> -->
                 <app-enrolment-wise-schools></app-enrolment-wise-schools>
             </div>
         </div>

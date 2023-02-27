@@ -26,7 +26,6 @@ export class TeacherStatisticsMainComponent implements OnInit {
     this.bigNumberReports = {
       ...this.bigNumberReports,
       [reportName]: data
-
     }
     this.pushIfUnique(data.dropwownfilterDate)
   }
@@ -35,8 +34,8 @@ export class TeacherStatisticsMainComponent implements OnInit {
     console.log('date values',arr);
 
   arr.forEach(obj => {
-    const minYear = parseInt(obj.min_year);
-    const maxYear = parseInt(obj.max_year);
+    let minYear = parseInt(obj.min_year);
+    let maxYear = parseInt(obj.max_year);
 
     for (let year = minYear; year <= maxYear; year++) {
       if (this.academicYear.indexOf(String(year)) === -1) {
@@ -52,6 +51,7 @@ export class TeacherStatisticsMainComponent implements OnInit {
   onSelectOption(selectedvalue: any): void {
     this.selectedOption = selectedvalue;
     this.totalTeachersComponent.getReportData(this.selectedOption)
+    this.averagepupilteacherratioComponent.getReportData(this.selectedOption)
   }
   getObjectlen(object: Object) {
     return Object.keys(object).length
