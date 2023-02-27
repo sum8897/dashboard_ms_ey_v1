@@ -150,7 +150,6 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
         if (res) {
           let rows = res;
-          console.log('the dadsdsdsd',rows);
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
             averagePercentage: rows[0].total_teachers,
