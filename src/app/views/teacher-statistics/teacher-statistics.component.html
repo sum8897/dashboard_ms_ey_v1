@@ -9,8 +9,7 @@
 <div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)">
-        <mat-tab label="School Statistics"  *ngIf="tabs.includes('Total Teachers')">
-            
+        <mat-tab label="Teacher Statistics"  *ngIf="tabs.includes('Total Teachers')">
             <app-teacher-statistics-main *ngIf="selectedTabLabel === 'Total Teachers'"></app-teacher-statistics-main>
         </mat-tab>
     </mat-tab-group>
