@@ -11,8 +11,7 @@ export class TeacherStatisticsMainComponent implements OnInit {
 
   bigNumberReports: any = {};
   selectedOption: string;
-  options = ['Please select', '2023', '2024',];
-  academicYear: string[] = ['Please select'];
+  academicYear: string[] = [];
 
   @ViewChild('totalteachers') totalTeachersComponent: TsTotalTeachersComponent;
   @ViewChild('averagepupilteacherratio') averagepupilteacherratioComponent: TsAveragePupilTeacherRatioComponent;
@@ -27,9 +26,13 @@ export class TeacherStatisticsMainComponent implements OnInit {
       ...this.bigNumberReports,
       [reportName]: data
     }
+    console.log('the ddata is ............',data);
     this.pushIfUnique(data.dropwownfilterDate)
-  }
 
+  }
+  minMaxDate(dates:any){
+    console.log('the dasdhasvdhgvasfvhfh fbsdvfh',dates);
+  }
   pushIfUnique(arr): void {
     console.log('date values',arr);
 
@@ -42,7 +45,6 @@ export class TeacherStatisticsMainComponent implements OnInit {
         this.academicYear.push(String(year));
       }
     }
-    console.log('asvdhgvvd',this.academicYear);
     return this.academicYear;
   });
 
@@ -50,8 +52,8 @@ export class TeacherStatisticsMainComponent implements OnInit {
   }
   onSelectOption(selectedvalue: any): void {
     this.selectedOption = selectedvalue;
-    this.totalTeachersComponent.getReportData(this.selectedOption)
-    this.averagepupilteacherratioComponent.getReportData(this.selectedOption)
+    this.totalTeachersComponent.getReportData(selectedvalue)
+    this.averagepupilteacherratioComponent.getReportData(selectedvalue)
   }
   getObjectlen(object: Object) {
     return Object.keys(object).length

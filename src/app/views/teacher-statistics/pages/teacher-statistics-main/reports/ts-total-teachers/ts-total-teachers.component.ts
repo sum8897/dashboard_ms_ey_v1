@@ -18,14 +18,14 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
   bigNumberReportData: any = {
     reportName: "Total Teachers"
   };
-  minDate: any;
-  maxDate: any;
+  minDate: '2024';
+  maxDate: '2025';
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
   dropDownFilter :string
   @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportDates = new EventEmitter<any>();
+  @Output() exportMinMaxDate = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
@@ -78,18 +78,23 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
         if(this.dropDownFilter == undefined){
           this.getTableReportData(query, options);
         }
+        else{
         let params = {columnName: "academic_year", value: this.dropDownFilter};
         let updatedquery= parseFilterToQuery(query,params)
+        console.log('updated the quary',updatedquery);
         this.getTableReportData(updatedquery, options);
+      }
       }
       else if (query && key === 'bigNumber') {
         if(this.dropDownFilter == undefined){
           this.getBigNumberReportData(query, options, 'averagePercentage');
         }
+        else{
 
         let params = {columnName: "academic_year", value: this.dropDownFilter};
         let updatedquery= parseFilterToQuery(query,params)
         this.getBigNumberReportData(updatedquery, options, 'averagePercentage');
+        }
       }
 
     })
@@ -114,7 +119,6 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
 
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      console.log('the data is ',res);
       let rows = res; 
       let { table: { columns } } = options;
       this.tableReportData = {
@@ -134,8 +138,12 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
             return col;
           }
         })
-      }
 
+      } 
+      this.exportMinMaxDate.emit({
+        minDate: this.minDate,
+        maxDate: this.maxDate
+      });
     });
   }
 

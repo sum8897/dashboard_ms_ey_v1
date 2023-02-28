@@ -312,8 +312,8 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name ,round(avg(sum_students_enrolled /sum_total_teachers ),2) as pupil_teacher_ratio  from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.scl_stats_avg_pupil_tch_ratio_by_district as t on m.district_id = t.district_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, state_name",
-                        "bigNumber": "select round(avg(sum_students_enrolled /sum_total_teachers ),2) as pupil_teacher_ratio from ingestion.scl_stats_avg_pupil_tch_ratio_by_state where state_id = {state_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, state_name, district_name ,round(avg(sum_students_enrolled /sum_total_teachers ),2) as pupil_teacher_ratio  from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.scl_stats_avg_pupil_tch_ratio_by_district as t on m.district_id = t.district_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(sum_students_enrolled /sum_total_teachers ),2) as pupil_teacher_ratio from ingestion.scl_stats_avg_pupil_tch_ratio_by_state where state_id = {state_id}",
                     },
                     "level": "district"
                 }

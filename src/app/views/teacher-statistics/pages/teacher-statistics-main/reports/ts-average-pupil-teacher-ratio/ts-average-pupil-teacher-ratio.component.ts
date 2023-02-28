@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -9,7 +9,7 @@ import { config } from 'src/app/views/teacher-statistics/config/teacher_statisti
   templateUrl: './ts-average-pupil-teacher-ratio.component.html',
   styleUrls: ['./ts-average-pupil-teacher-ratio.component.scss']
 })
-export class TsAveragePupilTeacherRatioComponent implements OnInit {
+export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
   reportName: string = 'ts_stat_average_pupil_teacher_ratio';
   filters: any = [];
   levels: any;
@@ -38,8 +38,12 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
   ngOnInit(): void {
     this.getReportData();
   }
-
+  ngOnChanges() {
+    
+    this.getReportData()
+  }
   getReportData(value?:string): void {
+    this.dropDownFilter = value
     let reportConfig = config
 
     let {  queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -67,19 +71,21 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit {
         if(this.dropDownFilter == undefined){
           this.getTableReportData(query, options);
         }
+        else{
         let params = {columnName: "academic_year", value: this.dropDownFilter};
         let updatedquery= parseFilterToQuery(query,params)
         this.getTableReportData(updatedquery, options);
-      }
+        }}
       else if (query && key === 'bigNumber') {
         if(this.dropDownFilter == undefined){
           this.getBigNumberReportData(query, options, 'averagePercentage');
         }
+        else{
 
         let params = {columnName: "academic_year", value: this.dropDownFilter};
         let updatedquery= parseFilterToQuery(query,params)
         this.getBigNumberReportData(updatedquery, options, 'averagePercentage');
-      }
+        }}
 
     })
   }
