@@ -83,10 +83,10 @@ export class EnrolmentWiseSchoolsComponent implements OnInit {
       let rows = res;
       let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
       
-      if(isMultibar){
-        console.log('');
-        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
-      }
+      // if(isMultibar){
+      //   console.log('');
+      //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      // }
       console.log('the is multibar',rows);
       this.tableReportData = {
         values: rows
