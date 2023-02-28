@@ -5,21 +5,22 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-import { config } from 'src/app/views/school-statistics/config/school_statistics_config';
+import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
+
 @Component({
-  selector: 'app-enrolment-wise-schools',
-  templateUrl: './enrolment-wise-schools.component.html',
-  styleUrls: ['./enrolment-wise-schools.component.scss']
+  selector: 'app-ts-category-wise-average-pupil-teacher-ratio',
+  templateUrl: './ts-category-wise-average-pupil-teacher-ratio.component.html',
+  styleUrls: ['./ts-category-wise-average-pupil-teacher-ratio.component.scss']
 })
-export class EnrolmentWiseSchoolsComponent implements OnInit {
+export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  {
 
   title: any;
   chartHeight: any;
   marginTop: any;
   config;
   data;
-  fileName: string = "Student Enrolment Wise Number of Schools";
-  reportName: string = 'scl_stat_student_enrolment_wise_number_of_Schools';
+  fileName: string = "Category Wise Average Pupil Teacher Ratio";
+  reportName: string = 'ts_stat_category_wise_average_pupil_total_teachers_ratio';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -52,7 +53,7 @@ export class EnrolmentWiseSchoolsComponent implements OnInit {
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = filter?.actions?.queries
           
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
@@ -83,10 +84,10 @@ export class EnrolmentWiseSchoolsComponent implements OnInit {
       let rows = res;
       let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
       
-      // if(isMultibar){
-      //   console.log('');
-      //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
-      // }
+      if(isMultibar){
+        console.log('');
+        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      }
       console.log('the is multibar',rows);
       this.tableReportData = {
         values: rows

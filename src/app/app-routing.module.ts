@@ -61,6 +61,13 @@ var routes: Routes = [];
               (module) => module.StudentStatisticsModule
             )
         },
+        {
+          path: 'teacher-statistics',
+          loadChildren: () => 
+            import('./views/teacher-statistics/teacher-statistics.module').then(
+              (module) => module.TeacherStatisticsModule
+            )
+        },
       ],
     },
   ];

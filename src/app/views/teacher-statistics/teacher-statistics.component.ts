@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
-import { config } from './config/teacher_attendance_config';
-
+import { config } from './config/teacher_statistics_config'
 @Component({
-  selector: 'app-teacher-attendance',
-  templateUrl: './teacher-attendance.component.html',
-  styleUrls: ['./teacher-attendance.component.scss']
+  selector: 'app-teacher-statistics',
+  templateUrl: './teacher-statistics.component.html',
+  styleUrls: ['./teacher-statistics.component.scss']
 })
-export class TeacherAttendanceComponent implements OnInit {
+export class TeacherStatisticsComponent implements OnInit {
   loadTabs = false;
   rbacDetails: any;
   tabIndex;
   selectedTabLabel;
   tabs: any = [];
+
   
-  constructor(private route: ActivatedRoute, private _rbacService: RbacService) { 
+constructor(private route: ActivatedRoute, private _rbacService: RbacService) { 
     this.route.queryParams.subscribe((param: any) => {
       this.tabIndex = param.tab ? Number(param.tab) : 0;
     })
@@ -24,9 +24,11 @@ export class TeacherAttendanceComponent implements OnInit {
     })
     let allTabs = [...Object.keys(config)]
     allTabs.forEach((tab: any) => {
+
       config?.[tab]?.filters?.every((filter) => {
         if((Number(filter?.hierarchyLevel) === this.rbacDetails?.role) || this.rbacDetails?.role === 0){
           if(!(this.tabs.includes(config?.[tab]?.label))){
+            console.log('aasasasa ',this.tabs);
             this.tabs.push(config?.[tab]?.label)
           }
           return false

@@ -1,0 +1,45 @@
+<div class="col-span-full tab-wrapper" appFullScreen>
+    <div class="dopdown">
+        <select class="custom-select" (change)="onSelectOption(option.value)" #option >
+            <option value="" disabled selected>Select year</option>
+            <option *ngFor="let option of academicYear" [value]="option" placeholder="Select Year">{{ option }} </option>
+        </select>
+    </div>
+    <div class="reports-row">
+
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-big-number [bigNumberReportData]="bigNumberReports['ts_stat_total_teachers']"></app-big-number>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-ts-total-teachers #totalteachers
+                    (bigNumberReport)="appendBigNumber($event)" (exportMinMaxDate)="minMaxDate($event)"></app-ts-total-teachers>
+            </div>
+        </div>
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-big-number
+                    [bigNumberReportData]="bigNumberReports['ts_stat_average_pupil_teacher_ratio']"></app-big-number>
+
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-ts-average-pupil-teacher-ratio #averagepupilteacherratio
+                    (bigNumberReport)="appendBigNumber($event)"></app-ts-average-pupil-teacher-ratio>
+            </div>
+        </div>
+
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-ts-category-wise-total-teachers></app-ts-category-wise-total-teachers>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-ts-category-wise-average-pupil-teacher-ratio></app-ts-category-wise-average-pupil-teacher-ratio>
+            </div>
+        </div>
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow">
+                <app-ts-rank-in-average-pupil-teacher-ratio></app-ts-rank-in-average-pupil-teacher-ratio>
+            </div>
+        </div>
+    </div>
+</div>
