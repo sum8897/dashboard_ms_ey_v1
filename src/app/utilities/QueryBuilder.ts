@@ -184,3 +184,20 @@ export function parseQueryParam(query: string, params: any) {
     return newQuery ? newQuery : query;
 }
 
+export function parseFilterToQuery(query: string, params?: { columnName: string, value: any }): string {
+    let whereIndex = query.toLowerCase().indexOf('where');
+    let groupByIndex = query.toLowerCase().indexOf('group by');
+    if ((params?.value == undefined && query) || (query && query.indexOf(params?.columnName) > -1 && whereIndex > -1 && query.indexOf(params?.columnName) > whereIndex)) {
+        return query;
+    }
+    let value = typeof params.value === 'string' ? `'${params.value}'` : params.value;
+    if (whereIndex === -1 && groupByIndex === -1) {
+        return query.trim() + ` WHERE ${params.columnName} = ${value}`;
+    } else if (whereIndex !== -1 && groupByIndex === -1) {
+        return query.substring(0, whereIndex) + `WHERE ${params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
+    } else if (whereIndex === -1 && groupByIndex !== -1) {
+        return query.substring(0, groupByIndex) + ` WHERE ${params.columnName} = ${value} ` + query.substring(groupByIndex);
+    } else {
+        return query.substring(0, whereIndex) + `WHERE ${params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
+    }
+}

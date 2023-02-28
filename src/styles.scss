@@ -9,11 +9,17 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Arial, Helvetica, sans-serif;}
 
-body {
-    &:before {
-        background: url('assets/images/Union.svg');
-        background-repeat: no-repeat;
-}
+// body {
+//     &:before {
+//         background: url('assets/images/background.png');
+//         background-repeat: no-repeat;
+// }
+// }
+html body {
+    background: url('assets/images/background.png') !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
 }
 
 .button-grp, #download1{

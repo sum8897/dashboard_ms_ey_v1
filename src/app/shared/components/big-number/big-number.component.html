@@ -22,6 +22,7 @@
     <div class="report-name text-center">
         {{bigNumberReportData?.reportName}}
     </div>
-    
-
+</div>
+<div class="noData" *ngIf="!averagePercentage || averagePercentage === undefined">
+    No Data Found
 </div>

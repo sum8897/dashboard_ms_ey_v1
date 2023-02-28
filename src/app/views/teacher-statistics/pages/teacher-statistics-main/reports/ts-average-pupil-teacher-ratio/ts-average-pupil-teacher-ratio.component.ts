@@ -1,33 +1,31 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseQueryParam, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-
-import { config } from 'src/app/views/school-statistics/config/school_statistics_config';
-
+import { buildQuery, parseFilterToQuery } from 'src/app/utilities/QueryBuilder';
+import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
 @Component({
-  selector: 'app-total-schools',
-  templateUrl: './total-schools.component.html',
-  styleUrls: ['./total-schools.component.scss']
+  selector: 'app-ts-average-pupil-teacher-ratio',
+  templateUrl: './ts-average-pupil-teacher-ratio.component.html',
+  styleUrls: ['./ts-average-pupil-teacher-ratio.component.scss']
 })
-export class TotalSchoolsComponent implements OnInit {
-  reportName: string = 'scl_stat_total_school';
+export class TsAveragePupilTeacherRatioComponent implements OnInit, OnChanges {
+  reportName: string = 'ts_stat_average_pupil_teacher_ratio';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total School"
+    reportName: "Average Pupil Teacher Ratio"
   };
-  minDate: any;
-  maxDate: any;
+  minYear: any;
+  maxYear: any;
   compareDateRange: any = 30;
-  // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
+  selectedYear: string
 
   @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportDates = new EventEmitter<any>();
+  @Output() exportMinmaxYear = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
@@ -40,19 +38,21 @@ export class TotalSchoolsComponent implements OnInit {
   ngOnInit(): void {
     this.getReportData();
   }
+  ngOnChanges() {
 
-  getReportData(startDate = undefined, endDate = undefined): void {
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.getReportData()
+  }
+  getReportData(value?: string): void {
+    this.selectedYear = value
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = { ...filter?.actions?.queries }
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
@@ -63,18 +63,14 @@ export class TotalSchoolsComponent implements OnInit {
     }
 
     Object.keys(queries).forEach((key: any) => {
-      if (key.toLowerCase().includes('comparison')) {
-        let currentYear = new Date().getFullYear()
-        let lastYear = currentYear -1;
-        onLoadQuery = parseQueryParam(queries[key], {'lastYear': lastYear})
-      }
-      else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
-      }
+      onLoadQuery = queries[key]
+
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
+      }
 
       if (query && key === 'table') {
         this.getTableReportData(query, options);
@@ -82,9 +78,7 @@ export class TotalSchoolsComponent implements OnInit {
       else if (query && key === 'bigNumber') {
         this.getBigNumberReportData(query, options, 'averagePercentage');
       }
-      else if (query && key === 'bigNumberComparison') {
-        this.getBigNumberReportData(query, options, 'differencePercentage')
-      }
+
     })
   }
 
@@ -108,6 +102,20 @@ export class TotalSchoolsComponent implements OnInit {
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
+      rows.forEach(row => {
+        if (this.minYear !== undefined && this.maxYear !== undefined) {
+          if (row['min_year'] < this.minYear) {
+            this.minYear = row['min_year']
+          }
+          if (row['max_year'] > this.maxYear) {
+            this.maxYear = row['max_year']
+          }
+        }
+        else {
+          this.minYear = row['min_year']
+          this.maxYear = row['max_year']
+        }
+      });
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
@@ -127,12 +135,16 @@ export class TotalSchoolsComponent implements OnInit {
           }
         })
       }
+      this.exportMinmaxYear.emit({
+        minYear: this.minYear,
+        maxYear: this.maxYear
+      })
     });
   }
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix, property } = bigNumber ?? {};
+    let { valueSuffix } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -140,33 +152,36 @@ export class TotalSchoolsComponent implements OnInit {
       }
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
         if (res) {
-          console.log(res)
           let rows = res;
+          rows.forEach(row => {
+            if (this.minYear !== undefined && this.maxYear !== undefined) {
+              if (row['min_year'] < this.minYear) {
+                this.minYear = row['min_year']
+              }
+              if (row['max_year'] > this.maxYear) {
+                this.maxYear = row['max_year']
+              }
+            }
+            else {
+              this.minYear = row['min_year']
+              this.maxYear = row['max_year']
+            }
+          });
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0]?.total_schools
+            averagePercentage: rows[0].pupil_teacher_ratio,
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
-            reportName:this.reportName
+            reportName: this.reportName
+          })
+          this.exportMinmaxYear.emit({
+            minYear: this.minYear,
+            maxYear: this.maxYear
           })
         }
       })
     }
-    else if (indicator === 'differencePercentage') {
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            differencePercentage: rows[0].total_schools
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
+
   }
 }

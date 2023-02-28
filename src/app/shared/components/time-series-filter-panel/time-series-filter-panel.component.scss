@@ -3,3 +3,12 @@
     margin: 5px;
     margin-bottom: 20px;
 }
+
+::ng-deep{
+    button.btn.btn-default.clear.ng-star-inserted {
+        svg{
+            display: none !important;
+        }
+        border-radius: 2px;   
+    }
+}
