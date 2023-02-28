@@ -142,7 +142,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year, district_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from ingestion.scl_stats_grade_wise_tchs_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id group by t.district_id, district_name, t.school_category",
+                        "barChart": "select district_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.scl_stats_grade_wise_tchs_by_district as t on m.district_id = t.district_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.school_category",
                     },
                     "level": "district"
                 }
@@ -154,7 +154,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from ingestion.scl_stats_grade_wise_tchs_by_block as t left join ingestion.dimension_block as d on t.block_id = d.block_id group by t.block_id, block_name, t.school_category",
+                        "barChart": "select block_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from (select distinct(block_id), district_id from ingestion.dimension_master) as m join ingestion.scl_stats_grade_wise_tchs_by_block as t on m.block_id = t.block_id left join ingestion.dimension_block as d on t.block_id = d.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.school_category",
                     },
                     "level": "block"
                 }
@@ -166,7 +166,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from ingestion.scl_stats_grade_wise_tchs_by_cluster as t left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id group by t.cluster_id, cluster_name, t.school_category",
+                        "barChart": "select cluster_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from (select distinct(cluster_id), block_id from ingestion.dimension_master) as m join ingestion.scl_stats_grade_wise_tchs_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.school_category",
                     },
                     "level": "cluster"
                 }
@@ -178,7 +178,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from ingestion.scl_stats_grade_wise_tchs_by_school as t left join ingestion.dimension_school as d on t.school_id = d.school_id group by t.school_id, school_name, t.school_category",
+                        "barChart": "select school_name as location,t.school_category, sum(sum_total_teachers) as total_teachers from (select distinct(school_id), cluster_id from ingestion.dimension_master) as m join ingestion.scl_stats_grade_wise_tchs_by_school as t on t.school_id = m.school_id left join ingestion.dimension_school as d on t.school_id = d.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.school_category",
                     },
                     "level": "school"
                 }
