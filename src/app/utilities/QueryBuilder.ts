@@ -185,7 +185,7 @@ export function parseQueryParam(query: string, params: any) {
 }
 
 export function parseFilterToQuery(query: string, params?: { columnName: string, value: any }): string {
-    if ((params?.value == undefined && query) || (query.indexOf(`${params.columnName}`))) {
+    if (params?.value == undefined && query) {
         return query;
     }
     let whereIndex = query.toLowerCase().indexOf('where');
