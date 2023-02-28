@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
-import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, multibarGroupBy, parseFilterToQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
 
 @Component({
@@ -26,11 +26,14 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
   tableReportData: any;
   startDate: any;
   endDate: any;
-  minDate: any;
-  maxDate: any;
+  minYear: any;
+  maxYear: any;
+  selectedYear: any;
   filterIndex: any;
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
+
+  @Output() exportMinmaxYear = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -42,9 +45,8 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
     this.getReportData();
   }
 
-  async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
-    this.startDate = startDate;
-    this.endDate = endDate;
+  async getReportData(value?: string): Promise<void> {
+    this.selectedYear = value
     let reportConfig = config
 
     let {  queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -71,6 +73,11 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
       onLoadQuery = queries[key]
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
 
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
+      }
+
       if (query && key === 'barChart') {
         this.getBarChartReportData(query, options, filters, defaultLevel);
       }
@@ -82,6 +89,20 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
   getBarChartReportData(query, options, filters, defaultLevel): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
+      rows.forEach(row => {
+        if (this.minYear !== undefined && this.maxYear !== undefined) {
+          if (row['min_year'] < this.minYear) {
+            this.minYear = row['min_year']
+          }
+          if (row['max_year'] > this.maxYear) {
+            this.maxYear = row['max_year']
+          }
+        }
+        else {
+          this.minYear = row['min_year']
+          this.maxYear = row['max_year']
+        }
+      }); 
       let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
       
       if(isMultibar){
@@ -131,6 +152,10 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
           }
         }
       });
+      this.exportMinmaxYear.emit({
+        minYear: this.minYear,
+        maxYear: this.maxYear
+      })
     });
   }
 

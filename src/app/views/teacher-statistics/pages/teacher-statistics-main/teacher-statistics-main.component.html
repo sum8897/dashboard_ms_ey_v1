@@ -1,9 +1,8 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
-    <div class="dopdown">
-        <select class="custom-select" (change)="onSelectOption(option.value)" #option >
-            <option value="" disabled selected>Select year</option>
-            <option *ngFor="let option of academicYear" [value]="option" placeholder="Select Year">{{ option }} </option>
-        </select>
+    <div class="grid grid-cols-6 ml-3">
+        <ng-select class="col-span-6 xmd:col-span-3 lg:col-span-1" (change)="onSelectOption($event)" placeholder="Select Year">
+            <ng-option *ngFor="let option of academicYear" [value]="option">{{option}}</ng-option>
+        </ng-select>
     </div>
     <div class="reports-row">
 
@@ -13,7 +12,7 @@
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
                 <app-ts-total-teachers #totalteachers
-                    (bigNumberReport)="appendBigNumber($event)" (exportMinMaxDate)="minMaxDate($event)"></app-ts-total-teachers>
+                    (bigNumberReport)="appendBigNumber($event)" (exportMinmaxYear)="minMaxDate($event)"></app-ts-total-teachers>
             </div>
         </div>
         <div class="row-wrapper grid grid-cols-2 gap-4">
@@ -24,21 +23,21 @@
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
                 <app-ts-average-pupil-teacher-ratio #averagepupilteacherratio
-                    (bigNumberReport)="appendBigNumber($event)"></app-ts-average-pupil-teacher-ratio>
+                    (bigNumberReport)="appendBigNumber($event)" (exportMinmaxYear)="minMaxDate($event)"></app-ts-average-pupil-teacher-ratio>
             </div>
         </div>
 
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-ts-category-wise-total-teachers></app-ts-category-wise-total-teachers>
+                <app-ts-category-wise-total-teachers #catWiseTotalTeacher></app-ts-category-wise-total-teachers>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-ts-category-wise-average-pupil-teacher-ratio></app-ts-category-wise-average-pupil-teacher-ratio>
+                <app-ts-category-wise-average-pupil-teacher-ratio #catWiseAvgPupilTeacherRatio></app-ts-category-wise-average-pupil-teacher-ratio>
             </div>
         </div>
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-ts-rank-in-average-pupil-teacher-ratio></app-ts-rank-in-average-pupil-teacher-ratio>
+                <app-ts-rank-in-average-pupil-teacher-ratio #rankAvgPupilTeacherRatio></app-ts-rank-in-average-pupil-teacher-ratio>
             </div>
         </div>
     </div>

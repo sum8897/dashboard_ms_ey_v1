@@ -185,11 +185,11 @@ export function parseQueryParam(query: string, params: any) {
 }
 
 export function parseFilterToQuery(query: string, params?: { columnName: string, value: any }): string {
-    if (params?.value == undefined && query) {
-        return query;
-    }
     let whereIndex = query.toLowerCase().indexOf('where');
     let groupByIndex = query.toLowerCase().indexOf('group by');
+    if ((params?.value == undefined && query) || (query && query.indexOf(params?.columnName) > -1 && whereIndex > -1 && query.indexOf(params?.columnName) > whereIndex)) {
+        return query;
+    }
     let value = typeof params.value === 'string' ? `'${params.value}'` : params.value;
     if (whereIndex === -1 && groupByIndex === -1) {
         return query.trim() + ` WHERE ${params.columnName} = ${value}`;

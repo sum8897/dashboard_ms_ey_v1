@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseFilterToQuery} from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseFilterToQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
 @Component({
   selector: 'app-ts-average-pupil-teacher-ratio',
   templateUrl: './ts-average-pupil-teacher-ratio.component.html',
   styleUrls: ['./ts-average-pupil-teacher-ratio.component.scss']
 })
-export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
+export class TsAveragePupilTeacherRatioComponent implements OnInit, OnChanges {
   reportName: string = 'ts_stat_average_pupil_teacher_ratio';
   filters: any = [];
   levels: any;
@@ -17,15 +17,15 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
   bigNumberReportData: any = {
     reportName: "Average Pupil Teacher Ratio"
   };
-  minDate: any;
-  maxDate: any;
+  minYear: any;
+  maxYear: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  dropDownFilter :string
+  selectedYear: string
 
   @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportDates = new EventEmitter<any>();
+  @Output() exportMinmaxYear = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
@@ -39,21 +39,21 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
     this.getReportData();
   }
   ngOnChanges() {
-    
+
     this.getReportData()
   }
-  getReportData(value?:string): void {
-    this.dropDownFilter = value
+  getReportData(value?: string): void {
+    this.selectedYear = value
     let reportConfig = config
 
-    let {  queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}        
-            Object.keys(queries).forEach((key) => {
+          queries = { ...filter?.actions?.queries }
+          Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
           return false
@@ -67,25 +67,17 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
 
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
-      if (query && key === 'table') {
-        if(this.dropDownFilter == undefined){
-          this.getTableReportData(query, options);
-        }
-        else{
-        let params = {columnName: "academic_year", value: this.dropDownFilter};
-        let updatedquery= parseFilterToQuery(query,params)
-        this.getTableReportData(updatedquery, options);
-        }}
-      else if (query && key === 'bigNumber') {
-        if(this.dropDownFilter == undefined){
-          this.getBigNumberReportData(query, options, 'averagePercentage');
-        }
-        else{
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
+      }
 
-        let params = {columnName: "academic_year", value: this.dropDownFilter};
-        let updatedquery= parseFilterToQuery(query,params)
-        this.getBigNumberReportData(updatedquery, options, 'averagePercentage');
-        }}
+      if (query && key === 'table') {
+        this.getTableReportData(query, options);
+      }
+      else if (query && key === 'bigNumber') {
+        this.getBigNumberReportData(query, options, 'averagePercentage');
+      }
 
     })
   }
@@ -101,7 +93,7 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
       Object.keys(this.rbacDetails).forEach((key: any) => {
         if (propertyName === key + '_id') {
           newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
-        } 
+        }
       });
     }
     return newQuery
@@ -110,6 +102,20 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
+      rows.forEach(row => {
+        if (this.minYear !== undefined && this.maxYear !== undefined) {
+          if (row['min_year'] < this.minYear) {
+            this.minYear = row['min_year']
+          }
+          if (row['max_year'] > this.maxYear) {
+            this.maxYear = row['max_year']
+          }
+        }
+        else {
+          this.minYear = row['min_year']
+          this.maxYear = row['max_year']
+        }
+      });
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
@@ -129,7 +135,10 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
           }
         })
       }
-     
+      this.exportMinmaxYear.emit({
+        minYear: this.minYear,
+        maxYear: this.maxYear
+      })
     });
   }
 
@@ -144,19 +153,35 @@ export class TsAveragePupilTeacherRatioComponent implements OnInit ,OnChanges {
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
         if (res) {
           let rows = res;
+          rows.forEach(row => {
+            if (this.minYear !== undefined && this.maxYear !== undefined) {
+              if (row['min_year'] < this.minYear) {
+                this.minYear = row['min_year']
+              }
+              if (row['max_year'] > this.maxYear) {
+                this.maxYear = row['max_year']
+              }
+            }
+            else {
+              this.minYear = row['min_year']
+              this.maxYear = row['max_year']
+            }
+          });
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
             averagePercentage: rows[0].pupil_teacher_ratio,
-            dropwownfilterDate:[{min_year:rows[0].min_year,max_year:rows[0].max_year}]
-
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
-            reportName:this.reportName,
+            reportName: this.reportName
+          })
+          this.exportMinmaxYear.emit({
+            minYear: this.minYear,
+            maxYear: this.maxYear
           })
         }
       })
     }
-    
+
   }
 }

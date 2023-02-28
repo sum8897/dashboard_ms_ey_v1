@@ -18,14 +18,14 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
   bigNumberReportData: any = {
     reportName: "Total Teachers"
   };
-  minDate: '2024';
-  maxDate: '2025';
+  minYear: any;
+  maxYear: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  dropDownFilter :string
+  selectedYear :string
   @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportMinMaxDate = new EventEmitter<any>();
+  @Output() exportMinmaxYear = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
@@ -49,7 +49,7 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
 
 
   getReportData(value?:string): void {
-    this.dropDownFilter = value
+    this.selectedYear = value
     let reportConfig = config   
 
 
@@ -74,27 +74,16 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
 
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
-      if (query && key === 'table') {
-        if(this.dropDownFilter == undefined){
-          this.getTableReportData(query, options);
-        }
-        else{
-        let params = {columnName: "academic_year", value: this.dropDownFilter};
-        let updatedquery= parseFilterToQuery(query,params)
-        console.log('updated the quary',updatedquery);
-        this.getTableReportData(updatedquery, options);
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
       }
+      
+      if (query && key === 'table') {
+        this.getTableReportData(query, options);
       }
       else if (query && key === 'bigNumber') {
-        if(this.dropDownFilter == undefined){
-          this.getBigNumberReportData(query, options, 'averagePercentage');
-        }
-        else{
-
-        let params = {columnName: "academic_year", value: this.dropDownFilter};
-        let updatedquery= parseFilterToQuery(query,params)
-        this.getBigNumberReportData(updatedquery, options, 'averagePercentage');
-        }
+        this.getBigNumberReportData(query, options, 'averagePercentage');
       }
 
     })
@@ -119,7 +108,21 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
 
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res; 
+      let rows = res;
+      rows.forEach(row => {
+        if (this.minYear !== undefined && this.maxYear !== undefined) {
+          if (row['min_year'] < this.minYear) {
+            this.minYear = row['min_year']
+          }
+          if (row['max_year'] > this.maxYear) {
+            this.maxYear = row['max_year']
+          }
+        }
+        else {
+          this.minYear = row['min_year']
+          this.maxYear = row['max_year']
+        }
+      }); 
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
@@ -138,12 +141,11 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
             return col;
           }
         })
-
-      } 
-      this.exportMinMaxDate.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
+      }
+      this.exportMinmaxYear.emit({
+        minYear: this.minYear,
+        maxYear: this.maxYear
+      })
     });
   }
 
@@ -158,14 +160,31 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
         if (res) {
           let rows = res;
+          rows.forEach(row => {
+            if (this.minYear !== undefined && this.maxYear !== undefined) {
+              if (row['min_year'] < this.minYear) {
+                this.minYear = row['min_year']
+              }
+              if (row['max_year'] > this.maxYear) {
+                this.maxYear = row['max_year']
+              }
+            }
+            else {
+              this.minYear = row['min_year']
+              this.maxYear = row['max_year']
+            }
+          });
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
             averagePercentage: rows[0].total_teachers,
-            dropwownfilterDate:[{min_year:rows[0].min_year,max_year:rows[0].max_year}]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
             reportName: this.reportName
+          })
+          this.exportMinmaxYear.emit({
+            minYear: this.minYear,
+            maxYear: this.maxYear
           })
         }
       })
