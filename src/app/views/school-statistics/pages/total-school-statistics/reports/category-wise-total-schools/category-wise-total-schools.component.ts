@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
-import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, multibarGroupBy, parseFilterToQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/school-statistics/config/school_statistics_config';
 @Component({
   selector: 'app-category-wise-total-schools',
@@ -25,11 +25,12 @@ export class CategoryWiseTotalSchoolsComponent implements OnInit {
   tableReportData: any;
   startDate: any;
   endDate: any;
-  minDate: any;
-  maxDate: any;
+  selectedYear: any;
   filterIndex: any;
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
+
+  @Output() exportMinmaxYear = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -41,9 +42,8 @@ export class CategoryWiseTotalSchoolsComponent implements OnInit {
     this.getReportData();
   }
 
-  async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
-    this.startDate = startDate;
-    this.endDate = endDate;
+  async getReportData(value?: string): Promise<void> {
+    this.selectedYear = value;
     let reportConfig = config
 
     let {  queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -70,6 +70,11 @@ export class CategoryWiseTotalSchoolsComponent implements OnInit {
       onLoadQuery = queries[key]
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
 
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
+      }
+
       if (query && key === 'barChart') {
         this.getBarChartReportData(query, options, filters, defaultLevel);
       }
@@ -79,15 +84,27 @@ export class CategoryWiseTotalSchoolsComponent implements OnInit {
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
+    let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
-      
-      if(isMultibar){
-        console.log('');
+      let minYear, maxYear;
+      rows.forEach(row => {
+        if (minYear !== undefined && maxYear !== undefined) {
+          if (row['min_year'] < minYear) {
+            minYear = row['min_year']
+          }
+          if (row['max_year'] > maxYear) {
+            maxYear = row['max_year']
+          }
+        }
+        else {
+          minYear = row['min_year']
+          maxYear = row['max_year']
+        }
+      });
+      if (isMultibar) {
         rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       }
-      console.log('the is multibar',rows);
       this.tableReportData = {
         values: rows
       }
@@ -130,18 +147,11 @@ export class CategoryWiseTotalSchoolsComponent implements OnInit {
           }
         }
       });
+      this.exportMinmaxYear.emit({
+        minYear: minYear,
+        maxYear: maxYear
+      })
     });
-  }
-
-  async filtersUpdated(filters: any): Promise<void> {
-    await new Promise(r => setTimeout(r, 100));
-    this.filters = [...filters]
-    let tempLevel = 1;
-    filters.forEach((filter: any) => {
-      tempLevel = Number(filter.hierarchyLevel) + 1 > Number(tempLevel) ? Number(filter.hierarchyLevel) + 1 : Number(tempLevel);
-    })
-    this.currentHierarchyLevel = tempLevel;
-    this.getReportData();
   }
 
   parseRbacFilter(query: string) {

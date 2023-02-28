@@ -37,7 +37,7 @@ export class RbacDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.rbacForm = this.fb.group({
-      state: [null],
+      state: [null, Validators.required],
       district: [null],
       block: [null],
       cluster: [null],
@@ -102,12 +102,12 @@ export class RbacDialogComponent implements OnInit {
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
         }
         if (filters[i].hierarchyLevel === baseHierarchy && !this.rbacForm.value[filters[i].name.toLowerCase()]) {
+          this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.setValidators(Validators.required)
+          this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
           await this._commonService.getReportDataNew(filters[i].query).subscribe((res: any) => {
             let rows = res;
             filters[i]['options'] = rows;
             constructedFilters.push(filters[i])
-            this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.setValidators(Validators.required)
-            this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
           })
         }
       }

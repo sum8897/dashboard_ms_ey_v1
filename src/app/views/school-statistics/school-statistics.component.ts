@@ -28,7 +28,6 @@ constructor(private route: ActivatedRoute, private _rbacService: RbacService) {
       config?.[tab]?.filters?.every((filter) => {
         if((Number(filter?.hierarchyLevel) === this.rbacDetails?.role) || this.rbacDetails?.role === 0){
           if(!(this.tabs.includes(config?.[tab]?.label))){
-            console.log('aasasasa ',this.tabs);
             this.tabs.push(config?.[tab]?.label)
           }
           return false

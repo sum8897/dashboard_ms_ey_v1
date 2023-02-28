@@ -1,5 +1,5 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
-    <div class="grid grid-cols-6 ml-3">
+    <div class="grid grid-cols-6 ml-3 filter-row">
         <ng-select class="col-span-6 xmd:col-span-3 lg:col-span-1" (change)="onSelectOption($event)" placeholder="Select Year">
             <ng-option *ngFor="let option of academicYear" [value]="option">{{option}}</ng-option>
         </ng-select>

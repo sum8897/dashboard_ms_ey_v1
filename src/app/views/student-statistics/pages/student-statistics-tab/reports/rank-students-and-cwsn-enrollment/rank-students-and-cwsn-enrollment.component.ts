@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseQueryParam } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseFilterToQuery, parseQueryParam } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-statistics/config/student_statistics_config';
 
 @Component({
@@ -15,8 +15,7 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
   filters: any = [];
   levels: any;
   tableReportData: any;
-  minDate: any;
-  maxDate: any;
+  selectedYear: any;
   startDate: any;
   endDate: any;
   compareDateRange: any = 30;
@@ -24,6 +23,7 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
 
+  @Output() exportMinmaxYear = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -35,7 +35,8 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
     this.getReportData();
   }
 
-  getReportData(startDate = undefined, endDate = undefined): void {
+  getReportData(value?: string): void {
+    this.selectedYear = value;
     let reportConfig = config
 
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -65,6 +66,11 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
+      if (this.selectedYear !== undefined) {
+        let params = { columnName: "academic_year", value: this.selectedYear };
+        query = parseFilterToQuery(query, params)
+      }
+
       if (query && key === 'table') {
         this.getTableReportData(query, options);
       }
@@ -91,6 +97,21 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
+      let minYear, maxYear;
+      rows.forEach(row => {
+        if (minYear !== undefined && maxYear !== undefined) {
+          if (row['min_year'] < minYear) {
+            minYear = row['min_year']
+          }
+          if (row['max_year'] > maxYear) {
+            maxYear = row['max_year']
+          }
+        }
+        else {
+          minYear = row['min_year']
+          maxYear = row['max_year']
+        }
+      });
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
@@ -110,6 +131,10 @@ export class RankStudentsAndCwsnEnrollmentComponent implements OnInit {
           }
         })
       }
+      this.exportMinmaxYear.emit({
+        minYear: minYear,
+        maxYear: maxYear
+      })
     });
   }
 }
