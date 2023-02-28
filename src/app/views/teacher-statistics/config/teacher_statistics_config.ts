@@ -99,28 +99,22 @@ export const config = {
                         class: "text-center"
                     },
                     {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Grade",
+                        property: "grade",
+                        class: "text-center"
+                    },
+                    {
                         name: "Total Teachers",
                         property: "total_teachers",
                         sticky: true,
                         class: "text-center",
                         isHeatMapRequired: true,
-                        color: {
-                            type: "total_teachers",
-                            values: [
-                                {
-                                    color: "#D6FFD6",
-                                    breakPoint: 75
-                                },
-                                {
-                                    color: "#FFFBD6",
-                                    breakPoint: 50
-                                },
-                                {
-                                    color: "#FFD6D6",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        color: '#fff'
                     }
                 ],
                 "sortByProperty": "state_name",
@@ -412,23 +406,7 @@ export const config = {
                         sticky: true,
                         class: "text-center",
                         isHeatMapRequired: true,
-                        color: {
-                            type: "pupil_teacher_ratio",
-                            values: [
-                                {
-                                    color: "#D6FFD6",
-                                    breakPoint: 75
-                                },
-                                {
-                                    color: "#FFFBD6",
-                                    breakPoint: 50
-                                },
-                                {
-                                    color: "#FFD6D6",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        color: '#fff'
                     }
                 ],
                 "sortByProperty": "state_name",
