@@ -11,11 +11,13 @@ import { TotalSchoolsComponent } from './reports/total-schools/total-schools.com
 export class TotalSchoolStatisticsComponent implements OnInit {
 
   bigNumberReports: any = {};
+  academicYear: string[] = [];
+  minYear: any;
+  maxYear: any;
 
-
-  @ViewChild('totalschools') totalSchoolsComponent:TotalSchoolsComponent;
-  @ViewChild('categoryWiseTotalSchools') categoryWiseTotalSchoolsComponent: CategoryWiseTotalSchoolsComponent;
-  @ViewChild('enrolmentWiseSchools') enrolmentWiseSchoolsComponent: EnrolmentWiseSchoolsComponent;
+  @ViewChild('totalschools') totalschools:TotalSchoolsComponent;
+  @ViewChild('categoryWiseTotalSchools') categoryWiseTotalSchools: CategoryWiseTotalSchoolsComponent;
+  @ViewChild('enrolmentWiseSchools') enrolmentWiseSchools: EnrolmentWiseSchoolsComponent;
   constructor() { }
 
   ngOnInit(): void {
@@ -30,6 +32,24 @@ export class TotalSchoolStatisticsComponent implements OnInit {
   }
   getObjectlen(object:Object){
     return Object.keys(object).length
+  }
+
+  minMaxDate(dates: any) {
+    console.log(dates)
+    let minYear = this.minYear < parseInt(dates?.minYear) ? this.minYear : parseInt(dates?.minYear);
+    let maxYear = this.maxYear > parseInt(dates?.maxYear) ? this.maxYear : parseInt(dates?.maxYear);
+
+    for (let year = minYear; year <= maxYear; year++) {
+      if (this.academicYear.indexOf(String(year)) === -1) {
+        this.academicYear.push(String(year));
+      }
+    }
+  }
+
+  onSelectOption(selectedvalue: any): void {
+    this.totalschools?.getReportData(selectedvalue);
+    this.categoryWiseTotalSchools?.getReportData(selectedvalue);
+    this.enrolmentWiseSchools?.getReportData(selectedvalue);
   }
 
 }
