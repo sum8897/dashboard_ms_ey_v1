@@ -9,8 +9,8 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_district as t on m.district_id = t.district_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, state_name",
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_state where state_id = {state_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_district as t on m.district_id = t.district_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_state where state_id = {state_id} group by state_id",
                         "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_state where state_id = {state_id} and (academic_year = lastYear)"
                     },
                     "level": "district"
@@ -23,8 +23,8 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name, block_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(block_id), district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_block as t on m.block_id = t.block_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, district_name, state_name",
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_district where district_id = {district_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(block_id), district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_block as t on m.block_id = t.block_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_district where district_id = {district_id} group by district_id",
                         "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_district where district_id = {district_id} and (academic_year = lastYear)"
                     },
                     "level": "block"
@@ -37,8 +37,8 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name, block_name, cluster_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(cluster_id), block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, block_name, district_name, state_name",
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_block where block_id = {block_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(cluster_id), block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_block where block_id = {block_id} group by block_id",
                         "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_block where block_id = {block_id} and (academic_year = lastYear)"
 
                     },
@@ -52,8 +52,8 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name, block_name, cluster_name, school_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_school as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, cluster_name, block_name, district_name, state_name",
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_cluster where cluster_id = {cluster_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, school_name, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_school as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_cluster where cluster_id = {cluster_id} group by cluster_id",
                         "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_cluster where cluster_id = {cluster_id} and (academic_year = lastYear)"
                     },
                     "level": "school"
@@ -66,8 +66,8 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "table": "select state_name, district_name, block_name, cluster_name, school_name, t.grade, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_grade as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where t.school_id = {school_id} group by t.grade, school_name, cluster_name, block_name, district_name, state_name",
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_school where school_id = {school_id}",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, school_name, t.grade, sum(sum_cwsn_enrolled) as cwsn_enrolled, round(avg(percentage), 2) as cwsn_enrollment from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.scl_stats_cwsn_enroll_by_grade as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where t.school_id = {school_id} group by t.grade, school_name, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_school where school_id = {school_id} group by school_id",
                         "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_school where school_id = {school_id} and (academic_year = lastYear)"
                     },
                     "level": "grade"
@@ -80,8 +80,8 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_grade where grade = {class_id}",
-                        "bigNumberComparison": "select round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_grade where grade = {class_id} and (academic_year = lastYear)"
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_grade where grade = {class_id} group by grade",
+                        "bigNumberComparison": "select min(academic_year) as min_year,max(academic_year) as max_year,round(avg(percentage), 2) as cwsn_enrollment from ingestion.scl_stats_cwsn_enroll_by_grade where grade = {class_id} and (academic_year = lastYear)"
                     },
                     "level": "grade"
                 }
@@ -133,23 +133,7 @@ export const config = {
                         sticky: true,
                         class: "text-center",
                         isHeatMapRequired: true,
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#D6FFD6",
-                                    breakPoint: 75
-                                },
-                                {
-                                    color: "#FFFBD6",
-                                    breakPoint: 50
-                                },
-                                {
-                                    color: "#FFD6D6",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        color: '#fff'
                     }
                 ],
                 "sortByProperty": "state_name",
@@ -171,7 +155,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_state where state_id = {state_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_state where state_id = {state_id} group by state_id",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_state where state_id = {state_id} and (academic_year = lastYear)"
                     },
                     "level": "district"
@@ -184,7 +168,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_district where district_id = {district_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_district where district_id = {district_id} group by district_id",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_district where district_id = {district_id} and (academic_year = lastYear)"
                     },
                     "level": "block"
@@ -197,7 +181,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_block where block_id = {block_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_block where block_id = {block_id} group by block_id",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_block where block_id = {block_id} and (academic_year = lastYear)"
 
                     },
@@ -211,7 +195,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_cluster where cluster_id = {cluster_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_cluster where cluster_id = {cluster_id} group by cluster_id",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_cluster where cluster_id = {cluster_id} and (academic_year = lastYear)"
                     },
                     "level": "school"
@@ -224,7 +208,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_school where school_id = {school_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_school where school_id = {school_id} group_by school_id",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_school where school_id = {school_id} and (academic_year = lastYear)"
                     },
                     "level": "grade"
@@ -237,7 +221,7 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_grade where grade = {class_id}",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_students_enrolled) as students_enrolled from ingestion.scl_stats_total_enroll_by_grade where grade = {class_id} group by grade",
                         "bigNumberComparison": "select sum_total_students_enrolled as students_enrolled from ingestion.scl_stats_total_enroll_by_grade where grade = {class_id} and (academic_year = lastYear)"
                     },
                     "level": "grade"
@@ -262,7 +246,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select district_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_district as t on m.district_id = t.district_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.school_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,district_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_district as t on m.district_id = t.district_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.school_category",
                     },
                     "level": "district"
                 }
@@ -274,7 +258,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": "select block_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(block_id), district_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_block as t on m.block_id = t.block_id left join ingestion.dimension_block as d on t.block_id = d.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.school_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(block_id), district_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_block as t on m.block_id = t.block_id left join ingestion.dimension_block as d on t.block_id = d.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.school_category",
                     },
                     "level": "block"
                 }
@@ -286,7 +270,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "barChart": "select cluster_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(cluster_id), block_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.school_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(cluster_id), block_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.school_category",
                     },
                     "level": "cluster"
                 }
@@ -298,7 +282,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "barChart": "select school_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(school_id), cluster_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_school as t on t.school_id = m.school_id left join ingestion.dimension_school as d on t.school_id = d.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.school_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name as location,t.school_category, sum(sum_students_enrolled) as students_enrolled from (select distinct(school_id), cluster_id from ingestion.dimension_master) as m join ingestion.Scl_stats_grade_wise_enroll_by_school as t on t.school_id = m.school_id left join ingestion.dimension_school as d on t.school_id = d.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.school_category",
                     },
                     "level": "school"
                 }
@@ -349,7 +333,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select district_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,district_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.gender",
                     },
                     "level": "district"
                 }
@@ -361,7 +345,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": "select block_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.gender",
                     },
                     "level": "block"
                 }
@@ -373,7 +357,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "barChart": "select cluster_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.gender",
                     },
                     "level": "cluster"
                 }
@@ -385,7 +369,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "barChart": "select school_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.gender",
                     },
                     "level": "school"
                 }
@@ -397,7 +381,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "barChart": "select t.grade as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_grade as t left join ingestion.dimension_school as s on t.school_id = s.school_id where t.school_id = {school_id} group by t.grade,t.school_id, school_name, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,t.grade as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_grade as t left join ingestion.dimension_school as s on t.school_id = s.school_id where t.school_id = {school_id} group by t.grade,t.school_id, school_name, t.gender",
                     },
                     "level": "grade"
                 }
@@ -409,7 +393,7 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "barChart": "select t.grade as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_grade as t where grade = {class_id} group by t.grade, t.gender",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,t.grade as location, t.gender, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_gender_wise_enroll_by_grade as t where grade = {class_id} group by t.grade, t.gender",
                     },
                     "level": "grade"
                 }
@@ -456,7 +440,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select district_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,district_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where m.state_id = {state_id} group by t.district_id, district_name, t.student_category",
                     },
                     "level": "district"
                 }
@@ -468,7 +452,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": "select block_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_block as t left join ingestion.dimension_block as d on t.block_id = d.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_block as t left join ingestion.dimension_block as d on t.block_id = d.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, t.student_category",
                     },
                     "level": "block"
                 }
@@ -480,7 +464,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "barChart": "select cluster_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_cluster as t left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_cluster as t left join ingestion.dimension_cluster as d on t.cluster_id = d.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, t.student_category",
                     },
                     "level": "cluster"
                 }
@@ -492,7 +476,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "barChart": "select school_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_school as t left join ingestion.dimension_school as d on t.school_id = d.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_school as t left join ingestion.dimension_school as d on t.school_id = d.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, t.student_category",
                     },
                     "level": "school"
                 }
@@ -504,7 +488,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "barChart": "select t.grade as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_grade as t left join ingestion.dimension_school as d on t.school_id = d.school_id where t.school_id = {school_id} group by t.grade, t.school_id, school_name, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,t.grade as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_grade as t left join ingestion.dimension_school as d on t.school_id = d.school_id where t.school_id = {school_id} group by t.grade, t.school_id, school_name, t.student_category",
                     },
                     "level": "grade"
                 }
@@ -516,7 +500,7 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "barChart": "select t.grade as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_grade as t where grade = {class_id} group by t.grade, t.student_category",
+                        "barChart": "select min(academic_year) as min_year,max(academic_year) as max_year,t.grade as location, t.student_category, sum(sum_students_enrolled) as students_enrolled from ingestion.Scl_stats_std_cat_wise_enroll_by_grade as t where grade = {class_id} group by t.grade, t.student_category",
                     },
                     "level": "grade"
                 }
@@ -571,7 +555,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,district_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name",
                     },
                     "level": "block"
                 }
@@ -583,7 +567,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "table": "select block_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name",
                     },
                     "level": "cluster"
                 }
@@ -595,7 +579,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "table": "select cluster_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name",
                     },
                     "level": "school"
                 }
@@ -607,7 +591,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "table": "select school_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name",
                     },
                     "level": "class"
                 }
@@ -619,7 +603,7 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "table": "select grade, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_grade as t where t.school_id = {school_id} group by grade, t.school_id",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,grade, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_grade as t where t.school_id = {school_id} group by grade, t.school_id",
                     },
                     "level": "class"
                 }

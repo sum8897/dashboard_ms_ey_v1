@@ -167,17 +167,14 @@ export function multibarGroupBy(data: any, groupByLabel: string, metricLabel: st
       });
       return data;
     }).value()
-    console.log(result)
     return result;
   }
 
 export function parseQueryParam(query: string, params: any) {
-    console.log(params)
     let newQuery;
     Object.keys(params).forEach((paramKey: any) => {
         if(query.indexOf(paramKey) > -1){
             let paramRE = new RegExp(`${paramKey}`, "g");
-            console.log(params[paramKey])
             newQuery = query.replace(paramRE, '\'' + params[paramKey] + '\'' )
         }
     });
