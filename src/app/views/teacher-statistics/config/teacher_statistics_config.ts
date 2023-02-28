@@ -10,8 +10,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, district_name, sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id ,district_name , t.sum_total_teachers",
-                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_state as t1 where state_id = (select distinct(state_id) from ingestion.dimension_master as m where state_id = {state_id} and m.state_id = t1.state_id);",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, sum(sum_total_teachers) as total_teachers from (select distinct(district_id), state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_district as t on m.district_id = t.district_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on t.district_id = d.district_id where m.state_id = {state_id} group by t.district_id, district_name, state_name",
+                        "bigNumberComparison": "select sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_state where state_id = {state_id} and (academic_year = lastYear)",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_state where state_id = {state_id} group by state_id",
                     },
                     "level": "district"
                 } 
@@ -23,8 +24,9 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, block_name,sum_total_teachers as total_teachers , district_name from ingestion.Scl_stats_total_tchs_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where m.district_id={district_id} group by t.block_id,block_name,district_name,t.sum_total_teachers",
-                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_district as t1 where district_id=( select distinct(district_id) from ingestion.dimension_master as m where district_id = {district_id} and m.district_id = t1.district_id)",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, state_name, district_name, block_name, sum(sum_total_teachers) as total_teachers from (select distinct(block_id), district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_block as t on m.block_id = t.block_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = t.block_id where m.district_id = {district_id} group by t.block_id, block_name, district_name, state_name",
+                        "bigNumberComparison": "select sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_district where district_id = {district_id} and (academic_year = lastYear)",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_district where district_id = {district_id} group by district_id",
                     },
                     "level": "block"
                 }
@@ -36,8 +38,10 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,sum_total_teachers as total_teachers, cluster_name, block_name, district_name from ingestion.Scl_stats_total_tchs_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_block as b on m.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where m.block_id={block_id} group by t.cluster_id,cluster_name,block_name,district_name ,t.sum_total_teachers",
-                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_block as t1 where block_id=( select distinct(block_id) from ingestion.dimension_master as m where block_id = {block_id} and m.block_id = t1.block_id)",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, state_name, district_name, block_name, cluster_name, sum(sum_total_teachers) as total_teachers from (select distinct(cluster_id), block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_cluster as t on m.cluster_id = t.cluster_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id where m.block_id = {block_id} group by t.cluster_id, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_block where block_id = {block_id} group by block_id",
+                        "bigNumberComparison": "select sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_block where block_id = {block_id} and (academic_year = lastYear)",
+
                     },
                     "level": "cluster"
                 }
@@ -49,8 +53,10 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, school_name,sum_total_teachers as total_teachers from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_school as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, cluster_name, block_name, district_name, state_name ,t.sum_total_teachers",
-                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year, sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_cluster as t1 where cluster_id=( select distinct(cluster_id) from ingestion.dimension_master as m where cluster_id = {cluster_id} and m.cluster_id = t1.cluster_id)",
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year, state_name, district_name, block_name, cluster_name, school_name, sum(sum_total_teachers) as total_teachers from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_school as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where m.cluster_id = {cluster_id} group by t.school_id, school_name, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_cluster where cluster_id = {cluster_id} group by cluster_id",
+                        "bigNumberComparison": "select sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_cluster where cluster_id = {cluster_id} and (academic_year = lastYear)",
+
                     },
                     "level": "school"
                 }
@@ -62,12 +68,12 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, school_name, grade, sum_total_teachers as total_teachers from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_grade as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where t.school_id = {school_id} group by t.grade, school_name, cluster_name, block_name, district_name, state_name",
-                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_school where school_id = {school_id}",
-
+                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,state_name, district_name, block_name, cluster_name, school_name, t.grade,sum(sum_total_teachers) as total_teachers  from (select distinct(school_id), cluster_id, block_id, district_id, state_id from ingestion.dimension_master) as m join ingestion.Scl_stats_total_tchs_by_grade as t on m.school_id = t.school_id left join ingestion.dimension_state as s on m.state_id = s.state_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on m.cluster_id = c.cluster_id left join ingestion.dimension_school as sc on sc.school_id = t.school_id where t.school_id = {school_id} group by t.grade, school_name, cluster_name, block_name, district_name, state_name",
+                        "bigNumber": "select min(academic_year) as min_year,max(academic_year) as max_year ,sum(sum_total_teachers) as total_teachers from ingestion.Scl_stats_total_tchs_by_school where school_id = {school_id} group by school_id",
+                        "bigNumberComparison": "select sum_total_teachers as total_teachers from ingestion.Scl_stats_total_tchs_by_school where school_id = {school_id} and (academic_year = lastYear)",
                     },
                     "level": "grade"
-                }
+                } 
             }
             
         ],
@@ -121,8 +127,8 @@ export const config = {
                 "sortDirection": "desc"
             },
             "bigNumber": {
-            
-            }
+                "property": "total_teachers"
+                }
         }
     },
     ts_stat_category_wise_total_teachers: {

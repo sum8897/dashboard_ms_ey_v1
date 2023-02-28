@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseTimeSeriesQuery, parseFilterToQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseTimeSeriesQuery, parseFilterToQuery, parseQueryParam } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-statistics/config/teacher_statistics_config';
 
 @Component({
@@ -70,7 +70,14 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
     }
 
     Object.keys(queries).forEach((key: any) => {
-      onLoadQuery = queries[key]
+      if (key.toLowerCase().includes('comparison')) {
+        let currentYear = new Date().getFullYear()
+        let lastYear = currentYear -1;
+        onLoadQuery = parseQueryParam(queries[key], {'lastYear': lastYear})
+      }
+      else {
+        onLoadQuery = queries[key]
+      }
 
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
@@ -84,6 +91,9 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
       }
       else if (query && key === 'bigNumber') {
         this.getBigNumberReportData(query, options, 'averagePercentage');
+      }
+      else if (query && key === 'bigNumberComparison') {
+        this.getBigNumberReportData(query, options, 'differencePercentage')
       }
 
     })
@@ -151,7 +161,7 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -176,11 +186,44 @@ export class TsTotalTeachersComponent implements OnInit, OnChanges {
           });
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0].total_teachers,
+            averagePercentage: rows[0]?.[property],
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
             reportName: this.reportName
+          })
+          this.exportMinmaxYear.emit({
+            minYear: this.minYear,
+            maxYear: this.maxYear
+          })
+        }
+      })
+    }
+    else if (indicator === 'differencePercentage') {
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        if (res) {
+          let rows = res;
+          rows.forEach(row => {
+            if (this.minYear !== undefined && this.maxYear !== undefined) {
+              if (row['min_year'] < this.minYear) {
+                this.minYear = row['min_year']
+              }
+              if (row['max_year'] > this.maxYear) {
+                this.maxYear = row['max_year']
+              }
+            }
+            else {
+              this.minYear = row['min_year']
+              this.maxYear = row['max_year']
+            }
+          });
+          this.bigNumberReportData = {
+            ...this.bigNumberReportData,
+            differencePercentage: rows[0]?.[property]
+          }
+          this.bigNumberReport.emit({
+            data: this.bigNumberReportData,
+            reportName:this.reportName
           })
           this.exportMinmaxYear.emit({
             minYear: this.minYear,
