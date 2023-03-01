@@ -1,5 +1,6 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
     <div class="filter-row">
+        <!-- <app-download-button [reportData]="bigNumberReports" [fileName]=""></app-download-button> -->
         <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
     </div>
     <div class="reports-row">

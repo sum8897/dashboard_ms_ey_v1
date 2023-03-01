@@ -145,6 +145,15 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
               scaleLabel: {
                 display: true,
                 labelString: xAxis.title
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  if (values.length > 4 && value.length > 8) {
+                    return value.substr(0, 8) + '...';
+                  } else {
+                    return value;
+                  }
+                }
               }
             }]
           }

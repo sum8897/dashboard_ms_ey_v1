@@ -17,7 +17,7 @@ export class TotalSchoolsComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total School"
+    reportName: "Total Schools"
   };
   selectedYear: any;
   startDate: any;

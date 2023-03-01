@@ -16,7 +16,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance Complaince"
+    reportName: "Average Attendance Compliance"
   };
   minDate: any;
   maxDate: any;
