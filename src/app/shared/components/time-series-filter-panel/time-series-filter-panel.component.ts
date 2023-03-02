@@ -28,6 +28,6 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
   }
 
   changeDate(event: any) {
-    // this.timeSeriesUpdated.emit(this.selected)
+    this.timeSeriesUpdated.emit(this.selected)
   }
 }
