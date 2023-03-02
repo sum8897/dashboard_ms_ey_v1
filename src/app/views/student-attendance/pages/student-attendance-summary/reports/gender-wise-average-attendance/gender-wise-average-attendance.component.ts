@@ -19,7 +19,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Gender-Wise-Average-Attendance";
+  fileName: string = "Gender Wise Average Attendance";
   reportName: string = 'sas_gender_wise_average_attendance';
   filters: any = [];
   levels: any;
@@ -146,6 +146,15 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
               scaleLabel: {
                 display: true,
                 labelString: xAxis.title
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  if (values.length > 4 && value.length > 8) {
+                    return value.substr(0, 8) + '...';
+                  } else {
+                    return value;
+                  }
+                }
               }
             }]
           }

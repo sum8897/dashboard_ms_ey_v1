@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import moment from 'moment';
 
 @Component({
   selector: 'app-time-series-filter-panel',

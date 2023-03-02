@@ -19,7 +19,7 @@ export class StudentCategoryWiseEnrollmentComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Student_Category_Wise_Enrollment";
+  fileName: string = "Student Category Wise Enrollment";
   reportName: string = 'student_category_wise_enrollment';
   filters: any = [];
   levels: any;
@@ -145,6 +145,15 @@ export class StudentCategoryWiseEnrollmentComponent implements OnInit {
               scaleLabel: {
                 display: true,
                 labelString: xAxis.title
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  if (values.length > 4 && value.length > 8) {
+                    return value.substr(0, 8) + '...';
+                  } else {
+                    return value;
+                  }
+                }
               }
             }]
           }

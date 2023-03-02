@@ -24,18 +24,16 @@ export class DownloadButtonComponent implements OnInit {
   @Input() fileName2: any;
   @Input() reportType1: any;
   @Input() reportType2: any;
-
+  @Input() reportData: any;
+  // @Input() reportData: { reportName: string, data: any }[];
 
   constructor() { }
 
   ngOnInit(): void {
-
   }
-
-
-
   // Download reports....
   download(reportData: any, fileName: any,) {
+    console.log('the dat iz', reportData);
     if (this.multiple) {
       for (let i = 0; i < 2; i++) {
         reportData = i === 0 ? this.data1 : this.data2;
@@ -127,7 +125,7 @@ export class DownloadButtonComponent implements OnInit {
           obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key]
         });
       });
-      
+
       const opts = { fields: keys, output: fileName };
       const csv = json2csv.parse(dupData, opts);
 
@@ -135,6 +133,20 @@ export class DownloadButtonComponent implements OnInit {
       saveAs(file, `${fileName}.csv`);
     }
   }
+
+
+  // downloadCSV() {
+  //   console.log('the sadha',this.reportData);
+  //   const csvContent = "data:text/csv;charset=utf-8,"
+  //     + this.reportData.map(report => `${report.reportName},${report.data.values}`).join("\n");
+
+  //   const encodedUri = encodeURI(csvContent);
+  //   const link = document.createElement("a");
+  //   link.setAttribute("href", encodedUri);
+  //   link.setAttribute("download", "report.csv");
+  //   document.body.appendChild(link);
+  //   link.click();
+  // }
 }
 
 

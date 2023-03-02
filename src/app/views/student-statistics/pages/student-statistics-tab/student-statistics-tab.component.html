@@ -3,6 +3,9 @@
         <ng-select class="col-span-6 xmd:col-span-3 lg:col-span-1" (change)="onSelectOption($event)" placeholder="Select Year">
             <ng-option *ngFor="let option of academicYear" [value]="option">{{option}}</ng-option>
         </ng-select>
+        <div class="grid grid-cols-12 button-right">
+            <app-download-button [data]="csvReportData?.values" [fileName]="fileName" [reportType]="'dashletBar'"></app-download-button>
+        </div>
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">

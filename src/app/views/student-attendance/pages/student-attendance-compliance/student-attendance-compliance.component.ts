@@ -20,6 +20,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
   appendBigNumber({data,reportName}) {

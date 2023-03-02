@@ -17,6 +17,7 @@ export class StudentStatisticsTabComponent implements OnInit {
   academicYear: string[] = [];
   minYear: any;
   maxYear: any;
+  csvReportData:any;
 
   @ViewChild('totalStudentsEnrolled') totalStudentsEnrolled: TotalStudentsEnrolledComponent;
   @ViewChild('studentsAndCwsnEnrollment') studentsAndCwsnEnrollment: StudentsAndCwsnEnrollmentComponent;
@@ -24,6 +25,7 @@ export class StudentStatisticsTabComponent implements OnInit {
   @ViewChild('gradeCatWiseEnrollment') gradeCatWiseEnrollment: GradeCategoryWiseEnrollmentComponent;
   @ViewChild('studentCatWiseEnrollment') studentCatWiseEnrollment: StudentCategoryWiseEnrollmentComponent;
   @ViewChild('rankStudentsAndCwsnEnrollment') rankStudentsAndCwsnEnrollment: RankStudentsAndCwsnEnrollmentComponent;
+fileName: string='sd';
 
     constructor() { }
 
@@ -38,6 +40,11 @@ export class StudentStatisticsTabComponent implements OnInit {
   }
 
   minMaxDate(dates: any) {
+    // console.log('the whole entire data ',dates.data);
+    if(dates.data){
+      this.csvReportData = dates.data
+    }
+    // console.log('dhbhbf',this.csvReportData);
     let minYear = this.minYear < parseInt(dates?.minYear) ? this.minYear : parseInt(dates?.minYear);
     let maxYear = this.maxYear > parseInt(dates?.maxYear) ? this.maxYear : parseInt(dates?.maxYear);
 
