@@ -59,18 +59,19 @@
 }
 
 .average-percentage {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 200;
-    font-size: 38.0896px;
-    line-height: 67px;
+    // font-family: 'Poppins';
+    // font-style: normal;
+    font-size: 1.5rem;
+    font-weight: 700;
+    // line-height: 67px;
+    color: var(--cQ-secondary)!important;
     text-align: justify;
 }
 
 .report-name {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
+//     font-family: 'Poppins';
+//     font-style: normal;
+//     font-weight: 500;
+//     font-size: 20px;
+//     line-height: 30px;
 }
