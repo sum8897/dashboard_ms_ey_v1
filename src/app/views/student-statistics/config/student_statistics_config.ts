@@ -555,7 +555,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,district_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name",
+                        "table": "select round(percentage,0) as percentage,min(academic_year) as min_year,max(academic_year) as max_year,district_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name,t.percentage",
                     },
                     "level": "block"
                 }
@@ -567,7 +567,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,block_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name",
+                        "table": "select round(percentage,0) as percentage,min(academic_year) as min_year,max(academic_year) as max_year,block_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name,t.percentage",
                     },
                     "level": "cluster"
                 }
@@ -579,7 +579,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,cluster_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name",
+                        "table": "select round(percentage,0) as percentage,min(academic_year) as min_year,max(academic_year) as max_year,cluster_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name,t.percentage",
                     },
                     "level": "school"
                 }
@@ -591,7 +591,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,school_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name",
+                        "table": "select round(percentage,0) as percentage,min(academic_year) as min_year,max(academic_year) as max_year,school_name, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name,t.percentage",
                     },
                     "level": "class"
                 }
@@ -603,7 +603,7 @@ export const config = {
                 "hierarchyLevel": "6",
                 "actions": {
                     "queries": {
-                        "table": "select min(academic_year) as min_year,max(academic_year) as max_year,grade, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_grade as t where t.school_id = {school_id} group by grade, t.school_id",
+                        "table": "select round(percentage,0) as percentage,min(academic_year) as min_year,max(academic_year) as max_year,grade, dense_rank() over(order by sum(sum_cwsn_enrolled) desc) as cwsn_enrolled_rank, dense_rank() over(order by sum(sum_total_students_enrolled) desc) as students_enrolled_rank from ingestion.scl_stats_cwsn_enroll_by_grade as t where t.school_id = {school_id} group by grade, t.school_id,t.percentage",
                     },
                     "level": "class"
                 }
@@ -655,6 +655,29 @@ export const config = {
                         class: "text-center",
                         isHeatMapRequired: true,
                         color: '#fff'
+                    },
+                    {
+                        name: "Percentage",
+                        property: "percentage",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#D6FFD6",
+                                    breakPoint: 75
+                                },
+                                {
+                                    color: "#FFFBD6",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFD6D6",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
                     }
                 ],
             }

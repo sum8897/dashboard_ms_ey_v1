@@ -265,7 +265,7 @@ export const config = {
                             "value": "count_0_to_50_students_enrolled"
                         },
                         {
-                            "label": "0-50",
+                            "label": "50-100",
                             "value": "count_50_to_100_students_enrolled"
                         },
                         {

@@ -24,7 +24,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
-
+  title :any;
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -117,6 +117,9 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
+          if(row['label']){
+            this.title = row['label']
+          }
           if (this.minDate !== undefined && this.maxDate !== undefined) {
             if (row['min_date'] < this.minDate) {
               this.minDate = row['min_date']
@@ -151,6 +154,8 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
       });
     });
   }
+  
+  
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
