@@ -48,6 +48,12 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
   constructTable(): void {
     if (this.tableData && this.sort) {
       setTimeout(() => {
+        this.tableData.data.forEach((data:any) => {
+          if (data?.percentage?.value) {
+            data.percentage.value = data.percentage.value.concat('%');
+          }
+        });
+        
         this.dataSource = new MatTableDataSource(this.tableData.data);
         this.dataSource.paginator = this.paginator;
         this.sort.sortChange.subscribe(v => console.log(v));
@@ -59,7 +65,7 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
         this.dataSource.sort = this.sort;
         let stickyColumns = [];
 
-        this.columns = this.tableData.columns.map((column: any) => {
+        this.columns = this.tableData.columns.map((column: any) => { 
           if (window.innerWidth <= 480) {
             if (stickyColumns.length === 0) {
               stickyColumns.push(true);

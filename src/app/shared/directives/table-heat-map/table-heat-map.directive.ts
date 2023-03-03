@@ -18,7 +18,7 @@ export class TableHeatMapCellDirective {
 
   @Input('id') colId: number | string | null = null;
 
-  constructor(public el: ElementRef<HTMLElement>) {}
+  constructor(public el: ElementRef<HTMLElement>) { }
 }
 
 @Directive({
@@ -43,7 +43,7 @@ export class TableHeatMapDirective implements AfterViewInit {
   columns: TableHeatMapColumnDirective[] = [];
   config: any = {};
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) { }
 
   ngAfterViewInit() {
     let timer: any;
@@ -63,21 +63,21 @@ export class TableHeatMapDirective implements AfterViewInit {
     });
   }
 
-  colorTheTable(): void {    
-    setTimeout(()=> {
+  colorTheTable(): void {
+    setTimeout(() => {
       if (this.tableHeatMapCells) {
-        this.cells = this.tableHeatMapCells.toArray();        
+        this.cells = this.tableHeatMapCells.toArray();
       }
-  
+
       if (this.tableHeatMapColumns) {
         this.columns = this.tableHeatMapColumns.toArray();
       }
-  
+
       this.setOptions();
       this.calculateHighestValues();
       this.applyHeatMap();
     }, 100);
-  } 
+  }
 
   private setOptions() {
     this.columns.forEach((col: any) => {
@@ -107,10 +107,10 @@ export class TableHeatMapDirective implements AfterViewInit {
     });
   }
 
-  private getColor(id: string, value: string | number) {    
+  private getColor(id: string, value: string | number) {
     const color = this.config[id] ? this.config[id].color : '#fff';
-    let [r, g, b, a] = parseToRgba(Array.isArray(color) ? color[color.length - 1] : (typeof color === 'object' && color !== null) ? color.values[color.values.length -1].color : color);
-    
+    let [r, g, b, a] = parseToRgba(Array.isArray(color) ? color[color.length - 1] : (typeof color === 'object' && color !== null) ? color.values[color.values.length - 1].color : color);
+
     if (!isNaN(Number(value))) {
       value = Number(value);
       let color = this.config[id] ? this.config[id].color : '#fff';
@@ -135,7 +135,53 @@ export class TableHeatMapDirective implements AfterViewInit {
             color = color[2];
           }
         }
-        else if(typeof color === 'object' && color !== null) {
+        else if (typeof color === 'object' && color !== null) {
+          let singleColor;
+          if (color.type === 'percentage') {
+            color.values?.every((item) => {
+              if (value > item.breakPoint) {
+                singleColor = item.color
+                return false
+              }
+              return true;
+            });
+          }
+          if (singleColor === undefined) {
+            color = '#fff'
+          }
+          color = singleColor;
+        }
+
+        let [r, g, b, a] = parseToRgba(color);
+        bgColor = rgba(r, g, b, +(Math.min(1, value / this.highestValues[id] + 0.06)).toFixed(3));
+        textColor = readableColor(bgColor);
+      }
+      return {
+        bgColor,
+        color: textColor,
+      };
+    }
+    else if(typeof value === 'string' && color?.type == "status" && color?.values) {
+      let colObj = color.values.filter((colObj: any) => {
+        console.log(colObj)
+        return colObj.value === (value as String).toLowerCase()
+      })[0]
+      let [r, g, b, a] = parseToRgba(colObj.color);
+      let bgColor = rgba(r, g, b, 100);
+      let textColor = readableColor(bgColor);
+
+      return {
+        bgColor,
+        color: textColor,
+      };
+    }
+    else if (typeof value === 'string' && value.includes('%')) {
+      value = Number(value.replace('%', ''));
+      let color = this.config[id] ? this.config[id].color : '#fff';
+      let textColor = null;
+      let bgColor = null;
+      if (color != null) {
+        if(typeof color === 'object' && color !== null) {
           let singleColor;
           if(color.type === 'percentage'){
             color.values?.every((item) => {
@@ -156,15 +202,6 @@ export class TableHeatMapDirective implements AfterViewInit {
         bgColor = rgba(r, g, b, +(Math.min(1, value / this.highestValues[id] + 0.06)).toFixed(3));
         textColor = readableColor(bgColor);
       }
-      return {
-        bgColor,
-        color: textColor,
-      };
-    } else if (typeof value === 'string' && value.toLowerCase() === 'yes') {
-      let [r, g, b, a] = parseToRgba(color);
-      let bgColor = rgba(r, g, b, 100);
-      let textColor = readableColor(bgColor);
-
       return {
         bgColor,
         color: textColor,

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-time-series-filter-panel',
@@ -11,10 +11,18 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
   @Output() timeSeriesUpdated = new EventEmitter<any>();
   @Input() minDate: any;
   @Input() maxDate: any;
+  selected: any;  
 
-  constructor() { }
+  constructor() {
+    const currentDate = moment();
+    console.log('the cureent date ', currentDate);
+    const last7DaysStart = moment().subtract(7, 'days');
+    console.log('last the current date ',last7DaysStart);
 
-  selected: any;
+    this.selected = {startDate: last7DaysStart, endDate: currentDate};
+
+   }
+
 
   ngOnInit(): void {
   }

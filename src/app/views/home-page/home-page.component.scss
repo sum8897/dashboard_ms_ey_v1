@@ -42,7 +42,7 @@
   #admin_console {
       width: 100%;
       color: #fff;
-      font-family: 'Poppins';
+      font-family: 'Poppins', sans-serif;
       font-style: normal;
       font-size: 15px;
   }
@@ -90,7 +90,7 @@
       #cQb_dhsbrd {
           width: 100%;
           color: #ffff;
-          font-family: 'Poppins';
+          font-family: 'Poppins', sans-serif;
           font-style: normal;
           font-size: 18px;
       }
@@ -137,7 +137,7 @@
       #cQb_dhsbrd {
           width: 100%;
           color: #FFFFFF;
-          font-family: 'Poppins';
+          font-family: 'Poppins', sans-serif;
           font-style: normal;
           font-size: 26px;
       }
@@ -185,7 +185,7 @@
           width: 100%;
           color: #fff;
           font-size: 38px !important;
-          font-family: 'Poppins';
+          font-family: 'Poppins', sans-serif;
           font-style: normal;
       }
 
@@ -209,7 +209,7 @@
   }
 
   .selectRole {
-      font-family: 'Poppins';
+      font-family: 'Poppins', sans-serif;
       font-style: normal;
       font-weight: 400;
       font-size: 20px;
@@ -218,7 +218,7 @@
   }
 
   .naming {
-      font-family: 'Poppins';
+      font-family: 'Poppins', sans-serif;
       font-style: normal;
       font-weight: 400;
       font-size: 20px;
@@ -238,17 +238,16 @@
       gap: 50px;
   }
 
-    .text-center {
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 36px;
-        line-height: 54px;
-        color: #FFFFFF;
-    }
+  .text-center {
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+}
 
   .selectRole {
-      font-family: 'Poppins';
+      font-family: 'Poppins', sans-serif;
       font-style: normal;
       font-weight: 400;
       font-size: 20px;
@@ -258,34 +257,30 @@
 
 
   .welcometxt {
-      font-family: 'Poppins';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 36px;
-      line-height: 54px;
-      color: #FFFFFF;
-  }
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 2rem;
+    color: #FFFFFF;
+}
 
-  .tostyle {
-      font-family: 'Samarkan';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 20px;
-      line-height: 25px;
-  }
+.tostyle {
+    font-family: 'Samarkan', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 25px;
+}
 
-  .items-center {
-      margin-top: 10px;
-  }
-  .justify-center{
-    gap:2rem;
+  .justify-center {
+      gap: 2rem;
   }
 
   @media only screen and (max-width: 768px) {
 
       /* For mobile phones: */
       .text-center {
-          font-family: 'Poppins';
+          font-family: 'Poppins', sans-serif;
           font-style: normal;
           font-weight: 400;
           font-size: 25px;
@@ -294,14 +289,16 @@
       }
 
       .selectRole {
-          font-family: 'Poppins';
+          font-family: 'Poppins', sans-serif;
           font-style: normal;
           font-weight: 400;
           font-size: 15px;
           line-height: 30px;
       }
-
-      .samikshadiv {
-          font-size: 0.5 rem;
-      }
   }
+
+  .samikshadiv {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+}

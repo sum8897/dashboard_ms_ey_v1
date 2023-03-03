@@ -182,7 +182,6 @@ export function parseQueryParam(query: string, params: any) {
 }
 
 export function parseFilterToQuery(query: string, params?: { columnName: string, value: any }): string {
-    console.log(query, params)
     let whereIndex = query.toLowerCase().indexOf('where');
     let groupByIndex = query.toLowerCase().indexOf('group by');
     let orderByIndex = query.toLowerCase().indexOf('order by');

@@ -49,14 +49,18 @@ export class WrapperService {
       let filter = filterConfig[index];
       filter.options = [];
       filter.value = null;
-      if(filter.values && filter.values.length > 0){
+      
+      if(filter.values?.length > 0 && Array.isArray(filter.values) && typeof filter.values?.[0] === 'object'){
+        filter.options = filter.values
+      }
+
+      else if(filter.values && filter.values.length > 0 && Array.isArray(filter.values)){
         filter.values.forEach((option) => {
           filter.options.push({
             value: option,
             label: option
           })
         });
-
       }
       let query = filter.values === undefined ? filter.query : undefined
       if(query && query.indexOf('{')) {
