@@ -1,0 +1,16 @@
+<div class="metric-card-wrapper">
+    <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+        <div class="col-span-6">
+            <p class="h4">Review Meetings</p>
+        </div>
+    </div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)">
+        <mat-tab label="Review Meetings" *ngIf="tabs.includes('Review Meetings')">
+            <!-- <app-student-attendance-compliance *ngIf="selectedTabLabel === 'Student Attendance Compliance'"></app-student-attendance-compliance> -->
+            <app-review-meetings-tab *ngIf="selectedTabLabel === 'Review Meetings'"></app-review-meetings-tab>
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: 'http://localhost:3000/ingestion',
+  apiURL: 'http://localhost:3008',
   stateCode: "HP",
   numberFormat: {
     reports: {
