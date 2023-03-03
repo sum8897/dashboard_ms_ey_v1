@@ -160,8 +160,13 @@ export class TableHeatMapDirective implements AfterViewInit {
         bgColor,
         color: textColor,
       };
-    } else if (typeof value === 'string' && value.toLowerCase() === 'yes') {
-      let [r, g, b, a] = parseToRgba(color);
+    }
+    else if(typeof value === 'string' && color?.type == "status" && color?.values) {
+      let colObj = color.values.filter((colObj: any) => {
+        console.log(colObj)
+        return colObj.value === (value as String).toLowerCase()
+      })[0]
+      let [r, g, b, a] = parseToRgba(colObj.color);
       let bgColor = rgba(r, g, b, 100);
       let textColor = readableColor(bgColor);
 

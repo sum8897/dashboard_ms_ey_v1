@@ -22,6 +22,9 @@ export class RbacDialogComponent implements OnInit {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.selectedRoleLevel = rbacDetails?.role
     })
+    if(this.selectedRoleLevel < rbacConfig.baseHierarchy){
+      router.navigate(['/dashboard'])
+    }
     this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
       return roleObj.value === this.selectedRoleLevel;
     })?.[0]
@@ -37,7 +40,6 @@ export class RbacDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.rbacForm = this.fb.group({
-      state: [null, Validators.required],
       district: [null],
       block: [null],
       cluster: [null],
@@ -59,6 +61,15 @@ export class RbacDialogComponent implements OnInit {
       this.router.navigate(['/dashboard'])
     }
     else {
+      const invalid = [];
+      const controls = this.rbacForm.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid)
+
       this.rbacForm.markAllAsTouched()
     }
   }

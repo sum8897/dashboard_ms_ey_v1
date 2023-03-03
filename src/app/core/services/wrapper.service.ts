@@ -13,7 +13,6 @@ export class WrapperService {
     for (let index = 0; index < filtersConfig.length; index++) {
       let filter = filtersConfig[index]
       let query = this.parseQuery(filtersConfig, filters, index);
-      console.log(query)
       if (query && query.indexOf('{') === -1) {
         let res = await this.runQuery(query);
         if (res) {
@@ -41,6 +40,44 @@ export class WrapperService {
 
       }
     };
+    return filters;
+  }
+
+  async constructCommonFilters(filterConfig: any){
+    let filters: any = []
+    for (let index = 0; index < filterConfig.length; index++) {
+      let filter = filterConfig[index];
+      filter.options = [];
+      filter.value = null;
+      
+      if(filter.values?.length > 0 && Array.isArray(filter.values) && typeof filter.values?.[0] === 'object'){
+        filter.options = filter.values
+      }
+
+      else if(filter.values && filter.values.length > 0 && Array.isArray(filter.values)){
+        filter.values.forEach((option) => {
+          filter.options.push({
+            value: option,
+            label: option
+          })
+        });
+      }
+      let query = filter.values === undefined ? filter.query : undefined
+      if(query && query.indexOf('{')) {
+        let res = await this.runQuery(query);
+        if(res) {
+          let rows = res;
+          filter.options = rows.map((row) => {
+            return {
+              value: row?.[filter.valueProp],
+              label: row?.[filter.labelProp]
+            }
+          })
+        }
+      }
+      filter.value = filter.options?.[0]?.value
+      filters.push(filter)
+    }
     return filters;
   }
 

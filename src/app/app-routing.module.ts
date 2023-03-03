@@ -40,34 +40,20 @@ var routes: Routes = [];
               (module) => module.StudentAttendanceModule
             )
         },
+        // {
+        //   path: 'teacher-attendance',
+        //   loadChildren: () => 
+        //     import('./views/teacher-attendance/teacher-attendance.module').then(
+        //       (module) => module.TeacherAttendanceModule
+        //     )
+        // },
         {
-          path: 'teacher-attendance',
+          path: 'review-meetings',
           loadChildren: () => 
-            import('./views/teacher-attendance/teacher-attendance.module').then(
-              (module) => module.TeacherAttendanceModule
+            import('./views/review-meetings/review-meetings.module').then(
+              (module) => module.ReviewMeetingsModule
             )
-        },
-        {
-          path: 'school-statistics',
-          loadChildren: () => 
-            import('./views/school-statistics/school-statistics.module').then(
-              (module) => module.SchoolStatisticsModule
-            )
-        },
-        {
-          path: 'student-statistics',
-          loadChildren: () => 
-            import('./views/student-statistics/student-statistics.module').then(
-              (module) => module.StudentStatisticsModule
-            )
-        },
-        {
-          path: 'teacher-statistics',
-          loadChildren: () => 
-            import('./views/teacher-statistics/teacher-statistics.module').then(
-              (module) => module.TeacherStatisticsModule
-            )
-        },
+        }
       ],
     },
   ];

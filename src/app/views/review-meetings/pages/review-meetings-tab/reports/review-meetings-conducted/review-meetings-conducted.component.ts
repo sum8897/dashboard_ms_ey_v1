@@ -2,69 +2,60 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
-import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
+import { buildQuery, parseFilterToQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { config } from 'src/app/views/review-meetings/config/review_meetings_config';
 
 @Component({
-  selector: 'app-sas-average-attendance',
-  templateUrl: './sas-average-attendance.component.html',
-  styleUrls: ['./sas-average-attendance.component.scss']
+  selector: 'app-review-meetings-conducted',
+  templateUrl: './review-meetings-conducted.component.html',
+  styleUrls: ['./review-meetings-conducted.component.scss']
 })
-export class SasAverageAttendanceComponent implements OnInit {
-  reportName: string = 'sas_average_attendance';
+export class ReviewMeetingsConductedComponent implements OnInit {
+  reportName: string = 'review_meetings_conducted';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance Summary"
+    reportName: "Average Review Meetings Conducted"
   };
-  minDate: any;
-  maxDate: any;
+  selectedYear: any;
+  selectedMonth: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  title='Attendance Summary %';
 
   @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportDates = new EventEmitter<any>();
-  @Input() startDate: any;
-  @Input() endDate: any;
+  @Output() exportFilters = new EventEmitter<any>();
 
-  constructor(private readonly _commonService: CommonService,
-    private csv :StudentAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
-  getReportData(startDate = undefined, endDate = undefined): void {
-    this.startDate = startDate;
-    this.endDate = endDate;
+  getReportData(filterValues?: any): void {
+    // this.selectedYear = filterValues?.academicYear;
+    // this.selectedMonth = filterValues?.month;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
+
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
-            timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
           });
           return false
         }
         return true
       })
-    }
-    else {
-      this._wrapperService.constructFilters(this.filters, filters);
     }
 
     Object.keys(queries).forEach((key: any) => {
@@ -75,13 +66,14 @@ export class SasAverageAttendanceComponent implements OnInit {
         startDate.setDate(days)
         onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
       }
-      else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
       else {
         onLoadQuery = queries[key]
       }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, undefined, undefined, key, this.compareDateRange);
+
+      filterValues.forEach((filterParams: any) => {
+        query = parseFilterToQuery(query, filterParams)
+      });
 
       if (query && key === 'table') {
         this.getTableReportData(query, options);
@@ -118,20 +110,8 @@ export class SasAverageAttendanceComponent implements OnInit {
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
-          if (this.minDate !== undefined && this.maxDate !== undefined) {
-            if (row['min_date'] < this.minDate) {
-              this.minDate = row['min_date']
-            }
-            if (row['max_date'] > this.maxDate) {
-              this.maxDate = row['max_date']
-            }
-          }
-          else {
-            this.minDate = row['min_date']
-            this.maxDate = row['max_date']
-          }
           columns.forEach((col: any) => {
-            if (row[col.property]) {
+            if (row[col.property] !== null || row[col.property] !== undefined) {
               row = {
                 ...row,
                 [col.property]: { value: row[col.property] }
@@ -146,18 +126,12 @@ export class SasAverageAttendanceComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.csv.csvDownload(reportsData)
     });
   }
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -168,7 +142,7 @@ export class SasAverageAttendanceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0].percentage
+            averagePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
@@ -183,7 +157,7 @@ export class SasAverageAttendanceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            differencePercentage: rows[0].percentage
+            differencePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
