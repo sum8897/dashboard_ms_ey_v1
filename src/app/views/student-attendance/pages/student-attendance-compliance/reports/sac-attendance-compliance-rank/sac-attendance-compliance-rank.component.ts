@@ -4,6 +4,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
+import { StudentAttendanceComplianceComponent } from '../../student-attendance-compliance.component';
 
 @Component({
   selector: 'app-sac-attendance-compliance-rank',
@@ -21,12 +22,14 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
+  title = 'Rank in Attendance Compliance %'
+  @Output() CsvDownload = new EventEmitter<any>();
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService,private sacCompl:StudentAttendanceComplianceComponent) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -41,7 +44,7 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
 
     if (this.rbacDetails?.role) {
@@ -135,8 +138,10 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
       }
       this.exportDates.emit({
         minDate: this.minDate,
-        maxDate: this.maxDate
+        maxDate: this.maxDate,
       });
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
+      this.sacCompl.csvDownload(reportsData)
     });
   }
 }

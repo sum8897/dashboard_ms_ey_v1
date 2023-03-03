@@ -42,5 +42,11 @@ $light-grey: #eee;
     td.mat-cell:hover {
         z-index: 9999 !important;
     }
+    .mat-cell{
+        word-break: break-all;
+    }
+    .mat-sort-header-content{
+        font-weight: bold;
+    }
 
 }

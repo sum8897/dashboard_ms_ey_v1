@@ -1,6 +1,7 @@
 <div class="grid grid-cols-12" *ngIf="tableReportData?.data?.length > 0">
-    <div class="xs:col-span-full">
-        <!-- <p class="text-center py-2" >{{bigNumberReportData.reportName}}</p> -->
+    <div class="xs:col-span-full  text-center py-2">
+            <h2 class="font-medium">{{title}}</h2>
+            <hr class="my-2">
         <app-material-heat-chart-table [tableData]="tableReportData" ></app-material-heat-chart-table>
     </div>
 </div>

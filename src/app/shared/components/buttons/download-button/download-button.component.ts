@@ -26,127 +26,160 @@ export class DownloadButtonComponent implements OnInit {
   @Input() reportType2: any;
   @Input() reportData: any;
   // @Input() reportData: { reportName: string, data: any }[];
-
+  // @Input() reportInputs :any;
   constructor() { }
 
   ngOnInit(): void {
   }
   // Download reports....
-  download(reportData: any, fileName: any,) {
-    console.log('the dat iz', reportData);
-    if (this.multiple) {
-      for (let i = 0; i < 2; i++) {
-        reportData = i === 0 ? this.data1 : this.data2;
-        fileName = i === 0 ? this.fileName1 : this.fileName2;
-        this.reportType = i === 0 ? this.reportType1 : this.reportType2
-        let keys: [] | any
-        if (reportData === undefined || reportData?.length <= 0) {
-          alert("No data found to download");
-        }
-        else {
+  // download(reportData: any, fileName: any,) {
+  //   console.log('the dat iz', reportData);
+  //   if (this.multiple) {
+  //     for (let i = 0; i < 2; i++) {
+  //       reportData = i === 0 ? this.data1 : this.data2;
+  //       fileName = i === 0 ? this.fileName1 : this.fileName2;
+  //       this.reportType = i === 0 ? this.reportType1 : this.reportType2
+  //       let keys: [] | any
+  //       if (reportData === undefined || reportData?.length <= 0) {
+  //         alert("No data found to download");
+  //       }
+  //       else {
 
-          keys = Object.keys(reportData['0']).filter(key => key !== 'tooltip');
+  //         keys = Object.keys(reportData['0']).filter(key => key !== 'tooltip');
 
-        };
+  //       };
+  //       let dupData;
+
+  //       if (this.reportType === 'map') {
+  //         dupData = JSON.parse(JSON.stringify(reportData));
+  //       }
+  //       else if (this.reportType === 'table') {
+  //         dupData = JSON.parse(JSON.stringify(reportData));
+  //         dupData?.forEach((rec: any) => {
+  //           Object.keys(rec).forEach((obj: any) => {
+  //             rec[obj] = rec[obj]?.value
+  //           });
+  //         });
+  //       }
+  //       else if (this.reportType === 'dashletBar') {
+  //         dupData = JSON.parse(JSON.stringify(reportData));
+  //       }
+  //       else if (this.reportType === 'dashletScatter') {
+  //         keys = keys.filter((ele: any) => {
+  //           return ele !== 'data'
+  //         })
+  //         dupData = JSON.parse(JSON.stringify(reportData));
+  //         dupData.forEach((obj: any) => {
+  //           delete obj.data
+  //         })
+  //       }
+  //       dupData.forEach((obj: any) => {
+  //         Object.keys(obj).forEach((key: any) => {
+  //           obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key]
+  //         });
+  //       });
+  //       const opts = { fields: keys, output: fileName };
+  //       const csv = json2csv.parse(dupData, opts);
+
+  //       let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  //       saveAs(file, `${fileName}.csv`);
+  //     }
+  //   }
+  //   else {
+  //     let keys: [] | any
+  //     if (reportData === undefined || reportData?.length <= 0) {
+  //       alert("No data found to download");
+  //     }
+  //     else {
+
+  //       keys = Object.keys(reportData['0']).filter(key => key !== 'tooltip');
+
+  //     };
+  //     let dupData;
+
+  //     if (this.reportType === 'map') {
+  //       dupData = JSON.parse(JSON.stringify(reportData));
+  //     }
+  //     else if (this.reportType === 'table') {
+  //       dupData = JSON.parse(JSON.stringify(reportData));
+  //       dupData?.forEach((rec: any) => {
+  //         Object.keys(rec).forEach((obj: any) => {
+  //           rec[obj] = rec[obj]?.value
+  //         });
+  //       });
+  //     }
+  //     else if (this.reportType === 'dashletBar') {
+  //       dupData = JSON.parse(JSON.stringify(reportData));
+  //     }
+  //     else if (this.reportType === 'dashletScatter') {
+  //       keys = keys.filter((ele: any) => {
+  //         return ele !== 'data'
+  //       })
+  //       dupData = JSON.parse(JSON.stringify(reportData));
+  //       dupData.forEach((obj: any) => {
+  //         delete obj.data
+  //       })
+  //     }
+  //     dupData.forEach((obj: any) => {
+  //       Object.keys(obj).forEach((key: any) => {
+  //         obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key]
+  //       });
+  //     });
+
+  //     const opts = { fields: keys, output: fileName };
+  //     const csv = json2csv.parse(dupData, opts);
+
+  //     let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  //     saveAs(file, `${fileName}.csv`);
+  //   }
+  // }
+  onDownload() {
+    this.download(this.data)
+  }
+
+  download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
+    if ( reportInputs=== undefined || reportInputs?.length <= 0) {
+      alert("No data found to download");
+    } else {
+      for (let i = 0; i < reportInputs.length; i++) {
+        const reportData = reportInputs[i].reportData;
+        const reportType = reportInputs[i].reportType;
+        const fileName = reportInputs[i].reportName;
+        let keys: [] | any;
+        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date'].includes(key));
         let dupData;
-
-        if (this.reportType === 'map') {
+        if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
-        }
-        else if (this.reportType === 'table') {
+        } else if (reportType === 'table') {
           dupData = JSON.parse(JSON.stringify(reportData));
           dupData?.forEach((rec: any) => {
             Object.keys(rec).forEach((obj: any) => {
-              rec[obj] = rec[obj]?.value
+              rec[obj] = rec[obj]?.value;
             });
           });
-        }
-        else if (this.reportType === 'dashletBar') {
+        } else if (reportType === 'dashletBar') {
           dupData = JSON.parse(JSON.stringify(reportData));
-        }
-        else if (this.reportType === 'dashletScatter') {
+        } else if (reportType === 'dashletScatter') {
           keys = keys.filter((ele: any) => {
-            return ele !== 'data'
-          })
+            return ele !== 'data';
+          });
           dupData = JSON.parse(JSON.stringify(reportData));
           dupData.forEach((obj: any) => {
-            delete obj.data
-          })
+            delete obj.data;
+          });
         }
         dupData.forEach((obj: any) => {
           Object.keys(obj).forEach((key: any) => {
-            obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key]
+            obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key];
           });
         });
         const opts = { fields: keys, output: fileName };
         const csv = json2csv.parse(dupData, opts);
-
         let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });
         saveAs(file, `${fileName}.csv`);
       }
     }
-    else {
-      let keys: [] | any
-      if (reportData === undefined || reportData?.length <= 0) {
-        alert("No data found to download");
-      }
-      else {
-
-        keys = Object.keys(reportData['0']).filter(key => key !== 'tooltip');
-
-      };
-      let dupData;
-
-      if (this.reportType === 'map') {
-        dupData = JSON.parse(JSON.stringify(reportData));
-      }
-      else if (this.reportType === 'table') {
-        dupData = JSON.parse(JSON.stringify(reportData));
-        dupData?.forEach((rec: any) => {
-          Object.keys(rec).forEach((obj: any) => {
-            rec[obj] = rec[obj]?.value
-          });
-        });
-      }
-      else if (this.reportType === 'dashletBar') {
-        dupData = JSON.parse(JSON.stringify(reportData));
-      }
-      else if (this.reportType === 'dashletScatter') {
-        keys = keys.filter((ele: any) => {
-          return ele !== 'data'
-        })
-        dupData = JSON.parse(JSON.stringify(reportData));
-        dupData.forEach((obj: any) => {
-          delete obj.data
-        })
-      }
-      dupData.forEach((obj: any) => {
-        Object.keys(obj).forEach((key: any) => {
-          obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key]
-        });
-      });
-
-      const opts = { fields: keys, output: fileName };
-      const csv = json2csv.parse(dupData, opts);
-
-      let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-      saveAs(file, `${fileName}.csv`);
-    }
   }
-
-
-  // downloadCSV() {
-  //   console.log('the sadha',this.reportData);
-  //   const csvContent = "data:text/csv;charset=utf-8,"
-  //     + this.reportData.map(report => `${report.reportName},${report.data.values}`).join("\n");
-
-  //   const encodedUri = encodeURI(csvContent);
-  //   const link = document.createElement("a");
-  //   link.setAttribute("href", encodedUri);
-  //   link.setAttribute("download", "report.csv");
-  //   document.body.appendChild(link);
-  //   link.click();
-  // }
 }
 
 

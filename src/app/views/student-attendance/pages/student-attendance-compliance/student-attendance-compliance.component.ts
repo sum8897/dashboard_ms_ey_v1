@@ -14,6 +14,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
   minDate: any;
   startDate: any;
   endDate: any
+  reportsData : any[]=[]
 
   @ViewChild('averageAttendanceCompliance') averageAttendanceCompliance: SacAverageAttendanceComplianceComponent;
   @ViewChild('attendanceComplianceRank') attendanceComplianceRank: SacAttendanceComplianceRankComponent
@@ -23,7 +24,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
     
   }
 
-  appendBigNumber({data,reportName}) {
+  appendBigNumber({data,reportName,reportData}) {
     this.bigNumberReports = { 
       ...this.bigNumberReports,
       [reportName]:data
@@ -31,6 +32,13 @@ export class StudentAttendanceComplianceComponent implements OnInit {
   }
   getObjectlen(object:Object){
     return Object.keys(object).length
+  }
+
+  csvDownload(csvData:any){
+    if(csvData){
+     this.reportsData.push(csvData)
+     }
+    console.log('hsgvdhvsd',this.reportsData);
   }
 
   settimeSeriesDates(dates: any) {

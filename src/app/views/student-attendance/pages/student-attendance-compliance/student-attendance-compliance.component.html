@@ -1,6 +1,13 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
-    <div class="filter-row">
-        <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
+    <div class="filter-row grid gird cols 6">
+        <div class="time-series-filter xmd:col-start-1 lg:col-end-2 xmd:col-end-3 col-span-6">
+            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
+                [maxDate]="maxDate"></app-time-series-filter-panel>
+        </div>
+        <div class=" lg:col-start-6 xmd:col-end-7 xmd:col-start-5 col-span-full" >
+            <app-download-button [data]="reportsData"></app-download-button>
+        </div>
+
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">

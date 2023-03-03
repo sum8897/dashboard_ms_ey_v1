@@ -6,6 +6,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
+import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
 @Component({
   selector: 'app-grade-wise-average-attendance',
@@ -34,7 +35,9 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
+  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService,
+    private csv:StudentAttendanceSummaryComponent,
+    private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -105,31 +108,31 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
           this.maxDate = row['max_date']
         }
       });
-      if(isMultibar){
-        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
-      }
+      // if(isMultibar){
+      //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      // }
       this.tableReportData = {
         values: rows
       }
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
-        datasets: getBarDatasetConfig(xAxis?.metrics?.map((metric: any) => {
-          return {
-            dataExpr: metric.value, label: metric.label
-          }
-        })),
+        datasets: getBarDatasetConfig(
+        [{
+          dataExpr: metricValue, label: metricLabel
+        }]),
+    
         options: {
           height: (rows.length * 15 + 150).toString(),
           tooltips: {
             callbacks: {
               label: (tooltipItem, data) => {
                 let multistringText = [];
-                if (tooltipItem.datasetIndex === 0) {
-                  xAxis.metrics.forEach((metric: any) => {
-                    multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
-                  });
-                }
-
+                // if (tooltipItem.datasetIndex === 0) {
+                //   xAxis.metrics.forEach((metric: any) => {
+                //     multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
+                //   });
+                // }
+                multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
                 return multistringText;
               }
             }
@@ -163,6 +166,8 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
         minDate: this.minDate,
         maxDate: this.maxDate
       });
+      let reportsData= {reportData:this.tableReportData.values,reportType:'dashletBar',reportName:this.fileName}
+      this.csv.csvDownload(reportsData)
     });
   }
 

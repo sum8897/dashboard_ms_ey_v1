@@ -4,6 +4,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
+import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
 @Component({
   selector: 'app-sas-average-attendance',
@@ -23,13 +24,15 @@ export class SasAverageAttendanceComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  title='Attendance Summary %';
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService,
+    private csv :StudentAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -44,9 +47,8 @@ export class SasAverageAttendanceComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
-
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
@@ -148,6 +150,8 @@ export class SasAverageAttendanceComponent implements OnInit {
         minDate: this.minDate,
         maxDate: this.maxDate
       });
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
+      this.csv.csvDownload(reportsData)
     });
   }
 

@@ -36,13 +36,13 @@ export class LayoutComponent implements OnInit {
 
     this._commonService.getDashboardMetrics().subscribe((menuResult: any) => {
       this.menu = [];
-      let menuToDisplay: IMenuItem | any = {};
-      menuToDisplay.label = "Dashboard";
-      menuToDisplay.path = "/dashboard";
-      menuToDisplay.icon = 'dashboard.png';
-      menuToDisplay.isSelected = true;
-      menuToDisplay.basepath = "dasboard";
-      this.menu.push(menuToDisplay);
+      // let menuToDisplay: IMenuItem | any = {};
+      // menuToDisplay.label = "Dashboard";
+      // menuToDisplay.path = "/dashboard";
+      // menuToDisplay.icon = 'dashboard.png';
+      // menuToDisplay.isSelected = true;
+      // menuToDisplay.basepath = "dasboard";
+      // this.menu.push(menuToDisplay);
       menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
         let menuToDisplay: IMenuItem | any = {};
         menuToDisplay.label = dasboardMenu.menuName;
