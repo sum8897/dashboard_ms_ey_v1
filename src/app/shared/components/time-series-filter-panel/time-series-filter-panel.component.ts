@@ -11,17 +11,25 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
   @Output() timeSeriesUpdated = new EventEmitter<any>();
   @Input() minDate: any;
   @Input() maxDate: any;
+  @Input() defaultSelectedDays: any;
   selected: any;
 
   constructor() {
-    // const currentDate = moment();
-    // const last7DaysStart = moment().subtract(7, 'days');
-    // this.selected = { startDate: last7DaysStart, endDate: currentDate };
+
   }
 
 
 
   ngOnInit(): void {
+    setTimeout(() => {
+      if (this.defaultSelectedDays) {
+        let endDate = new Date();
+        let days = endDate.getDate() - this.defaultSelectedDays;
+        let startDate = new Date();
+        startDate.setDate(days)
+        this.selected = { startDate: startDate, endDate: endDate };
+      }
+    }, 100);
   }
 
   changeDate(event: any) {

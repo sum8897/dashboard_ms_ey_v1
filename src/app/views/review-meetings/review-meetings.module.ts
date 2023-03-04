@@ -8,6 +8,7 @@ import { ReviewMeetingsConductedComponent } from './pages/review-meetings-tab/re
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ReviewMeetingsStatusComponent } from './pages/review-meetings-tab/reports/review-meetings-status/review-meetings-status.component';
+import { ReviewMeetingsConductedBignumberComponent } from './pages/review-meetings-tab/reports/review-meetings-conducted-bignumber/review-meetings-conducted-bignumber.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ReviewMeetingsStatusComponent } from './pages/review-meetings-tab/repor
     ReviewMeetingsComponent,
     ReviewMeetingsTabComponent,
     ReviewMeetingsConductedComponent,
-    ReviewMeetingsStatusComponent
+    ReviewMeetingsStatusComponent,
+    ReviewMeetingsConductedBignumberComponent
   ],
   imports: [
     SharedModule,

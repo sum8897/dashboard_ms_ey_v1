@@ -6,8 +6,16 @@
 @import "~@ng-select/ng-select/themes/material.theme.css";
 @import './assets/styles/styles.scss';
 @import '~@project-sunbird/sb-themes/themes/theme-cqube.scss';
-html, body { height: 100%; }
-body { margin: 0; font-family: Arial, Helvetica, sans-serif;}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 // body {
 //     &:before {
@@ -22,11 +30,12 @@ html body {
     background-size: cover !important;
 }
 
-.button-grp, #download1{
+.button-grp,
+#download1 {
     align-items: center;
 }
 
-.container-fluid{
+.container-fluid {
     overflow-y: hidden !important;
 }
 
@@ -69,7 +78,7 @@ html body {
     width: 100%;
     height: 100%;
     background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
-    background: -webkit-radial-gradient( rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
+    background: -webkit-radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
 }
 
 
@@ -85,16 +94,16 @@ html body {
     border: 0;
 }
 
-.header-center{
+.header-center {
     display: flex;
     align-items: center;
 }
 
 :root {
     /* Colors */
-  
-    --theme-bg-header-color:#fff;
-    --theme-bg-sidenav-color:#FFC400;
+
+    --theme-bg-header-color: #fff;
+    --theme-bg-sidenav-color: #FFC400;
     --theme-bg-container-color: #ffebcc;
     --theme-text-color: #000;
     --theme-dark-button-color: #0C54C6;
@@ -102,16 +111,16 @@ html body {
     --theme-back-button-color: #dcdcdc;
     --theme-back-button-border-color: #dcdcdc;
     --theme-report-button-color: rgb(152, 160, 163);
-    --theme-bg-sidenav-user-info:#FFE07B;
+    --theme-bg-sidenav-user-info: #FFE07B;
     --theme-report-heading-color: #000;
     --theme-access-progress-card-btn-color: #0545a5;
     --theme-download-btn-color: #0545a5;
     --theme-report-selected-level-color: #777;
     --theme-icon-color: #000;
-    --theme-report-header-bg-color : #ffebcd;
-  }
+    --theme-report-header-bg-color: #ffebcd;
+}
 
-  .selected-level{
+.selected-level {
     color: var(--theme-report-selected-level-color) !important;
 }
 
@@ -140,6 +149,7 @@ html body {
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
@@ -157,6 +167,7 @@ html body {
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
@@ -174,6 +185,7 @@ html body {
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
@@ -191,6 +203,7 @@ html body {
         -o-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         -moz-transform: rotate(360deg);
@@ -213,14 +226,17 @@ html body {
 }
 
 ::ng-deep {
-    .ng-has-value .ng-placeholder, .ng-select-opened .ng-placeholder{
-        position:absolute !important;
+
+    .ng-has-value .ng-placeholder,
+    .ng-select-opened .ng-placeholder {
+        position: absolute !important;
     }
 
-    .ng-placeholder{
+    .ng-placeholder {
         position: relative !important;
     }
-    .ng-select{
+
+    .ng-select {
         overflow: visible !important;
     }
 
@@ -236,6 +252,7 @@ html body {
         //background-color: #004e9d !important;
         //color: white !important;
     }
+
     .ng-has-value {
         //background-color: #004e9d !important;
         //color: white !important;
@@ -257,7 +274,7 @@ html body {
         min-width: 100%;
     }
 
-    .mat-tab-label-content{
+    .mat-tab-label-content {
         padding: 0 6px !important;
     }
 }
@@ -290,7 +307,12 @@ html body {
 .dataTableCustom .dataTables_wrapper .dataTables_scrollHead table thead .sorting {
     background-size: 15px 15px !important;
 }
-#dist, #block, #cluster, #school, .note{
+
+#dist,
+#block,
+#cluster,
+#school,
+.note {
     margin-bottom: 20px;
 }
 
@@ -347,12 +369,23 @@ html body {
     cursor: pointer;
 }
 
-.app-content{
+.app-content {
     position: relative;
 }
 
-.button-right{
+.button-right {
     display: flex;
     justify-content: end;
     padding: 10px 0px 10px 0px;
+}
+
+@media(max-width: 991px) {
+    .sideBarHeightNone .app-side-nav {
+        width:0% !important;
+        height: 0% !important
+    }
+}
+
+.sidebaractive .footer{
+    width: calc(100vw - #{$app-side-nav-width} + 6rem) !important;
 }

@@ -38,7 +38,7 @@ export class SasAverageAttendanceRankComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
@@ -136,10 +136,7 @@ export class SasAverageAttendanceRankComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
+      console.log(this.tableReportData?.data?.length <= 0)
       let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
       this.csv.csvDownload(reportsData)
     });

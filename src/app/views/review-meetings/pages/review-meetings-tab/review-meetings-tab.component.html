@@ -5,13 +5,14 @@
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">
-                <app-big-number [bigNumberReportData]="bigNumberReports['review_meetings_conducted']"></app-big-number>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted_bignumber', 'bigNumber')">
+                <!-- <app-big-number [bigNumberReportData]="bigNumberReports['review_meetings_conducted']"></app-big-number> -->
+                <app-review-meetings-conducted-bignumber #reviewMeetingsConductedBignumber></app-review-meetings-conducted-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-review-meetings-conducted #reviewMeetingsConducted (bigNumberReport)="appendBigNumber($event)"></app-review-meetings-conducted>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted', 'table')">
+                <app-review-meetings-conducted #reviewMeetingsConducted></app-review-meetings-conducted>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_status', 'table')">
                 <app-review-meetings-status #reviewMeetingsStatus></app-review-meetings-status>
             </div>
         </div>
