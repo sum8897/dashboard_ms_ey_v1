@@ -1,7 +1,13 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
     <div class="filter-row">
-        <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
-    </div>
+        <div class="time-series-filter">
+            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
+          </div>
+          <div class="download-button">
+            <app-download-button [data]="reportsData"></app-download-button>
+          </div>
+        
+     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">

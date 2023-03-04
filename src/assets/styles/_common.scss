@@ -34,6 +34,25 @@
     width: 300px;
     white-space: initial;
 }
+.filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // flex-direction: column;
+  }
+  
+  .download-button {
+    margin-left: auto;
+    // margin-top: -19px;
+    // margin-left: -51px;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // color: #fff;
+    // background-color: #007bff;
+    // border-color: #007bff;
+    // text-overflow: ellipsis;
+  }
+  
 
 // .highcharts-tooltip text, .highcharts-tooltip text tspan {
 //     font-size: 2rem;

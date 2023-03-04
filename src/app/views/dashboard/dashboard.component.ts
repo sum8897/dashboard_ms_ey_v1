@@ -20,19 +20,19 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._commonService.getDashboardMetrics().subscribe((dashboardMenuResult: any) => {
-      this.dashboardMenu=[]
-      dashboardMenuResult?.data.forEach((dasboardMenu) => {
-        let menuToDisplay: IDashboardMenu | any = {};
-        menuToDisplay.title = dasboardMenu.programName;
-        menuToDisplay.navigationURL = dasboardMenu.navigationUrl;
-        menuToDisplay.icon = dasboardMenu.imageUrl;
-        menuToDisplay.metrics = [];
-        menuToDisplay.tooltip = dasboardMenu.tooltip
-        this.dashboardMenu?.push(menuToDisplay);
-      });
-      console.log(this.dashboardMenu)
-    });
+    // this._commonService.getDashboardMetrics().subscribe((dashboardMenuResult: any) => {
+    //   this.dashboardMenu=[]
+    //   dashboardMenuResult?.data.forEach((dasboardMenu) => {
+    //     let menuToDisplay: IDashboardMenu | any = {};
+    //     menuToDisplay.title = dasboardMenu.programName;
+    //     menuToDisplay.navigationURL = dasboardMenu.navigationUrl;
+    //     menuToDisplay.icon = dasboardMenu.imageUrl;
+    //     menuToDisplay.metrics = [];
+    //     menuToDisplay.tooltip = dasboardMenu.tooltip
+    //     this.dashboardMenu?.push(menuToDisplay);
+    //   });
+    //   console.log(this.dashboardMenu)
+    // });
   }
 
   onClickOfDashboardItem(cardInfo: IDashboardMenu | undefined): void {

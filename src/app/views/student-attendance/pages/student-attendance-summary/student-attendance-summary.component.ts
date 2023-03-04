@@ -16,6 +16,7 @@ export class StudentAttendanceSummaryComponent implements OnInit {
   minDate: any;
   startDate: any;
   endDate: any;
+  reportsData : any[]=[]
 
   @ViewChild('averageAttendance') averageAttendanceCompliance:SasAverageAttendanceComponent;
   @ViewChild('genderWiseAverageAttendance') genderWiseAverageAttendance: GenderWiseAverageAttendanceComponent;
@@ -35,6 +36,11 @@ export class StudentAttendanceSummaryComponent implements OnInit {
   }
   getObjectlen(object:Object){
     return Object.keys(object).length
+  }
+  csvDownload(csvData:any){
+    if(csvData){
+     this.reportsData.push(csvData)
+     }
   }
 
   settimeSeriesDates(dates: any) {

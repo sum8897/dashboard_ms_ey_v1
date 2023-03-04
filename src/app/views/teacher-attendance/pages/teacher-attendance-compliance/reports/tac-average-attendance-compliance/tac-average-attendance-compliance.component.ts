@@ -4,6 +4,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
+import { TeacherAttendanceComplianceComponent } from '../../teacher-attendance-compliance.component';
 
 @Component({
   selector: 'app-tac-average-attendance-compliance',
@@ -30,7 +31,8 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, 
+    private csv:TeacherAttendanceComplianceComponent,private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -166,6 +168,8 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
         minDate: this.minDate,
         maxDate: this.maxDate
       });
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.reportName}
+      this.csv.csvDownload(reportsData)
     });
   }
 

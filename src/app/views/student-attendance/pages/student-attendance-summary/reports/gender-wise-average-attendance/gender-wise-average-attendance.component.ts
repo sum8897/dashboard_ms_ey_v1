@@ -6,6 +6,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
+import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
 @Component({
   selector: 'app-gender-wise-average-attendance',
@@ -35,7 +36,8 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
+  constructor(private readonly _commonService: CommonService,private csv :StudentAttendanceSummaryComponent,
+     private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -106,30 +108,33 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
           this.maxDate = row['max_date']
         }
       });
-      if(isMultibar){
-        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
-      }
+      // if(isMultibar){
+      //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      // }
+      console.log('the bar chart',rows);
       this.tableReportData = {
         values: rows
       }
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
-        datasets: getBarDatasetConfig(xAxis?.metrics?.map((metric: any) => {
-          return {
-            dataExpr: metric.value, label: metric.label
-          }
-        })),
+        datasets: getBarDatasetConfig(
+        [{
+          dataExpr: metricValue, label: metricLabel
+        }]),
+    
         options: {
           height: (rows.length * 15 + 150).toString(),
           tooltips: {
             callbacks: {
               label: (tooltipItem, data) => {
+                console.log(tooltipItem, data)
                 let multistringText = [];
-                if (tooltipItem.datasetIndex === 0) {
-                  xAxis.metrics.forEach((metric: any) => {
-                    multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
-                  });
-                }
+                // if (tooltipItem.datasetIndex === 0) {
+                //   xAxis.metrics.forEach((metric: any) => {
+                //     multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
+                //   });
+                // }
+                multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
 
                 return multistringText;
               }
@@ -160,10 +165,14 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
           }
         }
       });
+      console.log('config',this.config);
+
       this.exportDates.emit({
         minDate: this.minDate,
         maxDate: this.maxDate
       });
+      let reportsData= {reportData:this.tableReportData.values,reportType:'dashletBar',reportName:this.fileName}
+      this.csv.csvDownload(reportsData)
     });
   }
 
