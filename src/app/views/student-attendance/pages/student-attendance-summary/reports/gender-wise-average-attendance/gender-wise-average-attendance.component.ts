@@ -154,10 +154,11 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
               },
               ticks: {
                 callback: function(value, index, values) {
-                  if (values.length > 4 && value.length > 8) {
-                    return value.substr(0, 8) + '...';
+                  let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                  if (screen.width <= 768) {
+                    return newValue.substr(0, 8) + '...';
                   } else {
-                    return value;
+                    return newValue;
                   }
                 }
               }
