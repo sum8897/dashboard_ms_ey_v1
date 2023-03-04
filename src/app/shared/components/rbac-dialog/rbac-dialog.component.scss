@@ -23,6 +23,20 @@
         font-style: normal;
         color: #333333 !important;
     }
+    .ng-value-container{
+        padding: 0px !important;
+    }
+    .ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+        align-self: auto !important;
+        bottom: 0px !important;
+    }
+    .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper{
+        align-self: auto !important;
+        bottom: 2px !important;
+    }
+    .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder{
+    display: none !important;
+    }
 }
 
 .welcometxt {
