@@ -144,8 +144,10 @@ export class SasAverageAttendanceComponent implements OnInit {
         minDate: this.minDate,
         maxDate: this.maxDate
       });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.csv.csvDownload(reportsData)
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.csvDownload(reportsData)
+      }
     });
   }
 

@@ -30,7 +30,7 @@ export class SasAverageAttendanceRankComponent implements OnInit {
   @Input() endDate: any;
   title = 'Rank in Attendance %';
 
-  constructor(private readonly _commonService: CommonService, private csv :StudentAttendanceSummaryComponent,
+  constructor(private readonly _commonService: CommonService, private csv: StudentAttendanceSummaryComponent,
     private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -46,12 +46,12 @@ export class SasAverageAttendanceRankComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = { ...filter?.actions?.queries }
           timeSeriesQueries = filter?.timeSeriesQueries
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
@@ -137,8 +137,11 @@ export class SasAverageAttendanceRankComponent implements OnInit {
         })
       }
       console.log(this.tableReportData?.data?.length <= 0)
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.csv.csvDownload(reportsData)
+
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.csvDownload(reportsData)
+      }
     });
   }
 }
