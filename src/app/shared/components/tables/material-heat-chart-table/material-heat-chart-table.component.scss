@@ -1,5 +1,10 @@
 $light-grey: #eee;
 
+.table-title{
+    font-weight: 500;
+    color: var(--cQ-secondary);
+}
+
 ::ng-deep {
     .mat-table {
         border: 1px solid rgba(0, 0, 0, .12);
