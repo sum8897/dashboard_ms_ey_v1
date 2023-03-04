@@ -7,17 +7,17 @@ import { config } from 'src/app/views/student-attendance/config/student_attendan
 import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
 @Component({
-  selector: 'app-sas-average-attendance',
-  templateUrl: './sas-average-attendance.component.html',
-  styleUrls: ['./sas-average-attendance.component.scss']
+  selector: 'app-sas-average-attendance-bignumber',
+  templateUrl: './sas-average-attendance-bignumber.component.html',
+  styleUrls: ['./sas-average-attendance-bignumber.component.scss']
 })
-export class SasAverageAttendanceComponent implements OnInit {
-  reportName: string = 'sas_average_attendance';
+export class SasAverageAttendanceBignumberComponent implements OnInit {
+  reportName: string = 'sas_average_attendance_bignumber';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance Summary"
+    reportName: "Average Attendance"
   };
   minDate: any;
   maxDate: any;
@@ -25,9 +25,6 @@ export class SasAverageAttendanceComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
   title='Attendance Summary %';
-
-  @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
@@ -63,9 +60,6 @@ export class SasAverageAttendanceComponent implements OnInit {
         return true
       })
     }
-    else {
-      this._wrapperService.constructFilters(this.filters, filters);
-    }
 
     Object.keys(queries).forEach((key: any) => {
       if (key.toLowerCase().includes('comparison')) {
@@ -83,8 +77,11 @@ export class SasAverageAttendanceComponent implements OnInit {
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
-      if (query && key === 'table') {
-        this.getTableReportData(query, options);
+      if (query && key === 'bigNumber') {
+        this.getBigNumberReportData(query, options, 'averagePercentage');
+      }
+      else if (query && key === 'bigNumberComparison') {
+        this.getBigNumberReportData(query, options, 'differencePercentage')
       }
     })
   }
@@ -106,47 +103,34 @@ export class SasAverageAttendanceComponent implements OnInit {
     return newQuery
   }
 
-  getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          if (this.minDate !== undefined && this.maxDate !== undefined) {
-            if (row['min_date'] < this.minDate) {
-              this.minDate = row['min_date']
-            }
-            if (row['max_date'] > this.maxDate) {
-              this.maxDate = row['max_date']
-            }
-          }
-          else {
-            this.minDate = row['min_date']
-            this.maxDate = row['max_date']
-          }
-          columns.forEach((col: any) => {
-            if (row[col.property]) {
-              row = {
-                ...row,
-                [col.property]: { value: row[col.property] }
-              }
-            }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
-          }
-        })
+  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
+    let { bigNumber } = options ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
+    if (indicator === 'averagePercentage') {
+      this.bigNumberReportData = {
+        ...this.bigNumberReportData,
+        valueSuffix: valueSuffix
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.csv.csvDownload(reportsData)
-    });
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        if (res) {
+          let rows = res;
+          this.bigNumberReportData = {
+            ...this.bigNumberReportData,
+            averagePercentage: rows[0]?.[property]
+          }
+        }
+      })
+    }
+    else if (indicator === 'differencePercentage') {
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        if (res) {
+          let rows = res;
+          this.bigNumberReportData = {
+            ...this.bigNumberReportData,
+            differencePercentage: rows[0]?.[property]
+          }
+        }
+      })
+    }
   }
-
 }

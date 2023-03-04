@@ -1,8 +1,6 @@
-<div class="chart-wrapper" *ngIf="tableReportData?.data?.length > 0">
-    <div class="xs:col-span-full  text-center py-2">
-        <h2 class="font-medium">{{title}}</h2>
-        <hr class="my-2">
-        <app-material-heat-chart-table [tableData]="tableReportData"></app-material-heat-chart-table>
+<div class="chart-wrapper" >
+    <div class="xs:col-span-full  text-center py-2" *ngIf="tableReportData?.data?.length > 0">
+        <app-material-heat-chart-table [tableData]="tableReportData" [title]="title"></app-material-heat-chart-table>
     </div>
 
 </div>

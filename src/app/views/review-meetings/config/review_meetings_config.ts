@@ -72,8 +72,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, avg from dimensions.district as d join datasets.rev_and_monitoring_rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY d.district_name ASC",
-                        "bigNumber": "select ceil(round(CAST(avg(avg)*100 as numeric),2)) as percentage from datasets.rev_and_monitoring_district_monthly_academicyear0district",
+                        "table": "select district_name, avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY d.district_name ASC",
                     },
                     "level": "district"
                 }
@@ -84,19 +83,8 @@ export const config = {
                 "actions": {
                     "queries": {
                         "table": "select block_name, avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY b.block_name ASC",
-                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where district_id = {district_id}",
                     },
                     "level": "block"
-                }
-            },
-            {
-                "name": "Block",
-                "hierarchyLevel": "3",
-                "actions": {
-                    "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.cluster as c join datasets.rev_and_monitoring_cluster_monthly_academicyear0cluster as t on c.cluster_id = t.cluster_id where block_id = {block_id}",
-                    },
-                    "level": "cluster"
                 }
             }
         ],
@@ -144,7 +132,7 @@ export const config = {
                         //     type: "percentage",
                         //     values: [
                         //         {
-                        //             color: "#D6FFD6",
+                        //             color: "#b2d58f",
                         //             breakPoint: 75
                         //         },
                         //         {
@@ -159,12 +147,6 @@ export const config = {
                         // },
                     }
                 ],
-                "sortByProperty": "state_name",
-                "sortDirection": "desc"
-            },
-            "bigNumber": {
-                "valueSuffix": '%',
-                "property": 'percentage'
             }
         }
     },
@@ -246,7 +228,7 @@ export const config = {
                             values: [
                                 {
                                     value: "yes",
-                                    color: '#D6FFD6'
+                                    color: '#b2d58f'
                                 },
                                 {
                                     value: "no",
@@ -260,6 +242,47 @@ export const config = {
                 "sortDirection": "desc"
             },
             "bigNumber": {
+            }
+        }
+    },
+    review_meetings_conducted_bignumber: {
+        "label": "Review Meetings",
+        "filters": [
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select ceil(round(CAST(avg(avg)*100 as numeric),2)) as percentage from datasets.rev_and_monitoring_district_monthly_academicyear0district",
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "hierarchyLevel": "2",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where district_id = {district_id}",
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "hierarchyLevel": "3",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.cluster as c join datasets.rev_and_monitoring_cluster_monthly_academicyear0cluster as t on c.cluster_id = t.cluster_id where block_id = {block_id}",
+                    },
+                    "level": "cluster"
+                }
+            }
+        ],
+        "options": {
+            "bigNumber": {
+                "valueSuffix": '%',
+                "property": 'percentage'
             }
         }
     }

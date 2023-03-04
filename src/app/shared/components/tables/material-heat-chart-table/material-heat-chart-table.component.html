@@ -1,4 +1,5 @@
 <div class ="Mattable" style="overflow: auto hidden;">
+    <h2 class="table-title text-center my-2">{{title}}</h2>
     <table mat-table [dataSource]="dataSource" matSort tableHeatMap [matSortActive]="matSortActive"
         [matSortDirection]="matSortDirection" (contentChanged)="contentChanged()">
         <!-- <ng-container matColumnDef="id">

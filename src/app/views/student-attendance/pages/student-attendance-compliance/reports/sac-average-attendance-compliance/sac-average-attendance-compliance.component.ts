@@ -166,7 +166,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -177,7 +177,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0].percentage
+            averagePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
@@ -192,7 +192,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            differencePercentage: rows[0].percentage
+            differencePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,

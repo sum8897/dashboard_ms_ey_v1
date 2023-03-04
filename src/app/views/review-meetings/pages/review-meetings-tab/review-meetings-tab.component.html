@@ -1,18 +1,24 @@
 
-<div class="col-span-full tab-wrapper" appFullScreen>
-    <div class="filter-row">
-        <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)"></app-filter-panel>
+<div class="col-span-full tab-wrapper">
+    <div class="filter-row grid grid-cols-4">
+        <div class="col-span-2">
+            <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)" colSize="col-span-6"></app-filter-panel>
+        </div>
+        <div class="col-start-4 col-end-5 download-button">
+            <app-download-button [data]="reportsData"></app-download-button>
+        </div>
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">
-                <app-big-number [bigNumberReportData]="bigNumberReports['review_meetings_conducted']"></app-big-number>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted_bignumber', 'bigNumber')">
+                <!-- <app-big-number [bigNumberReportData]="bigNumberReports['review_meetings_conducted']"></app-big-number> -->
+                <app-review-meetings-conducted-bignumber #reviewMeetingsConductedBignumber></app-review-meetings-conducted-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-review-meetings-conducted #reviewMeetingsConducted (bigNumberReport)="appendBigNumber($event)"></app-review-meetings-conducted>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted', 'table')">
+                <app-review-meetings-conducted #reviewMeetingsConducted (exportReportData)="csvDownload($event)"></app-review-meetings-conducted>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-review-meetings-status #reviewMeetingsStatus></app-review-meetings-status>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_status', 'table')">
+                <app-review-meetings-status #reviewMeetingsStatus (exportReportData)="csvDownload($event)"></app-review-meetings-status>
             </div>
         </div>
     </div>

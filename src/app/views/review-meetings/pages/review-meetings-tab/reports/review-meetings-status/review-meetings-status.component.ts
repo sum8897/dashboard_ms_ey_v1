@@ -18,14 +18,14 @@ export class ReviewMeetingsStatusComponent implements OnInit {
   bigNumberReportData: any = {
     reportName: "Review Meetings Status"
   };
+  title: string = 'Review Meetings Status';
   selectedYear: any;
   selectedMonth: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
 
-  @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportFilters = new EventEmitter<any>();
+  @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -123,6 +123,8 @@ export class ReviewMeetingsStatusComponent implements OnInit {
           }
         })
       }
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
+      this.exportReportData.emit(reportsData)
     });
   }
 }

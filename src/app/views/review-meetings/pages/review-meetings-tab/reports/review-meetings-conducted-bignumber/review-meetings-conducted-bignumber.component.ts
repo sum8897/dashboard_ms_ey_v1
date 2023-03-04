@@ -6,19 +6,18 @@ import { buildQuery, parseFilterToQuery, parseTimeSeriesQuery } from 'src/app/ut
 import { config } from 'src/app/views/review-meetings/config/review_meetings_config';
 
 @Component({
-  selector: 'app-review-meetings-conducted',
-  templateUrl: './review-meetings-conducted.component.html',
-  styleUrls: ['./review-meetings-conducted.component.scss']
+  selector: 'app-review-meetings-conducted-bignumber',
+  templateUrl: './review-meetings-conducted-bignumber.component.html',
+  styleUrls: ['./review-meetings-conducted-bignumber.component.scss']
 })
-export class ReviewMeetingsConductedComponent implements OnInit {
-  reportName: string = 'review_meetings_conducted';
-  title: string = 'Average Review Meetings Conducted';
+export class ReviewMeetingsConductedBignumberComponent implements OnInit {
+  reportName: string = 'review_meetings_conducted_bignumber';
   filters: any = [];
   levels: any;
-  tableReportData: any;
   bigNumberReportData: any = {
     reportName: "Average Review Meetings Conducted"
   };
+  title: string = 'Average Review Meetings Conducted'
   selectedYear: any;
   selectedMonth: any;
   compareDateRange: any = 30;
@@ -38,8 +37,6 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   }
 
   getReportData(filterValues?: any): void {
-    // this.selectedYear = filterValues?.academicYear;
-    // this.selectedMonth = filterValues?.month;
     let reportConfig = config
 
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -74,9 +71,12 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
-
-      if (query && key === 'table') {
-        this.getTableReportData(query, options);
+      
+      if (query && key === 'bigNumber') {
+        this.getBigNumberReportData(query, options, 'averagePercentage');
+      }
+      else if (query && key === 'bigNumberComparison') {
+        this.getBigNumberReportData(query, options, 'differencePercentage')
       }
     })
   }
@@ -98,30 +98,36 @@ export class ReviewMeetingsConductedComponent implements OnInit {
     return newQuery
   }
 
-  getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          columns.forEach((col: any) => {
-            if (row[col.property] !== null || row[col.property] !== undefined) {
-              row = {
-                ...row,
-                [col.property]: { value: row[col.property] }
-              }
-            }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
-          }
-        })
+  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
+    let { bigNumber } = options ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
+    if (indicator === 'averagePercentage') {
+      this.bigNumberReportData = {
+        ...this.bigNumberReportData,
+        valueSuffix: valueSuffix
       }
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.exportReportData.emit(reportsData)
-    });
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        if (res) {
+          let rows = res;
+          this.bigNumberReportData = {
+            ...this.bigNumberReportData,
+            averagePercentage: rows[0]?.[property]
+          }
+        }
+      })
+    }
+    else if (indicator === 'differencePercentage') {
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        if (res) {
+          let rows = res;
+          this.bigNumberReportData = {
+            ...this.bigNumberReportData,
+            differencePercentage: rows[0]?.[property]
+          }
+        }
+      })
+    }
+    let reportsData= {reportData:this.bigNumberReportData,reportType:'bigNumber',reportName:this.title}
+    this.exportReportData.emit(reportsData)
   }
 }

@@ -15,6 +15,7 @@ import { DashletModule } from '@project-sunbird/sb-dashlet-v14';
 import { DataService } from 'src/app/core/services/data.service';
 import { SacAttendanceComplianceRankComponent } from './pages/student-attendance-compliance/reports/sac-attendance-compliance-rank/sac-attendance-compliance-rank.component';
 import { SasAverageAttendanceRankComponent } from './pages/student-attendance-summary/reports/sas-average-attendance-rank/sas-average-attendance-rank.component';
+import { SasAverageAttendanceBignumberComponent } from './pages/student-attendance-summary/reports/sas-average-attendance-bignumber/sas-average-attendance-bignumber.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { SasAverageAttendanceRankComponent } from './pages/student-attendance-su
     GenderWiseAverageAttendanceComponent,
     GradeWiseAverageAttendanceComponent,
     SacAttendanceComplianceRankComponent,
-    SasAverageAttendanceRankComponent
+    SasAverageAttendanceRankComponent,
+    SasAverageAttendanceBignumberComponent
   ],
   imports: [
     DashletModule.forRoot({
