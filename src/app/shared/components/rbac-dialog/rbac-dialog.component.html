@@ -29,8 +29,8 @@
     <span> {{'Please select your ' + availableFilters}}</span>
 </div>
 
-<div class="grid grid-cols-3">
-    <div class="xmd:col-start-2 xmd:col-end-3 wrapper">
+<div class="grid grid-cols-6">
+    <div class="xmd:col-start-2 xmd:col-end-6 md:col-start-3 md:col-end-5 col-start-1 col-end-7 wrapper">
         <form class="form theme-form" style="color:white" [formGroup]="rbacForm" (ngSubmit)="onSubmit()"
             enctype="multipart/form-data">
             <!-- <div class="display-flex-column" *ngFor="let filter of filters; let ind = index"

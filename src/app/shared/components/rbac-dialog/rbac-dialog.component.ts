@@ -23,7 +23,7 @@ export class RbacDialogComponent implements OnInit {
       this.selectedRoleLevel = rbacDetails?.role
     })
     if(this.selectedRoleLevel < rbacConfig.baseHierarchy){
-      router.navigate(['/dashboard'])
+      router.navigate(['/student-attendance'])
     }
     this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
       return roleObj.value === this.selectedRoleLevel;
@@ -58,7 +58,7 @@ export class RbacDialogComponent implements OnInit {
     if (this.rbacForm.valid) {
       this.rbacForm.value.role = this.selectedRoleLevel
       this._rbacService.setRbacDetails(this.rbacForm.value);
-      this.router.navigate(['/dashboard'])
+      this.router.navigate(['/student-attendance'])
     }
     else {
       const invalid = [];
