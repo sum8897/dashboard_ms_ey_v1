@@ -23,6 +23,7 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
   filters: any;
   reportsToBeShown: any = [];
   rbacDetails: any;
+  reportsData: any = [];
 
 
   @ViewChild('reviewMeetingsConducted') reviewMeetingsConducted: ReviewMeetingsConductedComponent;
@@ -68,6 +69,13 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
       }
     })
     return flag
+  }
+
+  csvDownload(csvData: any) {
+    if (csvData) {
+      this.reportsData.push(csvData)
+    }
+    console.log(this.reportsData)
   }
 
   filtersUpdated(filters: any) {

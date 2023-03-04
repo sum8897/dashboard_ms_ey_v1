@@ -12,6 +12,7 @@ import { config } from 'src/app/views/review-meetings/config/review_meetings_con
 })
 export class ReviewMeetingsConductedComponent implements OnInit {
   reportName: string = 'review_meetings_conducted';
+  title: string = 'Average Review Meetings Conducted';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -24,8 +25,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
 
-  @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportFilters = new EventEmitter<any>();
+  @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -120,6 +120,8 @@ export class ReviewMeetingsConductedComponent implements OnInit {
           }
         })
       }
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
+      this.exportReportData.emit(reportsData)
     });
   }
 }

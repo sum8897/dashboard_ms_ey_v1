@@ -141,7 +141,7 @@ export const config = {
     //                         type: "percentage",
     //                         values: [
     //                             {
-    //                                 color: "#D6FFD6",
+    //                                 color: "#b2d58f",
     //                                 breakPoint: 75
     //                             },
     //                             {
@@ -271,7 +271,7 @@ export const config = {
     //                         type: "percentage",
     //                         values: [
     //                             {
-    //                                 color: "#D6FFD6",
+    //                                 color: "#b2d58f",
     //                                 breakPoint: 75
     //                             },
     //                             {
@@ -432,7 +432,7 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#D6FFD6",
+                                    color: "#b2d58f",
                                     breakPoint: 75
                                 },
                                 {
@@ -750,7 +750,7 @@ export const config = {
                 "metricLabel": "Average Attendance",
                 "metricValue": "percentage",
                 "yAxis": {
-                    "title": "Attendence %",
+                    "title": "Attendance %",
                 },
                 "xAxis": {
                     "label": "school_category",
@@ -882,7 +882,7 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#D6FFD6",
+                                    color: "#b2d58f",
                                     breakPoint: 75
                                 },
                                 {

@@ -14,18 +14,17 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
   reportName: string = 'review_meetings_conducted_bignumber';
   filters: any = [];
   levels: any;
-  tableReportData: any;
   bigNumberReportData: any = {
     reportName: "Average Review Meetings Conducted"
   };
+  title: string = 'Average Review Meetings Conducted'
   selectedYear: any;
   selectedMonth: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
 
-  @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportFilters = new EventEmitter<any>();
+  @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -114,10 +113,6 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
             ...this.bigNumberReportData,
             averagePercentage: rows[0]?.[property]
           }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
         }
       })
     }
@@ -129,12 +124,10 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
             ...this.bigNumberReportData,
             differencePercentage: rows[0]?.[property]
           }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
         }
       })
     }
+    let reportsData= {reportData:this.bigNumberReportData,reportType:'bigNumber',reportName:this.title}
+    this.exportReportData.emit(reportsData)
   }
 }

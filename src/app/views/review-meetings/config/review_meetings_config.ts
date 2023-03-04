@@ -132,7 +132,7 @@ export const config = {
                         //     type: "percentage",
                         //     values: [
                         //         {
-                        //             color: "#D6FFD6",
+                        //             color: "#b2d58f",
                         //             breakPoint: 75
                         //         },
                         //         {
@@ -228,7 +228,7 @@ export const config = {
                             values: [
                                 {
                                     value: "yes",
-                                    color: '#D6FFD6'
+                                    color: '#b2d58f'
                                 },
                                 {
                                     value: "no",

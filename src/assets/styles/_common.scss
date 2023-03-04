@@ -34,15 +34,11 @@
     width: 300px;
     white-space: initial;
 }
-.filter-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    // flex-direction: column;
-  }
   
   .download-button {
     margin-left: auto;
+    padding-right: 8%;
+    padding-top: 3%;
     // margin-top: -19px;
     // margin-left: -51px;
     // white-space: nowrap;
@@ -161,4 +157,8 @@
     color: red;
     text-align: center;
     margin-top: 9rem;
+}
+
+.filename{
+    color: var(--cQ-secondary) !important;
 }

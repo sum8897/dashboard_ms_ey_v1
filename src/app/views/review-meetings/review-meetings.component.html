@@ -7,7 +7,7 @@
 </div>
 
 <div class="custom-tab-group-wrapper">
-    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)">
+    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms" (selectedTabChange)="onTabChanged($event)" appFullScreen>
         <mat-tab label="Review Meetings" *ngIf="tabs.includes('Review Meetings')">
             <app-review-meetings-tab *ngIf="selectedTabLabel === 'Review Meetings'"></app-review-meetings-tab>
         </mat-tab>
