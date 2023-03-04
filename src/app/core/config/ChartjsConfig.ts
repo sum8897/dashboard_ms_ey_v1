@@ -37,7 +37,7 @@ const fontSize = window.innerWidth > 1024 ? Math.round(window.innerWidth / 100) 
 export const ChartJSConfig = {
     bar: {
         minBarLength: 8,
-        barThickness: 12,
+        barThickness: 40,
         maxBarThickness: 18
     },
     scatter: {
