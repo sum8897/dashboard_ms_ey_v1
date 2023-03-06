@@ -200,7 +200,7 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
     return title;
   }
 
-  onPageChange(event) {
+  onPageChange(event: any) {
     this.pageSize = event.pageSize;
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;

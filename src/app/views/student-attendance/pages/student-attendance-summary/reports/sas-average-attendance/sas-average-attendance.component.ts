@@ -53,7 +53,7 @@ export class SasAverageAttendanceComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -140,10 +140,6 @@ export class SasAverageAttendanceComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
       if (this.tableReportData?.data?.length > 0) {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         this.csv.csvDownload(reportsData)

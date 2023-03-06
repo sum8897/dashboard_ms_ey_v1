@@ -17,10 +17,10 @@
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance', 'table')">
                 <app-sas-average-attendance #averageAttendance></app-sas-average-attendance>
             </div>
-            <!-- <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-gender-wise-average-attendance #genderWiseAverageAttendance (exportDates)="settimeSeriesDates($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-gender-wise-average-attendance>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_gender_wise_average_attendance', 'barChart')">
+                <app-gender-wise-average-attendance #genderWiseAverageAttendance></app-gender-wise-average-attendance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
+            <!-- <div class="col-span-2 xmd:col-span-1 div-shadow">
                 <app-grade-wise-average-attendance #gradeWiseAverageAttendance (exportDates)="settimeSeriesDates($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-grade-wise-average-attendance>
             </div> -->
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_rank', 'table')">

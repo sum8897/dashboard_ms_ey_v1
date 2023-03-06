@@ -201,3 +201,26 @@ export function parseFilterToQuery(query: string, params?: { columnName: string,
         return query.substring(0, whereIndex) + `WHERE ${params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
     }
 }
+
+export function parseRbacFilter(query: string, rbacDetails: any) {
+    let newQuery = query;
+
+    let startIndex = newQuery?.indexOf('{');
+    let endIndex = newQuery?.indexOf('}');
+
+    while (startIndex > -1 && endIndex > -1) {
+      if (newQuery && startIndex > -1) {
+        let propertyName = newQuery.substring(startIndex + 1, endIndex);
+        let re = new RegExp(`{${propertyName}}`, "g");
+        Object.keys(rbacDetails).forEach((key: any) => {
+          console.log(propertyName, key)
+          if (propertyName === key + '_id') {
+            newQuery = newQuery.replace(re, '\'' + rbacDetails[key] + '\'');
+          }
+        });
+      }
+      startIndex = newQuery?.indexOf('{');
+      endIndex = newQuery?.indexOf('}');
+    }
+    return newQuery
+  }

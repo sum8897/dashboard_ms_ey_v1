@@ -12,7 +12,7 @@ import { config } from 'src/app/views/review-meetings/config/review_meetings_con
 })
 export class ReviewMeetingsConductedComponent implements OnInit {
   reportName: string = 'review_meetings_conducted';
-  title: string = 'Average Review Meetings Conducted';
+  title: string = 'Average  Meetings Conducted';
   filters: any = [];
   levels: any;
   tableReportData: any;

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiURL: 'api_end_point/api/ingestion',
+  apiURL: 'api_end_point/api/queryBuilder',
   stateCode: "HP",
   numberFormat: {
     reports: {

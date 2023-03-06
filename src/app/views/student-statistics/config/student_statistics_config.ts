@@ -125,7 +125,7 @@ export const config = {
                         property: "cwsn_enrolled",
                         class: "text-center",
                         isHeatMapRequired: true,
-                        color: '#fff'
+                        color: '#fff',
                     },
                     {
                         name: "Cwsn Enrollment",

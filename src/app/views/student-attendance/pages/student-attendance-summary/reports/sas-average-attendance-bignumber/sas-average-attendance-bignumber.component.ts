@@ -24,12 +24,12 @@ export class SasAverageAttendanceBignumberComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  title='Attendance Summary %';
+  title = 'Attendance Summary %';
   @Input() startDate: any;
   @Input() endDate: any;
 
   constructor(private readonly _commonService: CommonService,
-    private csv :StudentAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+    private csv: StudentAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -44,15 +44,13 @@ export class SasAverageAttendanceBignumberComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
-          Object.keys(queries).forEach((key) => {
-            queries[key] = this.parseRbacFilter(queries[key])
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
+          Object.keys(timeSeriesQueries).forEach((key) => {
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
           });
           return false
@@ -61,13 +59,13 @@ export class SasAverageAttendanceBignumberComponent implements OnInit {
       })
     }
 
-    Object.keys(queries).forEach((key: any) => {
+    Object.keys(timeSeriesQueries).forEach((key: any) => {
       if (key.toLowerCase().includes('comparison')) {
         let endDate = new Date();
         let days = endDate.getDate() - this.compareDateRange;
         let startDate = new Date();
         startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
       }
       else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
         onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
@@ -88,17 +86,23 @@ export class SasAverageAttendanceBignumberComponent implements OnInit {
 
   parseRbacFilter(query: string) {
     let newQuery = query;
+
     let startIndex = newQuery?.indexOf('{');
     let endIndex = newQuery?.indexOf('}');
 
-    if (newQuery && startIndex > -1) {
-      let propertyName = query.substring(startIndex + 1, endIndex);
-      let re = new RegExp(`{${propertyName}}`, "g");
-      Object.keys(this.rbacDetails).forEach((key: any) => {
-        if (propertyName === key + '_id') {
-          newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
-        }
-      });
+    while (startIndex > -1 && endIndex > -1) {
+      if (newQuery && startIndex > -1) {
+        let propertyName = newQuery.substring(startIndex + 1, endIndex);
+        let re = new RegExp(`{${propertyName}}`, "g");
+        console.log(this.rbacDetails)
+        Object.keys(this.rbacDetails).forEach((key: any) => {
+          if (propertyName === key + '_id') {
+            newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
+          }
+        });
+      }
+      startIndex = newQuery?.indexOf('{');
+      endIndex = newQuery?.indexOf('}');
     }
     return newQuery
   }

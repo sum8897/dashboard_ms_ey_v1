@@ -307,7 +307,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "select district_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district_id as present_table join datasets.school_attendance_studentsmarked_daily_district_id as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name",
+                    "table": "select district_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district as present_table join datasets.school_attendance_studentsmarked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -322,7 +322,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select block_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block_id as present_table join datasets.school_attendance_studentsmarked_daily_block_id as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_name",
+                    "table": "select block_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block as present_table join datasets.school_attendance_studentsmarked_daily_block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -337,7 +337,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select cluster_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster_id as present_table join datasets.school_attendance_studentsmarked_daily_cluster_id as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name",
+                    "table": "select cluster_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster as present_table join datasets.school_attendance_studentsmarked_daily_cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -352,7 +352,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select school_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_school_id as present_table join datasets.school_attendance_studentsmarked_daily_school_id as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name",
+                    "table": "select school_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_school as present_table join datasets.school_attendance_studentsmarked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -367,25 +367,12 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "table": "select t.grade,  round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t left join ingestion.dimension_master as m on t.school_id = m.school_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on c.cluster_id = m.cluster_id left join ingestion.dimension_school as s on s.school_id = t.school_id where (date between startDate and endDate) and t.school_id={school_id} group by t.grade,school_name,cluster_name,block_name,district_name",
+                    "table": "select grade_number, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school0grade as present_table join datasets.school_attendance_studentsmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_id where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_id, grade_number order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
                         "table": "select min(date) as min_date, max(date) as max_date, t.grade, school_name, round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t left join ingestion.dimension_master as m on t.school_id = m.school_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on c.cluster_id = m.cluster_id left join ingestion.dimension_school as s on s.school_id = t.school_id where t.school_id={school_id} group by t.grade, school_name,cluster_name,block_name,district_name",
                     },  
-                    "level": "school"
-                }
-            },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "timeSeriesQueries": {
-                },
-                "actions": {
-                    "queries": {
-                    },
                     "level": "school"
                 }
             }
@@ -420,13 +407,14 @@ export const config = {
                     },
                     {
                         name: "Grade",
-                        property: "grade",
+                        property: "grade_number",
                         class: "text-center"
                     },
                     {
                         name: "Student Attendance Summary",
                         property: "stt_avg",
                         class: "text-center",
+                        valueSuffix: '%',
                         isHeatMapRequired: true,
                         color: {
                             type: "percentage",
@@ -463,7 +451,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district_id as present_table join datasets.school_attendance_studentsmarked_daily_district_id as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a where a.att_date between startDate and endDate",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district as present_table join datasets.school_attendance_studentsmarked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a where a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
@@ -480,7 +468,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block_id as present_table join datasets.school_attendance_studentsmarked_daily_block_id as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id} and a.att_date between startDate and endDate",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block as present_table join datasets.school_attendance_studentsmarked_daily_block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
                 },
                 "actions": {
@@ -497,7 +485,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster_id as present_table join datasets.school_attendance_studentsmarked_daily_cluster_id as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster as present_table join datasets.school_attendance_studentsmarked_daily_cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id}"
                 },
                 "actions": {
@@ -514,7 +502,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_school_id as present_table join datasets.school_attendance_studentsmarked_daily_school_id as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_school as present_table join datasets.school_attendance_studentsmarked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id}",
                 },
                 "actions": {
@@ -531,7 +519,7 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "bigNumber": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t where (date between startDate and endDate) and t.school_id={school_id}",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school0grade as present_table join datasets.school_attendance_studentsmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t where (date between startDate and endDate) and t.school_id={school_id}",
                 },
                 "actions": {
@@ -548,7 +536,7 @@ export const config = {
                 "valueProp": "grade",
                 "hierarchyLevel": "6",
                 "timeSeriesQueries": {
-                    "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
+                    "bigNumber": "select ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school0grade as present_table join datasets.school_attendance_studentsmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
                 },
                 "actions": {
@@ -577,7 +565,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "barChart": "select min(date) as min_date, max(date) as max_date, t.gender as gender, round(avg(percentage),2) as percentage,  from ingestion.sac_stds_avg_atd_gender_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0district as present_table join datasets.school_attendance_studentsmarked_daily_gender0district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -592,7 +580,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by  t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.district_id, present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0district as present_table join datasets.school_attendance_studentsmarked_daily_gender0district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate and a.district_id = {district_id} group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -607,7 +595,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by  t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.block_id, present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0block as present_table join datasets.school_attendance_studentsmarked_daily_gender0block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate and a.block_id = {block_id} group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -622,7 +610,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by  t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.cluster_id, present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0cluster as present_table join datasets.school_attendance_studentsmarked_daily_gender0cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate and a.cluster_id = {cluster_id} group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -637,7 +625,7 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "barChart": "select t.gender as gender, round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_gender_wise_by_grade as t where (date between startDate and endDate) and t.school_id={school_id} group by  t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.school_id, present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school as present_table join datasets.school_attendance_studentsmarked_daily_gender0school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate and a.school_id = {school_id} group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -652,7 +640,7 @@ export const config = {
                 "valueProp": "grade",
                 "hierarchyLevel": "6",
                 "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_grade as t where (date between startDate and endDate) and t.grade={class_id} group by  t.gender",
+                    "barChart": "select gender, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.grade_id, present_table.school_id, present_table.gender_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school0grade as present_table join datasets.school_attendance_studentsmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.gender as gender_wise_table on gender_wise_table.gender_id = a.gender_id where a.att_date between startDate and endDate and a.school_id = {school_id} and a.grade_id = {grade_id} group by a.gender_id, gender",
                 },
                 "actions": {
                     "queries": {
@@ -665,7 +653,7 @@ export const config = {
         "options": {
             "barChart": {
                 "metricLabel": "Average Attendance",
-                "metricValue": "percentage",
+                "metricValue": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %"
                 },
@@ -770,7 +758,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select district_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district_id as present_table join datasets.school_attendance_studentsmarked_daily_district_id as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name",
+                    "table": "select district_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.district_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_district as present_table join datasets.school_attendance_studentsmarked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name",
                 },
                 "actions": {
                     "queries": {
@@ -785,7 +773,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select block_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block_id as present_table join datasets.school_attendance_studentsmarked_daily_block_id as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where a.att_date between startDate and endDate and district_id = {district_id} group by a.block_id, block_name",
+                    "table": "select block_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.block_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_block as present_table join datasets.school_attendance_studentsmarked_daily_block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where a.att_date between startDate and endDate and district_id = {district_id} group by a.block_id, block_name",
                 },
                 "actions": {
                     "queries": {
@@ -800,7 +788,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select cluster_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster_id as present_table join datasets.school_attendance_studentsmarked_daily_cluster_id as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name",
+                    "table": "select cluster_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_cluster as present_table join datasets.school_attendance_studentsmarked_daily_cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name",
                 },
                 "actions": {
                     "queries": {
@@ -815,7 +803,7 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where (date between startDate and endDate) and cluster_id = {cluster_id} group by t.school_id, school_name,t.percentage",
+                    "table": "select school_name, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from  (select present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_school as present_table join datasets.school_attendance_studentsmarked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name",
                 },
                 "actions": {
                     "queries": {
@@ -830,7 +818,7 @@ export const config = {
                 "valueProp": "grade",
                 "hierarchyLevel": "6",
                 "timeSeriesQueries": {
-                    "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and school_id = {school_id} group by t.grade,t.percentage",
+                    "table": "select grade_number, ceil(round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.students_present/a.students_marked) desc) as rank from (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_gender0school0grade as present_table join datasets.school_attendance_studentsmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_id where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_id, grade_number",
                 },
                 "actions": {
                     "queries": {
@@ -870,7 +858,7 @@ export const config = {
                     },
                     {
                         name: "Grade",
-                        property: "grade",
+                        property: "grade_number",
                         class: "text-center"
                     },
                     {

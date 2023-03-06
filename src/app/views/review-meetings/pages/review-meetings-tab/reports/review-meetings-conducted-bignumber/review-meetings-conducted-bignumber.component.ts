@@ -15,7 +15,7 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
   filters: any = [];
   levels: any;
   bigNumberReportData: any = {
-    reportName: "Average Review Meetings Conducted"
+    reportName: "% Districts which conducted meeting"
   };
   title: string = 'Average Review Meetings Conducted'
   selectedYear: any;

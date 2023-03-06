@@ -44,7 +44,7 @@ export class RbacDialogComponent implements OnInit {
       block: [null],
       cluster: [null],
       school: [null],
-      class: [null]
+      grade: [null]
     })
     this.resetFilterForm(this.rbacForm);
     this.getFilters();

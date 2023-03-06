@@ -72,7 +72,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY d.district_name ASC",
+                        "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY d.district_name ASC",
                     },
                     "level": "district"
                 }
@@ -82,7 +82,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select block_name, avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY b.block_name ASC",
+                        "table": "select block_name, (avg * 100) as avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY b.block_name ASC",
                     },
                     "level": "block"
                 }
@@ -127,24 +127,24 @@ export const config = {
                         property: "avg",
                         class: "text-center",
                         isHeatMapRequired: true,
-                        color: '#fff'
-                        // color: {
-                        //     type: "percentage",
-                        //     values: [
-                        //         {
-                        //             color: "#b2d58f",
-                        //             breakPoint: 75
-                        //         },
-                        //         {
-                        //             color: "#FFFBD6",
-                        //             breakPoint: 50
-                        //         },
-                        //         {
-                        //             color: "#FFD6D6",
-                        //             breakPoint: 0
-                        //         }
-                        //     ]
-                        // },
+                        valueSuffix: '%',
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#b2d58f",
+                                    breakPoint: 75
+                                },
+                                {
+                                    color: "#FFFBD6",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFD6D6",
+                                    breakPoint: -1
+                                }
+                            ]
+                        },
                     }
                 ],
             }
@@ -186,7 +186,6 @@ export const config = {
         ],
         "options": {
             "table": {
-                "valueSuffix": '%',
                 "columns": [
                     {
                         name: "State",
