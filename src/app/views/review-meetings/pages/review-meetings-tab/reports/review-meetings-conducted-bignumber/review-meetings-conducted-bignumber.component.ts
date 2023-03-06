@@ -24,8 +24,6 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
 
-  @Output() exportReportData = new EventEmitter<any>();
-
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -127,7 +125,5 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
         }
       })
     }
-    let reportsData= {reportData:this.bigNumberReportData,reportType:'bigNumber',reportName:this.title}
-    this.exportReportData.emit(reportsData)
   }
 }

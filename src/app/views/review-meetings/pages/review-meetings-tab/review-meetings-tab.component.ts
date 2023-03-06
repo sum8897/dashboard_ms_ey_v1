@@ -75,10 +75,10 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
     if (csvData) {
       this.reportsData.push(csvData)
     }
-    console.log(this.reportsData)
   }
 
   filtersUpdated(filters: any) {
+    this.reportsData = [];
     this.reviewMeetingsConductedBignumber?.getReportData(this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
     this.reviewMeetingsConducted?.getReportData(filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
     this.reviewMeetingsStatus?.getReportData(filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));

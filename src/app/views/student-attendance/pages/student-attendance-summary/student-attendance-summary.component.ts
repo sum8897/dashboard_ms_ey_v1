@@ -78,6 +78,7 @@ export class StudentAttendanceSummaryComponent implements OnInit, AfterViewInit 
     this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
+      this.reportsData = []
       this.averageAttendanceBignumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
       this.genderWiseAverageAttendance?.getReportData(this.startDate, this.endDate);

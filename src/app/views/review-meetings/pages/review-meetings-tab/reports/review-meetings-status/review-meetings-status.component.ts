@@ -48,7 +48,7 @@ export class ReviewMeetingsStatusComponent implements OnInit {
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = { ...filter?.actions?.queries }
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
@@ -123,8 +123,10 @@ export class ReviewMeetingsStatusComponent implements OnInit {
           }
         })
       }
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.exportReportData.emit(reportsData)
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.exportReportData.emit(reportsData)
+      }
     });
   }
 }
