@@ -147,7 +147,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
           }
         }
       });
-      if (this.tableReportData?.data?.length > 0) {
+      if (this.tableReportData?.values?.length > 0) {
         let reportsData = { reportData: this.tableReportData.values, reportType: 'dashletBar', reportName: this.fileName }
         this.csv.csvDownload(reportsData)
       }

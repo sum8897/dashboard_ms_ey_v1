@@ -12,7 +12,7 @@ import { config } from 'src/app/views/review-meetings/config/review_meetings_con
 })
 export class ReviewMeetingsConductedComponent implements OnInit {
   reportName: string = 'review_meetings_conducted';
-  title: string = 'Average  Meetings Conducted';
+  title: string = 'District-wise % Blocks which conducted meeting';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -49,6 +49,9 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
+          let currentLevel = filter?.actions?.level
+          let prevLevel = filter?.name
+          this.title = `${prevLevel[0].toUpperCase() + prevLevel.substring(1)}-wise % ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
@@ -99,7 +102,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
+    this._commonService.getReportDataRev(query).subscribe((res: any) => {
       let rows = res;
       let { table: { columns } } = options;
       this.tableReportData = {
