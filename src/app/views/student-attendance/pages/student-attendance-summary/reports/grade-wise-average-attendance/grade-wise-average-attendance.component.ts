@@ -36,15 +36,15 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   @Input() endDate: any;
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService,
-    private csv:StudentAttendanceSummaryComponent,
-    private _rbacService: RbacService) { 
+    private csv: StudentAttendanceSummaryComponent,
+    private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
   async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
@@ -58,8 +58,8 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -69,16 +69,10 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
         return true
       })
     }
-    else {
-      this._wrapperService.constructFilters(this.filters, filters);
-    }
 
     Object.keys(queries).forEach((key: any) => {
       if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
         onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
 
@@ -94,20 +88,6 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
     let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      rows.forEach(row => {
-        if (this.minDate !== undefined && this.maxDate !== undefined) {
-          if (row['min_date'] < this.minDate) {
-            this.minDate = row['min_date']
-          }
-          if (row['max_date'] > this.maxDate) {
-            this.maxDate = row['max_date']
-          }
-        }
-        else {
-          this.minDate = row['min_date']
-          this.maxDate = row['max_date']
-        }
-      });
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       // }
@@ -117,10 +97,10 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(
-        [{
-          dataExpr: metricValue, label: metricLabel
-        }]),
-    
+          [{
+            dataExpr: metricValue, label: metricLabel
+          }]),
+
         options: {
           height: (rows.length * 15 + 150).toString(),
           tooltips: {
@@ -150,7 +130,7 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
                 labelString: xAxis.title
               },
               ticks: {
-                callback: function(value, index, values) {
+                callback: function (value, index, values) {
                   let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
                   if (screen.width <= 768) {
                     return newValue.substr(0, 8) + '...';
@@ -163,30 +143,11 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
           }
         }
       });
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.values,reportType:'dashletBar',reportName:this.fileName}
-      this.csv.csvDownload(reportsData)
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.values, reportType: 'dashletBar', reportName: this.fileName }
+        this.csv.csvDownload(reportsData)
+      }
     });
-  }
-
-  async filtersUpdated(filters: any): Promise<void> {
-    await new Promise(r => setTimeout(r, 100));
-    this.filters = [...filters]
-    let tempLevel = 1;
-    filters.forEach((filter: any) => {
-      tempLevel = Number(filter.hierarchyLevel) + 1 > Number(tempLevel) ? Number(filter.hierarchyLevel) + 1 : Number(tempLevel);
-    })
-    this.currentHierarchyLevel = tempLevel;
-    this.getReportData();
-  }
-
-  timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    this.getReportData();
   }
 
   parseRbacFilter(query: string) {

@@ -12,6 +12,7 @@ import { config } from 'src/app/views/review-meetings/config/review_meetings_con
 })
 export class ReviewMeetingsConductedComponent implements OnInit {
   reportName: string = 'review_meetings_conducted';
+  title: string = 'Average  Meetings Conducted';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -24,8 +25,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
 
-  @Output() bigNumberReport = new EventEmitter<any>();
-  @Output() exportFilters = new EventEmitter<any>();
+  @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -78,12 +78,6 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       if (query && key === 'table') {
         this.getTableReportData(query, options);
       }
-      else if (query && key === 'bigNumber') {
-        this.getBigNumberReportData(query, options, 'averagePercentage');
-      }
-      else if (query && key === 'bigNumberComparison') {
-        this.getBigNumberReportData(query, options, 'differencePercentage')
-      }
     })
   }
 
@@ -126,45 +120,10 @@ export class ReviewMeetingsConductedComponent implements OnInit {
           }
         })
       }
-    });
-  }
-
-  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
-    let { bigNumber } = options ?? {};
-    let { valueSuffix, property } = bigNumber ?? {};
-    if (indicator === 'averagePercentage') {
-      this.bigNumberReportData = {
-        ...this.bigNumberReportData,
-        valueSuffix: valueSuffix
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.exportReportData.emit(reportsData)
       }
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            averagePercentage: rows[0]?.[property]
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
-    else if (indicator === 'differencePercentage') {
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            differencePercentage: rows[0]?.[property]
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
+    });
   }
 }

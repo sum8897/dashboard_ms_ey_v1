@@ -24,8 +24,8 @@ export class FullScreenDirective implements OnInit {
     this.renderer.insertBefore(this.element.nativeElement.parentNode, div, this.element.nativeElement);
 
   }
-    fullscreen(): void {
-      if(this.element.nativeElement.requestFullscreen) {
+  fullscreen(): void {
+    if (this.element.nativeElement.requestFullscreen) {
       this.element.nativeElement.requestFullscreen();
     } else if (this.element.nativeElement.webkitRequestFullscreen) {
       this.element.nativeElement.webkitRequestFullscreen();

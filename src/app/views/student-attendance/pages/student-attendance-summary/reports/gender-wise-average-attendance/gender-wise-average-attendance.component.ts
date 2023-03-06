@@ -4,7 +4,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
-import { buildQuery, multibarGroupBy, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, multibarGroupBy, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
 import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
@@ -44,7 +44,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
   async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
@@ -59,26 +59,20 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
-            queries[key] = this.parseRbacFilter(queries[key])
-            timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
+            timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], this.rbacDetails)
           });
           return false
         }
         return true
       })
     }
-    else {
-      this._wrapperService.constructFilters(this.filters, filters);
-    }
+    
 
     Object.keys(queries).forEach((key: any) => {
       if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
         onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
 
@@ -94,20 +88,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
     let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      rows.forEach(row => {
-        if (this.minDate !== undefined && this.maxDate !== undefined) {
-          if (row['min_date'] < this.minDate) {
-            this.minDate = row['min_date']
-          }
-          if (row['max_date'] > this.maxDate) {
-            this.maxDate = row['max_date']
-          }
-        }
-        else {
-          this.minDate = row['min_date']
-          this.maxDate = row['max_date']
-        }
-      });
+      
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       // }
@@ -166,49 +147,11 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
           }
         }
       });
-      console.log('config',this.config);
-
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.values,reportType:'dashletBar',reportName:this.fileName}
-      this.csv.csvDownload(reportsData)
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.values, reportType: 'dashletBar', reportName: this.fileName }
+        this.csv.csvDownload(reportsData)
+      }
     });
-  }
-
-  async filtersUpdated(filters: any): Promise<void> {
-    await new Promise(r => setTimeout(r, 100));
-    this.filters = [...filters]
-    let tempLevel = 1;
-    filters.forEach((filter: any) => {
-      tempLevel = Number(filter.hierarchyLevel) + 1 > Number(tempLevel) ? Number(filter.hierarchyLevel) + 1 : Number(tempLevel);
-    })
-    this.currentHierarchyLevel = tempLevel;
-    this.getReportData();
-  }
-
-  timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    this.getReportData();
-  }
-
-  parseRbacFilter(query: string) {
-    let newQuery = query;
-    let startIndex = newQuery?.indexOf('{');
-    let endIndex = newQuery?.indexOf('}');
-
-    if (newQuery && startIndex > -1) {
-      let propertyName = query.substring(startIndex + 1, endIndex);
-      let re = new RegExp(`{${propertyName}}`, "g");
-      Object.keys(this.rbacDetails).forEach((key: any) => {
-        if (propertyName === key + '_id') {
-          newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
-        }
-      });
-    }
-    return newQuery
   }
 
   getYaxisTitle(filters: any): string {

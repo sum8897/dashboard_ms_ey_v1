@@ -50,6 +50,7 @@ export class StudentAttendanceComplianceComponent implements OnInit {
     this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
+      this.reportsData = []
       this.averageAttendanceCompliance?.getReportData(this.startDate, this.endDate);
       this.attendanceComplianceRank?.getReportData(this.startDate, this.endDate)
     }

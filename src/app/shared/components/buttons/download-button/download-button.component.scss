@@ -1,7 +1,22 @@
+button, button:hover {
+    color: white;
+    background-color: #4C30F5;
+}
+.download-icon {
+    display: none;
+}
+
 @media only screen and (max-width: 667px) {
-    button{
+    .download-icon {
+        padding-top: 1rem;
+        display: block;
+    }
+    button {
+        display: none;
         height: 37px;
         width: 133px;
         margin-top: -17px;
+        color: #4C30F5;
     }
+    
 }

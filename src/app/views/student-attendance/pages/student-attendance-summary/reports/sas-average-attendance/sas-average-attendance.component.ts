@@ -39,7 +39,7 @@ export class SasAverageAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
@@ -53,7 +53,7 @@ export class SasAverageAttendanceComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -85,12 +85,6 @@ export class SasAverageAttendanceComponent implements OnInit {
 
       if (query && key === 'table') {
         this.getTableReportData(query, options);
-      }
-      else if (query && key === 'bigNumber') {
-        this.getBigNumberReportData(query, options, 'averagePercentage');
-      }
-      else if (query && key === 'bigNumberComparison') {
-        this.getBigNumberReportData(query, options, 'differencePercentage')
       }
     })
   }
@@ -146,51 +140,11 @@ export class SasAverageAttendanceComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.csv.csvDownload(reportsData)
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.csvDownload(reportsData)
+      }
     });
   }
 
-  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
-    let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
-    if (indicator === 'averagePercentage') {
-      this.bigNumberReportData = {
-        ...this.bigNumberReportData,
-        valueSuffix: valueSuffix
-      }
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            averagePercentage: rows[0].percentage
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
-    else if (indicator === 'differencePercentage') {
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            differencePercentage: rows[0].percentage
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
-  }
 }

@@ -22,20 +22,20 @@ export const rbacConfig = {
       "labelProp": "cluster_name",
       "valueProp": "cluster_id"
     },
-    // {
-    //   "query": "select distinct(m.school_id), school_name from ingestion.dimension_master as m left join ingestion.dimension_school as s on m.school_id = s.school_id where cluster_id = {master_id} order by school_name",
-    //   "hierarchyLevel": 5,
-    //   "name": "School",
-    //   "labelProp": "school_name",
-    //   "valueProp": "school_id"
-    // },
-    // {
-    //   "query": "select distinct(grade) as class_id from ingestion.dimension_school where school_id = {master_id} order by grade",
-    //   "hierarchyLevel": 6,
-    //   "name": "Class",
-    //   "labelProp": "class_id",
-    //   "valueProp": "class_id"
-    // }
+    {
+      "query": "select school_id, school_name from dimensions.school where cluster_id = {master_id} order by school_name",
+      "hierarchyLevel": 5,
+      "name": "School",
+      "labelProp": "school_name",
+      "valueProp": "school_id"
+    },
+    {
+      "query": "select grade_id, grade_number from dimensions.grade order by grade_number",
+      "hierarchyLevel": 6,
+      "name": "Grade",
+      "labelProp": "grade_id",
+      "valueProp": "grade_number"
+    }
   ],
   "roles": [
     {
@@ -56,23 +56,23 @@ export const rbacConfig = {
       imageUrl: 'block.png',
       roleImageUrl: 'principle_role.png'
     },
-    // {
-    //   name: "Cluster Officer",
-    //   value: 4,
-    //   imageUrl: 'cluster.png',
-    //   roleImageUrl: 'principle_role.png'
-    // },
-    // {
-    //   name: "School Principle",
-    //   value: 5,
-    //   imageUrl: 'principle.png',
-    //   roleImageUrl: 'principle_role.png'
-    // },
-    // {
-    //   name: "Class Teacher",
-    //   value: 6,
-    //   imageUrl: 'class.png',
-    //   roleImageUrl: 'principle_role.png'
-    // }
+    {
+      name: "Cluster Officer",
+      value: 4,
+      imageUrl: 'cluster.png',
+      roleImageUrl: 'principle_role.png'
+    },
+    {
+      name: "School Principal",
+      value: 5,
+      imageUrl: 'principle.png',
+      roleImageUrl: 'principle_role.png'
+    },
+    {
+      name: "Class Teacher",
+      value: 6,
+      imageUrl: 'class.png',
+      roleImageUrl: 'principle_role.png'
+    }
   ]
 }

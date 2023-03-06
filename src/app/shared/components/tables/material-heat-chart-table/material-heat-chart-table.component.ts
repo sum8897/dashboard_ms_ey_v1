@@ -16,6 +16,7 @@ export class MaterialHeatChartTableComponent implements OnInit, OnChanges, After
   matSortDirection: SortDirection = "asc";
   columns: any;
 
+  @Input() title: any;
   @Input() tableData: any;
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild(MatSort) sort!: MatSort;

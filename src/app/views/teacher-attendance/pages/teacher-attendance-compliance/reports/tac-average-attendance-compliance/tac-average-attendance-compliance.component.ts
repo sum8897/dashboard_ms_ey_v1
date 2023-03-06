@@ -55,7 +55,7 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])

@@ -151,9 +151,10 @@ export class TableHeatMapDirective implements AfterViewInit {
           }
           color = singleColor;
         }
-
+        console.log(color)
         let [r, g, b, a] = parseToRgba(color);
-        bgColor = rgba(r, g, b, +(Math.min(1, value / this.highestValues[id] + 0.06)).toFixed(3));
+        // bgColor = rgba(r, g, b, +(Math.min(1, value / this.highestValues[id] + 0.06)).toFixed(3));
+        bgColor = rgba(r, g, b, + 1);
         textColor = readableColor(bgColor);
       }
       return {
@@ -163,7 +164,6 @@ export class TableHeatMapDirective implements AfterViewInit {
     }
     else if(typeof value === 'string' && color?.type == "status" && color?.values) {
       let colObj = color.values.filter((colObj: any) => {
-        console.log(colObj)
         return colObj.value === (value as String).toLowerCase()
       })[0]
       let [r, g, b, a] = parseToRgba(colObj.color);

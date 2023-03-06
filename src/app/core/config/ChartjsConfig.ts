@@ -38,7 +38,7 @@ export const ChartJSConfig = {
     bar: {
         minBarLength: 8,
         barThickness: 40,
-        maxBarThickness: 18
+        maxBarThickness: 100
     },
     scatter: {
         pointBorderColor: '#7cd6cc',
