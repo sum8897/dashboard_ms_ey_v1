@@ -411,7 +411,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Student Attendance Summary",
+                        name: "Average Student Attendance",
                         property: "stt_avg",
                         class: "text-center",
                         valueSuffix: '%',
@@ -864,6 +864,7 @@ export const config = {
                     {
                         name: "Average Student Attendance",
                         property: "stt_avg",
+                        valueSuffix: '%',
                         class: "text-center",
                         isHeatMapRequired: true,
                         color: {

@@ -49,6 +49,8 @@ export class ReviewMeetingsStatusComponent implements OnInit {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
+          let currentLevel = filter?.actions?.level
+          this.title = `${currentLevel[0].toUpperCase() + currentLevel.substring(1)}-wise Meeting Conducted`
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
@@ -102,7 +104,7 @@ export class ReviewMeetingsStatusComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
+    this._commonService.getReportDataRev(query).subscribe((res: any) => {
       let rows = res;
       let { table: { columns } } = options;
       this.tableReportData = {

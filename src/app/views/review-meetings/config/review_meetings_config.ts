@@ -72,7 +72,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY d.district_name ASC",
+                        "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY avg ASC",
                     },
                     "level": "district"
                 }
@@ -82,7 +82,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "table": "select block_name, (avg * 100) as avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY b.block_name ASC",
+                        "table": "select block_name, (avg * 100) as avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY avg ASC",
                     },
                     "level": "block"
                 }
@@ -262,7 +262,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where district_id = {district_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(avg)*100 as numeric),2)) as percentage from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where district_id = {district_id}",
                     },
                     "level": "block"
                 }
@@ -272,7 +272,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg*100 as numeric),2)) as percentage from dimensions.cluster as c join datasets.rev_and_monitoring_cluster_monthly_academicyear0cluster as t on c.cluster_id = t.cluster_id where block_id = {block_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(avg)*100 as numeric),2)) as percentage from dimensions.cluster as c join datasets.rev_and_monitoring_cluster_monthly_academicyear0cluster as t on c.cluster_id = t.cluster_id where block_id = {block_id}",
                     },
                     "level": "cluster"
                 }

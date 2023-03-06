@@ -39,11 +39,13 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
 
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
+    let currentLevel;
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
+          currentLevel = filter?.actions?.level;
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });
@@ -71,10 +73,10 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
       });
       
       if (query && key === 'bigNumber') {
-        this.getBigNumberReportData(query, options, 'averagePercentage');
+        this.getBigNumberReportData(query, options, 'averagePercentage', currentLevel);
       }
       else if (query && key === 'bigNumberComparison') {
-        this.getBigNumberReportData(query, options, 'differencePercentage')
+        this.getBigNumberReportData(query, options, 'differencePercentage', currentLevel)
       }
     })
   }
@@ -96,7 +98,7 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
     return newQuery
   }
 
-  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
+  async getBigNumberReportData(query: string, options: any, indicator: string, currentLevel: string): Promise<void> {
     let { bigNumber } = options ?? {};
     let { valueSuffix, property } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
@@ -104,11 +106,13 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
         ...this.bigNumberReportData,
         valueSuffix: valueSuffix
       }
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      await this._commonService.getReportDataRev(query).subscribe((res: any) => {
         if (res) {
           let rows = res;
+          console.log(currentLevel[0].toUpperCase() + currentLevel.substring(1) + 's')
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
+            reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`,
             averagePercentage: rows[0]?.[property]
           }
         }
@@ -120,6 +124,7 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
+            reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`,
             differencePercentage: rows[0]?.[property]
           }
         }
