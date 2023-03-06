@@ -74,7 +74,8 @@ export const config = {
                     "queries": {
                         "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY avg ASC",
                     },
-                    "level": "district"
+                    "level": "district",
+                    "nextLevel": "block"
                 }
             },
             {
@@ -84,7 +85,8 @@ export const config = {
                     "queries": {
                         "table": "select block_name, (avg * 100) as avg from dimensions.block as b join datasets.rev_and_monitoring_block_monthly_academicyear0block as t on t.block_id = b.block_id where b.district_id = {district_id} ORDER BY avg ASC",
                     },
-                    "level": "block"
+                    "level": "block",
+                    "nextLevel": "cluster"
                 }
             }
         ],

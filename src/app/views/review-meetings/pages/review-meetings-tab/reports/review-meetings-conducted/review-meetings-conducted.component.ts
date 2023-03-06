@@ -50,8 +50,8 @@ export class ReviewMeetingsConductedComponent implements OnInit {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
           let currentLevel = filter?.actions?.level
-          let prevLevel = filter?.name
-          this.title = `${prevLevel[0].toUpperCase() + prevLevel.substring(1)}-wise % ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
+          let nextLevel = filter?.actions?.nextLevel
+          this.title = `${currentLevel[0].toUpperCase() + currentLevel.substring(1)}-wise % ${nextLevel[0].toUpperCase() + nextLevel.substring(1)}s which conducted meeting`
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
           });

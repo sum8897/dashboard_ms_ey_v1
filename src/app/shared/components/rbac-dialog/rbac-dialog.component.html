@@ -51,8 +51,8 @@
                 </span>
             </div> -->
             <div class="grid grid-cols-4" *ngFor="let filter of filters; let ind = index" [attr.data-index]="ind">
-                <div class="col-span-1 label-wrapper">
-                    <label class="form-label col-span-1 mt-3"
+                <div class="col-span-1 label-wrapper mb-3">
+                    <label class="form-label col-span-1 my-3"
                         [for]="filter?.name?.toLowerCase()">{{filter?.name}}</label>
                 </div>
                 <div class="col-span-3 display-flex-column">
