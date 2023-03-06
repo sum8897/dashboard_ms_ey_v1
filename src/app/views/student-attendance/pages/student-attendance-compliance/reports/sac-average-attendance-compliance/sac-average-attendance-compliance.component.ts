@@ -4,6 +4,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
+import { StudentAttendanceComplianceComponent } from '../../student-attendance-compliance.component';
 
 @Component({
   selector: 'app-sac-average-attendance-compliance',
@@ -16,7 +17,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance Complaince"
+    reportName: "Average Attendance Compliance"
   };
   minDate: any;
   maxDate: any;
@@ -24,13 +25,15 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
-
+  title ='Attendance Compliance %'
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, 
+    private readonly _wrapperService: WrapperService,private sacCompl:StudentAttendanceComplianceComponent,
+     private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -45,14 +48,15 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
+  
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = {...filter?.actions?.queries}
-          timeSeriesQueries = filter?.timeSeriesQueries
+          timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -117,6 +121,9 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
       let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
+          if(row['label']){
+            this.title = row['label']
+          }
           if (this.minDate !== undefined && this.maxDate !== undefined) {
             if (row['min_date'] < this.minDate) {
               this.minDate = row['min_date']
@@ -147,14 +154,19 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
       }
       this.exportDates.emit({
         minDate: this.minDate,
-        maxDate: this.maxDate
+        maxDate: this.maxDate,
+        data:this.tableReportData
       });
+      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:'sac_average_attendance_compliance'}
+      this.sacCompl.csvDownload(reportsData)
     });
   }
+  
+  
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
+    let { valueSuffix, property } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -165,7 +177,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            averagePercentage: rows[0].percentage
+            averagePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,
@@ -180,7 +192,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
           let rows = res;
           this.bigNumberReportData = {
             ...this.bigNumberReportData,
-            differencePercentage: rows[0].percentage
+            differencePercentage: rows[0]?.[property]
           }
           this.bigNumberReport.emit({
             data: this.bigNumberReportData,

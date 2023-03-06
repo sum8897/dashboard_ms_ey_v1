@@ -14,7 +14,7 @@
 }
 
 .custom-tab-group-wrapper {
-    background-color: #CFCFCF !important;
+    background-color: #f5f5f5 !important;
     margin-top: 2rem !important;
     border-radius: 2rem 0 0 2rem;
     padding: 1.5rem !important;
@@ -34,6 +34,21 @@
     width: 300px;
     white-space: initial;
 }
+  
+  .download-button {
+    margin-left: auto;
+    padding-right: 8%;
+    padding-top: 3%;
+    // margin-top: -19px;
+    // margin-left: -51px;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // color: #fff;
+    // background-color: #007bff;
+    // border-color: #007bff;
+    // text-overflow: ellipsis;
+  }
+  
 
 // .highcharts-tooltip text, .highcharts-tooltip text tspan {
 //     font-size: 2rem;
@@ -134,12 +149,26 @@
     }
 }
 
-.mat-tab-label .mat-tab-label-content {
-    padding: 0 0.3em;
-}
+// .mat-tab-label .mat-tab-label-content {
+//     padding: 0 0.3em;
+// }
 
 .noData {
     color: red;
     text-align: center;
     margin-top: 9rem;
+}
+
+.filename{
+    color: var(--cQ-secondary) !important;
+}
+
+::ng-deep {
+    .ng-select.ng-select-focused .ng-select-container:after{
+        border-color: transparent;
+        border-width: 0px;
+    }
+        .ng-select .ng-select-container:after {
+        border-bottom : 0px solid rgba(0,0,0,0.42);
+    }
 }

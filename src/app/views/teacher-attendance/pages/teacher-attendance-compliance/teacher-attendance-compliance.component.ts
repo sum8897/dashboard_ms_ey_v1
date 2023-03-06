@@ -14,6 +14,7 @@ export class TeacherAttendanceComplianceComponent implements OnInit {
   minDate: any;
   startDate: any;
   endDate: any;
+  reportsData : any[]=[]
 
   @ViewChild('averageAttendanceCompliance') averageAttendanceCompliance:TacAverageAttendanceComplianceComponent;
   @ViewChild('attenadanceComplianceRank') attenadanceComplianceRank: TacAttendanceComplianceRankComponent;
@@ -30,6 +31,11 @@ export class TeacherAttendanceComplianceComponent implements OnInit {
   }
   getObjectlen(object:Object){
     return Object.keys(object).length
+  }
+  csvDownload(csvData:any){
+    if(csvData){
+     this.reportsData.push(csvData)
+     }
   }
 
   settimeSeriesDates(dates: any) {

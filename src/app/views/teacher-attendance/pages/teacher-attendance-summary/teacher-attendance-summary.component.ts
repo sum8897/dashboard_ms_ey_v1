@@ -14,6 +14,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   minDate: any;
   startDate: any;
   endDate: any
+  reportsData : any[]=[]
+
 
   @ViewChild('averageAttendance') averageAttendance:TasAverageAttendanceComponent;
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent
@@ -28,6 +30,13 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       [reportName]:data
     }
   }
+
+  csvDownload(csvData:any){
+    if(csvData){
+     this.reportsData.push(csvData)
+     }
+  }
+  
   getObjectlen(object:Object){
     return Object.keys(object).length
   }

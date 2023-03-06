@@ -17,7 +17,8 @@ img {
     flex-direction: column;
     position: fixed;
     bottom: 0;
-    width: calc(100vw - #{$app-side-nav-width} - 60px);
+    width: calc(100vw - #{$app-side-nav-width});
+    transition: all 0.3s;
 }
 @media (max-width: 768px){
     .data{
@@ -30,6 +31,6 @@ img {
 }
 @media (max-width: 992px){
     .footer{
-        width: 95%;
+        width: 100vw !important;
     }
 }

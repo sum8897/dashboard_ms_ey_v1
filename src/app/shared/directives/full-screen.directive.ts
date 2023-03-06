@@ -12,18 +12,18 @@ export class FullScreenDirective implements OnInit {
     const div = this.renderer.createElement('div');
     this.renderer.addClass(div, 'col-span-full');
     const button = this.renderer.createElement('button');
-    const i = this.renderer.createElement('i');
-    this.renderer.addClass(i, 'fa');
-    this.renderer.addClass(i, 'fa-expand');
+    const img = this.renderer.createElement('img'); // create image element
+    this.renderer.setAttribute(img, 'height', '17');
+    this.renderer.setAttribute(img, 'src', 'assets/images/full-screen_img.png'); // set image source
     this.renderer.addClass(button, 'float-right');
     button.addEventListener('click', () => {
       this.fullscreen();
     });
-    this.renderer.appendChild(button, i);
+    this.renderer.appendChild(button, img); // append image to button
     this.renderer.appendChild(div, button);
     this.renderer.insertBefore(this.element.nativeElement.parentNode, div, this.element.nativeElement);
-  }
 
+  }
   fullscreen(): void {
     if (this.element.nativeElement.requestFullscreen) {
       this.element.nativeElement.requestFullscreen();

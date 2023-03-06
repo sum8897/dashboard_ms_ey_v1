@@ -19,7 +19,7 @@ export class GradeCategoryWiseEnrollmentComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Category_Wise_Enrollment";
+  fileName: string = "Category Wise Enrollment";
   reportName: string = 'category_wise_enrollment';
   filters: any = [];
   levels: any;
@@ -33,6 +33,7 @@ export class GradeCategoryWiseEnrollmentComponent implements OnInit {
   pageSize: any;
 
   @Output() exportMinmaxYear = new EventEmitter<any>();
+  originalData: any;
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) { 
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -145,6 +146,15 @@ export class GradeCategoryWiseEnrollmentComponent implements OnInit {
               scaleLabel: {
                 display: true,
                 labelString: xAxis.title
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  if (values.length > 4 && value.length > 8) {
+                    return value.substr(0, 8) + '...';
+                  } else {
+                    return value;
+                  }
+                }
               }
             }]
           }
@@ -152,7 +162,8 @@ export class GradeCategoryWiseEnrollmentComponent implements OnInit {
       });
       this.exportMinmaxYear.emit({
         minYear: minYear,
-        maxYear: maxYear
+        maxYear: maxYear,
+        data:this.tableReportData
       })
     });
   }

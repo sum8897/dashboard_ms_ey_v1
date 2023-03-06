@@ -16,11 +16,18 @@ export class SideNavComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
+      document.body.classList.add("sideBarHeightNone");
+    }else if (document.body.classList.contains("sideBarHeightNone")) {
+      document.body.classList.remove("sideBarHeightNone")
     }
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
+      document.body.classList.add("sideBarHeightNone");
+    }
+    else if (document.body.classList.contains("sideBarHeightNone")) {
+      document.body.classList.remove("sideBarHeightNone")
     }
   }
 

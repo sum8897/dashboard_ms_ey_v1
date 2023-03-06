@@ -1,17 +1,29 @@
 <div class="col-span-full tab-wrapper" appFullScreen>
     <div class="filter-row">
-        <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate" [maxDate]="maxDate"></app-time-series-filter-panel>
+        <div class="time-series-filter">
+            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
+                [maxDate]="maxDate"></app-time-series-filter-panel>
+        </div>
+        <div class="download-button">
+            <app-download-button [data]="reportsData"></app-download-button>
+        </div>
     </div>
+
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="bigNumberReports['tac_average_teacher_attendance_compliance']">
-                <app-big-number [bigNumberReportData]="bigNumberReports['tac_average_teacher_attendance_compliance']"></app-big-number>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="bigNumberReports['tac_average_teacher_attendance_compliance']">
+                <app-big-number
+                    [bigNumberReportData]="bigNumberReports['tac_average_teacher_attendance_compliance']"></app-big-number>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-tac-average-attendance-compliance #averageAttendanceCompliance [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" (bigNumberReport)="appendBigNumber($event)"></app-tac-average-attendance-compliance>
+                <app-tac-average-attendance-compliance #averageAttendanceCompliance [startDate]="startDate"
+                    [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"
+                    (bigNumberReport)="appendBigNumber($event)"></app-tac-average-attendance-compliance>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-tac-attendance-compliance-rank #averageAttendanceCompliance [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-tac-attendance-compliance-rank>
+                <app-tac-attendance-compliance-rank #averageAttendanceCompliance [startDate]="startDate"
+                    [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-tac-attendance-compliance-rank>
             </div>
         </div>
     </div>

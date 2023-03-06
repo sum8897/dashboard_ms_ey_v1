@@ -1,4 +1,9 @@
-$light-grey: #FCFDFF;
+$light-grey: #eee;
+
+.table-title{
+    font-weight: 500;
+    color: var(--cQ-secondary);
+}
 
 ::ng-deep {
     .mat-table {
@@ -41,6 +46,12 @@ $light-grey: #FCFDFF;
     // }
     td.mat-cell:hover {
         z-index: 9999 !important;
+    }
+    .mat-cell{
+        word-break: break-all;
+    }
+    .mat-sort-header-content{
+        font-weight: bold;
     }
 
 }

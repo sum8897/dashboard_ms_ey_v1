@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -30,14 +30,20 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
   filterIndex: any;
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
-  pageSize: any;
+  pageSize = 5;
+
+  @ViewChild('chart')  chart:ElementRef;
+
 
   @Output() exportMinmaxYear = new EventEmitter<any>();
+  
+
 
   constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
+
   }
 
   ngOnInit(): void {
@@ -86,9 +92,9 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
     })
   }
 
-  getBarChartReportData(query, options, filters, defaultLevel): void {
+  async getBarChartReportData(query, options, filters, defaultLevel): Promise<void> {
     let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
+   await this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let minYear, maxYear;
       rows.forEach(row => {
@@ -108,9 +114,9 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
       if (isMultibar) {
         rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       }
-      this.tableReportData = {
-        values: rows
-      }
+  
+      // this.originalData = {values:rows};
+      this.tableReportData = { values: rows };
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(xAxis?.metrics?.map((metric: any) => {
@@ -145,6 +151,15 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
               scaleLabel: {
                 display: true,
                 labelString: xAxis.title
+              },
+              ticks: {
+                callback: function(value, index, values) {
+                  if (values.length > 4 && value.length > 8) {
+                    return value.substr(0, 8) + '...';
+                  } else {
+                    return value;
+                  }
+                }
               }
             }]
           }
@@ -152,7 +167,8 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
       });
       this.exportMinmaxYear.emit({
         minYear: minYear,
-        maxYear: maxYear
+        maxYear: maxYear,
+        data:this.tableReportData
       })
     });
   }
@@ -184,6 +200,13 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
     return title;
   }
 
-
-
+  onPageChange(event: any) {
+    this.pageSize = event.pageSize;
+    const startIndex = event.pageIndex * event.pageSize;
+    const endIndex = startIndex + event.pageSize;
+    this.tableReportData.values = this.tableReportData.values.slice(startIndex, endIndex);
+    
+    console.log('the modified data table data' , this.tableReportData);
+     
+  }
 }
