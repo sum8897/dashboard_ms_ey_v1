@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { environment } from 'src/environments/environment';
+import * as Title from '../../../../assets/config/title_config.json'
 import { stateNames } from '../../config/StateCodes';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 
@@ -33,10 +34,14 @@ export class HeaderComponent implements OnInit {
   withinTime: boolean = false;
   dropdown: boolean = false;
   environment = environment;
+  title:any;
 
-  constructor(private router:Router) { }
+  constructor(private router:Router) {
+    this.title= Title
+   }
 
   ngOnInit(): void {
+    console.log('the data of json',this.title);
     if(this.config === 'state'){
       this.national = false
       // // this.stateName = false;
