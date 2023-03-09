@@ -675,12 +675,9 @@ export const config = {
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
-                "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id} group by  t.school_category",
-                },
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on d.district_id = t.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by  t.school_category",
+                        "barChart": "select schoolcategory_name, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.schoolcategory_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_schoolcategory0district as present_table join datasets.school_attendance_studentsmarked_daily_schoolcategory0district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.schoolcategory as schoolcategory_wise_table on schoolcategory_wise_table.schoolcategory_id = a.schoolcategory_id where a.att_date between startDate and endDate group by a.schoolcategory_id, schoolcategory_name ",
                     },
                     "level": "district"
                 }
@@ -690,13 +687,9 @@ export const config = {
                 "labelProp": "district_name",
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
-                "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where (date between startDate and endDate) and m.district_id={district_id} group by  t.school_category",
-                },
-                "query": "select t.district_id, district_name, t.school_category from ingestion.sac_stds_avg_atd_cat_wise_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id={state_id} group by t.district_id,district_name",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date,round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by  t.school_category",
+                        "barChart": "select schoolcategory_name, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.schoolcategory_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_schoolcategory0district as present_table join datasets.school_attendance_studentsmarked_daily_schoolcategory0district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.schoolcategory as schoolcategory_wise_table on schoolcategory_wise_table.schoolcategory_id = a.schoolcategory_id where a.att_date between startDate and endDate group by a.schoolcategory_id, schoolcategory_name ",
                     },
                     "level": "block"
                 }
@@ -706,12 +699,9 @@ export const config = {
                 "labelProp": "block_name",
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
-                "timeSeriesQueries": {
-                    "barChart": "select round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id} group by  t.school_category",
-                },
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date, round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id} group by  t.school_category",
+                        "barChart": "select schoolcategory_name, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.block_id, present_table.schoolcategory_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_schoolcategory0block as present_table join datasets.school_attendance_studentsmarked_daily_schoolcategory0block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.schoolcategory as schoolcategory_wise_table on schoolcategory_wise_table.schoolcategory_id = a.schoolcategory_id where a.att_date between startDate and endDate and a.block_id = {block_id} group by a.schoolcategory_id, schoolcategory_name",
                     },
                     "level": "cluster"
                 }
@@ -721,12 +711,9 @@ export const config = {
                 "labelProp": "cluster_name",
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
-                "timeSeriesQueries": {
-                    "barChart": "select  round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id} group by t.school_category",
-                },
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date,  round(avg(percentage),2) as percentage, t.school_category as school_category from ingestion.sac_stds_avg_atd_cat_wise_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id} group by  t.school_category",
+                        "barChart": "select schoolcategory_name, round(CAST(avg(a.students_present/a.students_marked)*100 as numeric),2) as stt_avg from  (select present_table.cluster_id, present_table.schoolcategory_id,present_table.date as att_date,present_table.sum as students_present,marked_table.sum as students_marked from datasets.school_attendance_studentspresent_daily_schoolcategory0cluster as present_table join datasets.school_attendance_studentsmarked_daily_schoolcategory0cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.schoolcategory_id as schoolcategory_wise_table on schoolcategory_wise_table.schoolcategory_id = a.schoolcategory_id where a.att_date between startDate and endDate and a.cluster_id = {cluster_id} group by a.schoolcategory_id, schoolcategory_name",
                     },
                     "level": "school"
                 }
@@ -734,15 +721,14 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                // "isMultibar": true,
                 "metricLabel": "Average Attendance",
-                "metricValue": "percentage",
+                "metricValue": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %",
                 },
                 "xAxis": {
-                    "label": "school_category",
-                    "value": "school_category",
+                    "label": "schoolcategory_name",
+                    "value": "schoolcategory_name",
                     "title": " ",
                 }
             }

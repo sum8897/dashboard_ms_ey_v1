@@ -11,7 +11,6 @@
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_bignumber', 'bigNumber')">
-                <!-- <app-big-number [bigNumberReportData]="bigNumberReports['sas_average_attendance']" ></app-big-number> -->
                 <app-sas-average-attendance-bignumber #averageAttendanceBignumber></app-sas-average-attendance-bignumber>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance', 'table')">
@@ -20,9 +19,9 @@
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_gender_wise_average_attendance', 'barChart')">
                 <app-gender-wise-average-attendance #genderWiseAverageAttendance></app-gender-wise-average-attendance>
             </div>
-            <!-- <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-grade-wise-average-attendance #gradeWiseAverageAttendance (exportDates)="settimeSeriesDates($event)" [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-grade-wise-average-attendance>
-            </div> -->
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_grade_wise_average_attendance', 'barChart')">
+                <app-grade-wise-average-attendance #gradeWiseAverageAttendance ></app-grade-wise-average-attendance>
+            </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_rank', 'table')">
                 <app-sas-average-attendance-rank #averageAttendanceRank></app-sas-average-attendance-rank>
             </div>

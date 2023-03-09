@@ -20,11 +20,6 @@ export class CommonService {
     // return this._http.get<ResponseType<any>>(`http://localhost:3005/api/query?sql=${query}`);
     return this._http.post<ResponseType<any>>(`${environment.apiURL}/query`, {"query": query});
   }
-
-  getReportDataRev(query: string): Observable<ResponseType<any>> {
-    // return this._http.get<ResponseType<any>>(`http://localhost:3005/api/query?sql=${query}`);
-    return this._http.post<ResponseType<any>>(`${environment.apiURL}/query`, {"query": query});
-  }
   
   getDashboardMetrics(): Observable<ResponseType<any>> {
     return this._http.get<ResponseType<any>>(`${environment.apiURL}/metric`);

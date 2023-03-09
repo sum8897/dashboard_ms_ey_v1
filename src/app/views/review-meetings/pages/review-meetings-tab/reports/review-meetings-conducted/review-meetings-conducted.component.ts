@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
+import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseFilterToQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/review-meetings/config/review_meetings_config';
 
 @Component({
@@ -15,31 +16,32 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   title: string = 'District-wise % Blocks which conducted meeting';
   filters: any = [];
   levels: any;
-  tableReportData: any;
+  reportData: any;
   bigNumberReportData: any = {
     reportName: "Average Review Meetings Conducted"
   };
-  selectedYear: any;
-  selectedMonth: any;
+  startDate: any;
+  endDate: any;
+  config: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
 
   @Output() exportReportData = new EventEmitter<any>();
 
-  constructor(private readonly _commonService: CommonService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   ngOnInit(): void {
-    // this.getReportData();
   }
 
-  getReportData(filterValues?: any): void {
-    // this.selectedYear = filterValues?.academicYear;
-    // this.selectedMonth = filterValues?.month;
+  getReportData(values: any): void {
+    let {filterValues, timeSeriesValues} = values ?? {};
+    this.startDate = timeSeriesValues?.startDate;
+    this.endDate = timeSeriesValues?.endDate;
     let reportConfig = config
 
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -53,7 +55,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
           let nextLevel = filter?.actions?.nextLevel
           this.title = `${currentLevel[0].toUpperCase() + currentLevel.substring(1)}-wise % ${nextLevel[0].toUpperCase() + nextLevel.substring(1)}s which conducted meeting`
           Object.keys(queries).forEach((key) => {
-            queries[key] = this.parseRbacFilter(queries[key])
+            queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
           });
           return false
         }
@@ -61,7 +63,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       })
     }
 
-    Object.keys(queries).forEach((key: any) => {
+    Object.keys(queries).forEach(async (key: any) => {
       if (key.toLowerCase().includes('comparison')) {
         let endDate = new Date();
         let days = endDate.getDate() - this.compareDateRange;
@@ -72,61 +74,34 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       else {
         onLoadQuery = queries[key]
       }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, undefined, undefined, key, this.compareDateRange);
+      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
 
       if (query && key === 'table') {
-        this.getTableReportData(query, options);
+        this.reportData = await this._dataService.getTableReportData(query, options);
+        if (this.reportData?.data?.length > 0) {
+          let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
+          this.exportReportData.emit(reportsData)
+        }
+      }
+      else if (query && key === 'bigNumber') {
+        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
+      }
+      else if (query && key === 'bigNumberComparison') {
+        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
+      }
+      else if (query && key === 'barChart') {
+        let {reportData, config} = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+        this.reportData = reportData
+        this.config = config;
+        if (this.reportData?.values?.length > 0) {
+          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+          this.exportReportData.emit(reportsData)
+        }
       }
     })
-  }
-
-  parseRbacFilter(query: string) {
-    let newQuery = query;
-    let startIndex = newQuery?.indexOf('{');
-    let endIndex = newQuery?.indexOf('}');
-
-    if (newQuery && startIndex > -1) {
-      let propertyName = query.substring(startIndex + 1, endIndex);
-      let re = new RegExp(`{${propertyName}}`, "g");
-      Object.keys(this.rbacDetails).forEach((key: any) => {
-        if (propertyName === key + '_id') {
-          newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
-        }
-      });
-    }
-    return newQuery
-  }
-
-  getTableReportData(query, options): void {
-    this._commonService.getReportDataRev(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          columns.forEach((col: any) => {
-            if (row[col.property] !== null || row[col.property] !== undefined) {
-              row = {
-                ...row,
-                [col.property]: { value: row[col.property] }
-              }
-            }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
-          }
-        })
-      }
-      if (this.tableReportData?.data?.length > 0) {
-        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-        this.exportReportData.emit(reportsData)
-      }
-    });
   }
 }

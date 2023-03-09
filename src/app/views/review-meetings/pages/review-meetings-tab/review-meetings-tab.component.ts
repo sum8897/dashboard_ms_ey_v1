@@ -24,6 +24,11 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
   reportsToBeShown: any = [];
   rbacDetails: any;
   reportsData: any = [];
+  startDate: any;
+  endDate: any;
+  defaultSelectedDays: any;
+  hasTimeSeriesFilters: boolean = false;
+  hasCommonFilters: boolean = true;
 
 
   @ViewChild('reviewMeetingsConducted') reviewMeetingsConducted: ReviewMeetingsConductedComponent;
@@ -40,25 +45,22 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.filters = await this._wrapperService.constructCommonFilters(config.filters)
-    this.reviewMeetingsConducted?.getReportData(this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
-    this.reviewMeetingsStatus?.getReportData(this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
-    this.reviewMeetingsConductedBignumber?.getReportData(this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
+    if (this.hasCommonFilters) {
+      this.filters = await this._wrapperService.constructCommonFilters(config.filters)
+      this.reviewMeetingsConducted?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+      this.reviewMeetingsStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+      this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+    }
+    if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
+      let endDate = new Date();
+      let days = endDate.getDate() - this.defaultSelectedDays;
+      let startDate = new Date();
+      startDate.setDate(days)
+      this.reviewMeetingsConducted?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+      this.reviewMeetingsStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+      this.reviewMeetingsConductedBignumber?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+    }
   }
-
-  // renderReports() {
-  //   let reportConfig = config;
-  //   this.reportsToBeShown = Object.keys(reportConfig).filter((reportKey: any) => {
-  //     let flag = false;
-  //     reportConfig[reportKey]?.filters?.forEach((filter: any) => {
-  //       if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(this.reportType)) {
-  //         flag = true
-  //       }
-  //     })
-  //     return flag
-  //   })
-  //   console.log(this.reportsToBeShown)
-  // }
 
   checkReport(key: string, reportType: string): Boolean {
     let reportConfig = config;
@@ -79,9 +81,19 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
 
   filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.reviewMeetingsConductedBignumber?.getReportData(this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
-    this.reviewMeetingsConducted?.getReportData(filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
-    this.reviewMeetingsStatus?.getReportData(filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }));
+    this.reviewMeetingsConducted?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+    this.reviewMeetingsStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+    this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
   }
 
+  timeSeriesUpdated(event: any): void {
+    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    if (event?.startDate !== null && event?.endDate !== null) {
+      this.reportsData = []
+      this.reviewMeetingsConducted?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+      this.reviewMeetingsStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+      this.reviewMeetingsConductedBignumber?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+    }
+  }
 }
