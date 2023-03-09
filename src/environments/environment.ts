@@ -4,13 +4,9 @@
 
 export const environment = {
   production: false,
-<<<<<<< Updated upstream
-  apiURL: 'http://localhost:3008',
-=======
-  apiURL: 'http://localhost:3000',
->>>>>>> Stashed changes
+  apiURL: 'http://localhost:3002',
   stateCode: "HP",
-  numberFormat: {
+  numberFormat: { 
     reports: {
       locale: 'en-IN',
       format: 'long'
@@ -18,7 +14,7 @@ export const environment = {
   },
   app_header_title: "भारत सरकार | Government of India",
   app_header_image_1: "Flag_of_India.svg",
-  content_header_image_1: "MoE.png",
+  content_header_image_1: "MoE.png",  
   content_header_image_2: "ncert_logo_vector_modified.png"
 };
 
