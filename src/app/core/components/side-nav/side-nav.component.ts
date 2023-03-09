@@ -11,25 +11,33 @@ export class SideNavComponent implements OnInit, OnChanges {
   @Input() menu: IMenuItem[] | undefined;
   @Input() isHome: boolean;
   ckBoxProp = false;
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() {
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
       document.body.classList.add("sideBarHeightNone");
     }else if (document.body.classList.contains("sideBarHeightNone")) {
       document.body.classList.remove("sideBarHeightNone")
     }
+   }
+
+  ngOnInit(): void {
+    
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
       document.body.classList.add("sideBarHeightNone");
     }
-    else if (document.body.classList.contains("sideBarHeightNone")) {
+    else if (!this.isHome && document.body.classList.contains("sidebaractive")){
+      document.body.classList.remove("sidebaractive")
+
+    }
+    if (document.body.classList.contains("sideBarHeightNone")){ 
       document.body.classList.remove("sideBarHeightNone")
     }
+    
   }
+
 
   setMenuLinkActive(menuItemSelected: IMenuItem): void {
     this.menu?.forEach(menuItem => {
