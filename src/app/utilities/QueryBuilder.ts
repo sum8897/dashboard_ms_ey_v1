@@ -51,10 +51,10 @@ function parseQuery(filters, levels, index, startDate, endDate, compareDateRange
         let days = endDate.getDate() - compareDateRange;
         let startDate = new Date();
         startDate.setDate(days)
-        query = parseTimeSeriesQuery(filter?.timeSeriesQueries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+        query = parseTimeSeriesQuery(filter?.timeSeriesQueries[key] ? filter?.timeSeriesQueries[key] : filter?.queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
     }
     else if (startDate !== undefined && endDate !== undefined && Object.keys(filter?.timeSeriesQueries).length > 0) {
-        query = parseTimeSeriesQuery(filter?.timeSeriesQueries[key], startDate, endDate)
+        query = parseTimeSeriesQuery(filter?.timeSeriesQueries[key] ? filter?.timeSeriesQueries[key] : filter?.queries[key], startDate, endDate)
     }
     else {
         let { queries } = filter.actions;

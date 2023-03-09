@@ -11,7 +11,6 @@
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted_bignumber', 'bigNumber')">
-                <!-- <app-big-number [bigNumberReportData]="bigNumberReports['review_meetings_conducted']"></app-big-number> -->
                 <app-review-meetings-conducted-bignumber #reviewMeetingsConductedBignumber></app-review-meetings-conducted-bignumber>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted', 'table')">
