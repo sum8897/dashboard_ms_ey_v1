@@ -4,6 +4,7 @@ export interface IDashboardMenu {
     metrics: IDashboardMetric[];
     icon: string;
     tooltip: string;
+    programID?:string;
 }
 
 export interface IDashboardMetric {

@@ -1,13 +1,15 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
+import * as Title from '../../../../assets/config/title_config.json'
 import { ConfigService } from 'src/app/core/services/config/config.service';
 import { environment } from 'src/environments/environment';
 import { IDashboardMenu } from '../../models/IDashboardCard';
 import { IMenuItem } from '../../models/IMenuItem';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { CommonService } from '../../services/common/common.service';
-
+import { RbacService } from '../../services/rbac-service.service';
+import { configFiles } from '../../config/configMapping'
+import { of } from 'rxjs';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -30,29 +32,11 @@ export class LayoutComponent implements OnInit {
   @ViewChild('resetFontSize')
   resetFontSize!: ElementRef;
   environment = environment;
-
+  title: any;
+  hierarchyLevel: any;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
-  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router) {
+  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService) {
 
-    this._commonService.getDashboardMetrics().subscribe((menuResult: any) => {
-      this.menu = [];
-      // let menuToDisplay: IMenuItem | any = {};
-      // menuToDisplay.label = "Dashboard";
-      // menuToDisplay.path = "/dashboard";
-      // menuToDisplay.icon = 'dashboard.png';
-      // menuToDisplay.isSelected = true;
-      // menuToDisplay.basepath = "dasboard";
-      // this.menu.push(menuToDisplay);
-      menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
-        let menuToDisplay: IMenuItem | any = {};
-        menuToDisplay.label = dasboardMenu.menuName;
-        menuToDisplay.path = dasboardMenu.navigationUrl;
-        menuToDisplay.icon = dasboardMenu.imageUrl;
-        menuToDisplay.isSelected = false;
-        this.menu?.push(menuToDisplay);
-      });
-      //this.menu = menuResult.result;
-    })
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;
     }
@@ -67,15 +51,68 @@ export class LayoutComponent implements OnInit {
       this.showBackBtn = false
     }
 
+
   }
 
   ngOnInit(): void {
+    this.title = Title
     if (this.config === 'state') {
       this.national = false;
     }
-    this.role = localStorage.getItem('roleName');
+    this.role = localStorage.getItem('role');
   }
 
+  checkRbacLevel() {
+    const programIds = Object.keys(configFiles);
+    const hierarchyLevels = {};
+    programIds.forEach(key => {
+      const programObject = configFiles[key];
+      const reportNames = Object.keys(programObject);
+      reportNames.forEach(reportName => {
+        const reportObject = programObject[reportName];
+        const filters = reportObject.filters;
+        if (filters) {
+          filters.forEach(element => {
+            if (element.hierarchyLevel) {
+              if (!hierarchyLevels[key]) {
+                hierarchyLevels[key] = [];
+              }
+              if (!hierarchyLevels[key].includes(element.hierarchyLevel)) {
+                hierarchyLevels[key].push(element.hierarchyLevel);
+              }
+            }
+          });
+
+        }
+      });
+    });
+
+    this._commonService.getDashboardMetrics().subscribe((menuResult: any) => {
+      this.menu = [];
+      let rbacRole;
+      this.rbac.getRbacDetails().subscribe((rbacDetails: any) => {
+        rbacRole = rbacDetails.role;
+      })
+      menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
+
+        if (hierarchyLevels[dasboardMenu.programID].includes(String(rbacRole))) {
+
+          let menuToDisplay: IMenuItem | any = {};
+          menuToDisplay.label = dasboardMenu.menuName;
+          menuToDisplay.path = dasboardMenu.navigationUrl;
+          menuToDisplay.icon = dasboardMenu.imageUrl;
+          menuToDisplay.isSelected = false;
+
+          this.menu?.push(menuToDisplay);
+        }
+
+      });
+    })
+
+  }
+  rbacdetails() {
+    return this.rbac.getRbacDetails()
+  }
 
   // Change Font Size (Increase & Decrease)
   getLocalFontSize() {
@@ -150,11 +187,13 @@ export class LayoutComponent implements OnInit {
   }
 
   activate() {
+
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;
     }
     else {
       this.isHome = false;
+      this.checkRbacLevel()
     }
     if (this._router.url !== '/home') {
       this.showBackBtn = true
