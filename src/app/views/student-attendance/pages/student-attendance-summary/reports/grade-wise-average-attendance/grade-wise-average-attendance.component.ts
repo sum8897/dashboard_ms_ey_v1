@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
-import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
-import { buildQuery, multibarGroupBy, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/student-attendance/config/student_attendance_config';
 import { StudentAttendanceSummaryComponent } from '../../student-attendance-summary.component';
 
