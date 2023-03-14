@@ -1,29 +1,29 @@
 <div class="col-span-full tab-wrapper">
-    <div class="filter-row grid grid-cols-1 lg:grid-cols-12">
-        <div class="time-series-filter lg:col-start-1 lg:col-end-7">
+    <div class="filter-row grid md:grid-cols-4 grid-cols-10">
+        <div class="time-series-filter md:col-span-1 col-span-9">
             <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
-                [maxDate]="maxDate"></app-time-series-filter-panel>
+                [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
-        <div class="download-button lg:col-start-7 lg:col-end-13">
+        <div class="download-button md:col-start-4 md:col-end-5 col-start-10 col-end-11">
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
+
     </div>
 
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">
-                <app-big-number
-                    [bigNumberReportData]="bigNumberReports['sac_average_attendance_compliance']"></app-big-number>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('sac_average_attendance_compliance_bignumber', 'bigNumber')">
+                <app-sac-average-attendance-compliance-bignumber #averageAttendanceComplianceBigNumber></app-sac-average-attendance-compliance-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-sac-average-attendance-compliance #averageAttendanceCompliance
-                    (bigNumberReport)="appendBigNumber($event)" [startDate]="startDate" [endDate]="endDate"
-                    (exportDates)="settimeSeriesDates($event)"></app-sac-average-attendance-compliance>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('sac_average_attendance_compliance', 'table')">
+                <app-sac-average-attendance-compliance #averageAttendanceCompliance></app-sac-average-attendance-compliance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-sac-attendance-compliance-rank #attendanceComplianceRank [startDate]="startDate"
-                    [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-sac-attendance-compliance-rank>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('sac_attendance_compliance_rank', 'table')">
+                <app-sac-attendance-compliance-rank #attendanceComplianceRank></app-sac-attendance-compliance-rank>
             </div>
-        </div>
+        </div> 
     </div>
 </div>
