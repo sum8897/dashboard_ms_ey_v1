@@ -27,4 +27,7 @@
         font-weight: bold;
         width: 100%;
     }
+    .leaflet-interactive:focus, .leaflet-interactive:active{
+        outline:none;
+    }
 }

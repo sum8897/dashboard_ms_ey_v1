@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { parseQueryParam } from 'src/app/utilities/QueryBuilder';
 import { CommonService } from './common/common.service';
 
 @Injectable({
@@ -43,40 +44,54 @@ export class WrapperService {
     return filters;
   }
 
-  async constructCommonFilters(filterConfig: any){
+  async constructCommonFilters(filterConfig: any, tabLabel?: any, updatedFilter?: any, changedInd?: any) {
     let filters: any = []
+    if (tabLabel) {
+      filterConfig = filterConfig.filter((filter: any) => {
+        return filter.label === tabLabel
+      })
+    }
     for (let index = 0; index < filterConfig.length; index++) {
-      let filter = filterConfig[index];
-      filter.options = [];
-      filter.value = null;
-      
-      if(filter.values?.length > 0 && Array.isArray(filter.values) && typeof filter.values?.[0] === 'object'){
-        filter.options = filter.values
-      }
 
-      else if(filter.values && filter.values.length > 0 && Array.isArray(filter.values)){
-        filter.values.forEach((option) => {
-          filter.options.push({
-            value: option,
-            label: option
-          })
-        });
-      }
-      let query = filter.values === undefined ? filter.query : undefined
-      if(query && query.indexOf('{')) {
-        let res = await this.runQuery(query);
-        if(res) {
-          let rows = res;
-          filter.options = rows.map((row) => {
-            return {
-              value: row?.[filter.valueProp],
-              label: row?.[filter.labelProp]
-            }
-          })
+      if (changedInd === undefined || (changedInd < index && filterConfig[changedInd]?.dependentFilter)) {
+        let filter = filterConfig[index];
+        filter.options = [];
+        filter.value = null;
+
+        if (filter.values?.length > 0 && Array.isArray(filter.values) && typeof filter.values?.[0] === 'object') {
+          filter.options = filter.values
         }
+
+        else if (filter.values && filter.values.length > 0 && Array.isArray(filter.values)) {
+          filter.values.forEach((option) => {
+            filter.options.push({
+              value: option,
+              label: option
+            })
+          });
+        }
+        let query = filter.values === undefined ? filter.query : undefined
+        if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined) {
+          query = parseQueryParam(query, { [filters[index - 1]?.id]: filters[index - 1]?.value })
+        }
+        if (query) {
+          let res = await this.runQuery(query);
+          if (res) {
+            let rows = res;
+            filter.options = rows.map((row) => {
+              return {
+                value: row?.[filter.valueProp],
+                label: row?.[filter.labelProp]
+              }
+            })
+          }
+        }
+        filter.value = (changedInd === index && filterConfig[index]?.dependentFilter) ? updatedFilter[index].value : filter.options?.[0]?.value
+        filters.push(filter)
       }
-      filter.value = filter.options?.[0]?.value
-      filters.push(filter)
+      else {
+        filters.push(updatedFilter[index])
+      }
     }
     return filters;
   }
@@ -85,7 +100,12 @@ export class WrapperService {
     return new Promise((resolve, reject) => {
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         resolve(res);
-      });
+      },
+        (error) => {
+          console.log(error)
+          resolve(undefined)
+        },
+      );
     })
   }
 

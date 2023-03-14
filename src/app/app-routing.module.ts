@@ -53,6 +53,34 @@ var routes: Routes = [];
             import('./views/review-meetings/review-meetings.module').then(
               (module) => module.ReviewMeetingsModule
             )
+        },
+        // {
+        //   path: 'udise',
+        //   loadChildren: () => 
+        //     import('./views/udise/udise.module').then(
+        //       (module) => module.UdiseModule
+        //     )
+        // },
+        {
+          path: 'nishtha',
+          loadChildren: () => 
+            import('./views/nishtha/nishtha.module').then(
+              (module) => module.NishthaModule
+            )
+        },
+        {
+          path: 'pgi',
+          loadChildren: () => 
+            import('./views/pgi/pgi.module').then(
+              (module) => module.PgiModule
+            )
+        },
+        {
+          path: 'pmposhan',
+          loadChildren: () => 
+            import('./views/pmposhan/pmposhan.module').then(
+              (module) => module.PmPoshanModule
+            )
         }
       ],
     },

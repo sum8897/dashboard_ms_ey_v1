@@ -12,6 +12,7 @@ export class FilterPanelComponent implements OnInit, OnChanges {
   @Input() resetOthers = false;
 
   @Output() filtersUpdated = new EventEmitter<any>();
+  @Output() filterIndexUpdated = new EventEmitter<any>();
 
   constructor() { }
 
@@ -35,6 +36,7 @@ export class FilterPanelComponent implements OnInit, OnChanges {
     }
 
     this.filtersUpdated.emit(this.filters);
+    this.filterIndexUpdated.emit(ind)
   }
 
   clearFilters(): void {
