@@ -7,12 +7,13 @@ import { TeacherAttendanceComplianceComponent } from './pages/teacher-attendance
 import { TeacherAttendanceSummaryComponent } from './pages/teacher-attendance-summary/teacher-attendance-summary.component';
 import { TacAverageAttendanceComplianceComponent } from './pages/teacher-attendance-compliance/reports/tac-average-attendance-compliance/tac-average-attendance-compliance.component';
 import { TasAverageAttendanceComponent } from './pages/teacher-attendance-summary/reports/tas-average-attendance/tas-average-attendance.component';
-import { DashletModule } from '@project-sunbird/sb-dashlet-v14';
-import { DataService } from 'src/app/core/services/data.service';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TacAttendanceComplianceRankComponent } from './pages/teacher-attendance-compliance/reports/tac-attendance-compliance-rank/tac-attendance-compliance-rank.component';
 import { TacAverageAttendanceRankComponent } from './pages/teacher-attendance-summary/reports/tac-average-attendance-rank/tac-average-attendance-rank.component';
+import { TasAverageAttendanceBignumberComponent } from './pages/teacher-attendance-summary/reports/tas-average-attendance-bignumber/tas-average-attendance-bignumber.component';
+import { TacAttendanceComplianceBignumberComponent } from './pages/teacher-attendance-compliance/reports/tac-attendance-compliance-bignumber/tac-attendance-compliance-bignumber.component';
 
 
 @NgModule({
@@ -23,7 +24,9 @@ import { TacAverageAttendanceRankComponent } from './pages/teacher-attendance-su
     TacAverageAttendanceComplianceComponent,
     TasAverageAttendanceComponent,
     TacAttendanceComplianceRankComponent,
-    TacAverageAttendanceRankComponent
+    TacAverageAttendanceRankComponent,
+    TasAverageAttendanceBignumberComponent,
+    TacAttendanceComplianceBignumberComponent
   ],
   imports: [
     DashletModule.forRoot({

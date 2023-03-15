@@ -12,7 +12,7 @@ import { TeacherAttendanceComplianceComponent } from '../../teacher-attendance-c
   styleUrls: ['./tac-average-attendance-compliance.component.scss']
 })
 export class TacAverageAttendanceComplianceComponent implements OnInit {
-  reportName: string = 'tac_average_teacher_attendance_compliance';
+  reportName: string = 'tac_average_attendance_compliance';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -30,6 +30,7 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
+  title = 'Attendance Compliance %';
 
   constructor(private readonly _commonService: CommonService, 
     private csv:TeacherAttendanceComplianceComponent,private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -39,18 +40,16 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
-  async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
-    console.log(startDate, endDate)
-    this.startDate = (startDate !== undefined) ? startDate : this.startDate;
-    this.endDate = (endDate !== undefined) ? endDate : this.endDate;
+  getReportData(startDate = undefined, endDate = undefined): void {
+    this.startDate = startDate;
+    this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
-
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
@@ -88,12 +87,6 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
       if (query && key === 'table') {
         this.getTableReportData(query, options);
       }
-      else if (query && key === 'bigNumber') {
-        this.getBigNumberReportData(query, options, 'averagePercentage');
-      }
-      else if (query && key === 'bigNumberComparison') {
-        this.getBigNumberReportData(query, options, 'differencePercentage')
-      }
     })
   }
 
@@ -112,22 +105,6 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
       });
     }
     return newQuery
-  }
-
-  // filtersUpdated(filters: any): void {
-  //   this.filters = filters;
-  //   this.getReportData();
-  // }
-
-  // onSelectLevel(event: any): void {
-  //   this.levels = event.items;
-  //   this.getReportData();
-  // }
-
-  timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    this.getReportData();
   }
 
   getTableReportData(query, options): void {
@@ -164,51 +141,10 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate
-      });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.reportName}
-      this.csv.csvDownload(reportsData)
-    });
-  }
-
-  async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
-    let { bigNumber } = options ?? {};
-    let { valueSuffix } = bigNumber ?? {};
-    if (indicator === 'averagePercentage') {
-      this.bigNumberReportData = {
-        ...this.bigNumberReportData,
-        valueSuffix: valueSuffix
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.csvDownload(reportsData)
       }
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            averagePercentage: rows[0].percentage
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
-    else if (indicator === 'differencePercentage') {
-      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        if (res) {
-          let rows = res;
-          this.bigNumberReportData = {
-            ...this.bigNumberReportData,
-            differencePercentage: rows[0].percentage
-          }
-          this.bigNumberReport.emit({
-            data: this.bigNumberReportData,
-            reportName:this.reportName
-          })
-        }
-      })
-    }
+    });
   }
 }

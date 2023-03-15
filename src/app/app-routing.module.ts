@@ -40,13 +40,13 @@ var routes: Routes = [];
               (module) => module.StudentAttendanceModule
             )
         },
-        // {
-        //   path: 'teacher-attendance',
-        //   loadChildren: () => 
-        //     import('./views/teacher-attendance/teacher-attendance.module').then(
-        //       (module) => module.TeacherAttendanceModule
-        //     )
-        // },
+        {
+          path: 'teacher-attendance',
+          loadChildren: () => 
+            import('./views/teacher-attendance/teacher-attendance.module').then(
+              (module) => module.TeacherAttendanceModule
+            )
+        },
         {
           path: 'review-meetings',
           loadChildren: () => 
