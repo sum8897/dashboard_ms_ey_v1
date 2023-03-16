@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { AppServiceComponent } from 'src/app/app.service';
 import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
+import { CommonService } from 'src/app/core/services/common/common.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -21,8 +23,8 @@ export class HomePageComponent implements OnInit {
   hideAdmin
 
   roles = rbacConfig.roles
-  constructor(public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
-
+  constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
+    this.setToken()
   }
 
   ngOnInit(): void {
@@ -32,7 +34,6 @@ export class HomePageComponent implements OnInit {
     if (localStorage.getItem('roleName') !== 'admin') {
       //this.router.navigate(['/dashboard']);
     }
-
   }
 
   logout() {
@@ -57,8 +58,17 @@ export class HomePageComponent implements OnInit {
   }
 
   onRoleSelect(value: any) {
-    this._rbacService.setRbacDetails({role: value})
+    this._rbacService.setRbacDetails({ role: value })
     this.router.navigate(['/rbac'])
-  } 
+  }
+
+  setToken() {
+    this._common.getGenrateToken().subscribe((data: any) => {
+      let tokenStored = localStorage.getItem('token');
+      if (!tokenStored) {
+        window.localStorage.setItem("token", JSON.stringify(data.token));
+      }
+    })
+  }
   
 }
