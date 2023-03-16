@@ -1,0 +1,30 @@
+<div class="metric-card-wrapper">
+            <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+                <div class="col-span-6">
+                    <p class="h4">DIKSHA- ETB and eContent <em><small>(ETB : Energized Textbook)</small></em></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-tab-group-wrapper">
+            <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
+                (selectedTabChange)="onTabChanged($event)" appFullScreen>
+
+                <mat-tab label='ETB Coverage Status' *ngIf="tabs.includes('ETB Coverage Status')">
+                    <app-etb-coverage-status-tab *ngIf="selectedTabLabel === 'ETB Coverage Status'"></app-etb-coverage-status-tab>
+                </mat-tab> 
+
+                <mat-tab label='Content Coverage on QR' *ngIf="tabs.includes('Content Coverage on QR')">
+                    <app-content-coverage-tab *ngIf="selectedTabLabel === 'Content Coverage on QR'"></app-content-coverage-tab>
+                </mat-tab> 
+
+                <mat-tab label='Learning Sessions' *ngIf="tabs.includes('Learning Sessions')">
+                    <app-learning-sessions-tab *ngIf="selectedTabLabel === 'Learning Sessions'"></app-learning-sessions-tab>
+                </mat-tab> 
+
+                <mat-tab label='Learning Sessions on Potential Users' *ngIf="tabs.includes('Learning Sessions on Potential Users')">
+                    <app-learning-sessions-on-potential-users-tab *ngIf="selectedTabLabel === 'Learning Sessions on Potential Users'"></app-learning-sessions-on-potential-users-tab>
+                </mat-tab> 
+
+            </mat-tab-group>
+            </div>

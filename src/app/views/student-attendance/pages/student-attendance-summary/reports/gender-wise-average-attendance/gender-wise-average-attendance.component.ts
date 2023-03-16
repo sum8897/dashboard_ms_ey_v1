@@ -88,40 +88,6 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
     let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      rows = [
-        {
-          "district": "BALOD",
-          "goverment aided schools recieved textbook": 77.9,
-          "schools having drinking water": 100,
-          "schools having electricity": 99.6,
-          "schools having toilet": 99.8,
-          "schools having ramp": 93.1
-        },
-        {
-          "district": "BALODABAZAR",
-          "goverment aided schools recieved textbook": 77.2,
-          "schools having drinking water": 100,
-          "schools having electricity": 96.5,
-          "schools having toilet": 100,
-          "schools having ramp": 78.2
-        },
-        {
-          "district": "BALRAMPUR",
-          "goverment aided schools recieved textbook": 73.2,
-          "schools having drinking water": 100,
-          "schools having electricity": 88.8,
-          "schools having toilet": 99.7,
-          "schools having ramp": 87.3
-        },
-        {
-          "district": "BASTER",
-          "goverment aided schools recieved textbook": 78.5,
-          "schools having drinking water": 98.1,
-          "schools having electricity": 92.4,
-          "schools having toilet": 98.8,
-          "schools having ramp": 70.3
-        }
-       ]
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       // }
@@ -129,29 +95,11 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
         values: rows
       }
       this.config = getChartJSConfig({
-        // labelExpr: xAxis.value,
-        labelExpr: 'district',
+        labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(
-        // [{
-        //   dataExpr: metricValue, label: metricLabel
-        // }]),
-        [
-          {
-            dataExpr: 'goverment aided schools recieved textbook', label: 'goverment aided schools recieved textbook', options: {barThickness: 10}
-          },
-          {
-            dataExpr: 'schools having drinking water', label: 'schools having drinking water',options: {barThickness: 10}
-          },
-          {
-            dataExpr: 'schools having electricity', label: 'schools having electricity',options: {barThickness: 10}
-          },
-          {
-            dataExpr: 'schools having toilet', label: 'schools having toilet',options: {barThickness: 10}
-          },
-          {
-            dataExpr: 'schools having ramp', label: 'schools having ramp',options: {barThickness: 10}
-          }
-        ]),
+        [{
+          dataExpr: metricValue, label: metricLabel
+        }]),
     
         options: {
           height: (rows.length * 15 + 150).toString(),
@@ -159,29 +107,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
             callbacks: {
               label: (tooltipItem, data) => {
                 let multistringText = [];
-                let metrics = [
-                  {
-                    value: 'goverment aided schools recieved textbook', label: 'goverment aided schools recieved textbook'
-                  },
-                  {
-                    value: 'schools having drinking water', label: 'schools having drinking water'
-                  },
-                  {
-                    value: 'schools having electricity', label: 'schools having electricity'
-                  },
-                  {
-                    value: 'schools having toilet', label: 'schools having toilet'
-                  },
-                  {
-                    value: 'schools having ramp', label: 'schools having ramp'
-                  }
-                ]
-                if (tooltipItem.datasetIndex === 0) {
-                  metrics.forEach((metric: any) => {
-                    multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
-                  });
-                }
-                // multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
 
                 return multistringText;
               }

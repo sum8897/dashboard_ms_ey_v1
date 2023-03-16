@@ -77,10 +77,10 @@ export class DataService {
 
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
-      let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
+      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, metricLabel, metricValue } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        if (isMultibar) {
+        if (MultibarGroupByNeeded) {
           rows = this.multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
         }
         let reportData = {
@@ -88,10 +88,7 @@ export class DataService {
         }
         let config = getChartJSConfig({
           labelExpr: xAxis.value,
-          datasets: getBarDatasetConfig(
-            [{
-              dataExpr: metricValue, label: metricLabel
-            }]),
+          datasets: this.getDatasets(options.barChart, filters),
 
           options: {
             height: (rows.length * 15 + 150).toString(),
@@ -99,12 +96,16 @@ export class DataService {
               callbacks: {
                 label: (tooltipItem, data) => {
                   let multistringText = [];
-                  if (isMultibar && tooltipItem.datasetIndex === 0) {
-                    xAxis.metrics.forEach((metric: any) => {
-                      multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
-                    });
+                  if (isMultibar) {
+                    data.datasets.forEach((dataset: any, index: any) => {
+                      if (index === tooltipItem.datasetIndex) {
+                        multistringText.push(`${dataset.label} : ${tooltipItem.value}%`)
+                      }
+                    })
                   }
-                  multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                  else {
+                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                  }
                   return multistringText;
                 }
               }
@@ -140,65 +141,48 @@ export class DataService {
     });
   }
 
+  getDatasets(barChartOptions: any, filters: any) {
+    let { xAxis, isCorrelation, isMultibar, metricLabel, metricValue } = barChartOptions;
+    if (isCorrelation) {
+      return getBarDatasetConfig(
+        filters.map((filter: any) => {
+          return {
+            dataExpr: filter.value, label: xAxis?.metrics?.filter((metric: any) => {
+              return metric.value === filter.value
+            })[0].label
+          }
+        })
+      )
+    }
+    else if (isMultibar) {
+      return getBarDatasetConfig(
+        xAxis?.metrics.forEach((metric: any) => {
+          return {
+            dataExpr: metric.value,
+            label: metric.label
+          }
+        })
+      )
+    }
+    else {
+      return getBarDatasetConfig([{
+        dataExpr: metricValue, label: metricLabel
+      }])
+    }
+  }
+
   getMapReportData(query: any, options: any, filters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let reportData;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        rows = [
-          {
-            "latitude": 23.3441,
-            "longitude": 85.3096,
-            "ptr": 19.88,
-            "% schools having toilet": 99.8,
-            "% schools having drinking water": 100,
-            "% schools having electricity": 99.6,
-            "district_code": 364
-          },
-          {
-            "latitude": 24.2065,
-            "longitude": 84.8718,
-            "ptr": 27.01,
-            "% schools having toilet": 100,
-            "% schools having drinking water": 100,
-            "% schools having electricity": 96.5,
-            "district_code": 347
-          },
-          {
-            "latitude": 24.1913,
-            "longitude": 86.2996,
-            "ptr": 24.69,
-            "% schools having toilet": 99.7,
-            "% schools having drinking water": 100,
-            "% schools having electricity": 88.8,
-            "district_code": 349
-          },
-          {
-            "latitude": 23.9505,
-            "longitude": 86.817,
-            "ptr": 20.94,
-            "% schools having toilet": 98.8,
-            "% schools having drinking water": 98.1,
-            "% schools having electricity": 92.4,
-            "district_code": 363
-          },
-          {
-            "latitude": 23.6363,
-            "longitude": 85.5124,
-            "ptr": 28.46,
-            "% schools having toilet": 100,
-            "% schools having drinking water": 100,
-            "% schools having electricity": 99.9,
-            "district_code": 361
-          }
-         ]
         let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics } } = options ?? {};
         let metricFilter;
-        if(metricFilterNeeded) {
+        if (metricFilterNeeded) {
           metricFilter = filters.filter((filter: any) => {
             return filter.columnName === 'metric'
           })[0]
-        } 
+        }
         reportData = {
           data: rows.map(row => {
             row = {
@@ -208,21 +192,21 @@ export class DataService {
               indicator: metricFilter ? Number(row[metricFilter.value]) : Number(row[indicator]),
               tooltip: this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
-  
+
             return row;
           }),
           options: {
             reportIndicatorType: indicatorType,
             legend,
-            selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : indicator
+            selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
           }
         }
         resolve(reportData)
       },
-      (error) => {
-        reportData = undefined
-        resolve(reportData)
-      }
+        (error) => {
+          reportData = undefined
+          resolve(reportData)
+        }
       );
     })
   }

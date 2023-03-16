@@ -54,13 +54,13 @@ var routes: Routes = [];
               (module) => module.ReviewMeetingsModule
             )
         },
-        // {
-        //   path: 'udise',
-        //   loadChildren: () => 
-        //     import('./views/udise/udise.module').then(
-        //       (module) => module.UdiseModule
-        //     )
-        // },
+        {
+          path: 'udise',
+          loadChildren: () => 
+            import('./views/udise/udise.module').then(
+              (module) => module.UdiseModule
+            )
+        },
         {
           path: 'nishtha',
           loadChildren: () => 
@@ -80,6 +80,20 @@ var routes: Routes = [];
           loadChildren: () => 
             import('./views/pmposhan/pmposhan.module').then(
               (module) => module.PmPoshanModule
+            )
+        },
+        {
+          path: 'nas',
+          loadChildren: () => 
+            import('./views/nas/nas.module').then(
+              (module) => module.NasModule
+            )
+        },
+        {
+          path: 'diksha',
+          loadChildren: () => 
+            import('./views/diksha/diksha.module').then(
+              (module) => module.DikshaModule
             )
         }
       ],

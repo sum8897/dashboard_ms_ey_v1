@@ -145,13 +145,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       try {
         let body;
         if (this.config === 'national') {
-          // const response = await fetch(`${environment.apiURL}/assets/geo-locations/IN.json`);
-          // body = await response.json();
+          const response = await fetch(`${environment.apiURL}/assets/geo-locations/IN.json`);
+          body = await response.json();
         }
         else {
-          // const response = await fetch(`${environment.apiURL}/maps/${environment.stateCode}.json`);
-          // body = await response.json();
-          body = mapJson;
+          const response = await fetch(`${environment.apiURL}/assets/${environment.stateCode}.json`);
+          body = await response.json();
         }
 
         const data = body;
