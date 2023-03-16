@@ -20,6 +20,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/metadata-interceptor.service';
+import { JwtInterceptor } from './utilities/jwtInterceptor';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/me
     })
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MetadataInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
