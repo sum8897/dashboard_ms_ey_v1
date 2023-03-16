@@ -1,25 +1,27 @@
-<div class="col-span-full tab-wrapper" appFullScreen>
-    <div class="filter-row">
-        <div class="time-series-filter">
+<div class="col-span-full tab-wrapper">
+    <div class="filter-row grid md:grid-cols-4 grid-cols-10">
+        <div class="time-series-filter md:col-span-1 col-span-9">
             <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
-                [maxDate]="maxDate"></app-time-series-filter-panel>
+                [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
-        <div class="download-button">
+        <div class="download-button md:col-start-4 md:col-end-5 col-start-10 col-end-11">
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
     </div>
     <div class="reports-row">
-        <div class="grid grid-cols-2 gap-4 row-wrapper">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="getObjectlen(bigNumberReports)>0">
-                <app-big-number [bigNumberReportData]="bigNumberReports['tas_average_teacher_attendance_summary']"></app-big-number>
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('tas_average_attendance_bignumber', 'bigNumber')">
+                <app-tas-average-attendance-bignumber
+                    #averageAttendanceBigNumber></app-tas-average-attendance-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-tas-average-attendance #averageAttendance [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)" (bigNumberReport)="appendBigNumber($event)"></app-tas-average-attendance>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tas_average_attendance', 'table')">
+                <app-tas-average-attendance #averageAttendance></app-tas-average-attendance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow">
-                <app-tac-average-attendance-rank #averageAttendanceRank [startDate]="startDate" [endDate]="endDate" (exportDates)="settimeSeriesDates($event)"></app-tac-average-attendance-rank>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('tas_average_attendance_rank', 'table')">
+                <app-tac-average-attendance-rank #averageAttendanceRank></app-tac-average-attendance-rank>
             </div>
         </div>
-        
     </div>
 </div>

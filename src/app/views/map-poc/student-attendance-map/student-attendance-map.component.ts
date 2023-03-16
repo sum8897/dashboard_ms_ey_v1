@@ -3,7 +3,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { environment } from 'src/environments/environment';
-import { config } from '../../config/temp_attendance_config';
+import { config } from '../temp_attendance_config';
 
 @Component({
   selector: 'app-student-attendance-map',
@@ -93,18 +93,6 @@ export class StudentAttendanceMapComponent implements OnInit {
 
       this.reportData = {
         data: rows.map(row => {
-          if (this.minDate !== undefined && this.maxDate !== undefined) {
-            if (row['min_date'] < this.minDate) {
-              this.minDate = row['min_date']
-            }
-            if (row['max_date'] > this.maxDate) {
-              this.maxDate = row['max_date']
-            }
-          }
-          else {
-            this.minDate = row['min_date']
-            this.maxDate = row['max_date']
-          }
           row = {
             ...row,
             Latitude: row['latitude'],

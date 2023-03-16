@@ -88,11 +88,9 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
     let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
       // }
-      console.log('the bar chart',rows);
       this.tableReportData = {
         values: rows
       }
@@ -108,13 +106,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
           tooltips: {
             callbacks: {
               label: (tooltipItem, data) => {
-                console.log(tooltipItem, data)
                 let multistringText = [];
-                // if (tooltipItem.datasetIndex === 0) {
-                //   xAxis.metrics.forEach((metric: any) => {
-                //     multistringText.push(`${metric.label}: ${formatNumberForReport(rows[tooltipItem.index][metric.value])}`);
-                //   });
-                // }
                 multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
 
                 return multistringText;

@@ -6,4 +6,5 @@ export interface IMenuItem {
     hasSub: boolean;
     children?: IMenuItem[];
     isSelected: boolean;
+    
 }
