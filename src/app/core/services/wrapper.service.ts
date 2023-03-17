@@ -98,14 +98,17 @@ export class WrapperService {
 
   runQuery(query: string): any {
     return new Promise((resolve, reject) => {
-      this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        resolve(res);
-      },
-        (error) => {
-          console.log(error)
-          resolve(undefined)
+      try{
+        this._commonService.getReportDataNew(query).subscribe((res: any) => {
+          resolve(res);
         },
-      );
+          (error) => {
+            resolve(undefined)
+          },
+        );
+      }catch(error) {
+        reject(error)
+      }
     })
   }
 
