@@ -160,7 +160,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id = {state_id}",
+                        "bigNumber": "select ceil((cast( count(t1.school_id) as numeric)/cast (count(t2.school_id) as numeric))*100) as compliance_percentage from (select c.percentage, c.school_id as school_id from  (select a.school_id,(sum(a.sum)/sum(b.sum))*100 as percentage, sum(b.sum) as total_teachers, sum(a.sum) as attendace_marked from datasets.school_attendance_totalteacher_daily_school as b join datasets.school_attendance_teachersmarked_daily_school as a on a.school_id = b.school_id and a.date = b.date group by a.school_id) as c where c.percentage > 50) as t1 full join (select d.school_id, e.district_id, e.district_name from datasets.school_attendance_teachersmarked_daily_school as d join dimensions.school as e on d.school_id = e.school_id group by d.school_id, e.district_id, e.district_name) as t2 on t1.school_id = t2.school_id "
                     },
                     "level": "district"
                 }
@@ -175,7 +175,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where m.district_id={district_id}",
+                        "bigNumber": "select ceil((cast( count(t1.school_id) as numeric)/cast (count(t2.school_id) as numeric))*100) as compliance_percentage from (select c.percentage, c.school_id as school_id from (select a.school_id,(sum(a.sum)/sum(b.sum))*100 as percentage, sum(b.sum) as total_teachers, sum(a.sum) as attendace_marked from datasets.school_attendance_totalteacher_daily_school as b join datasets.school_attendance_teachersmarked_daily_school as a on a.school_id = b.school_id and a.date = b.date group by a.school_id) as c where c.percentage > 50) as t1 full join (select d.school_id, e.block_id, e.block_name from datasets.school_attendance_teachersmarked_daily_school as d join dimensions.school as e on d.school_id = e.school_id group by d.school_id, e.block_id, e.block_name) as t2 on t1.school_id = t2.school_id "
                     },
                     "level": "block"
                 }
@@ -190,7 +190,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id}",
+                        "bigNumber": "select ceil((cast( count(t1.school_id) as numeric)/cast (count(t2.school_id) as numeric))*100) as compliance_percentage from (select c.percentage, c.school_id as school_id from (select a.school_id,(sum(a.sum)/sum(b.sum))*100 as percentage, sum(b.sum) as total_teachers, sum(a.sum) as attendace_marked from datasets.school_attendance_totalteacher_daily_school as b join datasets.school_attendance_teachersmarked_daily_school as a on a.school_id = b.school_id and a.date = b.date group by a.school_id) as c where c.percentage > 50) as t1 full join (select d.school_id, e.cluster_id, e.cluster_name from datasets.school_attendance_teachersmarked_daily_school as d join dimensions.school as e on d.school_id = e.school_id group by d.school_id, e.cluster_id, e.cluster_name) as t2 on t1.school_id = t2.school_id"
                     },
                     "level": "cluster"
                 }
@@ -205,7 +205,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id}",
+                        "bigNumber": "select ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum) as attendace_marked from datasets.school_attendance_totalteacher_daily_school as b join datasets.school_attendance_teachersmarked_daily_school as a on a.school_id = b.school_id and a.date = b.date join dimensions.school as e on a.school_id = e.school_id"
                     },
                     "level": "school"
                 }
@@ -220,7 +220,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_school as t where t.school_id={school_id}",
+                        "bigNumber": "select ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum) as attendace_marked from datasets.school_attendance_totalteacher_daily_school as b join datasets.school_attendance_teachersmarked_daily_school as a on a.school_id = b.school_id and a.date = b.date join dimensions.school as e on a.school_id = e.school_id where a.school_id={school_id}"
                     },
                     "level": "school"
                 }
@@ -235,7 +235,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where t.grade={class_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_gender0school0grade as present_table join datasets.school_attendance_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id}",
                     },
                     "level": "school"
                 }
@@ -243,6 +243,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
+                "title": "",
                 "valueSuffix": '%',
                 "property": 'compliance_percentage'
             }
@@ -559,7 +560,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where m.state_id = {state_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_district as present_table join datasets.school_attendance_teachersmarked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"
@@ -576,7 +577,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where m.district_id={district_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_block as present_table join datasets.school_attendance_teachersmarked_daily_block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
                     },
                     "level": "block"
@@ -593,7 +594,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where m.block_id={block_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_cluster as present_table join datasets.school_attendance_teachersmarked_daily_cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id}"
                     },
                     "level": "cluster"
@@ -610,7 +611,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where m.cluster_id={cluster_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_school as present_table join datasets.school_attendance_teachersmarked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id}",
                     },
                     "level": "school"
@@ -627,7 +628,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_school as t where t.school_id={school_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_gender0school0grade as present_table join datasets.school_attendance_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t where (date between startDate and endDate) and t.school_id={school_id}",
                     },
                     "level": "school"
@@ -644,7 +645,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where t.grade={class_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.school_attendance_teacherspresent_daily_gender0school0grade as present_table join datasets.school_attendance_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
                     },
                     "level": "school"
@@ -653,6 +654,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
+                "title": "",
                 "valueSuffix": '%',
                 "property": 'stt_avg'
             }

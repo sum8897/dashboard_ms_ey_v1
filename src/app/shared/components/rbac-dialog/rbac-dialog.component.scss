@@ -37,6 +37,9 @@
     .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder{
     display: none !important;
     }
+    .ng-dropdown-panel {
+        top: 100% !important;
+    }
 }
 
 .welcometxt {

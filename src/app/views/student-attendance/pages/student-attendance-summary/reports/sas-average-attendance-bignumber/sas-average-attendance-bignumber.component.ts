@@ -109,7 +109,7 @@ export class SasAverageAttendanceBignumberComponent implements OnInit {
 
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
-    let { valueSuffix, property } = bigNumber ?? {};
+    let { valueSuffix, property, title } = bigNumber ?? {};
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,

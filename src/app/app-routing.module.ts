@@ -27,7 +27,7 @@ var routes: Routes = [];
           path: 'home', component: HomePageComponent
         },
         {
-          path: 'dashboard',
+          path: 'summary-statistics',
           loadChildren: () =>
             import('./views/dashboard/dashboard.module').then(
               (module) => module.DashboardModule

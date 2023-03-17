@@ -282,6 +282,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
+                "title": "",
                 "valueSuffix": '%',
                 "property": 'percentage'
             }
