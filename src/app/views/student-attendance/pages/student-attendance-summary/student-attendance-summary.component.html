@@ -10,19 +10,19 @@
      </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_bignumber', 'bigNumber')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_bignumber', 'bigNumber')" id="bignumber">
                 <app-sas-average-attendance-bignumber #averageAttendanceBignumber></app-sas-average-attendance-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance', 'table')" id="table">
                 <app-sas-average-attendance #averageAttendance></app-sas-average-attendance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_gender_wise_average_attendance', 'barChart')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_gender_wise_average_attendance', 'barChart')" id="chart">
                 <app-gender-wise-average-attendance #genderWiseAverageAttendance></app-gender-wise-average-attendance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_grade_wise_average_attendance', 'barChart')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_grade_wise_average_attendance', 'barChart')" id="chart">
                 <app-grade-wise-average-attendance #gradeWiseAverageAttendance ></app-grade-wise-average-attendance>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_rank', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('sas_average_attendance_rank', 'table')" id="table">
                 <app-sas-average-attendance-rank #averageAttendanceRank></app-sas-average-attendance-rank>
             </div>
         </div>
