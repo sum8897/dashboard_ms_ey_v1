@@ -25,6 +25,7 @@ export class HomePageComponent implements OnInit {
   roles = rbacConfig.roles
   constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
     this.setToken()
+
   }
 
   ngOnInit(): void {
@@ -64,6 +65,7 @@ export class HomePageComponent implements OnInit {
 
   setToken() {
     this._common.getGenrateToken().subscribe((data: any) => {
+      window.localStorage.removeItem('token');
       let tokenStored = localStorage.getItem('token');
       if (!tokenStored) {
         window.localStorage.setItem("token", JSON.stringify(data.token));

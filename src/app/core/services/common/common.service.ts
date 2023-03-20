@@ -30,4 +30,9 @@ export class CommonService {
     return this._http.get<ResponseType<any>>(`${environment.apiURL}/generatejwt`);
   } 
 
+  getMetaData(ProgramName,storageServiceType): Observable<ResponseType<any>> {
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/lastmodified?ProgramName=${ProgramName}&storageServiceType=${storageServiceType}`);
+  }
+  
+
 }
