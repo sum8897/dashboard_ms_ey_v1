@@ -95,10 +95,9 @@ export class LayoutComponent implements OnInit {
       })
       let menuToDisplay: IMenuItem | any = {};
       menuToDisplay.label = "Summary Statistics";
-      // menuToDisplay.path = "/summary-statistics";
+      menuToDisplay.path = "/summary-statistics";
       menuToDisplay.icon = 'dashboard.png';
       menuToDisplay.isSelected = true;
-      menuToDisplay.basepath = "summary-statistics";
       this.menu?.push(menuToDisplay);
 
       menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {

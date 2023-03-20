@@ -16,7 +16,22 @@ export class DataService {
     return new Promise((resolve, reject) => {
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        let { table: { columns } } = options;
+        let { table: { columns, groupByNeeded, metricLabelProp, metricValueProp } } = options;
+        let newColumns:any =[];
+        if (groupByNeeded) {
+          let {result, newColumnsProps} = this.tableGroupBy(rows, columns.filter((column: any) => !column?.groupByNeeded || column?.groupByNeeded === undefined).map((column) => column?.property), metricLabelProp, metricValueProp)
+          rows = result
+          let transposeColumn = columns.filter(col => col.property === metricLabelProp)[0]
+          newColumnsProps.forEach((newColProp) => {
+            newColumns.push({
+              ...transposeColumn,
+              property: newColProp,
+              name: newColProp
+            })
+          })
+          columns = columns.concat(newColumns)
+        }
+        
         let reportData = {
           data: rows.map(row => {
             columns.forEach((col: any) => {
@@ -30,7 +45,7 @@ export class DataService {
             return row;
           }),
           columns: columns.filter(col => {
-            if (rows[0] && col.property in rows[0]) {
+            if (rows[0] && col.property in rows[0] && col.property !== metricLabelProp) {
               return col;
             }
           })
@@ -180,7 +195,7 @@ export class DataService {
         let metricFilter;
         if (metricFilterNeeded) {
           metricFilter = filters.filter((filter: any) => {
-            return filter.columnName === 'metric'
+            return filter.filterType === 'metric'
           })[0]
         }
         reportData = {
@@ -211,7 +226,7 @@ export class DataService {
     })
   }
 
-  multibarGroupBy(data: any, groupByLabel: string, metricLabel: string, metricValue: string) {
+  multibarGroupBy(data: any, groupByLabel: any, metricLabel: string, metricValue: string) {
     let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
       data = {
         [groupByLabel]: key
@@ -225,5 +240,30 @@ export class DataService {
       return data;
     }).value()
     return result;
+  }
+
+  tableGroupBy(data: any, groupByLabel: any, metricLabel: string, metricValue: string) {
+    let newColumnsProps = [];
+    let result = _.chain(data).groupBy(Array.isArray(groupByLabel) ? (data) => {
+      let combinedLabel: string = '';
+      groupByLabel.forEach((label) => {
+        combinedLabel+='_' + data[label]
+      })
+      return combinedLabel
+    } : groupByLabel).map((objs, key) => {
+      let tempData;
+      objs?.forEach((obj: any) => {
+        tempData = {
+          ...tempData,
+          ...obj,
+          [obj[metricLabel]]: obj[metricValue]
+        }
+        if(!newColumnsProps.includes(obj[metricLabel])) {
+          newColumnsProps.push(obj[metricLabel])
+        }
+      });
+      return tempData;
+    }).value()
+    return {result,newColumnsProps};
   }
 }

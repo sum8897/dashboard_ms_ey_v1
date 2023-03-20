@@ -27,6 +27,7 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    tabLabel: any = 'District Wise Performance';
 @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -41,8 +42,8 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
-        this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options} }) });
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
+        this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
@@ -72,7 +73,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options} }) });
+    this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
 
     timeSeriesUpdated(event: any): void {
