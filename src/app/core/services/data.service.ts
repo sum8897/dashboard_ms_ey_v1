@@ -58,17 +58,18 @@ export class DataService {
   getBigNumberReportData(query: string, options: any, indicator: string, prevReportData: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let { bigNumber } = options ?? {};
-      let { valueSuffix, property } = bigNumber ?? {};
+      let { valueSuffix, property, title } = bigNumber ?? {};
       let reportData = {
         ...prevReportData,
-        valueSuffix: valueSuffix
+        valueSuffix: valueSuffix,
+        reportName: title
       }
       if (indicator === 'averagePercentage') {
         this._commonService.getReportDataNew(query).subscribe((res: any) => {
           if (res) {
             let rows = res;
             reportData = {
-              ...prevReportData,
+              ...reportData,
               averagePercentage: rows[0]?.[property]
             }
             resolve(reportData)
@@ -80,7 +81,7 @@ export class DataService {
           if (res) {
             let rows = res;
             reportData = {
-              ...prevReportData,
+              ...reportData,
               differencePercentage: rows[0]?.[property]
             }
             resolve(reportData)

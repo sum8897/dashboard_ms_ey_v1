@@ -27,6 +27,8 @@ export class ProgressStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    bigNumberMetrics: any = [];
+
 @ViewChild('progressStatus') progressStatus: ProgressStatusComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -83,6 +85,11 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.reportsData = [];
         this.progressStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
+    }
+
+
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
         

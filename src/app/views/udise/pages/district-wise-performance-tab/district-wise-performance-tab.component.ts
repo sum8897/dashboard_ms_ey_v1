@@ -27,7 +27,9 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    tabLabel: any = "District Wise Performance"
+    tabLabel: any = "District Wise Performance";
+    bigNumberMetrics: any = [];
+
 @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -83,6 +85,10 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.reportsData = [];
         this.districtWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
+    }
+
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
         

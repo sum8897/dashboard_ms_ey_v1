@@ -157,4 +157,30 @@ export const config = {
             }
         }
     },
+    nas_metrics: {
+        "label": "District Wise Performance",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_schools from datasets.nas_no_of_schools_district",
+                        "bigNumber2": "select sum(sum) as students_surveyed from datasets.nas_no_of_teachers_districtdatasets.nas_students_surveyed_district",
+                        "bigNumber3": "select sum(sum) as total_teachers from datasets.nas_no_of_teachers_district",
+                    },
+                    "level": "district"
+                }
+            },
+        ],
+        "options": {
+            "bigNumber": {
+                "title": ['Total Schools','Total Students Surveyed','Total Teachers'],
+                "valueSuffix": ['','',''],
+                "property": ['total_schools','students_surveyed','total_teachers']
+            }
+        }
+    }
 }

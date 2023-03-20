@@ -10,12 +10,13 @@ import {DistrictWisePerformanceTabComponent} from './pages/district-wise-perform
 import {DistrictWisePerformanceComponent} from './pages/district-wise-performance-tab/reports/district-wise-performance/district-wise-performance.component';
 import { CorrelationTabComponent } from './pages/correlation-tab/correlation-tab.component';
 import { CorrelationComponent } from './pages/correlation-tab/reports/correlation/correlation.component';
+import { UdiseBignumberMetricsComponent } from './pages/district-wise-performance-tab/reports/udise-bignumber-metrics/udise-bignumber-metrics.component';
 
 @NgModule({
 declarations: [
     UdiseComponent,
     DistrictWisePerformanceTabComponent,CorrelationTabComponent,
-    DistrictWisePerformanceComponent,CorrelationComponent
+    DistrictWisePerformanceComponent,CorrelationComponent, UdiseBignumberMetricsComponent
 ],
 imports: [
     DashletModule.forRoot({
