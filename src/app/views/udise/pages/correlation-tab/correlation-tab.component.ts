@@ -43,7 +43,7 @@ export class CorrelationTabComponent implements OnInit, AfterViewInit {
     async ngAfterViewInit(): Promise<void> {
         if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
-            this.correlation?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options } }) }, this.filters);
+            this.correlation?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) }, this.filters);
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();
@@ -73,7 +73,7 @@ export class CorrelationTabComponent implements OnInit, AfterViewInit {
 
     filtersUpdated(filters: any) {
         this.reportsData = [];
-        this.correlation?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options } }) }, this.filters);
+        this.correlation?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) }, this.filters);
     }
 
     timeSeriesUpdated(event: any): void {

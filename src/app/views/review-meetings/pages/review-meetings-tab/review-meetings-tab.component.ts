@@ -47,9 +47,9 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
       this.filters = await this._wrapperService.constructCommonFilters(config.filters)
-      this.reviewMeetingsConducted?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
-      this.reviewMeetingsStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
-      this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+      this.reviewMeetingsConducted?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+      this.reviewMeetingsStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+      this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
     }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
       let endDate = new Date();
@@ -81,9 +81,9 @@ export class ReviewMeetingsTabComponent implements OnInit, AfterViewInit {
 
   filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.reviewMeetingsConducted?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
-    this.reviewMeetingsStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
-    this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, value: filter.value } }) });
+    this.reviewMeetingsConducted?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    this.reviewMeetingsStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    this.reviewMeetingsConductedBignumber?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
   }
 
   timeSeriesUpdated(event: any): void {

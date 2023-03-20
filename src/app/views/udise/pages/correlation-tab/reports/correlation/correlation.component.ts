@@ -80,11 +80,11 @@ export class CorrelationComponent implements OnInit {
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
       let metricFilter = [...filterValues].filter((filter: any) => {
-        return filter.columnName === 'metric'
+        return filter.filterType === 'metric'
       })
 
       filterValues = [...filterValues].filter((filter: any) => {
-        return filter.columnName !== 'metric'
+        return filter.filterType !== 'metric'
       })
 
       filterValues.forEach((filterParams: any) => {

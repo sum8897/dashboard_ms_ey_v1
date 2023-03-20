@@ -98,10 +98,13 @@ export class DashboardComponent implements OnInit {
                 let res = await this._wrapperService.runQuery(query)
                 if (res) {
                   let metricData = {
-                    value: String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
+                    value: res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property] !== null ? String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix] : res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property],
                     name: programConfig[reports[i]]?.options?.bigNumber?.title
                   }
-                  metrics.push(metricData)
+                  if(metricData.value !== null && metricData !== undefined)
+                  {
+                    metrics.push(metricData)
+                  }
                 }
               }
             }
