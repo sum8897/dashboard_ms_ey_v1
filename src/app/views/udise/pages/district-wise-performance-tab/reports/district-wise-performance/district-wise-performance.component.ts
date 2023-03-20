@@ -117,7 +117,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
       else if (query && key === 'map') {
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
-          console.log(this.title)
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
           this.exportReportData.emit(reportsData)
         }

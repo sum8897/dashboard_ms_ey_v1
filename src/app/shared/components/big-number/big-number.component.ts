@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 
 @Component({
   selector: 'app-big-number',
@@ -38,6 +39,10 @@ export class BigNumberComponent implements OnInit, OnChanges {
     else {
       this.differenceIndicator = undefined;
     }
+  }
+
+  formatNumber(input: any) {
+    return formatNumberForReport(Number(input))
   }
 
 }
