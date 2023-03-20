@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event, ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
-import { AppConfig } from './AppConfig';
+import { AppConfig } from './app.config';
+import { HttpClient } from '@angular/common/http';
 declare const gtag: Function; // <------------Important: the declartion for gtag is required!
 
 @Component({
@@ -16,11 +17,23 @@ export class AppComponent {
   title = 'cQube National';
   loadingDataImg: boolean = false;
 
-  constructor(private translate: TranslateService, private titleService: Title, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private translate: TranslateService, private titleService: Title,
+    private router: Router, private activatedRoute: ActivatedRoute, public config: AppConfig, private http: HttpClient) {
     translate.setDefaultLang('en');
     translate.use('en');
-    router.events.subscribe(event => {
-      this.navigationInterceptor(event);
+    /** START : Code to Track Page View using gtag.js */
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      gtag('event', 'page_view', {
+        page_path: event.urlAfterRedirects
+      })
+    })
+
+    this.http.get('assets/config/globalconfig.json').pipe(map(data => {
+      return data;
+    })).subscribe((data) => {
+      this.grabTheTrackIds(data)
     });
 
     /** START : Code to Track Page View using gtag.js */
@@ -79,4 +92,16 @@ export class AppComponent {
       this.loadingDataImg = false;
     }
   }
+
+  grabTheTrackIds(trackIds) {
+    for (const [key, value] of Object.entries(trackIds)) {
+      const gaTrackId = value;
+      let customGtagScriptEle = document.createElement('script');
+      customGtagScriptEle.async = true;
+      customGtagScriptEle.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaTrackId;
+      document.head.prepend(customGtagScriptEle);
+      gtag('config', gaTrackId, { send_page_view: false });
+    }
+  }
+  
 }
