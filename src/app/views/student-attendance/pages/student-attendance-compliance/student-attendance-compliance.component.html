@@ -13,15 +13,15 @@
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('sac_average_attendance_compliance_bignumber', 'bigNumber')">
+                *ngIf="checkReport('sac_average_attendance_compliance_bignumber', 'bigNumber')" id="bignumber">
                 <app-sac-average-attendance-compliance-bignumber #averageAttendanceComplianceBigNumber></app-sac-average-attendance-compliance-bignumber>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('sac_average_attendance_compliance', 'table')">
+                *ngIf="checkReport('sac_average_attendance_compliance', 'table')" id="table1">
                 <app-sac-average-attendance-compliance #averageAttendanceCompliance></app-sac-average-attendance-compliance>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('sac_attendance_compliance_rank', 'table')">
+                *ngIf="checkReport('sac_attendance_compliance_rank', 'table')" id="table2">
                 <app-sac-attendance-compliance-rank #attendanceComplianceRank></app-sac-attendance-compliance-rank>
             </div>
         </div> 

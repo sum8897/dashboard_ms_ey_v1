@@ -9,10 +9,10 @@
             <div class="reports-row">
                 <div class="row-wrapper grid grid-cols-2 gap-4">
                 
-                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('content_coverage_bignumber', 'bigNumber')">
+                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('content_coverage_bignumber', 'bigNumber')" id="bignumber">
                         <app-content-coverage-bignumber #contentCoverage (exportReportData)="csvDownload($event)"></app-content-coverage-bignumber>
                     </div>
-                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('content_coverage', 'table')">
+                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('content_coverage', 'table')" id="table">
                         <app-content-coverage #undefined (exportReportData)="csvDownload($event)"></app-content-coverage>
                     </div></div>
             </div>

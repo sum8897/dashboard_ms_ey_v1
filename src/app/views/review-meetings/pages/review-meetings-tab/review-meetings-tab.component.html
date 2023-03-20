@@ -10,13 +10,13 @@
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted_bignumber', 'bigNumber')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted_bignumber', 'bigNumber')" id="bignumber">
                 <app-review-meetings-conducted-bignumber #reviewMeetingsConductedBignumber></app-review-meetings-conducted-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_conducted', 'table')" id="table1">
                 <app-review-meetings-conducted #reviewMeetingsConducted (exportReportData)="csvDownload($event)"></app-review-meetings-conducted>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_status', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('review_meetings_status', 'table')" id="table2">
                 <app-review-meetings-status #reviewMeetingsStatus (exportReportData)="csvDownload($event)"></app-review-meetings-status>
             </div>
         </div>

@@ -11,16 +11,16 @@
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('tac_average_attendance_compliance_bignumber', 'bigNumber')">
+                *ngIf="checkReport('tac_average_attendance_compliance_bignumber', 'bigNumber')" id="bignumber">
                 <app-tac-attendance-compliance-bignumber
                     #averageAttendanceComplianceBigNumber></app-tac-attendance-compliance-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tac_average_attendance_compliance', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tac_average_attendance_compliance', 'table')" id="table1">
                 <app-tac-average-attendance-compliance
                     #averageAttendanceCompliance></app-tac-average-attendance-compliance>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('tac_attendance_compliance_rank', 'table')">
+                *ngIf="checkReport('tac_attendance_compliance_rank', 'table')" id="table2">
                 <app-tac-attendance-compliance-rank #attenadanceComplianceRank></app-tac-attendance-compliance-rank>
             </div>
         </div>

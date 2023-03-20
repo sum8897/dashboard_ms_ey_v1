@@ -10,16 +10,16 @@
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow"
+            <div class="col-span-2 xmd:col-span-1 div-shadow" id="bignumber"
                 *ngIf="checkReport('tas_average_attendance_bignumber', 'bigNumber')">
                 <app-tas-average-attendance-bignumber
                     #averageAttendanceBigNumber></app-tas-average-attendance-bignumber>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tas_average_attendance', 'table')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tas_average_attendance', 'table')" id="table1">
                 <app-tas-average-attendance #averageAttendance></app-tas-average-attendance>
             </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('tas_average_attendance_rank', 'table')">
+                *ngIf="checkReport('tas_average_attendance_rank', 'table')" id="table2">
                 <app-tac-average-attendance-rank #averageAttendanceRank></app-tac-average-attendance-rank>
             </div>
         </div>

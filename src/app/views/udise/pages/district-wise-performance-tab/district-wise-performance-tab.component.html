@@ -9,17 +9,17 @@
         </div>
     </div>
     <div class="reports-row">
-        <div *ngIf="checkReport('udise_metrics', 'bigNumber1')">
+        <div *ngIf="checkReport('udise_metrics', 'bigNumber1')" id="bignumber1">
             <app-udise-bignumber-metrics (exportReportData)="importBigNumberMetrics($event)"></app-udise-bignumber-metrics>
         </div>
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow"
                 *ngFor="let bigNumberData of bigNumberMetrics; let index = index">
-                <div *ngIf="checkReport('udise_metrics', 'bigNumber'+(index+1))">
+                <div *ngIf="checkReport('udise_metrics', 'bigNumber'+(index+1))" id="bignumber2">
                     <app-big-number [bigNumberReportData]="bigNumberData"></app-big-number>
                 </div>
             </div>
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('district_wise_performance', 'map')">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('district_wise_performance', 'map')" id="map">
                 <app-district-wise-performance #districtWisePerformance
                     (exportReportData)="csvDownload($event)"></app-district-wise-performance>
             </div>

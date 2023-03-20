@@ -9,7 +9,7 @@
             <div class="reports-row">
                 <div class="row-wrapper grid grid-cols-2 gap-4">
                 
-                    <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('grade_and_subject_performance', 'table')">
+                    <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('grade_and_subject_performance', 'table')" id="table">
                         <app-grade-and-subject-performance #gradeAndSubjectPerformance (exportReportData)="csvDownload($event)"></app-grade-and-subject-performance>
                     </div></div>
             </div>

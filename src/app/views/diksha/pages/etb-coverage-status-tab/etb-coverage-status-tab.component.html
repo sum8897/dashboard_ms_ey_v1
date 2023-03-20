@@ -9,10 +9,10 @@
             <div class="reports-row">
                 <div class="row-wrapper grid grid-cols-2 gap-4">
                 
-                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('etb_coverage_status_bignumber', 'bigNumber')">
+                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('etb_coverage_status_bignumber', 'bigNumber')" id="bignumber"                                      >
                         <app-etb-coverage-status-bignumber #etbCoverageStatusBignumber (exportReportData)="csvDownload($event)"></app-etb-coverage-status-bignumber>
                     </div>
-                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('etb_coverage_status', 'table')">
+                    <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('etb_coverage_status', 'table')" id="table1">
                         <app-etb-coverage-status #etbCoverageStatus (exportReportData)="csvDownload($event)"></app-etb-coverage-status>
                     </div></div>
             </div>
