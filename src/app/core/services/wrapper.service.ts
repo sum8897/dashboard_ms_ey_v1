@@ -72,7 +72,7 @@ export class WrapperService {
         }
         let query = filter.values === undefined ? filter.query : undefined
         if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined) {
-          query = parseQueryParam(query, { [filters[index - 1]?.id]: filters[index - 1]?.value })
+          query = parseQueryParam(query, { [filters[index - 1]?.valueProp]: filters[index - 1]?.value })
         }
         if (query) {
           let res = await this.runQuery(query);
@@ -98,14 +98,17 @@ export class WrapperService {
 
   runQuery(query: string): any {
     return new Promise((resolve, reject) => {
-      this._commonService.getReportDataNew(query).subscribe((res: any) => {
-        resolve(res);
-      },
-        (error) => {
-          console.log(error)
-          resolve(undefined)
+      try{
+        this._commonService.getReportDataNew(query).subscribe((res: any) => {
+          resolve(res);
         },
-      );
+          (error) => {
+            resolve(undefined)
+          },
+        );
+      }catch(error) {
+        reject(error)
+      }
     })
   }
 

@@ -1,5 +1,5 @@
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +20,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/metadata-interceptor.service';
+import { JwtInterceptor } from './utilities/jwtInterceptor';
+import { AppConfig }  from './app.config';
 
+//Add this function as initiating load method first
+
+function initConfig(config: AppConfig){
+  return () => config.load()
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +58,8 @@ import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/me
     })
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MetadataInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    AppConfig ,{ provide: APP_INITIALIZER,multi: true, useFactory: initConfig, deps: [AppConfig]}
   ],
   bootstrap: [AppComponent]
 })

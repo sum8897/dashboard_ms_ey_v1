@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import * as Title from '../../../../assets/config/title_config.json'
+import * as Title from '../../../../assets/config/ui_config.json'
 import { ConfigService } from 'src/app/core/services/config/config.service';
 import { environment } from 'src/environments/environment';
 import { IDashboardMenu } from '../../models/IDashboardCard';
@@ -93,12 +93,19 @@ export class LayoutComponent implements OnInit {
       this.rbac.getRbacDetails().subscribe((rbacDetails: any) => {
         rbacRole = rbacDetails.role;
       })
+      let menuToDisplay: IMenuItem | any = {};
+      menuToDisplay.label = "Summary Statistics";
+      menuToDisplay.path = "/summary-statistics";
+      menuToDisplay.icon = 'dashboard.png';
+      menuToDisplay.isSelected = true;
+      this.menu?.push(menuToDisplay);
+
       menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
 
-        if (hierarchyLevels[dasboardMenu.programID].includes(String(rbacRole))) {
+        if (hierarchyLevels[dasboardMenu.programID]?.includes(String(rbacRole))) {
 
           let menuToDisplay: IMenuItem | any = {};
-          menuToDisplay.label = dasboardMenu.menuName;
+          menuToDisplay.label = dasboardMenu.programName;
           menuToDisplay.path = dasboardMenu.navigationUrl;
           menuToDisplay.icon = dasboardMenu.imageUrl;
           menuToDisplay.isSelected = false;

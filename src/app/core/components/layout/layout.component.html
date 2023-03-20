@@ -1,13 +1,13 @@
 <div>
     <div class="fontBar">
         <div class="flagArea"><img title=""
-                src="assets/images/{{title?.app_header_image_1}}" width="32"
-                [alt]="title?.app_header_title">
-            <span data-translate="govofIndia">{{ title?.app_header_title }}</span>
+                src="assets/images/{{title?.dashboard_header1_image}}" width="32"
+                [alt]="title?.dashboard_header1_title">
+            <span data-translate="govofIndia">{{ title?.dashboard_header1_title }}</span>
         </div>
 
         <div class="btnGroup">
-            <i *ngIf="showBackBtn" class="fa fa-home" aria-hidden="true" routerLink="/home"></i>
+            <i *ngIf="showBackBtn" class="fa fa-home" aria-hidden="true" routerLink="/home" id="homeButton"></i>
             <button type="button" [attr.aria-pressed]="false" tabindex="0" attr.aria-label="A-"
                 class="fontResizeBtn fontResizeBtn_A-" title="Decrease font size" (click)="changeFontSize('decrease');"
                 id="font-size-decrease" name="font-size-decrease" #decreaseFontSize>A-</button>

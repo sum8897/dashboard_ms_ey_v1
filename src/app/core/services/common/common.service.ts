@@ -9,6 +9,7 @@ import { IReportDataPayload } from '../../models/IReportDataPayload';
   providedIn: 'root'
 })
 export class CommonService {
+  
 
   constructor(private readonly _http: HttpClient) { }
   
@@ -23,5 +24,15 @@ export class CommonService {
   
   getDashboardMetrics(): Observable<ResponseType<any>> {
     return this._http.get<ResponseType<any>>(`${environment.apiURL}/metric`);
-  }   
+  } 
+
+  getGenrateToken(): Observable<ResponseType<any>> {
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/generatejwt`);
+  } 
+
+  getMetaData(ProgramName,storageServiceType): Observable<ResponseType<any>> {
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/lastmodified?ProgramName=${ProgramName}&storageServiceType=${storageServiceType}`);
+  }
+  
+
 }

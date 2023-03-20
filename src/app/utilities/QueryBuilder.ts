@@ -181,7 +181,7 @@ export function parseQueryParam(query: string, params: any) {
     return newQuery ? newQuery : query;
 }
 
-export function parseFilterToQuery(query: string, params?: { columnName: string, value: any }): string {
+export function parseFilterToQuery(query: string, params?: any): string {
     let whereIndex = query.toLowerCase().indexOf('where');
     let groupByIndex = query.toLowerCase().indexOf('group by');
     let orderByIndex = query.toLowerCase().indexOf('order by');
@@ -190,15 +190,15 @@ export function parseFilterToQuery(query: string, params?: { columnName: string,
     }
     let value = typeof params.value === 'string' ? `'${params.value}'` : params.value;
     if (whereIndex === -1 && groupByIndex === -1 && orderByIndex === -1) {
-        return query.trim() + ` WHERE ${params.columnName} = ${value}`;
+        return query.trim() + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value}`;
     } else if (whereIndex !== -1) {
-        return query.substring(0, whereIndex) + `WHERE ${params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
+        return query.substring(0, whereIndex) + `WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
     } else if (whereIndex === -1 && groupByIndex !== -1) {
-        return query.substring(0, groupByIndex) + ` WHERE ${params.columnName} = ${value} ` + query.substring(groupByIndex);
+        return query.substring(0, groupByIndex) + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} ` + query.substring(groupByIndex);
     } else if (whereIndex === -1 && orderByIndex !== -1) {
-        return query.substring(0, orderByIndex) + ` WHERE ${params.columnName} = ${value} ` + query.substring(orderByIndex);
+        return query.substring(0, orderByIndex) + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} ` + query.substring(orderByIndex);
     } else {
-        return query.substring(0, whereIndex) + `WHERE ${params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
+        return query.substring(0, whereIndex) + `WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
     }
 }
 

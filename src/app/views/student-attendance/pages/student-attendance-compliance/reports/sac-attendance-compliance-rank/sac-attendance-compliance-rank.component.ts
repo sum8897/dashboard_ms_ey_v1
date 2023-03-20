@@ -36,7 +36,7 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getReportData();
+    // this.getReportData();
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
@@ -46,11 +46,10 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
 
     let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
-
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = { ...filter?.actions?.queries }
           timeSeriesQueries = {...filter?.timeSeriesQueries}
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
@@ -92,7 +91,6 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
     if (newQuery && startIndex > -1) {
       let propertyName = query.substring(startIndex + 1, endIndex);
       let re = new RegExp(`{${propertyName}}`, "g");
-      console.log(this.rbacDetails)
       Object.keys(this.rbacDetails).forEach((key: any) => {
         if (propertyName === key + '_id') {
           newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
@@ -136,12 +134,12 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
           }
         })
       }
-      this.exportDates.emit({
-        minDate: this.minDate,
-        maxDate: this.maxDate,
-      });
-      let reportsData= {reportData:this.tableReportData.data,reportType:'table',reportName:this.title}
-      this.sacCompl.csvDownload(reportsData)
+      console.log(this.tableReportData?.data?.length <= 0)
+
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.sacCompl.csvDownload(reportsData)
+      }
     });
   }
 }

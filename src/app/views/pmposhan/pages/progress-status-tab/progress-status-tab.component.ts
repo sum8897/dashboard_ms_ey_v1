@@ -27,6 +27,8 @@ export class ProgressStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    bigNumberMetrics: any = [];
+
 @ViewChild('progressStatus') progressStatus: ProgressStatusComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -43,7 +45,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters);
         console.log(this.filters)
-        this.progressStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options} }) });
+        this.progressStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
@@ -73,7 +75,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.progressStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.id, value: filter.value, options: filter.options} }) });
+    this.progressStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
 
     timeSeriesUpdated(event: any): void {
@@ -83,6 +85,11 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.reportsData = [];
         this.progressStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
+    }
+
+
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
         
