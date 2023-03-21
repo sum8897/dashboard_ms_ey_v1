@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit {
               if (Number(reportFilters[j].hierarchyLevel) === Number(rbacDetails?.role)) {
                 let query = parseRbacFilter(reportFilters[j]?.actions?.queries?.bigNumber, rbacDetails)
                 let res = await this._wrapperService.runQuery(query)
-                if (res) {
+                if (res && res.length > 0) {
                   let metricData = {
                     value: res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property] !== null ? String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix] : res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property],
                     name: programConfig[reports[i]]?.options?.bigNumber?.title
