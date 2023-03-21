@@ -32,7 +32,7 @@ export class SideNavComponent implements OnInit, OnChanges {
       document.body.classList.remove("sidebaractive")
 
     }
-    if (document.body.classList.contains("sideBarHeightNone")){ 
+    if (!this.isHome && document.body.classList.contains("sideBarHeightNone")){ 
       document.body.classList.remove("sideBarHeightNone")
     }
     
