@@ -291,8 +291,8 @@ export const config = {
         "options": {
             "barChart": {
                 "isMultibar": true,
-                "metricLabel": "school_category",
-                "metricValue": "students_enrolled",
+                "metricLabelProp": "school_category",
+                "metricValueProp": "students_enrolled",
                 "yAxis": {
                     "title": "Students enrolled"
                 },
@@ -402,8 +402,8 @@ export const config = {
         "options": {
             "barChart": {
                 "isMultibar": true,
-                "metricLabel": "gender",
-                "metricValue": "students_enrolled",
+                "metricLabelProp": "gender",
+                "metricValueProp": "students_enrolled",
                 "yAxis": {
                     "title": "Students Enrolled"
                 },
@@ -509,8 +509,8 @@ export const config = {
         "options": {
             "barChart": {
                 "isMultibar": true,
-                "metricLabel": "student_category",
-                "metricValue": "students_enrolled",
+                "metricLabelProp": "student_category",
+                "metricValueProp": "students_enrolled",
                 "yAxis": {
                     "title": "Students Eenrolled"
                 },

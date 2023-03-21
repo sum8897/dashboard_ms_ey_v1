@@ -175,6 +175,7 @@ export class WrapperService {
       if (row[metric.value] !== undefined && row[metric.value] !== null) {
         if (metric.value === selectedMetricValue) {
           tooltip += '<b><i>' + metric.valuePrefix.replace(/\n/g, '</br>') + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + metric.valueSuffix.replace(/\n/g, '</br>') + '</i></b>'
+          
         }
         else {
           tooltip += metric.valuePrefix.replace(/\n/g, '</br>') + '<b>' + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + '</b>' + metric.valueSuffix.replace(/\n/g, '</br>')

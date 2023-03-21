@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    console.log('the data of json',this.title);
     if(this.config === 'state'){
       this.national = false
       // // this.stateName = false;

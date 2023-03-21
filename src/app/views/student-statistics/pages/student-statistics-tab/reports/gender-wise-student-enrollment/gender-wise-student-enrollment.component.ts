@@ -93,7 +93,7 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
   }
 
   async getBarChartReportData(query, options, filters, defaultLevel): Promise<void> {
-    let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
+    let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp } } = options;
    await this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let minYear, maxYear;
@@ -112,7 +112,7 @@ export class GenderWiseStudentEnrollmentComponent implements OnInit {
         }
       });
       if (isMultibar) {
-        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+        rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       }
   
       // this.originalData = {values:rows};

@@ -756,8 +756,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabel": "Average Attendance",
-                "metricValue": "stt_avg",
+                "metricLabelProp": "Average Attendance",
+                "metricValueProp": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %"
                 },
@@ -825,8 +825,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabel": "Average Attendance",
-                "metricValue": "stt_avg",
+                "metricLabelProp": "Average Attendance",
+                "metricValueProp": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %",
                 },
