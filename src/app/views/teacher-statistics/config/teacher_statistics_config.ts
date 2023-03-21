@@ -187,8 +187,8 @@ export const config = {
         "options": {
             "barChart": {
                 "isMultibar": true,
-                "metricLabel": "school_category",
-                "metricValue": "total_teachers",
+                "metricLabelProp": "school_category",
+                "metricValueProp": "total_teachers",
                 "yAxis": {
                     "title": "Total Teachers"
                 },
@@ -270,8 +270,8 @@ export const config = {
         "options": {
             "barChart": {
                 "isMultibar": true,
-                "metricLabel": "school_category",
-                "metricValue": "total_teachers",
+                "metricLabelProp": "school_category",
+                "metricValueProp": "total_teachers",
                 "yAxis": {
                     "title": "Avg Total Teachers"
                 },

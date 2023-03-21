@@ -154,7 +154,7 @@ function addMasterProps(query: string, selectedLevel: any, levelConfig: any): st
     return newQuery
 }
 
-export function multibarGroupBy(data: any, groupByLabel: string, metricLabel: string, metricValue: string){
+export function multibarGroupBy(data: any, groupByLabel: string, metricLabelProp: string, metricValueProp: string){
     let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
       data = {
         [groupByLabel]: key
@@ -162,7 +162,7 @@ export function multibarGroupBy(data: any, groupByLabel: string, metricLabel: st
       objs?.forEach((obj: any) => {
         data = {
           ...data,
-          [obj[metricLabel]]: obj[metricValue]
+          [obj[metricLabelProp]]: obj[metricValueProp]
         }
       });
       return data;
@@ -213,7 +213,6 @@ export function parseRbacFilter(query: string, rbacDetails: any) {
         let propertyName = newQuery.substring(startIndex + 1, endIndex);
         let re = new RegExp(`{${propertyName}}`, "g");
         Object.keys(rbacDetails).forEach((key: any) => {
-          console.log(propertyName, key)
           if (propertyName === key + '_id') {
             newQuery = newQuery.replace(re, '\'' + rbacDetails[key] + '\'');
           }

@@ -3,20 +3,10 @@ export const config = {
         {
             "label": "District Wise Performance",
             "name": "Metric",
-            "labelProp": "metric",
-            "valueProp": "metric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: 'ptr',
-                    label: 'PTR'
-                },
-                {
-                    value: '% schools having toilet',
-                    label: '% Schools Having Toilet'
-                }
-
-            ]
+            "query": "select category_name from dimensions.categorypm"
         },
     ],
     progress_status:
@@ -30,7 +20,7 @@ export const config = {
                     "actions": {
                         "queries":
                         {
-                            "map": "select * from dimensions.district"
+                            "map": "select t1.category_name,t2.district_name,t1.district_id, cast(sum(t1.sum) as numeric) as total_count FROM datasets.pm_poshan_category_district0categorypm as t1 join dimensions.district as t2 on t1.district_id = t2.district_id group by t1.district_id,t2.district_name,t1.category_name"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -40,14 +30,20 @@ export const config = {
         "options":
         {
             "map": {
+                "metricLabelProp": "category_name",
+                "metricValueProp": "total_count",
+                "groupByColumn": "district_id",
                 "metricFilterNeeded": true,
-                "indicator": "",
-                "indicatorType": "",
-                "legend": { "title": "" },
+                "legend": { "title": "Progress Status" },
                 "tooltipMetrics": [
                     {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "\n"
+                    },
+                    {   
                         "valuePrefix": "",
-                        "value": "",
+                        "value": "category_name",
                         "valueSuffix": "\n"
                     }
                 ]

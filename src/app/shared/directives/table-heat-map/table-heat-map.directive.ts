@@ -151,7 +151,6 @@ export class TableHeatMapDirective implements AfterViewInit {
           }
           color = singleColor;
         }
-        console.log(color)
         let [r, g, b, a] = parseToRgba(color);
         // bgColor = rgba(r, g, b, +(Math.min(1, value / this.highestValues[id] + 0.06)).toFixed(3));
         bgColor = rgba(r, g, b, + 1);

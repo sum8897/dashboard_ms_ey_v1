@@ -103,11 +103,11 @@ export class TsCategoryWiseAveragePupilTeacherRatioComponent implements OnInit  
           this.maxYear = row['max_year']
         }
       }); 
-      let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
+      let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp } } = options;
       
       if(isMultibar){
         console.log('');
-        rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+        rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       }
       console.log('the is multibar',rows);
       this.tableReportData = {
