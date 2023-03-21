@@ -19,3 +19,15 @@ import { config as dikshaConfig} from '../../views/diksha/config/diksha_config'
   nas:nasConfig,
   diksha:dikshaConfig
 };
+
+export const programFolderNames = {
+  studentAttendance: 'student_attendance',
+  reviewMeetings: 'random',
+  teacherAttendance:'random',
+  pgi:'random',
+  pmPoshan:'random',
+  nishtha:'random',
+  udise:'random',
+  nas:'random',
+  diksha:'random'
+}
