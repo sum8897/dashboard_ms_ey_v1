@@ -16,9 +16,7 @@ export class MetadataInterceptor implements HttpInterceptor {
         if (event instanceof HttpResponse) {
           let body = event.body;
 
-          if (body.result && body.result.fileMetaData) {
-            this._dataSourceMetadataService.updateMetaData(body.result.fileMetaData);
-          } else if (body.fileMetaData) {
+          if (body.fileMetaData) {
             this._dataSourceMetadataService.updateMetaData(body.fileMetaData);
           }
         }
@@ -26,7 +24,7 @@ export class MetadataInterceptor implements HttpInterceptor {
         return event;
       }),
       catchError((error: HttpErrorResponse) => {
-        this._dataSourceMetadataService.updateMetaData(undefined);
+        // this._dataSourceMetadataService.updateMetaData(undefined);
         return throwError(error);
       }));
   }
