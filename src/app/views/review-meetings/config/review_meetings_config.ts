@@ -282,7 +282,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "",
+                "title": "Average Review Meetings Conducted",
                 "valueSuffix": '%',
                 "property": 'percentage'
             }
