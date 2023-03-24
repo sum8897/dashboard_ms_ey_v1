@@ -4,17 +4,17 @@ export const config = {
             "label": "District Wise Performance",
             "name": "Grade",
             "id": "grade",
-            "labelProp": "grade",
-            "valueProp": "grade",
-            "query": "select grade_id, grade from dimensions.grade"
+            "labelProp": "grade_nas",
+            "valueProp": "grade_nas",
+            "query": "select grade_nas from dimensions.grade"
         },
         {
             "label": "District Wise Performance",
             "name": "Subject",
             "id": "subject",
-            "labelProp": "subject",
-            "valueProp": "subject",
-            "query": "select subject_id, subject from dimensions.subject"
+            "labelProp": "subject_nas",
+            "valueProp": "subject_nas",
+            "query": "select subject_nas from dimensions.subject"
         },
         {
             "label": "District Wise Performance",
@@ -29,17 +29,17 @@ export const config = {
             "label": "Grade & Subject Performance",
             "name": "Grade",
             "id": "grade",
-            "labelProp": "grade",
-            "valueProp": "grade",
-            "query": "select grade_id, grade from dimensions.grade"
+            "labelProp": "grade_nas",
+            "valueProp": "grade_nas",
+            "query": "select grade_nas from dimensions.grade"
         },
         {
             "label": "Grade & Subject Performance",
             "name": "Subject",
             "id": "subject",
-            "labelProp": "subject",
-            "valueProp": "subject",
-            "query": "select subject_id, subject from dimensions.subject"
+            "labelProp": "subject_nas",
+            "valueProp": "subject_nas",
+            "query": "select subject_nas from dimensions.subject"
         },
     ],
     district_wise_performance:
@@ -99,7 +99,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, lo_name, grade, subject, round(cast(avg(avg*100) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, lo_name, t.lo_code"
+                        "table": "select t.lo_code, lo_name, grade_nas, subject_nas, round(cast(sum(sum*100) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject_nas, grade_nas, lo_name, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -119,12 +119,12 @@ export const config = {
                     },
                     {
                         name: "Grade",
-                        property: "grade",
+                        property: "grade_nas",
                         class: "text-center"
                     },
                     {
                         name: "Subject",
-                        property: "subject",
+                        property: "subject_nas",
                         class: "text-center"
                     },
                     {
@@ -168,7 +168,7 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select sum(sum) as total_schools from datasets.nas_no_of_schools_district",
-                        "bigNumber2": "select sum(sum) as students_surveyed from datasets.nas_no_of_teachers_districtdatasets.nas_students_surveyed_district",
+                        "bigNumber2": "select sum(sum) as students_surveyed from datasets.nas_students_surveyed_district",
                         "bigNumber3": "select sum(sum) as total_teachers from datasets.nas_no_of_teachers_district",
                     },
                     "level": "district"

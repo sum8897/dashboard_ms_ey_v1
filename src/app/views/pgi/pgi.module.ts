@@ -8,12 +8,14 @@ import {PgiComponent} from './pgi.component';
 
 import {DistrictWisePerformanceTabComponent} from './pages/district-wise-performance-tab/district-wise-performance-tab.component';
 import {DistrictWisePerformanceComponent} from './pages/district-wise-performance-tab/reports/district-wise-performance/district-wise-performance.component';
+import { PgiBignumberMetricsComponent } from './pages/district-wise-performance-tab/reports/pgi-bignumber-metrics/pgi-bignumber-metrics.component';
 
 @NgModule({
 declarations: [
     PgiComponent,
     DistrictWisePerformanceTabComponent,
-    DistrictWisePerformanceComponent
+    DistrictWisePerformanceComponent,
+    PgiBignumberMetricsComponent
 ],
 imports: [
     DashletModule.forRoot({
