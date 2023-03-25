@@ -27,6 +27,9 @@ export class ImplementationStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    bigNumberMetrics: any = [];
+    tabLabel:any = 'Implementation Status'
+    
 @ViewChild('implementationStatus') implementationStatus: ImplementationStatusComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -41,7 +44,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
         this.implementationStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
@@ -82,6 +85,10 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.reportsData = [];
         this.implementationStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
+    }
+
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
         

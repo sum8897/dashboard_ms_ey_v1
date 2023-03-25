@@ -3,78 +3,26 @@ export const config = {
         {
             "label": "District Wise Performance",
             "name": "Metric",
-            "labelProp": "metric",
-            "valueProp": "metric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: 'ptr',
-                    label: 'PTR'
-                },
-                {
-                    value: '% schools having toilet',
-                    label: '% Schools Having Toilet'
-                }
-
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
         {
             "label": "Correlation",
             "name": "First Metric",
-            "labelProp": "firstMetric",
-            "valueProp": "firstMetric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: '%goverment aided schools recieved textbook',
-                    label: '%goverment aided schools recieved textbook'
-                },
-                {
-                    value: '%schools having drinking water',
-                    label: '%schools having drinking water'
-                },
-                {
-                    value: '%schools having electricity',
-                    label: '%schools having electricity'
-                },
-                {
-                    value: '%schools having toilet',
-                    label: '%schools having toilet'
-                },
-                {
-                    value: '%schools having ramp',
-                    label: '%schools having ramp'
-                }
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
         {
             "label": "Correlation",
-            "name": "Srcond Metric",
-            "labelProp": "secondMetric",
-            "valueProp": "secondMetric",
+            "name": "Second Metric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: '%goverment aided schools recieved textbook',
-                    label: '%goverment aided schools recieved textbook'
-                },
-                {
-                    value: '%schools having drinking water',
-                    label: '%schools having drinking water'
-                },
-                {
-                    value: '%schools having electricity',
-                    label: '%schools having electricity'
-                },
-                {
-                    value: '%schools having toilet',
-                    label: '%schools having toilet'
-                },
-                {
-                    value: '%schools having ramp',
-                    label: '%schools having ramp'
-                }
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
     ],
     district_wise_performance: {
@@ -110,7 +58,7 @@ export const config = {
                         "value": "district_name",
                         "valueSuffix": "\n"
                     },
-                    {   
+                    {
                         "valuePrefix": "",
                         "value": "category_name",
                         "valueSuffix": "\n"
@@ -195,9 +143,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total Students','PTR','% schools with toilets','% schools having electricity','% schools having drinking water'],
-                "valueSuffix": ['','','%','%','%'],
-                "property": ['total_students','ptr','schs_with_toilet','schs_having_electricity','schs_having_water']
+                "title": ['Total Students', 'PTR', '% schools with toilets', '% schools having electricity', '% schools having drinking water'],
+                "valueSuffix": ['', '', '%', '%', '%'],
+                "property": ['total_students', 'ptr', 'schs_with_toilet', 'schs_having_electricity', 'schs_having_water']
             }
         }
     }
