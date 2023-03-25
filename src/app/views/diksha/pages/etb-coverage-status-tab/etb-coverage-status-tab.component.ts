@@ -28,6 +28,7 @@ export class EtbCoverageStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    matLabel:"ETB Coverage Status"
 @ViewChild('etbCoverageStatusBignumber') etbCoverageStatusBignumber: EtbCoverageStatusComponentBignumber;
         @ViewChild('etbCoverageStatus') etbCoverageStatus: EtbCoverageStatusComponent;
         
@@ -43,7 +44,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
         this.etbCoverageStatusBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         this.etbCoverageStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }

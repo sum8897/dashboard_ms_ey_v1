@@ -27,6 +27,7 @@ export class DistrictWiseStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    matLabel='District Wise Status'
 @ViewChild('districtWiseStatus') districtWiseStatus: DistrictWiseStatusComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -41,7 +42,8 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
+        console.log('the filters',this.filters);
         this.districtWiseStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {

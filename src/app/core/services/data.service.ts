@@ -92,7 +92,7 @@ export class DataService {
 
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
-      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, metricLabelProp, metricValueProp } } = options;
+      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         if (MultibarGroupByNeeded) {
@@ -114,12 +114,12 @@ export class DataService {
                   if (isMultibar) {
                     data.datasets.forEach((dataset: any, index: any) => {
                       if (index === tooltipItem.datasetIndex) {
-                        multistringText.push(`${dataset.label} : ${tooltipItem.value}%`)
+                        multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                       }
                     })
                   }
                   else {
-                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                   }
                   return multistringText;
                 }
@@ -171,7 +171,7 @@ export class DataService {
     }
     else if (isMultibar) {
       return getBarDatasetConfig(
-        xAxis?.metrics.forEach((metric: any) => {
+        xAxis?.metrics.map((metric: any) => {
           return {
             dataExpr: metric.value,
             label: metric.label
