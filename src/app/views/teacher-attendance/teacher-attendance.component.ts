@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { config } from './config/teacher_attendance_config';
 
@@ -14,8 +15,9 @@ export class TeacherAttendanceComponent implements OnInit {
   tabIndex;
   selectedTabLabel;
   tabs: any = [];
+  programName: any = 'teacherAttendance'
   
-  constructor(private route: ActivatedRoute, private _rbacService: RbacService) { 
+  constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
       this.tabIndex = param.tab ? Number(param.tab) : 0;
     })
@@ -37,6 +39,7 @@ export class TeacherAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._commonService.getMetaData(this.programName).subscribe()
   }
 
   ngAfterViewInit(): void {

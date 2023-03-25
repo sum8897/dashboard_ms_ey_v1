@@ -6,9 +6,9 @@ export const config = {
             "labelProp": "program_name",
             "valueProp": "program_name",
             "id": "metric",
-            "query": ""
+            "query": "select program_name from dimensions.programnishtha"
         },
-      
+
     ],
     implementation_status: {
         "label": "Implementation Status",
@@ -64,7 +64,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                       "table": "select t1.program_name , sum(t1.sum) as total_courses ,sum(t2.sum) as  total_medium from datasets.nishtha_total_courses_programnishtha as t1 join datasets.nishtha_total_medium_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name"
+                        "table": "select t1.program_name , sum(t1.sum) as total_courses ,sum(t2.sum) as  total_medium from datasets.nishtha_total_courses_programnishtha as t1 join datasets.nishtha_total_medium_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -241,9 +241,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultiBar": true,
-                "metricLabelProp": "Average Attendance",
-                "metricValueProp": "total_enrolment",
+                "isMultibar": true,
+                "valueSuffix": "",
                 "yAxis": {
                     "title": "Attendance %"
                 },
@@ -262,6 +261,33 @@ export const config = {
                         }
                     ]
                 }
+            }
+        }
+    },
+    nishtha_metrics: {
+        "label": "Progress Status",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_enrolment from datasets.nishtha_total_enrolment_district",
+                        "bigNumber2": "select sum(sum) as total_completion from datasets.nishtha_total_completion_district",
+                        "bigNumber3": "select sum(sum) as total_certification from datasets.nishtha_total_certification_district",
+                        "bigNumber4": ""
+                    },
+                    "level": "district"
+                }
+            },
+        ],
+        "options": {
+            "bigNumber": {
+                "title": ['Total Enrolment', 'Total Completion', 'Total Certification', 'Total Mediums'],
+                "valueSuffix": ['', '', '', ''],
+                "property": ['total_enrolment', 'total_completion', 'total_certification', 'total_mediums']
             }
         }
     }

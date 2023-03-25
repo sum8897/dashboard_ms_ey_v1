@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { config } from './config/nas_config';
 
@@ -15,8 +16,9 @@ export class NasComponent implements OnInit {
     tabIndex;
     selectedTabLabel;
     tabs: any = [];
+    programName: any = 'nas'
     
-constructor(private route: ActivatedRoute, private _rbacService: RbacService) { 
+constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
         this.tabIndex = param.tab ? Number(param.tab) : 0;
     })
@@ -38,6 +40,7 @@ constructor(private route: ActivatedRoute, private _rbacService: RbacService) {
     }
 
     ngOnInit(): void {
+        this._commonService.getMetaData(this.programName).subscribe()
     }
 
     ngAfterViewInit(): void {
