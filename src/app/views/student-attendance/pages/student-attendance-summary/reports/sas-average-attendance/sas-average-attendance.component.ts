@@ -17,14 +17,14 @@ export class SasAverageAttendanceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance Summary"
+    reportName: "% Students Present"
   };
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  title='Attendance Summary %';
+  title='% Students Present';
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();

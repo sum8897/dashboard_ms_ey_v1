@@ -17,7 +17,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Teacher Attendance Summary"
+    reportName: "Average Teachers Present"
   };
   minDate: any;
   maxDate: any;
@@ -25,7 +25,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title='Attendance Summary %';
+  title='% Teachers Present';
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();

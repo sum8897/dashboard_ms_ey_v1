@@ -24,7 +24,7 @@ export class SacAverageAttendanceComplianceComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-  title='Attendance Compliance %';
+  title='% Schools Reporting Student Attendance';
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();

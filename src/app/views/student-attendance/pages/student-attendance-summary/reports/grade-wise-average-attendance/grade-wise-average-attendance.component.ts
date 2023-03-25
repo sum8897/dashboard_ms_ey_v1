@@ -18,7 +18,7 @@ export class GradeWiseAverageAttendanceComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Grade Wise Average Attendance";
+  fileName: string = "Grade-wise % Students Present";
   reportName: string = 'sas_grade_wise_average_attendance';
   filters: any = [];
   levels: any;

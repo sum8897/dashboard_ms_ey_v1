@@ -28,7 +28,7 @@ export class SasAverageAttendanceRankComponent implements OnInit {
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
-  title = 'Rank in Attendance %';
+  title = 'Rank in Average % Students Present';
 
   constructor(private readonly _commonService: CommonService, private csv: StudentAttendanceSummaryComponent,
     private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {

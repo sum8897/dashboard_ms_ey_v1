@@ -22,7 +22,7 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Rank in Attendance Compliance %'
+  title = 'Rank in % Schools Reporting Student Attendance'
   @Output() CsvDownload = new EventEmitter<any>();
 
   @Output() exportDates = new EventEmitter<any>();

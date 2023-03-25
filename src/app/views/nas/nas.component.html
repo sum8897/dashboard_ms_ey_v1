@@ -1,22 +1,26 @@
 <div class="metric-card-wrapper">
-            <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
-                <div class="col-span-6">
-                    <p class="h4">National Achievement Survey <em><small>(NAS)</small></em></p>
-                </div>
-            </div>
+    <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+        <div class="col-span-12">
+            <p class="program-title ">National Achievement Survey <em><small>(NAS)</small></em></p>
+            <p class="program-desc">The National Achievement Survey (NAS) is a nationally representative large-scale
+                survey of students' learning undertaken by the Ministry of Education, Government of India.</p>
         </div>
-        
-        <div class="custom-tab-group-wrapper">
-            <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
-                (selectedTabChange)="onTabChanged($event)" appFullScreen>
+    </div>
+</div>
 
-                <mat-tab label='District Wise Performance' *ngIf="tabs.includes('District Wise Performance')">
-                    <app-district-wise-performance-tab *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
-                </mat-tab> 
+<div class="custom-tab-group-wrapper">
+    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
+        (selectedTabChange)="onTabChanged($event)" appFullScreen>
 
-                <mat-tab label='Grade & Subject Performance' *ngIf="tabs.includes('Grade & Subject Performance')">
-                    <app-grade-and-subject-performance-tab *ngIf="selectedTabLabel === 'Grade & Subject Performance'"></app-grade-and-subject-performance-tab>
-                </mat-tab> 
+        <mat-tab label='District Wise Performance' *ngIf="tabs.includes('District Wise Performance')">
+            <app-district-wise-performance-tab
+                *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
+        </mat-tab>
 
-            </mat-tab-group>
-            </div>
+        <mat-tab label='Grade & Subject Performance' *ngIf="tabs.includes('Grade & Subject Performance')">
+            <app-grade-and-subject-performance-tab
+                *ngIf="selectedTabLabel === 'Grade & Subject Performance'"></app-grade-and-subject-performance-tab>
+        </mat-tab>
+
+    </mat-tab-group>
+</div>

@@ -22,7 +22,7 @@ export class TacAttendanceComplianceRankComponent implements OnInit {
   // level = environment.config === 'national' ? 'state' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title:"Rank in Attendance %"
+  title:any ="Rank in % Teachers Reporting Attendance"
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;

@@ -1,7 +1,7 @@
 export const config = {
 
     tac_average_attendance_compliance: {
-        "label": "Teacher Attendance Compliance",
+        "label": "Average Teachers Reporting Attendance",
         "defaultLevel": "state",
         "filters": [
             {
@@ -115,7 +115,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Teacher Attendance Compliance",
+                        name: "",
                         property: "compliance_percentage",
                         class: "text-center",
                         valueSuffix:"%",
@@ -148,7 +148,7 @@ export const config = {
         }
     },
     tac_average_attendance_compliance_bignumber: {
-        "label": "Teacher Attendance Compliance",
+        "label": "Average Teachers Reporting Attendance",
         "filters": [
             {
                 "name": "State",
@@ -243,14 +243,14 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Avaerage Teacher Attendance Compliance",
+                "title": "Avaerage Average Teachers Reporting Attendance",
                 "valueSuffix": '%',
                 "property": 'compliance_percentage'
             }
         }
     },
     tac_attendance_compliance_rank: {
-        "label": "Teacher Attendance Compliance",
+        "label": "Average Teachers Reporting Attendance",
         "defaultLevel": "district",
         "filters": [
             {
@@ -363,7 +363,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Teacher Attendance",
+                        name: "% Teachers Reporting Attendance",
                         property: "compliance_percentage",
                         valueSuffix: '%',
                         class: "text-center",
@@ -387,7 +387,7 @@ export const config = {
                         },
                     },
                     {
-                        name: "Rank in Average Attendance",
+                        name: "Rank in % Teachers Reporting Attendance",
                         property: "rank",
                         class: "text-center",
                         isHeatMapRequired: true,
@@ -401,7 +401,7 @@ export const config = {
 
     
     tas_average_attendance: {
-        "label": "Teacher Attendance Summary",
+        "label": "Average Teachers Present",
         "defaultLevel": "state",
         "filters": [
             {
@@ -514,7 +514,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Teacher Attendance",
+                        name: "% Teachers Present",
                         property: "stt_avg",
                         class: "text-center",
                         valueSuffix: '%',
@@ -547,7 +547,7 @@ export const config = {
     },
     
     tas_average_attendance_bignumber: {
-        "label": "Teacher Attendance Summary",
+        "label": "Average Teachers Present",
         "filters": [
             {
                 "name": "State",
@@ -654,7 +654,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Avaerage Teacher Attendance Summary",
+                "title": "Avaerage Average Teachers Present",
                 "valueSuffix": '%',
                 "property": 'stt_avg'
             }
@@ -662,7 +662,7 @@ export const config = {
     },
 
     tas_average_attendance_rank: {
-        "label": "Teacher Attendance Summary",
+        "label": "Average Teachers Present",
         "defaultLevel": "district",
         "filters": [
             {
@@ -775,7 +775,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Teacher Attendance",
+                        name: "% Teachers Present",
                         property: "stt_avg",
                         valueSuffix: '%',
                         class: "text-center",
@@ -799,7 +799,7 @@ export const config = {
                         },
                     },
                     {
-                        name: "Rank in Average Attendance",
+                        name: "Rank in % Teachers Present",
                         property: "rank",
                         class: "text-center",
                         isHeatMapRequired: true,

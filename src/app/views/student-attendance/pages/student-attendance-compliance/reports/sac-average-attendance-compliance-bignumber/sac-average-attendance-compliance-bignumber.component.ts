@@ -18,7 +18,7 @@ export class SacAverageAttendanceComplianceBignumberComponent implements OnInit 
   tableReportData: any;
   
   bigNumberReportData: any =  {
-    reportName: "Average Attendance"
+    reportName: "Average % Schools Reporting Student Attendance"
   };
 
   minDate: any;

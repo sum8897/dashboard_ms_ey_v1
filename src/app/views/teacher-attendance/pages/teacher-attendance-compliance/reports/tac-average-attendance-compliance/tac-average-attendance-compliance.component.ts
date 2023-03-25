@@ -17,7 +17,7 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Teacher Attendance compliance"
+    reportName: "Average Teachers Reporting Attendance"
   };
   minDate: any;
   maxDate: any;
@@ -30,7 +30,7 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
-  title = 'Attendance Compliance %';
+  title = '% Teachers Reporting Attendance';
 
   constructor(private readonly _commonService: CommonService, 
     private csv:TeacherAttendanceComplianceComponent,private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
