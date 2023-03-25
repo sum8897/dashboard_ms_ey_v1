@@ -5,17 +5,10 @@ export const config = {
             "name": "Program",
             "labelProp": "program_name",
             "valueProp": "program_name",
-            "id": "program",
+            "id": "metric",
             "query": ""
         },
-        {
-            "label": "Course wise Status",
-            "name": "Program",
-            "labelProp": "program_name",
-            "valueProp": "program_name",
-            "id": "program",
-            "query": ""
-        },
+      
     ],
     implementation_status: {
         "label": "Implementation Status",
@@ -25,7 +18,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY avg ASC",
+                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status  order by program_name",
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -37,12 +30,12 @@ export const config = {
                 "columns": [
                     {
                         name: "Program Name",
-                        property: "",
+                        property: "program_name",
                         class: "text-center"
                     },
                     {
                         name: "Nishtha Started",
-                        property: "",
+                        property: "status",
                         class: "text-center",
                         isHeatMapRequired: true,
                         color: {
@@ -71,7 +64,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select district_name, (avg * 100) as avg from dimensions.district as d join datasets.rev_and_monitoring_district_monthly_academicyear0district as t on t.district_id = d.district_id ORDER BY avg ASC",
+                       "table": "select t1.program_name , sum(t1.sum) as total_courses ,sum(t2.sum) as  total_medium from datasets.nishtha_total_courses_programnishtha as t1 join datasets.nishtha_total_medium_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -83,17 +76,17 @@ export const config = {
                 "columns": [
                     {
                         name: "Program Name",
-                        property: "",
+                        property: "program_name",
                         class: "text-center"
                     },
                     {
                         name: "Total Courses Launched",
-                        property: "",
+                        property: "total_courses",
                         class: "text-center"
                     },
                     {
                         name: "Total Mediums",
-                        property: "",
+                        property: "total_medium",
                         class: "text-center"
                     }
                 ],
@@ -123,22 +116,22 @@ export const config = {
                 "metricLabelProp": "Average Attendance",
                 "metricValueProp": "stt_avg",
                 "yAxis": {
-                    "title": "Attendance %"
+                    "title": "Programs"
                 },
                 "xAxis": {
                     "title": " ",
                     "label": "gender",
                     "value": "gender",
-                    "metrics": [
-                        {
-                            "label": "",
-                            "value": ""
-                        },
-                        {
-                            "label": "",
-                            "value": ""
-                        }
-                    ]
+                    // "metrics": [
+                    //     {
+                    //         "label": "",
+                    //         "value": ""
+                    //     },
+                    //     {
+                    //         "label": "",
+                    //         "value": ""
+                    //     }
+                    // ]
                 }
             }
         }
@@ -240,7 +233,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "",
+                        "barChart": "select d.district_name , sum (t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_total_enrolment_district as t1 join datasets.nishtha_total_certification_district as t2 on t1.district_id = t2.district_id join dimensions.district as d  on t2.district_id=d.district_id group by d.district_name",
                     },
                     "level": "district"
                 }
@@ -250,22 +243,22 @@ export const config = {
             "barChart": {
                 "isMultiBar": true,
                 "metricLabelProp": "Average Attendance",
-                "metricValueProp": "stt_avg",
+                "metricValueProp": "total_enrolment",
                 "yAxis": {
                     "title": "Attendance %"
                 },
                 "xAxis": {
-                    "title": " ",
-                    "label": "gender",
-                    "value": "gender",
+                    "title": "District Wise Status",
+                    "label": "district_name",
+                    "value": "district_name",
                     "metrics": [
                         {
-                            "label": "",
-                            "value": ""
+                            "label": "Total Entrolments",
+                            "value": "total_enrolment"
                         },
                         {
-                            "label": "",
-                            "value": ""
+                            "label": "Total Certifications",
+                            "value": "total_certification"
                         }
                     ]
                 }

@@ -1,16 +1,18 @@
 <div class="col-span-full tab-wrapper">
-            <div class="filter-row grid grid-cols-4">
-                <div class="col-span-2">
-                </div>
-                <div class="col-start-4 col-end-5 download-button">
-                    <app-download-button [data]="reportsData"></app-download-button>
-                </div>
-            </div>
-            <div class="reports-row">
-                <div class="row-wrapper grid grid-cols-2 gap-4">
-                
-                    <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('implementation_status', 'table')" id="table">
-                        <app-implementation-status #implementationStatus></app-implementation-status>
-                    </div></div>
+    <div class="filter-row grid grid-cols-4">
+        <div class="col-span-2">
+        </div>
+        <div class="col-start-4 col-end-5 download-button">
+            <app-download-button [data]="reportsData"></app-download-button>
+        </div>
+    </div>
+    <div class="reports-row">
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+
+            <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('implementation_status', 'table')"
+                id="table">
+                <app-implementation-status #implementationStatus></app-implementation-status>
             </div>
         </div>
+    </div>
+</div>
