@@ -20,7 +20,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Gender Wise Average Attendance";
+  fileName: string = "Gender-wise % Students Present";
   reportName: string = 'sas_gender_wise_average_attendance';
   filters: any = [];
   levels: any;

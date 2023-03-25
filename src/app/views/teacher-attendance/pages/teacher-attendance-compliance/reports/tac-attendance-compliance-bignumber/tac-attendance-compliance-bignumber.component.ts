@@ -16,7 +16,7 @@ export class TacAttendanceComplianceBignumberComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance"
+    reportName: "Average % Teachers Reporting Attendance"
   };
   minDate: any;
   maxDate: any;

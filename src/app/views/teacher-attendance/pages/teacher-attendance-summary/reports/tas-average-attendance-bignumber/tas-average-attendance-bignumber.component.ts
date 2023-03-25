@@ -18,7 +18,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average Attendance"
+    reportName: "Average % Teachers Present"
   };
   minDate: any;
   maxDate: any;

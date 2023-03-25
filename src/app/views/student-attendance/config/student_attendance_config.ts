@@ -1,6 +1,6 @@
 export const config = {
     sac_average_attendance_compliance: {
-        "label": "Student Attendance Compliance",
+        "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
         "filters": [
             {
@@ -114,7 +114,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Student Attendance Compliance",
+                        name: "Schools Reporting Student Attendance",
                         property: "compliance_percentage",
                         class: "text-center",
                         valueSuffix:"%",
@@ -148,7 +148,7 @@ export const config = {
     },
 
     sac_average_attendance_compliance_bignumber: {
-        "label": "Student Attendance Compliance",
+        "label": "Schools Reporting Student Attendance",
         "filters": [
             {
                 "name": "State",
@@ -243,7 +243,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Average Student Attendance Compliance",
+                "title": "Average % Schools Reporting Student Attendance",
                 "valueSuffix": '%',
                 "property": 'compliance_percentage',
             }
@@ -251,7 +251,7 @@ export const config = {
     },
 
     sac_attendance_compliance_rank: {
-        "label": "Student Attendance Compliance",
+        "label": "Schools Reporting Student Attendance",
         "defaultLevel": "district",
         "filters": [
             {
@@ -364,7 +364,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Student Attendance",
+                        name: "Schools Reporting Student Attendance",
                         property: "compliance_percentage",
                         valueSuffix: '%',
                         class: "text-center",
@@ -388,7 +388,7 @@ export const config = {
                         },
                     },
                     {
-                        name: "Rank in Average Attendance",
+                        name: "Rank in Schools Reporting Student Attendance",
                         property: "rank",
                         class: "text-center",
                         isHeatMapRequired: true,
@@ -401,7 +401,7 @@ export const config = {
     },
 
     sas_average_attendance: {
-        "label": "Student Attendance Summary",
+        "label": "Average Students Present",
         "defaultLevel": "state",
         "filters": [
             {
@@ -514,7 +514,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Student Attendance",
+                        name: "% Students Present",
                         property: "stt_avg",
                         class: "text-center",
                         valueSuffix: '%',
@@ -546,7 +546,7 @@ export const config = {
         }
     },
     sas_average_attendance_bignumber: {
-        "label": "Student Attendance Summary",
+        "label": "Average Students Present",
         "filters": [
             {
                 "name": "State",
@@ -653,7 +653,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Average Student Attendance Summary",
+                "title": "Average Average Students Present",
                 "valueSuffix": '%',
                 "property": 'stt_avg'
             }
@@ -756,7 +756,7 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Average Attendance",
+                "metricLabelProp": "% Students Present",
                 "metricValueProp": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %"
@@ -825,7 +825,7 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Average Attendance",
+                "metricLabelProp": "% Students Present",
                 "metricValueProp": "stt_avg",
                 "yAxis": {
                     "title": "Attendance %",
@@ -839,7 +839,7 @@ export const config = {
         }
     },
     sas_average_attendance_rank: {
-        "label": "Student Attendance Summary",
+        "label": "Average Students Present",
         "defaultLevel": "district",
         "filters": [
             {
@@ -952,7 +952,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Average Student Attendance",
+                        name: "% Students Present",
                         property: "stt_avg",
                         valueSuffix: '%',
                         class: "text-center",
@@ -976,7 +976,7 @@ export const config = {
                         },
                     },
                     {
-                        name: "Rank in Average Attendance",
+                        name: "Rank in % Students Present",
                         property: "rank",
                         class: "text-center",
                         isHeatMapRequired: true,
