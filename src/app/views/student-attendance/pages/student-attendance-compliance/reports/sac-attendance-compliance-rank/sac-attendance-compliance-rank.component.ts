@@ -37,6 +37,9 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getReportData();
+    if(Number(this.rbacDetails?.role > 4)){
+      this.title = 'Rank in % Students Reported'
+    }
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
@@ -104,6 +107,21 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let { table: { columns } } = options;
+      columns = columns.map((column: any) => {
+        if(column.name === 'Rank in Schools Reporting Student Attendance' && this.rbacDetails?.role > 4) {
+          column.name = 'Rank in % Students Reported'
+        }
+        else if(column.name === 'Rank in % Students Reported' && this.rbacDetails?.role <= 4) {
+          column.name = 'Rank in Schools Reporting Student Attendance'
+        }
+        else if(column.name === 'Schools Reporting Student Attendance' && this.rbacDetails?.role > 4) {
+          column.name = '% Students Reported'
+        }
+        else if(column.name === '% Students Reported' && this.rbacDetails?.role <= 4) {
+          column.name = 'Schools Reporting Student Attendance'
+        }
+        return column
+      })
       this.tableReportData = {
         data: rows.map(row => {
           if (this.minDate !== undefined && this.maxDate !== undefined) {
