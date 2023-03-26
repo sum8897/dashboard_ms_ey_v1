@@ -58,6 +58,7 @@ function initConfig(config: AppConfig){
     })
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: MetadataInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     AppConfig ,{ provide: APP_INITIALIZER,multi: true, useFactory: initConfig, deps: [AppConfig]}
   ],

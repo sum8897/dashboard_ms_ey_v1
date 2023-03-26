@@ -7,6 +7,8 @@ import { Title } from '@angular/platform-browser';
 import { AppConfig } from './app.config';
 import { HttpClient } from '@angular/common/http';
 declare const gtag: Function; // <------------Important: the declartion for gtag is required!
+declare var dataLayer: Array<any>;
+
 
 @Component({
   selector: 'app-root',
@@ -22,21 +24,13 @@ export class AppComponent {
     translate.setDefaultLang('en');
     translate.use('en');
     /** START : Code to Track Page View using gtag.js */
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      gtag('event', 'page_view', {
-        page_path: event.urlAfterRedirects
-      })
-    })
 
     this.http.get('assets/config/globalconfig.json').pipe(map(data => {
       return data;
-    })).subscribe((data) => {
-      this.grabTheTrackIds(data)
+    })).subscribe(async (data) => {
+     await this.grabTheTrackIds(data)
     });
-
-    /** START : Code to Track Page View using gtag.js */
+    
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
@@ -44,7 +38,6 @@ export class AppComponent {
         page_path: event.urlAfterRedirects
       })
     })
-    /** END : Code to Track Page View  using gtag.js */
 
     //Add dynamic title for selected pages - Start
     router.events.subscribe(event => {
@@ -93,15 +86,24 @@ export class AppComponent {
     }
   }
 
-  grabTheTrackIds(trackIds) {
+ async grabTheTrackIds(trackIds) {
     for (const [key, value] of Object.entries(trackIds)) {
       const gaTrackId = value;
       let customGtagScriptEle = document.createElement('script');
       customGtagScriptEle.async = true;
       customGtagScriptEle.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaTrackId;
       document.head.prepend(customGtagScriptEle);
-      gtag('config', gaTrackId, { send_page_view: false });
+  
+      customGtagScriptEle.onload = () => {
+        window['gtag'] = function() {
+          dataLayer.push(arguments);
+        };
+        window['dataLayer'] = window['dataLayer'] || [];
+        gtag('js', new Date());
+        gtag('config', gaTrackId, { send_page_view: false });
+      }
     }
   }
   
+
 }

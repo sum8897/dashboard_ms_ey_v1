@@ -13,7 +13,8 @@ export class FooterComponent implements OnInit {
   constructor(private readonly _dataSourceMetadataService: DatasourceMetadataService) {
     this._dataSourceMetadataService.metadata.subscribe(metadata => {
       if (metadata) {
-        this.lastModified = metadata.lastModified;
+        this.lastModified = metadata;
+        // this.lastModified = metadata.lastModified;
       } else {
         this.lastModified = undefined;
       }

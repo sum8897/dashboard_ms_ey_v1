@@ -3,78 +3,26 @@ export const config = {
         {
             "label": "District Wise Performance",
             "name": "Metric",
-            "labelProp": "metric",
-            "valueProp": "metric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: 'ptr',
-                    label: 'PTR'
-                },
-                {
-                    value: '% schools having toilet',
-                    label: '% Schools Having Toilet'
-                }
-
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
         {
             "label": "Correlation",
             "name": "First Metric",
-            "labelProp": "firstMetric",
-            "valueProp": "firstMetric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: '%goverment aided schools recieved textbook',
-                    label: '%goverment aided schools recieved textbook'
-                },
-                {
-                    value: '%schools having drinking water',
-                    label: '%schools having drinking water'
-                },
-                {
-                    value: '%schools having electricity',
-                    label: '%schools having electricity'
-                },
-                {
-                    value: '%schools having toilet',
-                    label: '%schools having toilet'
-                },
-                {
-                    value: '%schools having ramp',
-                    label: '%schools having ramp'
-                }
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
         {
             "label": "Correlation",
-            "name": "Srcond Metric",
-            "labelProp": "secondMetric",
-            "valueProp": "secondMetric",
+            "name": "Second Metric",
+            "labelProp": "category_name",
+            "valueProp": "category_name",
             "id": "metric",
-            "values": [
-                {
-                    value: '%goverment aided schools recieved textbook',
-                    label: '%goverment aided schools recieved textbook'
-                },
-                {
-                    value: '%schools having drinking water',
-                    label: '%schools having drinking water'
-                },
-                {
-                    value: '%schools having electricity',
-                    label: '%schools having electricity'
-                },
-                {
-                    value: '%schools having toilet',
-                    label: '%schools having toilet'
-                },
-                {
-                    value: '%schools having ramp',
-                    label: '%schools having ramp'
-                }
-            ]
+            "query": "select category_name from dimensions.categoryudise"
         },
     ],
     district_wise_performance: {
@@ -88,7 +36,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map": "select * from dimensions.district"
+                            "map": "select t2.district_name, t1.district_id , t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t1.district_id, t2.district_name,t1.category_name"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -99,21 +47,23 @@ export const config = {
         {
             "map":
             {
+                "metricLabelProp": "category_name",
+                "metricValueProp": "percentage",
+                "groupByColumn": "district_id",
                 "metricFilterNeeded": true,
-                "indicator": "",
-                "indicatorType": "",
-                "legend":
-                {
-                    "title": ""
-                },
-                "tooltipMetrics":
-                    [
-                        {
-                            "valuePrefix": "",
-                            "value": "",
-                            "valueSuffix": "\n"
-                        }
-                    ]
+                "legend": { "title": "District Wise Performance" },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "",
+                        "value": "category_name",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
@@ -129,7 +79,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "barChart": "select * from dimensions.district"
+                            "barChart": "select t2.district_name, t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t2.district_name,t1.category_name"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -141,8 +91,8 @@ export const config = {
                 "isCorrelation": true,
                 "MultibarGroupByNeeded": false,
                 "isMultibar": true,
-                "metricLabel": "",
-                "metricValue": "",
+                "metricLabelProp": "",
+                "metricValueProp": "",
                 "yAxis": {
                     "title": ""
                 },
@@ -193,9 +143,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total Students','PTR','% schools with toilets','% schools having electricity','% schools having drinking water'],
-                "valueSuffix": ['','','%','%','%'],
-                "property": ['total_students','ptr','schs_with_toilet','schs_having_electricity','schs_having_water']
+                "title": ['Total Students', 'PTR', '% schools with toilets', '% schools having electricity', '% schools having drinking water'],
+                "valueSuffix": ['', '', '%', '%', '%'],
+                "property": ['total_students', 'ptr', 'schs_with_toilet', 'schs_having_electricity', 'schs_having_water']
             }
         }
     }

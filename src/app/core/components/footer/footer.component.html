@@ -2,14 +2,15 @@
 <section class="text-white app-footer-bar">
     
     <div class="footer">
-        <img src="../../../../assets/images/NIC.png" alt="NIC Image">
+        <p class="data xmd:col-span-4 xmd:py-4 py-1 px-2 col-span-full text-center" *ngIf="lastModified">Data updated as of {{ lastModified | date: 'dd MMM, YYYY' }}</p>
+
+        <!-- <img src="../../../../assets/images/NIC.png" alt="NIC Image">
         <div class="grid grid-cols-12">
-            <!-- <p class="data xmd:col-span-4 xmd:py-4 py-1 px-2 col-span-full" *ngIf="lastModified">Data updated as of {{ lastModified | date: 'dd MMM, YYYY' }}</p> -->
             <div class="copyright pt-3 col-span-full text-center">
                 Copyright ©  2022
                 National Information Centre All Rights Reserved
             </div>
-        </div>
+        </div> -->
             
     </div>
 </section>

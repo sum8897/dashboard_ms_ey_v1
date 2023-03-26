@@ -17,12 +17,13 @@ import { DistrictWiseStatusComponent } from './pages/district-wise-status-tab/re
 import { CourseWiseStatusComponent } from './pages/course-wise-status-tab/reports/course-wise-status/course-wise-status.component';
 import { PotentialBaseCertificatesComponent } from './pages/potential-base-tab/reports/potential-base-certificates/potential-base-certificates.component';
 import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { NishthaBignumberMetricsComponent } from './pages/implementation-status-tab/reports/nishtha-bignumber-metrics/nishtha-bignumber-metrics.component';
 
 @NgModule({
 declarations: [
     NishthaComponent,
     ImplementationStatusTabComponent,CourseAndMediumStatusTabComponent,CourseWiseStatusTabComponent,PotentialBaseTabComponent,DistrictWiseStatusTabComponent,
-    ImplementationStatusComponent,CourseAndMediumStatusComponent,PotentialBaseComponent,DistrictWiseStatusComponent,CourseWiseStatusComponent, PotentialBaseCertificatesComponent
+    ImplementationStatusComponent,CourseAndMediumStatusComponent,PotentialBaseComponent,DistrictWiseStatusComponent,CourseWiseStatusComponent, PotentialBaseCertificatesComponent, NishthaBignumberMetricsComponent
 ],
 imports: [
     DashletModule.forRoot({

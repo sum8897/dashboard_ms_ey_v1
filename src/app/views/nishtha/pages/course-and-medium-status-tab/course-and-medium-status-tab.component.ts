@@ -27,61 +27,61 @@ export class CourseAndMediumStatusTabComponent implements OnInit, AfterViewInit 
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-@ViewChild('courseAndMediumStatus') courseAndMediumStatus: CourseAndMediumStatusComponent;
-        
-constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
-    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
-        this.rbacDetails = rbacDetails;
-    })
+    matLabel: any = 'Courses and Medium Status'
+    @ViewChild('courseAndMediumStatus') courseAndMediumStatus: CourseAndMediumStatusComponent;
+
+    constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
+        this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+            this.rbacDetails = rbacDetails;
+        })
     }
 
     async ngOnInit(): Promise<void> {
-    // this.renderReports();
+        // this.renderReports();
     }
 
     async ngAfterViewInit(): Promise<void> {
-    if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
-        this.courseAndMediumStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+        if (this.hasCommonFilters) {
+            this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
+            this.courseAndMediumStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
         }
-    if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.defaultSelectedDays;
-        let startDate = new Date();
-        startDate.setDate(days);
-        this.courseAndMediumStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
+            let endDate = new Date();
+            let days = endDate.getDate() - this.defaultSelectedDays;
+            let startDate = new Date();
+            startDate.setDate(days);
+            this.courseAndMediumStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
     checkReport(key: string, reportType: string): Boolean {
-    let reportConfig = config;
-    let flag = false;
-    reportConfig[key]?.filters?.forEach((filter: any) => {
-        if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
-        flag = true
-        }
-    })
-    return flag
+        let reportConfig = config;
+        let flag = false;
+        reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
+                flag = true
+            }
+        })
+        return flag
     }
 
     csvDownload(csvData: any) {
-    if (csvData) {
-        this.reportsData.push(csvData)
-    }
+        if (csvData) {
+            this.reportsData.push(csvData)
+        }
     }
 
     filtersUpdated(filters: any) {
-    this.reportsData = [];
-    this.courseAndMediumStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
-        }
+        this.reportsData = [];
+        this.courseAndMediumStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    }
 
     timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    if (event?.startDate !== null && event?.endDate !== null) {
-        this.reportsData = [];
-        this.courseAndMediumStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+        this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+        if (event?.startDate !== null && event?.endDate !== null) {
+            this.reportsData = [];
+            this.courseAndMediumStatus?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
         }
     }
 }
-        

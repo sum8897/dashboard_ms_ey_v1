@@ -9,6 +9,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { ConfigService } from 'src/app/core/services/config/config.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
+import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { parseRbacFilter } from 'src/app/utilities/QueryBuilder';
 import { environment } from 'src/environments/environment';
 
@@ -90,24 +91,76 @@ export class DashboardComponent implements OnInit {
         let metrics: any = []
         let reports = Object.keys(programConfig)
         for (let i = 0; i < reports.length; i++) {
-          if (reports[i].indexOf('bignumber') > -1) {
+          if (metrics.length >= 2) {
+            break;
+          }
+          if (reports[i].indexOf('bignumber') > -1 || reports[i].indexOf('metrics') > -1) {
             let reportFilters = programConfig[reports[i]]?.filters
-            for (let j = 0; j < reportFilters.length; j++) {
-              if (Number(reportFilters[j].hierarchyLevel) === Number(rbacDetails?.role)) {
-                let query = parseRbacFilter(reportFilters[j]?.actions?.queries?.bigNumber, rbacDetails)
-                let res = await this._wrapperService.runQuery(query)
-                if (res) {
-                  let metricData = {
-                    value: res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property] !== null ? String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix] : res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property],
-                    name: programConfig[reports[i]]?.options?.bigNumber?.title
-                  }
-                  if(metricData.value !== null && metricData !== undefined)
-                  {
-                    metrics.push(metricData)
+            let currentLevelFilter = programConfig[reports[i]]?.filters.filter(fil => fil.hierarchyLevel == Number(rbacDetails?.role))[0]
+            // for (let j = 0; j < reportFilters.length; j++) {
+            //   if (Number(reportFilters[j].hierarchyLevel) === Number(rbacDetails?.role)) {
+            //     if (reportFilters[j]?.actions?.queries?.bigNumber) {
+            //       let query = parseRbacFilter(reportFilters[j]?.actions?.queries?.bigNumber, rbacDetails)
+            //       let res = await this._wrapperService.runQuery(query)
+            //       if (res && res.length > 0) {
+            //         let metricData = {
+            //           value: res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property] !== null ? String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix] : res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property],
+            //           name: programConfig[reports[i]]?.options?.bigNumber?.title
+            //         }
+            //         if (metricData.value !== null && metricData !== undefined) {
+            //           metrics.push(metricData)
+            //         }
+            //       }
+            //     }
+            //     else {
+            //       let metricQueries = reportFilters[j]?.actions?.queries;
+            //       let metricQueriesKeys = Object.keys(reportFilters[j]?.actions?.queries);
+            //       for (let k = 0; k < metricQueriesKeys.length; k++) {
+            //         if (metrics.length >= 2) {
+            //           break;
+            //         }
+            //         else if (metricQueriesKeys[k].indexOf('bigNumber')) {
+            //           let query = parseRbacFilter(metricQueries[metricQueriesKeys[k]], rbacDetails)
+            //           let res = await this._wrapperService.runQuery(query)
+            //           if (res && res.length > 0) {
+            //             let metricData = {
+            //               value: res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property] !== null ? String(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix] : res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property],
+            //               name: programConfig[reports[i]]?.options?.bigNumber?.title
+            //             }
+            //             if (metricData.value !== null && metricData !== undefined) {
+            //               metrics.push(metricData)
+            //             }
+            //           }
+            //         }
+            //       }
+            //     }
+
+            //   }
+            // }
+            if (currentLevelFilter !== undefined) {
+              let metricQueries = currentLevelFilter?.actions?.queries;
+              let metricQueriesKeys = Object.keys(metricQueries);
+              for (let k = 0; k < metricQueriesKeys?.length; k++) {
+                if (metrics.length >= 2) {
+                  break;
+                }
+                else if (metricQueriesKeys[k].indexOf('bigNumber') > -1) {
+                  let query = parseRbacFilter(metricQueries[metricQueriesKeys[k]], rbacDetails)
+                  let res = await this._wrapperService.runQuery(query)
+                  if (res && res.length > 0 && (Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]] : res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) !== null) {
+                    let metricData = {
+                      value: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k]] : String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
+                      name: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.title) ? programConfig[reports[i]]?.options?.bigNumber?.title[k] : programConfig[reports[i]]?.options?.bigNumber?.title
+                    }
+                    if (metricData.value !== null && metricData !== undefined) {
+                      metrics.push(metricData)
+                      // console.log(metricData.value)
+                    }
                   }
                 }
               }
             }
+
           }
         }
         resolve(metrics)

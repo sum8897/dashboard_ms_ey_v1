@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { getBarDatasetConfig, getChartJSConfig } from '../config/ChartjsConfig';
 import { CommonService } from './common/common.service';
 import * as _ from 'lodash';
@@ -17,9 +16,9 @@ export class DataService {
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         let { table: { columns, groupByNeeded, metricLabelProp, metricValueProp } } = options;
-        let newColumns:any =[];
+        let newColumns: any = [];
         if (groupByNeeded) {
-          let {result, newColumnsProps} = this.tableGroupBy(rows, columns.filter((column: any) => !column?.groupByNeeded || column?.groupByNeeded === undefined).map((column) => column?.property), metricLabelProp, metricValueProp)
+          let { result, newColumnsProps } = this.tableGroupBy(rows, columns.filter((column: any) => !column?.groupByNeeded || column?.groupByNeeded === undefined).map((column) => column?.property), metricLabelProp, metricValueProp)
           rows = result
           let transposeColumn = columns.filter(col => col.property === metricLabelProp)[0]
           newColumnsProps.forEach((newColProp) => {
@@ -31,7 +30,7 @@ export class DataService {
           })
           columns = columns.concat(newColumns)
         }
-        
+
         let reportData = {
           data: rows.map(row => {
             columns.forEach((col: any) => {
@@ -93,11 +92,11 @@ export class DataService {
 
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
-      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, metricLabel, metricValue } } = options;
+      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         if (MultibarGroupByNeeded) {
-          rows = this.multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+          rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
         }
         let reportData = {
           values: rows
@@ -115,12 +114,12 @@ export class DataService {
                   if (isMultibar) {
                     data.datasets.forEach((dataset: any, index: any) => {
                       if (index === tooltipItem.datasetIndex) {
-                        multistringText.push(`${dataset.label} : ${tooltipItem.value}%`)
+                        multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                       }
                     })
                   }
                   else {
-                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                   }
                   return multistringText;
                 }
@@ -158,7 +157,7 @@ export class DataService {
   }
 
   getDatasets(barChartOptions: any, filters: any) {
-    let { xAxis, isCorrelation, isMultibar, metricLabel, metricValue } = barChartOptions;
+    let { xAxis, isCorrelation, isMultibar, metricLabelProp, metricValueProp } = barChartOptions;
     if (isCorrelation) {
       return getBarDatasetConfig(
         filters.map((filter: any) => {
@@ -172,7 +171,7 @@ export class DataService {
     }
     else if (isMultibar) {
       return getBarDatasetConfig(
-        xAxis?.metrics.forEach((metric: any) => {
+        xAxis?.metrics.map((metric: any) => {
           return {
             dataExpr: metric.value,
             label: metric.label
@@ -182,7 +181,7 @@ export class DataService {
     }
     else {
       return getBarDatasetConfig([{
-        dataExpr: metricValue, label: metricLabel
+        dataExpr: metricValueProp, label: metricLabelProp
       }])
     }
   }
@@ -192,13 +191,15 @@ export class DataService {
       let reportData;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics } } = options ?? {};
+        let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
         let metricFilter;
         if (metricFilterNeeded) {
           metricFilter = filters.filter((filter: any) => {
             return filter.filterType === 'metric'
           })[0]
+          rows = this.mapGroupBy(rows, groupByColumn, metricLabelProp, metricValueProp, tooltipMetrics, metricFilter.value)
         }
+
         reportData = {
           data: rows.map(row => {
             row = {
@@ -206,7 +207,7 @@ export class DataService {
               Latitude: row['latitude'],
               Longitude: row['longitude'],
               indicator: metricFilter ? Number(row[metricFilter.value]) : Number(row[indicator]),
-              tooltip: this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
+              tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
 
             return row;
@@ -227,7 +228,7 @@ export class DataService {
     })
   }
 
-  multibarGroupBy(data: any, groupByLabel: any, metricLabel: string, metricValue: string) {
+  multibarGroupBy(data: any, groupByLabel: any, metricLabelProp: string, metricValueProp: string) {
     let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
       data = {
         [groupByLabel]: key
@@ -235,7 +236,7 @@ export class DataService {
       objs?.forEach((obj: any) => {
         data = {
           ...data,
-          [obj[metricLabel]]: obj[metricValue]
+          [obj[metricLabelProp]]: obj[metricValueProp]
         }
       });
       return data;
@@ -243,12 +244,41 @@ export class DataService {
     return result;
   }
 
-  tableGroupBy(data: any, groupByLabel: any, metricLabel: string, metricValue: string) {
+  mapGroupBy(data: any, groupByLabel: any, metricLabelProp: string, metricValueProp: string, tooltipMetrics: any, metricFilterValue: any) {
+    let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
+      data = {
+        [groupByLabel]: key,
+      }
+      objs?.forEach((obj: any, index: any) => {
+        let modifiedTooltipMetrics = tooltipMetrics.filter(metric => metricLabelProp === metric.value).map((metric: any) => {
+          return {
+            ...metric,
+            valuePrefix: obj[metricLabelProp] + ': ',
+            value: obj[metricLabelProp]
+          }
+        })
+        data = {
+          ...data,
+          ...obj,
+          district_code: obj['district_id'] ? Number(obj['district_id']) : null,
+          [obj[metricLabelProp]]: obj[metricValueProp]
+        }
+        if (index === 0) {
+          data['tooltip'] = this._wrapperService.constructTooltip(tooltipMetrics.filter(metric => metricLabelProp !== metric.value), data, metricFilterValue)
+        }
+        data['tooltip'] += this._wrapperService.constructTooltip(modifiedTooltipMetrics, data, metricFilterValue)
+      });
+      return data;
+    }).value()
+    return result;
+  }
+
+  tableGroupBy(data: any, groupByLabel: any, metricLabelProp: string, metricValueProp: string) {
     let newColumnsProps = [];
     let result = _.chain(data).groupBy(Array.isArray(groupByLabel) ? (data) => {
       let combinedLabel: string = '';
       groupByLabel.forEach((label) => {
-        combinedLabel+='_' + data[label]
+        combinedLabel += '_' + data[label]
       })
       return combinedLabel
     } : groupByLabel).map((objs, key) => {
@@ -257,14 +287,14 @@ export class DataService {
         tempData = {
           ...tempData,
           ...obj,
-          [obj[metricLabel]]: obj[metricValue]
+          [obj[metricLabelProp]]: obj[metricValueProp]
         }
-        if(!newColumnsProps.includes(obj[metricLabel])) {
-          newColumnsProps.push(obj[metricLabel])
+        if (!newColumnsProps.includes(obj[metricLabelProp])) {
+          newColumnsProps.push(obj[metricLabelProp])
         }
       });
       return tempData;
     }).value()
-    return {result,newColumnsProps};
+    return { result, newColumnsProps };
   }
 }

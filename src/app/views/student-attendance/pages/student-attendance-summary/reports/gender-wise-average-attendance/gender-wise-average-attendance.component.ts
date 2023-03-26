@@ -20,7 +20,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Gender Wise Average Attendance";
+  fileName: string = "Gender-wise % Students Present";
   reportName: string = 'sas_gender_wise_average_attendance';
   filters: any = [];
   levels: any;
@@ -85,11 +85,11 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
-    let { barChart: { yAxis, xAxis, isMultibar, metricLabel, metricValue } } = options;
+    let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       // if(isMultibar){
-      //   rows = multibarGroupBy(rows, xAxis.label, metricLabel, metricValue);
+      //   rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       // }
       this.tableReportData = {
         values: rows
@@ -98,7 +98,7 @@ export class GenderWiseAverageAttendanceComponent implements OnInit {
         labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(
         [{
-          dataExpr: metricValue, label: metricLabel
+          dataExpr: metricValueProp, label: metricLabelProp
         }]),
     
         options: {

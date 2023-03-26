@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ResponseType } from 'src/app/core/models/IResponseType';
 import { environment } from 'src/environments/environment';
+import { programFolderNames, stateProgramsFolderNames } from '../../config/configMapping';
 import { IReportDataPayload } from '../../models/IReportDataPayload';
 
 @Injectable({
@@ -30,8 +31,9 @@ export class CommonService {
     return this._http.get<ResponseType<any>>(`${environment.apiURL}/generatejwt`);
   } 
 
-  getMetaData(ProgramName,storageServiceType): Observable<ResponseType<any>> {
-    return this._http.get<ResponseType<any>>(`${environment.apiURL}/lastmodified?ProgramName=${ProgramName}&storageServiceType=${storageServiceType}`);
+  getMetaData(programName:any): Observable<ResponseType<any>> {
+    let ProgramFolderName = stateProgramsFolderNames[programName] === '' ? programFolderNames[programName] : stateProgramsFolderNames[programName]
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/lastmodified?ProgramName=${ProgramFolderName}`);
   }
   
 
