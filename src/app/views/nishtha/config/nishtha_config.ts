@@ -1,11 +1,12 @@
 export const config = {
     filters: [
         {
-            "label": "District wise Status",
+            "label": "District Wise Status",
             "name": "Program",
             "labelProp": "program_name",
             "valueProp": "program_name",
-            "id": "metric",
+            "id": "program_name",
+            "tableAlias": "t1",
             "query": "select program_name from dimensions.programnishtha"
         },
         // {
@@ -111,7 +112,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "",
+                        "barChart": "select t1.program_name, round(cast(avg(t1.sum) as numeric),2) as target_achieved, round(cast(avg(t1.sum) as numeric) + (cast(avg(t2.sum) as numeric)),2) as total_target from datasets.nishtha_perc_target_achieved_enrolment_programnishtha as t1 join datasets.nishtha_perc_target_remaining_enrolment_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name",
                     },
                     "level": "district"
                 }
@@ -119,26 +120,25 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultiBar": true,
-                "metricLabelProp": "Average Attendance",
-                "metricValueProp": "stt_avg",
+                "isMultibar": true,
+                "valueSuffix": "%",
                 "yAxis": {
-                    "title": "Programs"
+                    "title": "% Target Achieved-Enrolment and \n% Total Target-Enrolment"
                 },
                 "xAxis": {
-                    "title": " ",
-                    "label": "gender",
-                    "value": "gender",
-                    // "metrics": [
-                    //     {
-                    //         "label": "",
-                    //         "value": ""
-                    //     },
-                    //     {
-                    //         "label": "",
-                    //         "value": ""
-                    //     }
-                    // ]
+                    "title": " Programs",
+                    "label": "program_name",
+                    "value": "program_name",
+                    "metrics": [
+                        {
+                            "label": "% Target Achieved-Enrolment",
+                            "value": "target_achieved"
+                        },
+                        {
+                            "label": "% Total Target-Enrolment",
+                            "value": "total_target"
+                        }
+                    ]
                 }
             }
         }
@@ -154,7 +154,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "",
+                        "barChart": "select t1.program_name, round(cast(avg(t1.sum) as numeric),2) as target_achieved, round(cast(avg(t1.sum) as numeric) + (cast(avg(t2.sum) as numeric)),2) as total_target from datasets.nishtha_perc_target_achieved_certificates_programnishtha as t1 join datasets.nishtha_perc_target_remaining_certificates_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name",
                     },
                     "level": "district"
                 }
@@ -162,24 +162,23 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultiBar": true,
-                "metricLabelProp": "Average Attendance",
-                "metricValueProp": "stt_avg",
+                "isMultibar": true,
+                "valueSuffix": "%",
                 "yAxis": {
-                    "title": "Attendance %"
+                    "title": "% Target Achieved-Certificates and % Total Target-Certificates"
                 },
                 "xAxis": {
-                    "title": " ",
-                    "label": "gender",
-                    "value": "gender",
+                    "title": " Programs",
+                    "label": "program_name",
+                    "value": "program_name",
                     "metrics": [
                         {
-                            "label": "",
-                            "value": ""
+                            "label": "% Target Achieved-Certificates",
+                            "value": "target_achieved"
                         },
                         {
-                            "label": "",
-                            "value": ""
+                            "label": "% Total Target-Certificates",
+                            "value": "total_target"
                         }
                     ]
                 }
@@ -239,7 +238,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select d.district_name , sum (t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_total_enrolment_district as t1 join datasets.nishtha_total_certification_district as t2 on t1.district_id = t2.district_id join dimensions.district as d  on t2.district_id=d.district_id group by d.district_name",
+                        "barChart": "select d.district_name , sum(t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_consumptionenrolment_district0programnishtha as t1 join datasets.nishtha_consumptioncertification_district0programnishtha as t2 on t1.district_id = t2.district_id join dimensions.district as d  on t2.district_id=d.district_id group by d.district_name",
                     },
                     "level": "district"
                 }

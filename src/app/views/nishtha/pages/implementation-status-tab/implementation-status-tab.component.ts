@@ -45,7 +45,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
-        this.implementationStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+        this.implementationStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
@@ -75,7 +75,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.implementationStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    this.implementationStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
 
     timeSeriesUpdated(event: any): void {

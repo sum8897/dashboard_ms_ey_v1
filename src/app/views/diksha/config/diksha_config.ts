@@ -1,8 +1,17 @@
 export const config = {
     filters: [
+        {   
+            "label": "ETB Coverage Status",
+            "name":"Medium",
+            "id": "medium",
+            "labelProp": "medium",
+            "valueProp": "medium",
+            "query": "select medium from dimensions.medium ORDER BY id ASC "
+        },
         {
-            "name": "ETB Coverage Status",
-            "id": "metric",
+            "label": "Content Coverage on QR",
+            "name":"Medium",
+            "id": "medium",
             "labelProp": "medium",
             "valueProp": "medium",
             "query": "select medium from dimensions.medium ORDER BY id ASC "
@@ -10,14 +19,14 @@ export const config = {
     ],
 
     etb_coverage_status_bignumber: {
-        "label": "",
+        "label": "ETB Coverage Status",
         "filters": [
             {
                 "name": "State",
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber": ""
+                        "bigNumber": " select round(cast(avg(sum) as numeric),2) as total_coverage from datasets.diksha_linkedqrcount_textbookdiksha0grade0subject0medium"
                     },
                     "level": "District",
                     "nextLevel": "Block"
@@ -26,8 +35,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "valueSuffix": "",
-                "property": ""
+                "title":"Overall ETB Coverage",
+                "valueSuffix": "%",
+                "property": "total_coverage"
             }
         }
     },
@@ -39,7 +49,64 @@ export const config = {
             "hierarchyLevel": "1",
             "actions": {
                 "queries": {
-                    "bigNumber": ""
+                    "table": "select subject_diksha as subject , grade_diksha as class , round(cast(sum(sum) as numeric),2) as performance from datasets.diksha_linkedqrcount_textbookdiksha0grade0subject0medium as t1 group by subject_diksha ,grade_diksha "
+                },
+                "level": "District",
+                "nextLevel": "Block"
+            }
+        }],
+        "options": {
+            "table": {
+                "groupByNeeded": true,
+                "metricLabelProp": "class",
+                "metricValueProp": "performance",
+                "columns": [
+                  
+                    {
+                        name: "Subject",
+                        property: "subject",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Class",
+                        groupByNeeded: true,
+                        property: "class",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#b2d58f",
+                                    breakPoint: 75
+                                },
+                                {
+                                    color: "#FFFBD6",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFD6D6",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    }
+                ],
+                "sortByProperty": "subject",
+                "sortDirection": "asc"
+            }
+        }
+    },
+
+    content_coverage_bignumber:
+    {
+        "label": "Content Coverage on QR",
+        "filters": [{
+            "name": "State",
+             "hierarchyLevel": "1",
+            "actions": {
+                "queries": {
+                    "bigNumber": " select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium "
                 },
                 "level": "District",
                 "nextLevel": "Block"
@@ -47,30 +114,9 @@ export const config = {
         }],
         "options": {
             "bigNumber": {
-                "valueSuffix": "",
-                "property": ""
-            }
-        }
-    },
-
-    content_coverage_bignumber:
-    {
-        "label": "----- to be filled -----",
-        "defaultLevel": "----- to be filled -----",
-        "filters": [{
-            "name": "", "hierarchyLevel": "",
-            "actions": {
-                "queries": {
-                    "bigNumber": ""
-                },
-                "level": "",
-                "nextLevel": ""
-            }
-        }],
-        "options": {
-            "bigNumber": {
-                "valueSuffix": "",
-                "property": ""
+                "title":"Content Coverage on QR",
+                "valueSuffix": "%",
+                "property": "content_coverage"
             }
         }
     },
@@ -82,48 +128,83 @@ export const config = {
             "hierarchyLevel": "1",
             "actions": {
                 "queries": {
-                    "bigNumber": ""
+                    "table": "select subject_diksha as subject , grade_diksha as class , round(cast(avg(sum) as numeric),2) as performance from datasets.diksha_contentqrcode_textbookdiksha0grade0subject0medium as t1 group by subject_diksha ,grade_diksha "
                 },
-                "level": "district",
-                "nextLevel": "block"
+                "level": "District",
+                "nextLevel": "Block"
             }
         }],
         "options": {
-            "bigNumber": {
-                "valueSuffix": "",
-                "property": ""
+            "table": {
+                "groupByNeeded": true,
+                "metricLabelProp": "class",
+                "metricValueProp": "performance",
+                "columns": [
+                  
+                    {
+                        name: "Subject",
+                        property: "subject",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Class",
+                        groupByNeeded: true,
+                        property: "class",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#b2d58f",
+                                    breakPoint: 75
+                                },
+                                {
+                                    color: "#FFFBD6",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFD6D6",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    }
+                ],
+                "sortByProperty": "subject",
+                "sortDirection": "asc"
             }
         }
     },
 
-    learning_sessions: {
-        "label": "Learning Sessions",
-        "filters": [{
-            "name": "State",
-            "hierarchyLevel": "1",
-            "actions": {
-                "queries": {
-                    "barChart": ""
-                },
-                "level": "district",
-                "nextLevel": "block"
-            }
-        }],
-        "options": {
-            "barChart": {
-                "metricLabelProp": "",
-                "metricValueProp": "",
-                "yAxis": {
-                    "title": ""
-                },
-                "xAxis": {
-                    "title": "",
-                    "label": "",
-                    "value": ""
-                }
-            }
-        }
-    },
+    // learning_sessions: {
+    //     "label": "Learning Sessions",
+    //     "filters": [{
+    //         "name": "State",
+    //         "hierarchyLevel": "1",
+    //         "actions": {
+    //             "queries": {
+    //                 "barChart": ""
+    //             },
+    //             "level": "district",
+    //             "nextLevel": "block"
+    //         }
+    //     }],
+    //     "options": {
+    //         "barChart": {
+    //             "metricLabelProp": "",
+    //             "metricValueProp": "",
+    //             "yAxis": {
+    //                 "title": ""
+    //             },
+    //             "xAxis": {
+    //                 "title": "",
+    //                 "label": "",
+    //                 "value": ""
+    //             }
+    //         }
+    //     }
+    // },
 
     learning_sessions_on_potential_users: {
         "label": "Learning Sessions on Potential Users",
@@ -133,7 +214,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "map": " "
+                        "map": "select t2.state_name  ,sum(t1.sum) as users from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t2.state_name "
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -143,19 +224,54 @@ export const config = {
         "options": {
             "map": {
                 "metricFilterNeeded": false,
-                "indicator": "",
-                "indicatorType": "",
+                "indicator": "users",
                 "legend": {
-                    "title": ""
+                    "title": "Learning Sessions on Potential Users"
                 },
                 "tooltipMetrics": [
                     {
-                        "valuePrefix": "",
-                        "value": "",
+                        "valuePrefix": "State/ UT Name",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Learning Sessions on Potential Users",
+                        "value": "users",
                         "valueSuffix": "\n"
                     }
                 ]
             }
         }
     },
+
+    diksha_metrics: {
+        "label": "ETB Coverage Status",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_etbs from datasets.diksha_resourcecount_textbookdiksha0grade0subject0medium",
+                        "bigNumber2": "select sum(sum) as total_qr_codes from datasets.diksha_totalqrcodes_textbookdiksha0grade0subject0medium",
+                        "bigNumber3": "select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium",
+                        "bigNumber4":""
+                    },
+                    "level": "district"
+                }
+            },
+        ],
+        "options": {
+            "bigNumber": {
+                "title": ['Total ETBs','Total QR Codes','Content Coverage on QR','Total Content'],
+                "valueSuffix": ['','','%',''],
+                "property": ['total_etbs','total_qr_codes','content_coverage','']
+            }
+        }
+    }
+
+
+
 }

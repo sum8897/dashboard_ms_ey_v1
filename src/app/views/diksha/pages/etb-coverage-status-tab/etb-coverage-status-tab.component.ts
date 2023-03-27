@@ -28,67 +28,71 @@ export class EtbCoverageStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLabel:"ETB Coverage Status"
-@ViewChild('etbCoverageStatusBignumber') etbCoverageStatusBignumber: EtbCoverageStatusComponentBignumber;
-        @ViewChild('etbCoverageStatus') etbCoverageStatus: EtbCoverageStatusComponent;
-        
-constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
-    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
-        this.rbacDetails = rbacDetails;
-    })
+    bigNumberMetrics: any = [];
+    matLabel:any = "ETB Coverage Status"
+    @ViewChild('etbCoverageStatusBignumber') etbCoverageStatusBignumber: EtbCoverageStatusComponentBignumber;
+    @ViewChild('etbCoverageStatus') etbCoverageStatus: EtbCoverageStatusComponent;
+
+    constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
+        this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+            this.rbacDetails = rbacDetails;
+        })
     }
 
     async ngOnInit(): Promise<void> {
-    // this.renderReports();
+        // this.renderReports();
     }
 
     async ngAfterViewInit(): Promise<void> {
-    if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
-        this.etbCoverageStatusBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
-        this.etbCoverageStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
+        if (this.hasCommonFilters) {
+            this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
+            this.etbCoverageStatusBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+            this.etbCoverageStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
-    if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.defaultSelectedDays;
-        let startDate = new Date();
-        startDate.setDate(days);
-        this.etbCoverageStatusBignumber?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
-        this.etbCoverageStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
+            let endDate = new Date();
+            let days = endDate.getDate() - this.defaultSelectedDays;
+            let startDate = new Date();
+            startDate.setDate(days);
+            this.etbCoverageStatusBignumber?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+            this.etbCoverageStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
     checkReport(key: string, reportType: string): Boolean {
-    let reportConfig = config;
-    let flag = false;
-    reportConfig[key]?.filters?.forEach((filter: any) => {
-        if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
-        flag = true
-        }
-    })
-    return flag
+        let reportConfig = config;
+        let flag = false;
+        reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
+                flag = true
+            }
+        })
+        return flag
     }
 
     csvDownload(csvData: any) {
-    if (csvData) {
-        this.reportsData.push(csvData)
-    }
+        if (csvData) {
+            this.reportsData.push(csvData)
+        }
     }
 
     filtersUpdated(filters: any) {
-    this.reportsData = [];
-    this.etbCoverageStatusBignumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
-        this.etbCoverageStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
-        }
+        this.reportsData = [];
+        this.etbCoverageStatusBignumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.etbCoverageStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    }
 
     timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    if (event?.startDate !== null && event?.endDate !== null) {
-        this.reportsData = [];
-        this.etbCoverageStatusBignumber?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
-        this.etbCoverageStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+        this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+        if (event?.startDate !== null && event?.endDate !== null) {
+            this.reportsData = [];
+            this.etbCoverageStatusBignumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+            this.etbCoverageStatus?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
         }
     }
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
+    }
+
 }
-        

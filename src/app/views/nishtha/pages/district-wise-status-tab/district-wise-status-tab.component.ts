@@ -44,7 +44,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
         console.log('the filters',this.filters);
-        this.districtWiseStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+        this.districtWiseStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
@@ -74,7 +74,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.districtWiseStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    this.districtWiseStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
 
     timeSeriesUpdated(event: any): void {

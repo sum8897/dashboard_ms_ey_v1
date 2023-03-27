@@ -43,7 +43,7 @@ export class CourseAndMediumStatusTabComponent implements OnInit, AfterViewInit 
     async ngAfterViewInit(): Promise<void> {
         if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
-            this.courseAndMediumStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+            this.courseAndMediumStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();
@@ -73,7 +73,7 @@ export class CourseAndMediumStatusTabComponent implements OnInit, AfterViewInit 
 
     filtersUpdated(filters: any) {
         this.reportsData = [];
-        this.courseAndMediumStatus?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+        this.courseAndMediumStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     }
 
     timeSeriesUpdated(event: any): void {

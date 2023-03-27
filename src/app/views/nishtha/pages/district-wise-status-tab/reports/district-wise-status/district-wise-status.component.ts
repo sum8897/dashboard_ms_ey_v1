@@ -80,6 +80,7 @@ export class DistrictWiseStatusComponent implements OnInit {
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
+      console.log(filterValues)
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
