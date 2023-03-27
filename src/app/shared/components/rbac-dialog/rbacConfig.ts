@@ -30,11 +30,11 @@ export const rbacConfig = {
       "valueProp": "school_id"
     },
     {
-      "query": "select grade_id, grade_number from dimensions.grade order by grade_number",
+      "query": "select grade_id, grade_nas from dimensions.grade order by grade_nas",
       "hierarchyLevel": 6,
       "name": "Grade",
       "labelProp": "grade_id",
-      "valueProp": "grade_number"
+      "valueProp": "grade_nas"
     }
   ],
   "roles": [

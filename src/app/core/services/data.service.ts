@@ -260,7 +260,7 @@ export class DataService {
         data = {
           ...data,
           ...obj,
-          district_code: obj['district_id'] ? Number(obj['district_id']) : null,
+          // district_code: obj['district_id'] ? Number(obj['district_id']) : null,
           [obj[metricLabelProp]]: obj[metricValueProp]
         }
         if (index === 0) {
