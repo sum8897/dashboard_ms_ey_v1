@@ -53,7 +53,7 @@ export const config = {
                     "actions":
                     {
                         "queries": {
-                            "map": "select lo_name, round(cast(avg(sum) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, lo_name"
+                            "map": "select lo_name, round(cast(avg(sum) as numeric),2) as performance, t.district_id, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, lo_name"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -99,7 +99,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, lo_name, grade_nas, subject_nas, round(cast(sum(sum*100) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject_nas, grade_nas, lo_name, t.lo_code"
+                        "table": "select t.lo_code, lo_name, grade_nas, subject_nas, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject_nas, grade_nas, lo_name, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"

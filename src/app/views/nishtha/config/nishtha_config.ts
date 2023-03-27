@@ -283,7 +283,7 @@ export const config = {
                         "bigNumber1": "select sum(sum) as total_enrolment from datasets.nishtha_total_enrolment_district",
                         "bigNumber2": "select sum(sum) as total_completion from datasets.nishtha_total_completion_district",
                         "bigNumber3": "select sum(sum) as total_certification from datasets.nishtha_total_certification_district",
-                        "bigNumber4": ""
+                        "bigNumber4": "select sum(sum) as total_mediums from datasets.nishtha_total_medium_programnishtha"
                     },
                     "level": "district"
                 }
