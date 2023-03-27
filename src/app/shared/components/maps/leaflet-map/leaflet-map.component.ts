@@ -130,16 +130,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       else {
         {
-          return e > 75 ? "#b2d58f" :
-            e > 50 ? "#FFFBD6" :
-              e >= 0 ? "#FFD6D6" : "#fff";
+          return e > 75 ? "#00FF00" :
+            e > 50 ? "#FFFF00" :
+              e >= 0 ? "#FF0000" : "#fff";
         }
       }
     }
   }
 
   async applyCountryBorder(mapData: any, singleColor?: any): Promise<any> {
-    let reportTypeIndicator = this.mapData.options && this.mapData.options.tooltip && this.mapData.options.tooltip.reportTypeIndicator ? this.mapData.options.tooltip.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
+    let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     let parent = this;
     return new Promise(async (resolve, reject) => {
       try {
@@ -235,10 +235,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           }
 
           mapData?.data.forEach((state: any) => {
-            if (state.state_code == feature.properties.ID_1 && !state.district_code) {
+            if (state.state_code == feature.properties.ID_1 && !state.district_id) {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
-            else if (state.district_code && state.district_code == feature.properties.ID_2) {
+            else if (state.district_id && state.district_id == feature.properties.ID_2) {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
           });
@@ -261,10 +261,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         function getPopUp(feature: any) {
           let popup: any;
           mapData.data.forEach((state: any) => {
-            if (state.state_code == feature.properties.ID_1 && !state.district_code) {
+            if (state.state_code == feature.properties.ID_1 && !state.district_id) {
               popup = state.tooltip
             }
-            else if (state.district_code && state.district_code == feature.properties.ID_2) {
+            else if (state.district_id && state.district_id == feature.properties.ID_2) {
               popup = state.tooltip
             }
           });
@@ -307,7 +307,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createMarkers(mapData: any, singleColor?: any): void {
-    let reportTypeIndicator = this.mapData.options && this.mapData.options.tooltip && this.mapData.options.tooltip.reportTypeIndicator ? this.mapData.options.tooltip.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
+    let reportTypeIndicator = this.mapData?.options?.map && this.mapData.options.map.reportTypeIndicator ? this.mapData.options.map.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];
       if (reportTypeIndicator === 'value' || reportTypeIndicator === 'percent') {
@@ -474,7 +474,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         //   }
         // }
       } else {
-        values = values && values.length > 0 ? values : [100, 75, 50, 0];
+        values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 75, 50, 0];
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
         let reset = L.DomUtil.create('button', 'legend-range-reset pull-right')

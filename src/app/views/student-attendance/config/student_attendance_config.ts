@@ -653,7 +653,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Average Average Students Present",
+                "title": "Average Students Present",
                 "valueSuffix": '%',
                 "property": 'stt_avg'
             }

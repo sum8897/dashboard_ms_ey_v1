@@ -243,7 +243,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Avaerage Average Teachers Reporting Attendance",
+                "title": "Average Teachers Reporting Attendance",
                 "valueSuffix": '%',
                 "property": 'compliance_percentage'
             }
@@ -654,7 +654,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Avaerage Average Teachers Present",
+                "title": "Average Teachers Present",
                 "valueSuffix": '%',
                 "property": 'stt_avg'
             }
