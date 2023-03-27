@@ -65,7 +65,7 @@ export const config = {
             "map":
             {
                 "indicator": "performance",
-                "indicatorType": "",
+                "indicatorType": "percent",
                 "legend": {
                     "title": "NAS Performance"
                 },
