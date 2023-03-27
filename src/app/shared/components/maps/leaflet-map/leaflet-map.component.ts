@@ -130,9 +130,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       else {
         {
-          return e > 75 ? "#b2d58f" :
-            e > 50 ? "#FFFBD6" :
-              e >= 0 ? "#FFD6D6" : "#fff";
+          return e > 75 ? "#1D4586" :
+            e > 50 ? "#1156CC" :
+              e >= 0 ? "#6D9FEB" : "#fff";
         }
       }
     }
