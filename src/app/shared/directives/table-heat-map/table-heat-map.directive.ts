@@ -139,7 +139,7 @@ export class TableHeatMapDirective implements AfterViewInit {
           let singleColor;
           if (color.type === 'percentage') {
             color.values?.every((item) => {
-              if (value > item.breakPoint) {
+              if (value >= item.breakPoint) {
                 singleColor = item.color
                 return false
               }

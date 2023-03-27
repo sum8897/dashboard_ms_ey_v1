@@ -58,10 +58,10 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Outcome'",
-                        "bigNumber2": "",
-                        "bigNumber3": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Infrastructure Facilities Student Entitlements'",
+                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Infrastructure Facilities Student Entitlements'",
+                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Governance Processes'",
                         "bigNumber4": "",
-                        "bigNumber5": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Governance Processes'",
+                        "bigNumber5": ""
                     },
                     "level": "district"
                 }
@@ -69,9 +69,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Learning Outcomes & Quality', 'Access', 'Infrastructure & Facilities', 'Equity', 'Governance Processes'],
+                "title": ['Learning Outcomes & Quality', 'Infrastructure & Facilities', 'Governance Processes', 'Access', 'Equity',],
                 "valueSuffix": ['', '', '', '', ''],
-                "property": ['outcome', '', 'infra_score', '', 'governance_processes']
+                "property": ['outcome', 'infra_score', 'governance_processes', '', '']
             }
         }
     }
