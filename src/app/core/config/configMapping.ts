@@ -21,8 +21,7 @@ export const configFiles = {
 };
 
 export const programFolderNames = {
-  studentAttendance: 'student_attendance',
-  // studentAttendance: 'sch_att',
+  studentAttendance: 'sch_att',
   reviewMeetings: 'rev_and_monitoring',
   teacherAttendance: 'sch_att',
   pgi: 'pgi',

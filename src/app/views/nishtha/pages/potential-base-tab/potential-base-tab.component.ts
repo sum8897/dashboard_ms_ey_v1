@@ -45,8 +45,8 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
-        this.potentialBase?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
-        this.potentialBaseCertificates?.getReportData({ filterValues: this.filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+        this.potentialBase?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.potentialBaseCertificates?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
 
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
@@ -78,8 +78,8 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.potentialBase?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
-    this.potentialBaseCertificates?.getReportData({ filterValues: filters.map((filter) => { return { columnName: filter.valueProp, filterType: filter.id, value: filter.value } }) });
+    this.potentialBase?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    this.potentialBaseCertificates?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
 
     timeSeriesUpdated(event: any): void {

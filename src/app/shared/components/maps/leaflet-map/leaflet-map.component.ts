@@ -130,9 +130,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       else {
         {
-          return e > 75 ? "#00FF00" :
-            e > 50 ? "#FFFF00" :
-              e >= 0 ? "#FF0000" : "#fff";
+          return e > 75 ? "#b2d58f" :
+            e > 50 ? "#FFFBD6" :
+              e >= 0 ? "#FFD6D6" : "#fff";
         }
       }
     }
@@ -223,6 +223,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           }
           else {
             values.push(min);
+          }
+          if(reportTypeIndicator === 'percent') {
+            max = 100;
+            min = 0;
           }
 
         }
