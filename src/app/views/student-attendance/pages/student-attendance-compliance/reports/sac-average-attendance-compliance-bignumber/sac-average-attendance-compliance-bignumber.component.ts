@@ -39,6 +39,9 @@ export class SacAverageAttendanceComplianceBignumberComponent implements OnInit 
 
   ngOnInit(): void {
     // this.getReportData();
+    if(Number(this.rbacDetails?.role > 4)){
+      this.title = 'Average % Students Reported'
+    }
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
