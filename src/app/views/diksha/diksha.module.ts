@@ -16,12 +16,13 @@ import { ContentCoverageComponent } from './pages/content-coverage-tab/reports/c
 import { ContentCoverageComponentBignumber } from './pages/content-coverage-tab/reports/content-coverage-bignumber/content-coverage-bignumber.component';
 import { LearningSessionsComponent } from './pages/learning-sessions-tab/reports/learning-sessions/learning-sessions.component';
 import { LearningSessionsOnPotentialUsersComponent } from './pages/learning-sessions-on-potential-users-tab/reports/learning-sessions-on-potential-users/learning-sessions-on-potential-users.component';
+import { EtbBignumbersComponent } from './pages/etb-coverage-status-tab/reports/etb-bignumbers/etb-bignumbers.component';
 
 @NgModule({
 declarations: [
     DikshaComponent,
     EtbCoverageStatusTabComponent,ContentCoverageTabComponent,LearningSessionsTabComponent,LearningSessionsOnPotentialUsersTabComponent,
-    EtbCoverageStatusComponentBignumber,EtbCoverageStatusComponent,ContentCoverageComponent,ContentCoverageComponentBignumber,LearningSessionsComponent,LearningSessionsOnPotentialUsersComponent
+    EtbCoverageStatusComponentBignumber,EtbCoverageStatusComponent,ContentCoverageComponent,ContentCoverageComponentBignumber,LearningSessionsComponent,LearningSessionsOnPotentialUsersComponent, EtbBignumbersComponent
 ],
 imports: [
     DashletModule.forRoot({
