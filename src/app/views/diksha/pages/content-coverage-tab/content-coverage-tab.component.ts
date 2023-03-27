@@ -28,62 +28,66 @@ export class ContentCoverageTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLabel:"Content Coverage on QR"
-@ViewChild('contentCoverage') contentCoverage: ContentCoverageComponentBignumber;
-        
-constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
-    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
-        this.rbacDetails = rbacDetails;
-    })
+    tabLabel: any ="Content Coverage on QR"
+    @ViewChild('contentCoverageBigNumber') contentCoverageBigNumber: ContentCoverageComponentBignumber;
+    @ViewChild('contentCoverage') contentCoverage: ContentCoverageComponent;
+
+    constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
+        this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+            this.rbacDetails = rbacDetails;
+        })
     }
 
     async ngOnInit(): Promise<void> {
-    // this.renderReports();
+        // this.renderReports();
     }
 
     async ngAfterViewInit(): Promise<void> {
-    if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
-        this.contentCoverage?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
+        if (this.hasCommonFilters) {
+            this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
+            this.contentCoverageBigNumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+            this.contentCoverage?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
-    if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.defaultSelectedDays;
-        let startDate = new Date();
-        startDate.setDate(days);
-        this.contentCoverage?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
+            let endDate = new Date();
+            let days = endDate.getDate() - this.defaultSelectedDays;
+            let startDate = new Date();
+            startDate.setDate(days);
+            this.contentCoverageBigNumber?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+            this.contentCoverage?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
     checkReport(key: string, reportType: string): Boolean {
-    let reportConfig = config;
-    let flag = false;
-    reportConfig[key]?.filters?.forEach((filter: any) => {
-        if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
-        flag = true
-        }
-    })
-    return flag
+        let reportConfig = config;
+        let flag = false;
+        reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
+                flag = true
+            }
+        })
+        return flag
     }
 
     csvDownload(csvData: any) {
-    if (csvData) {
-        this.reportsData.push(csvData)
-    }
+        if (csvData) {
+            this.reportsData.push(csvData)
+        }
     }
 
     filtersUpdated(filters: any) {
-    this.reportsData = [];
-    this.contentCoverage?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
-        }
+        this.reportsData = [];
+        this.contentCoverageBigNumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.contentCoverage?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    }
 
     timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    if (event?.startDate !== null && event?.endDate !== null) {
-        this.reportsData = [];
-        this.contentCoverage?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+        this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+        if (event?.startDate !== null && event?.endDate !== null) {
+            this.reportsData = [];
+            this.contentCoverageBigNumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+            this.contentCoverage?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
         }
     }
 }
-        

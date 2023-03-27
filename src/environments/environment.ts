@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  google_analytics_tracking_id:"UA-260554959-3",
   apiURL: 'http://localhost:3002',
   stateCode: "HP",
   numberFormat: { 
@@ -12,6 +13,7 @@ export const environment = {
       format: 'long'
     }
   },
+  // gaTrackingId :["UA-260554959-2"]
   // app_header_title: "भारत सरकार | Government of India",
   // app_header_image_1: "Flag_of_India.svg",
   // content_header_image_1: "MoE.png",  

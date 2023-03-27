@@ -45,12 +45,14 @@ export class WrapperService {
   }
 
   async constructCommonFilters(filterConfig: any, tabLabel?: any, updatedFilter?: any, changedInd?: any) {
+
     let filters: any = []
     if (tabLabel) {
       filterConfig = filterConfig.filter((filter: any) => {
         return filter.label === tabLabel
       })
     }
+    console.log('sdghvfhvdsghfvh',tabLabel , filterConfig);
     for (let index = 0; index < filterConfig.length; index++) {
 
       if (changedInd === undefined || (changedInd < index && filterConfig[changedInd]?.dependentFilter)) {

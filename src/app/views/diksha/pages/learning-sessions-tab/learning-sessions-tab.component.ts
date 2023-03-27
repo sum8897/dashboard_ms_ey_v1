@@ -27,7 +27,7 @@ export class LearningSessionsTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLabel:"Learning Sessions"
+    matLabel:any ="Learning Sessions"
 @ViewChild('learningSessions') learningSessions: LearningSessionsComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {

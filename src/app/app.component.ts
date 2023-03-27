@@ -18,17 +18,19 @@ declare var dataLayer: Array<any>;
 export class AppComponent {
   title = 'cQube National';
   loadingDataImg: boolean = false;
-
   constructor(private translate: TranslateService, private titleService: Title,
     private router: Router, private activatedRoute: ActivatedRoute, public config: AppConfig, private http: HttpClient) {
     translate.setDefaultLang('en');
     translate.use('en');
     /** START : Code to Track Page View using gtag.js */
 
-    this.http.get('assets/config/globalconfig.json').pipe(map(data => {
-      return data;
-    })).subscribe(async (data) => {
-     await this.grabTheTrackIds(data)
+    this.http.get('assets/config/globalconfig.json').pipe(
+      map(data => ({
+        ...data,
+        track: environment.google_analytics_tracking_id
+      }))
+    ).subscribe(async (data) => {
+      await this.grabTheTrackIds(data)
     });
     
     this.router.events.pipe(
