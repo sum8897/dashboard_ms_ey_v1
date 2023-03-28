@@ -225,21 +225,21 @@ export const config = {
                     "level": "school"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id} and a.att_date between startDate and endDate",
-                },
-                "actions": {
-                    "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id}",
-                    },
-                    "level": "school"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "timeSeriesQueries": {
+            //         "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a where school_id = {school_id} and grade_id = {grade_id} and a.att_date between startDate and endDate",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a where school_id = {school_id} and grade_id = {grade_id}",
+            //         },
+            //         "level": "school"
+            //     }
+            // }
         ],
         "options": {
             "bigNumber": {
@@ -313,21 +313,21 @@ export const config = {
                     "level": "class"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "timeSeriesQueries": {
-                    "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.teachers_present/a.teachers_marked) desc) as rank from (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_id where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_id, grade_number",
-                },
-                "actions": {
-                    "queries": {
-                        "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
-                    },
-                    "level": "class"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "timeSeriesQueries": {
+            //         "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.teachers_present/a.teachers_marked) desc) as rank from (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
+            //         },
+            //         "level": "class"
+            //     }
+            // }
         ],
         "options": {
             "table": {
@@ -470,7 +470,7 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_id where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_id, grade_number order by stt_avg asc",
+                    "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -623,34 +623,34 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and a.att_date between startDate and endDate",
+                    "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state) as a where school_id = {school_id} and a.att_date between startDate and endDate",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t where (date between startDate and endDate) and t.school_id={school_id}",
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id}",
+                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state) as a where school_id = {school_id}",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t where (date between startDate and endDate) and t.school_id={school_id}",
                     },
                     "level": "school"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "timeSeriesQueries": {
-                    "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id} and a.att_date between startDate and endDate",
-                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
-                },
-                "actions": {
-                    "queries": {
-                        "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a where school_id = {school_id} and grade_id = {grade_id}",
-                        // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
-                    },
-                    "level": "school"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "timeSeriesQueries": {
+            //         "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a where school_id = {school_id} and grade_id = {grade_id} and a.att_date between startDate and endDate",
+            //         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "bigNumber": "select ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a where school_id = {school_id} and grade_id = {grade_id}",
+            //             // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_grade as t where (date between startDate and endDate) and t.grade={class_id}",
+            //         },
+            //         "level": "school"
+            //     }
+            // }
         ],
         "options": {
             "bigNumber": {
@@ -725,21 +725,21 @@ export const config = {
                     "level": "class"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "timeSeriesQueries": {
-                    "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.teachers_present/a.teachers_marked) desc) as rank from (select present_table.grade_id, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_id = marked_table.grade_id) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_id where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_id, grade_number",
-                },
-                "actions": {
-                    "queries": {
-                        "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
-                    },
-                    "level": "class"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "timeSeriesQueries": {
+            //         "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as stt_avg, dense_rank() over(order by avg(a.teachers_present/a.teachers_marked) desc) as rank from (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
+            //         },
+            //         "level": "class"
+            //     }
+            // }
         ],
         "options": {
             "table": {
