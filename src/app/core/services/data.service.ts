@@ -34,11 +34,13 @@ export class DataService {
         let reportData = {
           data: rows.map(row => {
             columns.forEach((col: any) => {
-              if (row[col.property] !== null || row[col.property] !== undefined) {
-                row = {
-                  ...row,
-                  [col.property]: { value: row[col.property] }
-                }
+              let cellValue = row[col.property];
+              if (cellValue === null || cellValue === undefined) {
+                cellValue = "N/A";
+              }
+              row = {
+                ...row,
+                [col.property]: { value: cellValue }
               }
             });
             return row;
@@ -53,6 +55,7 @@ export class DataService {
       })
     });
   }
+
 
   getBigNumberReportData(query: string, options: any, indicator: string, prevReportData: any): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -287,7 +290,7 @@ export class DataService {
         tempData = {
           ...tempData,
           ...obj,
-          [obj[metricLabelProp]]: obj[metricValueProp]
+          [obj[metricLabelProp]]: obj[metricValueProp] || "NA"
         }
         if (!newColumnsProps.includes(obj[metricLabelProp])) {
           newColumnsProps.push(obj[metricLabelProp])
@@ -297,4 +300,5 @@ export class DataService {
     }).value()
     return { result, newColumnsProps };
   }
+  
 }
