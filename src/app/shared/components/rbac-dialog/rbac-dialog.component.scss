@@ -40,6 +40,9 @@
     .ng-dropdown-panel {
         top: 100% !important;
     }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+        background-color: white !important;
+    }
 }
 
 .welcometxt {
