@@ -1,15 +1,13 @@
 import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as Title from '../../../../assets/config/ui_config.json'
-import { ConfigService } from 'src/app/core/services/config/config.service';
 import { environment } from 'src/environments/environment';
 import { IDashboardMenu } from '../../models/IDashboardCard';
 import { IMenuItem } from '../../models/IMenuItem';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { CommonService } from '../../services/common/common.service';
 import { RbacService } from '../../services/rbac-service.service';
 import { configFiles } from '../../config/configMapping'
-import { of } from 'rxjs';
+import { AuthenticationService } from '../../services/authentication.service';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -35,7 +33,7 @@ export class LayoutComponent implements OnInit {
   title: any;
   hierarchyLevel: any;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
-  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService) {
+  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService, private _authService: AuthenticationService) {
 
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;
@@ -208,6 +206,10 @@ export class LayoutComponent implements OnInit {
     else {
       this.showBackBtn = false
     }
+  }
+
+  signOut() {
+    this._authService.logout()
   }
 
 }
