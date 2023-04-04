@@ -13,7 +13,6 @@ export const environment = {
       format: 'short'
     }
   },
-  skipCluster: true,
   config: "state",
   keycloakRealm: "cQube",
   keycloakUrl: "http://localhost:8080/auth",
