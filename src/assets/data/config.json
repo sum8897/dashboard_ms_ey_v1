@@ -258,5 +258,12 @@
         "lng": 88.2625,
         "zoomLevel": 4.8,
         "stateCode": 5
+    },
+    "AP": {
+        "name": "Andhra Pradesh",
+        "lat": 15.54,
+        "lng": 80.57,
+        "zoomLevel": 7.5,
+        "stateCode": 2
     }
 }
