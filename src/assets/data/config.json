@@ -40,6 +40,13 @@
         "zoomLevel": 7.5,
         "stateCode": 1
     },
+    "AP": {
+        "name": "Andhra Pradesh",
+        "lat": 15.54,
+        "lng": 80.57,
+        "zoomLevel": 7.5,
+        "stateCode": 2
+    },
     "AR": {
         "name": "Arunachal Pradesh",
         "lat": 27.6468,
