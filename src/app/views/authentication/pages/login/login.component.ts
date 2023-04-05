@@ -94,9 +94,12 @@ export class LoginComponent implements OnInit {
     }
     this._authenticationService.login(data).subscribe((res: any) => {
       const token = res.access_token
+      const refreshToken = res.refresh_token
       localStorage.setItem('token', token)
+      localStorage.setItem('refresh_token', refreshToken)
       // localStorage.setItem('userName', res.username)
       // localStorage.setItem('user_id', res.userId)
+      this._authenticationService.startRefreshTokenTimer();
       this.router.navigate(['/home']);
     },
       err => {
