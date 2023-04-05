@@ -2,15 +2,17 @@ export const environment = {
   production: true,
   google_analytics_tracking_id:"UA-260554959-3",
   apiURL: 'api_end_point/api/queryBuilder',
-  stateCode: "HP",
+  stateCode: "AP",
   numberFormat: {
     reports: {
       locale: 'en-IN',
-      format: 'long'
+      format: 'short'
     }
   },
-  app_header_title: "भारत सरकार | Government of India",
-  app_header_image_1: "Flag_of_India.svg",
-  content_header_image_1: "MoE.png",
-  content_header_image_2: "ncert_logo_vector_modified.png"
+  skipCluster: true,
+  config: "state",
+  keycloakRealm: "cQube",
+  keycloakUrl: "http://localhost:8080/auth",
+  keycloakClient: "cQube-app",
+  keycloakSecret: "0b39fbf7-0f18-4994-b2a9-4098cddb90b7"
 };
