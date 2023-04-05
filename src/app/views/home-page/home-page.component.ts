@@ -24,7 +24,7 @@ export class HomePageComponent implements OnInit {
 
   roles = rbacConfig.roles
   constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
-    this.setToken()
+    //this.setToken()
 
   }
 
