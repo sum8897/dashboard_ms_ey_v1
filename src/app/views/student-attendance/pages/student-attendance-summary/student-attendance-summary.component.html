@@ -9,7 +9,8 @@
                 [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
         <div class="download-button md:col-start-4 md:col-end-5 col-start-10 col-end-11">
-            <app-download-button [data]="reportsData"></app-download-button>
+            <app-popup-options [data]="reportsData" [reportName]="'student_attendance_summary'" ></app-popup-options>
+            <!-- <app-download-button [data]="reportsData"></app-download-button> -->
         </div>
 
     </div>
