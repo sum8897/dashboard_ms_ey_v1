@@ -17,6 +17,11 @@
                 *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
         </mat-tab>
 
+        <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance')">
+            <app-state-wise-performance-tab
+                *ngIf="selectedTabLabel === 'State Wise Performance'"></app-state-wise-performance-tab>
+        </mat-tab>
+
         <mat-tab label='Correlation' *ngIf="tabs.includes('Correlation')">
             <app-correlation-tab *ngIf="selectedTabLabel === 'Correlation'"></app-correlation-tab>
         </mat-tab>

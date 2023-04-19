@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { rbacConfig } from './rbacConfig';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rbac-dialog',
@@ -16,13 +17,22 @@ export class RbacDialogComponent implements OnInit {
   selectedRoleLevel: any = 0;
   rbacRoles: any = rbacConfig.roles
   selectedRoleObject: any;
+  rbacDetails: any;
   availableFilters: string = '';
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+      this.rbacDetails = rbacDetails
       this.selectedRoleLevel = rbacDetails?.role
     })
-    if(this.selectedRoleLevel < rbacConfig.baseHierarchy){
+    let baseHierarchy;
+    if(environment.config === 'state'){
+      baseHierarchy = 2;
+    }
+    else {
+      baseHierarchy = 1;
+    }
+    if(this.selectedRoleLevel < baseHierarchy){
       router.navigate(['/summary-statistics'])
     }
     this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
@@ -39,13 +49,26 @@ export class RbacDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.rbacForm = this.fb.group({
-      district: [null],
-      block: [null],
-      cluster: [null],
-      school: [null],
-      grade: [null]
-    })
+    if(environment.config === 'national') {
+      this.rbacForm = this.fb.group({
+        state: [null],
+        district: [null],
+        block: [null],
+        cluster: [null],
+        school: [null],
+        grade: [null]
+      })
+    }
+    else {
+      this.rbacForm = this.fb.group({
+        district: [null],
+        block: [null],
+        cluster: [null],
+        school: [null],
+        grade: [null]
+      })
+    }
+    
     this.resetFilterForm(this.rbacForm);
     this.getFilters();
   }
@@ -88,6 +111,15 @@ export class RbacDialogComponent implements OnInit {
     //   return
     // }
     let { filters, baseHierarchy } = rbacConfig;
+    if(environment.config === 'state'){
+      baseHierarchy = 2;
+      filters = filters.filter((filter: any) => {
+        return filter.hierarchyLevel !== 1
+      })
+    }
+    else {
+      baseHierarchy = 1;
+    }
     let oldFilters = this.filters.filter((filter: any) => {
       return this.rbacForm.value[filter.name?.toLowerCase()] != null
     })
@@ -107,7 +139,7 @@ export class RbacDialogComponent implements OnInit {
             this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
           })
         }
-        else if (masterFilter?.length > 0 && this.rbacForm.value[masterFilter[0].name.toLowerCase()] === null) {
+        else if (masterFilter?.length > 0 && this.rbacForm.value[masterFilter[0]?.name.toLowerCase()] === null) {
           constructedFilters.splice(i, 1);
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.clearValidators()
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
@@ -138,6 +170,11 @@ export class RbacDialogComponent implements OnInit {
 
   resetFilterForm(form: any) {
     let { filters } = rbacConfig;
+    if(environment.config === 'state') {
+      filters = filters.filter((filter: any) => {
+        return filter.hierarchyLevel !== 1
+      })
+    }
     filters.forEach((filter: any) => {
       form.controls[filter.name.toLowerCase()].reset()
       form.controls[filter.name.toLowerCase()].clearValidators();
@@ -147,6 +184,11 @@ export class RbacDialogComponent implements OnInit {
 
   changeFilter(filter: any) {
     let { filters } = rbacConfig
+    if(environment.config === 'state') {
+      filters = filters.filter((filter: any) => {
+        return filter.hierarchyLevel !== 1
+      })
+    }
     this.filters.splice(this.filters.indexOf(filter) + 1);
     filters.forEach((fil: any) => {
       if (fil.hierarchyLevel > filter.hierarchyLevel) {
