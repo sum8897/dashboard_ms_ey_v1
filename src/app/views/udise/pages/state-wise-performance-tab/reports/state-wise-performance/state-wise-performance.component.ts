@@ -6,19 +6,20 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/udise/config/udise_config';
 
+
 @Component({
-  selector: 'app-district-wise-performance',
-  templateUrl: './district-wise-performance.component.html',
-  styleUrls: ['./district-wise-performance.component.scss']
+  selector: 'app-state-wise-performance',
+  templateUrl: './state-wise-performance.component.html',
+  styleUrls: ['./state-wise-performance.component.scss']
 })
-export class DistrictWisePerformanceComponent implements OnInit {
-  reportName: string = 'district_wise_performance';
+export class StateWisePerformanceComponent implements OnInit {
+  reportName: string = 'state_wise_performance';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "District Wise Performance"
+    reportName: "State Wise Performance"
   };
-  title: string = 'District Wise Performance'
+  title: string = 'State Wise Performance'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -27,12 +28,14 @@ export class DistrictWisePerformanceComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  currentHierarchyLevel: any;
 
   @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+      this.currentHierarchyLevel = rbacDetails.role
     })
   }
 
@@ -49,7 +52,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
+    if (this.rbacDetails?.role !== null && this.rbacDetails !== undefined) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }

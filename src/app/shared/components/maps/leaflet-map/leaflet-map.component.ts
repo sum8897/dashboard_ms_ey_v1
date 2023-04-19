@@ -5,9 +5,10 @@ import * as L from "leaflet";
 import * as R from "leaflet-responsive-popup";
 import { StateCodes } from 'src/app/core/config/StateCodes';
 import { environment } from 'src/environments/environment';
-import * as config from '../../../../../assets/data/config.json';
 import invert from 'invert-color';
 import mapJson from './../../../../../assets/data/JH.json';
+import * as latLongConfig from './../../../../../assets/data/config.json'
+import { RbacService } from 'src/app/core/services/rbac-service.service';
 
 @Component({
   selector: 'app-leaflet-map',
@@ -22,19 +23,25 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   legend: any;
   countryGeoJSON: any;
   noData = false;
-  config = 'state'
+  config = environment.config
+  rbacDetails: any;
+  hierarchyLevel: any;
 
   @Input() mapData!: any;
-  @Input() level = 'state';
+  @Input() level: any;
   @Input() perCapitaReport: any = false;
-  @Input() hierarchyLevel: any = this.config === 'national' ? 1 : 2;
+  // @Input() hierarchyLevel: any = this.config === 'national' ? 0 : 1;
 
   @Output() drillDownFilter: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('map') mapContainer!: ElementRef<HTMLElement>;
 
-  constructor() {
-    this.mapCenterLatlng = config.default['IN'];
+  constructor(private _rbacService: RbacService) {
+    this.mapCenterLatlng = latLongConfig.default['IN'];
+    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+      this.rbacDetails = rbacDetails
+      this.hierarchyLevel = rbacDetails.role
+    })
   }
 
   ngOnInit(): void {
@@ -80,7 +87,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if (this.config === 'national') {
+      if (this.config === 'national' && this.hierarchyLevel === 0 && this.level === 'district') {
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 3) {
@@ -113,7 +120,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getLayerColor(e: any, legend?: boolean) {
-    if (this.config === 'national' && this.level === 'district' && !legend) {
+    if ((this.config === 'national' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
       return '#fff'
     }
     else {
@@ -144,9 +151,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     return new Promise(async (resolve, reject) => {
       try {
         let body;
-        if (this.config === 'national') {
-          const response = await fetch(`${environment.apiURL}/assets/geo-locations/IN.json`);
-          body = await response.json();
+        if (this.config === 'national' && this.rbacDetails.role === 0) {
+          const response = await fetch(`${environment.apiURL}/assets/IN.json`);
+          const temp = await response.json();
+          body = temp['IN']
         }
         else {
           const response = await fetch(`${environment.apiURL}/assets/${environment.stateCode}.json`);
@@ -239,14 +247,14 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           }
 
           mapData?.data.forEach((state: any) => {
-            if (state.state_code == feature.properties.ID_1 && !state.district_id) {
+            if (state.state_id && state.state_id == feature.properties.state_code) {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
             else if (state.district_id && state.district_id == feature.properties.ID_2) {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
           });
-          if (parent.level === 'state' || parent.config === 'state') {
+          if (parent.level === 'state' || parent.config === 'state' || parent.config === 'national') {
             return {
               fillColor: singleColor ? (color === '#fff' ? color : singleColor) : color,
               weight: 1,
@@ -265,7 +273,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         function getPopUp(feature: any) {
           let popup: any;
           mapData.data.forEach((state: any) => {
-            if (state.state_code == feature.properties.ID_1 && !state.district_id) {
+            if (state.state_id == feature.properties.state_code && !state.district_id) {
               popup = state.tooltip
             }
             else if (state.district_id && state.district_id == feature.properties.ID_2) {
@@ -518,9 +526,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      return value > 75 ? "#00FF00" :
-        value > 50 ? "#FFFF00" :
-          value >= 0 ? "#FF0000" : "#fff";
+      return Number(value) > 75 ? "#1D4586" :
+        Number(value) > 50 ? "#1156CC" :
+          Number(value) >= 0 ? "#6D9FEB" : "#fff";
     }
   }
 
