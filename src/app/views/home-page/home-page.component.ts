@@ -25,9 +25,9 @@ export class HomePageComponent implements OnInit {
   roles: any;
   constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
     // this.setToken()
-    // this.roles = rbacConfig.roles.filter((role: any, index: any) => {
-    //   return rbacConfig.roles[index - 1]?.['skipNext'] !== true
-    // })
+    this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+      return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+    })
     if(environment.config === 'state') {
       this.roles = this.roles.filter((role: any, index: any) => {
         return role.value !== 0

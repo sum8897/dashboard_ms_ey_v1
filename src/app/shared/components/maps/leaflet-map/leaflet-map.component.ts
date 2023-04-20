@@ -129,10 +129,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         reportTypeBoolean = true;
       }
       if (reportTypeBoolean) {
-        if (e.trim() == "Yes") {
-          return "#00FF00";
+        if (e.trim().toLowerCase() == "yes") {
+          return "#1D4586";
         } else {
-          return "#FF0000";
+          return "#fff";
         }
       }
       else {
