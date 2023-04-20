@@ -1,17 +1,17 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { RbacService } from 'src/app/core/services/rbac-service.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { StateWisePerformanceComponent } from './reports/state-wise-performance/state-wise-performance.component';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
+import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { config } from '../../config/pgi_config';
-import { DistrictWisePerformanceComponent } from './reports/district-wise-performance/district-wise-performance.component';
 
 @Component({
-    selector: 'app-district-wise-performance-tab',
-    templateUrl: './district-wise-performance-tab.component.html',
-    styleUrls: ['./district-wise-performance-tab.component.scss']
+  selector: 'app-state-wise-performance-tab',
+  templateUrl: './state-wise-performance-tab.component.html',
+  styleUrls: ['./state-wise-performance-tab.component.scss']
 })
-export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewInit {
+export class StateWisePerformanceTabComponent implements OnInit {
 
-    bigNumberReports: any = {};
+  bigNumberReports: any = {};
     minYear: any;
     maxYear: any;
     minMonth: any;
@@ -28,10 +28,10 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
     bigNumberMetrics: any = [];
-    tabName:any='District Wise Performance'
-@ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
-        
-constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
+    tabLabel:any='State Wise Performance';
+    @ViewChild('statewiseperformance') stateWisePerformance:StateWisePerformanceComponent ;
+
+  constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
     })
@@ -43,15 +43,15 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabName);
-        this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
+        this.stateWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
         let days = endDate.getDate() - this.defaultSelectedDays;
         let startDate = new Date();
         startDate.setDate(days);
-        this.districtWisePerformance?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        this.stateWisePerformance?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
@@ -74,7 +74,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    this.stateWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
 
     timeSeriesUpdated(event: any): void {
@@ -82,12 +82,12 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
         this.reportsData = [];
-        this.districtWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        this.stateWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
     }
 
     importBigNumberMetrics(bigNumberMetric: any) {
         this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
+
 }
-        

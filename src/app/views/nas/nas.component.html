@@ -12,6 +12,17 @@
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
 
+        <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
+            <app-nas-implementation-status-tab
+                *ngIf="selectedTabLabel === 'Implementation Status'"></app-nas-implementation-status-tab>
+        </mat-tab>
+
+
+        <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance')">
+            <app-nas-state-wise-performance-tab
+                *ngIf="selectedTabLabel === 'State Wise Performance'"></app-nas-state-wise-performance-tab>
+        </mat-tab>
+
         <mat-tab label='District Wise Performance' *ngIf="tabs.includes('District Wise Performance')">
             <app-district-wise-performance-tab
                 *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
@@ -20,7 +31,7 @@
         <mat-tab label='Grade & Subject Performance' *ngIf="tabs.includes('Grade & Subject Performance')">
             <app-grade-and-subject-performance-tab
                 *ngIf="selectedTabLabel === 'Grade & Subject Performance'"></app-grade-and-subject-performance-tab>
-        </mat-tab>
+        </mat-tab>       
 
     </mat-tab-group>
 </div>
