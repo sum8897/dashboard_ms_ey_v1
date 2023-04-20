@@ -13,10 +13,20 @@
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
 
+        <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
+            <app-implementation-status-tab
+                *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
+        </mat-tab>
+        <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance')">
+            <app-state-wise-performance-tab
+                *ngIf="selectedTabLabel === 'State Wise Performance'"></app-state-wise-performance-tab>
+        </mat-tab>
+
         <mat-tab label='District Wise Performance' *ngIf="tabs.includes('District Wise Performance')">
             <app-district-wise-performance-tab
                 *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
         </mat-tab>
+
 
     </mat-tab-group>
 </div>

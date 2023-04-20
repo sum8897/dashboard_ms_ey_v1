@@ -1,17 +1,16 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
+import { ImplementationStatusComponent } from './reports/implementation-status/implementation-status.component';
 import { config } from '../../config/pgi_config';
-import { DistrictWisePerformanceComponent } from './reports/district-wise-performance/district-wise-performance.component';
 
 @Component({
-    selector: 'app-district-wise-performance-tab',
-    templateUrl: './district-wise-performance-tab.component.html',
-    styleUrls: ['./district-wise-performance-tab.component.scss']
+  selector: 'app-implementation-status-tab',
+  templateUrl: './implementation-status-tab.component.html',
+  styleUrls: ['./implementation-status-tab.component.scss']
 })
-export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewInit {
-
-    bigNumberReports: any = {};
+export class ImplementationStatusTabComponent implements OnInit {
+  bigNumberReports: any = {};
     minYear: any;
     maxYear: any;
     minMonth: any;
@@ -28,10 +27,9 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
     bigNumberMetrics: any = [];
-    tabName:any='District Wise Performance'
-@ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
-        
-constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
+    @ViewChild('implementationstatus') implementationStatus:ImplementationStatusComponent ;
+
+  constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
     })
@@ -43,15 +41,15 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabName);
-        this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.implementationStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
         let days = endDate.getDate() - this.defaultSelectedDays;
         let startDate = new Date();
         startDate.setDate(days);
-        this.districtWisePerformance?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        this.implementationStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
@@ -74,7 +72,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    this.implementationStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
 
     timeSeriesUpdated(event: any): void {
@@ -82,7 +80,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
         this.reportsData = [];
-        this.districtWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        this.implementationStatus?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
     }
 
@@ -90,4 +88,3 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
-        

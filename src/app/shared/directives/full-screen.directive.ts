@@ -21,7 +21,8 @@ export class FullScreenDirective implements OnInit {
     });
     this.renderer.appendChild(button, img); // append image to button
     this.renderer.appendChild(div, button);
-    this.renderer.insertBefore(this.element.nativeElement.parentNode, div, this.element.nativeElement);
+    this.renderer.insertBefore(this.element.nativeElement.parentNode, div, this.element.nativeElement);   
+    this.renderer.setAttribute(button, 'id', 'fullscreen-button');
 
   }
   fullscreen(): void {

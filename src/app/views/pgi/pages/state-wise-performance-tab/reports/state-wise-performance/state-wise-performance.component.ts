@@ -1,24 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common/common.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-import { config } from 'src/app/views/pgi/config/pgi_config';
-
+import { config} from '../../../../config/pgi_config'
 @Component({
-  selector: 'app-district-wise-performance',
-  templateUrl: './district-wise-performance.component.html',
-  styleUrls: ['./district-wise-performance.component.scss']
+  selector: 'app-state-wise-performance',
+  templateUrl: './state-wise-performance.component.html',
+  styleUrls: ['./state-wise-performance.component.scss']
 })
-export class DistrictWisePerformanceComponent implements OnInit {
-  reportName: string = 'district_wise_performance';
+export class StateWisePerformanceComponent implements OnInit {
+
+  reportName: string = 'state_wise_performance';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "District Wise Performance"
+    reportName: "State Wise Performance"
   };
-  title: string = 'District Wise Performance'
+  title: string = 'State Wise Performance'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -116,6 +115,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
         }
       }
       else if (query && key === 'map') {
+        console.log('hx');
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
@@ -124,4 +124,5 @@ export class DistrictWisePerformanceComponent implements OnInit {
       }
     })
   }
+
 }

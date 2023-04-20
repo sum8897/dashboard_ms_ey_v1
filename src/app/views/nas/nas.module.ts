@@ -11,12 +11,16 @@ import {DistrictWisePerformanceComponent} from './pages/district-wise-performanc
 import { GradeAndSubjectPerformanceComponent } from './pages/grade-and-subject-performance-tab/reports/grade-and-subject-performance/grade-and-subject-performance.component';
 import { GradeAndSubjectPerformanceTabComponent } from './pages/grade-and-subject-performance-tab/grade-and-subject-performance-tab.component';
 import { NasBignumberMetricsComponent } from './pages/district-wise-performance-tab/reports/nas-bignumber-metrics/nas-bignumber-metrics.component';
+import { NasImplementationStatusTabComponent } from './pages/nas-implementation-status-tab/nas-implementation-status-tab.component';
+import { NasImplementationStatusComponent } from './pages/nas-implementation-status-tab/reports/nas-implementation-status/nas-implementation-status.component';
+import { NasStateWisePerformanceTabComponent } from './pages/nas-state-wise-performance-tab/nas-state-wise-performance-tab.component';
+import { NasStateWisePerformanceComponent } from './pages/nas-state-wise-performance-tab/reports/nas-state-wise-performance/nas-state-wise-performance.component';
 
 @NgModule({
 declarations: [
     NasComponent,
     DistrictWisePerformanceTabComponent,GradeAndSubjectPerformanceTabComponent,
-    DistrictWisePerformanceComponent,GradeAndSubjectPerformanceComponent, NasBignumberMetricsComponent
+    DistrictWisePerformanceComponent,GradeAndSubjectPerformanceComponent, NasBignumberMetricsComponent, NasImplementationStatusTabComponent, NasImplementationStatusComponent, NasStateWisePerformanceTabComponent, NasStateWisePerformanceComponent
 ],
 imports: [
     DashletModule.forRoot({
