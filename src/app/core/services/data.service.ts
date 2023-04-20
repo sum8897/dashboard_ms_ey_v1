@@ -209,7 +209,7 @@ export class DataService {
               ...row,
               Latitude: row['latitude'],
               Longitude: row['longitude'],
-              indicator: metricFilter ? Number(row[metricFilter.value]) : Number(row[indicator]),
+              indicator: metricFilter ? isNaN(row[metricFilter.value]) ? row[metricFilter.value] : Number(row[metricFilter.value]) : isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]),
               tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
 

@@ -33,6 +33,43 @@ export const config = {
             "query": "select category_name from dimensions.categoryudise"
         },
     ],
+    implementation_status: {
+        "label": "Implementation Status",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "map": "select t.state_id,state_name ,t.status from dimensions.state as d join (select state_id , case when sum > 0 then 'YES' else 'NO' end as status from datasets.udise_started_state) as t on  d.state_id = t.state_id order by d.state_name asc"
+                    },
+                    "level": "state",
+                    "nextLevel": "district"
+                }
+            }
+        ],
+        "options": {
+            "map": {
+                "metricFilterNeeded": false,
+                "indicator": "status",
+                "legend": {
+                    "title": "Implemented Udise"
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/ UT Name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Implemented NAS: ",
+                        "value": "status",
+                        "valueSuffix": "\n"
+                    }
+                ]
+            }
+        }
+    },
     district_wise_performance: {
         "label": "District Wise Performance",
         "filters":
