@@ -25,14 +25,14 @@ export class PopupOptionsComponent implements OnInit {
   divData: any;
   title: any;
   stateName: any;
-  config: string = 'state'
-  national: boolean = true;
+  config: string = 'VSK'
+  NVSK: boolean = true;
 
   constructor(private pdfDownloadService: PdfDownloadService, private renderer: Renderer2, private el: ElementRef) { }
   showOptionsvalue: any = false;
   ngOnInit(): void {
-    if (this.config === 'state') {
-      this.national = false
+    if (this.config === 'VSK') {
+      this.NVSK = false
       let names: any = stateNames;
       names.every((state: any) => {
         if (state.stateCode == environment.stateCode) {
@@ -87,7 +87,7 @@ export class PopupOptionsComponent implements OnInit {
     //   divToRemove.remove();
     // }
     this.showOptionsvalue = false;
-    let headerText = `${this.title.dashboard_header2_title ? this.title.dashboard_header2_title : this.stateName}  - VIDYA SAMIKSHA KENDRA (VSK)`
+    let headerText = `${this.title.dashboard_header2_title ? this.title.dashboard_header2_title : this.stateName}  - VIDYA SAMIKSHA KENDRA ('VSK')`
     let headerImgUrl = '../../../../../assets/images/MoE.png';
     const headerImg = new Image();
     headerImg.src = headerImgUrl;

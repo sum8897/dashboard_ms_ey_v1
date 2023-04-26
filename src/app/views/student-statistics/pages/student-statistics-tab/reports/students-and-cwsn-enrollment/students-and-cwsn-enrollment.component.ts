@@ -22,7 +22,7 @@ export class StudentsAndCwsnEnrollmentComponent implements OnInit {
   startDate: any;
   endDate: any;
   compareDateRange: any = 30;
-  // level = environment.config === 'national' ? 'state' : 'district';
+  // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
 

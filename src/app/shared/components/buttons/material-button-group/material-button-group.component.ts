@@ -8,16 +8,16 @@ import { environment } from 'src/environments/environment';
 })
 export class MaterialButtonGroupComponent implements OnInit {
 
-  config: string = 'state'
-  national: boolean = true;  
+  config: string = 'VSK'
+  NVSK: boolean = true;  
   @Input() buttons: any;
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
-    if(this.config == 'state'){
-      this.national = false;
+    if(this.config == 'VSK'){
+      this.NVSK = false;
     }
   }
 

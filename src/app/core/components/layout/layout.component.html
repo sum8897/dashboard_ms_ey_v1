@@ -20,7 +20,7 @@
             <i *ngIf="role==='report_viewer'" class="fa fa-key" aria-hidden="true"
                 [routerLink]="['change-password']" matTooltip="Change Password"></i>
             
-            <i *ngIf="!national" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout" (click)="signOut()" id="signOut"
+            <i *ngIf="!NVSK" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout" (click)="signOut()" id="signOut"
                 name="signOut"></i>
             <!-- <button id="dark-mode-toggle" class="dark-mode-toggle" tabindex="0"
              title="{{resourceService?.frmelmnts?.lbl?.accessibilitytheme}}" (click)="changeTheme()"

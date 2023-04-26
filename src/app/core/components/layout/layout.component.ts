@@ -16,9 +16,9 @@ import { PdfDownloadService } from '../../services/pdf-download.service';
 })
 export class LayoutComponent implements OnInit {
   menu: IMenuItem[] | undefined;
-  national: boolean = true;
+  NVSK: boolean = true;
   role: any;
-  config = 'state';
+  config = 'VSK';
   isHome: boolean = false;
   showBackBtn: boolean = false;
   // Font Increase Decrease Variables
@@ -57,8 +57,8 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.title = Title
-    if (this.config === 'state') {
-      this.national = false;
+    if (this.config === 'VSK') {
+      this.NVSK = false;
     }
     this.role = localStorage.getItem('role');
   }

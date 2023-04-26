@@ -28,7 +28,7 @@ export class HomePageComponent implements OnInit {
     this.roles = rbacConfig.roles.filter((role: any, index: any) => {
       return rbacConfig.roles[index - 1]?.['skipNext'] !== true
     })
-    if(environment.config === 'state') {
+    if(environment.config === 'VSK') {
       this.roles = this.roles.filter((role: any, index: any) => {
         return role.value !== 0
       })

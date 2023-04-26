@@ -26,7 +26,7 @@ export class RbacDialogComponent implements OnInit {
       this.selectedRoleLevel = rbacDetails?.role
     })
     let baseHierarchy;
-    if(environment.config === 'state'){
+    if(environment.config === 'VSK'){
       baseHierarchy = 2;
     }
     else {
@@ -49,7 +49,7 @@ export class RbacDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(environment.config === 'national') {
+    if(environment.config === 'NVSK') {
       this.rbacForm = this.fb.group({
         state: [null],
         district: [null],
@@ -111,7 +111,7 @@ export class RbacDialogComponent implements OnInit {
     //   return
     // }
     let { filters, baseHierarchy } = rbacConfig;
-    if(environment.config === 'state'){
+    if(environment.config === 'VSK'){
       baseHierarchy = 2;
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
@@ -170,7 +170,7 @@ export class RbacDialogComponent implements OnInit {
 
   resetFilterForm(form: any) {
     let { filters } = rbacConfig;
-    if(environment.config === 'state') {
+    if(environment.config === 'VSK') {
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
       })
@@ -184,7 +184,7 @@ export class RbacDialogComponent implements OnInit {
 
   changeFilter(filter: any) {
     let { filters } = rbacConfig
-    if(environment.config === 'state') {
+    if(environment.config === 'VSK') {
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
       })
