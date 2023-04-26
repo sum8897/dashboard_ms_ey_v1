@@ -19,7 +19,7 @@ export class SacAttendanceComplianceRankComponent implements OnInit {
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
-  // level = environment.config === 'national' ? 'state' : 'district';
+  // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
   title = 'Rank in % Schools Reporting Student Attendance'

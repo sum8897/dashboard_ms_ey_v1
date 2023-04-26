@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import * as Title from '../../../../assets/config/ui_config.json'
 import { environment } from 'src/environments/environment';
@@ -8,6 +8,7 @@ import { CommonService } from '../../services/common/common.service';
 import { RbacService } from '../../services/rbac-service.service';
 import { configFiles } from '../../config/configMapping'
 import { AuthenticationService } from '../../services/authentication.service';
+import { PdfDownloadService } from '../../services/pdf-download.service';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -15,9 +16,9 @@ import { AuthenticationService } from '../../services/authentication.service';
 })
 export class LayoutComponent implements OnInit {
   menu: IMenuItem[] | undefined;
-  national: boolean = true;
+  NVSK: boolean = true;
   role: any;
-  config = 'state';
+  config = 'VSK';
   isHome: boolean = false;
   showBackBtn: boolean = false;
   // Font Increase Decrease Variables
@@ -33,7 +34,10 @@ export class LayoutComponent implements OnInit {
   title: any;
   hierarchyLevel: any;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
-  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService, private _authService: AuthenticationService) {
+  @ViewChild('contentElement', { static: true }) contentElementRef!: ElementRef;
+  // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
+  constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService, private _authService: AuthenticationService,
+    private pdfDownloadService: PdfDownloadService, private cdr: ChangeDetectorRef) {
 
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;
@@ -49,16 +53,16 @@ export class LayoutComponent implements OnInit {
       this.showBackBtn = false
     }
 
-
   }
 
   ngOnInit(): void {
     this.title = Title
-    if (this.config === 'state') {
-      this.national = false;
+    if (this.config === 'VSK') {
+      this.NVSK = false;
     }
     this.role = localStorage.getItem('role');
   }
+
 
   checkRbacLevel() {
     const programIds = Object.keys(configFiles);
@@ -191,14 +195,15 @@ export class LayoutComponent implements OnInit {
     }
   }
 
-  activate() {
-
+  activate(componentRef: any) {
+    const copyOfContentElementRef =(this.contentElementRef);
+    this.pdfDownloadService.contentElementRef = copyOfContentElementRef;
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;
     }
     else {
       this.isHome = false;
-      this.checkRbacLevel()
+      this.checkRbacLevel();
     }
     if (this._router.url !== '/home') {
       this.showBackBtn = true

@@ -44,6 +44,7 @@ import { RbacDialogComponent } from './components/rbac-dialog/rbac-dialog.compon
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PopupOptionsComponent } from './components/buttons/popup-options/popup-options.component';
 
 
 const IMPORTS: any[] = [
@@ -93,7 +94,9 @@ const DECLARATIONS = [
   ProgressCircleComponent,
   DownloadButtonComponent,
   TimeSeriesFilterPanelComponent,
-  BigNumberComponent
+  BigNumberComponent,
+  PopupOptionsComponent,
+
 ];
 
 @NgModule({

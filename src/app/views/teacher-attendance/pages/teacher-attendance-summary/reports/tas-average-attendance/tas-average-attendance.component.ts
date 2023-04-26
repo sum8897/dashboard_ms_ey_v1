@@ -22,7 +22,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
-  // level = environment.config === 'national' ? 'state' : 'district';
+  // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
   title='% Teachers Present';

@@ -28,7 +28,7 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
     bigNumberMetrics: any = [];
-
+    tabName:any='District Wise Performance'
 @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -43,7 +43,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabName);
         this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {

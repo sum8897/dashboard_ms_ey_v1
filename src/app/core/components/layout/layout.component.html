@@ -20,7 +20,7 @@
             <i *ngIf="role==='report_viewer'" class="fa fa-key" aria-hidden="true"
                 [routerLink]="['change-password']" matTooltip="Change Password"></i>
             
-            <i *ngIf="!national" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout" (click)="signOut()" id="signOut"
+            <i *ngIf="!NVSK" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout" (click)="signOut()" id="signOut"
                 name="signOut"></i>
             <!-- <button id="dark-mode-toggle" class="dark-mode-toggle" tabindex="0"
              title="{{resourceService?.frmelmnts?.lbl?.accessibilitytheme}}" (click)="changeTheme()"
@@ -36,8 +36,8 @@
     <app-header></app-header>
     <app-side-nav [isHome]="isHome" [menu]="menu"></app-side-nav>
     <div class="app-content-wrapper">
-        <div class="app-content">
-            <router-outlet (activate)="activate()"></router-outlet>
+        <div class="app-content" #contentElement>
+            <router-outlet (activate)="activate($event)"></router-outlet>
         </div>
         <app-footer></app-footer>
     </div>

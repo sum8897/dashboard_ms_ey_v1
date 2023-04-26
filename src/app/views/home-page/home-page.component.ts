@@ -7,7 +7,7 @@ import { AppServiceComponent } from 'src/app/app.service';
 import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
-import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home-page',
@@ -22,9 +22,17 @@ export class HomePageComponent implements OnInit {
   storage
   hideAdmin
 
-  roles = rbacConfig.roles
+  roles: any;
   constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService) {
     // this.setToken()
+    this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+      return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+    })
+    if(environment.config === 'VSK') {
+      this.roles = this.roles.filter((role: any, index: any) => {
+        return role.value !== 0
+      })
+    }
   }
 
   ngOnInit(): void {

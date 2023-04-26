@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   loginObj: any;
-  national: boolean = true;
+  NVSK: boolean = true;
 
 
   otpForm!: FormGroup;
@@ -60,8 +60,8 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/home'])
     }
 
-    if (environment.config === 'state') {
-      this.national = false
+    if (environment.config === 'VSK') {
+      this.NVSK = false
 
 
       let names: any = stateNames;

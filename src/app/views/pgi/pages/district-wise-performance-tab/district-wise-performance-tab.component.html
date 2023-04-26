@@ -4,11 +4,12 @@
             <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)"
                 colSize="col-span-6"></app-filter-panel>
         </div>
-        <div class="col-start-4 col-end-5 download-button">
-            <app-download-button [data]="reportsData"></app-download-button>
+        <div class="col-start-4 col-end-5 download-button" id="downloadbutton" #downloadbutton>
+            <app-popup-options [data]="reportsData" [reportName]="'pgi'" ></app-popup-options>
+            <!-- <app-download-button [data]="reportsData"></app-download-button> -->
         </div>
     </div>
-    <div class="reports-row">
+    <div class="reports-row" >
         <div *ngIf="checkReport('pgi_metrics', 'bigNumber1')" id="bignumber1">
             <app-pgi-bignumber-metrics (exportReportData)="importBigNumberMetrics($event)"></app-pgi-bignumber-metrics>
         </div>

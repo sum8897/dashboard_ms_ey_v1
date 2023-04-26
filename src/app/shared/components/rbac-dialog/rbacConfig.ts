@@ -1,6 +1,13 @@
 export const rbacConfig = {
-  "baseHierarchy": 2,
+  "baseHierarchy": 1,
   "filters": [
+    {
+      "query": "select state_id, state_name from dimensions.state order by state_name",
+      "hierarchyLevel": 1,
+      "name": "State",
+      "labelProp": "state_name",
+      "valueProp": "state_id"
+    },
     {
       "query": "select district_id, district_name from dimensions.district order by district_name",
       "hierarchyLevel": 2,
@@ -39,18 +46,25 @@ export const rbacConfig = {
   ],
   "roles": [
     {
+      name: "National Officer",
+      value: 0,
+      imageUrl: 'state.png',
+      roleImageUrl: 'principle_role.png',
+      id:"national"
+    },
+    {
       name: "State Officer",
       value: 1,
       imageUrl: 'state.png',
       roleImageUrl: 'principle_role.png',
-      id:"state_officer"
+      id:"state"
     },
     {
       name: "District Officer",
       value: 2,
       imageUrl: 'district.png',
       roleImageUrl: 'principle_role.png',
-      id:"district_officer"
+      id:"district"
 
     },
     {
@@ -58,14 +72,14 @@ export const rbacConfig = {
       value: 3,
       imageUrl: 'block.png',
       roleImageUrl: 'principle_role.png',
-      id:"block_officer"
+      id:"block"
     },
     {
       name: "Cluster Officer",
       value: 4,
       imageUrl: 'cluster.png',
       roleImageUrl: 'principle_role.png',
-      id:"cluster_officer"
+      id:"cluster"
 
     },
     {
@@ -73,7 +87,7 @@ export const rbacConfig = {
       value: 5,
       imageUrl: 'principle.png',
       roleImageUrl: 'principle_role.png',
-      id:"school_officer"
+      id:"school"
 
     },
     {
@@ -81,7 +95,7 @@ export const rbacConfig = {
       value: 6,
       imageUrl: 'class.png',
       roleImageUrl: 'principle_role.png',
-      id:"class_officer"
+      id:"grade"
 
     }
   ]
