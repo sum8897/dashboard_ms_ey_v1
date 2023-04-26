@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./level-n-metric-filter-panel.component.scss']
 })
 export class LevelNMetricFilterPanelComponent implements OnInit {
-  config: string = 'state'
-  national: boolean = true;
+  config: string = 'VSK'
+  NVSK: boolean = true;
 
   @Input() metricFilter: any;
   @Input() levels: any;
@@ -19,8 +19,8 @@ export class LevelNMetricFilterPanelComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    if(this.config == 'state'){
-      this.national = false;
+    if(this.config == 'VSK'){
+      this.NVSK = false;
     }
   }
 

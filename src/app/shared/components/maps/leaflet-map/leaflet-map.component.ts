@@ -30,7 +30,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() mapData!: any;
   @Input() level: any;
   @Input() perCapitaReport: any = false;
-  // @Input() hierarchyLevel: any = this.config === 'national' ? 0 : 1;
+  // @Input() hierarchyLevel: any = this.config === 'NVSK' ? 0 : 1;
 
   @Output() drillDownFilter: EventEmitter<any> = new EventEmitter<any>();
 
@@ -87,7 +87,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if (this.config === 'national' && this.hierarchyLevel === 0 && this.level === 'district') {
+      if (this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') {
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 3) {
@@ -120,7 +120,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getLayerColor(e: any, legend?: boolean) {
-    if ((this.config === 'national' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
+    if ((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
       return '#fff'
     }
     else {
@@ -151,7 +151,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     return new Promise(async (resolve, reject) => {
       try {
         let body;
-        if (this.config === 'national' && this.rbacDetails.role === 0) {
+        if (this.config === 'NVSK' && this.rbacDetails.role === 0) {
           const response = await fetch(`${environment.apiURL}/assets/IN.json`);
           const temp = await response.json();
           body = temp['IN']
@@ -254,7 +254,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
             }
           });
-          if (parent.level === 'state' || parent.config === 'state' || parent.config === 'national') {
+          if (parent.level === 'state' || parent.config === 'VSK' || parent.config === 'NVSK') {
             return {
               fillColor: singleColor ? (color === '#fff' ? color : singleColor) : color,
               weight: 1,
@@ -544,7 +544,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       ...this.mapData,
       data: temp
     }
-    if (this.config === 'national') {
+    if (this.config === 'NVSK') {
       this.markers.clearLayers();
       this.createMarkers(filteredData, rangeColour);
     }

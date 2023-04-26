@@ -25,8 +25,8 @@ import { AuthenticationService } from '../../services/authentication/authenticat
 })
 export class HeaderComponent implements OnInit {
   stateName: any;
-  config: string = 'state'
-  national: boolean = true;
+  config: string = 'VSK'
+  NVSK: boolean = true;
 
   faBars = faBars;
 
@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    if(this.config === 'state'){
-      this.national = false
+    if(this.config === 'VSK'){
+      this.NVSK = false
       // // this.stateName = false;
       // this.stateName=environment.stateCode
 
