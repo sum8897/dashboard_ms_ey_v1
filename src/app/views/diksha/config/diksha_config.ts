@@ -49,7 +49,7 @@ export const config = {
             "hierarchyLevel": "1",
             "actions": {
                 "queries": {
-                    "table": "select subject_diksha as subject , grade_diksha as class , round(cast(sum(sum) as numeric),2) as performance from datasets.diksha_linkedqrcount_textbookdiksha0grade0subject0medium as t1 group by subject_diksha ,grade_diksha "
+                    "table": "select subject as subject , grade as class , round(cast(sum(sum) as numeric),2) as performance from datasets.diksha_linkedqrcount_textbookdiksha0grade0subject0medium as t1 group by subject ,grade "
                 },
                 "level": "District",
                 "nextLevel": "Block"
@@ -128,7 +128,7 @@ export const config = {
             "hierarchyLevel": "1",
             "actions": {
                 "queries": {
-                    "table": "select subject_diksha as subject , grade_diksha as class , round(cast(avg(sum) as numeric),2) as performance from datasets.diksha_contentqrcode_textbookdiksha0grade0subject0medium as t1 group by subject_diksha ,grade_diksha "
+                    "table": "select subject as subject , grade as class , round(cast(avg(sum) as numeric),2) as performance from datasets.diksha_contentqrcode_textbookdiksha0grade0subject0medium as t1 group by subject ,grade "
                 },
                 "level": "District",
                 "nextLevel": "Block"

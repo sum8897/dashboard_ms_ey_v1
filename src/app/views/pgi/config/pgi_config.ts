@@ -76,7 +76,7 @@ export const config = {
                 "actions": {
                     "queries":
                     {
-                        "map": "select category_name, d.district_name,t.district_id, cast(sum(t.sum) as numeric) as performance FROM datasets.pgi_category_state0district0categorypgi as t join dimensions.district as d on t.district_id = d.district_id join dimensions.categorypgi as c on t.category_id = c.category_id group by t.district_id, d.district_name, category_name"
+                        "map": "select category_name, d.district_name,t.district_id, cast(sum(t.sum) as numeric) as performance FROM datasets.pgi_category_state0district0categorypgi as t join dimensions.district as d on t.district_id = d.district_id group by t.district_id, d.district_name, category_name"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -116,9 +116,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Outcome'",
-                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Infrastructure Facilities Student Entitlements'",
-                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t join dimensions.categorypgi as c on c.category_id = t.category_id where category_name = 'Governance Processes'",
+                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Outcome'",
+                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Infrastructure, Facilities, Student Entitlements'",
+                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Governance Processes'",
                         "bigNumber4": "",
                         "bigNumber5": ""
                     },

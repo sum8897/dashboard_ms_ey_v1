@@ -4,17 +4,17 @@ export const config = {
             "label": "District Wise Performance",
             "name": "Grade",
             "id": "grade",
-            "labelProp": "grade_nas",
-            "valueProp": "grade_nas",
-            "query": "select grade_nas from dimensions.grade"
+            "labelProp": "grade",
+            "valueProp": "grade",
+            "query": "select grade from dimensions.grade"
         },
         {
             "label": "District Wise Performance",
             "name": "Subject",
             "id": "subject",
-            "labelProp": "subject_nas",
-            "valueProp": "subject_nas",
-            "query": "select subject_nas from dimensions.subject"
+            "labelProp": "subject",
+            "valueProp": "subject",
+            "query": "select subject from dimensions.subject"
         },
         {
             "label": "District Wise Performance",
@@ -23,40 +23,40 @@ export const config = {
             "id": "lo_code",
             "labelProp": "lo_code",
             "valueProp": "lo_code",
-            "query": "select lo_id, lo_code from dimensions.lo"
+            "query": "select lo_code from dimensions.lo"
         },
         {
             "label": "Grade & Subject Performance",
             "name": "Grade",
             "id": "grade",
-            "labelProp": "grade_nas",
-            "valueProp": "grade_nas",
-            "query": "select grade_nas from dimensions.grade"
+            "labelProp": "grade",
+            "valueProp": "grade",
+            "query": "select grade from dimensions.grade"
         },
         {
             "label": "Grade & Subject Performance",      
             "name": "Subject",
             "id": "subject",
-            "labelProp": "subject_nas",
-            "valueProp": "subject_nas",
-            "query": "select subject_nas from dimensions.subject"
+            "labelProp": "subject",
+            "valueProp": "subject",
+            "query": "select subject from dimensions.subject"
         },
       
         {
             "label": "State Wise Performance",
             "name": "Grade",
             "id": "grade",
-            "labelProp": "grade_nas",
-            "valueProp": "grade_nas",
-            "query": "select grade_nas from dimensions.grade"
+            "labelProp": "grade",
+            "valueProp": "grade",
+            "query": "select grade from dimensions.grade"
         },
         {
             "label": "State Wise Performance",
             "name": "Subject",
             "id": "subject",
-            "labelProp": "subject_nas",
-            "valueProp": "subject_nas",
-            "query": "select subject_nas from dimensions.subject"
+            "labelProp": "subject",
+            "valueProp": "subject",
+            "query": "select subject from dimensions.subject"
         },
         {
             "label": "State Wise Performance",
@@ -65,7 +65,7 @@ export const config = {
             "id": "lo_code",
             "labelProp": "lo_code",
             "valueProp": "lo_code",
-            "query": "select lo_id, lo_code from dimensions.lo"
+            "query": "select lo_code from dimensions.lo"
         },
 
     ],
@@ -178,7 +178,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, lo_name, grade_nas, subject_nas, round(cast(sum(sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject_nas, grade_nas, lo_name, t.lo_code"
+                        "table": "select t.lo_code, lo_name, grade, subject, round(cast(sum(sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject, grade, lo_name, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -190,7 +190,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, lo_name, grade_nas, subject_nas, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject_nas, grade_nas, lo_name, t.lo_code"
+                        "table": "select t.lo_code, lo_name, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_district0lo0subject0grade as t join dimensions.district as d on t.district_id = d.district_id join dimensions.lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, lo_name, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -210,12 +210,12 @@ export const config = {
                     },
                     {
                         name: "Grade",
-                        property: "grade_nas",
+                        property: "grade",
                         class: "text-center"
                     },
                     {
                         name: "Subject",
-                        property: "subject_nas",
+                        property: "subject",
                         class: "text-center"
                     },
                     {
