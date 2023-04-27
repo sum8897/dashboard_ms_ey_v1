@@ -314,7 +314,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
   fitBoundsToCountryBorder(): void {
     this.map.fitBounds(this.countryGeoJSON.getBounds(), {
-      padding: [10, 10]
+      padding: [100, 100]
     });
   }
 
