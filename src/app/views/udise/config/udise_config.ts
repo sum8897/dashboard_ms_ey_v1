@@ -197,10 +197,10 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select sum(sum) as total_students from datasets.udise_no_of_students_district",
-                        "bigNumber2": "select avg(sum) as ptr from datasets.udise_category_district0categoryudise where category_name = 'PTR'",
-                        "bigNumber3": "select avg(sum) as schs_with_toilet from datasets.udise_category_district0categoryudise where category_name = '% schools having toilet'",
-                        "bigNumber4": "select avg(sum) as schs_having_electricity from datasets.udise_category_district0categoryudise where category_name = '% schools having electricity'",
-                        "bigNumber5": "select avg(sum) as schs_having_water from datasets.udise_category_district0categoryudise where category_name = '% schools having drinking water'",
+                        "bigNumber2": "select round(cast (avg(sum) as numeric),2) as ptr from datasets.udise_category_district0categoryudise where category_name = 'PTR'",
+                        "bigNumber3": "select round(cast (avg(sum) as numeric),2) as schs_with_toilet from datasets.udise_category_district0categoryudise where category_name = '% schools having toilet'",
+                        "bigNumber4": "select round(cast (avg(sum) as numeric),2) as schs_having_electricity from datasets.udise_category_district0categoryudise where category_name = '% schools having electricity'",
+                        "bigNumber5": "select round(cast (avg(sum) as numeric),2) as schs_having_water from datasets.udise_category_district0categoryudise where category_name = '% schools having drinking water'",
                     },
                     "level": "district"
                 }
