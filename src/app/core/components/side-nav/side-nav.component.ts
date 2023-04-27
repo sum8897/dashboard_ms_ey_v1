@@ -21,15 +21,18 @@ export class SideNavComponent implements OnInit, OnChanges {
    }
 
   ngOnInit(): void {
-    
   }
   ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes?.['isHome']?.currentValue !== changes?.['isHome']?.previousValue && !this.isHome && document.body.classList.contains("sidebaractive")){
+      document.body.classList.remove("sidebaractive")
+    }
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
       document.body.classList.add("sideBarHeightNone");
     }
     else if (!this.isHome && document.body.classList.contains("sidebaractive")){
-      document.body.classList.remove("sidebaractive")
+      // document.body.classList.remove("sidebaractive")
 
     }
     if (!this.isHome && document.body.classList.contains("sideBarHeightNone")){ 
