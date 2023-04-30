@@ -11,11 +11,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [
     SchoolInfrastructureComponent
   ],
-  imports: [ 
-     
-  MatTabsModule,
-  SharedModule,
-  CommonModule,
+  imports: [
+    MatTabsModule,
+    SharedModule,
     CommonModule,
     SchoolInfrastructureRoutingModule
   ]

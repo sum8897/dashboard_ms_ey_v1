@@ -116,6 +116,14 @@ routes = [
             (module) => module.SchoolInfrastructureModule
           ),
         canLoad: [AuthGuard]
+      },
+      {
+        path: 'studentProgress',
+        loadChildren: () =>
+          import('./views/student-progression/student-progression.module').then(
+            (module) => module.StudentProgressionModule
+          ),
+        canLoad: [AuthGuard]
       }
     ],
   },

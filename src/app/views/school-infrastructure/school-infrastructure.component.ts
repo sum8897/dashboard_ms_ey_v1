@@ -18,15 +18,28 @@ export class SchoolInfrastructureComponent implements OnInit {
     averagePercentage: 10
   };
   tableReportData: any;
-  title = ''
+  // title = 'District wise % Schools meeting UDISE Criteria'
+  title = {
+    1:'District wise % Schools meeting UDISE Criteria',
+    2:'Block wise % Schools meeting UDISE Criteria',
+    3:'Cluster wise % Schools meeting UDISE Criteria',
+    4:'School wise details of meeting UDISE Criteria								'
+  }
   rbacDetails: any;
   filters: any = [];
   levels: any;
+  reportName = {
+    1:'school_infrastructure_config',
+    2:'school_infrastructure_district_config',
+    3:'school_infrastructure_block_config',
+    4:'school_infrastructure_cluster_config'
+  }
 
   constructor(private readonly _commonService: CommonService,
     private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+      debugger
     })
   }
 
@@ -40,7 +53,7 @@ export class SchoolInfrastructureComponent implements OnInit {
     // this.endDate = endDate;
     let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig['school_infrastructure_config'];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName[this.rbacDetails.role]];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
@@ -127,32 +140,142 @@ export class SchoolInfrastructureComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          columns.forEach((col: any) => {
-            if (row[col.property]) {
-              row = {
-                ...row,
-                [col.property]: { value: row[col.property] }
-              }
+    let rows = [
+        {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:1,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      },
+      {
+        index:2,
+        district_name:'Gujarat',
+        drinking_water: 'Yes',
+        have_toilet: 'No',
+        have_cwsn : 'Yes',
+        have_elec: 'Yes',
+        have_cctv: 'No',
+        have_solar: 'No',
+        have_handwash: 'Yes',
+        hsve_playground: 'No'
+      }
+    ];
+    let { table: { columns } } = options;
+    this.tableReportData = {
+      data: rows.map(row => {
+        columns.forEach((col: any) => {
+          if (row[col.property]) {
+            row = {
+              ...row,
+              [col.property]: { value: row[col.property] }
             }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
           }
-        })
-      }
-      if (this.tableReportData?.data?.length > 0) {
-        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: '' }
-        // this.csv.csvDownload(reportsData)
-      }
-    });
+        });
+        return row
+      }),
+      columns: columns.filter(col => {
+        if (rows[0] && col.property in rows[0]) {
+          return col;
+        }
+      })
+    }
+    if (this.tableReportData?.data?.length > 0) {
+      let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+      // this.csv.csvDownload(reportsData)
+    }
+    
+    // this._commonService.getReportDataNew(query).subscribe((res: any) => {
+    //   let rows = res;
+    //   let { table: { columns } } = options;
+    //   this.tableReportData = {
+    //     data: rows.map(row => {
+    //       columns.forEach((col: any) => {
+    //         if (row[col.property]) {
+    //           row = {
+    //             ...row,
+    //             [col.property]: { value: row[col.property] }
+    //           }
+    //         }
+    //       });
+    //       return row
+    //     }),
+    //     columns: columns.filter(col => {
+    //       if (rows[0] && col.property in rows[0]) {
+    //         return col;
+    //       }
+    //     })
+    //   }
+    //   if (this.tableReportData?.data?.length > 0) {
+    //     let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: '' }
+    //     // this.csv.csvDownload(reportsData)
+    //   }
+    // });
   }
 
 }

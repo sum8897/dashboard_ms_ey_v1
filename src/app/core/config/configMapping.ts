@@ -8,6 +8,8 @@ import { config as udiseConfig } from '../../views/udise/config/udise_config'
 import { config as nasConfig } from '../../views/nas/config/nas_config'
 import { config as dikshaConfig } from '../../views/diksha/config/diksha_config'
 import { config as schoolInfraConfig } from '../../views/school-infrastructure/config/school_infrastructure_config'
+import { config as studentProgressConfig } from '../../views/student-progression/config/student_progression_config'
+
 
 
 export const configFiles = {
@@ -20,7 +22,8 @@ export const configFiles = {
   udise: udiseConfig,
   nas: nasConfig,
   diksha: dikshaConfig,
-  schoolInfrastructure: schoolInfraConfig
+  schoolInfrastructure: schoolInfraConfig,
+  studentProgress: studentProgressConfig
 };
 
 export const programFolderNames = {
