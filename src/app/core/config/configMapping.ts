@@ -7,6 +7,8 @@ import { config as nishthaConfig } from '../../views/nishtha/config/nishtha_conf
 import { config as udiseConfig } from '../../views/udise/config/udise_config'
 import { config as nasConfig } from '../../views/nas/config/nas_config'
 import { config as dikshaConfig } from '../../views/diksha/config/diksha_config'
+import { config as schoolInfraConfig } from '../../views/school-infrastructure/config/school_infrastructure_config'
+
 
 export const configFiles = {
   studentAttendance: studentAttendaceConfig,
@@ -17,7 +19,8 @@ export const configFiles = {
   nishtha: nishthaConfig,
   udise: udiseConfig,
   nas: nasConfig,
-  diksha: dikshaConfig
+  diksha: dikshaConfig,
+  schoolInfrastructure: schoolInfraConfig
 };
 
 export const programFolderNames = {

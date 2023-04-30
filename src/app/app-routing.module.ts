@@ -108,6 +108,14 @@ routes = [
             (module) => module.DikshaModule
           ),
         canLoad: [AuthGuard]
+      },
+      {
+        path: 'schoolInfra',
+        loadChildren: () =>
+          import('./views/school-infrastructure/school-infrastructure.module').then(
+            (module) => module.SchoolInfrastructureModule
+          ),
+        canLoad: [AuthGuard]
       }
     ],
   },
