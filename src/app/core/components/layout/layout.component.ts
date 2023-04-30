@@ -116,9 +116,29 @@ export class LayoutComponent implements OnInit {
         }
 
       });
+
+      this.fetchMenu();
     })
 
   }
+
+  fetchMenu() {
+    const dynamicRoutes = [
+      {name: 'Student Assessments',icon: 'udise.png', icon_url: '', path: ''}
+    ];
+
+    dynamicRoutes.forEach(menu => {
+      let menuToDisplay: IMenuItem | any = {};
+      menuToDisplay.label = menu.name;
+      menuToDisplay.path = 'dynamic/' + menu.path;
+      menuToDisplay.icon = null;
+      menuToDisplay.iconUrl = menu.icon_url;
+      menuToDisplay.isSelected = false;
+
+      this.menu.push(menuToDisplay);
+    });
+  }
+
   rbacdetails() {
     return this.rbac.getRbacDetails()
   }
