@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {config} from "./config/school_assessment_config";
-import {buildQuery, parseTimeSeriesQuery} from "../../utilities/QueryBuilder";
+import {buildQuery, parseFilterToQuery, parseTimeSeriesQuery} from "../../utilities/QueryBuilder";
 import {RbacService} from "../../core/services/rbac-service.service";
 import {CommonService} from "../../core/services/common/common.service";
 import {DataService} from "../../core/services/data.service";
+import {WrapperService} from "../../core/services/wrapper.service";
 
 @Component({
     selector: 'app-student-assessment',
@@ -67,20 +68,20 @@ export class StudentAssessmentComponent implements OnInit {
     };
 
     constructor(private _rbacService: RbacService, private _commonService: CommonService,
-                private readonly _dataService: DataService) {
+                private readonly _dataService: DataService, private _wrapperService: WrapperService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
     }
 
-    ngOnInit(): void {
-        this.getReportData();
+    async ngOnInit(): Promise<void> {
+        this.getReportData({filterValues: [], timeSeriesValues: []});
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters)
     }
 
-    getReportData(startDate = undefined, endDate = undefined): void {
-        let filterValues = [];
-        // this.startDate = startDate;
-        // this.endDate = endDate;
+    getReportData(values: any): void {
+        console.log('values', values);
+        let {filterValues, timeSeriesValues} = values ?? {filterValues: [], timeSeriesValues: []};
         let reportConfig = config;
 
         console.log('this.rbacDetails?.role', this.rbacDetails?.role, reportConfig);
@@ -114,11 +115,17 @@ export class StudentAssessmentComponent implements OnInit {
         Object.keys(queries).forEach(async (key: any) => {
             if (key.toLowerCase().includes('comparison')) {
                 let endDate = new Date();
+                let days = endDate.getDate();
+                let startDate = new Date();
+                startDate.setDate(days)
                 onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
             } else {
                 onLoadQuery = queries[key]
             }
-            let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, '', '', key, '');
+            let query = buildQuery(onLoadQuery, defaultLevel, this.levels, [], '', '', key, '');
+            filterValues.forEach((filterParams: any) => {
+                query = parseFilterToQuery(query, filterParams)
+            });
 
             let metricFilter = [...filterValues].filter((filter: any) => {
                 return filter.filterType === 'metric'
@@ -266,6 +273,11 @@ export class StudentAssessmentComponent implements OnInit {
                 // this.csv.csvDownload(reportsData)
             }
         });
+    }
+
+    filtersUpdated(data) {
+        console.log('=============>', data);
+        this.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     }
 
 }

@@ -39,6 +39,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
   }
 
   getReportData(values: any): void {
+    console.log('=======>>>>fffffff', values);
     let {filterValues, timeSeriesValues} = values ?? {};
     this.startDate = timeSeriesValues?.startDate;
     this.endDate = timeSeriesValues?.endDate;
@@ -74,6 +75,7 @@ export class ReviewMeetingsConductedComponent implements OnInit {
       else {
         onLoadQuery = queries[key]
       }
+      console.log('innnn review', this.filters);
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
       filterValues.forEach((filterParams: any) => {

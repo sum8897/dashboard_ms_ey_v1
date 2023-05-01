@@ -1,24 +1,21 @@
 <div class="metric-card-wrapper">
     <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
         <div class="col-span-12">
-<!--            <p class="program-title">Title</p>-->
-<!--            <p class="program-desc">Description</p>-->
+            <!--            <p class="program-title">Title</p>-->
+            <p class="program-desc">This program details the compliance of schools in the state with UDISE infrastructure criteria</p>
         </div>
     </div>
 </div>
 
 <div class="custom-tab-group-wrapper">
-    <div class="filter-row grid grid-cols-4">
+    <div class="filter-row grid grid-cols-6">
         <div class="col-span-2">
             <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)" colSize="col-span-6"></app-filter-panel>
         </div>
-        <!--<div class="col-start-4 col-end-5 download-button" >
-            <app-popup-options [data]="reportsData" [reportName]="'review_meetings'" ></app-popup-options>
-        </div>-->
     </div>
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngFor="let card of cards">
+            <div [class]="'col-span-2 xmd:col-span-' + (card.span || 1) + ' div-shadow'" *ngFor="let card of cards">
                 <ng-container [ngSwitch]="card.type">
                     <ng-container *ngSwitchCase="'number'">
                         <div class="col-span-full tab-wrapper" *ngIf="card.value">

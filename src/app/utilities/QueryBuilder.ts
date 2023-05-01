@@ -34,6 +34,7 @@ const getCubeNameFromSelFilter = (filters, levels, startDate, endDate, compareDa
     let newQuery = "";
 
     if (filters.length > 0) {
+        console.log('BUILDER=====', filters);
         filters.forEach(({ actions: { level, query } }, index) => {
             if (level && level !== '') {
                 newQuery = parseQuery(filters, levels, index, startDate, endDate, compareDateRange, key);

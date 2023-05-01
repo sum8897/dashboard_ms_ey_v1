@@ -132,6 +132,14 @@ routes = [
                 (module) => module.StudentAssessmentModule
             ),
         canLoad: [AuthGuard]
+      },
+      {
+        path: 'school-infra',
+        loadChildren: () =>
+            import('./views/school-infra/school-infra.module').then(
+                (module) => module.SchoolInfraModule
+            ),
+        canLoad: [AuthGuard]
       }
     ],
   },
