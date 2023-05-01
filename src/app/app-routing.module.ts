@@ -126,7 +126,7 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
-        path: 'dynamic',
+        path: 'student-assessment',
         loadChildren: () =>
             import('./views/student-assessment/student-assessment.module').then(
                 (module) => module.StudentAssessmentModule

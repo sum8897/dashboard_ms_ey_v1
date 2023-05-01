@@ -124,15 +124,14 @@ export class LayoutComponent implements OnInit {
 
   fetchMenu() {
     const dynamicRoutes = [
-      {name: 'Student Assessments',icon: 'udise.png', icon_url: '', path: ''}
+      {name: 'Student Assessments',icon: 'udise.png', icon_url: '', path: 'student-assessment'}
     ];
 
     dynamicRoutes.forEach(menu => {
       let menuToDisplay: IMenuItem | any = {};
       menuToDisplay.label = menu.name;
-      menuToDisplay.path = 'dynamic/' + menu.path;
-      menuToDisplay.icon = null;
-      menuToDisplay.iconUrl = menu.icon_url;
+      menuToDisplay.path = menu.path;
+      menuToDisplay.icon = menu.icon;
       menuToDisplay.isSelected = false;
 
       this.menu.push(menuToDisplay);

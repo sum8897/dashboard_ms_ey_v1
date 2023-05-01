@@ -12,16 +12,41 @@ import {DataService} from "../../core/services/data.service";
 })
 export class StudentAssessmentComponent implements OnInit {
     tabIndex;
+    // creating card map for all levels
     cardMap = {
         1: {
             avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
             district_map: {type: 'map', value: null},
             district_avg_score: {type: 'table', title: '', value: null},
+            grade: {type: 'barChart', title: '', value: null},
+            subject: {type: 'barChart', title: '', value: null},
             lo_avg_score: {type: 'table', title: '', value: null},
         },
         2: {
             avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
             district_avg_score: {type: 'table', title: '', value: null},
+            grade: {type: 'barChart', title: '', value: null},
+            subject: {type: 'barChart', title: '', value: null},
+            lo_avg_score: {type: 'table', title: '', value: null},
+        },
+        3: {
+            avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+            district_avg_score: {type: 'table', title: '', value: null},
+            grade: {type: 'barChart', title: '', value: null},
+            subject: {type: 'barChart', title: '', value: null},
+            lo_avg_score: {type: 'table', title: '', value: null},
+        },
+        4: {
+            avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+            district_avg_score: {type: 'table', title: '', value: null},
+            grade: {type: 'barChart', title: '', value: null},
+            subject: {type: 'barChart', title: '', value: null},
+            lo_avg_score: {type: 'table', title: '', value: null},
+        },
+        5: {
+            avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+            grade: {type: 'barChart', title: '', value: null},
+            subject: {type: 'barChart', title: '', value: null},
             lo_avg_score: {type: 'table', title: '', value: null},
         }
     };
@@ -34,7 +59,8 @@ export class StudentAssessmentComponent implements OnInit {
         1: 'config',
         2: 'district_config',
         3: 'block_config',
-        4: 'cluster_config'
+        4: 'cluster_config',
+        5: 'school_config',
     }
     reportData: any = {
         reportName: "District Wise Performance"
@@ -85,8 +111,6 @@ export class StudentAssessmentComponent implements OnInit {
             // this._wrapperService.constructFilters(this.filters, filters);
         }
 
-        console.log('-----', queries);
-
         Object.keys(queries).forEach(async (key: any) => {
             if (key.toLowerCase().includes('comparison')) {
                 let endDate = new Date();
@@ -112,7 +136,6 @@ export class StudentAssessmentComponent implements OnInit {
                             this.createCard(card, data);
                         }
                     )
-                    // this.getTableReportData(query, options);
                 } else if (query && card.type === 'table') {
                     this.getTableReportData(query, options, card);
                 } else if (query && card.type === 'map') {
@@ -166,6 +189,8 @@ export class StudentAssessmentComponent implements OnInit {
                         ).catch(err => {
                     });
 
+                } else if (query && card.type === 'barChart') {
+                    // todo use bar table
                 }
             }
 
