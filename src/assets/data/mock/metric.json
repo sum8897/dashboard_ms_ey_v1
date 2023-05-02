@@ -67,9 +67,9 @@
     },
     {
       "programName": "Student Progression",
-      "tooltip": "NISHTHA is a capacity building programme for \"Improving Quality of School Education through Integrated Teacher Training\". It aims to build competencies among all the teachers and school principals at the elementary stage.",
+      "tooltip": "This program details the compliance of schools in the state with UDISE infrastructure criteria.",
       "navigationUrl": "/studentProgress",
-      "imageUrl": "nishtha.png",
+      "imageUrl": "progression.jpeg",
       "programID": "studentProgress",
       "orderBy": "11"
     }

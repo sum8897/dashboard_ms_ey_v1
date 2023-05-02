@@ -187,7 +187,7 @@ export class SchoolProgressionComponent implements OnInit {
 
   createCard(card, data) {
     if (data && data.length) {
-      card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria']};
+      card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria'] || '0%',valueSuffix:"%"};
     } else if (card.type === 'table' || card.type === 'map') {
       card.value = data;
     }
