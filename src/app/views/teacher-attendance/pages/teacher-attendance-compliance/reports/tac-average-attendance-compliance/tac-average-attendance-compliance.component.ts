@@ -109,6 +109,7 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
 
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      debugger
       let rows = res;
       let { table: { columns } } = options;
       this.tableReportData = {
@@ -130,6 +131,13 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
               row = {
                 ...row,
                 [col.property]: { value: row[col.property] }
+              }
+            }
+           else if(row[col.property]==0 || row[col.property]=== "" || row[col.property]=== null || row[col.property]==="undefined" || !row[col.property]){
+            
+              row = {
+                ...row,
+                [col.property]: {value: "0" }
               }
             }
           });

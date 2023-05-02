@@ -101,7 +101,7 @@ export class LayoutComponent implements OnInit {
       menuToDisplay.icon = 'dashboard.png';
       menuToDisplay.isSelected = true;
       this.menu?.push(menuToDisplay);
-
+      console.log("cvbn:", { menuResult })
       menuResult?.data?.forEach((dasboardMenu: IDashboardMenu | any) => {
 
         if (hierarchyLevels[dasboardMenu.programID]?.includes(String(rbacRole))) {
@@ -116,9 +116,30 @@ export class LayoutComponent implements OnInit {
         }
 
       });
+
+      this.fetchMenu();
     })
 
   }
+
+  fetchMenu() {
+    const dynamicRoutes = [
+      { name: 'School Infrastructure', icon: 'udise.png', icon_url: '', path: 'school-infrastructure' },
+      { name: 'Student Assessments', icon: 'udise.png', icon_url: '', path: 'student-assessment' },
+      { name: 'Student Progression', icon: 'udise.png', icon_url: '', path: 'school-progression' },
+    ];
+
+    dynamicRoutes.forEach(menu => {
+      let menuToDisplay: IMenuItem | any = {};
+      menuToDisplay.label = menu.name;
+      menuToDisplay.path = menu.path;
+      menuToDisplay.icon = menu.icon;
+      menuToDisplay.isSelected = false;
+
+      this.menu.push(menuToDisplay);
+    });
+  }
+
   rbacdetails() {
     return this.rbac.getRbacDetails()
   }
@@ -196,7 +217,7 @@ export class LayoutComponent implements OnInit {
   }
 
   activate(componentRef: any) {
-    const copyOfContentElementRef =(this.contentElementRef);
+    const copyOfContentElementRef = (this.contentElementRef);
     this.pdfDownloadService.contentElementRef = copyOfContentElementRef;
     if (this._router.url === '/home' || this._router.url === '/rbac') {
       this.isHome = true;

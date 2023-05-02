@@ -108,6 +108,30 @@ routes = [
             (module) => module.DikshaModule
           ),
         canLoad: [AuthGuard]
+      },
+      {
+        path: 'student-assessment',
+        loadChildren: () =>
+            import('./views/student-assessment/student-assessment.module').then(
+                (module) => module.StudentAssessmentModule
+            ),
+        canLoad: [AuthGuard]
+      },
+      {
+        path: 'school-infrastructure',
+        loadChildren: () =>
+            import('./views/school-infrastructure/school-infrastructure.module').then(
+                (module) => module.SchoolInfrastructureModule
+            ),
+        canLoad: [AuthGuard]
+      },
+      {
+        path: 'school-progression',
+        loadChildren: () =>
+            import('./views/school-progression/school-progression.module').then(
+                (module) => module.SchoolProgressionModule
+            ),
+        canLoad: [AuthGuard]
       }
     ],
   },
