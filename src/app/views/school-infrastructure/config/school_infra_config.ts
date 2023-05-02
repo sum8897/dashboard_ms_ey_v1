@@ -1,4 +1,5 @@
 export const config = {
+    
     filters: [
         {
             "name": "Academic Year",
@@ -15,8 +16,7 @@ export const config = {
         "queries": {
             "avg_score": "select round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria FROM (select cctv.school_id,  cctv.academicyear_id,  cctv.sum as has_cctv,  water.sum as has_water,  toilet.sum as has_toilet,  cwsn_toilet.sum as has_cwsn_toilet,  electricity.sum as has_electricity,  library.sum as has_library,  handwash.sum as has_handwash,  solar_panel.sum as has_solarpanel,  playground.sum as has_playground, case when (cctv.sum::int+water.sum::int+toilet.sum::int+cwsn_toilet.sum::int+electricity.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 9 then 1 else 0 end as criteria_met,  school.school_name,  district_name,  block_name,  cluster_name from datasets.school_infra_cctv_school0academicyear as cctv inner join datasets.school_infra_drinkingwater_school0academicyear as water on cctv.school_id = water.school_id and cctv.academicyear_id = water.academicyear_id inner join datasets.school_infra_toilet_school0academicyear as toilet on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id inner join datasets.school_infra_cwsntoilet_school0academicyear as cwsn_toilet on cwsn_toilet.school_id = water.school_id and cwsn_toilet.academicyear_id = water.academicyear_id inner join datasets.school_infra_electricty_school0academicyear as electricity on electricity.school_id = water.school_id and electricity.academicyear_id = water.academicyear_id inner join datasets.school_infra_library_school0academicyear as library on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id inner join datasets.school_infra_handwash_school0academicyear as handwash on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id inner join datasets.school_infra_solarpanel_school0academicyear as solar_panel on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id inner join datasets.school_infra_playground_school0academicyear as playground on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id inner join dimensions.school on school.school_id = cctv.school_id) as intermediate_table",
 
-            "district_map": "select  district_name,  round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria  FROM  (select  cctv.school_id,  cctv.academicyear_id,  cctv.sum as has_cctv,  water.sum as has_water,  toilet.sum as has_toilet,  cwsn_toilet.sum as has_cwsn_toilet,  electricity.sum as has_electricity,  library.sum as has_library,  handwash.sum as has_handwash,  solar_panel.sum as has_solarpanel,  playground.sum as has_playground,  case  when  (cctv.sum::int+water.sum::int+toilet.sum::int+cwsn_toilet.sum::int+electricity.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 9  then 1  else 0  end as criteria_met,  school.school_name,  district_name,  block_name,  cluster_name  from  datasets.school_infra_cctv_school0academicyear as cctv  inner join  datasets.school_infra_drinkingwater_school0academicyear as water  on cctv.school_id = water.school_id and cctv.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_toilet_school0academicyear as toilet  on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_cwsntoilet_school0academicyear as cwsn_toilet  on cwsn_toilet.school_id = water.school_id and cwsn_toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_electricty_school0academicyear as electricity  on electricity.school_id = water.school_id and electricity.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_library_school0academicyear as library  on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_handwash_school0academicyear as handwash  on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_solarpanel_school0academicyear as solar_panel  on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_playground_school0academicyear as playground  on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id  inner join  dimensions.school  on school.school_id = cctv.school_id) as intermediate_table  group by district_name",
-
+            "district_map": "select  district_name, round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria  FROM  (select  cctv.school_id,  cctv.academicyear_id,  cctv.sum as has_cctv,  water.sum as has_water,  toilet.sum as has_toilet,  cwsn_toilet.sum as has_cwsn_toilet,  electricity.sum as has_electricity,  library.sum as has_library,  handwash.sum as has_handwash,  solar_panel.sum as has_solarpanel,  playground.sum as has_playground,  case  when  (cctv.sum::int+water.sum::int+toilet.sum::int+cwsn_toilet.sum::int+electricity.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 9  then 1  else 0  end as criteria_met,  school.school_name,  district_name,  block_name,  cluster_name  from  datasets.school_infra_cctv_school0academicyear as cctv  inner join  datasets.school_infra_drinkingwater_school0academicyear as water  on cctv.school_id = water.school_id and cctv.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_toilet_school0academicyear as toilet  on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_cwsntoilet_school0academicyear as cwsn_toilet  on cwsn_toilet.school_id = water.school_id and cwsn_toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_electricty_school0academicyear as electricity  on electricity.school_id = water.school_id and electricity.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_library_school0academicyear as library  on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_handwash_school0academicyear as handwash  on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_solarpanel_school0academicyear as solar_panel  on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_playground_school0academicyear as playground  on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id  inner join  dimensions.school  on school.school_id = cctv.school_id) as intermediate_table  group by district_name ",
             "district_avg_score": "select  district_name,  round( (sum(has_water)*100)/count(school_id) ) as percent_school_has_water,  round( (sum(has_toilet)*100)/count(school_id) ) as percent_school_has_toilet,  round( (sum(has_cwsn_toilet)*100)/count(school_id) ) as percent_school_has_cswn_toilet,  round( (sum(has_electricity)*100)/count(school_id) ) as percent_school_has_electricity,  round( (sum(has_cctv)*100)/count(school_id) ) as percent_school_has_cctv,  round( (sum(has_library)*100)/count(school_id) ) as percent_school_has_library,  round( (sum(has_handwash)*100)/count(school_id) ) as percent_school_has_handwash,  round( (sum(has_solarpanel)*100)/count(school_id) ) as percent_school_has_solarpanel,  round( (sum(has_playground)*100)/count(school_id) ) as percent_school_has_playground  FROM  (select  cctv.school_id,  cctv.academicyear_id,  cctv.sum as has_cctv,  water.sum as has_water,  toilet.sum as has_toilet,  cwsn_toilet.sum as has_cwsn_toilet,  electricity.sum as has_electricity,  library.sum as has_library,  handwash.sum as has_handwash,  solar_panel.sum as has_solarpanel,  playground.sum as has_playground,  case  when  (cctv.sum::int+water.sum::int+toilet.sum::int+cwsn_toilet.sum::int+electricity.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 9  then 1  else 0  end as criteria_met,  school.school_name,  district_name,  block_name,  cluster_name  from  datasets.school_infra_cctv_school0academicyear as cctv  inner join  datasets.school_infra_drinkingwater_school0academicyear as water  on cctv.school_id = water.school_id and cctv.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_toilet_school0academicyear as toilet  on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_cwsntoilet_school0academicyear as cwsn_toilet  on cwsn_toilet.school_id = water.school_id and cwsn_toilet.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_electricty_school0academicyear as electricity  on electricity.school_id = water.school_id and electricity.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_library_school0academicyear as library  on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_handwash_school0academicyear as handwash  on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_solarpanel_school0academicyear as solar_panel  on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id  inner join  datasets.school_infra_playground_school0academicyear as playground  on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id  inner join  dimensions.school  on school.school_id = cctv.school_id) as intermediate_table  group by district_name",
         },
         "levels":'',
@@ -34,47 +34,209 @@ export const config = {
                     {
                         name: "Have Drinking Water",
                         property: "percent_school_has_water",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Toilet",
                         property: "percent_school_has_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CWSN Toilet",
                         property: "percent_school_has_cswn_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Electricity",
                         property: "percent_school_has_electricity",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CCTV Cameras",
                         property: "percent_school_has_cctv",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Library",
                         property: "percent_school_has_library",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Handwash",
                         property: "percent_school_has_handwash",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Solar Panel",
                         property: "percent_school_has_solarpanel",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Playgrounds",
                         property: "percent_school_has_playground",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                 ],
                 "sortByProperty": "district_name",
@@ -132,52 +294,232 @@ export const config = {
                     {
                         name: "Block",
                         property: "block_name",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Drinking Water",
                         property: "percent_school_has_water",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Toilet",
                         property: "percent_school_has_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CWSN Toilet",
                         property: "percent_school_has_cswn_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Electricity",
                         property: "percent_school_has_electricity",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CCTV Cameras",
                         property: "percent_school_has_cctv",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Library",
                         property: "percent_school_has_library",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Handwash",
                         property: "percent_school_has_handwash",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Solar Panel",
                         property: "percent_school_has_solarpanel",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Playgrounds",
                         property: "percent_school_has_playground",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                 ],
                 "sortByProperty": "district_name",
@@ -233,54 +575,216 @@ export const config = {
             "table": {
                 "columns": [
                     {
-                        name: "District",
-                        property: "district_name",
+                        name: "Cluster",
+                        property: "cluster_name",
                         class: "text-center"
                     },
                     {
                         name: "Have Drinking Water",
                         property: "percent_school_has_water",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Toilet",
                         property: "percent_school_has_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CWSN Toilet",
                         property: "percent_school_has_cswn_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Electricity",
                         property: "percent_school_has_electricity",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have CCTV Cameras",
                         property: "percent_school_has_cctv",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Library",
                         property: "percent_school_has_library",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Handwash",
                         property: "percent_school_has_handwash",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Solar Panel",
                         property: "percent_school_has_solarpanel",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                     {
                         name: "Have Playgrounds",
                         property: "percent_school_has_playground",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint: 0
+                                }
+                            ]
+                        }
                     },
                 ],
                 "sortByProperty": "district_name",
@@ -336,57 +840,72 @@ export const config = {
             "table": {
                 "columns": [
                     {
-                        name: "District",
-                        property: "district_name",
+                        name: "School",
+                        property: "school_name",
                         class: "text-center"
                     },
                     {
                         name: "Have Drinking Water",
-                        property: "percent_school_has_water",
-                        class: "text-center"
+                        property: "has_water",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "string",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: "YES"
+                                },
+                                {
+                                    color: "#fff2cc",
+                                    breakPoint: "NO"
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Toilet",
-                        property: "percent_school_has_toilet",
+                        property: "has_toilet",
                         class: "text-center"
                     },
                     {
                         name: "Have CWSN Toilet",
-                        property: "percent_school_has_cswn_toilet",
+                        property: "has_cwsn_toilet",
                         class: "text-center"
                     },
                     {
                         name: "Have Electricity",
-                        property: "percent_school_has_electricity",
+                        property: "has_electricity",
                         class: "text-center"
                     },
                     {
                         name: "Have CCTV Cameras",
-                        property: "percent_school_has_cctv",
+                        property: "has_cctv",
                         class: "text-center"
                     },
                     {
                         name: "Have Library",
-                        property: "percent_school_has_library",
+                        property: "has_library",
                         class: "text-center"
                     },
                     {
                         name: "Have Handwash",
-                        property: "percent_school_has_handwash",
+                        property: "has_handwash",
                         class: "text-center"
                     },
                     {
                         name: "Have Solar Panel",
-                        property: "percent_school_has_solarpanel",
+                        property: "has_solarpanel",
                         class: "text-center"
                     },
                     {
                         name: "Have Playgrounds",
-                        property: "percent_school_has_playground",
+                        property: "has_playground",
                         class: "text-center"
                     },
                 ],
-                "sortByProperty": "district_name",
+                "sortByProperty": "school_name",
                 "sortDirection": "desc"
             },
             "bigNumber": {

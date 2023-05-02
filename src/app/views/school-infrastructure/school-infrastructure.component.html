@@ -7,13 +7,17 @@
     </div>
 </div>
 
+
 <div class="custom-tab-group-wrapper">
+    
     <div class="filter-row grid grid-cols-6">
         <div class="col-span-2">
             <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)" colSize="col-span-6"></app-filter-panel>
         </div>
     </div>
+    
     <div class="reports-row">
+        <app-breadcrumb-component></app-breadcrumb-component>
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div [class]="'col-span-2 xmd:col-span-' + (card.span || 1) + ' div-shadow'" *ngFor="let card of cards">
                 <ng-container [ngSwitch]="card.type">

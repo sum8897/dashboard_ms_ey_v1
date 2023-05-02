@@ -192,6 +192,7 @@ export class SchoolInfrastructureComponent implements OnInit {
       
       card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria'] || "0" ,valueSuffix:"%"};
     } else if (card.type === 'table' || card.type === 'map') {
+      console.log("asdfg:",{data})
       card.value = data;
     }
     this.cards = Object.values(this.cardMap[this.rbacDetails.role]);
@@ -221,6 +222,7 @@ export class SchoolInfrastructureComponent implements OnInit {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let {table: {columns}} = options;
+      console.log("asdf:",{columns,rows})
       this.tableReportData = {
         data: rows.map(row => {
           /*if (this.minDate !== undefined && this.maxDate !== undefined) {
@@ -236,6 +238,7 @@ export class SchoolInfrastructureComponent implements OnInit {
               this.maxDate = row['max_date']
           }*/
           columns.forEach((col: any) => { 
+            console.log("asdfe:",{row,col,prop:col.property,val:row[col.property]})
             if (row[col.property]) {
              
               row = {
