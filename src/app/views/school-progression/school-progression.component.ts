@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {RbacService} from "../../core/services/rbac-service.service";
-import {CommonService} from "../../core/services/common/common.service";
-import {DataService} from "../../core/services/data.service";
-import {WrapperService} from "../../core/services/wrapper.service";
-import {buildQuery, parseFilterToQuery, parseTimeSeriesQuery} from "../../utilities/QueryBuilder";
-import {config} from "./config/school_prog_config";
+import { RbacService } from "../../core/services/rbac-service.service";
+import { CommonService } from "../../core/services/common/common.service";
+import { DataService } from "../../core/services/data.service";
+import { WrapperService } from "../../core/services/wrapper.service";
+import { buildQuery, parseFilterToQuery, parseTimeSeriesQuery } from "../../utilities/QueryBuilder";
+import { config } from "./config/school_prog_config";
 
 @Component({
   selector: 'app-school-progression',
@@ -16,21 +16,21 @@ export class SchoolProgressionComponent implements OnInit {
   // creating card map for all levels
   cardMap = {
     1: {
-      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
-      district_map: {type: 'map', value: null},
-      district_avg_score: {type: 'table', title: 'District wise % Schools meeting UDISE Criteria', value: null}
+      avg_score: { type: 'number', reportName: "Schools that have frozen Student Progression", value: null },
+      district_map: { type: 'map', value: null },
+      district_avg_score: { type: 'table', title: 'District wise % Schools meeting UDISE Criteria', value: null }
     },
     2: {
-      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
-      district_avg_score: {type: 'table', title: '', value: null}
+      avg_score: { type: 'number', reportName: "Schools that have frozen Student Progression", value: null },
+      district_avg_score: { type: 'table', title: '', value: null }
     },
     3: {
-      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
-      district_avg_score: {type: 'table', title: '', value: null}
+      avg_score: { type: 'number', reportName: "Schools that have frozen Student Progression", value: null },
+      district_avg_score: { type: 'table', title: '', value: null }
     },
     4: {
-      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
-      district_avg_score: {type: 'table', title: '', value: null},
+      avg_score: { type: 'number', reportName: "Schools that have frozen Student Progression", value: null },
+      district_avg_score: { type: 'table', title: '', value: null },
     }
   };
   cards = []
@@ -49,19 +49,19 @@ export class SchoolProgressionComponent implements OnInit {
   };
 
   constructor(private _rbacService: RbacService, private _commonService: CommonService,
-              private readonly _dataService: DataService, private _wrapperService: WrapperService) {
+    private readonly _dataService: DataService, private _wrapperService: WrapperService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   async ngOnInit(): Promise<void> {
-    this.getReportData({filterValues: [], timeSeriesValues: []});
+    this.getReportData({ filterValues: [], timeSeriesValues: [] });
     this.filters = await this._wrapperService.constructCommonFilters(config.filters)
   }
 
   getReportData(values: any): void {
-    let {filterValues, timeSeriesValues} = values ?? {filterValues: [], timeSeriesValues: []};
+    let { filterValues, timeSeriesValues } = values ?? { filterValues: [], timeSeriesValues: [] };
     let reportConfig = config;
 
     console.log('this.rbacDetails?.role', this.rbacDetails?.role, reportConfig);
@@ -74,15 +74,15 @@ export class SchoolProgressionComponent implements OnInit {
       options
     } = reportConfig[this.reportName[this.rbacDetails.role]];
     let onLoadQuery;
-
+    
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
+          queries = { ...filter?.actions?.queries }
           // timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key]);
-            // timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
+            // timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])            
           });
           return false
         }
@@ -119,9 +119,9 @@ export class SchoolProgressionComponent implements OnInit {
         const card = this.cardMap[this.rbacDetails.role][key];
         if (query && card.type === 'number') {
           this._commonService.getReportDataNew(query).subscribe(
-              data => {
-                this.createCard(card, data);
-              }
+            data => {
+              this.createCard(card, data);
+            }
           )
         } else if (query && card.type === 'table') {
           this.getTableReportData(query, options, card);
@@ -170,12 +170,12 @@ export class SchoolProgressionComponent implements OnInit {
             }
           ]
           this._dataService.getMapReportData(query, options, metricFilter)
-              .then(data => {
-                    console.log('data ==== map', data);
-                    this.createCard(card, data);
-                  }
-              ).catch(err => {
-          });
+            .then(data => {
+              console.log('data ==== map', data);
+              this.createCard(card, data);
+            }
+            ).catch(err => {
+            });
 
         } else if (query && card.type === 'barChart') {
           // todo use bar table
@@ -187,7 +187,7 @@ export class SchoolProgressionComponent implements OnInit {
 
   createCard(card, data) {
     if (data && data.length) {
-      card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria'] || '0%',valueSuffix:"%"};
+      card.value = { reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria'] || '0%', valueSuffix: "%" };
     } else if (card.type === 'table' || card.type === 'map') {
       card.value = data;
     }
@@ -199,6 +199,7 @@ export class SchoolProgressionComponent implements OnInit {
     let startIndex = newQuery?.indexOf('{');
     let endIndex = newQuery?.indexOf('}');
 
+    console.log("TEST@", { startIndex, endIndex });
     if (newQuery && startIndex > -1) {
       let propertyName = query.substring(startIndex + 1, endIndex);
       let re = new RegExp(`{${propertyName}}`, "g");
@@ -217,7 +218,7 @@ export class SchoolProgressionComponent implements OnInit {
   getTableReportData(query, options, card): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
-      let {table: {columns}} = options;
+      let { table: { columns } } = options;
       this.tableReportData = {
         data: rows.map(row => {
           /*if (this.minDate !== undefined && this.maxDate !== undefined) {
@@ -236,7 +237,7 @@ export class SchoolProgressionComponent implements OnInit {
             if (row[col.property]) {
               row = {
                 ...row,
-                [col.property]: {value: row[col.property]}
+                [col.property]: { value: row[col.property] }
               }
             }
           });
