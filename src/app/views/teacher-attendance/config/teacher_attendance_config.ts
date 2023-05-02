@@ -560,7 +560,7 @@ export const config = {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_teachers_marked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a",
+                        "bigNumber": "select ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_teachers_marked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a ORDER BY stt_avg desc",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"
