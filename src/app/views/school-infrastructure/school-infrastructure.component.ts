@@ -21,15 +21,15 @@ export class SchoolInfrastructureComponent implements OnInit {
       district_avg_score: {type: 'table', title: 'District wise % Schools meeting UDISE Criteria', value: null, span: 2}
     },
     2: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+      avg_score: {type: 'number', reportName: "Schools meeting 100% criteria", value: null},
       district_avg_score: {type: 'table', title: '', value: null, span: 2}
     },
     3: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+      avg_score: {type: 'number', reportName: "Schools meeting 100% criteria", value: null},
       district_avg_score: {type: 'table', title: '', value: null, span: 2}
     },
     4: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
+      avg_score: {type: 'number', reportName: "Schools meeting 100% criteria", value: null},
       district_avg_score: {type: 'table', title: '', value: null, span: 2},
     }
   };
