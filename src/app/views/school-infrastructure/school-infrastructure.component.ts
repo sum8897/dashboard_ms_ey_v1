@@ -63,7 +63,7 @@ export class SchoolInfrastructureComponent implements OnInit {
   getReportData(values: any): void {
     let {filterValues, timeSeriesValues} = values ?? {filterValues: [], timeSeriesValues: []};
     let reportConfig = config;
-
+    console.log("cvbb:",{filterValues, timeSeriesValues})
     console.log('this.rbacDetails?.role', this.rbacDetails?.role, reportConfig);
     let {
       queries,
@@ -103,10 +103,11 @@ export class SchoolInfrastructureComponent implements OnInit {
         onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, [], '', '', key, '');
+      console.log("cvbb:",{query})
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
-
+      console.log("cvbb: 2",{query})
       let metricFilter = [...filterValues].filter((filter: any) => {
         return filter.filterType === 'metric'
       })
@@ -124,6 +125,7 @@ export class SchoolInfrastructureComponent implements OnInit {
               }
           )
         } else if (query && card.type === 'table') {
+          console.log("cvbn table:",{query})
           this.getTableReportData(query, options, card);
         } else if (query && card.type === 'map') {
           metricFilter = [
@@ -187,7 +189,8 @@ export class SchoolInfrastructureComponent implements OnInit {
 
   createCard(card, data) {
     if (data && data.length) {
-      card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria']};
+      
+      card.value = {reportName: card.reportName, averagePercentage: data[0]['percent_school_met_criteria'] || "0" ,valueSuffix:"%"};
     } else if (card.type === 'table' || card.type === 'map') {
       card.value = data;
     }
@@ -232,20 +235,30 @@ export class SchoolInfrastructureComponent implements OnInit {
               this.minDate = row['min_date']
               this.maxDate = row['max_date']
           }*/
-          columns.forEach((col: any) => {
+          columns.forEach((col: any) => { 
             if (row[col.property]) {
+             
               row = {
                 ...row,
-                [col.property]: {value: row[col.property]}
+                [col.property]: {value: row[col.property] }
               }
             }
+            if(row[col.property]==0){
+              row = {
+                ...row,
+                [col.property]: {value: "0" }
+              }
+            }
+            
           });
           return row
         }),
+       
         columns: columns.filter(col => {
           if (rows[0] && col.property in rows[0]) {
             return col;
           }
+         
         })
       }
       this.createCard(card, this.tableReportData);

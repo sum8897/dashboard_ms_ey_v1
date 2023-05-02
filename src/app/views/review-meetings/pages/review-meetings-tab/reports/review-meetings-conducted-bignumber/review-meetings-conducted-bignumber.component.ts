@@ -93,6 +93,7 @@ export class ReviewMeetingsConductedBignumberComponent implements OnInit {
       }
       else if (query && key === 'bigNumber') {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
+  
       }
       else if (query && key === 'bigNumberComparison') {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
