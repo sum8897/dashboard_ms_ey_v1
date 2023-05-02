@@ -126,6 +126,13 @@ export class TacAttendanceComplianceRankComponent implements OnInit {
                 [col.property]: { value: row[col.property] }
               }
             }
+           else  if(row[col.property]==0 || row[col.property]=== "" || row[col.property]=== null || row[col.property]==="undefined" || !row[col.property]){
+            
+                row = {
+                  ...row,
+                  [col.property]: {value: "0" }
+                }
+              }
           });
           return row
         }),
