@@ -72,9 +72,9 @@ export const config = {
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "",
+                        "valuePrefix": "% Schools that have frozen student progression: ",
                         "value": "percent_school_met_criteria",
-                        "valueSuffix": "\n"
+                        "valueSuffix": "%"
                     }
                 ]
             }
@@ -146,7 +146,7 @@ export const config = {
 
     block_config: {
         "label": "Schools Reporting Student Attendance",
-        "defaultLevel": "district",
+        "defaultLevel": "state",
         "timeSeriesQueries": '',
         "queries": {},
         "levels": '',
@@ -158,9 +158,9 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "avg_score": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_name != '' and district_id = {district_id} and block_id = {block_id}",
+                        "avg_score": "select round( (sum(progression.sum)*100)/count(progression.school_id) ) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and block_id = {block_id};",
 
-                        "district_avg_score": "select cluster_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_name != '' and district_id = {district_id} and block_id = {block_id} group by cluster_name;",
+                        "district_avg_score": "select cluster_name, round( (sum(progression.sum)*100)/count(progression.school_id) ) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and block_id = {block_id} group by cluster_name;",
                     }
                 }
             }
@@ -218,12 +218,12 @@ export const config = {
                 "name": "District",
                 "labelProp": "cluster_name",
                 "valueProp": "cluster_id",
-                "hierarchyLevel": "3",
+                "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "avg_score": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_name != '' and district_id = {district_id} and block_id = {block_id} and cluster_id = {cluster_id};",
+                        "avg_score": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and cluster_id = {cluster_id};",
 
-                        "district_avg_score": "select school_name, case when progression.sum = 1 THEN 'YES' ELSE 'NO' END as progression_frozen from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_name != '' and district_id = {district_id} and block_id = {block_id} and cluster_id = {cluster_id};",
+                        "district_avg_score": "select school_name, case when progression.sum = 1 THEN 'YES' ELSE 'NO' END as progression_frozen from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and cluster_id = {cluster_id};",
                     }
                 }
             }
