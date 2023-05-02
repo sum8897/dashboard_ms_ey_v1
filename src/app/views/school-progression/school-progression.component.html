@@ -3,8 +3,9 @@
     <div class="col-span-12">
       <p class="program-title">Student Progression</p>
       <p class="program-desc">
-        This program details the compliance of schools in the state with UDISE
-        infrastructure criteria
+        This program shows whether schools have completed or frozen the activity
+        of upgrading students from one grade to the next at the beginning of a
+        new academic year.
       </p>
     </div>
   </div>
@@ -21,6 +22,7 @@
     </div>
   </div>
   <div class="reports-row">
+    <app-breadcrumb-component></app-breadcrumb-component>
     <div class="row-wrapper grid grid-cols-2 gap-4">
       <div
         [class]="'col-span-2 xmd:col-span-' + (card.span || 1) + ' div-shadow'"
