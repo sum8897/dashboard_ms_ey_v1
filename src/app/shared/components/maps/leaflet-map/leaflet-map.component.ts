@@ -130,16 +130,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       if (reportTypeBoolean) {
         if (e.trim().toLowerCase() == "yes") {
-          return "#1D4586";
+          return "#d8ead3";
         } else {
           return "#fff";
         }
       }
       else {
         {
-          return e > 75 ? "#1D4586" :
-            e > 50 ? "#1156CC" :
-              e >= 0 ? "#6D9FEB" : "#fff";
+          return e > 75 ? "#d8ead3" :
+            e > 50 ? "#fff2cc" :
+              e >= 0 ? "#f4cccc" : "#fff";
         }
       }
     }
@@ -526,9 +526,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      return Number(value) > 75 ? "#1D4586" :
-        Number(value) > 50 ? "#1156CC" :
-          Number(value) >= 0 ? "#6D9FEB" : "#fff";
+      return Number(value) > 75 ? "#d8ead3" :
+        Number(value) > 50 ? "#fff2cc" :
+          Number(value) >= 0 ? "#f4cccc" : "#fff";
     }
   }
 
