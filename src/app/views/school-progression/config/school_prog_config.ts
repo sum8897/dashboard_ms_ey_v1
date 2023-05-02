@@ -20,20 +20,7 @@ export const config = {
             "district_avg_score": "select school.district_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name is not null and district_name != '' and academicyear_id = '2021-2022' group by school.district_name order by round( (sum(progression.sum)*100)/count(progression.school_id) ) desc;",
         },
         "levels": '',
-        "filters": [
-            {
-                "name": "State",
-                "labelProp": "state_name",
-                "valueProp": "state_id",
-                "hierarchyLevel": "1",
-                "actions": {
-                    "queries": {
-                        "avg_score": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_id = {district_id};",
-
-                        "district_avg_score": "select block_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_id = {district_id} group by block_name;",
-                    }
-                }
-            }
+        "filters": [           
         ],
         "options": {
             "table": {
