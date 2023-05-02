@@ -850,15 +850,15 @@ export const config = {
                         class: "text-center",
                         isHeatMapRequired: true,
                         color: {
-                            type: "string",
+                            type: "percentage",
                             values: [
                                 {
                                     color: "#d8ead3",
-                                    breakPoint: "YES"
+                                    breakPoint: 1
                                 },
                                 {
-                                    color: "#fff2cc",
-                                    breakPoint: "NO"
+                                    color: "#f4cccc",
+                                    breakPoint:0
                                 }
                                 
                             ]
@@ -867,42 +867,162 @@ export const config = {
                     {
                         name: "Have Toilet",
                         property: "has_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have CWSN Toilet",
                         property: "has_cwsn_toilet",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Electricity",
                         property: "has_electricity",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have CCTV Cameras",
                         property: "has_cctv",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Library",
                         property: "has_library",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Handwash",
                         property: "has_handwash",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Solar Panel",
                         property: "has_solarpanel",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                     {
                         name: "Have Playgrounds",
                         property: "has_playground",
-                        class: "text-center"
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#d8ead3",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#f4cccc",
+                                    breakPoint:0
+                                }
+                                
+                            ]
+                        }
                     },
                 ],
                 "sortByProperty": "school_name",
