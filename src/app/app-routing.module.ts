@@ -140,6 +140,14 @@ routes = [
                 (module) => module.SchoolInfraModule
             ),
         canLoad: [AuthGuard]
+      },
+      {
+        path: 'school-prog',
+        loadChildren: () =>
+            import('./views/school-prog/school-prog.module').then(
+                (module) => module.SchoolProgModule
+            ),
+        canLoad: [AuthGuard]
       }
     ],
   },
