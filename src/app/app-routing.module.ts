@@ -110,22 +110,6 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
-        path: 'schoolInfra',
-        loadChildren: () =>
-          import('./views/school-infrastructure/school-infrastructure.module').then(
-            (module) => module.SchoolInfrastructureModule
-          ),
-        canLoad: [AuthGuard]
-      },
-      {
-        path: 'studentProgress',
-        loadChildren: () =>
-          import('./views/student-progression/student-progression.module').then(
-            (module) => module.StudentProgressionModule
-          ),
-        canLoad: [AuthGuard]
-      },
-      {
         path: 'student-assessment',
         loadChildren: () =>
             import('./views/student-assessment/student-assessment.module').then(
@@ -134,18 +118,18 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
-        path: 'school-infra',
+        path: 'school-infrastructure',
         loadChildren: () =>
-            import('./views/school-infra/school-infra.module').then(
-                (module) => module.SchoolInfraModule
+            import('./views/school-infrastructure/school-infrastructure.module').then(
+                (module) => module.SchoolInfrastructureModule
             ),
         canLoad: [AuthGuard]
       },
       {
-        path: 'school-prog',
+        path: 'school-progression',
         loadChildren: () =>
-            import('./views/school-prog/school-prog.module').then(
-                (module) => module.SchoolProgModule
+            import('./views/school-progression/school-progression.module').then(
+                (module) => module.SchoolProgressionModule
             ),
         canLoad: [AuthGuard]
       }

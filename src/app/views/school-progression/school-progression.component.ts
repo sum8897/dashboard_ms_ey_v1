@@ -4,33 +4,33 @@ import {CommonService} from "../../core/services/common/common.service";
 import {DataService} from "../../core/services/data.service";
 import {WrapperService} from "../../core/services/wrapper.service";
 import {buildQuery, parseFilterToQuery, parseTimeSeriesQuery} from "../../utilities/QueryBuilder";
-import {config} from "./config/school_infra_config";
+import {config} from "./config/school_prog_config";
 
 @Component({
-  selector: 'app-school-infra',
-  templateUrl: './school-infra.component.html',
-  styleUrls: ['./school-infra.component.scss']
+  selector: 'app-school-progression',
+  templateUrl: './school-progression.component.html',
+  styleUrls: ['./school-progression.component.scss']
 })
-export class SchoolInfraComponent implements OnInit {
+export class SchoolProgressionComponent implements OnInit {
   tabIndex;
   // creating card map for all levels
   cardMap = {
     1: {
-      avg_score: {type: 'number', reportName: "Schools meeting 100% criteria", value: null},
+      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
       district_map: {type: 'map', value: null},
-      district_avg_score: {type: 'table', title: 'District wise % Schools meeting UDISE Criteria', value: null, span: 2}
+      district_avg_score: {type: 'table', title: 'District wise % Schools meeting UDISE Criteria', value: null}
     },
     2: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
-      district_avg_score: {type: 'table', title: '', value: null, span: 2}
+      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
+      district_avg_score: {type: 'table', title: '', value: null}
     },
     3: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
-      district_avg_score: {type: 'table', title: '', value: null, span: 2}
+      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
+      district_avg_score: {type: 'table', title: '', value: null}
     },
     4: {
-      avg_score: {type: 'number', reportName: "Average Student Assessment Scores", value: null},
-      district_avg_score: {type: 'table', title: '', value: null, span: 2},
+      avg_score: {type: 'number', reportName: "Schools that have frozen Student Progression", value: null},
+      district_avg_score: {type: 'table', title: '', value: null},
     }
   };
   cards = []

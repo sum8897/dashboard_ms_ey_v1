@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SchoolInfraRoutingModule } from './school-infra-routing.module';
-import { SchoolInfraComponent } from './school-infra.component';
+import { SchoolProgressionRoutingModule } from './school-progression-routing.module';
+import { SchoolProgressionComponent } from './school-progression.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
   declarations: [
-    SchoolInfraComponent
+    SchoolProgressionComponent
   ],
   imports: [
     CommonModule,
-    SchoolInfraRoutingModule,
+    SchoolProgressionRoutingModule,
     MatTabsModule,
     SharedModule
   ]
 })
-export class SchoolInfraModule { }
+export class SchoolProgressionModule { }

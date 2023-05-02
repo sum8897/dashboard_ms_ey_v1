@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { SchoolInfrastructureRoutingModule } from './school-infrastructure-routing.module';
 import { SchoolInfrastructureComponent } from './school-infrastructure.component';
-import { MatTabsModule } from '@angular/material/tabs';
-import { SharedModule } from 'src/app/shared/shared.module';
+import {MatTabsModule} from "@angular/material/tabs";
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -12,10 +12,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SchoolInfrastructureComponent
   ],
   imports: [
-    MatTabsModule,
-    SharedModule,
     CommonModule,
-    SchoolInfrastructureRoutingModule
+    SchoolInfrastructureRoutingModule,
+    MatTabsModule,
+    SharedModule
   ]
 })
 export class SchoolInfrastructureModule { }
