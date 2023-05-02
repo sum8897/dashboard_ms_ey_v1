@@ -45,6 +45,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PopupOptionsComponent } from './components/buttons/popup-options/popup-options.component';
+import { BreadcrumbComponentComponent } from './components/breadcrumb-component/breadcrumb-component.component';
 
 
 const IMPORTS: any[] = [
@@ -96,12 +97,14 @@ const DECLARATIONS = [
   TimeSeriesFilterPanelComponent,
   BigNumberComponent,
   PopupOptionsComponent,
+  BreadcrumbComponentComponent
 
 ];
 
 @NgModule({
   declarations: [
     DECLARATIONS,
+    BreadcrumbComponentComponent,
   ],
   imports: [
     CommonModule,
