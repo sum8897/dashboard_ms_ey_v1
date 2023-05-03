@@ -264,6 +264,67 @@ export const config = {
                 "valueSuffix": '%'
             }
         }
+    },
+    school_progression_bignumber: {
+        "label": "Average Teachers Reporting Attendance",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022';"
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' and district_id = {district_id};"
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select round( (sum(progression.sum)*100)/count(progression.school_id) ) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and block_id = {block_id};"
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name != '' and cluster_id = {cluster_id};"
+                    },
+                    "level": "school"
+                }
+            }
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools that have frozen Student Progression",
+                "valueSuffix": '%',
+                "property": 'percent_school_met_criteria'
+            }
+        }
     }
+
 }
 
