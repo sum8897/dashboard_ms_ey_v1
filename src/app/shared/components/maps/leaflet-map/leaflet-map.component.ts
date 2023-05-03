@@ -125,9 +125,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
     else {
       let reportTypeBoolean = false;
-      console.log("e", e)
-      return e >= 70 ? "#000" :
-            e >= 40 && e <70 ? "#fff2cc" :
+      return e > 70 ? "#d8ead3" :
+          e > 40 ? "#fff2cc" :
               e >= 0 ? "#f4cccc" : "#fff";
       // if (typeof e === 'string') {
       //   reportTypeBoolean = true;
@@ -141,7 +140,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // }
       // else {
       //   {
-          
+
       //   }
       // }
     }
@@ -487,7 +486,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         //   values = values && values.length > 0 ? values : [100, 75, 50, 25, 0];
         //   for (let i = values.length; i > 1; i--) {
         //     labels.push(
-        //       `<i class="fa  fa-square" style="color: ${ref.getLayerColor(25 * (i - 1), true)}"></i> 
+        //       `<i class="fa  fa-square" style="color: ${ref.getLayerColor(25 * (i - 1), true)}"></i>
         //         <span>${values[values.length - i + 1] ? values[values.length - i + 1] : 0} &dash; ${values[values.length - i]}${reportTypeIndicator === 'percent' ? '%' : ''}</span>`
         //     );
         //   }
@@ -502,12 +501,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           ref.resetRange()
         })
         div.insertBefore(reset, div.prevSibling)
-        for (let i = values.length; i > 1; i--) {
-          console.log("value: " + values)
+        for (let i = 0; i < values.length - 1; i++) {
+          console.log("value: " + values, 'data', values[i], i);
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(25 * (i), true), true)}">${values[values.length - i + 1] ? values[values.length - i + 1] : 0} &dash; ${values[values.length - i]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i+1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[values.length - i + 1] ? values[values.length - i + 1] : 0), Number(values[values.length - i]), Number(values[values.length - 1]), ref.getLayerColor(25 * (i), true))
+            ref.applyRange(Number(values[values.length - i + 1] ? values[values.length - i + 1] : 0), Number(values[values.length - i]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
           })
           div.appendChild(span)
           clickable = true;
