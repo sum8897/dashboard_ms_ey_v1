@@ -77,8 +77,11 @@ export class DashboardComponent implements OnInit {
           menuToDisplay.navigationURL = menuData[i].navigationUrl;
           menuToDisplay.icon = menuData[i].imageUrl;
           menuToDisplay.tooltip = menuData[i].tooltip;
-          menuToDisplay.metrics = await this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails);
-          this.dashboardMenu?.push(menuToDisplay);
+           this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
+               .then(d => {
+                 menuToDisplay.metrics = d;
+               });
+          this.dashboardMenu.push(menuToDisplay);
 
           console.log('this.dashboardMenu---',this.dashboardMenu);
 
