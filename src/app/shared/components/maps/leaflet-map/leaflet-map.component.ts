@@ -157,7 +157,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           body = temp['IN']
         }
         else {
-          const response = await fetch(`${environment.apiURL}/assets/${environment.stateCode}.json`);
+          const response = await fetch(`/assets/data/${environment.stateCode}.json`);
           body = await response.json();
         }
 
