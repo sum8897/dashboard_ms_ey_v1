@@ -244,7 +244,7 @@ export class SchoolInfrastructureComponent implements OnInit {
               row = {
                 ...row,
                 // [col.property]: {value: row[col.property] }
-                [col.property]: {value: row[col.property]==='YES' ? 1: row[col.property]==='NO' ? "0" :row[col.property]}
+               [col.property]: {value: row[col.property]==='YES' ? 1: row[col.property]==='NO' ? "0" :row[col.property]}
               }
             }
             if(row[col.property]==0){
