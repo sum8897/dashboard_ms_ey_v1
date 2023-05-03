@@ -506,7 +506,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           let span = L.DomUtil.create('span', 'clickable-range');
           span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i+1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[values.length - i + 1] ? values[values.length - i + 1] : 0), Number(values[values.length - i]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i+1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
           })
           div.appendChild(span)
           clickable = true;
