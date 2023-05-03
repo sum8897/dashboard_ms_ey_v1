@@ -125,23 +125,24 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
     else {
       let reportTypeBoolean = false;
-      if (typeof e === 'string') {
-        reportTypeBoolean = true;
-      }
-      if (reportTypeBoolean) {
-        if (e.trim().toLowerCase() == "yes") {
-          return "#d8ead3";
-        } else {
-          return "#fff";
-        }
-      }
-      else {
-        {
-          return e > 75 ? "#d8ead3" :
-            e > 50 ? "#fff2cc" :
+      return e > 70 ? "#d8ead3" :
+          e > 40 ? "#fff2cc" :
               e >= 0 ? "#f4cccc" : "#fff";
-        }
-      }
+      // if (typeof e === 'string') {
+      //   reportTypeBoolean = true;
+      // }
+      // if (reportTypeBoolean) {
+      //   if (e.trim().toLowerCase() == "yes") {
+      //     return "#d8ead3";
+      //   } else {
+      //     return "#fff";
+      //   }
+      // }
+      // else {
+      //   {
+
+      //   }
+      // }
     }
   }
 
@@ -232,7 +233,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           else {
             values.push(min);
           }
-          if(reportTypeIndicator === 'percent') {
+          if (reportTypeIndicator === 'percent') {
             max = 100;
             min = 0;
           }
@@ -245,13 +246,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           if (typeof mapData?.data[0]?.indicator === 'string') {
             reportTypeBoolean = true;
           }
-
+          // console.log("TEST", state)
           mapData?.data.forEach((state: any) => {
+            console.log("TEST", state)
             if (state.state_id && state.state_id == feature.properties.state_code) {
-              color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
+
+              color = parent.getLayerColor(state.indicator);
             }
             else if (state.district_id && state.district_id == feature.properties.ID_2) {
-              color = parent.getLayerColor(state.indicator ? (max - min ? (state.indicator - min) / (max - min) * 100 : state.indicator) : -1);
+              color = parent.getLayerColor(state.indicator);
+              console.log({ color })
             }
           });
           if (parent.level === 'state' || parent.config === 'VSK' || parent.config === 'NVSK') {
@@ -465,9 +469,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     legend.onAdd = function (map: any) {
       let div = L.DomUtil.create('div', 'info legend text-center');
       let clickable = false;
+      console.log("clickable", mapOptions)
       if (mapOptions.legend && mapOptions.legend.title) {
         labels.push(`<strong>${mapOptions.selectedMetric ? mapOptions.selectedMetric : mapOptions.legend.title}:</strong>`)
       }
+      values = [100, 70, 40, 0]
       if (values.length <= 1 && reportTypeIndicator !== 'boolean') {
         labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[0] ? values[0] : -1, true)}"></i> ${values[0]}`);
       }
@@ -480,13 +486,13 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         //   values = values && values.length > 0 ? values : [100, 75, 50, 25, 0];
         //   for (let i = values.length; i > 1; i--) {
         //     labels.push(
-        //       `<i class="fa  fa-square" style="color: ${ref.getLayerColor(25 * (i - 1), true)}"></i> 
+        //       `<i class="fa  fa-square" style="color: ${ref.getLayerColor(25 * (i - 1), true)}"></i>
         //         <span>${values[values.length - i + 1] ? values[values.length - i + 1] : 0} &dash; ${values[values.length - i]}${reportTypeIndicator === 'percent' ? '%' : ''}</span>`
         //     );
         //   }
         // }
       } else {
-        values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 75, 50, 0];
+        values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 70, 40, 0];
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
         let reset = L.DomUtil.create('button', 'legend-range-reset pull-right')
@@ -495,11 +501,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           ref.resetRange()
         })
         div.insertBefore(reset, div.prevSibling)
-        for (let i = values.length; i > 1; i--) {
+        for (let i = 0; i < values.length - 1; i++) {
+          console.log("value: " + values, 'data', values[i], i);
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(25 * (i), true)}; color: ${invert(ref.getLayerColor(25 * (i), true), true)}">${values[values.length - i + 1] ? values[values.length - i + 1] : 0} &dash; ${values[values.length - i]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i+1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[values.length - i + 1] ? values[values.length - i + 1] : 0), Number(values[values.length - i]), Number(values[values.length - 1]), ref.getLayerColor(25 * (i), true))
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i+1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
           })
           div.appendChild(span)
           clickable = true;
@@ -526,8 +533,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      return Number(value) > 75 ? "#d8ead3" :
-        Number(value) > 50 ? "#fff2cc" :
+      return Number(value) >= 70 ? "#d8ead3" :
+        Number(value) >= 40 ? "#fff2cc" :
           Number(value) >= 0 ? "#f4cccc" : "#fff";
     }
   }
