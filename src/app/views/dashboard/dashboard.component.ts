@@ -156,13 +156,14 @@ export class DashboardComponent implements OnInit {
                 else if (metricQueriesKeys[k].indexOf('bigNumber') > -1) {
                   let query = parseRbacFilter(metricQueries[metricQueriesKeys[k]], rbacDetails)
                   let res = await this._wrapperService.runQuery(query)
-                  console.log("cvbn:",{res})
-                  if (res && res.length > 0 && (Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]] : res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) !== null) {
+                  if (res && res.length > 0) {
                     let metricData = {
                       value: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k]] : String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
                       name: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.title) ? programConfig[reports[i]]?.options?.bigNumber?.title[k] : programConfig[reports[i]]?.options?.bigNumber?.title
                     }
-                    console.log("cvbn:",{metricData})
+                    if((Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]] : res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) === null) {
+                      metricData.value = '0' + programConfig[reports[i]]?.options?.bigNumber?.valueSuffix
+                    }
                     if (metricData.value !== null && metricData !== undefined) {
                       metrics.push(metricData)
                       // console.log(metricData.value)
