@@ -21,6 +21,10 @@
                 <app-tas-average-attendance-bignumber
                     #averageAttendanceBigNumber></app-tas-average-attendance-bignumber>
             </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('tas_average_attendance_map', 'map')" id="map">
+                <app-teacher-attendance-map #tasMap></app-teacher-attendance-map>
+            </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tas_average_attendance', 'table')" id="table1">
                 <app-tas-average-attendance #averageAttendance></app-tas-average-attendance>
             </div>

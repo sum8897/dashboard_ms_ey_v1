@@ -109,7 +109,6 @@ export class TacAverageAttendanceComplianceComponent implements OnInit {
 
   getTableReportData(query, options): void {
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      debugger
       let rows = res;
       let { table: { columns } } = options;
       this.tableReportData = {

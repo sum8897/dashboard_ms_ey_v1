@@ -4,6 +4,7 @@ import { TasAverageAttendanceComponent } from './reports/tas-average-attendance/
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { TasAverageAttendanceBignumberComponent } from './reports/tas-average-attendance-bignumber/tas-average-attendance-bignumber.component';
 import { config } from '../../config/teacher_attendance_config'
+import { TeacherAttendanceMapComponent } from './reports/teacher-attendance-map/teacher-attendance-map.component';
 @Component({
   selector: 'app-teacher-attendance-summary',
   templateUrl: './teacher-attendance-summary.component.html',
@@ -23,6 +24,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   @ViewChild('averageAttendanceBigNumber') averageAttendanceBigNumber: TasAverageAttendanceBignumberComponent;
   @ViewChild('averageAttendance') averageAttendance: TasAverageAttendanceComponent;
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent
+  @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
   constructor(private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -41,6 +43,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.averageAttendanceBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      this.tasMap?.getReportData({timeSeriesValues :{startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0]}});
     }
   }
 
@@ -74,6 +77,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
+      this.tasMap?.getReportData({timeSeriesValues: { startDate: this.startDate, endDate: this.endDate}});
     }
   }
 

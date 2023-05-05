@@ -1,5 +1,99 @@
 export const config = {
 
+
+    tas_average_attendance_map:{
+        "label": "Average Teachers Present",
+        "filters":
+            [
+                {
+                    "name": "State",
+                    "hierarchyLevel": "1",
+                    "timeSeriesQueries": {
+                        "map": "select a.district_id, district_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_teachers_marked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
+                    },
+                    "actions": {
+                        "queries": {
+                            "map": "select a.district_id, district_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_teachers_marked_daily_district as marked_table on present_table.date = marked_table.date and present_table.district_id = marked_table.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
+                        },
+                        "level": "district"
+                    }
+                },
+                {
+                    "name": "District",
+                    "hierarchyLevel": "2",
+                    "timeSeriesQueries": {
+                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.block_id, block_wise_table.block_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_teachers_marked_daily_block as marked_table on present_table.date = marked_table.date and present_table.block_id = marked_table.block_id) as a full join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id full join dimensions.school as s on s.block_id = block_wise_table.block_id where block_wise_table.district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_wise_table.block_name order by stt_avg asc",
+                    },
+                    "actions": {
+                        "queries": {
+                            "map": "",
+                        },
+                        "level": "block"
+                    }
+                },
+                {
+                    "name": "Block",
+                    "hierarchyLevel": "3",
+                    "timeSeriesQueries": {
+                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.cluster_id, cluster_wise_table.cluster_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_teachers_marked_daily_cluster as marked_table on present_table.date = marked_table.date and present_table.cluster_id = marked_table.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id full join dimensions.school as s on cluster_wise_table.cluster_id = s.cluster_id where cluster_wise_table.block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_wise_table.cluster_name order by stt_avg asc",
+                    },
+                    "actions": {
+                        "queries": {
+                            "map": "",
+                        },
+                        "level": "cluster"
+                    }
+                },
+                {
+                    "name": "Cluster",
+                    "hierarchyLevel": "4",
+                    "timeSeriesQueries": {
+                        "map": "select latitude, longitude, a.school_id, school_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_school as present_table join datasets.sch_att_teachers_marked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name, latitude, longitude order by stt_avg asc",
+                    },
+                    "actions": {
+                        "queries": {
+                            "map": "",
+                        },
+                        "level": "school"
+                    }
+                }
+            ],
+        "options":
+        {
+            "map": {
+                "indicator": "stt_avg",
+                "legend": { "title": "Average Teachers Present" },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Average Teachers Present: ",
+                        "value": "stt_avg",
+                        "valueSuffix": "\n"
+                    }
+                ]
+            }
+        }
+    },
+
     tac_average_attendance_compliance: {
         "label": "Average Teachers Reporting Attendance",
         "defaultLevel": "state",
