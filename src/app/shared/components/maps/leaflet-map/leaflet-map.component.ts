@@ -30,6 +30,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() mapData!: any;
   @Input() level: any;
   @Input() perCapitaReport: any = false;
+  @Input() drillDown: boolean = false;
+  @Input() drillDownLevel: any;
   // @Input() hierarchyLevel: any = this.config === 'NVSK' ? 0 : 1;
 
   @Output() drillDownFilter: EventEmitter<any> = new EventEmitter<any>();
@@ -87,7 +89,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if (this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') {
+      if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || this.drillDown || this.hierarchyLevel > 1) {
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 3) {
@@ -248,14 +250,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           }
           // console.log("TEST", state)
           mapData?.data.forEach((state: any) => {
-            console.log("TEST", state)
             if (state.state_id && state.state_id == feature.properties.state_code) {
 
               color = parent.getLayerColor(state.indicator);
             }
             else if (state.district_id && state.district_id == feature.properties.ID_2) {
               color = parent.getLayerColor(state.indicator);
-              console.log({ color })
             }
           });
           if (parent.level === 'state' || parent.config === 'VSK' || parent.config === 'NVSK') {
@@ -292,6 +292,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             if (getPopUp(feature)) {
               layer.bindTooltip(getPopUp(feature), { classname: "app-leaflet-tooltip", sticky: true });
             }
+            layer.on({
+              click: () => {
+                parent.drillDownFilter.emit({id:feature?.properties?.['ID_2'], level: parent.rbacDetails.role})
+              }
+            });
           },
           style: styleStates,
           color: "#a0a1a3",
@@ -394,7 +399,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       mapData.data.forEach((data: any) => {
         let re = new RegExp("_id$");
-        let filterIds = {};
+        // let filterIds = {};
+        var id;
 
         Object.keys(data).forEach((prop: any) => {
           // if(re.test(prop)){
@@ -403,14 +409,15 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           // }
           // return true;
           if (prop.match(re)) {
-            filterIds = {
-              ...filterIds,
-              [prop.match(re).input]: data[prop.match(re)?.input]
-            }
+            id = data[prop.match(re)?.input]
+            // filterIds = {
+            //   ...filterIds,
+            //   [prop.match(re).input]: data[prop.match(re)?.input]
+            // }
           }
         })
         let markerIcon = L.circleMarker([data.Latitude, data.Longitude], {
-          filterIds: filterIds,
+          id: id,
           hierarchyLevel: data.hierarchyLevel,
           color: "gray",
           // fillColor: this.getZoneColor(reportTypeIndicator, data.indicator >= 1 ? (max - min ? (data.indicator - min) / (max - min) * 100 : data.indicator) : -1),
@@ -441,7 +448,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
 
         markerIcon.on("click", (e: any) => {
-          this.drillDownMarker(e.target.options.filterIds)
+          this.drillDownFilter.emit({id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role})
         })
 
         markerIcon.addTo(this.map).bindPopup(popup, { closeButton: false });
@@ -469,7 +476,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     legend.onAdd = function (map: any) {
       let div = L.DomUtil.create('div', 'info legend text-center');
       let clickable = false;
-      console.log("clickable", mapOptions)
       if (mapOptions.legend && mapOptions.legend.title) {
         labels.push(`<strong>${mapOptions.selectedMetric ? mapOptions.selectedMetric : mapOptions.legend.title}:</strong>`)
       }
@@ -502,7 +508,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         })
         div.insertBefore(reset, div.prevSibling)
         for (let i = 0; i < values.length - 1; i++) {
-          console.log("value: " + values, 'data', values[i], i);
           let span = L.DomUtil.create('span', 'clickable-range');
           span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i+1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
@@ -543,7 +548,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     this.applyCountryBorder(this.mapData)
   }
 
-  applyRange(min: any, max: any, baseValue: any, rangeColour: any): void {
+  applyRange(max: any, min: any, baseValue: any, rangeColour: any): void {
     let temp = this.mapData.data.filter((obj: any) => {
       return obj.indicator <= max && (min === baseValue ? obj.indicator >= min : obj.indicator > min)
     })
@@ -558,9 +563,5 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     else {
       this.applyCountryBorder(filteredData, rangeColour);
     }
-  }
-
-  drillDownMarker(value: any) {
-    this.drillDownFilter.emit(value);
   }
 }
