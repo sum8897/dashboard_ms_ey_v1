@@ -26,7 +26,7 @@
 
   <div class="col-span-full div-shadow">
     <ng-container *ngIf="reportData?.data && reportData?.data?.length > 0">
-      <p class="text-center font-medium py-2 filename">{{ title }}</p>
+      <p class="text-center font-medium pt-4 filename">{{ title }}</p>
       <br />
       <app-leaflet-map
         [mapData]="reportData"
@@ -38,7 +38,7 @@
     </ng-container>
     <div
       class="noData"
-      *ngIf="!(reportData?.data && reportData?.data?.length > 0)"      
+      *ngIf="!(reportData?.data && reportData?.data?.length > 0)"
     >
       No Data Found
     </div>
