@@ -17,6 +17,7 @@ export class TeacherAttendanceComponent implements OnInit {
   tabs: any = [];
   programName: any = 'teacherAttendance'
   
+  
   constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
       this.tabIndex = param.tab ? Number(param.tab) : 0;
