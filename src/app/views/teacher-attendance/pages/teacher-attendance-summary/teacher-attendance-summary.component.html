@@ -9,7 +9,7 @@
             <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
                 [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
-        <div class="download-button md:col-start-2 md:col-end-5 col-start-10 col-end-11">
+        <div class="download-button md:col-start-2 md:col-end-5 col-start-10 col-end-11 flex">
             <app-download-button [data]="schoolReportsData" [pagereportName]="pagereportName"></app-download-button>
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
