@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RbacService } from "../../core/services/rbac-service.service";
-import { CommonService } from "../../core/services/common/common.service";
-import { DataService } from "../../core/services/data.service";
-import { WrapperService } from "../../core/services/wrapper.service";
-import { buildQuery, parseFilterToQuery, parseTimeSeriesQuery } from "../../utilities/QueryBuilder";
-import { config } from "./config/school_infra_config";
+import {RbacService} from "../../core/services/rbac-service.service";
+import {CommonService} from "../../core/services/common/common.service";
+import {DataService} from "../../core/services/data.service";
+import {WrapperService} from "../../core/services/wrapper.service";
+import {buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery} from "../../utilities/QueryBuilder";
+import {config} from "./config/school_infra_config";
 
 @Component({
   selector: 'app-school-infra',
@@ -55,6 +55,8 @@ export class SchoolInfrastructureComponent implements OnInit {
   reportData: any = {
     reportName: "District Wise Performance"
   };
+  drillDown: any;
+  drillDownLevel: any;
 
   constructor(private _rbacService: RbacService, private _commonService: CommonService,
     private readonly _dataService: DataService, private _wrapperService: WrapperService) {
@@ -309,5 +311,131 @@ export class SchoolInfrastructureComponent implements OnInit {
     this.data = data;
     console.log('=============>', data);
     this.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+  }
+
+  async drilldownData(event: any, card: any) {
+    this.drillDown = true;
+    let { level, id } = event ?? {};
+
+    if (level > 4) {
+      return;
+    }
+
+    let drillDownDetails;
+    let {filterValues, timeSeriesValues} = { filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }), timeSeriesValues: [] }
+    let reportConfig = config;
+    let {
+      queries,
+      levels,
+      label,
+      defaultLevel,
+      filters,
+      options
+    } = reportConfig[this.reportName[level + 1]];
+    let onLoadQuery;
+
+    switch (Number(level)) {
+      case 1:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          district: id
+        }
+        break;
+      case 2:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          block: id
+        }
+        break;
+      case 3:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          cluster: id
+        }
+        break;
+    }
+
+    let key = 'district_map';
+    queries[key] = parseRbacFilter(queries[key], drillDownDetails);
+
+    if (key.toLowerCase().includes('comparison')) {
+      let endDate = new Date();
+      let days = endDate.getDate();
+      let startDate = new Date();
+      startDate.setDate(days)
+      onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+    } else {
+      onLoadQuery = queries[key];
+    }
+
+    let query = buildQuery(onLoadQuery, defaultLevel, this.levels, [], '', '', key, '');
+    console.log("cvbb:",{query})
+    filterValues.forEach((filterParams: any) => {
+      query = parseFilterToQuery(query, filterParams)
+    });
+    console.log("cvbb: 2",{query})
+    let metricFilter = [...filterValues].filter((filter: any) => {
+      return filter.filterType === 'metric'
+    })
+
+    filterValues = [...filterValues].filter((filter: any) => {
+      return filter.filterType !== 'metric'
+    });
+
+    if (this.cardMap[this.rbacDetails.role] && this.cardMap[this.rbacDetails.role][key]) {
+      metricFilter = [
+        {
+          "label": "District Wise Performance",
+          "name": "Metric",
+          "labelProp": "category_name",
+          "valueProp": "category_name",
+          "id": "metric",
+          "query": "select category_name from dimensions.categorypgi",
+          "options": [
+            {
+              "value": "Outcome",
+              "label": "Outcome"
+            },
+            {
+              "value": "Effective Classroom Transaction",
+              "label": "Effective Classroom Transaction"
+            },
+            {
+              "value": "Infrastructure, Facilities, Student Entitlements",
+              "label": "Infrastructure, Facilities, Student Entitlements"
+            },
+            {
+              "value": "School Safety and Child Protection",
+              "label": "School Safety and Child Protection"
+            },
+            {
+              "value": "Digital Learning",
+              "label": "Digital Learning"
+            },
+            {
+              "value": "Governance Processes",
+              "label": "Governance Processes"
+            },
+            {
+              "value": "Overall",
+              "label": "Overall"
+            }
+          ],
+          "value": "Outcome",
+          "columnName": "category_name",
+          "filterType": "metric"
+        }
+      ];
+      this._dataService.getMapReportData(query, options, metricFilter)
+          .then(data => {
+            card.value = data;
+          }).catch(err => {
+          });
+    }
+
+    this.drillDownLevel = level + 1
   }
 }

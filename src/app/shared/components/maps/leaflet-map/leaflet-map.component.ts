@@ -328,8 +328,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createMarkers(mapData: any, singleColor?: any): void {
-    console.log(this.mapData);
-
     let reportTypeIndicator = this.mapData?.options?.map && this.mapData.options.map.reportTypeIndicator ? this.mapData.options.map.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];

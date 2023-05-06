@@ -221,6 +221,7 @@ export class DataService {
             selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
           }
         }
+
         resolve(reportData)
       },
         (error) => {
