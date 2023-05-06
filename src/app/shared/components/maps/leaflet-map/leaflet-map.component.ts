@@ -128,8 +128,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     else {
       let reportTypeBoolean = false;
       return e > 70 ? "#d8ead3" :
-          e > 40 ? "#fff2cc" :
-              e >= 0 ? "#f4cccc" : "#fff";
+        e > 40 ? "#fff2cc" :
+          e >= 0 ? "#f4cccc" : "#fff";
       // if (typeof e === 'string') {
       //   reportTypeBoolean = true;
       // }
@@ -294,7 +294,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             }
             layer.on({
               click: () => {
-                parent.drillDownFilter.emit({id:feature?.properties?.['ID_2'], level: parent.rbacDetails.role})
+                parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role })
               }
             });
           },
@@ -328,6 +328,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createMarkers(mapData: any, singleColor?: any): void {
+    console.log(this.mapData);
+
     let reportTypeIndicator = this.mapData?.options?.map && this.mapData.options.map.reportTypeIndicator ? this.mapData.options.map.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];
@@ -448,7 +450,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
 
         markerIcon.on("click", (e: any) => {
-          this.drillDownFilter.emit({id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role})
+          this.drillDownFilter.emit({ id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role })
         })
 
         markerIcon.addTo(this.map).bindPopup(popup, { closeButton: false });
@@ -502,16 +504,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
         let reset = L.DomUtil.create('button', 'legend-range-reset pull-right')
-        reset.innerHTML = `<i class="fa fa-refresh"></i>`
+        // reset.innerHTML = `<i class="fa fa-refresh"></i>`
         L.DomEvent.addListener(reset, 'click', () => {
           ref.resetRange()
         })
         div.insertBefore(reset, div.prevSibling)
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i+1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i + 1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i+1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
           })
           div.appendChild(span)
           clickable = true;
@@ -556,11 +558,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       ...this.mapData,
       data: temp
     }
-    if (this.config === 'NVSK') {
+
+    let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
+    if (lev > 1) {
       this.markers.clearLayers();
       this.createMarkers(filteredData, rangeColour);
-    }
-    else {
+    } else {
       this.applyCountryBorder(filteredData, rangeColour);
     }
   }
