@@ -73,8 +73,48 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
     }
   }
 
-  getSchoolReportData() {
-    let query = `select    school_id,    school_name,    round((sum(criteria_met) * 100) / count(school_id)) as percent_school_met_criteria  FROM    (      select        water.academicyear_id as academicyear_id,        water.school_id as school_id,        water.sum as has_water,        toilet.sum as has_toilet,        library.sum as has_library,        handwash.sum as has_handwash,        solar_panel.sum as has_solarpanel,        playground.sum as has_playground,        case when (          water.sum :: int + toilet.sum :: int + library.sum :: int + handwash.sum :: int + solar_panel.sum :: int + playground.sum :: int        ) = 6 then 1 else 0 end as criteria_met,        school.school_name,        district_name,        district_id,        block_name,        cluster_name      from        datasets.school_infra_drinkingwater_b2jvnmboswx_bmldvwj7 as water        inner join datasets.school_infra_toilet_fmpgclnmwwbzcr5rphco as toilet on toilet.school_id = water.school_id        and toilet.academicyear_id = water.academicyear_id        inner join datasets.school_infra_library_chvsch9qvw9nex0nbw0k as library on library.school_id = water.school_id        and library.academicyear_id = water.academicyear_id        inner join datasets.school_infra_handwash_fmz7a3fty2nob28om1ga as handwash on handwash.school_id = water.school_id        and handwash.academicyear_id = water.academicyear_id        inner join datasets.school_infra_solarpanel_l2n5fmpnv2xsbhroqhwd as solar_panel on solar_panel.school_id = water.school_id        and solar_panel.academicyear_id = water.academicyear_id        inner join datasets.school_infra_playground_intsfgr8xgrsbhroqh8a as playground on playground.school_id = water.school_id        and playground.academicyear_id = water.academicyear_id        inner join dimensions.school on school.school_id = water.school_id    ) as intermediate_table where academicyear_id = '2021-2022'  group by    school_name,    school_id limit 10`;
+  getSchoolReportData(startDate?: string, endDate ?: string) {
+    let query; 
+    if(startDate && endDate)
+    {
+      this.startDate = startDate;
+      this.endDate = endDate;
+    }
+    else{
+      let endDate = new Date();
+      let days = endDate.getDate() - this.defaultSelectedDays;
+      let startDate = new Date();
+      startDate.setDate(days)
+      this.startDate = startDate?.toISOString().split('T')[0];
+      this.endDate = endDate?.toISOString().split('T')[0];
+    }
+    console.log("Date is:",this.startDate, this.endDate);
+    if(this.rbacDetails?.role == 1){
+      query = `select e.school_id, e.school_name, ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum) 
+      as attendace_marked from datasets.sch_att_total_teachers_daily_school as b 
+      join datasets.sch_att_teachers_marked_daily_school as a on a.school_id = b.school_id and a.date = b.date 
+      join dimensions.school as e on a.school_id = e.school_id 
+      where a.date between '${this.startDate}' and '${this.endDate}'`
+    }else if(this.rbacDetails?.role ==2){
+      query = `select e.district_id, e.district_name,e.school_id, e.school_name ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as 
+      total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_district 
+      as b join datasets.sch_att_teachers_marked_daily_district as a on 
+      a.district_id = b.district_id and a.date = b.date 
+      join dimensions.school as e on a.district = e.district_id 
+      where a.date between '${this.startDate}' and '${this.endDate}' and e.district_id = '${this.rbacDetails?.district}' group by e.district_id, e.district_name,e.school_id, e.school_name`; 
+    } else if(this.rbacDetails?.role == 3) {
+      query = `select ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as 
+      total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_block as b join 
+      datasets.sch_att_teachers_marked_daily_block as a on 
+      a.block_id = b.block_id and a.date = b.date 
+      join dimensions.school as e on a.block_id = e.block_id 
+      where a.date between ${this.startDate} and ${this.endDate} and e.block_id = '${this.rbacDetails?.block}' group by e.district_id, e.district_name, e.block_id,e.block_name,e.school_id, e.school_name`; 
+    } else if(this.rbacDetails?.role == 4){
+      query = `select district_id, district_name, block_id, block_name, e.cluster_id, e.cluster_name, school_id, school_name, ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_cluster as b join datasets.sch_att_teachers_marked_daily_cluster as a on a.cluster_id = b.cluster_id and a.date = b.date 
+      join dimensions.school as e on a.cluster_id = e.cluster_id 
+      where a.date between '${this.startDate}' and '${this.endDate}' and
+       e.cluster_id = '${this.rbacDetails?.cluster}' group by e.district_id, e.district_name, e.block_id,e.block_name,e.cluster_id,e.cluster_name,e.school_id, e.school_name`; 
+   } 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let d = { reportData: res, reportType: 'map', reportName: "teacher_present_school_wise" };
       this.schoolReportsData.push(d);
@@ -95,6 +135,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+      this.getSchoolReportData(this.startDate, this.endDate)
     }
   }
 
