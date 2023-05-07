@@ -89,30 +89,13 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
     }
     console.log("Date is:", this.startDate, this.endDate);
     if (this.rbacDetails?.role == 1) {
-      query = `select e.school_id, e.school_name, ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum) 
-      as attendace_marked from datasets.sch_att_total_teachers_daily_school as b 
-      join datasets.sch_att_teachers_marked_daily_school as a on a.school_id = b.school_id and a.date = b.date 
-      join dimensions.school as e on a.school_id = e.school_id 
-      where a.date between '${this.startDate}' and '${this.endDate}' group by e.school_id,e.school_name`
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `
     } else if (this.rbacDetails?.role == 2) {
-      query = `select e.district_id, e.district_name,e.school_id, e.school_name ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as 
-      total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_district 
-      as b join datasets.sch_att_teachers_marked_daily_district as a on 
-      a.district_id = b.district_id and a.date = b.date 
-      join dimensions.school as e on a.district = e.district_id 
-      where a.date between '${this.startDate}' and '${this.endDate}' and e.district_id = '${this.rbacDetails?.district}' group by e.district_id, e.district_name,e.school_id, e.school_name`;
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
     } else if (this.rbacDetails?.role == 3) {
-      query = `select ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as 
-      total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_block as b join 
-      datasets.sch_att_teachers_marked_daily_block as a on 
-      a.block_id = b.block_id and a.date = b.date 
-      join dimensions.school as e on a.block_id = e.block_id 
-      where a.date between ${this.startDate} and ${this.endDate} and e.block_id = '${this.rbacDetails?.block}' group by e.district_id, e.district_name, e.block_id,e.block_name,e.school_id, e.school_name`;
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
     } else if (this.rbacDetails?.role == 4) {
-      query = `select district_id, district_name, block_id, block_name, e.cluster_id, e.cluster_name, school_id, school_name, ceil(round(sum(a.sum)/sum(b.sum)*100))as compliance_percentage, sum(b.sum) as total_teachers, sum(a.sum)  as attendace_marked from datasets.sch_att_total_teachers_daily_cluster as b join datasets.sch_att_teachers_marked_daily_cluster as a on a.cluster_id = b.cluster_id and a.date = b.date 
-      join dimensions.school as e on a.cluster_id = e.cluster_id 
-      where a.date between '${this.startDate}' and '${this.endDate}' and
-       e.cluster_id = '${this.rbacDetails?.cluster}' group by e.district_id, e.district_name, e.block_id,e.block_name,e.cluster_id,e.cluster_name,e.school_id, e.school_name`;
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' and cluster_id = '${this.rbacDetails?.cluster}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
     }
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
