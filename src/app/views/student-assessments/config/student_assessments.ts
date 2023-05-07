@@ -6,7 +6,7 @@ export const config = {
             "id": "academicYear",
             "labelProp": "academicyear",
             "valueProp": "academicyear_id",
-            "query": "select academicyear_id, academicyear from dimensions.academicyear"
+            "query": "select academicyear_id, academicyear from dimensions.academicyear order by academicyear_id asc"
         },
         {
             "label": "LO Summary",
@@ -74,7 +74,7 @@ export const config = {
             "id": "academicYear",
             "labelProp": "academicyear",
             "valueProp": "academicyear_id",
-            "query": "select academicyear_id, academicyear from dimensions.academicyear"
+            "query": "select academicyear_id, academicyear from dimensions.academicyear order by academicyear_id asc"
         },
         {
             "label": "Assessment Summary",
