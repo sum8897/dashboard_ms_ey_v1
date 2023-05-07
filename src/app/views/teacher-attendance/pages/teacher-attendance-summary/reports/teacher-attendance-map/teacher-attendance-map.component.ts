@@ -113,6 +113,7 @@ export class TeacherAttendanceMapComponent implements OnInit {
   }
 
   getReportData(values: any): void {
+    this.drillDownLevel = undefined;
     let { filterValues, timeSeriesValues } = values ?? { filterValues: [], timeSeriesValues: [] };
     if (filterValues === undefined) {
       filterValues = []

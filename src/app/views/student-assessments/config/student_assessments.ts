@@ -45,7 +45,7 @@ export const config = {
         {
             "label": "Map View",
             "name": "Exam Event Grade",
-            "id": "exam_id",
+            "id": "exam",
             "labelProp": "exam_name",
             "valueProp": "exam_id",
             "query": "select exam_id,exam_name from dimensions.exam"
@@ -53,7 +53,7 @@ export const config = {
         {
             "label": "Map View",
             "name": "Grade",
-            "id": "grade_id",
+            "id": "grade",
             "labelProp": "grade",
             "valueProp": "grade_id",
             "query": "select grade_id,grade from dimensions.grade"
@@ -61,10 +61,10 @@ export const config = {
         {
             "label": "Map View",
             "name": "Subject",
-            "id": "subject_id",
+            "id": "subject",
             "labelProp": "subject",
             "valueProp": "subject_id",
-            "query": "select subject_id,subject from dimensions.subject"
+            "query": "select subject_id,subject from dimensions.subject order by subject asc"
         },
 
 
@@ -491,31 +491,117 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "map": "SELECT school_name, cluster_name,block_name,district_name,(obtained_marks/total_marks)*100 AS Scores, scl_latitude, scl_longitude, cluster_latitude,cluster_longitude,block_latitude,block_longitude,district_latitude,district_longitude FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.district_id, school.block_id, school.cluster_id, school.school_name, school.latitude AS scl_latitude, school.longitude AS scl_longitude, cluster.latitude AS cluster_latitude, cluster.longitude AS cluster_longitude, cluster.cluster_name, block.latitude AS block_latitude, block.longitude AS block_longitude, block.block_name, district.latitude AS district_latitude, district.longitude AS district_longitude, district.district_name FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.cluster AS cluster ON cluster.cluster_id = school.cluster_id INNER JOIN dimensions.block AS block ON block.block_id = school.block_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id) AS student_assessment"
+                        "map": "SELECT t.district_id,t.grade_id, t.grade,t.exam_id,t.exam_name,t.academicyear_id, t.academicyear, t.subject_id, t.subject, t.district_name,round(cast(avg(t.obtained_marks/t.total_marks)*100 as numeric), 2) AS scores FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.district_id, district.district_name, grade.grade, subject.subject, academicyear.academicyear, exam.exam_name FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district ON district.district_id = school.district_id INNER JOIN dimensions.grade ON obtained_marks.grade_id = grade.grade_id INNER JOIN dimensions.academicyear ON academicyear.academicyear_id = obtained_marks.academicyear_id INNER JOIN dimensions.exam ON exam.exam_id = obtained_marks.exam_id INNER JOIN dimensions.subject ON subject.subject_id = obtained_marks.subject_id) as t group by t.district_id,t.grade_id,t.exam_id,t.academicyear_id,t.subject_id,t.district_name, t.grade, t.subject, t.exam_name, t.academicyear"
                     },
-                    "level": "district",
-                    "nextLevel": "block"
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "hierarchyLevel": "2",
+                "actions": {
+                    "queries": {
+                        "map": "SELECT avg(cast(t.latitude as numeric)) as latitude, avg(cast (t.longitude as numeric)) as longitude, t.block_id, t.block_name, t.district_id,t.grade_id, t.grade,t.exam_id,t.exam_name,t.academicyear_id, t.academicyear, t.subject_id, t.subject, t.district_name,round(cast(avg(t.obtained_marks/t.total_marks)*100 as numeric), 2) AS scores FROM ( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.district_id, school.block_id, district.district_name, block.block_name, grade.grade, subject.subject, academicyear.academicyear, exam.exam_name, school.latitude, school.longitude FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district ON district.district_id = school.district_id INNER JOIN dimensions.block ON block.block_id = school.block_id INNER JOIN dimensions.grade ON obtained_marks.grade_id = grade.grade_id INNER JOIN dimensions.academicyear ON academicyear.academicyear_id = obtained_marks.academicyear_id INNER JOIN dimensions.exam ON exam.exam_id = obtained_marks.exam_id INNER JOIN dimensions.subject ON subject.subject_id = obtained_marks.subject_id) as t WHERE district_id = {district_id} group by t.block_id, t.block_name, t.district_id,t.grade_id,t.exam_id,t.academicyear_id,t.subject_id,t.district_name, t.grade, t.subject, t.exam_name, t.academicyear"
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "hierarchyLevel": "3",
+                "actions": {
+                    "queries": {
+                        "map": "SELECT avg(cast(t.latitude as numeric)) as latitude, avg(cast (t.longitude as numeric)) as longitude, t.cluster_id, t.cluster_name,t.block_id, t.block_name, t.district_id,t.grade_id, t.grade,t.exam_id,t.exam_name,t.academicyear_id, t.academicyear, t.subject_id, t.subject, t.district_name,round(cast(avg(t.obtained_marks/t.total_marks)*100 as numeric), 2) AS scores FROM ( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.district_id, school.block_id, school.cluster_id, district.district_name, block.block_name, cluster.cluster_name, grade.grade, subject.subject, academicyear.academicyear, exam.exam_name, school.latitude, school.longitude FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district ON district.district_id = school.district_id INNER JOIN dimensions.block ON block.block_id = school.block_id INNER JOIN dimensions.cluster ON cluster.cluster_id = school.cluster_id INNER JOIN dimensions.grade ON obtained_marks.grade_id = grade.grade_id INNER JOIN dimensions.academicyear ON academicyear.academicyear_id = obtained_marks.academicyear_id INNER JOIN dimensions.exam ON exam.exam_id = obtained_marks.exam_id INNER JOIN dimensions.subject ON subject.subject_id = obtained_marks.subject_id) as t WHERE district_id = {district_id} group by t.cluster_id, t.cluster_name, t.block_id, t.block_name, t.district_id,t.grade_id,t.exam_id,t.academicyear_id,t.subject_id,t.district_name, t.grade, t.subject, t.exam_name, t.academicyear"
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "hierarchyLevel": "4",
+                "actions": {
+                    "queries": {
+                        "map": ""
+                    },
+                    "level": "school"
                 }
             }
         ],
         "options": {
             "map": {
+                "indicatorType": "percent",
                 "metricFilterNeeded": false,
-                "indicator": "Scores",
+                "indicator": "scores",
                 "legend": {
                     "title": "Average Student Assessment Scores"
                 },
                 "tooltipMetrics": [
                     {
-                        "valuePrefix": "State/ UT Name",
-                        "value": "state_name",
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Average Student Assessment Scores",
-                        "value": "Scores",
+                        "valuePrefix": "District ID: ",
+                        "value": "district_id",
                         "valueSuffix": "\n"
-                    }
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Block ID: ",
+                        "value": "block_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Cluster ID: ",
+                        "value": "cluster_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "School ID: ",
+                        "value": "school_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Average Student Assessment Scores: ",
+                        "value": "scores",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Academic Year: ",
+                        "value": "academicyear",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Exam: ",
+                        "value": "exam",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Grade: ",
+                        "value": "grade",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Subject: ",
+                        "value": "subject",
+                        "valueSuffix": "\n"
+                    },
+                    
                 ]
             }
         }

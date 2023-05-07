@@ -28,6 +28,8 @@ export class MapViewStudentAssessmentComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  drillDownLevel: any;
+  drillDown: any;
 
   @Output() exportReportData = new EventEmitter<any>();
 
@@ -40,7 +42,67 @@ export class MapViewStudentAssessmentComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  async drilldownData(event: any) {
+    this.drillDown = true
+    let { level, id } = event ?? {}
+    let drillDownDetails;
+
+    switch (Number(level)) {
+      case 1:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          district: id
+        }
+        break;
+      case 2:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          block: id
+        }
+        break;
+      case 3:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          cluster: id
+        }
+        break;
+    }
+
+    let reportConfig = config
+    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    filters.every((filter: any) => {
+      if ((Number(level) + 1) === Number(filter.hierarchyLevel)) {
+        queries = { ...filter?.actions?.queries }
+        queries['map'] = parseRbacFilter(queries['map'], drillDownDetails)
+        return false
+      }
+      return true
+    })
+    let drillDownQuery;
+    console.log(queries)
+    if (this.startDate === undefined && this.endDate === undefined) {
+      let endDate = new Date();
+      let days = endDate.getDate() - this.compareDateRange;
+      let startDate = new Date();
+      startDate.setDate(days)
+      drillDownQuery = parseTimeSeriesQuery(queries['map'], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+    }
+    else {
+      drillDownQuery = parseTimeSeriesQuery(queries['map'], this.startDate, this.endDate)
+    }
+    this.reportData = await this._dataService.getMapReportData(drillDownQuery, options, undefined)
+    if (this.reportData?.data?.length > 0) {
+      let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
+      this.exportReportData.emit(reportsData)
+    }
+    this.drillDownLevel = level + 1
+  }
+
   getReportData(values: any): void {
+    this.drillDownLevel = undefined;
     let { filterValues, timeSeriesValues } = values ?? {};
     this.startDate = timeSeriesValues?.startDate;
     this.endDate = timeSeriesValues?.endDate;
