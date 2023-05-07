@@ -82,7 +82,9 @@ export class SchoolProgressionComponent implements OnInit {
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let d = { reportData: res, reportType: 'map', reportName: "student_progression_school_wise" };
-      this.schoolReportsData.push(d);
+      if (d.reportData.length > 0) {
+        this.schoolReportsData.push(d);
+      } 
     })
   }
 
@@ -286,5 +288,6 @@ export class SchoolProgressionComponent implements OnInit {
   filtersUpdated(data) {
     console.log('=============>', data);
     this.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    this.getSchoolReportData()
   }
 }
