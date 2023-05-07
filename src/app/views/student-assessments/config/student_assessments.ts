@@ -8,14 +8,14 @@ export const config = {
             "valueProp": "academicyear_id",
             "query": "select academicyear_id, academicyear from dimensions.academicyear order by academicyear_id asc"
         },
-        {
-            "label": "LO Summary",
-            "name": "Exam Event Grade",
-            "id": "exam_id",
-            "labelProp": "exam_name",
-            "valueProp": "exam_id",
-            "query": "select exam_id, exam_name from dimensions.exam"
-        },
+        // {
+        //     "label": "LO Summary",
+        //     "name": "Exam Event Grade",
+        //     "id": "exam_id",
+        //     "labelProp": "exam_name",
+        //     "valueProp": "exam_id",
+        //     "query": "select exam_id, exam_name from dimensions.exam"
+        // },
         {
             "label": "LO Summary",
             "name": "Grade",
@@ -32,8 +32,6 @@ export const config = {
             "valueProp": "subject",
             "query": "select subject from dimensions.subject"
         },
-
-
         {
             "label": "Map View",
             "name": "Academic Year",
@@ -42,14 +40,14 @@ export const config = {
             "valueProp": "academicyear_id",
             "query": "select academicyear_id, academicyear from dimensions.academicyear"
         },
-        {
-            "label": "Map View",
-            "name": "Exam Event Grade",
-            "id": "exam",
-            "labelProp": "exam_name",
-            "valueProp": "exam_id",
-            "query": "select exam_id,exam_name from dimensions.exam"
-        },
+        // {
+        //     "label": "Map View",
+        //     "name": "Exam Event Grade",
+        //     "id": "exam",
+        //     "labelProp": "exam_name",
+        //     "valueProp": "exam_id",
+        //     "query": "select exam_id,exam_name from dimensions.exam"
+        // },
         {
             "label": "Map View",
             "name": "Grade",
@@ -76,14 +74,14 @@ export const config = {
             "valueProp": "academicyear_id",
             "query": "select academicyear_id, academicyear from dimensions.academicyear order by academicyear_id asc"
         },
-        {
-            "label": "Assessment Summary",
-            "name": "Exam Event Grade",
-            "id": "exam_id",
-            "labelProp": "exam_name",
-            "valueProp": "exam_id",
-            "query": "select exam_id,exam_name from dimensions.exam"
-        },
+        // {
+        //     "label": "Assessment Summary",
+        //     "name": "Exam Event Grade",
+        //     "id": "exam_id",
+        //     "labelProp": "exam_name",
+        //     "valueProp": "exam_id",
+        //     "query": "select exam_id,exam_name from dimensions.exam"
+        // },
         {
             "label": "Assessment Summary",
             "name": "Grade",
