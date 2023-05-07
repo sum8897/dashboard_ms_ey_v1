@@ -65,7 +65,6 @@ export class AssessmentSummaryTabComponent implements OnInit {
       this.GradeWiseAvgStuAsessScoreComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
       this.SubjectWiseAvgStuAsessScoreComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
       this.AvgStuAsseesScoreBignoComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-      this.getSchoolReportData()
     }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
       let endDate = new Date();
@@ -97,31 +96,36 @@ export class AssessmentSummaryTabComponent implements OnInit {
     }
   }
 
-  getSchoolReportData(startDate?: string, endDate?: string) {
+
+  getSchoolReportData(filters?: any) {
     let query;
-    // if (startDate && endDate) {
-    //   this.startDate = startDate;
-    //   this.endDate = endDate;
-    // }
-    // else {
-    //   let endDate = new Date();
-    //   let days = endDate.getDate() - this.defaultSelectedDays;
-    //   let startDate = new Date();
-    //   startDate.setDate(days)
-    //   this.startDate = startDate?.toISOString().split('T')[0];
-    //   this.endDate = endDate?.toISOString().split('T')[0];
-    // }
-    console.log("Date is:", this.startDate, this.endDate);
-    if (this.rbacDetails?.role == 1) {
-      query = `SELECT  ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME, ROUND(CAST(AVG(OBTAINED_MARKS / TOTAL_MARKS) * 100 AS numeric), 2) AS SCORES FROM (SELECT OBTAINED_MARKS.SUM AS OBTAINED_MARKS, TOTAL_MARKS.SUM AS TOTAL_MARKS, OBTAINED_MARKS.GRADE_ID, OBTAINED_MARKS.ACADEMICYEAR_ID, OBTAINED_MARKS.SUBJECT_ID, OBTAINED_MARKS.LO_ID, GRADE.GRADE, SUBJECT.SUBJECT, OBTAINED_MARKS.EXAM_ID, LO.LO_NAME, SCHOOL.SCHOOL_ID, SCHOOL.SCHOOL_NAME, SCHOOL.CLUSTER_NAME, SCHOOL.BLOCK_NAME, SCHOOL.DISTRICT_NAME FROM DATASETS.ASSESSMENT_OBTAINEDMARKS_BWBODTT2FNDSW2K7DSKK AS OBTAINED_MARKS INNER JOIN DATASETS.ASSESSMENT_TOTALMARKS_ETT2DMFXQLM6YWIFCGK5 AS TOTAL_MARKS ON TOTAL_MARKS.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.SCHOOL AS SCHOOL ON SCHOOL.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.GRADE AS GRADE ON GRADE.GRADE_ID = OBTAINED_MARKS.GRADE_ID INNER JOIN DIMENSIONS.SUBJECT AS SUBJECT ON SUBJECT.SUBJECT_ID = OBTAINED_MARKS.SUBJECT_ID INNER JOIN DIMENSIONS.EXAM AS EXAM ON EXAM.EXAM_ID = OBTAINED_MARKS.EXAM_ID INNER JOIN DIMENSIONS.LO AS LO ON LO.LO_ID = OBTAINED_MARKS.LO_ID) AS STUDENT_ASSESSMENT GROUP BY  ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME`
+    if (filters == undefined) {
+        query = `SELECT ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME, ROUND(CAST(AVG(OBTAINED_MARKS / TOTAL_MARKS) * 100 AS numeric), 2) AS SCORES FROM(SELECT OBTAINED_MARKS.SUM AS OBTAINED_MARKS, TOTAL_MARKS.SUM AS TOTAL_MARKS, OBTAINED_MARKS.GRADE_ID, OBTAINED_MARKS.ACADEMICYEAR_ID, OBTAINED_MARKS.SUBJECT_ID, OBTAINED_MARKS.LO_ID, GRADE.GRADE, SUBJECT.SUBJECT, OBTAINED_MARKS.EXAM_ID, LO.LO_NAME, SCHOOL.SCHOOL_ID, SCHOOL.SCHOOL_NAME, SCHOOL.CLUSTER_NAME, SCHOOL.BLOCK_NAME, SCHOOL.DISTRICT_NAME FROM DATASETS.ASSESSMENT_OBTAINEDMARKS_BWBODTT2FNDSW2K7DSKK AS OBTAINED_MARKS INNER JOIN DATASETS.ASSESSMENT_TOTALMARKS_ETT2DMFXQLM6YWIFCGK5 AS TOTAL_MARKS ON TOTAL_MARKS.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.SCHOOL AS SCHOOL ON SCHOOL.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.GRADE AS GRADE ON GRADE.GRADE_ID = OBTAINED_MARKS.GRADE_ID INNER JOIN DIMENSIONS.SUBJECT AS SUBJECT ON SUBJECT.SUBJECT_ID = OBTAINED_MARKS.SUBJECT_ID INNER JOIN DIMENSIONS.EXAM AS EXAM ON EXAM.EXAM_ID = OBTAINED_MARKS.EXAM_ID INNER JOIN DIMENSIONS.LO AS LO ON LO.LO_ID = OBTAINED_MARKS.LO_ID) AS STUDENT_ASSESSMENT GROUP BY ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME`
     }
-    // else if (this.rbacDetails?.role == 2) {
-    //   query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-    // } else if (this.rbacDetails?.role == 3) {
-    //   query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-    // } else if (this.rbacDetails?.role == 4) {
-    //   query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' and cluster_id = '${this.rbacDetails?.cluster}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-    // }
+    else {
+      const desiredIdYear = 'academicYear';
+      const desiredIdSubject = 'subject_id';
+      const desiredIdGrade = 'grade_id';
+      const desiredIdexam = 'exam_id';
+      let academicYear;
+      let examId;
+      let gradeId;
+      let subjectId;
+      for (const obj of filters) {
+        if (obj.id == desiredIdYear) {
+          academicYear = obj.value;
+        }else if(obj.id == desiredIdSubject){
+          subjectId=obj.value
+        }else if(obj.id == desiredIdGrade){
+          gradeId=obj.value
+        }else if(obj.id == desiredIdexam){
+          examId=obj.value
+        }
+      }
+      if (this.rbacDetails?.role == 1) {
+        query = `SELECT ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME, ROUND(CAST(AVG(OBTAINED_MARKS / TOTAL_MARKS) * 100 AS numeric), 2) AS SCORES FROM(SELECT OBTAINED_MARKS.SUM AS OBTAINED_MARKS, TOTAL_MARKS.SUM AS TOTAL_MARKS, OBTAINED_MARKS.GRADE_ID, OBTAINED_MARKS.ACADEMICYEAR_ID, OBTAINED_MARKS.SUBJECT_ID, OBTAINED_MARKS.LO_ID, GRADE.GRADE, SUBJECT.SUBJECT, OBTAINED_MARKS.EXAM_ID, LO.LO_NAME, SCHOOL.SCHOOL_ID, SCHOOL.SCHOOL_NAME, SCHOOL.CLUSTER_NAME, SCHOOL.BLOCK_NAME, SCHOOL.DISTRICT_NAME FROM DATASETS.ASSESSMENT_OBTAINEDMARKS_BWBODTT2FNDSW2K7DSKK AS OBTAINED_MARKS INNER JOIN DATASETS.ASSESSMENT_TOTALMARKS_ETT2DMFXQLM6YWIFCGK5 AS TOTAL_MARKS ON TOTAL_MARKS.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.SCHOOL AS SCHOOL ON SCHOOL.SCHOOL_ID = OBTAINED_MARKS.SCHOOL_ID INNER JOIN DIMENSIONS.GRADE AS GRADE ON GRADE.GRADE_ID = OBTAINED_MARKS.GRADE_ID INNER JOIN DIMENSIONS.SUBJECT AS SUBJECT ON SUBJECT.SUBJECT_ID = OBTAINED_MARKS.SUBJECT_ID INNER JOIN DIMENSIONS.EXAM AS EXAM ON EXAM.EXAM_ID = OBTAINED_MARKS.EXAM_ID INNER JOIN DIMENSIONS.LO AS LO ON LO.LO_ID = OBTAINED_MARKS.LO_ID) AS STUDENT_ASSESSMENT where subject_id = '${subjectId}' AND grade_id = '${gradeId}'  AND academicyear_id = '${academicYear}'  GROUP BY ACADEMICYEAR_ID, SCHOOL_ID, SCHOOL_NAME, EXAM_ID, GRADE, SUBJECT, LO_NAME`
+      }
+    }
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let d = { reportData: res, reportType: 'map', reportName: "teacher_present_school_wise" };
@@ -132,6 +136,7 @@ export class AssessmentSummaryTabComponent implements OnInit {
   }
 
   filtersUpdated(filters: any) {
+    this.getSchoolReportData(filters)
     this.reportsData = [];
     this.AvgStuAsseesScoreTableComponent?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     this.GradeWiseAvgStuAsessScoreComponent?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
