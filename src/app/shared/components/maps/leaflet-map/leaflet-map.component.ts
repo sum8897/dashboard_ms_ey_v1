@@ -122,7 +122,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getLayerColor(e: any, legend?: boolean, values?: number[]) {
-    if ((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
+    if (((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) || (this.hierarchyLevel > 1 || this.drillDownLevel > 1) && !legend) {
       return '#fff'
     } else {
       let value = e;
@@ -224,6 +224,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         function getPopUp(feature: any) {
+          if(parent.hierarchyLevel > 1 || parent.drillDownLevel > 1) {
+            return undefined
+          }
           let popup: any;
           mapData.data.forEach((state: any) => {
             if (state.state_id == feature.properties.state_code && !state.district_id) {
