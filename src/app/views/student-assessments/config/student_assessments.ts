@@ -27,10 +27,10 @@ export const config = {
         {
             "label": "LO Summary",
             "name": "Subject",
-            "id": "lo_name",
-            "labelProp": "lo_name",
-            "valueProp": "lo_name",
-            "query": "select lo_name from dimensions.lo"
+            "id": "subject_id",
+            "labelProp": "subject",
+            "valueProp": "subject",
+            "query": "select subject from dimensions.subject"
         },
 
 
@@ -111,7 +111,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(AVG(obtained_marks/total_marks), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id) AS student_assessment"
+                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id) AS student_assessment"
                     },
                     "level": "district"
                 }
@@ -185,7 +185,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table":"SELECT district_name AS district,grade,subject, AVG(obtained_marks/total_marks)*100 AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, grade.grade, subject.subject, district.district_name FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id) AS student_assessment GROUP BY district_name,grade,subject;"
+                        "table":"SELECT district_name AS district,grade,subject, CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, grade.grade, subject.subject, district.district_name, obtained_marks.exam_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id) AS student_assessment GROUP BY district_name,grade,subject; "
                     },
                     "level": "district"
                 }
@@ -195,10 +195,9 @@ export const config = {
                 "labelProp": "district_name",
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
-
                 "actions": {
                     "queries": {
-                        "table": ""
+                        "table":"SELECT block_name AS block,grade,subject,district_id ,AVG(obtained_marks/total_marks)*100 AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, grade.grade, subject.subject, block.block_name, obtained_marks.exam_id, block.block_id, district.district_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.block AS block ON block.block_id = school.block_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id) AS student_assessment where district_id={district_id} GROUP BY block_name,grade,subject,district_id;"
                     },
                     "level": "block"
                 }
@@ -210,7 +209,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "table": ""
+                        "table":"SELECT cluster_name AS cluster,grade,subject,block_id, AVG(obtained_marks/total_marks)*100 AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, obtained_marks.exam_id, grade.grade, subject.subject, cluster.cluster_name, cluster.cluster_id, block.block_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.block AS block ON block.block_id = school.block_id INNER JOIN dimensions.cluster AS cluster ON cluster.cluster_id = school.cluster_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id) AS student_assessment where block_id={block_id} GROUP BY cluster_name,grade,subject,block_id;"
                     },
                     "level": "cluster"
                 }
@@ -222,23 +221,11 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "table": ""
+                        "table": "SELECT school_name AS school,grade,subject,cluster_id, AVG(obtained_marks/total_marks)*100 AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.school_id AS school_id, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, obtained_marks.exam_id, grade.grade, subject.subject, school.school_name, cluster.cluster_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.cluster AS cluster ON cluster.cluster_id = school.cluster_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id) AS student_assessment WHERE cluster_id={cluster_id} GROUP BY school_name,grade,subject,cluster_id;"
                     },
                     "level": "school"
                 }
             },
-            {
-                "name": "School",
-                "labelProp": "school_name",
-                "valueProp": "school_id",
-                "hierarchyLevel": "5",
-                "actions": {
-                    "queries": {
-                        "table": ""
-                    },
-                    "level": "school"
-                }
-            }
         ],
         "options": {
             "table": {
@@ -246,6 +233,22 @@ export const config = {
                     {
                         name: "District",
                         property: "district",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster",
+                        class: "text-center"
+                    },
+                    ,
+                    {
+                        name: "School",
+                        property: "school",
                         class: "text-center"
                     },
                     {
@@ -283,7 +286,7 @@ export const config = {
                         },
                     }
                 ],
-                "sortByProperty": "subject",
+                "sortByProperty": "average",
                 "sortDirection": "desc"
             },
             "bigNumber": {
@@ -303,7 +306,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "SELECT grade,AVG(obtained_marks/total_marks) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.academicyear_id, grade.grade FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id) AS student_assessment GROUP BY grade;"
+                        "barChart":"SELECT grade,AVG(obtained_marks/total_marks) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, obtained_marks.exam_id, grade.grade FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id) AS student_assessment GROUP BY grade;"
                     },
                     "level": "district"
                 }
@@ -315,7 +318,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": ""
+                        "barChart": "SELECT grade,AVG(obtained_marks/total_marks) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.subject_id, obtained_marks.academicyear_id, grade.grade, district.district_id, obtained_marks.exam_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id) AS student_assessment WHERE district_id = {district_id} GROUP BY grade"
                     },
                     "level": "block"
                 }
@@ -371,13 +374,13 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "% Average",
+                "metricLabelProp": "Average Student Assessment Scores",
                 "metricValueProp": "average",
                 "yAxis": {
-                    "title": "Grades"
+                    "title": "% Scores "
                 },
                 "xAxis": {
-                    "title": "% Scores ",
+                    "title": "Grades",
                     "label": "grade",
                     "value": "grade",
 
@@ -397,7 +400,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "SELECT subject,AVG(obtained_marks/total_marks)AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.academicyear_id, subject.subject FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id) AS student_assessment GROUP BY subject;",
+                        "barChart":"SELECT subject,AVG(obtained_marks/total_marks)AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.academicyear_id, obtained_marks.subject_id, obtained_marks.exam_id, subject.subject FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.subject AS subject ON subject.subject_id = obtained_marks.subject_id INNER JOIN dimensions.exam as exam on exam.exam_id=obtained_marks.exam_id INNER JOIN dimensions.grade AS grade ON grade.grade_id = obtained_marks.grade_id) AS student_assessment GROUP BY subject;"
                     },
                     "level": "district"
                 }
@@ -409,7 +412,7 @@ export const config = {
                 "hierarchyLevel": "2",
                 "actions": {
                     "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date,round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_master as m on t.block_id = m.block_id where m.district_id={district_id} group by  t.gender",
+                        "barChart":"",
                     },
                     "level": "block"
                 }
@@ -465,15 +468,15 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "% Students Present",
-                "metricValueProp": "stt_avg",
+                "metricLabelProp": "Average Student Assessment Scores",
+                "metricValueProp": "average",
                 "yAxis": {
-                    "title": "Attendance %"
+                    "title": "% Scores"
                 },
                 "xAxis": {
-                    "title": " ",
-                    "label": "gender",
-                    "value": "gender",
+                    "title": "Subjects",
+                    "label": "subject",
+                    "value": "subject",
 
                 }
             }
