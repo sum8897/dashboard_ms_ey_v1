@@ -466,7 +466,7 @@ export const config = {
                 }
             }
         ],
-        "options": {
+        "options": { 
             "barChart": {
                 "metricLabelProp": "Average Student Assessment Scores",
                 "metricValueProp": "average",
