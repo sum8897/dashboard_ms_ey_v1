@@ -30,6 +30,7 @@ export class MapViewStudentAssessmentComponent implements OnInit {
   rbacDetails: any;
   drillDownLevel: any;
   drillDown: any;
+  filterValues: any;
 
   @Output() exportReportData = new EventEmitter<any>();
 
@@ -81,17 +82,15 @@ export class MapViewStudentAssessmentComponent implements OnInit {
       }
       return true
     })
-    let drillDownQuery;
-    console.log(queries)
-    if (this.startDate === undefined && this.endDate === undefined) {
-      let endDate = new Date();
-      let days = endDate.getDate() - this.compareDateRange;
-      let startDate = new Date();
-      startDate.setDate(days)
-      drillDownQuery = parseTimeSeriesQuery(queries['map'], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-    }
-    else {
-      drillDownQuery = parseTimeSeriesQuery(queries['map'], this.startDate, this.endDate)
+    let drillDownQuery = queries['map'];
+    if (this.filterValues?.length > 0) {
+      this.filterValues.filter((filter: any) => {
+        return filter.filterType !== 'metric'
+      })
+
+      this.filterValues.forEach((filterParams: any) => {
+        drillDownQuery = parseFilterToQuery(drillDownQuery, filterParams)
+      });
     }
     this.reportData = await this._dataService.getMapReportData(drillDownQuery, options, undefined)
     if (this.reportData?.data?.length > 0) {
@@ -104,6 +103,7 @@ export class MapViewStudentAssessmentComponent implements OnInit {
   getReportData(values: any): void {
     this.drillDownLevel = undefined;
     let { filterValues, timeSeriesValues } = values ?? {};
+    this.filterValues = [...filterValues]
     this.startDate = timeSeriesValues?.startDate;
     this.endDate = timeSeriesValues?.endDate;
     let reportConfig = config
