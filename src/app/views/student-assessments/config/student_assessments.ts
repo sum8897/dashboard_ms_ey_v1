@@ -101,7 +101,7 @@ export const config = {
             "query": "select subject_id,subject from dimensions.subject"
         },
     ],
-    avg_student_assessment_big_no: {
+    avg_student_assessment_bignumber: {
         "label": "Assessment Summary",
         "filters": [
             {
