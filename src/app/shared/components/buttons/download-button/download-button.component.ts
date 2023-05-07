@@ -182,7 +182,7 @@ export class DownloadButtonComponent implements OnInit {
           });
         });
         // added  below condition temporary for school download reports
-        if (this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
+        if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
           dupData = JSON.parse(JSON.stringify(reportData));
         }
         //
