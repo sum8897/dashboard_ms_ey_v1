@@ -61,6 +61,7 @@ export const config = {
         "options":
         {
             "map": {
+                "indicatorType": "percent",
                 "indicator": "stt_avg",
                 "legend": { "title": "Average Teachers Present" },
                 "tooltipMetrics": [

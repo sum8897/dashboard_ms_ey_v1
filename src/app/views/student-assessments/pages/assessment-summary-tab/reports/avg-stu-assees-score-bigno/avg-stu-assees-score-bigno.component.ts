@@ -13,7 +13,7 @@ import { config } from '../../../../config/student_assessments'
 })
 export class AvgStuAsseesScoreBignoComponent implements OnInit {
 
-  reportName: string = 'avg_student_assessment_big_no';
+  reportName: string = 'avg_student_assessment_bignumber';
   filters: any = [];
   levels: any;
   reportData: any = {

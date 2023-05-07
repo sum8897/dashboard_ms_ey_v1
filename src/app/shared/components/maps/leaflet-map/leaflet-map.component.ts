@@ -122,7 +122,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getLayerColor(e: any, legend?: boolean, values?: number[]) {
-    if ((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
+    if (((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) || (this.hierarchyLevel > 1 || this.drillDownLevel > 1) && !legend) {
       return '#fff'
     } else {
       let value = e;
@@ -224,6 +224,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         function getPopUp(feature: any) {
+          if(parent.hierarchyLevel > 1 || parent.drillDownLevel > 1) {
+            return undefined
+          }
           let popup: any;
           mapData.data.forEach((state: any) => {
             if (state.state_id == feature.properties.state_code && !state.district_id) {
@@ -279,7 +282,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   createMarkers(mapData: any, singleColor?: any): void {
-    let reportTypeIndicator = this.mapData?.options?.map && this.mapData.options.map.reportTypeIndicator ? this.mapData.options.map.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
+    let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];
       if (reportTypeIndicator === 'value') {
