@@ -72,6 +72,14 @@
       "imageUrl": "progression.jpeg",
       "programID": "studentProgress",
       "orderBy": "11"
+    },
+    {
+      "programName": "Student Assessments",
+      "tooltip": "Student Assessments",
+      "navigationUrl": "/student-assessments",
+      "imageUrl": "nishtha.png",
+      "programID": "studentAssessments",
+      "orderBy": "12"
     }
   ]
 }

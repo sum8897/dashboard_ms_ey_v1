@@ -1,0 +1,33 @@
+<div class="col-span-full tab-wrapper">
+    <div class="filter-row grid grid-cols-4">
+        <div class="col-span-2">
+            <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)"
+                colSize="col-span-6"></app-filter-panel>
+        </div>
+        <div class="col-start-4 col-end-5 download-button">
+            <!-- <app-popup-options [data]="reportsData" [reportName]="'diksha_content'" ></app-popup-options> -->
+            <app-download-button [data]="reportsData"></app-download-button>
+        </div>
+    </div>
+    <div class="reports-row">
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('avg_student_assessment_big_no', 'bigNumber')" id="bignumber">
+                <app-avg-stu-assees-score-bigno #AvgStuAsseesScoreBignoComponent></app-avg-stu-assees-score-bigno>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('average_student_assessment_score_table', 'table')" id="table">
+                <app-avg-stu-assees-score-table #AvgStuAsseesScoreTableComponent></app-avg-stu-assees-score-table>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('grade_wise_avg_student_assessment_score_barchart', 'barChart')" id="bar">
+                <app-grade-wise-avg-stu-asess-score
+                    #GradeWiseAvgStuAsessScoreComponent></app-grade-wise-avg-stu-asess-score>
+            </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('subject_wise_avg_student_assessment_barchart', 'barChart')" id="bar">
+                <app-subject-wise-avg-stu-asess-score
+                    #SubjectWiseAvgStuAsessScoreComponent></app-subject-wise-avg-stu-asess-score>
+            </div>
+        </div>
+    </div>
+</div>
