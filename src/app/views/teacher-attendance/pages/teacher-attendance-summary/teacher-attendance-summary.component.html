@@ -1,7 +1,6 @@
 <div class="col-span-full tab-wrapper">
     <p class="tab-desc">
-        This report shows the % of teachers present in the school (out of the ones who have reported their attendance)
-        within the selected time duration on an average.
+        This report shows the % of teachers present in the school within the selected time duration on average
     </p>
     <!-- <app-breadcrumb-component></app-breadcrumb-component> -->
     <div class="filter-row grid md:grid-cols-4 grid-cols-10">
@@ -11,6 +10,7 @@
         </div>
         <div class="download-button md:col-start-2 md:col-end-5 col-start-10 col-end-11 flex">
             <app-download-button [data]="schoolReportsData" [pagereportName]="pagereportName"></app-download-button>
+            &nbsp;
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
     </div>
