@@ -17,9 +17,9 @@ export class GradeWiseAvgStuAsessScoreComponent implements OnInit {
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: ""
+    reportName: "Grade Wise Average Student Assessment Scores"
   };
-  title: string = ''
+  title: string = 'Grade Wise Average Student Assessment Scores'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
