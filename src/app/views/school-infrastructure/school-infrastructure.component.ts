@@ -18,6 +18,7 @@ export class SchoolInfrastructureComponent implements OnInit {
   schoolReportsData: any[] = [];
   pagereportName = "school_infra"
   data: any;
+  hideTab: any;
   
   //
 
@@ -83,9 +84,11 @@ export class SchoolInfrastructureComponent implements OnInit {
       label,
       defaultLevel,
       filters,
-      options
+      options,
+      hideTab
     } = reportConfig[this.reportName[this.rbacDetails.role]];
     let onLoadQuery;
+    this.hideTab = hideTab
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {

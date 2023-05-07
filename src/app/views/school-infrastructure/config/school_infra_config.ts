@@ -246,6 +246,7 @@ export const config = {
                 "valueSuffix": '%'
             },
             "map": {
+                "indicatorType": "percent",
                 "indicator": "percent_school_met_criteria",
                 "metricFilterNeeded": false,
                 "legend": { "title": "District-wise Performance" },
@@ -268,6 +269,7 @@ export const config = {
     district_config: {
         "label": "Schools Infrastructure",
         "defaultLevel": "state",
+        "hideTab": true,
         "timeSeriesQueries":'',
         "queries": {
             "district_map": "select district_id, block_id, block_name, avg(cast (latitude as numeric)) as latitude, avg(cast (longitude as numeric)) as longitude, round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria FROM (select water.academicyear_id as academicyear_id, water.school_id as school_id, water.sum as has_water, toilet.sum as has_toilet, library.sum as has_library, handwash.sum as has_handwash, solar_panel.sum as has_solarpanel, playground.sum as has_playground, case when (water.sum::int+toilet.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 6 then 1 else 0 end as criteria_met, school.school_name, district_id, block_id, block_name, latitude, longitude from datasets.school_infra_drinkingwater_school0academicyear as water inner join datasets.school_infra_toilet_school0academicyear as toilet on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id inner join datasets.school_infra_library_school0academicyear as library on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id inner join datasets.school_infra_handwash_school0academicyear as handwash on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id inner join datasets.school_infra_solarpanel_school0academicyear as solar_panel on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id inner join datasets.school_infra_playground_school0academicyear as playground on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id inner join dimensions.school on school.school_id = water.school_id) as intermediate_table where district_id={district_id} group by district_id, block_name, block_id"
@@ -529,6 +531,7 @@ export const config = {
                 "valueSuffix": '%'
             },
             "map": {
+                "indicatorType": "percent",
                 "indicator": "percent_school_met_criteria",
                 "metricFilterNeeded": false,
                 "legend": { "title": "District-wise Performance" },
@@ -551,6 +554,7 @@ export const config = {
     block_config: {
         "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
+        "hideTab": true,
         "timeSeriesQueries": '',
         "queries": {
             "district_map": "select block_id, cluster_id, cluster_name, avg(cast (latitude as numeric)) as latitude, avg(cast (longitude as numeric)) as longitude, round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria FROM (select water.academicyear_id as academicyear_id, water.school_id as school_id, water.sum as has_water, toilet.sum as has_toilet, library.sum as has_library, handwash.sum as has_handwash, solar_panel.sum as has_solarpanel, playground.sum as has_playground, case when (water.sum::int+toilet.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 6 then 1 else 0 end as criteria_met, school.school_name, block_id, cluster_id, cluster_name, latitude, longitude from datasets.school_infra_drinkingwater_school0academicyear as water inner join datasets.school_infra_toilet_school0academicyear as toilet on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id inner join datasets.school_infra_library_school0academicyear as library on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id inner join datasets.school_infra_handwash_school0academicyear as handwash on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id inner join datasets.school_infra_solarpanel_school0academicyear as solar_panel on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id inner join datasets.school_infra_playground_school0academicyear as playground on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id inner join dimensions.school on school.school_id = water.school_id) as intermediate_table where block_id={block_id} group by block_id, cluster_id, cluster_name"
@@ -794,6 +798,7 @@ export const config = {
                 "valueSuffix": '%'
             },
             "map": {
+                "indicatorType": "percent",
                 "indicator": "percent_school_met_criteria",
                 "metricFilterNeeded": false,
                 "legend": { "title": "District-wise Performance" },
@@ -816,6 +821,7 @@ export const config = {
     cluster_config: {
         "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
+        "hideTab": true,
         "timeSeriesQueries": '',
         "queries": {
             "district_map": "select cluster_id, school_id, school_name, avg(cast (latitude as numeric)) as latitude, avg(cast (longitude as numeric)) as longitude, round( (sum(criteria_met)*100)/count(school_id) ) as percent_school_met_criteria FROM (select water.academicyear_id as academicyear_id, water.school_id as school_id, water.sum as has_water, toilet.sum as has_toilet, library.sum as has_library, handwash.sum as has_handwash, solar_panel.sum as has_solarpanel, playground.sum as has_playground, case when (water.sum::int+toilet.sum::int+library.sum::int+handwash.sum::int+solar_panel.sum::int+playground.sum::int) = 6 then 1 else 0 end as criteria_met, school.school_name, cluster_id, latitude, longitude from datasets.school_infra_drinkingwater_school0academicyear as water inner join datasets.school_infra_toilet_school0academicyear as toilet on toilet.school_id = water.school_id and toilet.academicyear_id = water.academicyear_id inner join datasets.school_infra_library_school0academicyear as library on library.school_id = water.school_id and library.academicyear_id = water.academicyear_id inner join datasets.school_infra_handwash_school0academicyear as handwash on handwash.school_id = water.school_id and handwash.academicyear_id = water.academicyear_id inner join datasets.school_infra_solarpanel_school0academicyear as solar_panel on solar_panel.school_id = water.school_id and solar_panel.academicyear_id = water.academicyear_id inner join datasets.school_infra_playground_school0academicyear as playground on playground.school_id = water.school_id and playground.academicyear_id = water.academicyear_id inner join dimensions.school on school.school_id = water.school_id) as intermediate_table where cluster_id={cluster_id} group by cluster_id, school_id, school_name"
@@ -1031,6 +1037,7 @@ export const config = {
                 "valueSuffix": '%'
             },
             "map": {
+                "indicatorType": "percent",
                 "indicator": "percent_school_met_criteria",
                 "metricFilterNeeded": false,
                 "legend": { "title": "District-wise Performance" },
