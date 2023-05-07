@@ -247,6 +247,10 @@ export class SchoolInfrastructureComponent implements OnInit {
   }
 
   onTabChanged($event) {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      console.log('resize');
+    }, 100);
   }
 
   getTableReportData(query, options, card): void {
@@ -314,7 +318,7 @@ export class SchoolInfrastructureComponent implements OnInit {
     this.drillDown = true;
     let { level, id } = event ?? {};
 
-    if (level > 4) {
+    if (level >= 4) {
       return;
     }
 

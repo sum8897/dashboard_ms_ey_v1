@@ -121,35 +121,26 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     this.createMarkers(this.mapData);
   }
 
-  getLayerColor(e: any, legend?: boolean) {
+  getLayerColor(e: any, legend?: boolean, values?: number[]) {
     if ((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) {
       return '#fff'
-    }
-    else {
-      let reportTypeBoolean = false;
-      return e > 70 ? "#d8ead3" :
-        e > 40 ? "#fff2cc" :
-          e >= 0 ? "#f4cccc" : "#fff";
-      // if (typeof e === 'string') {
-      //   reportTypeBoolean = true;
-      // }
-      // if (reportTypeBoolean) {
-      //   if (e.trim().toLowerCase() == "yes") {
-      //     return "#d8ead3";
-      //   } else {
-      //     return "#fff";
-      //   }
-      // }
-      // else {
-      //   {
+    } else {
+      let value = e;
+      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let color = "#fff";
+      value = Number(value);
+      for (let i = 0; i < values.length - 1; i++) {
+        if (value <= values[i] && value >= values[i + 1]) {
+          color = colors[i];
+        }
+      }
 
-      //   }
-      // }
+      return color;
     }
   }
 
   async applyCountryBorder(mapData: any, singleColor?: any): Promise<any> {
-    let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
+    let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value';
     let parent = this;
     return new Promise(async (resolve, reject) => {
       try {
@@ -166,80 +157,36 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
         const data = body;
         let min!: number, max!: number, values: any[] = [];
-        let reportTypeBoolean = false;
-        if (typeof mapData?.data[0]?.indicator === 'string') {
-          reportTypeBoolean = true;
-        }
-        if (reportTypeBoolean === false) {
+        
+        if (reportTypeIndicator === 'value') {
           mapData.data.forEach((data: any, index: number) => {
             if (index === 0) {
               min = data.indicator;
               max = data.indicator;
               return;
             }
-
+  
             min = min <= data.indicator ? min : data.indicator;
             max = max >= data.indicator ? max : data.indicator;
           });
-
+  
+          let parts = 3;
+          max = max > 0 ? max : parts;
           let range = max - min;
-          let partSize = (range / 4 % 1 === 0) ? range / 4 : Number((range / 4).toFixed(2));
-          if (range && range <= 4) {
-            for (let i = 1; i <= 5; i++) {
-              if (i === 5) {
-                if (min === 0) {
-                  values.push(0.1);
-                }
-                else {
-                  values.push(Number(min))
-                }
-              }
-              else if (i === 1) {
-                values.push(Number(max))
-              }
-              else if (i !== 4) {
-                let value = Number((max - partSize * (i - 1)))
-                values.push(value >= 1 ? value : 1)
-              }
+  
+          let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(2));
+          for (let i = 0; i < parts; i++) {
+            if (i === 0) {
+              values.push(max);
+            } else {
+              let value = Number((max - partSize * i).toFixed(2));
+              values.push(value);
             }
           }
-          else if (range > 4) {
-            for (let i = 1; i <= 5; i++) {
-              if (i === 5) {
-                if (min === 0) {
-                  values.push(this.perCapitaReport ? 0.1 : 1);
-                }
-                else {
-                  values.push(this.perCapitaReport ? min : Math.floor(min))
-                }
-                continue;
-              }
 
-              if (i === 1) {
-                values.push(this.perCapitaReport ? max : Math.ceil(max));
-                continue;
-              }
-              if (i === 4) {
-                continue;
-              }
-              if (this.perCapitaReport) {
-                let value = Number((max - partSize * (i - 1)).toFixed(2))
-                values.push(value)
-              }
-              else {
-                let value = Number((max - partSize * (i - 1)).toFixed(0))
-                values.push(value >= 1 ? value : 1)
-              }
-            }
-          }
-          else {
-            values.push(min);
-          }
-          if (reportTypeIndicator === 'percent') {
-            max = 100;
-            min = 0;
-          }
-
+          values.push(0);
+        } else if (reportTypeIndicator === 'percent') {
+          values = [100, 70, 40, 0];
         }
 
         function styleStates(feature: any) {
@@ -249,15 +196,17 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             reportTypeBoolean = true;
           }
           // console.log("TEST", state)
-          mapData?.data.forEach((state: any) => {
-            if (state.state_id && state.state_id == feature.properties.state_code) {
-
-              color = parent.getLayerColor(state.indicator);
-            }
-            else if (state.district_id && state.district_id == feature.properties.ID_2) {
-              color = parent.getLayerColor(state.indicator);
-            }
-          });
+          if (!parent.drillDown) {
+            mapData?.data.forEach((state: any) => {
+              if (state.state_id && state.state_id == feature.properties.state_code) {
+                color = parent.getLayerColor(state.indicator, null, values);
+              }
+              else if (state.district_id && state.district_id == feature.properties.ID_2) {
+                color = parent.getLayerColor(state.indicator, null, values);
+              }
+            });
+          }
+          
           if (parent.level === 'state' || parent.config === 'VSK' || parent.config === 'NVSK') {
             return {
               fillColor: singleColor ? (color === '#fff' ? color : singleColor) : color,
@@ -294,7 +243,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             }
             layer.on({
               click: () => {
-                parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role })
+                if (!parent.drillDown) {
+                  parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role });
+                }
               }
             });
           },
@@ -331,7 +282,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     let reportTypeIndicator = this.mapData?.options?.map && this.mapData.options.map.reportTypeIndicator ? this.mapData.options.map.reportTypeIndicator : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];
-      if (reportTypeIndicator === 'value' || reportTypeIndicator === 'percent') {
+      if (reportTypeIndicator === 'value') {
         mapData.data.forEach((data: any, index: number) => {
           if (index === 0) {
             min = data.indicator;
@@ -343,60 +294,25 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           max = max >= data.indicator ? max : data.indicator;
         });
 
+        let parts = 3;
+        max = max > 0 ? max : parts;
         let range = max - min;
-        let partSize = (range / 4 % 1 === 0) ? range / 4 : Number((range / 4).toFixed(2));
-        if (range && range <= 4) {
-          for (let i = 1; i <= 5; i++) {
-            if (i === 5) {
-              if (min === 0) {
-                values.push(0.1);
-              }
-              else {
-                values.push(Number(min))
-              }
-            }
-            else if (i === 1) {
-              values.push(Number(max))
-            }
-            else if (i !== 4) {
-              let value = Number((max - partSize * (i - 1)))
-              values.push(value >= 1 ? value : 1)
-            }
-          }
-        }
-        else if (range > 4) {
-          for (let i = 1; i <= 5; i++) {
-            if (i === 5) {
-              if (min === 0) {
-                values.push(this.perCapitaReport ? 0.1 : 1);
-              }
-              else {
-                values.push(this.perCapitaReport ? min : Math.floor(min));
-              }
-              continue;
-            }
 
-            if (i === 1) {
-              values.push(this.perCapitaReport ? max : Math.ceil(max));
-              continue;
-            }
-            if (i === 4) {
-              continue;
-            }
-            if (this.perCapitaReport) {
-              let value = Number((max - partSize * (i - 1)).toFixed(2))
-              values.push(value)
-            }
-            else {
-              let value = Number((max - partSize * (i - 1)).toFixed(0))
-              values.push(value >= 1 ? value : 1)
-            }
+        let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(2));
+        for (let i = 0; i < parts; i++) {
+          if (i === 0) {
+            values.push(max);
+          } else {
+            let value = Number((max - partSize * i).toFixed(2));
+            values.push(value);
           }
         }
-        else {
-          values.push(min);
-        }
+
+        values.push(0);
+      } else if (reportTypeIndicator === 'percent') {
+        values = [100, 70, 40, 0];
       }
+
       mapData.data.forEach((data: any) => {
         let re = new RegExp("_id$");
         // let filterIds = {};
@@ -421,7 +337,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           hierarchyLevel: data.hierarchyLevel,
           color: "gray",
           // fillColor: this.getZoneColor(reportTypeIndicator, data.indicator >= 1 ? (max - min ? (data.indicator - min) / (max - min) * 100 : data.indicator) : -1),
-          fillColor: singleColor ? singleColor : this.getZoneColor(reportTypeIndicator, data.indicator >= 1 ? (max - min ? (data.indicator - min) / (max - min) * 100 : data.indicator) : -1),
+          fillColor: singleColor ? singleColor : this.getZoneColor(reportTypeIndicator, data.indicator, values),
           fillOpacity: 1,
           strokeWeight: 0.01,
           weight: 1
@@ -479,11 +395,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       if (mapOptions.legend && mapOptions.legend.title) {
         labels.push(`<strong>${mapOptions.selectedMetric ? mapOptions.selectedMetric : mapOptions.legend.title}:</strong>`)
       }
-      values = [100, 70, 40, 0]
-      if (values.length <= 1 && reportTypeIndicator !== 'boolean') {
-        labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[0] ? values[0] : -1, true)}"></i> ${values[0]}`);
-      }
-      else if (reportTypeIndicator === 'boolean') {
+
+      if (reportTypeIndicator === 'boolean') {
         values = ["Yes", "No"];
         for (let i = 0; i < values.length; i++) {
           labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[i])}"></i> ${values[i]}`);
@@ -509,9 +422,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         div.insertBefore(reset, div.prevSibling)
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true)}; color: ${invert(ref.getLayerColor(values[i], true), true)}">${values[i] ? values[i] : 0} &dash; ${values[i + 1]}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true))
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values))
           })
           div.appendChild(span)
           clickable = true;
@@ -530,7 +443,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     this.legend = legend;
   }
 
-  getZoneColor(reportTypeIndicator: string, value: string | number) {
+  getZoneColor(reportTypeIndicator: string, value: string | number, values?: number[]) {
     if (reportTypeIndicator === 'boolean') {
       if (value == "Yes") {
         return "#00FF00";
@@ -538,9 +451,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      return Number(value) >= 70 ? "#d8ead3" :
-        Number(value) >= 40 ? "#fff2cc" :
-          Number(value) >= 0 ? "#f4cccc" : "#fff";
+      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let color = "#fff";
+      value = Number(value);
+      for (let i = 0; i < values.length - 1; i++) {
+        if (value <= values[i] && value >= values[i + 1]) {
+          color = colors[i];
+        }
+      }
+
+      return color;
     }
   }
 
