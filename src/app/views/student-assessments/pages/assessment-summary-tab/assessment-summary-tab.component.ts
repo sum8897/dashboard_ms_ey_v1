@@ -137,7 +137,7 @@ export class AssessmentSummaryTabComponent implements OnInit {
     }
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let d = { reportData: res, reportType: 'map', reportName: "teacher_present_school_wise" };
+      let d = { reportData: res, reportType: 'map', reportName: "assessment_summary_school_wise" };
       if (d.reportData.length > 0) {
         this.schoolReportsData.push(d);
       } 
