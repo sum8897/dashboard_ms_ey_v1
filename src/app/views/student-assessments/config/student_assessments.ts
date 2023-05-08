@@ -109,7 +109,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id) AS student_assessment"
+                        "bigNumber": "SELECT ceil(COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id) AS student_assessment"
                     },
                     "level": "district"
                 }
@@ -122,7 +122,7 @@ export const config = {
 
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, district.district_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id) AS student_assessment WHERE district_id = {district_id};"
+                        "bigNumber": "SELECT ceil(COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, district.district_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.district AS district ON district.district_id = school.district_id) AS student_assessment WHERE district_id = {district_id};"
 
                     },
                     "level": "block"
@@ -135,7 +135,7 @@ export const config = {
                 "hierarchyLevel": "3",
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, block.block_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.block AS block ON block.block_id = school.block_id) AS student_assessment WHERE block_id = {block_id};"
+                        "bigNumber": "SELECT ceil(COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, block.block_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.block AS block ON block.block_id = school.block_id) AS student_assessment WHERE block_id = {block_id};"
                     },
                     "level": "cluster"
                 }
@@ -147,7 +147,7 @@ export const config = {
                 "hierarchyLevel": "4",
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, cluster.cluster_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.cluster AS cluster ON cluster.cluster_id = school.cluster_id) AS student_assessment WHERE cluster_id = {cluster_id};"
+                        "bigNumber": "SELECT ceil(COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, cluster.cluster_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id INNER JOIN dimensions.cluster AS cluster ON cluster.cluster_id = school.cluster_id) AS student_assessment WHERE cluster_id = {cluster_id};"
                     },
                     "level": "school"
                 }
@@ -159,7 +159,7 @@ export const config = {
                 "hierarchyLevel": "5",
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.school_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id) AS student_assessment WHERE school_id = {school_id};"
+                        "bigNumber": "SELECT ceil(COALESCE(CAST(AVG(obtained_marks/total_marks)*100 AS numeric(10,2)), 0)) AS average FROM( SELECT obtained_marks.sum AS obtained_marks, total_marks.sum AS total_marks, obtained_marks.grade_id, obtained_marks.exam_id, obtained_marks.academicyear_id, obtained_marks.subject_id, school.school_id FROM datasets.assessment_obtainedmarks_bWBOdTt2fndsW2k7dSkK AS obtained_marks INNER JOIN datasets.assessment_totalmarks_eTt2dmFxQlM6YwIfCgk5 AS total_marks ON total_marks.school_id = obtained_marks.school_id INNER JOIN dimensions.school AS school ON school.school_id = obtained_marks.school_id) AS student_assessment WHERE school_id = {school_id};"
                     },
                     "level": "school"
                 }
@@ -577,7 +577,7 @@ export const config = {
                     {
                         "valuePrefix": "Average Student Assessment Scores: ",
                         "value": "scores",
-                        "valueSuffix": "\n"
+                        "valueSuffix": "%\n"
                     },
                     {
                         "valuePrefix": "Academic Year: ",
