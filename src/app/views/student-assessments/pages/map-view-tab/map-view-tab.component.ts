@@ -39,7 +39,7 @@ export class MapViewTabComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     // this.renderReports();
-    console.log('shabhbh');
+    // console.log('shabhbh');
   }
 
   async ngAfterViewInit(): Promise<void> {
