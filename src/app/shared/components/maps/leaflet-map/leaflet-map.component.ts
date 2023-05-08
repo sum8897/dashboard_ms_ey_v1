@@ -92,7 +92,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || this.drillDown || this.hierarchyLevel > 1) {
         this.createMarkers(this.mapData);
       }
-      if (this.hierarchyLevel < 3) {
+      if (this.hierarchyLevel < 2) {
         this.map.on('resize', () => {
           this.fitBoundsToCountryBorder();
         });
@@ -315,7 +315,19 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       } else if (reportTypeIndicator === 'percent') {
         values = [100, 70, 40, 0];
       }
-
+      let level = this.drillDownLevel ? this.drillDownLevel : this.hierarchyLevel
+      var idProp;
+      switch (Number(level)) {
+        case 1:
+          idProp = 'district_id'
+          break;
+        case 2:
+          idProp = 'block_id'
+          break;
+        case 3:
+          idProp = 'cluster_id'
+          break;
+      }
       mapData.data.forEach((data: any) => {
         let re = new RegExp("_id$");
         // let filterIds = {};
@@ -327,13 +339,14 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           //   return false;
           // }
           // return true;
-          if (prop.match(re)) {
-            id = data[prop.match(re)?.input]
+          // if (prop.match(re)) {
+          //   id = data[prop.match(re)?.input]
             // filterIds = {
             //   ...filterIds,
             //   [prop.match(re).input]: data[prop.match(re)?.input]
             // }
-          }
+          // }
+          id = data[idProp]
         })
         let markerIcon = L.circleMarker([data.Latitude, data.Longitude], {
           id: id,
@@ -367,7 +380,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
 
         markerIcon.on("click", (e: any) => {
-          this.drillDownFilter.emit({ id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role })
+          if(level < 4) {
+            this.drillDownFilter.emit({ id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role })
+          }
         })
 
         markerIcon.addTo(this.map).bindPopup(popup, { closeButton: false });
