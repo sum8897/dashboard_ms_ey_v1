@@ -16,7 +16,7 @@ export class SchoolProgressionComponent implements OnInit {
   // title = "Download School Report"
   schoolReportsData: any[] = [];
   pagereportName = "school_progression"
-  
+
   //
 
   tabIndex;
@@ -69,22 +69,24 @@ export class SchoolProgressionComponent implements OnInit {
   }
 
   getSchoolReportData(data?: any) {
+
+
     let query;
-    if(this.rbacDetails?.role == 1){
-      query = `select school.school_id,school.school_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_byeqddmdavwnywl1zwlx as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '${this.filters?.[0]['value']}' group by school.school_name, school.school_id;`
-    }else if(this.rbacDetails?.role ==2){
-      query = `select district_id,district_name,school.school_id, school.school_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_byeqddmdavwnywl1zwlx as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '${this.filters?.[0]['value']}' and district_id = '${this.rbacDetails.district}' group by district_id, district_name,school.school_id, school.school_name;`
-    } else if(this.rbacDetails?.role == 3) {
-      query = `select district_id,district_name, block_id,block_name,school.school_id,school.school_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_byeqddmdavwnywl1zwlx as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '${this.filters?.[0]['value']}' and block_id = '${this.rbacDetails.block}' group by district_id, district_name,block_id, block_name,school.school_id, school.school_name;`
-    } else if(this.rbacDetails?.role == 4){
-      query = `select district_id,district_name, block_id,block_name,cluster_name,school.school_id,school.school_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_byeqddmdavwnywl1zwlx as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '${this.filters?.[0]['value']}' and cluster_id = '${this.rbacDetails.cluster}' group by district_id, district_name, block_id, block_name,cluster_id, cluster_name, school.school_id, school.school_name;`
-   } 
+    if (this.rbacDetails?.role == 1) {
+      query = `SELECT ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME, case when PROGRESSION.SUM = 1 then 'Frozen' else 'Not Frozen' end as PROGRESSION_STATUS FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID WHERE ACADEMICYEAR_ID = '${this.filters?.[0]['value']}' GROUP BY PROGRESSION_STATUS, ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME`
+    } else if (this.rbacDetails?.role == 2) {
+      query = `SELECT ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME, case when PROGRESSION.SUM = 1 then 'Frozen' else 'Not Frozen' end as PROGRESSION_STATUS FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID WHERE ACADEMICYEAR_ID = '${this.filters?.[0]['value']}' and DISTRICT_ID = '${this.rbacDetails.district}' GROUP BY PROGRESSION_STATUS, ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME`
+    } else if (this.rbacDetails?.role == 3) {
+      query = `SELECT ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME, case when PROGRESSION.SUM = 1 then 'Frozen' else 'Not Frozen' end as PROGRESSION_STATUS FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID WHERE ACADEMICYEAR_ID = '${this.filters?.[0]['value']}' and BLOCK_ID = '${this.rbacDetails.block}' GROUP BY PROGRESSION_STATUS, ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME`
+    } else if (this.rbacDetails?.role == 4) {
+      query = `SELECT ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME, case when PROGRESSION.SUM = 1 then 'Frozen' else 'Not Frozen' end as PROGRESSION_STATUS FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID WHERE ACADEMICYEAR_ID = '${this.filters?.[0]['value']}' and BLOCK_ID = '${this.rbacDetails.cluster}' GROUP BY PROGRESSION_STATUS, ACADEMICYEAR_ID, SCHOOL.SCHOOL_ID, SCHOOL_NAME, DISTRICT_NAME, BLOCK_NAME, CLUSTER_NAME`
+    }
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let d = { reportData: res, reportType: 'map', reportName: "student_progression_school_wise" };
       if (d.reportData.length > 0) {
         this.schoolReportsData.push(d);
-      } 
+      }
     })
   }
 
@@ -102,7 +104,7 @@ export class SchoolProgressionComponent implements OnInit {
       options
     } = reportConfig[this.reportName[this.rbacDetails.role]];
     let onLoadQuery;
-    
+
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
