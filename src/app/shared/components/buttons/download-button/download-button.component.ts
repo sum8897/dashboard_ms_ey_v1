@@ -140,7 +140,8 @@ export class DownloadButtonComponent implements OnInit {
   //   }
   // }
   onDownload() {
-    if(this.data.length > 0) this.download(this.data)
+    // if(this.data.length > 0) this.download(this.data)
+    this.download(this.data)
   }
 
   download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
@@ -181,6 +182,7 @@ export class DownloadButtonComponent implements OnInit {
         });
         // added  below condition temporary for school download reports
         if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
+          alert('downloading')
           dupData = JSON.parse(JSON.stringify(reportData));
         }
         //
