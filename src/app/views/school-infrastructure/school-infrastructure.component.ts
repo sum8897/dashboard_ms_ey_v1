@@ -68,8 +68,8 @@ export class SchoolInfrastructureComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     console.log("ngOnInit is called");
-    this.getReportData({ filterValues: [], timeSeriesValues: [] });
-    this.filters = await this._wrapperService.constructCommonFilters(config.filters)
+    this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+    this.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }), timeSeriesValues: [] });
     this.getSchoolReportData();
   }
 
@@ -120,7 +120,7 @@ export class SchoolInfrastructureComponent implements OnInit {
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, [], '', '', key, '');
       // console.log("cvbb:",{query})
       filterValues.forEach((filterParams: any) => {
-        query = parseFilterToQuery(query, filterParams)
+        query = parseFilterToQuery(query, filterParams, filterValues)
       });
       // console.log("cvbb: 2",{query})
       let metricFilter = [...filterValues].filter((filter: any) => {
@@ -378,7 +378,7 @@ export class SchoolInfrastructureComponent implements OnInit {
     let query = buildQuery(onLoadQuery, defaultLevel, this.levels, [], '', '', key, '');
     console.log("cvbb:",{query})
     filterValues.forEach((filterParams: any) => {
-      query = parseFilterToQuery(query, filterParams)
+      query = parseFilterToQuery(query, filterParams, filterValues)
     });
     console.log("cvbb: 2",{query})
     let metricFilter = [...filterValues].filter((filter: any) => {
