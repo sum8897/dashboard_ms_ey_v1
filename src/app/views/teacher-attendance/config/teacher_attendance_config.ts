@@ -9,11 +9,11 @@ export const config = {
                     "name": "State",
                     "hierarchyLevel": "1",
                     "timeSeriesQueries": {
-                        "map": "select a.district_id, district_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
+                        "map": "select a.district_id, district_name,sum(a.total_teachers) as total_teachers,sum(a.teachers_present) as teachers_present, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
                     },
                     "actions": {
                         "queries": {
-                            "map": "select a.district_id, district_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
+                            "map": "select a.district_id, district_name,sum(a.total_teachers) as total_teachers,sum(a.teachers_present) as teachers_present, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name order by stt_avg asc",
                         },
                         "level": "district"
                     }
@@ -22,7 +22,7 @@ export const config = {
                     "name": "District",
                     "hierarchyLevel": "2",
                     "timeSeriesQueries": {
-                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.block_id, block_wise_table.block_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id) as a full join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id full join dimensions.school as s on s.block_id = block_wise_table.block_id where block_wise_table.district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_wise_table.block_name order by stt_avg asc",
+                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.block_id, block_wise_table.block_name, sum(a.total_teachers) as total_teachers,sum(a.teachers_present) as teachers_present,ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id) as a full join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id full join dimensions.school as s on s.block_id = block_wise_table.block_id where block_wise_table.district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_wise_table.block_name order by stt_avg asc",
                     },
                     "actions": {
                         "queries": {
@@ -35,7 +35,7 @@ export const config = {
                     "name": "Block",
                     "hierarchyLevel": "3",
                     "timeSeriesQueries": {
-                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.cluster_id, cluster_wise_table.cluster_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id full join dimensions.school as s on cluster_wise_table.cluster_id = s.cluster_id where cluster_wise_table.block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_wise_table.cluster_name order by stt_avg asc",
+                        "map": "select avg(cast (s.latitude as numeric)) as latitude, avg(cast (s.longitude as numeric)) as longitude, a.cluster_id, cluster_wise_table.cluster_name, sum(a.total_teachers) as total_teachers,sum(a.teachers_present) as teachers_present,ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id full join dimensions.school as s on cluster_wise_table.cluster_id = s.cluster_id where cluster_wise_table.block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_wise_table.cluster_name order by stt_avg asc",
                     },
                     "actions": {
                         "queries": {
@@ -48,7 +48,7 @@ export const config = {
                     "name": "Cluster",
                     "hierarchyLevel": "4",
                     "timeSeriesQueries": {
-                        "map": "select latitude, longitude, a.school_id, school_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_school as present_table join datasets.sch_att_total_teachers_daily_school as total_teachers on present_table.date = total_teachers.date and present_table.school_id = total_teachers.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name, latitude, longitude order by stt_avg asc",
+                        "map": "select latitude, longitude, a.school_id, school_name, sum(a.total_teachers) as total_teachers,sum(a.teachers_present) as teachers_present,ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_school as present_table join datasets.sch_att_total_teachers_daily_school as total_teachers on present_table.date = total_teachers.date and present_table.school_id = total_teachers.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name, latitude, longitude order by stt_avg asc",
                     },
                     "actions": {
                         "queries": {
@@ -66,8 +66,18 @@ export const config = {
                 "legend": { "title": "Average Teachers Present" },
                 "tooltipMetrics": [
                     {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
                         "valuePrefix": "District Name: ",
                         "value": "district_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
                         "valueSuffix": "\n"
                     },
                     {
@@ -76,13 +86,33 @@ export const config = {
                         "valueSuffix": "\n"
                     },
                     {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
                         "valuePrefix": "Cluster Name: ",
                         "value": "cluster_name",
                         "valueSuffix": "\n"
                     },
                     {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
                         "valuePrefix": "School Name: ",
                         "value": "school_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Total Teachers: ",
+                        "value": "total_teachers",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Total Teachers Present: ",
+                        "value": "teachers_present",
                         "valueSuffix": "\n"
                     },
                     {
