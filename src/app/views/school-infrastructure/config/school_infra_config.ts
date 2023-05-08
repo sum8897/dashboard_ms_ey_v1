@@ -1120,38 +1120,46 @@ export const config = {
                     SCHOOL_NAME,
                     LATITUDE,
                     LONGITUDE,
-                    HAS_WATER,
-                    TOTAL_NO_OF_SCHOOLS,
-                    ROUND(CAST(HAS_WATER / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_WATER,
-                    ROUND(CAST(HAS_TOILET / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_TOILET,
-                    ROUND(CAST(HAS_LIBRARY / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_LIBRARY,
-                    ROUND(CAST(HAS_HANDWASH / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_HANDWASH,
-                    ROUND(CAST(HAS_SOLARPANEL / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_SOLARPANEL,
-                    ROUND(CAST(HAS_PLAYGROUND / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_PLAYGROUND,
-                    ROUND(CAST(ALL_CRITERIA / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC),
-                        2) AS PERCENT_SCHOOL_MET_ALL_CRITERIA
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_WATER = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_WATER,
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_TOILET = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_TOILET,
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_LIBRARY = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_LIBRARY,
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_HANDWASH = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_HANDWASH,
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_SOLARPANEL = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_SOLARPANEL,
+                    CASE
+                                    WHEN INTERMEDIATE_TABLE.HAS_PLAYGROUND = 1 THEN 'Yes'
+                                    ELSE 'No'
+                    END AS HAS_PLAYGROUND,
+                    ROUND(CAST(INTERMEDIATE_TABLE.ALL_CRITERIA AS NUMERIC) / 6 * 100, 2) AS PERCENT_SCHOOL_MET_ALL_CRITERIA
                 FROM
-                    (SELECT WATER.SCHOOL_ID,
-                            SCHOOL_NAME,
-                            AVG(CAST (LATITUDE AS numeric)) AS LATITUDE,
-                            AVG(CAST (LONGITUDE AS numeric)) AS LONGITUDE,
-                            COUNT(WATER.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
-                            SUM(WATER.SUM) AS HAS_WATER,
-                            SUM(TOILET.SUM) AS HAS_TOILET,
-                            SUM(LIBRARY.SUM) AS HAS_LIBRARY,
-                            SUM(HANDWASH.SUM) AS HAS_HANDWASH,
-                            SUM(SOLAR_PANEL.SUM) AS HAS_SOLARPANEL,
-                            SUM(PLAYGROUND.SUM) AS HAS_PLAYGROUND,
-                            SUM(CASE
-                                                            WHEN (WATER.SUM::int + TOILET.SUM::int + LIBRARY.SUM::int + HANDWASH.SUM::int + SOLAR_PANEL.SUM::int + PLAYGROUND.SUM::int) = 6 THEN 1
-                                                            ELSE 0
-                                            END) AS ALL_CRITERIA
+                    (SELECT 
+                            CLUSTER_ID,
+                            WATER.ACADEMICYEAR_ID,
+                            WATER.SCHOOL_ID AS SCHOOL_ID,
+                            SCHOOL.SCHOOL_NAME,
+                            LATITUDE,
+                            LONGITUDE,
+                            WATER.SUM AS HAS_WATER,
+                            TOILET.SUM AS HAS_TOILET,
+                            LIBRARY.SUM AS HAS_LIBRARY,
+                            HANDWASH.SUM AS HAS_HANDWASH,
+                            SOLAR_PANEL.SUM AS HAS_SOLARPANEL,
+                            PLAYGROUND.SUM AS HAS_PLAYGROUND,
+                            (WATER.SUM::int + TOILET.SUM::int + LIBRARY.SUM::int + HANDWASH.SUM::int + SOLAR_PANEL.SUM::int + PLAYGROUND.SUM::int) AS ALL_CRITERIA
                         FROM DATASETS.SCHOOL_INFRA_DRINKINGWATER_B2JVNMBOSWX_BMLDVWJ7 AS WATER
                         INNER JOIN DATASETS.SCHOOL_INFRA_TOILET_FMPGCLNMWWBZCR5RPHCO AS TOILET ON TOILET.SCHOOL_ID = WATER.SCHOOL_ID
                         AND TOILET.ACADEMICYEAR_ID = WATER.ACADEMICYEAR_ID
@@ -1163,22 +1171,18 @@ export const config = {
                         AND SOLAR_PANEL.ACADEMICYEAR_ID = WATER.ACADEMICYEAR_ID
                         INNER JOIN DATASETS.SCHOOL_INFRA_PLAYGROUND_INTSFGR8XGRSBHROQH8A AS PLAYGROUND ON PLAYGROUND.SCHOOL_ID = WATER.SCHOOL_ID
                         AND PLAYGROUND.ACADEMICYEAR_ID = WATER.ACADEMICYEAR_ID
-                        INNER JOIN DIMENSIONS.SCHOOL ON SCHOOL.SCHOOL_ID = WATER.SCHOOL_ID
-                        WHERE CLUSTER_ID = {cluster_id} AND  filter.water.academicYear
-                        GROUP BY WATER.SCHOOL_ID,
-                            SCHOOL_NAME) AS INTERMEDIATE_TABLE
-                GROUP BY SCHOOL_ID,
-                    SCHOOL_NAME,
+                        INNER JOIN DIMENSIONS.SCHOOL ON SCHOOL.SCHOOL_ID = WATER.SCHOOL_ID WHERE CLUSTER_ID = {cluster_id} AND filter.water.academicYear) AS INTERMEDIATE_TABLE
+                GROUP BY SCHOOL_NAME,
+                    SCHOOL_ID,
                     LATITUDE,
                     LONGITUDE,
-                    HAS_WATER,
-                    HAS_TOILET,
-                    HAS_LIBRARY,
-                    HAS_HANDWASH,
-                    HAS_SOLARPANEL,
-                    HAS_PLAYGROUND,
-                    ALL_CRITERIA,
-                    TOTAL_NO_OF_SCHOOLS
+                    INTERMEDIATE_TABLE.HAS_WATER,
+                    INTERMEDIATE_TABLE.HAS_TOILET,
+                    INTERMEDIATE_TABLE.HAS_LIBRARY,
+                    INTERMEDIATE_TABLE.HAS_HANDWASH,
+                    INTERMEDIATE_TABLE.HAS_SOLARPANEL,
+                    INTERMEDIATE_TABLE.HAS_PLAYGROUND,
+                    INTERMEDIATE_TABLE.ALL_CRITERIA
             `
         },
         "levels": '',
@@ -1408,44 +1412,39 @@ export const config = {
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Total number of schools: ",
-                        "value": "total_no_of_schools",
-                        "valueSuffix": "\n"
-                    },
-                    {
-                        "valuePrefix": "Schools meeting 100% criteria: ",
+                        "valuePrefix": "% criteria met: ",
                         "value": "percent_school_met_all_criteria",
                         "valueSuffix": "%\n"
                     },
                     {
-                        "valuePrefix": "Schools with Toilet: ",
-                        "value": "percent_school_met_toilet",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Toilet: ",
+                        "value": "has_toilet",
+                        "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Schools with Playground: ",
-                        "value": "percent_school_met_playground",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Playground: ",
+                        "value": "has_playground",
+                        "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Schools with solar panel: ",
-                        "value": "percent_school_met_solarpanel",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Solar Panel: ",
+                        "value": "has_solarpanel",
+                        "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Schools with drinking water: ",
-                        "value": "percent_school_met_water",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Drinking water: ",
+                        "value": "has_water",
+                        "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Schools with library: ",
-                        "value": "percent_school_met_library",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Library: ",
+                        "value": "has_library",
+                        "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Schools with handwash: ",
-                        "value": "percent_school_met_handwash",
-                        "valueSuffix": "%\n"
+                        "valuePrefix": "Handwash: ",
+                        "value": "has_handwash",
+                        "valueSuffix": "\n"
                     }
                 ]
             }

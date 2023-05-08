@@ -187,7 +187,7 @@ export function parseFilterToQuery(query: string, params?: any, filters?: any): 
     if (filterIndex > -1) {
         let endIndex = filterIndex + 1;
 
-        while(query.charAt(endIndex) !== '\n' && query.charAt(endIndex) !== ' ') {
+        while(query.charAt(endIndex) !== '\n' && query.charAt(endIndex) !== ' ' && query.charAt(endIndex) !== ')') {
             endIndex++;
         }
 
