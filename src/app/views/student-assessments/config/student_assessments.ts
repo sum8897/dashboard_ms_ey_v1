@@ -584,11 +584,11 @@ export const config = {
                         "value": "academicyear",
                         "valueSuffix": "\n"
                     },
-                    {
-                        "valuePrefix": "Exam: ",
-                        "value": "exam_name",
-                        "valueSuffix": "\n"
-                    },
+                    // {
+                    //     "valuePrefix": "Exam: ",
+                    //     "value": "exam_name",
+                    //     "valueSuffix": "\n"
+                    // },
                     {
                         "valuePrefix": "Grade: ",
                         "value": "grade",
