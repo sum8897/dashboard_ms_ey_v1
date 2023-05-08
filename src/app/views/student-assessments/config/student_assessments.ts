@@ -357,18 +357,18 @@ export const config = {
                     "level": "grade"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "actions": {
-                    "queries": {
-                        "barChart": ""
-                    },
-                    "level": "grade"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "actions": {
+            //         "queries": {
+            //             "barChart": ""
+            //         },
+            //         "level": "grade"
+            //     }
+            // }
         ],
         "options": {
             "barChart": {
@@ -451,18 +451,18 @@ export const config = {
                     "level": "grade"
                 }
             },
-            {
-                "name": "Grade",
-                "labelProp": "grade",
-                "valueProp": "grade",
-                "hierarchyLevel": "6",
-                "actions": {
-                    "queries": {
-                        "barChart": "select min(date) as min_date, max(date) as max_date,  round(avg(percentage),2) as percentage, t.gender as gender from ingestion.sac_stds_avg_atd_gender_wise_by_grade as t where t.grade={class_id} group by  t.gender",
-                    },
-                    "level": "grade"
-                }
-            }
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "actions": {
+            //         "queries": {
+            //             "barChart": "",
+            //         },
+            //         "level": "grade"
+            //     }
+            // }
         ],
         "options": { 
             "barChart": {
