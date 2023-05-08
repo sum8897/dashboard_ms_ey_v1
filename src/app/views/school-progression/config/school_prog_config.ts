@@ -15,7 +15,20 @@ export const config = {
         "queries": {
             "avg_score": "select round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022';",
 
-            "district_map": "select school.district_name, school.district_id, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where academicyear_id = '2021-2022' group by school.district_name, school.district_id;",
+            "district_map": `
+                SELECT SCHOOL.DISTRICT_NAME,
+                    SCHOOL.DISTRICT_ID,
+                    COUNT(PROGRESSION.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
+                    SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_COMPLETED,
+                    ROUND(CAST(SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_COMPLETED,
+                    COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_INCOMPLETE,
+                    ROUND(CAST(COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_INCOMPLETE
+                FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION
+                INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID
+                WHERE filter.academicYear
+                GROUP BY SCHOOL.DISTRICT_NAME,
+                    SCHOOL.DISTRICT_ID
+            `,
 
             "district_avg_score": "select school.district_name, round((sum(progression.sum)*100)/count(progression.school_id)) as percent_school_met_criteria from datasets.student_progression_progression_school0academicyear as progression inner join dimensions.school on progression.school_id = school.school_id where district_name is not null and district_name != '' and academicyear_id = '2021-2022' group by school.district_name order by round( (sum(progression.sum)*100)/count(progression.school_id) ) desc;",
         },
@@ -62,19 +75,45 @@ export const config = {
                 "valueSuffix": '%'
             },
             "map": {
-                "indicator": "percent_school_met_criteria",
+                "indicator": "percent_school_prog_completed",
                 "metricFilterNeeded": false,
                 "legend": { "title": "District-wise Performance" },
+                "indicatorType": "percent",
                 "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District ID: ",
+                        "value": "district_id",
+                        "valueSuffix": "\n"
+                    },
                     {
                         "valuePrefix": "District Name: ",
                         "value": "district_name",
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "% Schools that have frozen student progression: ",
-                        "value": "percent_school_met_criteria",
-                        "valueSuffix": "%"
+                        "valuePrefix": "Percentage of schools where progression is complete: ",
+                        "value": "percent_school_prog_completed",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is complete: ",
+                        "value": "no_of_schools_prog_completed",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Percentage of schools where progression is not complete: ",
+                        "value": "percent_school_prog_incomplete",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is not complete: ",
+                        "value": "no_of_schools_prog_incomplete",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Total number of schools: ",
+                        "value": "total_no_of_schools",
+                        "valueSuffix": "\n"
                     }
                 ]
             }
@@ -85,7 +124,26 @@ export const config = {
         "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
         "timeSeriesQueries": '',
-        "queries": {},
+        "queries": {
+            "district_map": `
+                SELECT SCHOOL.DISTRICT_ID,
+                    SCHOOL.BLOCK_ID,
+                    SCHOOL.BLOCK_NAME,
+                    AVG(CAST (LATITUDE AS numeric)) AS LATITUDE,
+                    AVG(CAST (LONGITUDE AS numeric)) AS LONGITUDE,
+                    COUNT(PROGRESSION.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
+                    SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_COMPLETED,
+                    ROUND(CAST(SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_COMPLETED,
+                    COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_INCOMPLETE,
+                    ROUND(CAST(COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_INCOMPLETE
+                FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION
+                INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID
+                WHERE DISTRICT_ID = {district_id} AND filter.academicYear
+                GROUP BY SCHOOL.DISTRICT_ID,
+                    SCHOOL.BLOCK_ID,
+                    SCHOOL.BLOCK_NAME
+            `,
+        },
         "levels": '',
         "filters": [
             {
@@ -140,6 +198,49 @@ export const config = {
             },
             "bigNumber": {
                 "valueSuffix": '%'
+            },
+            "map": {
+                "indicator": "percent_school_prog_completed",
+                "metricFilterNeeded": false,
+                "legend": { "title": "Block-wise Performance" },
+                "indicatorType": "percent",
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "Block ID: ",
+                        "value": "block_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Percentage of schools where progression is complete: ",
+                        "value": "percent_school_prog_completed",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is complete: ",
+                        "value": "no_of_schools_prog_completed",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Percentage of schools where progression is not complete: ",
+                        "value": "percent_school_prog_incomplete",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is not complete: ",
+                        "value": "no_of_schools_prog_incomplete",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Total number of schools: ",
+                        "value": "total_no_of_schools",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
@@ -148,7 +249,26 @@ export const config = {
         "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
         "timeSeriesQueries": '',
-        "queries": {},
+        "queries": {
+            "district_map": `
+                SELECT SCHOOL.BLOCK_ID,
+                    SCHOOL.CLUSTER_ID,
+                    SCHOOL.CLUSTER_NAME,
+                    AVG(CAST (LATITUDE AS numeric)) AS LATITUDE,
+                    AVG(CAST (LONGITUDE AS numeric)) AS LONGITUDE,
+                    COUNT(PROGRESSION.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
+                    SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_COMPLETED,
+                    ROUND(CAST(SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_COMPLETED,
+                    COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_INCOMPLETE,
+                    ROUND(CAST(COUNT(PROGRESSION.SCHOOL_ID) - SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_INCOMPLETE
+                FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION
+                INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID
+                WHERE BLOCK_ID = {block_id} AND filter.academicYear
+                GROUP BY SCHOOL.BLOCK_ID,
+                    SCHOOL.CLUSTER_ID,
+                    SCHOOL.CLUSTER_NAME
+            `
+        },
         "levels": '',
         "filters": [
             {
@@ -203,6 +323,49 @@ export const config = {
             },
             "bigNumber": {
                 "valueSuffix": '%'
+            },
+            "map": {
+                "indicator": "percent_school_prog_completed",
+                "metricFilterNeeded": false,
+                "legend": { "title": "Cluster-wise Performance" },
+                "indicatorType": "percent",
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "Cluster ID: ",
+                        "value": "cluster_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Percentage of schools where progression is complete: ",
+                        "value": "percent_school_prog_completed",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is complete: ",
+                        "value": "no_of_schools_prog_completed",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Percentage of schools where progression is not complete: ",
+                        "value": "percent_school_prog_incomplete",
+                        "valueSuffix": "%\n"
+                    },
+                    {
+                        "valuePrefix": "Number of schools where progression is not complete: ",
+                        "value": "no_of_schools_prog_incomplete",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Total number of schools: ",
+                        "value": "total_no_of_schools",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
@@ -211,7 +374,19 @@ export const config = {
         "label": "Schools Reporting Student Attendance",
         "defaultLevel": "state",
         "timeSeriesQueries": '',
-        "queries": {},
+        "queries": {
+            "district_map": `
+                SELECT SCHOOL.CLUSTER_ID,
+                    SCHOOL.SCHOOL_ID,
+                    SCHOOL.SCHOOL_NAME,
+                    LATITUDE,
+                    LONGITUDE,
+                    CASE WHEN PROGRESSION.SUM = 1 THEN 'Yes' ELSE 'No' END AS STATUS
+                FROM DATASETS.STUDENT_PROGRESSION_PROGRESSION_BYEQDDMDAVWNYWL1ZWLX AS PROGRESSION
+                INNER JOIN DIMENSIONS.SCHOOL ON PROGRESSION.SCHOOL_ID = SCHOOL.SCHOOL_ID
+                WHERE CLUSTER_ID = {cluster_id} AND filter.academicYear
+            `
+        },
         "levels": '',
         "filters": [
             {
@@ -262,6 +437,29 @@ export const config = {
             },
             "bigNumber": {
                 "valueSuffix": '%'
+            },
+            "map": {
+                "indicator": "status",
+                "metricFilterNeeded": false,
+                "legend": { "title": "School-wise Performance" },
+                "indicatorType": "boolean",
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "School ID: ",
+                        "value": "school_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Status: ",
+                        "value": "status",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
