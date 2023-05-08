@@ -140,13 +140,12 @@ export class DownloadButtonComponent implements OnInit {
   //   }
   // }
   onDownload() {
-    // if(this.data.length > 0) 
-    this.download(this.data)
+    if(this.data.length > 0) this.download(this.data)
   }
 
   download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
     if (reportInputs === undefined || reportInputs?.length <= 0) {
-      alert("No data found to download/ please try after sometime");
+      alert("No data found to download");
     } else {
       for (let i = 0; i < reportInputs.length; i++) {
         const reportData = reportInputs[i].reportData;
