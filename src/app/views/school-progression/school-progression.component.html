@@ -108,6 +108,9 @@
                   <app-leaflet-map
                     [mapData]="card.value"
                     level="district"
+                    (drillDownFilter)="drilldownData($event, card)"
+                    [drillDown]="drillDown"
+                    [drillDownLevel]="drillDownLevel"
                   ></app-leaflet-map>
                 </ng-container>
                 <ng-template #noMapData>
