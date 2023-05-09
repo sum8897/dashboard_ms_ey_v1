@@ -80,6 +80,30 @@
       "imageUrl": "nishtha.png",
       "programID": "studentAssessments",
       "orderBy": "12"
+    },
+    {
+      "programName": "NCERT Quizes",
+      "tooltip": "National Curriculum Framework",
+      "navigationUrl": "/quizzes",
+      "imageUrl": "Quizzes.png",
+      "programID": "quiz",
+      "orderBy": "13"
+    },
+    {
+      "programName": "NCF",
+      "tooltip": "National Curriculum Framework",
+      "navigationUrl": "/ncf",
+      "imageUrl": "NCF.png",
+      "programID": "ncf",
+      "orderBy": "14"
+    },
+    {
+      "programName": "Micro-Improvements",
+      "tooltip": "Micro-Improvements",
+      "navigationUrl": "/microimprovement",
+      "imageUrl": "Micro Improvement.png",
+      "programID": "microImprovement",
+      "orderBy": "15"
     }
   ]
 }
