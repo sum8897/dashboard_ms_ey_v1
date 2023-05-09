@@ -59,8 +59,8 @@
                     <ng-select class="" [formControlName]="filter?.name?.toLowerCase()"
                         [id]="filter?.name?.toLowerCase() + 'filter'" [placeholder]="'Select ' + filter?.name"
                         (change)="changeFilter(filter)">
-                        <ng-option *ngFor="let option of filter?.options" [value]="option[filter.valueProp]">
-                            {{option[filter?.labelProp]}}
+                        <ng-option *ngFor="let option of filter?.options" [value]="updateForm(option, filter)">
+                            {{option[filter?.labelProp]}} 
                         </ng-option>
                     </ng-select>
                     <span style="color:white" class=""

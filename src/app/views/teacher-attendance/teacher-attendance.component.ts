@@ -16,6 +16,8 @@ export class TeacherAttendanceComponent implements OnInit {
   selectedTabLabel;
   tabs: any = [];
   programName: any = 'teacherAttendance'
+  teacherReportsData: any  = [];
+  
   
   constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
@@ -47,6 +49,8 @@ export class TeacherAttendanceComponent implements OnInit {
       this.selectedTabLabel = this.tabs.length > 0 ? this.tabs[0] : undefined
     });
   }
+
+  
 
   onTabChanged($event: any): void {
     this.selectedTabLabel = $event?.tab?.textLabel;

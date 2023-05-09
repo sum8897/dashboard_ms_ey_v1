@@ -4,8 +4,15 @@
     </button>
     <i class="download-icon fa fa-download"></i>
 </div> -->
+<div *ngIf='(pagereportName == "student_assessment") || (pagereportName == "teachers_present") ||( pagereportName == "school_infra") ||( pagereportName == "school_progression"); else templateName'>
+    <button class="btn" (click)="onDownload()" id="downloadButton">
+        <span class="button-text">School Report</span>
+    </button>
+    <!-- <i class="download-icon fa fa-2x fa-download"></i> -->
+</div>
 
-<button class="btn" (click)="onDownload()" id="downloadButton">
-    <span class="button-text">Download Report</span>
-</button>
-<i class="download-icon fa fa-2x fa-download"></i>
+<ng-template #templateName>
+    <button class="btn" (click)="onDownload()" id="downloadButton">
+        <span class="button-text">Download Report</span>
+    </button>
+</ng-template>

@@ -730,7 +730,7 @@ export class AppServiceComponent {
   //         : ["#204d96"]
   //       : this.exceptionColor().generateGradient(
   //         "#C9DAF7",
-  //         "#1D4586",
+  //         "#d8ead3",
   //         uniqueItems.length,
   //         "rgb"
   //       );

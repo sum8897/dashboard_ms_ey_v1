@@ -4,6 +4,9 @@ import { TasAverageAttendanceComponent } from './reports/tas-average-attendance/
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { TasAverageAttendanceBignumberComponent } from './reports/tas-average-attendance-bignumber/tas-average-attendance-bignumber.component';
 import { config } from '../../config/teacher_attendance_config'
+import { TeacherAttendanceMapComponent } from './reports/teacher-attendance-map/teacher-attendance-map.component';
+import { CommonService } from 'src/app/core/services/common/common.service';
+
 @Component({
   selector: 'app-teacher-attendance-summary',
   templateUrl: './teacher-attendance-summary.component.html',
@@ -20,10 +23,16 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   rbacDetails: any;
   defaultSelectedDays: any = 7;
 
+  //added for full school report download
+  // title = "Download School Report"
+  schoolReportsData: any[] = [];
+  pagereportName = "teachers_present"
+  //
   @ViewChild('averageAttendanceBigNumber') averageAttendanceBigNumber: TasAverageAttendanceBignumberComponent;
   @ViewChild('averageAttendance') averageAttendance: TasAverageAttendanceComponent;
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent
-  constructor(private _rbacService: RbacService) {
+  @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
+  constructor(private readonly _commonService: CommonService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -41,8 +50,11 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.averageAttendanceBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      this.tasMap?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+      this.getSchoolReportData()
     }
   }
+
 
   checkReport(key: string, reportType: string): Boolean {
     let reportConfig = config;
@@ -61,6 +73,39 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
     }
   }
 
+  getSchoolReportData(startDate?: string, endDate?: string) {
+    let query;
+    if (startDate && endDate) {
+      this.startDate = startDate;
+      this.endDate = endDate;
+    }
+    else {
+      let endDate = new Date();
+      let days = endDate.getDate() - this.defaultSelectedDays;
+      let startDate = new Date();
+      startDate.setDate(days)
+      this.startDate = startDate?.toISOString().split('T')[0];
+      this.endDate = endDate?.toISOString().split('T')[0];
+    }
+    console.log("Date is:", this.startDate, this.endDate);
+    if (this.rbacDetails?.role == 1) {
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `
+    } else if (this.rbacDetails?.role == 2) {
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
+    } else if (this.rbacDetails?.role == 3) {
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
+    } else if (this.rbacDetails?.role == 4) {
+      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' and cluster_id = '${this.rbacDetails?.cluster}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
+    }
+
+    this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      let d = { reportData: res, reportType: 'map', reportName: "teacher_present_school_wise" };
+      if (d.reportData.length > 0) {
+        this.schoolReportsData.push(d);
+      }
+    })
+  }
+
   settimeSeriesDates(dates: any) {
     // this.minDate = (this.minDate === undefined || (dates?.minDate && this.minDate < dates.minDate)) ? dates?.minDate : this.minDate
     // this.maxDate = (this.maxDate === undefined || (dates?.maxDate && this.maxDate > dates.maxDate)) ? dates.maxDate : this.maxDate
@@ -74,6 +119,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
+      this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+      this.getSchoolReportData(this.startDate, this.endDate)
     }
   }
 

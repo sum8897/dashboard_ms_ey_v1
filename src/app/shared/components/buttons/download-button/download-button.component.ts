@@ -25,11 +25,17 @@ export class DownloadButtonComponent implements OnInit {
   @Input() reportType1: any;
   @Input() reportType2: any;
   @Input() reportData: any;
+  // below vars === added for school report download button
+  @Input() title: any;
+  @Input() pagereportName: any;
+  // 
+
   // @Input() reportData: { reportName: string, data: any }[];
   // @Input() reportInputs :any;
   constructor() { }
 
   ngOnInit(): void {
+
   }
   // Download reports....
   // download(reportData: any, fileName: any,) {
@@ -134,11 +140,12 @@ export class DownloadButtonComponent implements OnInit {
   //   }
   // }
   onDownload() {
+    // if(this.data.length > 0) this.download(this.data)
     this.download(this.data)
   }
 
   download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
-    if ( reportInputs=== undefined || reportInputs?.length <= 0) {
+    if (reportInputs === undefined || reportInputs?.length <= 0) {
       alert("No data found to download");
     } else {
       for (let i = 0; i < reportInputs.length; i++) {
@@ -173,6 +180,12 @@ export class DownloadButtonComponent implements OnInit {
             obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key];
           });
         });
+        // added  below condition temporary for school download reports
+        if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
+          alert('downloading')
+          dupData = JSON.parse(JSON.stringify(reportData));
+        }
+        //
         const opts = { fields: keys, output: fileName };
         const csv = json2csv.parse(dupData, opts);
         let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });

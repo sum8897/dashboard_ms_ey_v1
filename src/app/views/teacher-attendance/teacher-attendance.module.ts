@@ -14,6 +14,7 @@ import { TacAttendanceComplianceRankComponent } from './pages/teacher-attendance
 import { TacAverageAttendanceRankComponent } from './pages/teacher-attendance-summary/reports/tac-average-attendance-rank/tac-average-attendance-rank.component';
 import { TasAverageAttendanceBignumberComponent } from './pages/teacher-attendance-summary/reports/tas-average-attendance-bignumber/tas-average-attendance-bignumber.component';
 import { TacAttendanceComplianceBignumberComponent } from './pages/teacher-attendance-compliance/reports/tac-attendance-compliance-bignumber/tac-attendance-compliance-bignumber.component';
+import { TeacherAttendanceMapComponent } from './pages/teacher-attendance-summary/reports/teacher-attendance-map/teacher-attendance-map.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { TacAttendanceComplianceBignumberComponent } from './pages/teacher-atten
     TacAttendanceComplianceRankComponent,
     TacAverageAttendanceRankComponent,
     TasAverageAttendanceBignumberComponent,
-    TacAttendanceComplianceBignumberComponent
+    TacAttendanceComplianceBignumberComponent,
+    TeacherAttendanceMapComponent
   ],
   imports: [
     DashletModule.forRoot({

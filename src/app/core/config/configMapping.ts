@@ -7,6 +7,11 @@ import { config as nishthaConfig } from '../../views/nishtha/config/nishtha_conf
 import { config as udiseConfig } from '../../views/udise/config/udise_config'
 import { config as nasConfig } from '../../views/nas/config/nas_config'
 import { config as dikshaConfig } from '../../views/diksha/config/diksha_config'
+import { config as infraConfig } from '../../views/school-infrastructure/config/school_infra_config'
+import { config as progresConfig } from '../../views/school-progression/config/school_prog_config'
+import { config as studentAssessments } from '../../../app/views/student-assessments/config/student_assessments'
+
+
 
 export const configFiles = {
   studentAttendance: studentAttendaceConfig,
@@ -17,7 +22,10 @@ export const configFiles = {
   nishtha: nishthaConfig,
   udise: udiseConfig,
   nas: nasConfig,
-  diksha: dikshaConfig
+  diksha: dikshaConfig,
+  schoolInfrastructure: infraConfig,
+  studentProgress: progresConfig,
+  studentAssessments:studentAssessments
 };
 
 export const programFolderNames = {
@@ -29,7 +37,9 @@ export const programFolderNames = {
   nishtha: 'nishtha',
   udise: 'udise',
   nas: 'nas',
-  diksha: 'diksha'
+  diksha: 'diksha',
+  studentAssessments:'studentAssessments'
+
 }
 
 export const stateProgramsFolderNames = {
@@ -41,5 +51,6 @@ export const stateProgramsFolderNames = {
   nishtha: '',
   udise: '',
   nas: '',
-  diksha: ''
+  diksha: '',
+  studentAssessments:''
 }

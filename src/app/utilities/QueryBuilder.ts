@@ -34,6 +34,7 @@ const getCubeNameFromSelFilter = (filters, levels, startDate, endDate, compareDa
     let newQuery = "";
 
     if (filters.length > 0) {
+        console.log('BUILDER=====', filters);
         filters.forEach(({ actions: { level, query } }, index) => {
             if (level && level !== '') {
                 newQuery = parseQuery(filters, levels, index, startDate, endDate, compareDateRange, key);
@@ -181,7 +182,21 @@ export function parseQueryParam(query: string, params: any) {
     return newQuery ? newQuery : query;
 }
 
-export function parseFilterToQuery(query: string, params?: any): string {
+export function parseFilterToQuery(query: string, params?: any, filters?: any): string {
+    let filterIndex = query.toLowerCase().indexOf('filter');
+    if (filterIndex > -1) {
+        let endIndex = filterIndex + 1;
+
+        while(query.charAt(endIndex) !== '\n' && query.charAt(endIndex) !== ' ' && query.charAt(endIndex) !== ')') {
+            endIndex++;
+        }
+
+        let filterConfig = query.substring(filterIndex, endIndex).split('.');
+        let filter = filters.find(filter => filter.id === filterConfig[filterConfig.length - 1]);
+        let filterQueryString = filterConfig.length > 2 ? `${filterConfig[1]}.${filter.valueProp}='${filter.value}'` : `${filter.valueProp}='${filter.value}'`;
+        return `${query.substring(0, filterIndex - 1)} ${filterQueryString}${query.substring(endIndex, query.length)}`;
+    }
+
     let whereIndex = query.toLowerCase().indexOf('where');
     let groupByIndex = query.toLowerCase().indexOf('group by');
     let orderByIndex = query.toLowerCase().indexOf('order by');

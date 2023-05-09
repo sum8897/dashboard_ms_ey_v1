@@ -19,6 +19,7 @@ export class RbacDialogComponent implements OnInit {
   selectedRoleObject: any;
   rbacDetails: any;
   availableFilters: string = '';
+  updatedForm: any;
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -26,13 +27,13 @@ export class RbacDialogComponent implements OnInit {
       this.selectedRoleLevel = rbacDetails?.role
     })
     let baseHierarchy;
-    if(environment.config === 'VSK'){
+    if (environment.config === 'VSK') {
       baseHierarchy = 2;
     }
     else {
       baseHierarchy = 1;
     }
-    if(this.selectedRoleLevel < baseHierarchy){
+    if (this.selectedRoleLevel < baseHierarchy) {
       router.navigate(['/summary-statistics'])
     }
     this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
@@ -49,7 +50,7 @@ export class RbacDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(environment.config === 'NVSK') {
+    if (environment.config === 'NVSK') {
       this.rbacForm = this.fb.group({
         state: [null],
         district: [null],
@@ -68,7 +69,7 @@ export class RbacDialogComponent implements OnInit {
         grade: [null]
       })
     }
-    
+
     this.resetFilterForm(this.rbacForm);
     this.getFilters();
   }
@@ -80,7 +81,13 @@ export class RbacDialogComponent implements OnInit {
   onSubmit() {
     if (this.rbacForm.valid) {
       this.rbacForm.value.role = this.selectedRoleLevel
-      this._rbacService.setRbacDetails(this.rbacForm.value);
+      this.updatedForm = {
+        ...this.updatedForm,
+        ...this.rbacForm.value
+      }
+     // console.log(this.updatedForm)
+      this._rbacService.setRbacDetails(this.updatedForm);
+      // this._rbacService.setRbacDetails(this.rbacForm.value);
       this.router.navigate(['/summary-statistics'])
     }
     else {
@@ -111,7 +118,7 @@ export class RbacDialogComponent implements OnInit {
     //   return
     // }
     let { filters, baseHierarchy } = rbacConfig;
-    if(environment.config === 'VSK'){
+    if (environment.config === 'VSK') {
       baseHierarchy = 2;
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
@@ -158,6 +165,15 @@ export class RbacDialogComponent implements OnInit {
     this.filters = constructedFilters;
   }
 
+  updateForm(option: any, filter: any) {
+    this.updatedForm = {
+      ...this.updatedForm,
+      [option[filter?.valueProp]]: option[filter?.labelProp]
+    }
+   
+    return option[filter?.valueProp]
+  }
+
   parseQuery(query: any, masterLevel: any) {
     let startIndex = query.indexOf('{');
     let endIndex = query.indexOf('}');
@@ -170,7 +186,7 @@ export class RbacDialogComponent implements OnInit {
 
   resetFilterForm(form: any) {
     let { filters } = rbacConfig;
-    if(environment.config === 'VSK') {
+    if (environment.config === 'VSK') {
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
       })
@@ -184,7 +200,7 @@ export class RbacDialogComponent implements OnInit {
 
   changeFilter(filter: any) {
     let { filters } = rbacConfig
-    if(environment.config === 'VSK') {
+    if (environment.config === 'VSK') {
       filters = filters.filter((filter: any) => {
         return filter.hierarchyLevel !== 1
       })

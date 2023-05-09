@@ -123,15 +123,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#1D4586",
+                                    color: "#d8ead3",
                                     breakPoint: 75
                                 },
                                 {
-                                    color: "#1156CC",
+                                    color: "#fff2cc",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#6D9FEB",
+                                    color: "#f4cccc",
                                     breakPoint: 0
                                 }
                             ]
@@ -373,15 +373,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#1D4586",
+                                    color: "#d8ead3",
                                     breakPoint: 75
                                 },
                                 {
-                                    color: "#1156CC",
+                                    color: "#fff2cc",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#6D9FEB",
+                                    color: "#f4cccc",
                                     breakPoint: 0
                                 }
                             ]
@@ -523,15 +523,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#1D4586",
+                                    color: "#d8ead3",
                                     breakPoint: 75
                                 },
                                 {
-                                    color: "#1156CC",
+                                    color: "#fff2cc",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#6D9FEB",
+                                    color: "#f4cccc",
                                     breakPoint: 0
                                 }
                             ]
@@ -961,15 +961,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#1D4586",
+                                    color: "#d8ead3",
                                     breakPoint: 75
                                 },
                                 {
-                                    color: "#1156CC",
+                                    color: "#fff2cc",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#6D9FEB",
+                                    color: "#f4cccc",
                                     breakPoint: 0
                                 }
                             ]
