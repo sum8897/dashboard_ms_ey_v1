@@ -46,6 +46,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PopupOptionsComponent } from './components/buttons/popup-options/popup-options.component';
 import { BreadcrumbComponentComponent } from './components/breadcrumb-component/breadcrumb-component.component';
+import { SbBarChartComponent } from './components/charts/sb-bar-chart/sb-bar-chart.component';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
 
 
 const IMPORTS: any[] = [
@@ -65,7 +67,10 @@ const IMPORTS: any[] = [
   NgCircleProgressModule.forRoot(),
   NgApexchartsModule,
   TooltipModule.forRoot(),
-  NgxDaterangepickerMd.forRoot()
+  NgxDaterangepickerMd.forRoot(),
+  DashletModule.forRoot({
+    dataService: DataService
+  }),
 ];
 
 const DECLARATIONS = [
@@ -97,7 +102,8 @@ const DECLARATIONS = [
   TimeSeriesFilterPanelComponent,
   BigNumberComponent,
   PopupOptionsComponent,
-  BreadcrumbComponentComponent
+  BreadcrumbComponentComponent,
+  SbBarChartComponent,
 
 ];
 
