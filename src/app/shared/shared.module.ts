@@ -48,7 +48,7 @@ import { PopupOptionsComponent } from './components/buttons/popup-options/popup-
 import { BreadcrumbComponentComponent } from './components/breadcrumb-component/breadcrumb-component.component';
 import { SbBarChartComponent } from './components/charts/sb-bar-chart/sb-bar-chart.component';
 import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
-
+import { MaterialHeatChartDrilldownTableComponent } from './components/tables/material-heat-chart-drilldown-table/material-heat-chart-drilldown-table.component';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -104,13 +104,13 @@ const DECLARATIONS = [
   PopupOptionsComponent,
   BreadcrumbComponentComponent,
   SbBarChartComponent,
-
+  MaterialHeatChartDrilldownTableComponent
 ];
 
 @NgModule({
   declarations: [
     DECLARATIONS,
-    BreadcrumbComponentComponent,
+    BreadcrumbComponentComponent
   ],
   imports: [
     CommonModule,
