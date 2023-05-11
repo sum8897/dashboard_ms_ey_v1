@@ -257,7 +257,7 @@ export const config = {
                     "value": "district_name",
                     "metrics": [
                         {
-                            "label": "Total Entrolments",
+                            "label": "Total Enrolments",
                             "value": "total_enrolment"
                         },
                         {
