@@ -29,6 +29,7 @@ export class DownloadButtonComponent implements OnInit {
   @Input() title: any;
   @Input() pagereportName: any;
   // 
+  public isVisible: boolean = false;
 
   // @Input() reportData: { reportName: string, data: any }[];
   // @Input() reportInputs :any;
@@ -146,14 +147,18 @@ export class DownloadButtonComponent implements OnInit {
 
   download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
     if (reportInputs === undefined || reportInputs?.length <= 0) {
-      alert("No data found to download");
+      if (this.isVisible) {
+        return;
+      }
+      this.isVisible = true;
+      setTimeout(() => this.isVisible = false, 2500)
     } else {
       for (let i = 0; i < reportInputs.length; i++) {
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const fileName = reportInputs[i].reportName;
         let keys: [] | any;
-        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date'].includes(key));
+        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date','latitude','longitude'].includes(key));
         let dupData;
         if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
