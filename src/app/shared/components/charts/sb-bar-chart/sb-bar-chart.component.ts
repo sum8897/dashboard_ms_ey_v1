@@ -6,7 +6,7 @@ import { filter } from 'lodash';
   templateUrl: './sb-bar-chart.component.html',
   styleUrls: ['./sb-bar-chart.component.scss']
 })
-export class SbBarChartComponent implements OnInit {
+export class SbBarChartComponent implements OnInit, OnChanges {
 
   @Input() data: any;
   @Input() config: any;
@@ -16,6 +16,10 @@ export class SbBarChartComponent implements OnInit {
   pageSize = 5;
 
   ngOnInit() {
+    this.filterData = { values: this.data.values.slice(0, this.pageSize) };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.filterData = { values: this.data.values.slice(0, this.pageSize) };
   }
 

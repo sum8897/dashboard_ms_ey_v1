@@ -616,7 +616,20 @@ export const config = {
                     {
                         name: "State",
                         property: "state_name",
-                        class: "text-center"
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "state_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "state_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 1,
+                                linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber"]
+                            },
+                            allowedLevels: [1]
+                        }
                     },
                     {
                         name: "District",
@@ -631,8 +644,9 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["tas_average_attendance_barchart"]
-                            }
+                                linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber"]
+                            },
+                            allowedLevels: [1]
                         }
                     },
                     {
@@ -648,8 +662,9 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["tas_average_attendance_barchart"]
-                            }
+                                linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber"]
+                            },
+                            allowedLevels: [1]
                         }
                     },
                     {
@@ -665,8 +680,10 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["tas_average_attendance_barchart"]
-                            }
+                                linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber"]
+                            },
+                            allowedLevels: [1]
+                            
                         }
                     },
                     {

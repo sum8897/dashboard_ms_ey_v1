@@ -1,9 +1,9 @@
-<div class="wrapper grid grid-cols-12">
+<!-- <div class="wrapper grid grid-cols-12">
   <div
     class="state col-span-1"
     *ngIf="rbacDetails?.['state'] !== null && rbacDetails?.['state'] !== undefined"
   >
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['state']]}}</a>
+    <p (click)="drilldown(1)" [ngClass]="checkActive(1) ? 'active' : 'notActive'">{{rbacDetails?.stateName}}</p>
   </div>
   <div
     class="state col-span-1"
@@ -12,7 +12,7 @@
     {{ ">" }}
   </div>
   <div class="district col-span-1" *ngIf="rbacDetails?.['district'] !== null">
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['district']]}}</a>
+    <p (click)="drilldown(2)" [ngClass]="checkActive(2) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['district']]}}</p>
   </div>
   <div
     class="district col-span-1"
@@ -21,7 +21,7 @@
     {{ ">" }}
   </div>
   <div class="block col-span-1" *ngIf="rbacDetails?.['block'] !== null">
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['block']]}}</a>
+    <p (click)="drilldown(3)" [ngClass]="checkActive(3) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['block']]}}</p>
   </div>
   <div
     class="block col-span-1"
@@ -30,7 +30,7 @@
     {{ ">" }}
   </div>
   <div class="cluster col-span-1" *ngIf="rbacDetails?.['cluster'] !== null">
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['cluster']]}}</a>
+    <p (click)="drilldown(4)" [ngClass]="checkActive(4) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['cluster']]}}</p>
   </div>
   <div
     class="cluster col-span-1"
@@ -39,7 +39,7 @@
     {{ ">" }}
   </div>
   <div class="school col-span-1" *ngIf="rbacDetails?.['school'] !== null">
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['school']]}}</a>
+    <p (click)="drilldown(5)" [ngClass]="checkActive(5) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['school']]}}</p>
   </div>
   <div
     class="school col-span-1"
@@ -48,6 +48,58 @@
     {{ ">" }}
   </div>
   <div class="grade col-span-1" *ngIf="rbacDetails?.['grade'] !== null">
-    <a [routerLink]="['/rbac']">{{rbacDetails?.[rbacDetails?.['grade']]}}</a>
+    <p (click)="drilldown(6)">{{rbacDetails?.[rbacDetails?.['grade']]}}</p>
+  </div>
+</div> -->
+
+<div class="wrapper d-flex">
+  <div class="state col-span-1" *ngIf="rbacDetails?.['state'] !== null && rbacDetails?.['state'] !== undefined">
+    <p (click)="drilldown(1)" [ngClass]="checkActive(1) ? 'active' : 'notActive'">{{rbacDetails?.state_name}}</p>
+  </div>
+  <div
+    class="state seperator col-span-1"
+    *ngIf="rbacDetails?.['district'] !== null && rbacDetails?.['district'] !== undefined && rbacDetails?.['state'] !== null && rbacDetails?.['state'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
+  <div class="district col-span-1" *ngIf="rbacDetails?.['district'] !== null && rbacDetails?.['district'] !== undefined">
+    <p (click)="drilldown(2)" [ngClass]="checkActive(2) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['district']]}}</p>
+  </div>
+  <div
+    class="district seperator col-span-1"
+    *ngIf="rbacDetails?.['block'] !== null && rbacDetails?.['block'] !== undefined && rbacDetails?.['district'] !== null && rbacDetails?.['district'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
+  <div class="block col-span-1" *ngIf="rbacDetails?.['block'] !== null && rbacDetails?.['block'] !== undefined">
+    <p (click)="drilldown(3)" [ngClass]="checkActive(3) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['block']]}}</p>
+  </div>
+  <div
+    class="block seperator col-span-1"
+    *ngIf="rbacDetails?.['cluster'] !== null && rbacDetails?.['block'] !== null && rbacDetails?.['cluster'] !== undefined && rbacDetails?.['block'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
+  <div class="cluster col-span-1" *ngIf="rbacDetails?.['cluster'] !== null && rbacDetails?.['cluster'] !== undefined">
+    <p (click)="drilldown(4)" [ngClass]="checkActive(4) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['cluster']]}}</p>
+  </div>
+  <div
+    class="cluster seperator col-span-1"
+    *ngIf="rbacDetails?.['school'] !== null && rbacDetails?.['cluster'] !== null && rbacDetails?.['school'] !== undefined && rbacDetails?.['cluster'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
+  <div class="school col-span-1" *ngIf="rbacDetails?.['school'] !== null && rbacDetails?.['school'] !== undefined">
+    <p (click)="drilldown(5)" [ngClass]="checkActive(5) ? 'active' : 'notActive'">{{rbacDetails?.[rbacDetails?.['school']]}}</p>
+  </div>
+  <div
+    class="school seperator col-span-1"
+    *ngIf="rbacDetails?.['grade'] !== null && rbacDetails?.['school'] !== null && rbacDetails?.['grade'] !== undefined && rbacDetails?.['school'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
+  <div class="grade col-span-1" *ngIf="rbacDetails?.['grade'] !== null && rbacDetails?.['grade'] !== undefined">
+    <p (click)="drilldown(6)">{{rbacDetails?.[rbacDetails?.['grade']]}}</p>
   </div>
 </div>
+

@@ -4,6 +4,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { TableHeatMapDirective } from 'src/app/shared/directives/table-heat-map/table-heat-map.directive';
 import { MatPaginator } from '@angular/material/paginator';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { RbacService } from 'src/app/core/services/rbac-service.service';
 
 @Component({
   selector: 'app-material-heat-chart-drilldown-table',
@@ -16,6 +17,7 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
   matSortActive = "";
   matSortDirection: SortDirection = "asc";
   columns: any;
+  rbacLevel: any;
 
   @Input() title: any;
   @Input() tableData: any;
@@ -25,7 +27,11 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(TableHeatMapDirective) tableHeatMap!: TableHeatMapDirective;
 
-  constructor(private readonly _reportDrilldownService: ReportDrilldownService) { }
+  constructor(private readonly _reportDrilldownService: ReportDrilldownService, private readonly _rbacService: RbacService) {
+    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+      this.rbacLevel = rbacDetails.role;
+    })
+   }
 
   ngOnInit(): void {
     // this.dataSource.paginator = this.paginator;
@@ -96,7 +102,7 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
   }
 
   onClickCell(column: any, element: any): void {
-    if (column && column.action) {
+    if (column && column.action && this.rbacLevel && column.action?.allowedLevels?.includes(this.rbacLevel)) {
       let data = {
         action: column.action
       };
