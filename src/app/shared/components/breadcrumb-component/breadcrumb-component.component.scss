@@ -1,9 +1,44 @@
+// .wrapper{
+//     padding-top: 10px;
+// }
+
+// .state, .district, .cluster, .block, .school, .grade{
+//     text-align: center;
+//     color: black;
+//     font-weight: 400;
+// }
+
+// .active {
+//     cursor: pointer;
+// }
+// .active:hover {
+//     color: blue;
+// }
+
 .wrapper{
+    padding-left: 10px;
     padding-top: 10px;
+    justify-content: start;
 }
 
 .state, .district, .cluster, .block, .school, .grade{
+    display: flex;
+    align-items: center;
     text-align: center;
     color: black;
     font-weight: 400;
+}
+
+.active {
+    font-weight: 450;
+    color: var(--cQ-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.seperator{
+    font-size: 2.5rem;
+    font-weight: 500;
+    padding-left: 15px;
+    padding-right: 15px;
 }

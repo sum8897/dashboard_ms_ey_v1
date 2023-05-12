@@ -5,6 +5,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { rbacConfig } from './rbacConfig';
 import { environment } from 'src/environments/environment';
+import { StateCodes, stateNames } from 'src/app/core/config/StateCodes';
 
 @Component({
   selector: 'app-rbac-dialog',
@@ -20,15 +21,25 @@ export class RbacDialogComponent implements OnInit {
   rbacDetails: any;
   availableFilters: string = '';
   updatedForm: any;
+  stateInfo: any;
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
       this.selectedRoleLevel = rbacDetails?.role
     })
+    this.rbacForm = this.fb.group({
+      state: [null],
+      district: [null],
+      block: [null],
+      cluster: [null],
+      school: [null],
+      grade: [null]
+    })
     let baseHierarchy;
     if (environment.config === 'VSK') {
       baseHierarchy = 2;
+      this.setStateDetails(this.rbacDetails)
     }
     else {
       baseHierarchy = 1;
@@ -50,26 +61,6 @@ export class RbacDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (environment.config === 'NVSK') {
-      this.rbacForm = this.fb.group({
-        state: [null],
-        district: [null],
-        block: [null],
-        cluster: [null],
-        school: [null],
-        grade: [null]
-      })
-    }
-    else {
-      this.rbacForm = this.fb.group({
-        district: [null],
-        block: [null],
-        cluster: [null],
-        school: [null],
-        grade: [null]
-      })
-    }
-
     this.resetFilterForm(this.rbacForm);
     this.getFilters();
   }
@@ -81,12 +72,13 @@ export class RbacDialogComponent implements OnInit {
   onSubmit() {
     if (this.rbacForm.valid) {
       this.rbacForm.value.role = this.selectedRoleLevel
-      this.updatedForm = {
-        ...this.updatedForm,
-        ...this.rbacForm.value
-      }
+      this.setStateDetails(this.updatedForm)
+      // this.updatedForm = {
+      //   ...this.updatedForm,
+      //   ...this.rbacForm.value
+      // }
      // console.log(this.updatedForm)
-      this._rbacService.setRbacDetails(this.updatedForm);
+      // this._rbacService.setRbacDetails(this.updatedForm);
       // this._rbacService.setRbacDetails(this.rbacForm.value);
       this.router.navigate(['/summary-statistics'])
     }
@@ -214,6 +206,27 @@ export class RbacDialogComponent implements OnInit {
       }
     });
     this.getFilters();
+  }
+
+  setStateDetails(details: any) {
+    let state_id, stateName;
+      if (environment.stateCode) {
+        state_id = StateCodes.indexOf(environment.stateCode)
+        this.rbacForm.value.state = state_id
+        let names: any = stateNames;
+        names.every((state: any) => {
+          if (state.stateCode == environment.stateCode) {
+            stateName = state.stateName;
+            return false;
+          }
+          return true;
+        });
+      }
+      this._rbacService.setRbacDetails({
+        ...details,
+        ...this.rbacForm.value,
+        state_name: stateName,
+      });
   }
 
 }

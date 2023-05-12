@@ -28,6 +28,12 @@ $light-grey: #eee;
         padding: 0 5px !important;
     }
 
+    .clickable {
+        color: var(--cQ-secondary);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
     .tooltip-inner {
         font-size: 0.7rem;
         width: 200px;

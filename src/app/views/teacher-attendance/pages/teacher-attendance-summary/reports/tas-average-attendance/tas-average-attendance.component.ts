@@ -39,7 +39,9 @@ export class TasAverageAttendanceComponent implements OnInit {
     });
 
     this._reportDrilldownService.drilldownData.subscribe(data => {
-      this.drilldownData(data);
+      if(data && data.hierarchyLevel) {
+        this.drilldownData(data);
+      }
     })
   }
 
@@ -144,7 +146,6 @@ export class TasAverageAttendanceComponent implements OnInit {
           }
         })
       };
-      console.log(this.tableReportData);
       if (this.tableReportData?.data?.length > 0) {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         this.csv.csvDownload(reportsData)
@@ -157,24 +158,27 @@ export class TasAverageAttendanceComponent implements OnInit {
     let drillDownDetails;
 
     switch (Number(hierarchyLevel)) {
+      case 1:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          state: id
+        }
+        break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
           district: id
         }
         break;
       case 3:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
           block: id
         }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
           cluster: id
         }
         break;

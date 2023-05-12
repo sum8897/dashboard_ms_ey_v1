@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TacAverageAttendanceRankComponent } from './reports/tac-average-attendance-rank/tac-average-attendance-rank.component';
 import { TasAverageAttendanceComponent } from './reports/tas-average-attendance/tas-average-attendance.component';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -7,13 +7,14 @@ import { config } from '../../config/teacher_attendance_config'
 import { TeacherAttendanceMapComponent } from './reports/teacher-attendance-map/teacher-attendance-map.component';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { TasAverageAttendanceBarchartComponent } from './reports/tas-average-attendance-barchart/tas-average-attendance-barchart.component';
+import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 
 @Component({
   selector: 'app-teacher-attendance-summary',
   templateUrl: './teacher-attendance-summary.component.html',
   styleUrls: ['./teacher-attendance-summary.component.scss']
 })
-export class TeacherAttendanceSummaryComponent implements OnInit {
+export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
 
   bigNumberReports: any = {};
   maxDate: any;
@@ -34,13 +35,18 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent;
   @ViewChild('averageAttendanceBarchart') averageAttendanceBarchart: TasAverageAttendanceBarchartComponent
   @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
-  constructor(private readonly _commonService: CommonService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   ngOnInit(): void {
+    // this._reportDrilldownService.emit()
+  }
+
+  ngOnDestroy(): void {
+    this._reportDrilldownService.emit(this.rbacDetails)
   }
 
   ngAfterViewInit(): void {

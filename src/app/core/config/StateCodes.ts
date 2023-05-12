@@ -8,7 +8,6 @@ export const StateCodes = [
     "CH",
     "CT",
     "DN",
-    "DD",
     "DL",
     "GA",
     "GJ",
