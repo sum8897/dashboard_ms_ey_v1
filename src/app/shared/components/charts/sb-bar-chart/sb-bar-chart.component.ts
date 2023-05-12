@@ -13,7 +13,7 @@ export class SbBarChartComponent implements OnInit, OnChanges {
 
   filterData: any;
   currentPage = 0;
-  pageSize = 5;
+  pageSize = 30;
 
   ngOnInit() {
     this.filterData = { values: this.data.values.slice(0, this.pageSize) };

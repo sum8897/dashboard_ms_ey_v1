@@ -52,7 +52,7 @@ export class WrapperService {
         return filter.label === tabLabel
       })
     }
-    console.log('sdghvfhvdsghfvh',tabLabel , filterConfig);
+    console.log('sdghvfhvdsghfvh', tabLabel, filterConfig);
     for (let index = 0; index < filterConfig.length; index++) {
 
       if (changedInd === undefined || (changedInd < index && filterConfig[changedInd]?.dependentFilter)) {
@@ -100,7 +100,7 @@ export class WrapperService {
 
   runQuery(query: string): any {
     return new Promise((resolve, reject) => {
-      try{
+      try {
         this._commonService.getReportDataNew(query).subscribe((res: any) => {
           resolve(res);
         },
@@ -108,7 +108,7 @@ export class WrapperService {
             resolve(undefined)
           },
         );
-      }catch(error) {
+      } catch (error) {
         reject(error)
       }
     })
@@ -171,13 +171,22 @@ export class WrapperService {
     return query;
   }
 
-  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any): string {
+  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any, reportType?: string): any {
+    if (reportType === 'barChart') {
+      let tooltip = []
+      tooltipMetrics.forEach((metric: any) => {
+        if (row[metric.value] !== undefined && row[metric.value] !== null) {
+          tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + metric.valueSuffix)
+        }
+      });
+      return tooltip
+    }
     let tooltip = '';
     tooltipMetrics.forEach((metric: any) => {
       if (row[metric.value] !== undefined && row[metric.value] !== null) {
         if (metric.value === selectedMetricValue) {
           tooltip += '<b><i>' + metric.valuePrefix.replace(/\n/g, '</br>') + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + metric.valueSuffix.replace(/\n/g, '</br>') + '</i></b>'
-          
+
         }
         else {
           tooltip += metric.valuePrefix.replace(/\n/g, '</br>') + '<b>' + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + '</b>' + metric.valueSuffix.replace(/\n/g, '</br>')
