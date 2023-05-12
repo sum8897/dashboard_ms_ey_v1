@@ -36,12 +36,12 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   @Input() endDate: any;
 
   constructor(private readonly _commonService: CommonService,
-     private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) { 
+    private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
-      if(data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
+      if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drilldownData(data);
       }
     })
@@ -62,8 +62,8 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], this.rbacDetails)
           });
@@ -72,7 +72,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         return true
       })
     }
-    
+
 
     Object.keys(queries).forEach((key: any) => {
       if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
@@ -89,7 +89,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
-    let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp } } = options;
+    let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       // if(isMultibar){
@@ -98,22 +98,32 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
       this.tableReportData = {
         values: rows
       }
+      let tooltipObject
+      this.tableReportData.values.forEach((row) => {
+        let tooltip = this._wrapperService.constructTooltip(tooltipMetrics,row, metricValueProp, 'barChart')
+        tooltipObject = {
+          ...tooltipObject,
+          [row.level]: tooltip
+        }
+      });
+      console.log(tooltipObject)
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(
-        [{
-          dataExpr: metricValueProp, label: metricLabelProp
-        }]),
-    
+          [{
+            dataExpr: metricValueProp, label: metricLabelProp
+          }]),
+
         options: {
-          height: (rows.length * 15 + 150).toString(),
+          height: '120',
           tooltips: {
             callbacks: {
               label: (tooltipItem, data) => {
-                let multistringText = [];
-                multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
+                // let multistringText = [];
+                // multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value}%`)
 
-                return multistringText;
+                // return multistringText;
+                return tooltipObject[tooltipItem.label]
               }
             }
           },
@@ -130,7 +140,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
                 labelString: xAxis.title
               },
               ticks: {
-                callback: function(value, index, values) {
+                callback: function (value, index, values) {
                   let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
                   if (screen.width <= 768) {
                     return newValue.substr(0, 8) + '...';
@@ -193,13 +203,13 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
 
     let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(hierarchyLevel) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], drillDownDetails)
             timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], drillDownDetails)
