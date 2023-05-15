@@ -9,6 +9,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { TasAverageAttendanceBarchartComponent } from './reports/tas-average-attendance-barchart/tas-average-attendance-barchart.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import moment from 'moment';
+import { AverageAttendanceSchoolTableComponent } from './reports/average-attendance-school-table/average-attendance-school-table.component';
 
 @Component({
   selector: 'app-teacher-attendance-summary',
@@ -25,6 +26,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   reportsData: any[] = []
   rbacDetails: any;
   defaultSelectedDays: any = 7;
+  drillDownLevel: any;
 
   //added for full school report download
   // title = "Download School Report"
@@ -33,12 +35,20 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   //
   @ViewChild('averageAttendanceBigNumber') averageAttendanceBigNumber: TasAverageAttendanceBignumberComponent;
   @ViewChild('averageAttendance') averageAttendance: TasAverageAttendanceComponent;
+  @ViewChild('averageAttendanceSchool') averageAttendanceSchool: AverageAttendanceSchoolTableComponent;
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent;
   @ViewChild('averageAttendanceBarchart') averageAttendanceBarchart: TasAverageAttendanceBarchartComponent
   @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
   constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+    })
+    this._reportDrilldownService.drilldownData.subscribe(data => {
+      if (data) {
+        this.drillDownLevel = data.hierarchyLevel
+        this.reportsData = []
+        this.schoolReportsData = []
+      }
     })
   }
 
@@ -58,11 +68,12 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       startDate.setDate(days)
       this.averageAttendanceBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      this.averageAttendanceSchool?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
       this.averageAttendanceBarchart?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
 
-      this.getSchoolReportData()
+      // this.getSchoolReportData()
     }
   }
 
@@ -81,6 +92,12 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   csvDownload(csvData: any) {
     if (csvData) {
       this.reportsData.push(csvData)
+    }
+  }
+
+  schoolCsvDownload(csvData: any, hierarchyLevel: any) {
+    if(csvData && this.drillDownLevel == hierarchyLevel) {
+      this.schoolReportsData.push(csvData)
     }
   }
 
@@ -126,12 +143,14 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
     this.endDate = moment(event.endDate).format('YYYY-MM-DD');
     if (event?.startDate !== null && event?.endDate !== null) {
       this.reportsData = []
+      this.schoolReportsData = []
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
+      this.averageAttendanceSchool?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceBarchart?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
-      this.getSchoolReportData(this.startDate, this.endDate)
+      // this.getSchoolReportData(this.startDate, this.endDate)
     }
   }
 
