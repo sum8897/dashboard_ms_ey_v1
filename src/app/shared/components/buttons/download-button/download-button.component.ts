@@ -166,7 +166,7 @@ export class DownloadButtonComponent implements OnInit {
           dupData = JSON.parse(JSON.stringify(reportData));
           dupData?.forEach((rec: any) => {
             Object.keys(rec).forEach((obj: any) => {
-              rec[obj] = rec[obj]?.value;
+              rec[obj] = rec[obj]?.value ? rec[obj]?.value : rec[obj]
             });
           });
         } else if (reportType === 'dashletBar') {
@@ -180,17 +180,17 @@ export class DownloadButtonComponent implements OnInit {
             delete obj.data;
           });
         }
+        let re = new RegExp("_id$");
         dupData.forEach((obj: any) => {
           Object.keys(obj).forEach((key: any) => {
-            obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key];
+            obj[key] = !isNaN(obj[key]) && !key.match(re) ? formatNumberForReport(Number(obj[key])) : obj[key];
           });
         });
         // added  below condition temporary for school download reports
-        if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
-          alert('downloading')
-          dupData = JSON.parse(JSON.stringify(reportData));
-        }
-        //
+        // if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
+        //   alert('downloading')
+        //   dupData = JSON.parse(JSON.stringify(reportData));
+        // }
         const opts = { fields: keys, output: fileName };
         const csv = json2csv.parse(dupData, opts);
         let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });

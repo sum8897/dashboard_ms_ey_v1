@@ -9,9 +9,9 @@
                 [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
         <div class="download-button md:col-start-2 md:col-end-5 col-start-10 col-end-11 flex">
-            <app-download-button [data]="schoolReportsData" [pagereportName]="pagereportName"></app-download-button>
+            <app-download-button [data]="schoolReportsData" pagereportName="school"></app-download-button>
             &nbsp;
-            <app-download-button [data]="reportsData"></app-download-button>
+            <app-download-button [data]="reportsData" ></app-download-button>
         </div>
     </div>
     <div class="reports-row" >
@@ -28,15 +28,16 @@
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('tas_average_attendance', 'table')" id="table1">
                 <app-tas-average-attendance #averageAttendance></app-tas-average-attendance>
             </div>
+            <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('tas_average_attendance_barchart', 'barChart')" id="bar">
+                <app-tas-average-attendance-barchart #averageAttendanceBarchart></app-tas-average-attendance-barchart>
+            </div>
             <div class="col-span-2 xmd:col-span-1 div-shadow"
                 *ngIf="checkReport('tas_average_attendance_rank', 'table')" id="table2">
                 <app-tac-average-attendance-rank #averageAttendanceRank></app-tac-average-attendance-rank>
             </div>
-
-            <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('tas_average_attendance_barchart', 'barChart')" id="bar">
-                <app-tas-average-attendance-barchart #averageAttendanceBarchart></app-tas-average-attendance-barchart>
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('average_attendance_school', 'table')" id="table3">
+                <app-average-attendance-school-table #averageAttendanceSchool></app-average-attendance-school-table>
             </div>
-
         </div>
     </div>
 </div>
