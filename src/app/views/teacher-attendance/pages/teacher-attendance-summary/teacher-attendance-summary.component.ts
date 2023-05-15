@@ -8,6 +8,7 @@ import { TeacherAttendanceMapComponent } from './reports/teacher-attendance-map/
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { TasAverageAttendanceBarchartComponent } from './reports/tas-average-attendance-barchart/tas-average-attendance-barchart.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-teacher-attendance-summary',
@@ -121,8 +122,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   }
 
   timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    this.startDate = moment(event.startDate).format('YYYY-MM-DD');
+    this.endDate = moment(event.endDate).format('YYYY-MM-DD');
     if (event?.startDate !== null && event?.endDate !== null) {
       this.reportsData = []
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
