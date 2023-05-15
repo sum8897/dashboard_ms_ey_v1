@@ -51,7 +51,7 @@ import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
 import { MaterialHeatChartDrilldownTableComponent } from './components/tables/material-heat-chart-drilldown-table/material-heat-chart-drilldown-table.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core'; // Add this line
+import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core'; // Add this line
 import { MatIconModule } from '@angular/material/icon';
 
 const IMPORTS: any[] = [
@@ -132,6 +132,9 @@ const DECLARATIONS = [
     DECLARATIONS,
     // DaterangepickerModule
 
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class SharedModule { }
