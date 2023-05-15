@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import moment from 'moment';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -207,8 +208,10 @@ export class TeacherAttendanceMapComponent implements OnInit {
   }
 
   timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    // this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+    // this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    this.startDate = moment(event.startDate).format('YYYY-MM-DD');
+    this.endDate = moment(event.endDate).format('YYYY-MM-DD');
     if (event?.startDate !== null && event?.endDate !== null) {
       this.reportsData = []
       this.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
