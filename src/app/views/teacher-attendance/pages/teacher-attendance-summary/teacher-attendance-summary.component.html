@@ -18,8 +18,9 @@
         <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow" id="bignumber"
                 *ngIf="checkReport('tas_average_attendance_bignumber', 'bigNumber')">
-                <app-tas-average-attendance-bignumber
-                    #averageAttendanceBigNumber></app-tas-average-attendance-bignumber>
+                <app-tas-average-attendance-bignumber  #averageAttendanceBigNumber></app-tas-average-attendance-bignumber>
+                <hr>
+                <app-tas-trendline-chart #TasTrendlineChartComponent></app-tas-trendline-chart>
             </div>
             <!-- <div class="col-span-2 xmd:col-span-1 div-shadow"
                 *ngIf="checkReport('tas_average_attendance_map', 'map')" id="map">
@@ -38,6 +39,9 @@
             <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('average_attendance_school', 'table')" id="table3">
                 <app-average-attendance-school-table #averageAttendanceSchool></app-average-attendance-school-table>
             </div>
+            <!-- <div class="col-span-2 xmd:col-span-1 div-shadow"  *ngIf="checkReport('tas_trendline_chart', 'table')" id="table3">
+                <app-tas-trendline-chart #TasTrendlineChartComponent></app-tas-trendline-chart>
+            </div> -->
         </div>
     </div>
 </div>
