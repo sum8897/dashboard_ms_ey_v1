@@ -28,6 +28,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   rbacDetails: any;
   defaultSelectedDays: any = 7;
   drillDownLevel: any;
+  criteriaConfig: any = config.criteria_config;
 
   //added for full school report download
   // title = "Download School Report"
@@ -101,7 +102,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   }
 
   schoolCsvDownload(csvData: any, hierarchyLevel: any) {
-    if(csvData && this.drillDownLevel == hierarchyLevel) {
+    if (csvData && this.drillDownLevel == hierarchyLevel) {
       this.schoolReportsData.push(csvData)
     }
   }

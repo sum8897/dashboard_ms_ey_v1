@@ -6,6 +6,7 @@ import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utili
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { CriteriaService } from 'src/app/core/services/criteria.service';
 
 @Component({
   selector: 'app-tas-average-attendance',
@@ -17,6 +18,8 @@ export class TasAverageAttendanceComponent implements OnInit {
   filters: any = [];
   levels: any;
   tableReportData: any;
+  backUpData: any = [];
+  criteriaApplied: boolean = false;
   bigNumberReportData: any = {
     reportName: "Average Teachers Present"
   };
@@ -26,21 +29,34 @@ export class TasAverageAttendanceComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title='% Teachers Present';
+  title = '% Teachers Present';
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService,private csv:TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
+  constructor(
+    private readonly _commonService: CommonService,
+    private csv: TeacherAttendanceSummaryComponent,
+    private readonly _wrapperService: WrapperService,
+    private _rbacService: RbacService,
+    private readonly _reportDrilldownService: ReportDrilldownService,
+    private readonly _criteriaService: CriteriaService
+  ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     });
 
     this._reportDrilldownService.drilldownData.subscribe(data => {
-      if(data && data.hierarchyLevel) {
+      if (data && data.hierarchyLevel) {
         this.drilldownData(data);
+      }
+    })
+
+    this._criteriaService.criteriaObject.subscribe((data) => {
+      if(data && data?.linkedReports?.includes(this.reportName)) {
+        this.applyCriteria(data)
       }
     })
   }
@@ -54,13 +70,13 @@ export class TasAverageAttendanceComponent implements OnInit {
     this.endDate = endDate;
     let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -113,6 +129,8 @@ export class TasAverageAttendanceComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
+    this._criteriaService.emit('reset')
+    this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let { table: { columns } } = options;
@@ -186,13 +204,13 @@ export class TasAverageAttendanceComponent implements OnInit {
 
     let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(hierarchyLevel) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], drillDownDetails)
             timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], drillDownDetails)
@@ -225,5 +243,22 @@ export class TasAverageAttendanceComponent implements OnInit {
         this.getTableReportData(query, options);
       }
     });
+  }
+
+  applyCriteria(data: any) {
+    if(!this.criteriaApplied){
+      this.backUpData = this.tableReportData?.data
+    } 
+    this.criteriaApplied = true
+    if(data && this.backUpData.length > 0) {
+      let filteredData = this.backUpData.filter((row: any) => {
+        let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
+        return (Number(data?.fromRange) <= Number(value) &&  Number(value) <= Number(data?.toRange))
+      })
+      this.tableReportData = {
+        ...this.tableReportData,
+        data: filteredData
+      }
+    }
   }
 }

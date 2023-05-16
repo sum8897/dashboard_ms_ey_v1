@@ -1,4 +1,11 @@
 export const config = {
+    criteria_config: {
+        indicatorName: 'Teacher Attendance',
+        minRange: 0,
+        maxRange: 100,
+        unitKey: "stt_avg",
+        linkedReports: ['tas_average_attendance', 'tas_average_attendance_barchart']
+    },
 
 
     tas_average_attendance_map:{
@@ -1003,7 +1010,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "barChart": "select district_name as level, district_name, a.district_id,total_teachers, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from( select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present ,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name,a.total_teachers ,a.district_id order by stt_avg asc",
+                    "barChart": "select ceil(round(CAST(COALESCE(avg(intermediate_table.teachers_present_intermediate/NULLIF(intermediate_table.total_teachers_intemediate, 0))*100) as numeric),2)) as stt_avg, ceil(avg(intermediate_table.total_teachers_intemediate)) as total_teachers, count(intermediate_table.school_id) as total_schools, intermediate_table.district_id, intermediate_table.district_name, intermediate_table.district_name as level from( select ceil(avg(present_table.sum)) as teachers_present_intermediate, ceil(avg(total_teachers.sum)) as total_teachers_intemediate, s.district_id, s.district_name, s.school_id from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id join dimensions.school as s on present_table.district_id = s.district_id where present_table.date between startDate and endDate group by s.school_id, s.district_id, district_name) as intermediate_table group by intermediate_table.district_id, district_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -1018,7 +1025,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": "select block_name as level, block_name, a.block_id, sum(a.total_teachers) as total_teachers, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where district_id = {district_id} and a.att_date between startDate and endDate group by a.block_id, block_name order by stt_avg asc",
+                    "barChart": "select ceil(round(CAST(COALESCE(avg(intermediate_table.teachers_present_intermediate/NULLIF(intermediate_table.total_teachers_intemediate, 0))*100) as numeric),2)) as stt_avg, ceil(avg(intermediate_table.total_teachers_intemediate)) as total_teachers, count(intermediate_table.school_id) as total_schools, intermediate_table.block_id, intermediate_table.block_name, intermediate_table.block_name as level from( select avg(present_table.sum) as teachers_present_intermediate, avg(total_teachers.sum) as total_teachers_intemediate, s.block_id, s.block_name, s.school_id from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id join dimensions.school as s on present_table.block_id = s.block_id where present_table.date between startDate and endDate and s.district_id = {district_id} group by s.school_id, s.block_id, block_name) as intermediate_table group by block_id, block_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -1033,7 +1040,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": "select cluster_name as level, cluster_name, a.cluster_id, sum(a.total_teachers) as total_teachers, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.total_teachers, 0))*100) as numeric),2)) as stt_avg from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name order by stt_avg asc",
+                    "barChart": "select ceil(round(CAST(COALESCE(avg(intermediate_table.teachers_present_intermediate/NULLIF(intermediate_table.total_teachers_intemediate, 0))*100) as numeric),2)) as stt_avg, ceil(avg(intermediate_table.total_teachers_intemediate)) as total_teachers, count(intermediate_table.school_id) as total_schools, intermediate_table.cluster_id, intermediate_table.cluster_name, intermediate_table.cluster_name as level from( select avg(present_table.sum) as teachers_present_intermediate, avg(total_teachers.sum) as total_teachers_intemediate, s.cluster_id, s.cluster_name, s.school_id from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id join dimensions.school as s on present_table.cluster_id = s.cluster_id where present_table.date between startDate and endDate and s.block_id = {block_id} group by s.school_id, s.cluster_id, cluster_name) as intermediate_table group by cluster_id, cluster_name order by stt_avg asc",
                 },
                 "actions": {
                     "queries": {
@@ -1143,7 +1150,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1158,7 +1165,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.district_id = {district_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.district_id = {district_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1173,7 +1180,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.block_id = {block_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.block_id = {block_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1188,7 +1195,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.cluster_id = {cluster_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.cluster_id = {cluster_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1208,7 +1215,7 @@ export const config = {
                     },
                     {
                         name: "% Teachers Present",
-                        property: "average_percent_attendance",
+                        property: "stt_avg",
                         class: "text-center",
                         valueSuffix: '%',
                         isHeatMapRequired: true,
