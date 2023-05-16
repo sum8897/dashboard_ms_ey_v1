@@ -68,7 +68,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       startDate.setDate(days)
       this.averageAttendanceBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
-      this.averageAttendanceSchool?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      // this.averageAttendanceSchool?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
       this.averageAttendanceBarchart?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
@@ -146,7 +146,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       this.schoolReportsData = []
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
-      this.averageAttendanceSchool?.getReportData(this.startDate, this.endDate);
+      // this.averageAttendanceSchool?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceBarchart?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
