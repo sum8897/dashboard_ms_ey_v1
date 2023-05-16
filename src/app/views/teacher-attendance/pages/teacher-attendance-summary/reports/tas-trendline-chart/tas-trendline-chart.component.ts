@@ -1,3 +1,5 @@
+import Chart from 'chart.js';
+import { ChartDataSets, ChartOptions, ChartType, PluginServiceRegistrationOptions, TimeScale } from 'chart.js';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -6,69 +8,53 @@ import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utili
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
-import { CriteriaService } from 'src/app/core/services/criteria.service';
+
+interface TrendlineChartDataSets extends ChartDataSets {
+  trendlineLinear?: PluginServiceRegistrationOptions;
+}
 
 @Component({
-  selector: 'app-tas-average-attendance',
-  templateUrl: './tas-average-attendance.component.html',
-  styleUrls: ['./tas-average-attendance.component.scss']
+  selector: 'app-tas-trendline-chart',
+  templateUrl: './tas-trendline-chart.component.html',
+  styleUrls: ['./tas-trendline-chart.component.scss']
 })
-export class TasAverageAttendanceComponent implements OnInit {
-  reportName: string = 'tas_average_attendance';
+export class TasTrendlineChartComponent implements OnInit {
+  reportName: string = 'tas_trendline_chart';
   filters: any = [];
   levels: any;
-  tableReportData: any;
-  backUpData: any = [];
-  criteriaApplied: boolean = false;
-  bigNumberReportData: any = {
-    reportName: "Average Teachers Present"
-  };
+  tableReportData: any
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = '% Teachers Present';
+  title: any = "Rank in % Teachers Present"
 
-  @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
-
-  constructor(
-    private readonly _commonService: CommonService,
-    private csv: TeacherAttendanceSummaryComponent,
-    private readonly _wrapperService: WrapperService,
-    private _rbacService: RbacService,
-    private readonly _reportDrilldownService: ReportDrilldownService,
-    private readonly _criteriaService: CriteriaService
-  ) {
+  constructor(private readonly _commonService: CommonService,
+    private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
-    });
+    })
 
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.hierarchyLevel) {
         this.drilldownData(data);
       }
     })
-
-    this._criteriaService.criteriaObject.subscribe((data) => {
-      if(data && data?.linkedReports?.includes(this.reportName)) {
-        this.applyCriteria(data)
-      }
-    })
   }
 
-  ngOnInit(): void {
-    // this.getReportData();
+  ngOnInit() {
+    // this.generateChart();
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
     this.startDate = startDate;
     this.endDate = endDate;
-    let reportConfig = config;
+    let reportConfig = config
 
     let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
@@ -85,8 +71,6 @@ export class TasAverageAttendanceComponent implements OnInit {
         }
         return true
       })
-    } else {
-      this._wrapperService.constructFilters(this.filters, filters);
     }
 
     Object.keys(queries).forEach((key: any) => {
@@ -129,8 +113,6 @@ export class TasAverageAttendanceComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
-    this._criteriaService.emit('reset')
-    this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
       let { table: { columns } } = options;
@@ -163,10 +145,11 @@ export class TasAverageAttendanceComponent implements OnInit {
             return col;
           }
         })
-      };
+      }
       if (this.tableReportData?.data?.length > 0) {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-        this.csv.csvDownload(reportsData)
+        // this.csv.csvDownload(reportsData)
+        this.generateChart(this.tableReportData)
       }
     });
   }
@@ -245,20 +228,69 @@ export class TasAverageAttendanceComponent implements OnInit {
     });
   }
 
-  applyCriteria(data: any) {
-    if(!this.criteriaApplied){
-      this.backUpData = this.tableReportData?.data
-    } 
-    this.criteriaApplied = true
-    if(data && this.backUpData.length > 0) {
-      let filteredData = this.backUpData.filter((row: any) => {
-        let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
-        return (Number(data?.fromRange) <= Number(value) &&  Number(value) <= Number(data?.toRange))
-      })
-      this.tableReportData = {
-        ...this.tableReportData,
-        data: filteredData
-      }
-    }
+  generateChart(reportData) {
+    // const dates = reportData?.data?.map(data => moment(data.stt_avg.value).format('YYYY-MM-DD'));
+    const dates = reportData?.data?.map(data => {
+      const dateValue = new Date(data.att_date.value);
+      return dateValue.toLocaleDateString();
+    });
+    const values = reportData?.data?.map(data => data.stt_avg.value);
+    const ctx = document.getElementById('trendlineChart') as HTMLCanvasElement;
+    const chart = new Chart(ctx, {
+      type: 'line',
+
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            data: values,
+            label: '% Teacher Present',
+            borderColor: 'green',
+            fill: true,
+            lineTension: 0,
+  
+            // backgroundColor: 'rgba(0,255,0,0.3)',
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: "% Teacher Present",
+          fontStyle: "normal",
+          fontColor: "#333"
+        },
+        tooltips: {
+          callbacks: {
+            label: function (context) {
+              // const date = dates[context.datasetIndex];
+              const value = context.value
+              // return `Date: ${date}/n% Teacher Present: ${value}%`;
+              return '% Teacher Present:' + value + '%'
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day'
+            },
+            grid: {
+              display: false
+            } as TimeScale
+          },
+          y: {
+           
+            suggestedMin: Math.min(...values),
+            suggestedMax: Math.max(...values),
+            grid: {
+              display: false
+            }
+          }
+        } as ChartOptions['scales'],
+      },
+    });
   }
 }
