@@ -18,7 +18,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
   reportData: any = {
     reportName: "District Wise Performance"
   };
-  title: string = 'District Wise Performance'
+  title: string = 'Pgi District Wise Performance'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -116,7 +116,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
         }
       }
       else if (query && key === 'map') {
-        console.log('metricFiltermetricFiltermetricFilter', metricFilter)
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }

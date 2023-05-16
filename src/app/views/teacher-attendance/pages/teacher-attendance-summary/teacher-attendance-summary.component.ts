@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TacAverageAttendanceRankComponent } from './reports/tac-average-attendance-rank/tac-average-attendance-rank.component';
 import { TasAverageAttendanceComponent } from './reports/tas-average-attendance/tas-average-attendance.component';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -6,13 +6,17 @@ import { TasAverageAttendanceBignumberComponent } from './reports/tas-average-at
 import { config } from '../../config/teacher_attendance_config'
 import { TeacherAttendanceMapComponent } from './reports/teacher-attendance-map/teacher-attendance-map.component';
 import { CommonService } from 'src/app/core/services/common/common.service';
+import { TasAverageAttendanceBarchartComponent } from './reports/tas-average-attendance-barchart/tas-average-attendance-barchart.component';
+import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import moment from 'moment';
+import { AverageAttendanceSchoolTableComponent } from './reports/average-attendance-school-table/average-attendance-school-table.component';
 
 @Component({
   selector: 'app-teacher-attendance-summary',
   templateUrl: './teacher-attendance-summary.component.html',
   styleUrls: ['./teacher-attendance-summary.component.scss']
 })
-export class TeacherAttendanceSummaryComponent implements OnInit {
+export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
 
   bigNumberReports: any = {};
   maxDate: any;
@@ -22,6 +26,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   reportsData: any[] = []
   rbacDetails: any;
   defaultSelectedDays: any = 7;
+  drillDownLevel: any;
 
   //added for full school report download
   // title = "Download School Report"
@@ -30,15 +35,29 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   //
   @ViewChild('averageAttendanceBigNumber') averageAttendanceBigNumber: TasAverageAttendanceBignumberComponent;
   @ViewChild('averageAttendance') averageAttendance: TasAverageAttendanceComponent;
-  @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent
+  @ViewChild('averageAttendanceSchool') averageAttendanceSchool: AverageAttendanceSchoolTableComponent;
+  @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent;
+  @ViewChild('averageAttendanceBarchart') averageAttendanceBarchart: TasAverageAttendanceBarchartComponent
   @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
-  constructor(private readonly _commonService: CommonService, private _rbacService: RbacService) {
+  constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+    })
+    this._reportDrilldownService.drilldownData.subscribe(data => {
+      if (data) {
+        this.drillDownLevel = data.hierarchyLevel
+        this.reportsData = []
+        this.schoolReportsData = []
+      }
     })
   }
 
   ngOnInit(): void {
+    // this._reportDrilldownService.emit()
+  }
+
+  ngOnDestroy(): void {
+    this._reportDrilldownService.emit(this.rbacDetails)
   }
 
   ngAfterViewInit(): void {
@@ -49,9 +68,12 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       startDate.setDate(days)
       this.averageAttendanceBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      this.averageAttendanceSchool?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
-      this.getSchoolReportData()
+      this.averageAttendanceBarchart?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+
+      // this.getSchoolReportData()
     }
   }
 
@@ -73,6 +95,12 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
     }
   }
 
+  schoolCsvDownload(csvData: any, hierarchyLevel: any) {
+    if(csvData && this.drillDownLevel == hierarchyLevel) {
+      this.schoolReportsData.push(csvData)
+    }
+  }
+
   getSchoolReportData(startDate?: string, endDate?: string) {
     let query;
     if (startDate && endDate) {
@@ -87,7 +115,6 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
       this.startDate = startDate?.toISOString().split('T')[0];
       this.endDate = endDate?.toISOString().split('T')[0];
     }
-    console.log("Date is:", this.startDate, this.endDate);
     if (this.rbacDetails?.role == 1) {
       query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as average_percent_attendance from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between '${this.startDate}' and '${this.endDate}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `
     } else if (this.rbacDetails?.role == 2) {
@@ -112,15 +139,18 @@ export class TeacherAttendanceSummaryComponent implements OnInit {
   }
 
   timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    this.startDate = moment(event.startDate).format('YYYY-MM-DD');
+    this.endDate = moment(event.endDate).format('YYYY-MM-DD');
     if (event?.startDate !== null && event?.endDate !== null) {
       this.reportsData = []
+      this.schoolReportsData = []
       this.averageAttendanceBigNumber?.getReportData(this.startDate, this.endDate);
       this.averageAttendance?.getReportData(this.startDate, this.endDate);
+      this.averageAttendanceSchool?.getReportData(this.startDate, this.endDate);
+      this.averageAttendanceBarchart?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
-      this.getSchoolReportData(this.startDate, this.endDate)
+      // this.getSchoolReportData(this.startDate, this.endDate)
     }
   }
 

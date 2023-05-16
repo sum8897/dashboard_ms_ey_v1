@@ -10,6 +10,9 @@ import { config as dikshaConfig } from '../../views/diksha/config/diksha_config'
 import { config as infraConfig } from '../../views/school-infrastructure/config/school_infra_config'
 import { config as progresConfig } from '../../views/school-progression/config/school_prog_config'
 import { config as studentAssessments } from '../../../app/views/student-assessments/config/student_assessments'
+import {config as ncf } from '../../views/ncf/config/ncf_config';
+import {config as quiz} from '../../views/ncert-quiz/config/quiz_config';
+import{config as microImprovement} from '../../views/micro-improvements/config/microimprovements_config';
 
 
 
@@ -25,7 +28,10 @@ export const configFiles = {
   diksha: dikshaConfig,
   schoolInfrastructure: infraConfig,
   studentProgress: progresConfig,
-  studentAssessments:studentAssessments
+  studentAssessments:studentAssessments,
+  ncf:ncf,
+  quiz:quiz,
+  microImprovement:microImprovement,
 };
 
 export const programFolderNames = {
@@ -38,8 +44,10 @@ export const programFolderNames = {
   udise: 'udise',
   nas: 'nas',
   diksha: 'diksha',
-  studentAssessments:'studentAssessments'
-
+  studentAssessments:'studentAssessments',
+  ncf:'ncf',
+  quiz:'quiz',
+  microImprovement:'microImprovement',
 }
 
 export const stateProgramsFolderNames = {
@@ -52,5 +60,8 @@ export const stateProgramsFolderNames = {
   udise: '',
   nas: '',
   diksha: '',
-  studentAssessments:''
+  studentAssessments:'',
+  ncf:'',
+  quiz:'',
+  microImprovement:'',
 }

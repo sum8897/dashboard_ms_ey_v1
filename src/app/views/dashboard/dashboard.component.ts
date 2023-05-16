@@ -96,7 +96,6 @@ export class DashboardComponent implements OnInit {
       try {
         let metrics: any = []
         let reports = Object.keys(programConfig)
-        console.log("cvbn:",{reports,metrics})
         for (let i = 0; i < reports.length; i++) {
           if (metrics.length >= 2) {
             break;

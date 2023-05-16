@@ -46,7 +46,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PopupOptionsComponent } from './components/buttons/popup-options/popup-options.component';
 import { BreadcrumbComponentComponent } from './components/breadcrumb-component/breadcrumb-component.component';
-
+import { SbBarChartComponent } from './components/charts/sb-bar-chart/sb-bar-chart.component';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { MaterialHeatChartDrilldownTableComponent } from './components/tables/material-heat-chart-drilldown-table/material-heat-chart-drilldown-table.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core'; // Add this line
+import { MatIconModule } from '@angular/material/icon';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -65,7 +71,15 @@ const IMPORTS: any[] = [
   NgCircleProgressModule.forRoot(),
   NgApexchartsModule,
   TooltipModule.forRoot(),
-  NgxDaterangepickerMd.forRoot()
+  NgxDaterangepickerMd.forRoot(),
+  DashletModule.forRoot({
+    dataService: DataService
+  }),
+  MatInputModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatIconModule
+
 ];
 
 const DECLARATIONS = [
@@ -97,23 +111,30 @@ const DECLARATIONS = [
   TimeSeriesFilterPanelComponent,
   BigNumberComponent,
   PopupOptionsComponent,
-  BreadcrumbComponentComponent
-
+  BreadcrumbComponentComponent,
+  SbBarChartComponent,
+  MaterialHeatChartDrilldownTableComponent
 ];
 
 @NgModule({
   declarations: [
     DECLARATIONS,
-    BreadcrumbComponentComponent,
+    BreadcrumbComponentComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    // DaterangepickerModule,
     IMPORTS
   ],
   exports: [
     IMPORTS,
-    DECLARATIONS
+    DECLARATIONS,
+    // DaterangepickerModule
+
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class SharedModule { }

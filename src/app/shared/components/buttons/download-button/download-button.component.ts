@@ -29,6 +29,7 @@ export class DownloadButtonComponent implements OnInit {
   @Input() title: any;
   @Input() pagereportName: any;
   // 
+  public isVisible: boolean = false;
 
   // @Input() reportData: { reportName: string, data: any }[];
   // @Input() reportInputs :any;
@@ -146,14 +147,18 @@ export class DownloadButtonComponent implements OnInit {
 
   download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
     if (reportInputs === undefined || reportInputs?.length <= 0) {
-      alert("No data found to download");
+      if (this.isVisible) {
+        return;
+      }
+      this.isVisible = true;
+      setTimeout(() => this.isVisible = false, 2500)
     } else {
       for (let i = 0; i < reportInputs.length; i++) {
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const fileName = reportInputs[i].reportName;
         let keys: [] | any;
-        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date'].includes(key));
+        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date','latitude','longitude'].includes(key));
         let dupData;
         if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
@@ -161,7 +166,7 @@ export class DownloadButtonComponent implements OnInit {
           dupData = JSON.parse(JSON.stringify(reportData));
           dupData?.forEach((rec: any) => {
             Object.keys(rec).forEach((obj: any) => {
-              rec[obj] = rec[obj]?.value;
+              rec[obj] = rec[obj]?.value ? rec[obj]?.value : rec[obj]
             });
           });
         } else if (reportType === 'dashletBar') {
@@ -175,17 +180,17 @@ export class DownloadButtonComponent implements OnInit {
             delete obj.data;
           });
         }
+        let re = new RegExp("_id$");
         dupData.forEach((obj: any) => {
           Object.keys(obj).forEach((key: any) => {
-            obj[key] = !isNaN(obj[key]) ? formatNumberForReport(Number(obj[key])) : obj[key];
+            obj[key] = !isNaN(obj[key]) && !key.match(re) ? formatNumberForReport(Number(obj[key])) : obj[key];
           });
         });
         // added  below condition temporary for school download reports
-        if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
-          alert('downloading')
-          dupData = JSON.parse(JSON.stringify(reportData));
-        }
-        //
+        // if (this.pagereportName == "student_assessment" || this.pagereportName == "teachers_present" || this.pagereportName == "school_infra" || this.pagereportName == "school_progression") {
+        //   alert('downloading')
+        //   dupData = JSON.parse(JSON.stringify(reportData));
+        // }
         const opts = { fields: keys, output: fileName };
         const csv = json2csv.parse(dupData, opts);
         let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });
