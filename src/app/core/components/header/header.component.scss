@@ -19,15 +19,19 @@
         width: 45px;
     }
 
-    // .left-logo{
-    //     height: 40px;
-    //     width: 80px;
-    // }
+    .left-logo{
+        height: 70px;
+        width: auto;
+    }
+}
+
+.header-wrapper{
+    align-items: center;
 }
 
 .left-logo {
-    height: 30px;
-    width: 30rem;
+    height: 70px;
+    width: auto;
 }
 
 .logo {
@@ -146,12 +150,12 @@ p {
     font-size: 12.4133px;
     line-height: 19px
 }
-@media(max-width: 674px) {
-    .left-logo{
-        height: 30px;
-        width: 112rem;
-    }
-    .white-box{
-        display: none;
-    }
-}
+// @media(max-width: 674px) {
+//     .left-logo{
+//         height: 30px;
+//         width: 112rem;
+//     }
+//     .white-box{
+//         display: none;
+//     }
+// }
