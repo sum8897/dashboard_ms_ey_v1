@@ -5,6 +5,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/nishtha/config/nishtha_config';
+import { CourseWiseStatusTabComponent } from '../../course-wise-status-tab.component';
 
 @Component({
   selector: 'app-course-wise-status',
@@ -30,7 +31,7 @@ export class CourseWiseStatusComponent implements OnInit {
 
   @Output() exportReportData = new EventEmitter<any>();
 
-  constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(private readonly _dataService: DataService,private csv:CourseWiseStatusTabComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -103,7 +104,8 @@ export class CourseWiseStatusComponent implements OnInit {
         this.config = config;
         if (this.reportData?.values?.length > 0) {
           let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
-          this.exportReportData.emit(reportsData)
+          // this.exportReportData.emit(reportsData)
+          this.csv.csvDownload(reportsData)
         }
       }
     })

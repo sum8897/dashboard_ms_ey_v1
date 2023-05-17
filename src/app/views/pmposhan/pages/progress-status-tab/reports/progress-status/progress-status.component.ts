@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             import { WrapperService } from 'src/app/core/services/wrapper.service';
             import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
             import { config } from 'src/app/views/pmposhan/config/pmposhan_config';
+import { ProgressStatusTabComponent } from '../../progress-status-tab.component';
             
             @Component({
               selector: 'app-progress-status',
@@ -30,7 +31,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             
               @Output() exportReportData = new EventEmitter<any>();
             
-              constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+              constructor(private readonly _dataService: DataService,private csv:ProgressStatusTabComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
                 this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
                   this.rbacDetails = rbacDetails;
                 })
@@ -95,7 +96,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
                     this.reportData = await this._dataService.getTableReportData(query, options);
                     if (this.reportData?.data?.length > 0) {
                       let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
-                      this.exportReportData.emit(reportsData)
+                      // this.exportReportData.emit(reportsData)
+                      this.csv.csvDownload(reportsData)
+
                     }
                   }
                   else if (query && key === 'bigNumber') {
@@ -110,14 +113,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
                     this.config = config;
                     if (this.reportData?.values?.length > 0) {
                       let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
-                      this.exportReportData.emit(reportsData)
+                      // this.exportReportData.emit(reportsData)
+                      this.csv.csvDownload(reportsData)
                     }
                   }
                   else if (query && key === 'map') {
                     this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
                     if (this.reportData?.data?.length > 0) {
                       let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
-                      this.exportReportData.emit(reportsData)
+                      // this.exportReportData.emit(reportsData)
+                      this.csv.csvDownload(reportsData)
+
                     }
                   }
                 })
