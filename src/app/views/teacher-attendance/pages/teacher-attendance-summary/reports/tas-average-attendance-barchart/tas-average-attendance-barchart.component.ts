@@ -7,6 +7,7 @@ import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from '../../../../config/teacher_attendance_config';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { CriteriaService } from 'src/app/core/services/criteria.service';
 @Component({
   selector: 'app-tas-average-attendance-barchart',
   templateUrl: './tas-average-attendance-barchart.component.html',
@@ -30,19 +31,32 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   currentHierarchyLevel: any = 1;
   rbacDetails: any;
   pageSize: any;
+  backUpData: any = [];
+  criteriaApplied: boolean = false;
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService,
-    private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
+  constructor(
+    private readonly _commonService: CommonService,
+    private readonly _wrapperService: WrapperService,
+    private _rbacService: RbacService,
+    private readonly _reportDrilldownService: ReportDrilldownService,
+    private readonly _criteriaService: CriteriaService
+  ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drilldownData(data);
+      }
+    })
+    this._criteriaService.criteriaObject.subscribe((data) => {
+      if(data && data?.linkedReports?.includes(this.reportName)) {
+        console.log(data)
+        this.applyCriteria(data)
       }
     })
   }
@@ -89,6 +103,8 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
+    this._criteriaService.emit('reset')
+    this.criteriaApplied = false
     let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
@@ -100,13 +116,12 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
       }
       let tooltipObject
       this.tableReportData.values.forEach((row) => {
-        let tooltip = this._wrapperService.constructTooltip(tooltipMetrics,row, metricValueProp, 'barChart')
+        let tooltip = this._wrapperService.constructTooltip(tooltipMetrics, row, metricValueProp, 'barChart')
         tooltipObject = {
           ...tooltipObject,
           [row.level]: tooltip
         }
       });
-      console.log(tooltipObject)
       this.config = getChartJSConfig({
         labelExpr: xAxis.value,
         datasets: getBarDatasetConfig(
@@ -115,6 +130,23 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
           }]),
 
         options: {
+          animation: {
+            onComplete: function() {
+              let chartInstance = this.chart;
+              let ctx = chartInstance.ctx;
+              ctx.font = '#000';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+
+              this.data.datasets.forEach(function(dataset, i) {
+                const meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach(function(bar, index) {
+                  const data = dataset.data[index];
+                  ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                });
+              });
+            }
+          },
           height: '120',
           tooltips: {
             callbacks: {
@@ -235,6 +267,23 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         this.getBarChartReportData(query, options, filters, defaultLevel);
       }
     });
+  }
+
+  applyCriteria(data: any) {
+    if(!this.criteriaApplied){
+      this.backUpData = this.tableReportData?.values
+    }
+    this.criteriaApplied = true
+    if(data && this.backUpData.length > 0) {
+      let filteredData = this.backUpData.filter((row: any) => {
+        let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
+        return (Number(data?.fromRange) <= Number(value) &&  Number(value) <= Number(data?.toRange))
+      })
+      this.tableReportData = {
+        ...this.tableReportData,
+        values: filteredData
+      }
+    }
   }
 
 

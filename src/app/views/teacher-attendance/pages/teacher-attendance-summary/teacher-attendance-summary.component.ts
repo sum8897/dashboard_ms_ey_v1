@@ -10,6 +10,7 @@ import { TasAverageAttendanceBarchartComponent } from './reports/tas-average-att
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import moment from 'moment';
 import { AverageAttendanceSchoolTableComponent } from './reports/average-attendance-school-table/average-attendance-school-table.component';
+import { TasTrendlineChartComponent } from './reports/tas-trendline-chart/tas-trendline-chart.component';
 
 @Component({
   selector: 'app-teacher-attendance-summary',
@@ -27,6 +28,13 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   rbacDetails: any;
   defaultSelectedDays: any = 7;
   drillDownLevel: any;
+  criteriaConfig: any = config.criteria_config;
+  trendLineConfig = {
+    options: {
+      tooltips: { displayColors: false},
+      legend: {display: false}
+    }
+  };
 
   //added for full school report download
   // title = "Download School Report"
@@ -39,6 +47,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   @ViewChild('averageAttendanceRank') averageAttendanceRank: TacAverageAttendanceRankComponent;
   @ViewChild('averageAttendanceBarchart') averageAttendanceBarchart: TasAverageAttendanceBarchartComponent
   @ViewChild('tasMap') tasMap: TeacherAttendanceMapComponent
+  @ViewChild('TasTrendlineChartComponent') TasTrendlineChartComponent: TasTrendlineChartComponent
+
   constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -72,6 +82,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       this.averageAttendanceRank?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
       this.averageAttendanceBarchart?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+      this.TasTrendlineChartComponent?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
+
 
       // this.getSchoolReportData()
     }
@@ -96,7 +108,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   }
 
   schoolCsvDownload(csvData: any, hierarchyLevel: any) {
-    if(csvData && this.drillDownLevel == hierarchyLevel) {
+    if (csvData && this.drillDownLevel == hierarchyLevel) {
       this.schoolReportsData.push(csvData)
     }
   }
@@ -150,6 +162,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       this.averageAttendanceBarchart?.getReportData(this.startDate, this.endDate);
       this.averageAttendanceRank?.getReportData(this.startDate, this.endDate);
       this.tasMap?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+      this.TasTrendlineChartComponent?.getReportData(this.startDate, this.endDate);
+
       // this.getSchoolReportData(this.startDate, this.endDate)
     }
   }
