@@ -158,7 +158,7 @@ export class DownloadButtonComponent implements OnInit {
         const reportType = reportInputs[i].reportType;
         const fileName = reportInputs[i].reportName;
         let keys: [] | any;
-        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date','latitude','longitude'].includes(key));
+        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date','Latitude','Longitude'].includes(key));
         let dupData;
         if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
