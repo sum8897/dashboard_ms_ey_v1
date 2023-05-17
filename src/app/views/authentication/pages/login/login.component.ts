@@ -88,23 +88,29 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    let data = {
-      username: this.LoginForm.controls.userId.value,
-      password: this.LoginForm.controls.password.value
+    if (this.LoginForm.valid) {
+      let data = {
+        username: this.LoginForm.controls.userId.value,
+        password: this.LoginForm.controls.password.value
+      }
+      this._authenticationService.login(data).subscribe((res: any) => {
+        const token = res.access_token
+        const refreshToken = res.refresh_token
+        localStorage.setItem('token', token)
+        localStorage.setItem('refresh_token', refreshToken)
+        // localStorage.setItem('userName', res.username)
+        // localStorage.setItem('user_id', res.userId)
+        this._authenticationService.startRefreshTokenTimer();
+        this.router.navigate(['/home']);
+      },
+        err => {
+          this.error = true;
+        })
     }
-    this._authenticationService.login(data).subscribe((res: any) => {
-      const token = res.access_token
-      const refreshToken = res.refresh_token
-      localStorage.setItem('token', token)
-      localStorage.setItem('refresh_token', refreshToken)
-      // localStorage.setItem('userName', res.username)
-      // localStorage.setItem('user_id', res.userId)
-      this._authenticationService.startRefreshTokenTimer();
-      this.router.navigate(['/home']);
-    },
-      err => {
-        this.error = true;
-      })
+    else {
+      this.error = true
+    }
+    
 
   }
 

@@ -450,12 +450,19 @@ input:-webkit-autofill {
     width: 100%;
     border-radius: 20px !important;
     background-color: transparent;
-    border: 1px solid white;
+    // border: 1px solid white;
     color: #899BFF;
     padding: 8px 10px 8px 15px;
     font-weight: 900;
     border: 1px solid #848FFF;
     font-size: 12px;
+}
+
+.valid {
+    font-size: 14px !important;
+    color: white !important;
+    border: 2px solid #9fa5ee !important;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 #togglePassword {

@@ -39,7 +39,7 @@
                                         placeholder="Enter your password" name="password" tabindex="2">
                                     <br /><br />
                                     <br />
-                                    <button class="submit" type="submit" id="login" name="login" value="Login"
+                                    <button [ngClass]="LoginForm.valid ? 'valid' : ''" class="submit" type="submit" id="login" name="login" value="Login"
                                         tabindex="3">Login</button>
                                 </form>
                             </div>
