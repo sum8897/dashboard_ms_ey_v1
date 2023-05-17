@@ -26,8 +26,8 @@
 }
 
 .left-logo {
-    height: 45px;
-    width: auto;
+    height: 30px;
+    width: 30rem;
 }
 
 .logo {
@@ -78,7 +78,7 @@
 }
 
 .headerSideWidth {
-    max-width: 18rem;
+    max-width: 5rem;
 }
 
 .mainHeaderContent {
@@ -95,11 +95,14 @@
 
 
 .white-box {
-    position: absolute;
-    width: 354px;
-    height: 130px;
-    right: -1px;
-    top: 50px;
+    position: fixed;
+    // width: 354px;
+    // height: 130px;
+    // right: -1px;
+    // top: 50px;
+    height: auto;
+    right: 0;
+    top: 3rem;
     padding: 16px;
     background: #FFFFFF;
     border-radius: 4px;
@@ -142,4 +145,13 @@ p {
     font-weight: 600;
     font-size: 12.4133px;
     line-height: 19px
+}
+@media(max-width: 674px) {
+    .left-logo{
+        height: 30px;
+        width: 112rem;
+    }
+    .white-box{
+        display: none;
+    }
 }
