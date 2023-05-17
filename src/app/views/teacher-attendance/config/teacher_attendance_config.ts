@@ -1209,6 +1209,26 @@ export const config = {
             "table": {
                 "columns": [
                     {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "School Id",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
                         name: "School",
                         property: "school_name",
                         class: "text-left"
