@@ -623,7 +623,7 @@ export const config = {
                     {
                         name: "State",
                         property: "state_name",
-                        class: "text-center",
+                        class: "text-left",
                         action: {
                             dataProps: [{
                                 "prop": "state_id",
@@ -641,7 +641,7 @@ export const config = {
                     {
                         name: "District",
                         property: "district_name",
-                        class: "text-center",
+                        class: "text-left",
                         action: {
                             dataProps: [{
                                 "prop": "district_id",
@@ -659,7 +659,7 @@ export const config = {
                     {
                         name: "Block",
                         property: "block_name",
-                        class: "text-center",
+                        class: "text-left",
                         action: {
                             dataProps: [{
                                 "prop": "block_id",
@@ -677,7 +677,7 @@ export const config = {
                     {
                         name: "Cluster",
                         property: "cluster_name",
-                        class: "text-center",
+                        class: "text-left",
                         action: {
                             dataProps: [{
                                 "prop": "cluster_id",
@@ -690,13 +690,13 @@ export const config = {
                                 linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber", "average_attendance_school"]
                             },
                             allowedLevels: [1]
-                            
+
                         }
                     },
                     {
                         name: "School",
                         property: "school_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "Grade",
@@ -937,32 +937,32 @@ export const config = {
                     {
                         name: "State",
                         property: "state_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "District",
                         property: "district_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "Block",
                         property: "block_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "Cluster",
                         property: "cluster_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "School",
                         property: "school_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "Grade",
                         property: "grade_number",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "% Teachers Present",
@@ -1064,9 +1064,9 @@ export const config = {
                     "level": "school"
                 }
             },
-           
+
         ],
-        "options": { 
+        "options": {
             "barChart": {
                 "metricLabelProp": "% Teacher Present",
                 "metricValueProp": "stt_avg",
@@ -1209,9 +1209,29 @@ export const config = {
             "table": {
                 "columns": [
                     {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "School Id",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
                         name: "School",
                         property: "school_name",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "% Teachers Present",
@@ -1318,12 +1338,12 @@ export const config = {
                     {
                         name: "avarage",
                         property: "stt_avg",
-                        class: "text-center",                        
+                        class: "text-center",
                     }
                 ],
             }
         }
     },
 
- 
+
 }

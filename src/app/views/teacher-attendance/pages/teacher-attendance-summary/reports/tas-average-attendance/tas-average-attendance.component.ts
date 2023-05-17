@@ -248,7 +248,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   applyCriteria(data: any) {
     if(!this.criteriaApplied){
       this.backUpData = this.tableReportData?.data
-    } 
+    }
     this.criteriaApplied = true
     if(data && this.backUpData.length > 0) {
       let filteredData = this.backUpData.filter((row: any) => {

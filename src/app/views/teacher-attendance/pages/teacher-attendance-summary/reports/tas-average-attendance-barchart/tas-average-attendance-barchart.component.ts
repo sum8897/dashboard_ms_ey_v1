@@ -130,6 +130,23 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
           }]),
 
         options: {
+          animation: {
+            onComplete: function() {
+              let chartInstance = this.chart;
+              let ctx = chartInstance.ctx;
+              ctx.font = '#000';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+
+              this.data.datasets.forEach(function(dataset, i) {
+                const meta = chartInstance.controller.getDatasetMeta(i);
+                meta.data.forEach(function(bar, index) {
+                  const data = dataset.data[index];
+                  ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                });
+              });
+            }
+          },
           height: '120',
           tooltips: {
             callbacks: {
@@ -255,7 +272,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   applyCriteria(data: any) {
     if(!this.criteriaApplied){
       this.backUpData = this.tableReportData?.values
-    } 
+    }
     this.criteriaApplied = true
     if(data && this.backUpData.length > 0) {
       let filteredData = this.backUpData.filter((row: any) => {

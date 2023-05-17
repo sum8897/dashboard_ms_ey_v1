@@ -29,6 +29,12 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   defaultSelectedDays: any = 7;
   drillDownLevel: any;
   criteriaConfig: any = config.criteria_config;
+  trendLineConfig = {
+    options: {
+      tooltips: { displayColors: false},
+      legend: {display: false}
+    }
+  };
 
   //added for full school report download
   // title = "Download School Report"

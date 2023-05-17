@@ -8,6 +8,7 @@ import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utili
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import _ from "lodash";
 
 interface TrendlineChartDataSets extends ChartDataSets {
   trendlineLinear?: PluginServiceRegistrationOptions;
@@ -34,6 +35,7 @@ export class TasTrendlineChartComponent implements OnInit {
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
+  @Input() chartConfig: any = {};
   constructor(private readonly _commonService: CommonService,
     private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -236,7 +238,7 @@ export class TasTrendlineChartComponent implements OnInit {
     });
     const values = reportData?.data?.map(data => data.stt_avg.value);
     const ctx = document.getElementById('trendlineChart') as HTMLCanvasElement;
-    const chart = new Chart(ctx, {
+    let defaultOptions = {
       type: 'line',
 
       data: {
@@ -248,7 +250,7 @@ export class TasTrendlineChartComponent implements OnInit {
             borderColor: 'green',
             fill: true,
             lineTension: 0,
-  
+
             // backgroundColor: 'rgba(0,255,0,0.3)',
           },
         ]
@@ -282,7 +284,7 @@ export class TasTrendlineChartComponent implements OnInit {
             } as TimeScale
           },
           y: {
-           
+
             suggestedMin: Math.min(...values),
             suggestedMax: Math.max(...values),
             grid: {
@@ -291,6 +293,8 @@ export class TasTrendlineChartComponent implements OnInit {
           }
         } as ChartOptions['scales'],
       },
-    });
+    };
+    defaultOptions = _.merge(defaultOptions, this.chartConfig);
+    const chart = new Chart(ctx, defaultOptions);
   }
 }
