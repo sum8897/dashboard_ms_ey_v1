@@ -23,9 +23,9 @@ export class CriteriaComponent implements OnInit {
 
   ngOnInit(): void {
     this.criteriaForm = this.fb.group({
-      fromRange: [null],
-      toRange: [null]
-    })
+      fromRange: [this.criteriaConfig.hasOwnProperty('defaultFromRange') ? this.criteriaConfig.defaultFromRange : null],
+      toRange: [this.criteriaConfig.hasOwnProperty('defaultToRange') ? this.criteriaConfig.defaultToRange : null]
+    });
   }
 
   get f() {
@@ -33,7 +33,10 @@ export class CriteriaComponent implements OnInit {
   }
 
   resetCriteria() {
-    this.criteriaForm.reset()
+    this.criteriaForm.patchValue({
+      fromRange: this.criteriaConfig.hasOwnProperty('defaultFromRange') ? this.criteriaConfig.defaultFromRange : null,
+      toRange: this.criteriaConfig.hasOwnProperty('defaultToRange') ? this.criteriaConfig.defaultToRange : null
+    });
   }
 
   onSubmit() {

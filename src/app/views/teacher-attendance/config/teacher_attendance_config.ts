@@ -3,6 +3,8 @@ export const config = {
         indicatorName: 'Teacher Attendance',
         minRange: 0,
         maxRange: 100,
+        defaultFromRange: 0,
+        defaultToRange: 100,
         unitKey: "stt_avg",
         linkedReports: ['tas_average_attendance', 'tas_average_attendance_barchart', 'average_attendance_school']
     },
