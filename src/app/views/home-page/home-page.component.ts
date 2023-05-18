@@ -65,8 +65,8 @@ export class HomePageComponent implements OnInit {
     }
   }
 
-  onRoleSelect(value: any) {
-    this._rbacService.setRbacDetails({ role: value })
+  onRoleSelect(role: any) {
+    this._rbacService.setRbacDetails({ role: role.value, roleDetail: role })
     this.router.navigate(['/rbac'])
   }
 
@@ -79,5 +79,5 @@ export class HomePageComponent implements OnInit {
       }
     })
   }
-  
+
 }
