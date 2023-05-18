@@ -20,6 +20,7 @@ export class LayoutComponent implements OnInit {
   role: any;
   config = 'VSK';
   isHome: boolean = false;
+  isSummary: boolean = false;
   showBackBtn: boolean = false;
   // Font Increase Decrease Variables
   fontSize: any;
@@ -232,6 +233,12 @@ export class LayoutComponent implements OnInit {
     }
     else {
       this.showBackBtn = false
+    }
+    if(this._router.url === '/summary-statistics') {
+      this.isSummary = true
+    }
+    else {
+      this.isSummary = false
     }
   }
 
