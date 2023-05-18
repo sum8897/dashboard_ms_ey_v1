@@ -73,13 +73,6 @@ export class RbacDialogComponent implements OnInit {
     if (this.rbacForm.valid) {
       this.rbacForm.value.role = this.selectedRoleLevel
       this.setStateDetails(this.updatedForm)
-      // this.updatedForm = {
-      //   ...this.updatedForm,
-      //   ...this.rbacForm.value
-      // }
-     // console.log(this.updatedForm)
-      // this._rbacService.setRbacDetails(this.updatedForm);
-      // this._rbacService.setRbacDetails(this.rbacForm.value);
       this.router.navigate(['/summary-statistics'])
     }
     else {
@@ -159,6 +152,7 @@ export class RbacDialogComponent implements OnInit {
 
   updateForm(option: any, filter: any) {
     this.updatedForm = {
+      ...this.rbacDetails,
       ...this.updatedForm,
       [option[filter?.valueProp]]: option[filter?.labelProp]
     }
