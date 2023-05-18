@@ -7,13 +7,14 @@ import { config } from 'src/app/views/teacher-attendance/config/teacher_attendan
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
   selector: 'app-average-attendance-school-table',
   templateUrl: './average-attendance-school-table.component.html',
   styleUrls: ['./average-attendance-school-table.component.scss']
 })
-export class AverageAttendanceSchoolTableComponent implements OnInit  {
+export class AverageAttendanceSchoolTableComponent implements OnInit {
   reportName: string = 'average_attendance_school';
   filters: any = [];
   levels: any;
@@ -27,16 +28,18 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title=' School Wise % Teachers Present';
+  title = ' School Wise % Teachers Present';
   backUpData: any = [];
   criteriaApplied: boolean = false;
+  searchText: any;
+  previousText: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService,private csv:TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService) {
+  constructor(private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     });
@@ -46,7 +49,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
       }
     })
     this._criteriaService.criteriaObject.subscribe((data) => {
-      if(data && data?.linkedReports?.includes(this.reportName)) {
+      if (data && data?.linkedReports?.includes(this.reportName)) {
         this.applyCriteria(data)
       }
     })
@@ -61,13 +64,13 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
     this.endDate = endDate;
     let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = this.parseRbacFilter(queries[key])
             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
@@ -80,7 +83,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
       this._wrapperService.constructFilters(this.filters, filters);
     }
 
-    Object.keys(queries).forEach((key: any) => {
+    Object.keys(queries).forEach(async (key: any) => {
       if (key.toLowerCase().includes('comparison')) {
         let endDate = new Date();
         let days = endDate.getDate() - this.compareDateRange;
@@ -195,13 +198,13 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
 
     let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels,label, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(hierarchyLevel) === Number(filter.hierarchyLevel)) {
-          queries = {...filter?.actions?.queries}
-          timeSeriesQueries = {...filter?.timeSeriesQueries}
+          queries = { ...filter?.actions?.queries }
+          timeSeriesQueries = { ...filter?.timeSeriesQueries }
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], drillDownDetails)
             timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], drillDownDetails)
@@ -237,14 +240,14 @@ export class AverageAttendanceSchoolTableComponent implements OnInit  {
   }
 
   applyCriteria(data: any) {
-    if(!this.criteriaApplied){
+    if (!this.criteriaApplied) {
       this.backUpData = this.tableReportData?.data
     }
     this.criteriaApplied = true
-    if(data && this.backUpData.length > 0) {
+    if (data && this.backUpData.length > 0) {
       let filteredData = this.backUpData.filter((row: any) => {
         let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
-        return (Number(data?.fromRange) <= Number(value) &&  Number(value) <= Number(data?.toRange))
+        return (Number(data?.fromRange) <= Number(value) && Number(value) <= Number(data?.toRange))
       })
       this.tableReportData = {
         ...this.tableReportData,
