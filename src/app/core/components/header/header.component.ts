@@ -81,9 +81,7 @@ export class HeaderComponent implements OnInit {
         const currentRoute = event.url;
         if (currentRoute === '/home' || currentRoute === '/rbac') {
           this.hideDiv = true;
-          console.log('hello');
         } else {
-          console.log('hi');
           this.hideDiv = false;
         }
       }

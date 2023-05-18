@@ -263,15 +263,15 @@ export const config = {
     //                         type: "percentage",
     //                         values: [
     //                             {
-    //                                 color: "#d8ead3",
+    //                                 color: "#007000",
     //                                 breakPoint: 70
     //                             },
     //                             {
-    //                                 color: "#fff2cc",
+    //                                 color: "#FFBF00",
     //                                 breakPoint: 40
     //                             },
     //                             {
-    //                                 color: "#f4cccc",
+    //                                 color: "#D2222D",
     //                                 breakPoint: 0
     //                             }
     //                         ]
@@ -511,15 +511,15 @@ export const config = {
     //                         type: "percentage",
     //                         values: [
     //                             {
-    //                                 color: "#d8ead3",
+    //                                 color: "#007000",
     //                                 breakPoint: 70
     //                             },
     //                             {
-    //                                 color: "#fff2cc",
+    //                                 color: "#FFBF00",
     //                                 breakPoint: 40
     //                             },
     //                             {
-    //                                 color: "#f4cccc",
+    //                                 color: "#D2222D",
     //                                 breakPoint: 0
     //                             }
     //                         ]
@@ -715,15 +715,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]
@@ -942,15 +942,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]
@@ -1118,7 +1118,7 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id,  udise_code, school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate group by  school.school_id, udise_code,  school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1133,7 +1133,7 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.district_id = {district_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id, udise_code, school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.district_id = {district_id} group by  school.school_id, udise_code,  school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1148,7 +1148,7 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.block_id = {block_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id, udise_code, school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.block_id = {block_id} group by  school.school_id,  udise_code, school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1163,7 +1163,7 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.cluster_id = {cluster_id} group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;"
+                    "table": "select  school.school_id, udise_code, school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_teachers.sum) as total_teachers,  sum(teachers_marked_present.sum) as teachers_marked_present,   ceil(round(cast((sum(teachers_marked_present.sum)/sum(total_teachers.sum) )*100 as numeric),2)) as stt_avg from datasets.sch_att_teachers_marked_present_daily_school as teachers_marked_present  inner join  datasets.sch_att_total_teachers_daily_school as total_teachers on teachers_marked_present.school_id = total_teachers.school_id inner join dimensions.school on school.school_id = total_teachers.school_id where total_teachers.date between startDate and endDate and school.cluster_id = {cluster_id} group by  school.school_id, udise_code,  school_name,    district_name,    block_name,    cluster_name;"
                 },
                 "actions": {
                     "queries": {
@@ -1192,8 +1192,8 @@ export const config = {
                         class: "text-left"
                     },
                     {
-                        name: "School Id",
-                        property: "school_id",
+                        name: "Udise Code",
+                        property: "udise_code",
                         class: "text-center"
                     },
                     {
@@ -1211,15 +1211,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]

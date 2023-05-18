@@ -54,6 +54,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core'; // Add this line
 import { MatIconModule } from '@angular/material/icon';
 import { CriteriaComponent } from './components/criteria/criteria.component';
+import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -115,7 +116,8 @@ const DECLARATIONS = [
   BreadcrumbComponentComponent,
   SbBarChartComponent,
   CriteriaComponent,
-  MaterialHeatChartDrilldownTableComponent
+  MaterialHeatChartDrilldownTableComponent,
+  SearchFilterPipe
 ];
 
 @NgModule({
