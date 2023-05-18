@@ -34,7 +34,7 @@
         </div>
     </div>
     <app-header></app-header>
-    <app-side-nav [isHome]="isHome" [menu]="menu"></app-side-nav>
+    <app-side-nav [isHome]="isHome" [menu]="menu" [isSummary]="isSummary"></app-side-nav>
     <div class="app-content-wrapper">
         <div class="app-content" #contentElement>
             <router-outlet (activate)="activate($event)"></router-outlet>

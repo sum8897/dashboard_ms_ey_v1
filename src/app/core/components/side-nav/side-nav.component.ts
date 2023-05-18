@@ -10,6 +10,7 @@ export class SideNavComponent implements OnInit, OnChanges {
 
   @Input() menu: IMenuItem[] | undefined;
   @Input() isHome: boolean;
+  @Input() isSummary: boolean;
   ckBoxProp = false;
   constructor() {
     if (this.isHome) {
@@ -26,6 +27,11 @@ export class SideNavComponent implements OnInit, OnChanges {
 
     if (changes?.['isHome']?.currentValue !== changes?.['isHome']?.previousValue && !this.isHome && document.body.classList.contains("sidebaractive")){
       document.body.classList.remove("sidebaractive")
+    }
+    if (changes?.['isSummary']?.currentValue !== changes?.['isSummary']?.previousValue && !this.isHome && !this.isSummary){
+      let ckbox = document.getElementById('openSidebarMenu') as HTMLInputElement;
+      document.body.classList.add("sidebaractive");
+      ckbox.checked = true;
     }
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
