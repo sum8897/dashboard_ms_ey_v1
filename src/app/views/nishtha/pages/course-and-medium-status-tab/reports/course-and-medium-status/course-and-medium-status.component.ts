@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             import { WrapperService } from 'src/app/core/services/wrapper.service';
             import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
             import { config } from 'src/app/views/nishtha/config/nishtha_config';
+import { CourseAndMediumStatusTabComponent } from '../../course-and-medium-status-tab.component';
             
             @Component({
               selector: 'app-course-and-medium-status',
@@ -30,7 +31,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             
               @Output() exportReportData = new EventEmitter<any>();
             
-              constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+              constructor(private readonly _dataService: DataService, private csv:CourseAndMediumStatusTabComponent,private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
                 this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
                   this.rbacDetails = rbacDetails;
                 })
@@ -87,7 +88,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
                     this.reportData = await this._dataService.getTableReportData(query, options);
                     if (this.reportData?.data?.length > 0) {
                       let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
-                      this.exportReportData.emit(reportsData)
+                      // this.exportReportData.emit(reportsData)
+                      this.csv.csvDownload(reportsData)
                     }
                   }
                   else if (query && key === 'bigNumber') {

@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
             import { WrapperService } from 'src/app/core/services/wrapper.service';
             import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
             import { config } from 'src/app/views/nishtha/config/nishtha_config';
+import { PotentialBaseTabComponent } from '../../potential-base-tab.component';
             
             @Component({
               selector: 'app-potential-base',
@@ -29,8 +30,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
               rbacDetails: any;
             
               @Output() exportReportData = new EventEmitter<any>();
-            
-              constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+              constructor(private readonly _dataService: DataService,private csv:PotentialBaseTabComponent  , private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
                 this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
                   this.rbacDetails = rbacDetails;
                 })
@@ -102,7 +102,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
                     this.config = config;
                     if (this.reportData?.values?.length > 0) {
                       let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
-                      this.exportReportData.emit(reportsData)
+                      // this.exportReportData.emit(reportsData)
+                      this.csv.csvDownload(reportsData)
                     }
                   }
                 })
