@@ -245,7 +245,7 @@ export class TasTrendlineChartComponent implements OnInit {
         labels: dates,
         datasets: [
           {
-            data: values,
+            data: [...values,0,100],
             label: '% Teacher Present',
             borderColor: 'green',
             fill: true,
@@ -263,9 +263,17 @@ export class TasTrendlineChartComponent implements OnInit {
           fontStyle: "normal",
           fontColor: "#333"
         },
+        zoom: {
+          // Boolean to enable zooming
+          enabled: false,
+          // Zooming directions. Remove the appropriate direction to disable
+          // Eg. 'y' would only allow zooming in the y direction
+          // mode: 'x',
+      },
         tooltips: {
           callbacks: {
             label: function (context) {
+              console.log("fgh:",{values:context?.value})
               // const date = dates[context.datasetIndex];
               const value = context.value
               // return `Date: ${date}/n% Teacher Present: ${value}%`;
@@ -295,6 +303,7 @@ export class TasTrendlineChartComponent implements OnInit {
       },
     };
     defaultOptions = _.merge(defaultOptions, this.chartConfig);
+   console.log("fgh:<-------",{data:defaultOptions?.data})
     const chart = new Chart(ctx, defaultOptions);
   }
 }
