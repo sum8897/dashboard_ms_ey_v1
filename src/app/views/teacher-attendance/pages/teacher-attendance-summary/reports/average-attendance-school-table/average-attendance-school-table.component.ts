@@ -33,6 +33,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   criteriaApplied: boolean = false;
   searchText: any;
   previousText: any;
+  drillDownLevel: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -42,9 +43,11 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   constructor(private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+      this.drillDownLevel = rbacDetails.role
     });
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
+        this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
       }
     })
@@ -100,7 +103,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
       if (query && key === 'table') {
-        this.getTableReportData(query, options);
+        this.getTableReportData(query, options, this.drillDownLevel);
       }
     })
   }
@@ -126,41 +129,43 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
     this._criteriaService.emit('reset')
     this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          if (this.minDate !== undefined && this.maxDate !== undefined) {
-            if (row['min_date'] < this.minDate) {
-              this.minDate = row['min_date']
-            }
-            if (row['max_date'] > this.maxDate) {
-              this.maxDate = row['max_date']
-            }
-          }
-          else {
-            this.minDate = row['min_date']
-            this.maxDate = row['max_date']
-          }
-          columns.forEach((col: any) => {
-            if (row[col.property]) {
-              row = {
-                ...row,
-                [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+      if (this.drillDownLevel === hierarchyLevel) {
+        let rows = res;
+        let { table: { columns } } = options;
+        this.tableReportData = {
+          data: rows.map(row => {
+            if (this.minDate !== undefined && this.maxDate !== undefined) {
+              if (row['min_date'] < this.minDate) {
+                this.minDate = row['min_date']
+              }
+              if (row['max_date'] > this.maxDate) {
+                this.maxDate = row['max_date']
               }
             }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
-          }
-        })
-      };
-      if (this.tableReportData?.data?.length > 0) {
-        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-        this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
+            else {
+              this.minDate = row['min_date']
+              this.maxDate = row['max_date']
+            }
+            columns.forEach((col: any) => {
+              if (row[col.property]) {
+                row = {
+                  ...row,
+                  [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+                }
+              }
+            });
+            return row
+          }),
+          columns: columns.filter(col => {
+            if (rows[0] && col.property in rows[0]) {
+              return col;
+            }
+          })
+        };
+        if (this.tableReportData?.data?.length > 0) {
+          let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+          this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
+        }
       }
     });
   }
