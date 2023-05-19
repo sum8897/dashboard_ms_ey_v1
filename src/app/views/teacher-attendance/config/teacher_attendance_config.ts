@@ -1192,9 +1192,9 @@ export const config = {
                         class: "text-left"
                     },
                     {
-                        name: "Udise Code",
+                        name: "UDISE Code",
                         property: "udise_code",
-                        class: "text-center"
+                        class: "text-left"
                     },
                     {
                         name: "School",
