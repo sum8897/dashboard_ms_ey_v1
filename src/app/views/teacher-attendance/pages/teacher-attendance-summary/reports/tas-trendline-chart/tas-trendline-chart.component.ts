@@ -13,12 +13,13 @@ import _ from "lodash";
 interface TrendlineChartDataSets extends ChartDataSets {
   trendlineLinear?: PluginServiceRegistrationOptions;
 }
-
+let chart;
 @Component({
   selector: 'app-tas-trendline-chart',
   templateUrl: './tas-trendline-chart.component.html',
   styleUrls: ['./tas-trendline-chart.component.scss']
 })
+
 export class TasTrendlineChartComponent implements OnInit {
   reportName: string = 'tas_trendline_chart';
   filters: any = [];
@@ -31,6 +32,7 @@ export class TasTrendlineChartComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
   title: any = "Rank in % Teachers Present"
+
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -54,6 +56,7 @@ export class TasTrendlineChartComponent implements OnInit {
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
+   
     this.startDate = startDate;
     this.endDate = endDate;
     let reportConfig = config
@@ -149,9 +152,16 @@ export class TasTrendlineChartComponent implements OnInit {
         })
       }
       if (this.tableReportData?.data?.length > 0) {
-        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        let reportsData = {
+          reportData: this.tableReportData.data,
+          reportType: "table",
+          reportName: this.title,
+        };
         // this.csv.csvDownload(reportsData)
-        this.generateChart(this.tableReportData)
+
+        if (chart) {
+          this.updateChart(this.tableReportData);
+        } else this.generateChart(this.tableReportData);
       }
     });
   }
@@ -230,9 +240,33 @@ export class TasTrendlineChartComponent implements OnInit {
     });
   }
 
+  updateChart(reportData) {
+    
+    var dates = reportData?.data?.map(data => {
+      const dateValue = new Date(data.att_date.value);
+      return dateValue.toLocaleDateString();
+    });
+    const values = reportData?.data?.map(data => data.stt_avg.value);
+   
+    chart.data.labels=dates;
+    chart.data.datasets= [
+      {
+        data: [...values,0,100],
+        label: '% Teacher Present',
+        borderColor: 'green',
+        fill: true,
+        lineTension: 0,
+      },
+    ]
+    chart.update()
+    
+  }
+
+
   generateChart(reportData) {
+   
     // const dates = reportData?.data?.map(data => moment(data.stt_avg.value).format('YYYY-MM-DD'));
-    const dates = reportData?.data?.map(data => {
+    var dates = reportData?.data?.map(data => {
       const dateValue = new Date(data.att_date.value);
       return dateValue.toLocaleDateString();
     });
@@ -263,6 +297,7 @@ export class TasTrendlineChartComponent implements OnInit {
           fontStyle: "normal",
           fontColor: "#333"
         },
+        hover: {mode: null},
         zoom: {
           // Boolean to enable zooming
           enabled: false,
@@ -273,8 +308,6 @@ export class TasTrendlineChartComponent implements OnInit {
         tooltips: {
           callbacks: {
             label: function (context) {
-              console.log("fgh:",{values:context?.value})
-              // const date = dates[context.datasetIndex];
               const value = context.value
               // return `Date: ${date}/n% Teacher Present: ${value}%`;
               return '% Teacher Present:' + value + '%'
@@ -303,7 +336,11 @@ export class TasTrendlineChartComponent implements OnInit {
       },
     };
     defaultOptions = _.merge(defaultOptions, this.chartConfig);
-   console.log("fgh:<-------",{data:defaultOptions?.data})
-    const chart = new Chart(ctx, defaultOptions);
+  
+   if (chart) {
+    chart.destroy();
+  }
+
+     chart = new Chart(ctx, defaultOptions);
   }
 }
