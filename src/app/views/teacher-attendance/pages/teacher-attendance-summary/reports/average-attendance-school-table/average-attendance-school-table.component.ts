@@ -69,7 +69,6 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
         data.linkedReports?.includes(this.reportName) &&
         data.hierarchyLevel
       ) {
-        console.log("sdf:", { data, filters: this.filters });
         this.currentHieracy = data.hierarchyLevel;
         this.drilldownData(data);
       }
@@ -178,21 +177,10 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   }
 
   getTableReportData(query, options, hierarchyLevel?): void {
-    console.log("sdf:", {
-      query,
-      options,
-      hierarchyLevel,
-      currentHieracy: this.currentHieracy,
-    });
 
     this._criteriaService.emit("reset");
     this.criteriaApplied = false;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      console.log("sdfg:", {
-        res,
-        hierarchyLevel,
-        currentHi: this.currentHieracy,
-      });
       if (Number(hierarchyLevel) === Number(this.currentHieracy)) {
         let rows = res;
         let {
