@@ -711,6 +711,7 @@ export const config = {
                         class: "text-center",
                         valueSuffix: '%',
                         isHeatMapRequired: true,
+                        type: "number",
                         color: {
                             type: "percentage",
                             values: [
@@ -938,6 +939,7 @@ export const config = {
                         valueSuffix: '%',
                         class: "text-center",
                         isHeatMapRequired: true,
+                        type: "number",
                         color: {
                             type: "percentage",
                             values: [
