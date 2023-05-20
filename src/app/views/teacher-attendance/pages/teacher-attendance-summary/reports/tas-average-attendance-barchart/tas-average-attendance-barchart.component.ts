@@ -111,6 +111,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       // }
+      console.log("vbn:",{rows})
       this.tableReportData = {
         values: rows
       }
@@ -173,9 +174,9 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
               },
               ticks: {
                 callback: function (value, index, values) {
-                  let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                  let newValue = value?.split('_')?.map((word: any) => word[0]?.toUpperCase() + word?.substring(1))?.join(' ')
                   if (screen.width <= 768) {
-                    return newValue.substr(0, 8) + '...';
+                    return newValue?.substr(0, 8) + '...';
                   } else {
                     return newValue;
                   }
