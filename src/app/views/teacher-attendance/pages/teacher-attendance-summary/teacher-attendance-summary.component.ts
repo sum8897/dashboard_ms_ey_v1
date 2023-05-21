@@ -51,11 +51,13 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+     
       this.rbacDetails = rbacDetails;
+      this.drillDownLevel =rbacDetails.role
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data) {
-        this.drillDownLevel = data.hierarchyLevel
+        this.drillDownLevel = data.hierarchyLevel || this.rbacDetails?.role
         this.reportsData = []
         this.schoolReportsData = []
       }
