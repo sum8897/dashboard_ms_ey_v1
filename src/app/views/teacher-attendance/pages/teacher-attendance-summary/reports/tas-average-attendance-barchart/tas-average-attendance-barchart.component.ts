@@ -8,6 +8,7 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from '../../../../config/teacher_attendance_config';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
+import { filter, isNull, omitBy } from 'lodash';
 @Component({
   selector: 'app-tas-average-attendance-barchart',
   templateUrl: './tas-average-attendance-barchart.component.html',
@@ -111,13 +112,15 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       // }
-      console.log("vbn:",{rows})
+ 
       this.tableReportData = {
-        values: rows
+       
+      values: filter(rows,(row)=>row.district_name !== null && row.district_name !== 'undefined' && !isNull(row.district_name) && row.district_name !=='') 
       }
       let tooltipObject
       this.tableReportData.values.forEach((row) => {
         let tooltip = this._wrapperService.constructTooltip(tooltipMetrics, row, metricValueProp, 'barChart')
+      
         tooltipObject = {
           ...tooltipObject,
           [row.level]: tooltip

@@ -27,7 +27,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   reportsData: any[] = []
   rbacDetails: any;
   defaultSelectedDays: any = 7;
-  drillDownLevel: any;
+  drillDownLevel: any =1;
   criteriaConfig: any = config.criteria_config;
   trendLineConfig = {
     options: {
