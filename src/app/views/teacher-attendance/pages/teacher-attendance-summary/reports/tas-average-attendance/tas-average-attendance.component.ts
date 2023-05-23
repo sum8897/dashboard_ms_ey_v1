@@ -152,7 +152,7 @@ export class TasAverageAttendanceComponent implements OnInit {
             if (row[col.property]) {
               row = {
                 ...row,
-                [col.property]: { value: row[col.property] }
+                [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
               }
             }
           });
