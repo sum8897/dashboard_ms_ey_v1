@@ -21,6 +21,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
   bigNumberReportData: any = {
     reportName: "Average % Teachers Present"
   };
+  currentReportName: string = "Average % Teachers Present";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
@@ -50,7 +51,6 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
     this.startDate = startDate;
     this.endDate = endDate;
     let reportConfig = config
-
     let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
     let onLoadQuery;
     if (this.rbacDetails?.role) {
@@ -101,7 +101,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
       if (newQuery && startIndex > -1) {
         let propertyName = newQuery.substring(startIndex + 1, endIndex);
         let re = new RegExp(`{${propertyName}}`, "g");
-        console.log(this.rbacDetails)
+   
         Object.keys(this.rbacDetails).forEach((key: any) => {
           if (propertyName === key + '_id') {
             newQuery = newQuery.replace(re, '\'' + this.rbacDetails[key] + '\'');
@@ -117,12 +117,15 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
     let { valueSuffix, property } = bigNumber ?? {};
+  
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
-        valueSuffix: valueSuffix
+        valueSuffix: valueSuffix,
+        
       }
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+     
         if (res) {
           let rows = res;
           this.bigNumberReportData = {
@@ -146,6 +149,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
   }
 
   async drilldownData(event: any) {
+   
     let { hierarchyLevel, id } = event ?? {}
     let drillDownDetails;
 
@@ -155,11 +159,19 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
           ...this.rbacDetails,
           state: id
         }
+        this.bigNumberReportData={...this.bigNumberReportData,
+          reportName:this.currentReportName
+        
+        }
         break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
           district: id
+        }
+        this.bigNumberReportData={...this.bigNumberReportData,
+          reportName:this.currentReportName+ ` for ${event?.district_name || event[event.district]} District`
+        
         }
         break;
       case 3:
@@ -167,14 +179,24 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
           ...this.rbacDetails,
           block: id
         }
+        this.bigNumberReportData={...this.bigNumberReportData,
+          reportName:this.currentReportName+ ` for ${event?.block_name || event[event.block]} Block`
+        
+        }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
           cluster: id
         }
+        this.bigNumberReportData={...this.bigNumberReportData,
+          reportName:this.currentReportName+ ` for ${event?.cluster_name || event[event.cluster]} Cluster`
+        
+        }
         break;
+
     }
+    
 
     let reportConfig = config;
 

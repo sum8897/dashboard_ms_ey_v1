@@ -155,7 +155,9 @@ export class DownloadButtonComponent implements OnInit {
       this.isVisible = true;
       setTimeout(() => this.isVisible = false, 2500)
     } else {
-      for (let i = 0; i < reportInputs.length; i++) {
+     // for (let i = 0; i < reportInputs.length; i++) {
+      for (let i = 0; i < 1; i++) {
+        
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const fileName = reportInputs[i].reportName;
