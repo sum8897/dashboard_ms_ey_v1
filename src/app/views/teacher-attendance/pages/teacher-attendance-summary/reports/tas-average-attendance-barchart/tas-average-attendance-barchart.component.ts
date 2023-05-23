@@ -173,6 +173,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
                 labelString: xAxis.title
               },
               ticks: {
+                fontSize:12,
                 callback: function (value, index, values) {
                   let newValue = value?.split('_')?.map((word: any) => word[0]?.toUpperCase() + word?.substring(1))?.join(' ')
                   if (screen.width <= 768) {

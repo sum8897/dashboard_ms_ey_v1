@@ -246,7 +246,7 @@ export class TasTrendlineChartComponent implements OnInit {
       const dateValue = new Date(data.att_date.value);
       return dateValue.toLocaleDateString();
     });
-    const values = reportData?.data?.map(data => data.stt_avg.value);
+    const values = reportData?.data?.map(data => data.perc_teachers.value);
    
     chart.data.labels=dates;
     chart.data.datasets= [
@@ -265,12 +265,12 @@ export class TasTrendlineChartComponent implements OnInit {
 
   generateChart(reportData) {
    
-    // const dates = reportData?.data?.map(data => moment(data.stt_avg.value).format('YYYY-MM-DD'));
+    // const dates = reportData?.data?.map(data => moment(data.perc_teachers.value).format('YYYY-MM-DD'));
     var dates = reportData?.data?.map(data => {
       const dateValue = new Date(data.att_date.value);
       return dateValue.toLocaleDateString();
     });
-    const values = reportData?.data?.map(data => data.stt_avg.value);
+    const values = reportData?.data?.map(data => data.perc_teachers.value);
     const ctx = document.getElementById('trendlineChart') as HTMLCanvasElement;
     let defaultOptions = {
       type: 'line',
