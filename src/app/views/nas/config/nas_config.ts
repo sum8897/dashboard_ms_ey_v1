@@ -259,9 +259,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select count as total_schools from datasets.nas_performance_state",
-                        "bigNumber2": "select sum as students_surveyed from datasets.nas_students_surveyed_state",
-                        "bigNumber3": "select sum as total_teachers from datasets.nas_no_of_teachers_state",
+                        "bigNumber1": "select a.count as total_schools from datasets.nas_performance_state as a",
+                        "bigNumber2": "select a.sum as students_surveyed from datasets.nas_students_surveyed_state as a",
+                        "bigNumber3": "select a.sum as total_teachers from datasets.nas_no_of_teachers_state as a",
                     },
                     "level": "district"
                 }
