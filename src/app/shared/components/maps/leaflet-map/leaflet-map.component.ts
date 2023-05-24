@@ -20,8 +20,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   error = false;
   mapCenterLatlng: any;
   markers = new L.FeatureGroup();
+  layerGroup = new L.LayerGroup();
   legend: any;
   countryGeoJSON: any;
+  stateGeoJSON: any;
   noData = false;
   config = environment.config
   rbacDetails: any;
@@ -78,8 +80,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       reportTypeBoolean = true;
     }
     this.map = L.map(this.mapContainer.nativeElement, { zoomSnap: 0.05, minZoom: 4, zoomControl: true, scrollWheelZoom: false, touchZoom: false }).setView([this.mapCenterLatlng.lat, this.mapCenterLatlng.lng], this.mapCenterLatlng.zoomLevel);
+    this.layerGroup.addTo(this.map);
     try {
-      await this.applyCountryBorder(this.mapData);
+      if (!this.drillDownLevel) {
+        await this.applyCountryBorder(this.mapData);
+      }
+
       const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd'
       });
@@ -90,6 +96,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
       if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || this.drillDown || this.hierarchyLevel > 1) {
+        this.map?.removeLayer(this.layerGroup);
+        await this.applyStateBorder();
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 2) {
@@ -258,6 +266,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           fillOpacity: 0,
           fontWeight: "bold"
         }).addTo(this.map);
+        this.layerGroup.addLayer(this.countryGeoJSON);
         if (this.hierarchyLevel < 3) {
           this.fitBoundsToCountryBorder();
         }
@@ -269,6 +278,39 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           this.createLegend(reportTypeIndicator, this.mapData.options, values);
         }
         resolve('India map borders plotted successfully');
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  async applyStateBorder(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`${environment.apiURL}/assets/IN.json`);
+        const temp = await response.json();
+        const data = temp['IN'];
+        const geoJSON = data.features.find(feature => {
+          let state_code = feature.properties.state_code_2 || feature.properties.state_code;
+          return state_code === this.rbacDetails.state;
+        });
+        
+        this.stateGeoJSON = L.geoJSON(geoJSON, {
+          // style: {
+          //   fillColor: '#fff',
+          //   weight: 1,
+          //   opacity: 1,
+          //   color: 'grey',
+          //   dashArray: '0',
+          //   fillOpacity: 1
+          // },
+          color: "#6e6d6d",
+          weight: 2,
+          fillOpacity: 0,
+          fontWeight: "bold"
+        });
+        this.stateGeoJSON.addTo(this.map);
+        resolve('State borders are applied successfully!');
       } catch (e) {
         reject(e);
       }
@@ -391,11 +433,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       });
 
       this.map.addLayer(this.markers);
-      if (this.hierarchyLevel > 2) {
-        this.map.fitBounds(this.markers.getBounds(), {
-          padding: [250, 250]
-        });
-      }
+      
+      this.map.fitBounds(this.markers.getBounds(), {
+        padding: [150, 150]
+      });
       if (!singleColor) {
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
       }
