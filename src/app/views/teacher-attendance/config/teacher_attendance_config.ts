@@ -637,7 +637,7 @@ export const config = {
                                 hierarchyLevel: 1,
                                 linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber", "average_attendance_school"]
                             },
-                            allowedLevels: [1]
+                            allowedLevels: [1, 2, 3]
                         }
                     },
                     {
@@ -655,7 +655,7 @@ export const config = {
                                 hierarchyLevel: 2,
                                 linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber", "average_attendance_school"]
                             },
-                            allowedLevels: [1]
+                            allowedLevels: [1, 2, 3]
                         }
                     },
                     {
@@ -673,7 +673,7 @@ export const config = {
                                 hierarchyLevel: 3,
                                 linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber", "average_attendance_school"]
                             },
-                            allowedLevels: [1]
+                            allowedLevels: [1, 2, 3]
                         }
                     },
                     {
@@ -691,7 +691,7 @@ export const config = {
                                 hierarchyLevel: 4,
                                 linkedReports: ["tas_average_attendance_barchart", "tas_average_attendance_bignumber", "average_attendance_school"]
                             },
-                            allowedLevels: [1]
+                            allowedLevels: [1, 2, 3]
 
                         }
                     },
