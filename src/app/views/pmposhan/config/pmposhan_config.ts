@@ -20,7 +20,7 @@ export const config = {
                     "actions": {
                         "queries":
                         {
-                            "map": "select t1.category_name,t2.district_name,t1.district_id, cast(sum(t1.sum) as numeric) as total_count FROM datasets.pm_poshan_category_daily_district0categorypm as t1 join dimensions.district as t2 on t1.district_id = t2.district_id group by t1.district_id,t2.district_name,t1.category_name"
+                            "map": "select category_name as category_name,t2.district_name,t1.district_id, cast(sum(t1.sum) as numeric) as total_count FROM datasets.pm_poshan_category_a3pbqhlja3gcngavrayg as t1 join dimensions.district as t2 on t1.district_id = t2.district_id group by t1.district_id,t2.district_name, category_name"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -60,8 +60,8 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select count(distinct(district_id)) as total_districts from datasets.pm_poshan_category_daily_district0categorypm",
-                        "bigNumber2": "select sum(sum) as total_schools from datasets.pm_poshan_category_daily_district0categorypm where category_name = 'Total Schools'",
+                        "bigNumber1": "select count(distinct(district_id)) as total_districts from datasets.pm_poshan_total_meals_served_daily_district",
+                        "bigNumber2": "select sum(sum) as total_schools from datasets.pm_poshan_category_value_categorypm where category_name = 'Total Schools'",
                         "bigNumber3": "select sum(sum) as total_meals_served from datasets.pm_poshan_total_meals_served_daily_district",
                         "bigNumber4": "",
                         "bigNumber5": "",
