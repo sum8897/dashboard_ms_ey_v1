@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { reject } from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { configFiles } from 'src/app/core/config/configMapping';
 
 import { IDashboardMenu } from 'src/app/core/models/IDashboardCard';
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit {
   // isNvsk = environment.config.toLocaleLowerCase() === 'nvsk';
   isNvsk = false;
   rbacDetails: any;
-  constructor(private readonly _commonService: CommonService, private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService) {
+  constructor(private spinner: NgxSpinnerService,private readonly _commonService: CommonService, private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService) {
     this.rbac.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
     })
@@ -68,7 +69,6 @@ export class DashboardComponent implements OnInit {
       this.dashboardMenu = [];
       let rbacDetails;
       let menuData = menuResult?.data
-
       for (let i = 0; i < menuData?.length; i++) {
         if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
 
@@ -83,15 +83,13 @@ export class DashboardComponent implements OnInit {
                });
           this.dashboardMenu.push(menuToDisplay);
 
-          console.log('this.dashboardMenu---',this.dashboardMenu);
-
         }
       }
     })
 
   }
 
-  getDashboardMetrics(programConfig: any, rbacDetails: any) {
+   getDashboardMetrics(programConfig: any, rbacDetails: any) {
     return new Promise(async (resolve, reject) => {
       try {
         let metrics: any = []
