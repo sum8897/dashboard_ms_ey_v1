@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -14,7 +14,7 @@ import { filter, isNull, omitBy } from 'lodash';
   templateUrl: './tas-average-attendance-barchart.component.html',
   styleUrls: ['./tas-average-attendance-barchart.component.scss']
 })
-export class TasAverageAttendanceBarchartComponent implements OnInit {
+export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy {
 
   title: any;
   chartHeight: any;
@@ -34,6 +34,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   pageSize: any;
   backUpData: any = [];
   criteriaApplied: boolean = false;
+  drillDownSubscription: any;
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -49,7 +50,11 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    
+  }
+
+  ngOnInit(): void {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drilldownData(data);
       }
@@ -60,9 +65,6 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         this.applyCriteria(data)
       }
     })
-  }
-
-  ngOnInit(): void {
     // this.getReportData();
   }
 
@@ -289,6 +291,10 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         values: filteredData
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.drillDownSubscription.unsubscribe()
   }
 
 

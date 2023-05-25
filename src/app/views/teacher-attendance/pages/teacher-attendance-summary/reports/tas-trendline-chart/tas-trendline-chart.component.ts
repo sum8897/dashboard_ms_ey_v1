@@ -32,6 +32,7 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
   filterIndex: any;
   rbacDetails: any;
   title: any = "Rank in % Teachers Present"
+  drillDownSubscription: any;
 
 
   @Output() exportDates = new EventEmitter<any>();
@@ -43,15 +44,16 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
+  }
 
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+  ngOnInit() {
+
+
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.hierarchyLevel) {
         this.drilldownData(data);
       }
     })
-  }
-
-  ngOnInit() {
     // this.generateChart();
   }
 
@@ -349,5 +351,6 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
       chart.destroy();
       chart = null;
     }
+    this.drillDownSubscription.unsubscribe()
   }
 }

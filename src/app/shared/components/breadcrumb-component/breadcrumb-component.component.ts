@@ -13,14 +13,22 @@ export class BreadcrumbComponentComponent implements OnInit {
   baseRbacDetails: any;
   selectedRole: any;
   linkedReports: any;
+  originalDetails: any;
 
   constructor(private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
+      this.originalDetails = rbacDetails
       this.selectedRole = rbacDetails.role
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
-      if (data) {
+      if (data && data === 'reset') {
+        this._reportDrilldownService.emit(null)
+        this.rbacDetails = {
+          ...this.originalDetails
+        }
+      }
+      else if (data) {
         this.linkedReports = data?.linkedReports ? data?.linkedReports : this.linkedReports
         this.updateBreadcrumb(data);
       }
