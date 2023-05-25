@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { parseQueryParam } from 'src/app/utilities/QueryBuilder';
 import { CommonService } from './common/common.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WrapperService {
 
-  constructor(private readonly _commonService: CommonService) { }
+  constructor(private readonly _commonService: CommonService,private spinner: NgxSpinnerService) { }
 
   async constructFilters(filters: any, filtersConfig: any): Promise<any> {
     // filtersConfig.forEach((filter, index) => {
+      this.spinner.show()
     for (let index = 0; index < filtersConfig.length; index++) {
       let filter = filtersConfig[index]
       let query = this.parseQuery(filtersConfig, filters, index);
@@ -41,11 +43,12 @@ export class WrapperService {
 
       }
     };
+    this.spinner.hide()
     return filters;
   }
 
   async constructCommonFilters(filterConfig: any, tabLabel?: any, updatedFilter?: any, changedInd?: any) {
-
+    this.spinner.show();
     let filters: any = []
     if (tabLabel) {
       filterConfig = filterConfig.filter((filter: any) => {
@@ -95,20 +98,25 @@ export class WrapperService {
         filters.push(updatedFilter[index])
       }
     }
+    this.spinner.hide()
     return filters;
   }
 
   runQuery(query: string): any {
     return new Promise((resolve, reject) => {
+      this.spinner.show();
       try {
         this._commonService.getReportDataNew(query).subscribe((res: any) => {
+          this.spinner.hide()
           resolve(res);
         },
           (error) => {
+            this.spinner.hide()
             resolve(undefined)
           },
         );
       } catch (error) {
+        this.spinner.hide()
         reject(error)
       }
     })

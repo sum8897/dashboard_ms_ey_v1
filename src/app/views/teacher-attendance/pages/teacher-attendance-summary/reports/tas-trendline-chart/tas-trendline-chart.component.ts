@@ -1,6 +1,6 @@
 import Chart from 'chart.js';
 import { ChartDataSets, ChartOptions, ChartType, PluginServiceRegistrationOptions, TimeScale } from 'chart.js';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -13,14 +13,14 @@ import _ from "lodash";
 interface TrendlineChartDataSets extends ChartDataSets {
   trendlineLinear?: PluginServiceRegistrationOptions;
 }
-let chart;
+var chart;
 @Component({
   selector: 'app-tas-trendline-chart',
   templateUrl: './tas-trendline-chart.component.html',
   styleUrls: ['./tas-trendline-chart.component.scss']
 })
 
-export class TasTrendlineChartComponent implements OnInit {
+export class TasTrendlineChartComponent implements OnInit, OnDestroy {
   reportName: string = 'tas_trendline_chart';
   filters: any = [];
   levels: any;
@@ -56,7 +56,7 @@ export class TasTrendlineChartComponent implements OnInit {
   }
 
   getReportData(startDate = undefined, endDate = undefined): void {
-   
+
     this.startDate = startDate;
     this.endDate = endDate;
     let reportConfig = config
@@ -241,17 +241,17 @@ export class TasTrendlineChartComponent implements OnInit {
   }
 
   updateChart(reportData) {
-    
+
     var dates = reportData?.data?.map(data => {
       const dateValue = new Date(data.att_date.value);
       return dateValue.toLocaleDateString();
     });
     const values = reportData?.data?.map(data => data.perc_teachers.value);
-   
-    chart.data.labels=dates;
-    chart.data.datasets= [
+
+    chart.data.labels = dates;
+    chart.data.datasets = [
       {
-        data: [...values,0,100],
+        data: [...values, 0, 100],
         label: '% Teacher Present',
         borderColor: 'green',
         fill: true,
@@ -259,12 +259,12 @@ export class TasTrendlineChartComponent implements OnInit {
       },
     ]
     chart.update()
-    
+
   }
 
 
   generateChart(reportData) {
-   
+
     // const dates = reportData?.data?.map(data => moment(data.perc_teachers.value).format('YYYY-MM-DD'));
     var dates = reportData?.data?.map(data => {
       const dateValue = new Date(data.att_date.value);
@@ -279,7 +279,7 @@ export class TasTrendlineChartComponent implements OnInit {
         labels: dates,
         datasets: [
           {
-            data: [...values,0,100],
+            data: [...values, 0, 100],
             label: '% Teacher Present',
             borderColor: 'green',
             fill: true,
@@ -297,14 +297,14 @@ export class TasTrendlineChartComponent implements OnInit {
           fontStyle: "normal",
           fontColor: "#333"
         },
-        hover: {mode: null},
+        hover: { mode: null },
         zoom: {
           // Boolean to enable zooming
           enabled: false,
           // Zooming directions. Remove the appropriate direction to disable
           // Eg. 'y' would only allow zooming in the y direction
           // mode: 'x',
-      },
+        },
         tooltips: {
           callbacks: {
             label: function (context) {
@@ -336,11 +336,18 @@ export class TasTrendlineChartComponent implements OnInit {
       },
     };
     defaultOptions = _.merge(defaultOptions, this.chartConfig);
-  
-   if (chart) {
-    chart.destroy();
+
+    if (chart) {
+      chart.destroy();
+      chart = null;
+    }
+    chart = new Chart(ctx, defaultOptions);
   }
 
-     chart = new Chart(ctx, defaultOptions);
+  ngOnDestroy(): void {
+    if (chart) {
+      chart.destroy();
+      chart = null;
+    }
   }
 }
