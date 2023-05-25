@@ -8,18 +8,18 @@ import { config } from 'src/app/views/nishtha/config/nishtha_config';
 import { CourseWiseStatusTabComponent } from '../../course-wise-status-tab.component';
 
 @Component({
-  selector: 'app-course-wise-status',
-  templateUrl: './course-wise-status.component.html',
-  styleUrls: ['./course-wise-status.component.scss']
+  selector: "app-course-wise-status",
+  templateUrl: "./course-wise-status.component.html",
+  styleUrls: ["./course-wise-status.component.scss"],
 })
 export class CourseWiseStatusComponent implements OnInit {
-  reportName: string = 'course_wise_status';
+  reportName: string = "course_wise_status";
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "course_wise_status"
+    reportName: "course_wise_status",
   };
-  title: string = 'Course Wise Status'
+  title: string = "Course Wise Status";
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -31,83 +31,147 @@ export class CourseWiseStatusComponent implements OnInit {
 
   @Output() exportReportData = new EventEmitter<any>();
 
-  constructor(private readonly _dataService: DataService,private csv:CourseWiseStatusTabComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+  constructor(
+    private readonly _dataService: DataService,
+    private csv: CourseWiseStatusTabComponent,
+    private readonly _wrapperService: WrapperService,
+    private _rbacService: RbacService
+  ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
-    })
+    });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
+  getBarChartOptions(configuration: any): any {
+    return {
+      ...configuration.options,
+      height: "200",
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              callback: function (value) {
+                return `${value.substr(0, 10)}...`; //truncate
+              },
+            },
+          },
+        ],
+        yAxes: [{}],
+      },
+    };
+  }
+  
   getReportData(values: any): void {
     let { filterValues, timeSeriesValues } = values ?? {};
     this.startDate = timeSeriesValues?.startDate;
     this.endDate = timeSeriesValues?.endDate;
-    let reportConfig = config
+    let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } =
+      reportConfig[this.reportName];
     let onLoadQuery;
     let currentLevel;
 
     if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.actions?.queries }
+          queries = { ...filter?.actions?.queries };
           currentLevel = filter?.actions?.level;
           this.reportData = {
             ...this.reportData,
-            reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
-          }
+            reportName: `% ${
+              currentLevel[0].toUpperCase() + currentLevel.substring(1)
+            }s which conducted meeting`,
+          };
           Object.keys(queries).forEach((key) => {
-            queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
+            queries[key] = parseRbacFilter(queries[key], this.rbacDetails);
           });
-          return false
+          return false;
         }
-        return true
-      })
+        return true;
+      });
     }
 
     Object.keys(queries).forEach(async (key: any) => {
-      if (key.toLowerCase().includes('comparison')) {
+      if (key.toLowerCase().includes("comparison")) {
         let endDate = new Date();
         let days = endDate.getDate() - this.compareDateRange;
         let startDate = new Date();
-        startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+        startDate.setDate(days);
+        onLoadQuery = parseTimeSeriesQuery(
+          queries[key],
+          startDate.toISOString().split("T")[0],
+          endDate.toISOString().split("T")[0]
+        );
+      } else {
+        onLoadQuery = queries[key];
       }
-      else {
-        onLoadQuery = queries[key]
-      }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+      let query = buildQuery(
+        onLoadQuery,
+        defaultLevel,
+        this.levels,
+        this.filters,
+        this.startDate,
+        this.endDate,
+        key,
+        this.compareDateRange
+      );
 
       filterValues.forEach((filterParams: any) => {
-        query = parseFilterToQuery(query, filterParams)
+        query = parseFilterToQuery(query, filterParams);
       });
 
-      if (query && key === 'table') {
-        this.reportData = await this._dataService.getTableReportData(query, options);
+      if (query && key === "table") {
+        this.reportData = await this._dataService.getTableReportData(
+          query,
+          options
+        );
         if (this.reportData?.data?.length > 0) {
-          let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
-          this.exportReportData.emit(reportsData)
+          let reportsData = {
+            reportData: this.reportData.data,
+            reportType: "table",
+            reportName: this.title,
+          };
+          this.exportReportData.emit(reportsData);
         }
-      }
-      else if (query && key === 'bigNumber') {
-        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
-      }
-      else if (query && key === 'bigNumberComparison') {
-        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
-      }
-      else if (query && key === 'barChart') {
-        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-        this.reportData = reportData
-        this.config = config;
+      } else if (query && key === "bigNumber") {
+        this.reportData = await this._dataService.getBigNumberReportData(
+          query,
+          options,
+          "averagePercentage",
+          this.reportData
+        );
+      } else if (query && key === "bigNumberComparison") {
+        this.reportData = await this._dataService.getBigNumberReportData(
+          query,
+          options,
+          "differencePercentage",
+          this.reportData
+        );
+      } else if (query && key === "barChart") {
+        let { reportData, config } =
+          await this._dataService.getBarChartReportData(
+            query,
+            options,
+            filters,
+            defaultLevel
+          );
+        this.reportData = reportData;
+        // this.config = config;
+
+        this.config = { ...config, options: this.getBarChartOptions(config) };
         if (this.reportData?.values?.length > 0) {
-          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+          let reportsData = {
+            reportData: this.reportData.values,
+            reportType: "dashletBar",
+            reportName: this.title,
+          };
           // this.exportReportData.emit(reportsData)
-          this.csv.csvDownload(reportsData)
+          this.csv.csvDownload(reportsData);
         }
       }
-    })
+    });
   }
 }
