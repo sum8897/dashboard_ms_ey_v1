@@ -14,11 +14,7 @@ export class CriteriaComponent implements OnInit {
   criteriaForm: FormGroup;
 
   constructor(private fb: FormBuilder, private _criteriaService: CriteriaService) {
-    this._criteriaService.criteriaObject.subscribe((data) => {
-      if(data && data === 'reset') {
-        this.resetCriteria()
-      }
-    })
+    
    }
 
   ngOnInit(): void {
@@ -26,6 +22,11 @@ export class CriteriaComponent implements OnInit {
       fromRange: [this.criteriaConfig.hasOwnProperty('defaultFromRange') ? this.criteriaConfig.defaultFromRange : null],
       toRange: [this.criteriaConfig.hasOwnProperty('defaultToRange') ? this.criteriaConfig.defaultToRange : null]
     });
+    this._criteriaService.criteriaObject.subscribe((data) => {
+      if(data && data === 'reset') {
+        this.resetCriteria()
+      }
+    })
   }
 
   get f() {

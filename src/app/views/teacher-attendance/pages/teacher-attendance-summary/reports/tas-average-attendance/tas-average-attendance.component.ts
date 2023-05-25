@@ -30,6 +30,8 @@ export class TasAverageAttendanceComponent implements OnInit {
   filterIndex: any;
   rbacDetails: any;
   title = '% Teachers Present';
+  drillDownDetails: any;
+  drillDownLevel: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -50,6 +52,7 @@ export class TasAverageAttendanceComponent implements OnInit {
 
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.hierarchyLevel) {
+        this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
       }
     })
@@ -68,47 +71,53 @@ export class TasAverageAttendanceComponent implements OnInit {
   getReportData(startDate = undefined, endDate = undefined): void {
     this.startDate = startDate;
     this.endDate = endDate;
-    let reportConfig = config;
+    if (this.drillDownDetails !== undefined) {
+      this.drilldownData({hierarchyLevel: this.drillDownLevel})
+    }
+    else {
+      let reportConfig = config;
 
-    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
-    let onLoadQuery;
-    if (this.rbacDetails?.role) {
-      filters.every((filter: any) => {
-        if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.actions?.queries }
-          timeSeriesQueries = { ...filter?.timeSeriesQueries }
-          Object.keys(queries).forEach((key) => {
-            queries[key] = this.parseRbacFilter(queries[key])
-            timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
-          });
-          return false
+      let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
+      let onLoadQuery;
+      if (this.rbacDetails?.role) {
+        filters.every((filter: any) => {
+          if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
+            queries = { ...filter?.actions?.queries }
+            timeSeriesQueries = { ...filter?.timeSeriesQueries }
+            Object.keys(queries).forEach((key) => {
+              queries[key] = this.parseRbacFilter(queries[key])
+              timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
+            });
+            return false
+          }
+          return true
+        })
+      } else {
+        this._wrapperService.constructFilters(this.filters, filters);
+      }
+
+      Object.keys(queries).forEach((key: any) => {
+        if (key.toLowerCase().includes('comparison')) {
+          let endDate = new Date();
+          let days = endDate.getDate() - this.compareDateRange;
+          let startDate = new Date();
+          startDate.setDate(days)
+          onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
         }
-        return true
+        else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
+          onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
+        }
+        else {
+          onLoadQuery = queries[key]
+        }
+        let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+        if (query && key === 'table') {
+          this.getTableReportData(query, options);
+        }
       })
-    } else {
-      this._wrapperService.constructFilters(this.filters, filters);
     }
 
-    Object.keys(queries).forEach((key: any) => {
-      if (key.toLowerCase().includes('comparison')) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.compareDateRange;
-        let startDate = new Date();
-        startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-      }
-      else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
-      }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-      if (query && key === 'table') {
-        this.getTableReportData(query, options);
-      }
-    })
   }
 
   parseRbacFilter(query: string) {
@@ -179,28 +188,29 @@ export class TasAverageAttendanceComponent implements OnInit {
       case 1:
         drillDownDetails = {
           ...this.rbacDetails,
-          state: id
+          state: id ? id : this.drillDownDetails.state
         }
         break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
-          district: id
+          district: id ? id : this.drillDownDetails.district
         }
         break;
       case 3:
         drillDownDetails = {
           ...this.rbacDetails,
-          block: id
+          block: id ? id : this.drillDownDetails.block
         }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
-          cluster: id
+          cluster: id ? id : this.drillDownDetails.cluster
         }
         break;
     }
+    this.drillDownDetails = {...drillDownDetails}
 
     let reportConfig = config;
 
@@ -246,14 +256,14 @@ export class TasAverageAttendanceComponent implements OnInit {
   }
 
   applyCriteria(data: any) {
-    if(!this.criteriaApplied){
+    if (!this.criteriaApplied) {
       this.backUpData = this.tableReportData?.data
     }
     this.criteriaApplied = true
-    if(data && this.backUpData.length > 0) {
+    if (data && this.backUpData.length > 0) {
       let filteredData = this.backUpData.filter((row: any) => {
         let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
-        return (Number(data?.fromRange) <= Number(value) &&  Number(value) <= Number(data?.toRange))
+        return (Number(data?.fromRange) <= Number(value) && Number(value) <= Number(data?.toRange))
       })
       this.tableReportData = {
         ...this.tableReportData,

@@ -34,6 +34,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   searchText: any;
   previousText: any;
   drillDownLevel: any;
+  drillDownDetails: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -65,47 +66,53 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   getReportData(startDate = undefined, endDate = undefined): void {
     this.startDate = startDate;
     this.endDate = endDate;
-    let reportConfig = config;
-
-    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
-    let onLoadQuery;
-    if (this.rbacDetails?.role) {
-      filters.every((filter: any) => {
-        if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.actions?.queries }
-          timeSeriesQueries = { ...filter?.timeSeriesQueries }
-          Object.keys(queries).forEach((key) => {
-            queries[key] = this.parseRbacFilter(queries[key])
-            timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
-          });
-          return false
-        }
-        return true
-      })
-    } else {
-      this._wrapperService.constructFilters(this.filters, filters);
+    if (this.drillDownDetails !== undefined) {
+      this.drilldownData({hierarchyLevel: this.drillDownLevel})
     }
+    else {
+      let reportConfig = config;
 
-    Object.keys(queries).forEach(async (key: any) => {
-      if (key.toLowerCase().includes('comparison')) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.compareDateRange;
-        let startDate = new Date();
-        startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+      let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
+      let onLoadQuery;
+      if (this.rbacDetails?.role) {
+        filters.every((filter: any) => {
+          if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
+            queries = { ...filter?.actions?.queries }
+            timeSeriesQueries = { ...filter?.timeSeriesQueries }
+            Object.keys(queries).forEach((key) => {
+              queries[key] = this.parseRbacFilter(queries[key])
+              timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
+            });
+            return false
+          }
+          return true
+        })
+      } else {
+        this._wrapperService.constructFilters(this.filters, filters);
       }
-      else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
-      }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-      if (query && key === 'table') {
-        this.getTableReportData(query, options, this.drillDownLevel);
-      }
-    })
+  
+      Object.keys(queries).forEach(async (key: any) => {
+        if (key.toLowerCase().includes('comparison')) {
+          let endDate = new Date();
+          let days = endDate.getDate() - this.compareDateRange;
+          let startDate = new Date();
+          startDate.setDate(days)
+          onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+        }
+        else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
+          onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
+        }
+        else {
+          onLoadQuery = queries[key]
+        }
+        let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+  
+        if (query && key === 'table') {
+          this.getTableReportData(query, options, this.drillDownLevel);
+        }
+      })
+    }
+    
   }
 
   parseRbacFilter(query: string) {
@@ -178,28 +185,29 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
       case 1:
         drillDownDetails = {
           ...this.rbacDetails,
-          state: id
+          state: id ? id : this.drillDownDetails.state
         }
         break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
-          district: id
+          district: id ? id : this.drillDownDetails.district
         }
         break;
       case 3:
         drillDownDetails = {
           ...this.rbacDetails,
-          block: id
+          block: id ? id : this.drillDownDetails.block
         }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
-          cluster: id
+          cluster: id ? id : this.drillDownDetails.cluster
         }
         break;
     }
+    this.drillDownDetails = {...drillDownDetails}
 
     let reportConfig = config;
 
