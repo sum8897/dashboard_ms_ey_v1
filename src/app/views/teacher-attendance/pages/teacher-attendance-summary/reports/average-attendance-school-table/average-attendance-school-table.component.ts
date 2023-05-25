@@ -8,6 +8,7 @@ import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summ
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { DataService } from 'src/app/core/services/data.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-average-attendance-school-table',
@@ -41,7 +42,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
+  constructor(private spinner: NgxSpinnerService,private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
       this.drillDownLevel = rbacDetails.role
@@ -108,11 +109,10 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
         let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
   
         if (query && key === 'table') {
-          this.getTableReportData(query, options, this.drillDownLevel);
+         await this.getTableReportData(query, options, this.drillDownLevel);
         }
       })
     }
-    
   }
 
   parseRbacFilter(query: string) {
@@ -132,10 +132,11 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
     return newQuery
   }
 
-  getTableReportData(query, options, hierarchyLevel?): void {
+   async getTableReportData(query, options, hierarchyLevel?) {
     this._criteriaService.emit('reset')
     this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      this.spinner.show();
       if (this.drillDownLevel === hierarchyLevel) {
         let rows = res;
         let { table: { columns } } = options;
@@ -173,6 +174,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
           this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
         }
+        this.spinner.hide();
       }
     });
   }
