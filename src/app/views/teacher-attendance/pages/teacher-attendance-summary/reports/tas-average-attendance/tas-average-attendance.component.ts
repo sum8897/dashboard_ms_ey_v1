@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -14,7 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './tas-average-attendance.component.html',
   styleUrls: ['./tas-average-attendance.component.scss']
 })
-export class TasAverageAttendanceComponent implements OnInit {
+export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
   reportName: string = 'tas_average_attendance';
   filters: any = [];
   levels: any;
@@ -33,6 +33,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   title = '% Teachers Present';
   drillDownDetails: any;
   drillDownLevel: any;
+  drillDownSubscription: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -52,7 +53,11 @@ export class TasAverageAttendanceComponent implements OnInit {
       this.rbacDetails = rbacDetails;
     });
 
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    
+  }
+
+  ngOnInit(): void {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
@@ -64,9 +69,6 @@ export class TasAverageAttendanceComponent implements OnInit {
         this.applyCriteria(data)
       }
     })
-  }
-
-  ngOnInit(): void {
     // this.getReportData();
   }
 
@@ -275,5 +277,9 @@ export class TasAverageAttendanceComponent implements OnInit {
       }
     }
     this.spinner.hide();
+  }
+
+  ngOnDestroy(): void {
+    this.drillDownSubscription.unsubscribe()
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -12,7 +12,7 @@ import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/r
   templateUrl: './tas-average-attendance-bignumber.component.html',
   styleUrls: ['./tas-average-attendance-bignumber.component.scss']
 })
-export class TasAverageAttendanceBignumberComponent implements OnInit {
+export class TasAverageAttendanceBignumberComponent implements OnInit, OnDestroy {
 
   reportName: string = 'tas_average_attendance_bignumber';
   filters: any = [];
@@ -30,11 +30,15 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
   title = 'Attendance Summary %';
   @Input() startDate: any;
   @Input() endDate: any;
+  drillDownSubscription: any;
 
 
   constructor(private readonly _commonService: CommonService,
     private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
-    this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+    
+  }
+  ngOnInit(): void {
+    this.drillDownSubscription = this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
@@ -42,8 +46,6 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
         this.drilldownData(data);
       }
     })
-  }
-  ngOnInit(): void {
     // this.getReportData();
   }
 
@@ -232,6 +234,10 @@ export class TasAverageAttendanceBignumberComponent implements OnInit {
         this.getBigNumberReportData(query, options, 'averagePercentage');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.drillDownSubscription.unsubscribe()
   }
 
 }

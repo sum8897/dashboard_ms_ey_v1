@@ -35,6 +35,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       legend: {display: false}
     }
   };
+  drillDownSubscription: any;
 
   //added for full school report download
   // title = "Download School Report"
@@ -55,7 +56,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       this.rbacDetails = rbacDetails;
       this.drillDownLevel =rbacDetails.role
     })
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data) {
         this.drillDownLevel = data.hierarchyLevel || this.rbacDetails?.role
         this.reportsData = []
@@ -69,7 +70,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._reportDrilldownService.emit(this.rbacDetails)
+    this._reportDrilldownService.emit('reset')
+    this.drillDownSubscription.unsubscribe()
   }
 
   ngAfterViewInit(): void {

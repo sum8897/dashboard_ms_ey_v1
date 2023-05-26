@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -15,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './average-attendance-school-table.component.html',
   styleUrls: ['./average-attendance-school-table.component.scss']
 })
-export class AverageAttendanceSchoolTableComponent implements OnInit {
+export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy {
   reportName: string = 'average_attendance_school';
   filters: any = [];
   levels: any;
@@ -36,6 +36,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
   previousText: any;
   drillDownLevel: any;
   drillDownDetails: any;
+  drillDownSubscription: any;
 
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -47,7 +48,11 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
       this.rbacDetails = rbacDetails;
       this.drillDownLevel = rbacDetails.role
     });
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    
+  }
+
+  ngOnInit(): void {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
@@ -58,9 +63,6 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
         this.applyCriteria(data)
       }
     })
-  }
-
-  ngOnInit(): void {
     // this.getReportData();
   }
 
@@ -269,5 +271,9 @@ export class AverageAttendanceSchoolTableComponent implements OnInit {
         data: filteredData
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.drillDownSubscription.unsubscribe();
   }
 }
