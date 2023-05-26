@@ -16,7 +16,7 @@ import { PotentialBaseComponent } from './pages/potential-base-tab/reports/poten
 import { DistrictWiseStatusComponent } from './pages/district-wise-status-tab/reports/district-wise-status/district-wise-status.component';
 import { CourseWiseStatusComponent } from './pages/course-wise-status-tab/reports/course-wise-status/course-wise-status.component';
 import { PotentialBaseCertificatesComponent } from './pages/potential-base-tab/reports/potential-base-certificates/potential-base-certificates.component';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { NishthaBignumberMetricsComponent } from './pages/implementation-status-tab/reports/nishtha-bignumber-metrics/nishtha-bignumber-metrics.component';
 
 @NgModule({

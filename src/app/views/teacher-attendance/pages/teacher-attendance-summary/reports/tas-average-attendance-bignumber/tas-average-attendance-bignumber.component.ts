@@ -6,6 +6,7 @@ import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utili
 import { config } from '../../../../config/teacher_attendance_config';
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 
 @Component({
   selector: 'app-tas-average-attendance-bignumber',
@@ -31,10 +32,16 @@ export class TasAverageAttendanceBignumberComponent implements OnInit, OnDestroy
   @Input() startDate: any;
   @Input() endDate: any;
   drillDownSubscription: any;
+  drillDownLevel: any;
 
 
   constructor(private readonly _commonService: CommonService,
-    private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
+    private csv: TeacherAttendanceSummaryComponent, 
+    private readonly _wrapperService: WrapperService, 
+    private _rbacService: RbacService, 
+    private readonly _reportDrilldownService: ReportDrilldownService,
+    private readonly _benchmarkService: BarchartBenchmarkService
+    ) {
     
   }
   ngOnInit(): void {
@@ -43,6 +50,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit, OnDestroy
     })
     this._reportDrilldownService.drilldownData.subscribe(data => {
       if(data && data?.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
+        this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
       }
     })
@@ -134,6 +142,38 @@ export class TasAverageAttendanceBignumberComponent implements OnInit, OnDestroy
             ...this.bigNumberReportData,
             averagePercentage: rows[0]?.[property]
           }
+          let benchmarkValues;
+          this._benchmarkService.getValues().subscribe((obj: any) => {
+            let level = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
+            if(obj && Object.keys(obj).includes(this.reportName) && rows[0]?.[property]) {
+              benchmarkValues = {
+                ...obj,
+                [this.reportName]: {
+                  ...obj[this.reportName],
+                  [level]: rows[0]?.[property]
+                }
+              }
+            }
+            else if (obj && rows[0]?.[property]){
+              benchmarkValues = {
+                ...obj,
+                [this.reportName]: {
+                  [level]: rows[0]?.[property]
+                }
+              }
+            }
+            else if(rows[0]?.[property]) {
+              benchmarkValues = {
+                [this.reportName]: {
+                  [level]: rows[0]?.[property]
+                }
+              }
+            }
+          })
+          if(benchmarkValues) {
+            this._benchmarkService.emit(benchmarkValues)
+          }
+          
         }
       })
     }
@@ -148,6 +188,7 @@ export class TasAverageAttendanceBignumberComponent implements OnInit, OnDestroy
         }
       })
     }
+    
   }
 
   async drilldownData(event: any) {

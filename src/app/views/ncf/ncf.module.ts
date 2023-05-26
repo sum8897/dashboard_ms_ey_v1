@@ -8,7 +8,7 @@ import { DisancSurveyTabComponent } from './pages/disanc-survey-tab/disanc-surve
 import { ProgressStatusComponent } from './pages/progress-status-tab/reports/progress-status/progress-status.component';
 import { DisancSurveyMapComponent } from './pages/disanc-survey-tab/reports/disanc-survey-map/disanc-survey-map.component';
 import { DisancSurveyBarComponent } from './pages/disanc-survey-tab/reports/disanc-survey-bar/disanc-survey-bar.component';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
