@@ -6,7 +6,7 @@ import { StudentAssessmentsComponent } from './student-assessments.component';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { AssessmentSummaryTabComponent } from './pages/assessment-summary-tab/assessment-summary-tab.component';
 import { MapViewTabComponent } from './pages/map-view-tab/map-view-tab.component';
 import { LoSummaryTabComponent } from './pages/lo-summary-tab/lo-summary-tab.component';

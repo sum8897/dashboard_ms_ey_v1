@@ -11,7 +11,7 @@ import { TsCategoryWiseAveragePupilTeacherRatioComponent } from './pages/teacher
 import { TsRankInAveragePupilTeacherRatioComponent } from './pages/teacher-statistics-main/reports/ts-rank-in-average-pupil-teacher-ratio/ts-rank-in-average-pupil-teacher-ratio.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 
 
 @NgModule({

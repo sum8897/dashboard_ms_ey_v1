@@ -30,7 +30,7 @@
     "@ngneat/transloco": "^4.1.0",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
-    "@project-sunbird/sb-dashlet-v14": "^1.0.6",
+    "@project-sunbird/sb-dashlet": "6.0.3",
     "@project-sunbird/sb-themes": "^0.0.78",
     "@types/jspdf": "^2.0.0",
     "angular-material-datepicker": "^1.0.2",
