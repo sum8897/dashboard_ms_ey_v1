@@ -31,7 +31,7 @@
       ></app-teacher-attendance-summary>
     </mat-tab>
     <mat-tab label="Map View of Teacher Attendance">
-      <app-teacher-attendance-map></app-teacher-attendance-map>
+      <app-teacher-attendance-map *ngIf="selectedTabLabel === 'Map View of Teacher Attendance'"></app-teacher-attendance-map>
     </mat-tab>
   </mat-tab-group>
 </div>

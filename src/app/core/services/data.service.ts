@@ -3,17 +3,19 @@ import { getBarDatasetConfig, getChartJSConfig } from '../config/ChartjsConfig';
 import { CommonService } from './common/common.service';
 import * as _ from 'lodash';
 import { WrapperService } from './wrapper.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  constructor(private _commonService: CommonService, private _wrapperService: WrapperService) { }
+  constructor(private spinner: NgxSpinnerService,private _commonService: CommonService, private _wrapperService: WrapperService) { }
 
   getTableReportData(query, options): Promise<any> {
     return new Promise((resolve, reject) => {
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        this.spinner.show()
         let rows = res;
         let { table: { columns, groupByNeeded, metricLabelProp, metricValueProp } } = options;
         let newColumns: any = [];
@@ -51,6 +53,7 @@ export class DataService {
             }
           })
         }
+        this.spinner.hide()
         resolve(reportData);
       })
     });
@@ -59,6 +62,7 @@ export class DataService {
 
   getBigNumberReportData(query: string, options: any, indicator: string, prevReportData: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      this.spinner.show();
       let { bigNumber } = options ?? {};
       let { valueSuffix, property, title } = bigNumber ?? {};
       let reportData = {
@@ -90,11 +94,13 @@ export class DataService {
           }
         })
       }
+      this.spinner.hide()
     });
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
+      this.spinner.show();
       let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
@@ -154,6 +160,7 @@ export class DataService {
             }
           }
         });
+        this.spinner.hide();
         resolve({ reportData: reportData, config: config })
       });
     });
@@ -192,6 +199,7 @@ export class DataService {
   getMapReportData(query: any, options: any, filters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let reportData;
+      this.spinner.show();
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
@@ -221,11 +229,12 @@ export class DataService {
             selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
           }
         }
-
+        this.spinner.hide();
         resolve(reportData)
       },
         (error) => {
           reportData = undefined
+          this.spinner.hide();
           resolve(reportData)
         }
       );

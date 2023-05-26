@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { getBarDatasetConfig, getChartJSConfig } from 'src/app/core/config/ChartjsConfig';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -8,12 +8,13 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from '../../../../config/teacher_attendance_config';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
+import { filter, isNull, omitBy } from 'lodash';
 @Component({
   selector: 'app-tas-average-attendance-barchart',
   templateUrl: './tas-average-attendance-barchart.component.html',
   styleUrls: ['./tas-average-attendance-barchart.component.scss']
 })
-export class TasAverageAttendanceBarchartComponent implements OnInit {
+export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy {
 
   title: any;
   chartHeight: any;
@@ -33,6 +34,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
   pageSize: any;
   backUpData: any = [];
   criteriaApplied: boolean = false;
+  drillDownSubscription: any;
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -48,7 +50,11 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    
+  }
+
+  ngOnInit(): void {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drilldownData(data);
       }
@@ -59,9 +65,6 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         this.applyCriteria(data)
       }
     })
-  }
-
-  ngOnInit(): void {
     // this.getReportData();
   }
 
@@ -111,12 +114,15 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
       // if(isMultibar){
       //   rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
       // }
+ 
       this.tableReportData = {
-        values: rows
+       
+      values: filter(rows,(row)=>row.district_name !== null && row.district_name !== 'undefined' && !isNull(row.district_name) && row.district_name !=='') 
       }
       let tooltipObject
       this.tableReportData.values.forEach((row) => {
         let tooltip = this._wrapperService.constructTooltip(tooltipMetrics, row, metricValueProp, 'barChart')
+      
         tooltipObject = {
           ...tooltipObject,
           [row.level]: tooltip
@@ -172,10 +178,11 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
                 labelString: xAxis.title
               },
               ticks: {
+                fontSize:12,
                 callback: function (value, index, values) {
-                  let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                  let newValue = value?.split('_')?.map((word: any) => word[0]?.toUpperCase() + word?.substring(1))?.join(' ')
                   if (screen.width <= 768) {
-                    return newValue.substr(0, 8) + '...';
+                    return newValue?.substr(0, 8) + '...';
                   } else {
                     return newValue;
                   }
@@ -284,6 +291,10 @@ export class TasAverageAttendanceBarchartComponent implements OnInit {
         values: filteredData
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.drillDownSubscription.unsubscribe()
   }
 
 
