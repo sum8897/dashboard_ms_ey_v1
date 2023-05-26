@@ -46,6 +46,23 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     async ngAfterViewInit(): Promise<void> {
         if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
+            this.filters.map((a) => {
+                let allObj = {
+                    "value": "all",
+                    "label": "All"
+                }
+                var index = a.options.findIndex(x => x.value == "all");
+                if (index === -1) {
+                    a.options.push(allObj)
+                    a.options.map((item, i) => {
+                        if (item.value === "all") {
+                            a.options.splice(i, 1);
+                            a.options.unshift(item);
+                        }
+                    })
+                    a.value = "all"
+                }
+            })
             this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
             this.nasMetrics?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
