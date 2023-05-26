@@ -7,6 +7,7 @@ import { config } from 'src/app/views/teacher-attendance/config/teacher_attendan
 import { TeacherAttendanceSummaryComponent } from '../../teacher-attendance-summary.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-tas-average-attendance',
@@ -44,7 +45,8 @@ export class TasAverageAttendanceComponent implements OnInit {
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
-    private readonly _criteriaService: CriteriaService
+    private readonly _criteriaService: CriteriaService,
+    private spinner: NgxSpinnerService
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -117,7 +119,6 @@ export class TasAverageAttendanceComponent implements OnInit {
         }
       })
     }
-
   }
 
   parseRbacFilter(query: string) {
@@ -138,6 +139,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   }
 
   getTableReportData(query, options): void {
+    this.spinner.show();
     this._criteriaService.emit('reset')
     this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
@@ -177,6 +179,7 @@ export class TasAverageAttendanceComponent implements OnInit {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         this.csv.csvDownload(reportsData)
       }
+      this.spinner.hide();
     });
   }
 
@@ -256,6 +259,7 @@ export class TasAverageAttendanceComponent implements OnInit {
   }
 
   applyCriteria(data: any) {
+    this.spinner.show();
     if (!this.criteriaApplied) {
       this.backUpData = this.tableReportData?.data
     }
@@ -270,5 +274,6 @@ export class TasAverageAttendanceComponent implements OnInit {
         data: filteredData
       }
     }
+    this.spinner.hide();
   }
 }
