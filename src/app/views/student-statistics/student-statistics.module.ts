@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StudentStatisticsRoutingModule } from './student-statistics-routing.module';
-import { DashletModule } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule } from '@project-sunbird/sb-dashlet';
 import { DataService } from 'src/app/core/services/data.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';

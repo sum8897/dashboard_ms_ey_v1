@@ -1043,6 +1043,9 @@ export const config = {
                 "yAxis": {
                     "title": "Attendance %"
                 },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
                 "xAxis": {
                     "title": " ",
                     "label": "level",

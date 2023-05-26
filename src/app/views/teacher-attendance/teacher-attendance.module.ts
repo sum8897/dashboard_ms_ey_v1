@@ -7,7 +7,7 @@ import { TeacherAttendanceComplianceComponent } from './pages/teacher-attendance
 import { TeacherAttendanceSummaryComponent } from './pages/teacher-attendance-summary/teacher-attendance-summary.component';
 import { TacAverageAttendanceComplianceComponent } from './pages/teacher-attendance-compliance/reports/tac-average-attendance-compliance/tac-average-attendance-compliance.component';
 import { TasAverageAttendanceComponent } from './pages/teacher-attendance-summary/reports/tas-average-attendance/tas-average-attendance.component';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TacAttendanceComplianceRankComponent } from './pages/teacher-attendance-compliance/reports/tac-attendance-compliance-rank/tac-attendance-compliance-rank.component';

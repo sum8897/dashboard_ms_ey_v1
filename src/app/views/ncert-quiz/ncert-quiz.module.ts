@@ -6,7 +6,7 @@ import { NcertQuizComponent } from './ncert-quiz.component';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { ImplementationStatusTabComponent } from './pages/implementation-status-tab/implementation-status-tab.component';
 import { ParticipationStatusTabComponent } from './pages/participation-status-tab/participation-status-tab.component';
 import { QuizWiseStatusTabComponent } from './pages/quiz-wise-status-tab/quiz-wise-status-tab.component';

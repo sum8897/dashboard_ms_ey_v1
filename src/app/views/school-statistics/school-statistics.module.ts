@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { SchoolStatisticsRoutingModule } from './school-statistics-routing.module';
 import { SchoolStatisticsComponent } from './school-statistics.component';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TotalSchoolStatisticsComponent } from './pages/total-school-statistics/total-school-statistics.component';
