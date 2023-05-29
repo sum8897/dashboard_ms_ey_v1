@@ -1,13 +1,14 @@
 import { environment } from "src/environments/environment";
 
 function formatNumber(number: number, config: any): string {
+    
     if (config.format === 'short') {
         if (config.locale === 'en-IN') {
             if (number < 1000) {
                 return `${number}`;
-            } else if (number > 999 && number <= 9999) {
+            } else if (number > 999 && number <= 99999) {
                 return `${(number / 1000).toFixed(2)}K`;
-            } else if (number > 9999 && number <= 9999999) {
+            } else if (number > 99999 && number <= 9999999) {
                 return `${(number / 100000).toFixed(2)}L`;
             } else {
                 return `${(number / 10000000).toFixed(2)}Cr`;
