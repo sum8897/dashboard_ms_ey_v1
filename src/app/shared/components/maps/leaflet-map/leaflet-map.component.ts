@@ -9,6 +9,7 @@ import invert from 'invert-color';
 import mapJson from './../../../../../assets/data/JH.json';
 import * as latLongConfig from './../../../../../assets/data/config.json'
 import { RbacService } from 'src/app/core/services/rbac-service.service';
+import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 
 @Component({
   selector: 'app-leaflet-map',
@@ -20,8 +21,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   error = false;
   mapCenterLatlng: any;
   markers = new L.FeatureGroup();
+  layerGroup = new L.LayerGroup();
   legend: any;
   countryGeoJSON: any;
+  stateGeoJSON: any;
   noData = false;
   config = environment.config
   rbacDetails: any;
@@ -38,7 +41,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('map') mapContainer!: ElementRef<HTMLElement>;
 
-  constructor(private _rbacService: RbacService) {
+  constructor(private _rbacService: RbacService, private readonly _drillDownService: ReportDrilldownService) {
     this.mapCenterLatlng = latLongConfig.default['IN'];
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
@@ -78,8 +81,13 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       reportTypeBoolean = true;
     }
     this.map = L.map(this.mapContainer.nativeElement, { zoomSnap: 0.05, minZoom: 4, zoomControl: true, scrollWheelZoom: false, touchZoom: false }).setView([this.mapCenterLatlng.lat, this.mapCenterLatlng.lng], this.mapCenterLatlng.zoomLevel);
+    this.layerGroup.addTo(this.map);
     try {
-      await this.applyCountryBorder(this.mapData);
+      let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
+      if (Number(lev)<=1) {
+        await this.applyCountryBorder(this.mapData);
+      }
+
       const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd'
       });
@@ -89,7 +97,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || this.drillDown || this.hierarchyLevel > 1) {
+      if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || Number(lev) > 1 || this.hierarchyLevel > 1) {
+        this.map?.removeLayer(this.layerGroup);
+        await this.applyStateBorder();
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 2) {
@@ -196,7 +206,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             reportTypeBoolean = true;
           }
           // console.log("TEST", state)
-          if (!parent.drillDown) {
+          let lev = parent.drillDownLevel ? parent.drillDownLevel : parent.rbacDetails.role
+          if (Number(lev) <= 1) {
             mapData?.data.forEach((state: any) => {
               if (state.state_id && state.state_id == feature.properties.state_code) {
                 color = parent.getLayerColor(state.indicator, null, values);
@@ -246,8 +257,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             }
             layer.on({
               click: () => {
-                if (!parent.drillDown) {
-                  parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role });
+                let lev = parent.drillDownLevel ? parent.drillDownLevel : parent.rbacDetails.role
+                if (Number(lev) <= 1) {
+                  // parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role });
+                  let district_name = parent.getDrillDownDetails(feature?.properties?.['ID_2'], mapData.data)
+                  parent.applyDrillDown({ id: feature?.properties?.['ID_2'], hierarchyLevel: parent.rbacDetails.role + 1 , name: district_name})
                 }
               }
             });
@@ -258,6 +272,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           fillOpacity: 0,
           fontWeight: "bold"
         }).addTo(this.map);
+        this.layerGroup.addLayer(this.countryGeoJSON);
         if (this.hierarchyLevel < 3) {
           this.fitBoundsToCountryBorder();
         }
@@ -269,6 +284,86 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           this.createLegend(reportTypeIndicator, this.mapData.options, values);
         }
         resolve('India map borders plotted successfully');
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  getDrillDownDetails(id: any, data: any) {
+    let selectedRow = data.filter((row) => {
+      return row?.['district_id'] == id
+    })
+    return selectedRow?.[0]?.['district_name']
+  }
+
+  applyDrillDown(details: any) {
+    let drillDownDetails;
+    let { hierarchyLevel, id } = details ?? {}
+
+    switch (Number(hierarchyLevel)) {
+      case 2:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          hierarchyLevel: hierarchyLevel,
+          district: id,
+          id: id,
+          district_name: details?.name
+        }
+        break;
+      case 3:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          hierarchyLevel: hierarchyLevel,
+          block: id,
+          id: id,
+          block_name: details?.name
+        }
+        break;
+      case 4:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          role: Number(this.rbacDetails.role) + 1,
+          hierarchyLevel: hierarchyLevel,
+          cluster: id,
+          id: id,
+          cluster_name: details?.name
+        }
+        break;
+    }
+    console.log(drillDownDetails)
+    this._drillDownService.emit(drillDownDetails)
+  }
+
+  async applyStateBorder(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`${environment.apiURL}/assets/IN.json`);
+        const temp = await response.json();
+        const data = temp['IN'];
+        const geoJSON = data.features.find(feature => {
+          let state_code = feature.properties.state_code_2 || feature.properties.state_code;
+          return state_code === this.rbacDetails.state;
+        });
+        
+        this.stateGeoJSON = L.geoJSON(geoJSON, {
+          // style: {
+          //   fillColor: '#fff',
+          //   weight: 1,
+          //   opacity: 1,
+          //   color: 'grey',
+          //   dashArray: '0',
+          //   fillOpacity: 1
+          // },
+          color: "#6e6d6d",
+          weight: 2,
+          fillOpacity: 0,
+          fontWeight: "bold"
+        });
+        this.stateGeoJSON.addTo(this.map);
+        resolve('State borders are applied successfully!');
       } catch (e) {
         reject(e);
       }
@@ -317,14 +412,18 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       }
       let level = this.drillDownLevel ? this.drillDownLevel : this.hierarchyLevel
       var idProp;
+      var nameProp;
       switch (Number(level)) {
         case 1:
+          nameProp = 'district_name'
           idProp = 'district_id'
           break;
         case 2:
+          nameProp = 'block_name'
           idProp = 'block_id'
           break;
         case 3:
+          nameProp = 'cluster_name'
           idProp = 'cluster_id'
           break;
       }
@@ -332,6 +431,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         let re = new RegExp("_id$");
         // let filterIds = {};
         var id;
+        
 
         Object.keys(data).forEach((prop: any) => {
           // if(re.test(prop)){
@@ -350,6 +450,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         })
         let markerIcon = L.circleMarker([data.Latitude, data.Longitude], {
           id: id,
+          name: data[nameProp],
           hierarchyLevel: data.hierarchyLevel,
           color: "gray",
           // fillColor: this.getZoneColor(reportTypeIndicator, data.indicator >= 1 ? (max - min ? (data.indicator - min) / (max - min) * 100 : data.indicator) : -1),
@@ -381,7 +482,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
         markerIcon.on("click", (e: any) => {
           if(level < 4) {
-            this.drillDownFilter.emit({ id: e.target.options.id, level: this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role })
+            this.applyDrillDown({ name: e.target.options.name, id: e.target.options.id, hierarchyLevel: this.drillDownLevel ? this.drillDownLevel + 1 : this.rbacDetails.role + 1 })
           }
         })
 
@@ -391,11 +492,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       });
 
       this.map.addLayer(this.markers);
-      if (this.hierarchyLevel > 2) {
-        this.map.fitBounds(this.markers.getBounds(), {
-          padding: [250, 250]
-        });
-      }
+      
+      this.map.fitBounds(this.markers.getBounds(), {
+        padding: [150, 150]
+      });
       if (!singleColor) {
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
       }
@@ -496,7 +596,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
-    if (lev > 1) {
+    if (Number(lev) > 1) {
       this.markers.clearLayers();
       this.createMarkers(filteredData, rangeColour);
     } else {

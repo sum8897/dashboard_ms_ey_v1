@@ -8,7 +8,7 @@ import { ImprovementsStatusTabComponent } from './pages/improvements-status-tab/
 import { ImplementationStatusComponent } from './pages/implementation-status-tab/reports/implementation-status/implementation-status.component';
 import { ImprovementsStatusComponent } from './pages/improvements-status-tab/reports/improvements-status/improvements-status.component';
 
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';

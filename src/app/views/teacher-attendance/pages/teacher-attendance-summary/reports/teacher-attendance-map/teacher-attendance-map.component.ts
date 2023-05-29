@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import moment from 'moment';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
+import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
@@ -12,7 +13,7 @@ import { config } from 'src/app/views/teacher-attendance/config/teacher_attendan
   templateUrl: './teacher-attendance-map.component.html',
   styleUrls: ['./teacher-attendance-map.component.scss']
 })
-export class TeacherAttendanceMapComponent implements OnInit {
+export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
   reportName: string = 'tas_average_attendance_map';
   filters: any = [];
   levels: any;
@@ -39,42 +40,55 @@ export class TeacherAttendanceMapComponent implements OnInit {
   schoolReportsData: any[] = [];
   pagereportName = "teachers_present"
   defaultSelectedDays: any = 7;
+  drillDownSubscription: any
 
   //
 
 
   @Output() exportReportData = new EventEmitter<any>();
 
-  constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _commonService: CommonService) {
+  constructor(private readonly _dataService: DataService,
+    private readonly _wrapperService: WrapperService,
+    private _rbacService: RbacService,
+    private readonly _commonService: CommonService,
+    private readonly _drillDownService: ReportDrilldownService
+  ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
   }
 
   ngOnInit(): void {
+    this.drillDownSubscription = this._drillDownService.drilldownData.subscribe((data) => {
+      if(data && data !== 'reset') {
+        this.drilldownData({
+          ...data
+        })
+      }
+    })
   }
 
-  async drilldownData(event: any) {
+  async drilldownData(details: any) {
     this.drillDown = true
-    let { level, id } = event ?? {}
+    let { hierarchyLevel, id } = details ?? {}
     let drillDownDetails;
 
-    switch (Number(level)) {
-      case 1:
+    switch (Number(hierarchyLevel)) {
+      case 2:
         drillDownDetails = {
           ...this.rbacDetails,
           role: Number(this.rbacDetails.role) + 1,
           district: id
         }
         break;
-      case 2:
+      case 3:
         drillDownDetails = {
           ...this.rbacDetails,
           role: Number(this.rbacDetails.role) + 1,
           block: id
         }
         break;
-      case 3:
+      case 4:
         drillDownDetails = {
           ...this.rbacDetails,
           role: Number(this.rbacDetails.role) + 1,
@@ -86,7 +100,7 @@ export class TeacherAttendanceMapComponent implements OnInit {
     let reportConfig = config
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
     filters.every((filter: any) => {
-      if ((Number(level) + 1) === Number(filter.hierarchyLevel)) {
+      if ((Number(hierarchyLevel)) === Number(filter.hierarchyLevel)) {
         queries = { ...filter?.timeSeriesQueries }
         queries['map'] = parseRbacFilter(queries['map'], drillDownDetails)
         return false
@@ -94,7 +108,6 @@ export class TeacherAttendanceMapComponent implements OnInit {
       return true
     })
     let drillDownQuery;
-    console.log(queries)
     if (this.startDate === undefined && this.endDate === undefined) {
       let endDate = new Date();
       let days = endDate.getDate() - this.compareDateRange;
@@ -110,7 +123,7 @@ export class TeacherAttendanceMapComponent implements OnInit {
       let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
       this.exportReportData.emit(reportsData)
     }
-    this.drillDownLevel = level + 1
+    this.drillDownLevel = hierarchyLevel
   }
 
   getReportData(values: any): void {
@@ -216,5 +229,9 @@ export class TeacherAttendanceMapComponent implements OnInit {
       this.reportsData = []
       this.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
     }
+  }
+  ngOnDestroy(): void {
+    this._drillDownService.emit('reset')
+    this.drillDownSubscription.unsubscribe()
   }
 }

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DashletModule, DataService } from '@project-sunbird/sb-dashlet-v14';
+import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import {DikshaRoutingModule} from './diksha-routing.module';
 import {DikshaComponent} from './diksha.component';
 

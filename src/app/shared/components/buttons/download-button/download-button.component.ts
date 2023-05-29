@@ -141,6 +141,8 @@ export class DownloadButtonComponent implements OnInit {
   //   }
   // }
   onDownload() {
+    console.log(this.data);
+
     // if(this.data.length > 0) this.download(this.data)
     this.download(this.data)
   }
@@ -153,12 +155,14 @@ export class DownloadButtonComponent implements OnInit {
       this.isVisible = true;
       setTimeout(() => this.isVisible = false, 2500)
     } else {
-      for (let i = 0; i < reportInputs.length; i++) {
+     // for (let i = 0; i < reportInputs.length; i++) {
+      for (let i = 0; i < 1; i++) {
+        
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const fileName = reportInputs[i].reportName;
         let keys: [] | any;
-        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date','Latitude','Longitude'].includes(key));
+        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date', 'Latitude', 'Longitude'].includes(key));
         let dupData;
         if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
@@ -183,7 +187,9 @@ export class DownloadButtonComponent implements OnInit {
         let re = new RegExp("_id$");
         dupData.forEach((obj: any) => {
           Object.keys(obj).forEach((key: any) => {
-            obj[key] = !isNaN(obj[key]) && !key.match(re) ? formatNumberForReport(Number(obj[key])) : obj[key];
+            if (key !== 'udise_code') {
+              obj[key] = !isNaN(obj[key]) && !key.match(re) ? formatNumberForReport(Number(obj[key])) : obj[key];
+            }
           });
         });
         // added  below condition temporary for school download reports
@@ -191,6 +197,7 @@ export class DownloadButtonComponent implements OnInit {
         //   alert('downloading')
         //   dupData = JSON.parse(JSON.stringify(reportData));
         // }
+
         const opts = { fields: keys, output: fileName };
         const csv = json2csv.parse(dupData, opts);
         let file = new Blob([csv], { type: 'text/csv;charset=utf-8' });

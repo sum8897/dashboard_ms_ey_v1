@@ -53,6 +53,7 @@ export class TeacherAttendanceComponent implements OnInit {
   
 
   onTabChanged($event: any): void {
+    console.log($event)
     this.selectedTabLabel = $event?.tab?.textLabel;
     this.tabIndex = $event.index;
     setTimeout(() => {

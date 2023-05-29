@@ -27,7 +27,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   reportsData: any[] = []
   rbacDetails: any;
   defaultSelectedDays: any = 7;
-  drillDownLevel: any;
+  drillDownLevel: any =1;
   criteriaConfig: any = config.criteria_config;
   trendLineConfig = {
     options: {
@@ -35,6 +35,7 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
       legend: {display: false}
     }
   };
+  drillDownSubscription: any;
 
   //added for full school report download
   // title = "Download School Report"
@@ -51,11 +52,13 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+     
       this.rbacDetails = rbacDetails;
+      this.drillDownLevel =rbacDetails.role
     })
-    this._reportDrilldownService.drilldownData.subscribe(data => {
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
       if (data) {
-        this.drillDownLevel = data.hierarchyLevel
+        this.drillDownLevel = data.hierarchyLevel || this.rbacDetails?.role
         this.reportsData = []
         this.schoolReportsData = []
       }
@@ -67,7 +70,8 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._reportDrilldownService.emit(this.rbacDetails)
+    this._reportDrilldownService.emit('reset')
+    this.drillDownSubscription.unsubscribe()
   }
 
   ngAfterViewInit(): void {
