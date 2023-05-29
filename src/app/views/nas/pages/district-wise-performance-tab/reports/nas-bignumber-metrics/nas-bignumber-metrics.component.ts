@@ -108,10 +108,14 @@ export class NasBignumberMetricsComponent implements OnInit {
 
       filterValues.forEach((filterParams: any) => {
         if (filterParams.value !== 'all') {
-          query += ` join datasets.nas_performance_umy3wxzhjm8aqh4udaka as b on a.state_id = b.state_id`
-          query = parseFilterToQuery(query, filterParams)
+          // Check if the subquery is already present in the query
+          if (!query.includes('join datasets.nas_performance_umy3wxzhjm8aqh4udaka as t on a.state_id = t.state_id')) {
+            query += ` join datasets.nas_performance_umy3wxzhjm8aqh4udaka as t on a.state_id = t.state_id`;
+          }
+          query = parseFilterToQuery(query, filterParams);
         }
       });
+      
 
       if (query && key.indexOf('bigNumber') > -1) {
         let metricOptions = {
