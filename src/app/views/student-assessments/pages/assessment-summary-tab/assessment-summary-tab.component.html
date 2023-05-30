@@ -10,11 +10,24 @@
             <!-- <app-download-button [data]="reportsData"></app-download-button> -->
         </div>
     </div>
+
     <div class="reports-row">
-        <div class="row-wrapper grid grid-cols-2 gap-4">
-            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('avg_student_assessment_bignumber', 'bigNumber')" id="bignumber">
+        <!-- <div class="row-wrapper grid grid-cols-5 gap-4">
+            <div class="col-span-2 xmd:col-span-1" *ngIf="checkReport('avg_student_assessment_bignumber', 'bigNumber')"
+                id="bignumber">
                 <app-avg-stu-assees-score-bigno #AvgStuAsseesScoreBignoComponent></app-avg-stu-assees-score-bigno>
             </div>
+        </div> -->
+
+        <div class="row-wrapper grid grid-cols-5 gap-4">
+            <div class="col-span-2 xmd:col-span-1  bignumber-container" id="bignumber">
+            <div  *ngIf="checkReport('avg_student_assessment_bignumber', 'bigNumber')">
+                <app-avg-stu-assees-score-bigno #AvgStuAsseesScoreBignoComponent></app-avg-stu-assees-score-bigno>
+            </div>
+            </div>
+        </div>
+
+        <div class="row-wrapper grid grid-cols-2 gap-4">
             <div class="col-span-2 xmd:col-span-1 div-shadow"
                 *ngIf="checkReport('average_student_assessment_score_table', 'table')" id="table">
                 <app-avg-stu-assees-score-table #AvgStuAsseesScoreTableComponent></app-avg-stu-assees-score-table>

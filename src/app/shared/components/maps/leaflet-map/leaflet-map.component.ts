@@ -532,25 +532,25 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 70, 40, 0];
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
-        let reset = L.DomUtil.create('button', 'legend-range-reset pull-right')
-        // reset.innerHTML = `<i class="fa fa-refresh"></i>`
-        L.DomEvent.addListener(reset, 'click', () => {
-          ref.resetRange()
-        })
-        div.insertBefore(reset, div.prevSibling)
+  
+        // Create the reset button element
+        const resetButton = L.DomUtil.create('button', 'legend-range-reset pull-right');
+        resetButton.innerHTML = '<i class="fa fa-refresh"></i>';
+        L.DomEvent.addListener(resetButton, 'click', () => {
+          ref.resetRange();
+        });
+        div.insertBefore(resetButton, div.previousSibling);
+  
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button><br>`;
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values))
-          })
-          div.appendChild(span)
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
+          });
+          div.appendChild(span);
           clickable = true;
         }
       }
-
-      // div.innerHTML = labels.join('<br>');
-
       if (!clickable) {
         div.innerHTML = labels.join('<br>');
       }

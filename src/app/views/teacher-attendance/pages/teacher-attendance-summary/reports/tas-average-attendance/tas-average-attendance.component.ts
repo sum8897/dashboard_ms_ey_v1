@@ -141,7 +141,6 @@ export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
   }
 
   getTableReportData(query, options): void {
-    this.spinner.show();
     this._criteriaService.emit('reset')
     this.criteriaApplied = false
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
@@ -181,7 +180,6 @@ export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         this.csv.csvDownload(reportsData)
       }
-      this.spinner.hide();
     });
   }
 
@@ -261,7 +259,6 @@ export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
   }
 
   applyCriteria(data: any) {
-    this.spinner.show();
     if (!this.criteriaApplied) {
       this.backUpData = this.tableReportData?.data
     }
@@ -276,7 +273,6 @@ export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
         data: filteredData
       }
     }
-    this.spinner.hide();
   }
 
   ngOnDestroy(): void {

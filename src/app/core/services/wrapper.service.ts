@@ -184,7 +184,7 @@ export class WrapperService {
       let tooltip = []
       tooltipMetrics.forEach((metric: any) => {
         if (row[metric.value] !== undefined && row[metric.value] !== null) {
-          tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + metric.valueSuffix)
+          tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])).toLocaleString() + metric.valueSuffix);
         }
       });
       return tooltip
@@ -192,12 +192,13 @@ export class WrapperService {
     let tooltip = '';
     tooltipMetrics.forEach((metric: any) => {
       if (row[metric.value] !== undefined && row[metric.value] !== null) {
+        const value = isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value]);
+        const formattedValue = value.toLocaleString();
+        
         if (metric.value === selectedMetricValue) {
-          tooltip += '<b><i>' + metric.valuePrefix.replace(/\n/g, '</br>') + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + metric.valueSuffix.replace(/\n/g, '</br>') + '</i></b>'
-
-        }
-        else {
-          tooltip += metric.valuePrefix.replace(/\n/g, '</br>') + '<b>' + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])) + '</b>' + metric.valueSuffix.replace(/\n/g, '</br>')
+          tooltip += '<b><i>' + metric.valuePrefix.replace(/\n/g, '</br>') + formattedValue + metric.valueSuffix.replace(/\n/g, '</br>') + '</i></b>';
+        } else {
+          tooltip += metric.valuePrefix.replace(/\n/g, '</br>') + '<b>' + formattedValue + '</b>' + metric.valueSuffix.replace(/\n/g, '</br>');
         }
       }
     });
