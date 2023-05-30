@@ -136,9 +136,10 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
 
    async getTableReportData(query, options, hierarchyLevel?) {
     this._criteriaService.emit('reset')
-    this.criteriaApplied = false
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      this.spinner.show();
+    this.criteriaApplied = false;
+    this.spinner.show();
+     await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      // this.spinner.show();
       if (this.drillDownLevel === hierarchyLevel) {
         let rows = res;
         let { table: { columns } } = options;
