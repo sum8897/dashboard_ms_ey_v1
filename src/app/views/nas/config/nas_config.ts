@@ -23,7 +23,7 @@ export const config = {
             "id": "lo_code",
             "labelProp": "lo_code",
             "valueProp": "lo_code",
-            "query": "select lo_code from datasets.nas_performance_lo"
+            "query": "select lo_code from datasets.nas_performance_lonas"
         },
         {
             "label": "Grade & Subject Performance",
@@ -65,7 +65,7 @@ export const config = {
             "id": "lo_code",
             "labelProp": "lo_code",
             "valueProp": "lo_code",
-            "query": "select lo_code from datasets.nas_performance_lo"
+            "query": "select lo_code from datasets.nas_performance_lonas"
         },
 
     ],
@@ -119,7 +119,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map":"select t3.district_id, district_name,latitude,longitude, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as performance from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join datasets.nas_performance_lo as t2 on t.lo_code = t2.lo_code join dimensions.district as t3 on t.district_id = t3.district_id group by district_name,t.lo_code,t3.district_id,latitude,longitude"
+                            "map":"select t3.district_id, district_name,latitude,longitude, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as performance from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join datasets.nas_performance_lonas as t2 on t.lo_code = t2.lo_code join dimensions.district as t3 on t.district_id = t3.district_id group by district_name,t.lo_code,t3.district_id,latitude,longitude"
                         },
                         "level": "state",
                         "nextLevel": "district"
@@ -131,7 +131,7 @@ export const config = {
                     "actions":
                     {
                         "queries": {
-                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code"
+                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -178,7 +178,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join datasets.nas_performance_lo as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject, grade, t.lo_code, t.lo_code"
+                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject, grade, t.lo_code, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -190,7 +190,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
+                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -259,9 +259,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select avg(a.sum) as total_schools from datasets.nas_no_of_schools_state as a",
-                        "bigNumber2": "select avg(a.sum) as students_surveyed from datasets.nas_students_surveyed_state as a",
-                        "bigNumber3": "select avg(a.sum) as total_teachers from datasets.nas_no_of_teachers_state as a",
+                        "bigNumber1": "select sum(a.avg) from datasets.nas_schools_fmfdoxoqhb0gdwdvfaya as a",
+                        "bigNumber2": "select sum(a.avg) from datasets.nas_studentssurveyed_bhzjwwmbywjlfnrdfxwb as a",
+                        "bigNumber3": "select sum(a.avg) from datasets.nas_teachers_bnfzbxamehcadbehbxqg as a",
                     },
                     "level": "district"
                 }
@@ -287,7 +287,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map":"select t3.state_id, state_name, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as percentage from datasets.nas_performance_state0lo0subject0grade as t join datasets.nas_performance_lo as t2 on t.lo_code = t2.lo_code join dimensions.state as t3 on t.state_id = t3.state_id group by state_name,t.lo_code,t3.state_id"
+                            "map":"select t3.state_id, state_name, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as percentage from datasets.nas_performance_state0lo0subject0grade as t join datasets.nas_performance_lonas as t2 on t.lo_code = t2.lo_code join dimensions.state as t3 on t.state_id = t3.state_id group by state_name,t.lo_code,t3.state_id"
                         },
                         "level": "state",
                         "nextLevel": "district"
