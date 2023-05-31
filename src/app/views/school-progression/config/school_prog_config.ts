@@ -18,6 +18,8 @@ export const config = {
             "district_map": `
                 SELECT SCHOOL.DISTRICT_NAME,
                     SCHOOL.DISTRICT_ID,
+                    AVG(CAST (LATITUDE AS numeric)) AS LATITUDE,
+	                AVG(CAST (LONGITUDE AS numeric)) AS LONGITUDE,
                     COUNT(PROGRESSION.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
                     SUM(PROGRESSION.SUM) AS NO_OF_SCHOOLS_PROG_COMPLETED,
                     ROUND(CAST(SUM(PROGRESSION.SUM) AS NUMERIC) / COUNT(PROGRESSION.SCHOOL_ID) * 100, 2) AS PERCENT_SCHOOL_PROG_COMPLETED,
