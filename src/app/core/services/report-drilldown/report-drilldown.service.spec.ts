@@ -13,4 +13,16 @@ describe('ReportDrilldownService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should emit data', () => {
+    const testData = 'Test data';
+
+    service.drilldownData.subscribe((data) => {
+      if(data) {
+        expect(data).toBe(testData);
+      }
+    });
+
+    service.emit(testData);
+  });
 });
