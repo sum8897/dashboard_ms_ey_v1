@@ -18,6 +18,8 @@ export const config = {
             "district_map": `
                     SELECT DISTRICT_ID,
                     DISTRICT_NAME,
+                    LATITUDE,
+	 		        LONGITUDE,
                     HAS_WATER,
                     TOTAL_NO_OF_SCHOOLS,
                     ROUND(CAST(HAS_WATER / TOTAL_NO_OF_SCHOOLS * 100 AS NUMERIC), 2) AS PERCENT_SCHOOL_MET_WATER,
@@ -30,6 +32,8 @@ export const config = {
                 FROM
                     (SELECT DISTRICT_ID,
                             DISTRICT_NAME,
+                            AVG(CAST (LATITUDE AS numeric)) AS LATITUDE,
+	                        AVG(CAST (LONGITUDE AS numeric)) AS LONGITUDE,
                             COUNT(WATER.SCHOOL_ID) AS TOTAL_NO_OF_SCHOOLS,
                             SUM(WATER.SUM) AS HAS_WATER,
                             SUM(TOILET.SUM) AS HAS_TOILET,
@@ -54,10 +58,11 @@ export const config = {
                         AND PLAYGROUND.ACADEMICYEAR_ID = WATER.ACADEMICYEAR_ID
                         INNER JOIN DIMENSIONS.SCHOOL ON SCHOOL.SCHOOL_ID = WATER.SCHOOL_ID
                         WHERE filter.water.academicYear
-                        GROUP BY DISTRICT_ID,
-                            DISTRICT_NAME) AS INTERMEDIATE_TABLE
+                        GROUP BY DISTRICT_ID, DISTRICT_NAME) AS INTERMEDIATE_TABLE
                 GROUP BY DISTRICT_ID,
                     DISTRICT_NAME,
+                    LATITUDE,
+                    LONGITUDE,
                     HAS_WATER,
                     HAS_TOILET,
                     HAS_LIBRARY,
