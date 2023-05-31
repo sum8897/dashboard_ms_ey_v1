@@ -214,7 +214,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "map": "select t2.state_name  ,sum(t1.sum) as users from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t2.state_name "
+                        "map": "select t2.state_name  ,sum(t1.sum) as users, latitude, longitude from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t2.state_name, latitude, longitude"
                     },
                     "level": "district",
                     "nextLevel": "block"

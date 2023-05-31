@@ -76,7 +76,7 @@ export const config = {
                 "actions": {
                     "queries":
                     {
-                        "map": "select category_name, d.district_name,t.district_id, cast(sum(t.sum) as numeric) as performance FROM datasets.pgi_category_state0district0categorypgi as t join dimensions.district as d on t.district_id = d.district_id group by t.district_id, d.district_name, category_name"
+                        "map": "select category_name, d.district_name,latitude, longitude,t.district_id, cast(sum(t.sum) as numeric) as performance FROM datasets.pgi_category_state0district0categorypgi as t join dimensions.district as d on t.district_id = d.district_id group by t.district_id, d.district_name, category_name, latitude, longitude"
                     },
                     "level": "district",
                     "nextLevel": "block"
