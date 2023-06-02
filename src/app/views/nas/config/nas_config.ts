@@ -131,7 +131,7 @@ export const config = {
                     "actions":
                     {
                         "queries": {
-                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name, latitude, longitude from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lo as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code, latitude, longitude"
+                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name, latitude, longitude from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code, latitude, longitude"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -259,9 +259,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(a.avg) from datasets.nas_schools_fmfdoxoqhb0gdwdvfaya as a",
-                        "bigNumber2": "select sum(a.avg) from datasets.nas_studentssurveyed_bhzjwwmbywjlfnrdfxwb as a",
-                        "bigNumber3": "select sum(a.avg) from datasets.nas_teachers_bnfzbxamehcadbehbxqg as a",
+                        "bigNumber1": "select sum(a.avg) as total_schools from datasets.nas_schools_fmfdoxoqhb0gdwdvfaya as a",
+                        "bigNumber2": "select sum(a.avg) as students_surveyed from datasets.nas_studentssurveyed_bhzjwwmbywjlfnrdfxwb as a",
+                        "bigNumber3": "select sum(a.avg) as total_teachers from datasets.nas_teachers_bnfzbxamehcadbehbxqg as a",
                     },
                     "level": "district"
                 }
