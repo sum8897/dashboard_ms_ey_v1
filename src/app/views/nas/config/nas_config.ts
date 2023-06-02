@@ -119,7 +119,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map":"select t3.district_id, district_name,latitude,longitude, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as performance from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join datasets.nas_performance_lonas as t2 on t.lo_code = t2.lo_code join dimensions.district as t3 on t.district_id = t3.district_id group by district_name,t.lo_code,t3.district_id,latitude,longitude"
+                            "map":"select t3.district_id, district_name,latitude,longitude, t.lo_code , round(cast(sum(t.sum) as numeric ),2) as performance from datasets.nas_performance_axzvtm5yeherjxnvzgcw as t join datasets.nas_performance_lonas as t2 on t.lo_code = t2.lo_code join dimensions.district as t3 on t.district_id = t3.district_id group by district_name,t.lo_code,t3.district_id,latitude,longitude"
                         },
                         "level": "state",
                         "nextLevel": "district"
@@ -131,7 +131,7 @@ export const config = {
                     "actions":
                     {
                         "queries": {
-                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name, latitude, longitude from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code, latitude, longitude"
+                            "map": "select t.lo_code, round(cast(avg(t.sum) as numeric),2) as performance, t.district_id, district_name, latitude, longitude from datasets.nas_performance_axzvtm5yeherjxnvzgcw as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, t.lo_code, latitude, longitude"
                         },
                         "level": "district",
                         "nextLevel": "block"
@@ -190,7 +190,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_U29_T3AnfHd6JmQOXhAQ as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
+                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_axzvtm5yeherjxnvzgcw as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
