@@ -9,6 +9,14 @@ export const config = {
             "tableAlias": "t1",
             "query": "select program_name from dimensions.programnishtha"
         },
+        {
+            "label": "Implementation Status",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "query": "select program_name from dimensions.programnishtha"
+        },
         // {
         //     "label": "District Wise Performance",
         //     "name": "Metric",
