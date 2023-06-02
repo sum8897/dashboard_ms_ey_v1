@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MetadataInterceptorService } from './metadata-interceptor.service';
+import { MetadataInterceptor } from './metadata-interceptor.service';
 
 describe('MetadataInterceptorService', () => {
-  let service: MetadataInterceptorService;
+  let service: MetadataInterceptor;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MetadataInterceptorService);
+    service = TestBed.inject(MetadataInterceptor);
   });
 
   it('should be created', () => {

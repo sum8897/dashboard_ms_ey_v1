@@ -67,6 +67,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     })
     this._criteriaService.criteriaObject.subscribe((data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
+        this.applyCriteria(data)
       }
     })
     this.benchmarkSubscription = this._benchmarkService.benchmarkValues.subscribe((values: any) => {

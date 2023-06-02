@@ -43,12 +43,12 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   @Input() startDate: any;
   @Input() endDate: any;
 
-  constructor(private spinner: NgxSpinnerService,private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
+  constructor(private spinner: NgxSpinnerService, private readonly _commonService: CommonService, private csv: TeacherAttendanceSummaryComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
       this.drillDownLevel = rbacDetails.role
     });
-    
+
   }
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
     this.startDate = startDate;
     this.endDate = endDate;
     if (this.drillDownDetails !== undefined) {
-      this.drilldownData({hierarchyLevel: this.drillDownLevel})
+      this.drilldownData({ hierarchyLevel: this.drillDownLevel })
     }
     else {
       let reportConfig = config;
@@ -93,7 +93,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
       } else {
         this._wrapperService.constructFilters(this.filters, filters);
       }
-  
+
       Object.keys(queries).forEach(async (key: any) => {
         if (key.toLowerCase().includes('comparison')) {
           let endDate = new Date();
@@ -109,9 +109,9 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
           onLoadQuery = queries[key]
         }
         let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-  
+
         if (query && key === 'table') {
-         await this.getTableReportData(query, options, this.drillDownLevel);
+          await this.getTableReportData(query, options, this.drillDownLevel);
         }
       })
     }
@@ -134,52 +134,62 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
     return newQuery
   }
 
-   async getTableReportData(query, options, hierarchyLevel?) {
+  async getTableReportData(query, options, hierarchyLevel?) {
     this._criteriaService.emit('reset')
     this.criteriaApplied = false;
     this.spinner.show();
-     await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      // this.spinner.show();
-      if (this.drillDownLevel === hierarchyLevel) {
-        let rows = res;
-        let { table: { columns } } = options;
-        this.tableReportData = {
-          data: rows.map(row => {
-            if (this.minDate !== undefined && this.maxDate !== undefined) {
-              if (row['min_date'] < this.minDate) {
-                this.minDate = row['min_date']
-              }
-              if (row['max_date'] > this.maxDate) {
-                this.maxDate = row['max_date']
-              }
-            }
-            else {
-              this.minDate = row['min_date']
-              this.maxDate = row['max_date']
-            }
-            columns.forEach((col: any) => {
-              if (row[col.property]) {
-                row = {
-                  ...row,
-                  [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+
+    try {
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        // this.spinner.show();
+        if (this.drillDownLevel === hierarchyLevel) {
+          let rows = res;
+          let { table: { columns } } = options;
+          this.tableReportData = {
+            data: rows.map(row => {
+              if (this.minDate !== undefined && this.maxDate !== undefined) {
+                if (row['min_date'] < this.minDate) {
+                  this.minDate = row['min_date']
+                }
+                if (row['max_date'] > this.maxDate) {
+                  this.maxDate = row['max_date']
                 }
               }
-            });
-            return row
-          }),
-          columns: columns.filter(col => {
-            if (rows[0] && col.property in rows[0]) {
-              return col;
-            }
-          })
-        };
-        if (this.tableReportData?.data?.length > 0) {
-          let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-          this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
+              else {
+                this.minDate = row['min_date']
+                this.maxDate = row['max_date']
+              }
+              columns.forEach((col: any) => {
+                if (row[col.property]) {
+                  row = {
+                    ...row,
+                    [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+                  }
+                }
+              });
+              return row
+            }),
+            columns: columns.filter(col => {
+              if (rows[0] && col.property in rows[0]) {
+                return col;
+              }
+            })
+          };
+          if (this.tableReportData?.data?.length > 0) {
+            let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+            this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
+          }
+
         }
-        this.spinner.hide();
-      }
-    });
+      });
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      this.spinner.hide();
+    }
+
   }
 
   async drilldownData(event: any) {
@@ -212,7 +222,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
         }
         break;
     }
-    this.drillDownDetails = {...drillDownDetails}
+    this.drillDownDetails = { ...drillDownDetails }
 
     let reportConfig = config;
 
