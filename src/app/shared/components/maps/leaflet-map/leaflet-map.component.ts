@@ -139,7 +139,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       return '#fff'
     } else {
       let value = e;
-      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
       value = Number(value);
       for (let i = 0; i < values.length - 1; i++) {
@@ -594,7 +594,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
       value = Number(value);
       for (let i = 0; i < values.length - 1; i++) {
