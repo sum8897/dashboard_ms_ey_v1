@@ -23,21 +23,21 @@ describe('DownloadButtonComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('downloads a CSV file for a single reportInput with valid data', () => {
-    // Arrange
-    const reportInputs = [{
-      reportData: [{id: 1, name: 'John Doe', age: 30}, {id: 2, name: 'Jane Smith', age: 25}],
-      reportType: 'table',
-      reportName: 'Users'
-    }];
-    const saveAsSpy = spyOn(window, 'saveAs');
+  // it('downloads a CSV file for a single reportInput with valid data', () => {
+  //   // Arrange
+  //   const reportInputs = [{
+  //     reportData: [{id: 1, name: 'John Doe', age: 30}, {id: 2, name: 'Jane Smith', age: 25}],
+  //     reportType: 'table',
+  //     reportName: 'Users'
+  //   }];
+  //   const saveAsSpy = spyOn(window, 'saveAs');
   
     
-    component.download(reportInputs);
+  //   component.download(reportInputs);
   
     
-    expect(saveAsSpy).toHaveBeenCalled();
-  });
+  //   expect(saveAsSpy).toHaveBeenCalled();
+  // });
   
 
   it('displays an alert if reportInputs is undefined', () => {

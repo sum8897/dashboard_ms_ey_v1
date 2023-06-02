@@ -15,10 +15,19 @@ export class RbacService {
   };
   rbacDetails: BehaviorSubject<any>;
   constructor() {
-    this.rbacDetails = new BehaviorSubject(this.rbacObject);
-    let rbacStored = localStorage.getItem('rbacDetails')
-    if(rbacStored){
-      this.rbacDetails.next(JSON.parse(rbacStored))
+    this.rbacDetails = new BehaviorSubject(this.getStoredRbacDetails());
+  }
+
+  private getStoredRbacDetails() {
+    const storedRbacDetails = localStorage.getItem('rbacDetails');
+    if (storedRbacDetails) {
+      try {
+        return JSON.parse(storedRbacDetails);
+      } catch {
+        return this.rbacObject;
+      }
+    } else {
+      return this.rbacObject;
     }
   }
 
