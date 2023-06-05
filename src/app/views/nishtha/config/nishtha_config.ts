@@ -51,11 +51,11 @@ export const config = {
                             values: [
                                 {
                                     value: "yes",
-                                    color: '#b2d58f'
+                                    color: '#007000'
                                 },
                                 {
                                     value: "no",
-                                    color: '#FFD6D6'
+                                    color: '#D2222D'
                                 }
                             ]
                         }
