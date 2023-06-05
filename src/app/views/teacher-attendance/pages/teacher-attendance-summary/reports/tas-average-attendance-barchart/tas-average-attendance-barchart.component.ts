@@ -67,6 +67,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     })
     this._criteriaService.criteriaObject.subscribe((data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
+        this.applyCriteria(data)
       }
     })
     this.benchmarkSubscription = this._benchmarkService.benchmarkValues.subscribe((values: any) => {
@@ -165,6 +166,13 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics, benchmarkConfig } } = options;
     let annotations = []
     let colors = ['green', 'yellow', 'orange', 'red' ]
+    let objLevel = {
+     1 : "State average",
+     2 : "Disterict average",
+     3 : "Block average",
+     4 : "Cluster average"
+    }
+  console.log(objLevel[1],objLevel[2],objLevel[3],objLevel[4],"levels")   
     let reportValues = this.benchmarkValues?.[benchmarkConfig?.linkedReport]
     let currentLevel = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
     if(reportValues) {
@@ -179,14 +187,17 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
           borderColor: colors[index],
           borderWidth: 2,
           label: {
-            content: reportValues[level],
+            content: objLevel[level],
+            xAdjust:(120*level) - (350),
             enabled: true,
             backgroundColor: colors[index],
             color: 'white'
           }
         }
       })
-      console.log(annotations)
+      console.log(annotations);
+      console.log(reportValues,"gagfJHGF");
+      
     }
     
     

@@ -98,20 +98,28 @@ export class NasBignumberMetricsComponent implements OnInit {
 
 
 
-      let metricFilter = [...filterValues].filter((filter: any) => {
-        return filter?.filterType === 'metric'
-      })
+      // let metricFilter = [...filterValues].filter((filter: any) => {
+      //   return filter?.filterType === 'metric'
+      // })
 
-      filterValues = [...filterValues].filter((filter: any) => {
-        return filter?.filterType !== 'metric'
-      })
+      // filterValues = [...filterValues].filter((filter: any) => {
+      //   return filter?.filterType !== 'metric'
+      // })
 
-      filterValues.forEach((filterParams: any) => {
-        if (filterParams.value !== 'all') {
-          query += ` join datasets.nas_performance_umy3wxzhjm8aqh4udaka as b on a.state_id = b.state_id`
-          query = parseFilterToQuery(query, filterParams)
-        }
-      });
+      // filterValues.forEach((filterParams: any) => {
+      //   if (filterParams.value !== 'all') {
+      //     // Check if the subquery is already present in the query
+      //     if (key == 'bigNumber1') {
+      //       query = `select sum(a.count) as total_schools from datasets.nas_performance_umy3wxzhjm8aqh4udaka as a join datasets.nas_no_of_schools_state as t on a.state_id = t.state_id `;
+      //     } else if (key == 'bigNumber2') {
+      //       query = `select sum(a.count) as students_surveyed from datasets.nas_performance_umy3wxzhjm8aqh4udaka as a join datasets.nas_students_surveyed_state as t on a.state_id = t.state_id `;
+      //     } else if (key == 'bigNumber3') {
+      //       query = `select sum(a.count) as total_teachers from datasets.nas_performance_umy3wxzhjm8aqh4udaka as a join datasets.nas_no_of_teachers_state as t on a.state_id = t.state_id `;
+      //     }
+      //       query = parseFilterToQuery(query, filterParams);
+      //   }
+      // });
+
 
       if (query && key.indexOf('bigNumber') > -1) {
         let metricOptions = {

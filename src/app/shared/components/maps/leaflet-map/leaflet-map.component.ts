@@ -1,15 +1,13 @@
-import { state } from '@angular/animations';
-import { ThisReceiver } from '@angular/compiler';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import * as L from "leaflet";
 import * as R from "leaflet-responsive-popup";
 import { StateCodes } from 'src/app/core/config/StateCodes';
 import { environment } from 'src/environments/environment';
 import invert from 'invert-color';
-import mapJson from './../../../../../assets/data/JH.json';
 import * as latLongConfig from './../../../../../assets/data/config.json'
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { MapService } from 'src/app/core/services/map/map.service';
 
 @Component({
   selector: 'app-leaflet-map',
@@ -29,6 +27,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   config = environment.config
   rbacDetails: any;
   hierarchyLevel: any;
+  districtGeoJSON: any;
 
   @Input() mapData!: any;
   @Input() level: any;
@@ -41,7 +40,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('map') mapContainer!: ElementRef<HTMLElement>;
 
-  constructor(private _rbacService: RbacService, private readonly _drillDownService: ReportDrilldownService) {
+  constructor(private _rbacService: RbacService, private readonly _drillDownService: ReportDrilldownService, private readonly _mapService: MapService) {
     this.mapCenterLatlng = latLongConfig.default['IN'];
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
@@ -86,6 +85,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
       if (Number(lev)<=1) {
         await this.applyCountryBorder(this.mapData);
+        if (this.config !== 'NVSK') {
+          this.createMarkers(this.mapData);
+        }
       }
 
       const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -100,6 +102,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || Number(lev) > 1 || this.hierarchyLevel > 1) {
         this.map?.removeLayer(this.layerGroup);
         await this.applyStateBorder();
+        this.applyDistrictBorder();
         this.createMarkers(this.mapData);
       }
       if (this.hierarchyLevel < 2) {
@@ -136,7 +139,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       return '#fff'
     } else {
       let value = e;
-      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
       value = Number(value);
       for (let i = 0; i < values.length - 1; i++) {
@@ -154,18 +157,14 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     let parent = this;
     return new Promise(async (resolve, reject) => {
       try {
-        let body;
+        let data;
         if (this.config === 'NVSK' && this.rbacDetails.role === 0) {
-          const response = await fetch(`${environment.apiURL}/assets/IN.json`);
-          const temp = await response.json();
-          body = temp['IN']
+          data = await this._mapService.getCountryGeoJSON();
         }
         else {
-          const response = await fetch(`/assets/data/${environment.stateCode}.json`);
-          body = await response.json();
+          data = await this._mapService.getStateGeoJSON();
         }
 
-        const data = body;
         let min!: number, max!: number, values: any[] = [];
         
         if (reportTypeIndicator === 'value') {
@@ -256,7 +255,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               layer.bindTooltip(getPopUp(feature), { classname: "app-leaflet-tooltip", sticky: true });
             }
             layer.on({
-              click: () => {
+              click: this.config !== 'NVSK' ? () => { } : () => {
                 let lev = parent.drillDownLevel ? parent.drillDownLevel : parent.rbacDetails.role
                 if (Number(lev) <= 1) {
                   // parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role });
@@ -266,8 +265,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               }
             });
           },
-          style: styleStates,
-          color: "#a0a1a3",
+          style: this.config !== 'NVSK' ? () => {} : styleStates,
+          color: this.config !== 'NVSK' ? "#6e6d6d" : "#a0a1a3",
           weight: 1,
           fillOpacity: 0,
           fontWeight: "bold"
@@ -340,9 +339,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   async applyStateBorder(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await fetch(`${environment.apiURL}/assets/IN.json`);
-        const temp = await response.json();
-        const data = temp['IN'];
+        const data = await this._mapService.getCountryGeoJSON();
         const geoJSON = data.features.find(feature => {
           let state_code = feature.properties.state_code_2 || feature.properties.state_code;
           return state_code === this.rbacDetails.state;
@@ -370,10 +367,29 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
+  applyDistrictBorder(): any {
+    L.geoJSON(this.districtGeoJSON, {
+      // style: {
+      //   fillColor: '#fff',
+      //   weight: 1,
+      //   opacity: 1,
+      //   color: 'grey',
+      //   dashArray: '0',
+      //   fillOpacity: 1
+      // },
+      color: "#6e6d6d",
+      weight: 2,
+      fillOpacity: 0,
+      fontWeight: "bold"
+    }).addTo(this.map);
+  }
+
   fitBoundsToCountryBorder(): void {
-    this.map.fitBounds(this.countryGeoJSON.getBounds(), {
-      padding: [100, 100]
-    });
+    if (this.countryGeoJSON) {
+      this.map.fitBounds(this.countryGeoJSON.getBounds(), {
+        padding: [100, 100]
+      });
+    }
   }
 
   createMarkers(mapData: any, singleColor?: any): void {
@@ -480,7 +496,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           e.target.closePopup();
         });
 
-        markerIcon.on("click", (e: any) => {
+        markerIcon.on("click", async (e: any) => {
+          let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
+          if (Number(lev) <= 1) {
+            let stateGeoJSON = await this._mapService.getStateGeoJSON();
+
+            this.districtGeoJSON = stateGeoJSON.features.find(feature => {
+              return feature.properties['ID_2'] == e.target.options.id;
+            });
+            this.applyDrillDown({ id: e.target.options.id, hierarchyLevel: this.rbacDetails.role + 1, name: e.target.options.name})
+          }
           if(level < 4) {
             this.applyDrillDown({ name: e.target.options.name, id: e.target.options.id, hierarchyLevel: this.drillDownLevel ? this.drillDownLevel + 1 : this.rbacDetails.role + 1 })
           }
@@ -532,25 +557,25 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 70, 40, 0];
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
-        let reset = L.DomUtil.create('button', 'legend-range-reset pull-right')
-        // reset.innerHTML = `<i class="fa fa-refresh"></i>`
-        L.DomEvent.addListener(reset, 'click', () => {
-          ref.resetRange()
-        })
-        div.insertBefore(reset, div.prevSibling)
+  
+        // Create the reset button element
+        const resetButton = L.DomUtil.create('button', 'legend-range-reset pull-right');
+        resetButton.innerHTML = '<i class="fa fa-refresh"></i>';
+        L.DomEvent.addListener(resetButton, 'click', () => {
+          ref.resetRange();
+        });
+        div.insertBefore(resetButton, div.previousSibling);
+  
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button></br>`
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button><br>`;
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values))
-          })
-          div.appendChild(span)
+            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
+          });
+          div.appendChild(span);
           clickable = true;
         }
       }
-
-      // div.innerHTML = labels.join('<br>');
-
       if (!clickable) {
         div.innerHTML = labels.join('<br>');
       }
@@ -569,7 +594,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         return "#FF0000";
       }
     } else {
-      let colors = ["#d8ead3", "#fff2cc", "#f4cccc"];
+      let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
       value = Number(value);
       for (let i = 0; i < values.length - 1; i++) {
@@ -589,18 +614,20 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   applyRange(max: any, min: any, baseValue: any, rangeColour: any): void {
     let temp = this.mapData.data.filter((obj: any) => {
       return obj.indicator <= max && (min === baseValue ? obj.indicator >= min : obj.indicator > min)
-    })
+    });
     let filteredData = {
       ...this.mapData,
       data: temp
+    };
+
+    let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
+    if (Number(lev) === 1) {
+      this.applyCountryBorder(filteredData, rangeColour);
     }
 
-    let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
-    if (Number(lev) > 1) {
+    if (this.config !== 'NVSK') {
       this.markers.clearLayers();
       this.createMarkers(filteredData, rangeColour);
-    } else {
-      this.applyCountryBorder(filteredData, rangeColour);
     }
   }
 }

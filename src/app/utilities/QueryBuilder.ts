@@ -200,21 +200,29 @@ export function parseFilterToQuery(query: string, params?: any, filters?: any): 
     let whereIndex = query.toLowerCase().indexOf('where');
     let groupByIndex = query.toLowerCase().indexOf('group by');
     let orderByIndex = query.toLowerCase().indexOf('order by');
-    if ((params?.value == undefined && query) || (query && query.indexOf(params?.columnName) > -1 && whereIndex > -1 && query.indexOf(params?.columnName) > whereIndex)) {
-        return query;
-    }
-    let value = typeof params.value === 'string' ? `'${params.value}'` : params.value;
-    if (whereIndex === -1 && groupByIndex === -1 && orderByIndex === -1) {
-        return query.trim() + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value}`;
-    } else if (whereIndex !== -1) {
-        return query.substring(0, whereIndex) + `WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
-    } else if (whereIndex === -1 && groupByIndex !== -1) {
-        return query.substring(0, groupByIndex) + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} ` + query.substring(groupByIndex);
-    } else if (whereIndex === -1 && orderByIndex !== -1) {
-        return query.substring(0, orderByIndex) + ` WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} ` + query.substring(orderByIndex);
-    } else {
-        return query.substring(0, whereIndex) + `WHERE ${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = ${value} AND ` + query.substring(whereIndex + 6);
-    }
+
+if ((params?.value == undefined && query) || (query && query.indexOf(params?.columnName) > -1 && whereIndex > -1 && query.indexOf(params?.columnName) > whereIndex)) {
+    return query;
+}
+
+let values = Array.isArray(params.value) ? params.value : [params.value]; // Convert single value or array of values
+let valueConditions = values.map(value => `${params.tableAlias ? params.tableAlias+'.'+params.columnName : params.columnName} = '${value}'`).join(' OR ');
+
+// Create parentheses around OR conditions
+valueConditions = `(${valueConditions})`;
+
+if (whereIndex === -1 && groupByIndex === -1 && orderByIndex === -1) {
+    return query.trim() + ` WHERE ${valueConditions}`;
+} else if (whereIndex !== -1) {
+    return query.substring(0, whereIndex) + ` WHERE ${valueConditions} AND ` + query.substring(whereIndex + 6);
+} else if (whereIndex === -1 && groupByIndex !== -1) {
+    return query.substring(0, groupByIndex) + ` WHERE ${valueConditions} ` + query.substring(groupByIndex);
+} else if (whereIndex === -1 && orderByIndex !== -1) {
+    return query.substring(0, orderByIndex) + ` WHERE ${valueConditions} ` + query.substring(orderByIndex);
+} else {
+    return query.substring(0, whereIndex) + ` WHERE ${valueConditions} AND ` + query.substring(whereIndex + 6);
+}
+
 }
 
 export function parseRbacFilter(query: string, rbacDetails: any) {
