@@ -3,17 +3,19 @@
         This report shows the % of teachers present in the school within the selected time duration on average
     </p>
 
-    <div class="filter-row grid md:grid-cols-7 grid-cols-10">
-        <div class="time-series-filter md:col-span-2 col-span-4">
+    <div class="filter-row grid xs:grid-cols-6 sm:grid-cols-6 xmd:grid-cols-10 md:grid-cols-8 grid-cols-10">
+        <div class="time-series-filter xs:col-span-6 sm:col-span-6 xmd:col-span-4 md:col-span-2 col-span-4">
             <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
                 [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
-        <div class="download-button md:col-start-6 md:col-end-8 col-start-8 col-end-11 flex">
+        <div class="download-button xmd:col-start-7 xmd:col-end-10  md:col-start-7 md:col-end-10 col-start-8 col-end-10 flex">
             <app-download-button [data]="schoolReportsData" pagereportName="school"></app-download-button>
             &nbsp;
             <app-download-button [data]="reportsData" ></app-download-button>
         </div>
     </div>
+
+
 
     <div class="grid grid-cols-4">
         <div class="xmd:col-span-2 col-span-4">

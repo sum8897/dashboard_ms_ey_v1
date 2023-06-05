@@ -55,15 +55,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]
@@ -180,15 +180,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]
@@ -305,15 +305,15 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#d8ead3",
+                                    color: "#007000",
                                     breakPoint: 70
                                 },
                                 {
-                                    color: "#fff2cc",
+                                    color: "#FFBF00",
                                     breakPoint: 40
                                 },
                                 {
-                                    color: "#f4cccc",
+                                    color: "#D2222D",
                                     breakPoint: 0
                                 }
                             ]
