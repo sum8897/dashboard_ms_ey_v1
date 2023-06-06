@@ -37,7 +37,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   drillDownLevel: any;
   drillDownDetails: any;
   drillDownSubscription: any;
-
+  hierarchy:any;
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -58,9 +58,11 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
         this.drilldownData(data);
       }
     })
-    this._criteriaService.criteriaObject.subscribe((data) => {
+    this._criteriaService.criteriaObject.subscribe(async (data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
-        this.applyCriteria(data)
+       await this.applyCriteria(data)
+       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+       this.csv.schoolCsvDownload(reportsData,this.hierarchy)
       }
     })
     // this.getReportData();
@@ -135,6 +137,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   }
 
   async getTableReportData(query, options, hierarchyLevel?) {
+    this.hierarchy=hierarchyLevel;
     this._criteriaService.emit('reset')
     this.criteriaApplied = false;
     this.spinner.show();
