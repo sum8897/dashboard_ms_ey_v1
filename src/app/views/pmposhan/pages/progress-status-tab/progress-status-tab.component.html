@@ -6,12 +6,12 @@
         </div>
         <div class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex">
             <!-- <app-popup-options [data]="reportsData" [reportName]="'pm_poshan_progress'" ></app-popup-options> -->
-            <app-download-button [data]="reportsData"></app-download-button>
+            <app-download-button [data]="reportsData" [reportConfig]="{formatNumber: false}"></app-download-button>
         </div>
     </div>
 
 
-    
+
     <div class="reports-row">
         <div *ngIf="checkReport('pmposhan_metrics', 'bigNumber1')" id="bignumber1">
             <app-pmposhan-bignumber-metrics (exportReportData)="importBigNumberMetrics($event)"></app-pmposhan-bignumber-metrics>
@@ -28,7 +28,7 @@
         <div class="row-wrapper grid">
             <div class="col-span-1 xmd:col-span-1 div-shadow" *ngIf="checkReport('progress_status', 'map')" id="map">
                 <app-progress-status #progressStatus (exportReportData)="csvDownload($event)"></app-progress-status>
-            </div>   
+            </div>
         </div>
     </div>
 </div>

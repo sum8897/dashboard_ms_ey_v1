@@ -29,9 +29,9 @@ export class ImplementationStatusTabComponent implements OnInit, AfterViewInit {
     hasCommonFilters: boolean = true;
     bigNumberMetrics: any = [];
     tabLabel:any = 'Implementation Status'
-    
+
 @ViewChild('implementationStatus') implementationStatus: ImplementationStatusComponent;
-        
+
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
@@ -91,4 +91,3 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 }
-        
