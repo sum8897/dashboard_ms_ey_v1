@@ -107,12 +107,14 @@ export class TeacherAttendanceSummaryComponent implements OnInit, OnDestroy {
 
   csvDownload(csvData: any) {
     if (csvData) {
+      this.reportsData = [];
       this.reportsData.push(csvData)
     }
   }
 
   schoolCsvDownload(csvData: any, hierarchyLevel: any) {
     if (csvData && this.drillDownLevel == hierarchyLevel) {
+      this.schoolReportsData = [];
       this.schoolReportsData.push(csvData)
     }
   }

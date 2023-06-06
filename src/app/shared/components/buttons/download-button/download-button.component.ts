@@ -141,7 +141,6 @@ export class DownloadButtonComponent implements OnInit {
   //   }
   // }
   onDownload() {
-    console.log(this.data);
 
     // if(this.data.length > 0) this.download(this.data)
     this.download(this.data)
