@@ -418,12 +418,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         max = max > 0 ? max : parts;
         let range = max - min;
 
-        let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(2));
+        let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(0));
         for (let i = 0; i < parts; i++) {
           if (i === 0) {
             values.push(max);
           } else {
-            let value = Number((max - partSize * i).toFixed(2));
+            let value = Number((max - partSize * i).toFixed(0));
             values.push(value);
           }
         }

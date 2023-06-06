@@ -41,6 +41,7 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
   pagereportName = "teachers_present"
   defaultSelectedDays: any = 7;
   drillDownSubscription: any
+  drillDownDetails: any;
 
   //
 
@@ -60,7 +61,7 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.drillDownSubscription = this._drillDownService.drilldownData.subscribe((data) => {
-      if(data && data !== 'reset') {
+      if (data && data !== 'reset') {
         this.drilldownData({
           ...data
         })
@@ -74,28 +75,32 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
     let drillDownDetails;
 
     switch (Number(hierarchyLevel)) {
+      case 1:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          state: id ? id : this.drillDownDetails.state
+        }
+        break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
-          district: id
+          district: id ? id : this.drillDownDetails.district
         }
         break;
       case 3:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
-          block: id
+          block: id ? id : this.drillDownDetails.block
         }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
-          role: Number(this.rbacDetails.role) + 1,
-          cluster: id
+          cluster: id ? id : this.drillDownDetails.cluster
         }
         break;
     }
+    this.drillDownDetails = { ...drillDownDetails }
 
     let reportConfig = config
     let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -127,89 +132,94 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
   }
 
   getReportData(values: any): void {
-    this.drillDownLevel = undefined;
-    let { filterValues, timeSeriesValues } = values ?? { filterValues: [], timeSeriesValues: [] };
-    if (filterValues === undefined) {
-      filterValues = []
+    if (this.drillDownDetails !== undefined) {
+      this.drilldownData({ hierarchyLevel: this.drillDownLevel })
     }
-    this.startDate = timeSeriesValues?.startDate;
-    this.endDate = timeSeriesValues?.endDate;
-    let reportConfig = config
+    else {
+      this.drillDownLevel = undefined;
+      let { filterValues, timeSeriesValues } = values ?? { filterValues: [], timeSeriesValues: [] };
+      if (filterValues === undefined) {
+        filterValues = []
+      }
+      this.startDate = timeSeriesValues?.startDate;
+      this.endDate = timeSeriesValues?.endDate;
+      let reportConfig = config
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
-    let onLoadQuery;
-    let currentLevel;
+      let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+      let onLoadQuery;
+      let currentLevel;
 
-    if (this.rbacDetails?.role) {
-      filters.every((filter: any) => {
-        if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.timeSeriesQueries }
-          console.log(queries)
-          Object.keys(queries).forEach((key) => {
-            queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
-          });
-          return false
+      if (this.rbacDetails?.role) {
+        filters.every((filter: any) => {
+          if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
+            queries = { ...filter?.timeSeriesQueries }
+            console.log(queries)
+            Object.keys(queries).forEach((key) => {
+              queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
+            });
+            return false
+          }
+          return true
+        })
+      }
+
+      Object.keys(queries).forEach(async (key: any) => {
+        if (this.startDate === undefined && this.endDate === undefined) {
+          let endDate = new Date();
+          let days = endDate.getDate() - this.compareDateRange;
+          let startDate = new Date();
+          startDate.setDate(days)
+          onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
         }
-        return true
+        else if (this.startDate !== undefined && this.endDate !== undefined) {
+          onLoadQuery = parseTimeSeriesQuery(queries[key], this.startDate, this.endDate)
+        }
+
+        let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+        let metricFilter = [...filterValues].filter((filter: any) => {
+          return filter.filterType === 'metric'
+        })
+
+        filterValues = [...filterValues].filter((filter: any) => {
+          return filter.filterType !== 'metric'
+        })
+
+        filterValues.forEach((filterParams: any) => {
+          query = parseFilterToQuery(query, filterParams)
+        });
+
+        if (query && key === 'table') {
+          this.reportData = await this._dataService.getTableReportData(query, options);
+          if (this.reportData?.data?.length > 0) {
+            let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
+            this.exportReportData.emit(reportsData)
+          }
+        }
+        else if (query && key === 'bigNumber') {
+          this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
+        }
+        else if (query && key === 'bigNumberComparison') {
+          this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
+        }
+        else if (query && key === 'barChart') {
+          let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+          this.reportData = reportData
+          this.config = config;
+          if (this.reportData?.values?.length > 0) {
+            let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+            this.exportReportData.emit(reportsData)
+          }
+        }
+        else if (query && key === 'map') {
+          this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
+          if (this.reportData?.data?.length > 0) {
+            let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
+            this.exportReportData.emit(reportsData)
+          }
+        }
       })
     }
-
-    Object.keys(queries).forEach(async (key: any) => {
-      if (this.startDate === undefined && this.endDate === undefined) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.compareDateRange;
-        let startDate = new Date();
-        startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-      }
-      else if (this.startDate !== undefined && this.endDate !== undefined) {
-        onLoadQuery = parseTimeSeriesQuery(queries[key], this.startDate, this.endDate)
-      }
-
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-      let metricFilter = [...filterValues].filter((filter: any) => {
-        return filter.filterType === 'metric'
-      })
-
-      filterValues = [...filterValues].filter((filter: any) => {
-        return filter.filterType !== 'metric'
-      })
-
-      filterValues.forEach((filterParams: any) => {
-        query = parseFilterToQuery(query, filterParams)
-      });
-
-      if (query && key === 'table') {
-        this.reportData = await this._dataService.getTableReportData(query, options);
-        if (this.reportData?.data?.length > 0) {
-          let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
-          this.exportReportData.emit(reportsData)
-        }
-      }
-      else if (query && key === 'bigNumber') {
-        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
-      }
-      else if (query && key === 'bigNumberComparison') {
-        this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
-      }
-      else if (query && key === 'barChart') {
-        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-        this.reportData = reportData
-        this.config = config;
-        if (this.reportData?.values?.length > 0) {
-          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
-          this.exportReportData.emit(reportsData)
-        }
-      }
-      else if (query && key === 'map') {
-        this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
-        if (this.reportData?.data?.length > 0) {
-          let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
-          this.exportReportData.emit(reportsData)
-        }
-      }
-    })
   }
 
   getSchoolReportData() {
