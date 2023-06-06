@@ -30,4 +30,11 @@
     .leaflet-interactive:focus, .leaflet-interactive:active{
         outline:none;
     }
+    .legend-checkbox{
+        display: flex !important;
+    }
+    .button-content{
+        display: column;
+        // justify-content: space-evenly;
+    }
 }

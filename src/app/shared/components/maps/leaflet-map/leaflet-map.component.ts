@@ -8,6 +8,7 @@ import * as latLongConfig from './../../../../../assets/data/config.json'
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { MapService } from 'src/app/core/services/map/map.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-leaflet-map',
@@ -28,6 +29,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   rbacDetails: any;
   hierarchyLevel: any;
   districtGeoJSON: any;
+  legendForm: any;
+  range1: any = true
 
   @Input() mapData!: any;
   @Input() level: any;
@@ -40,7 +43,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('map') mapContainer!: ElementRef<HTMLElement>;
 
-  constructor(private _rbacService: RbacService, private readonly _drillDownService: ReportDrilldownService, private readonly _mapService: MapService) {
+  constructor(private _rbacService: RbacService,
+    private readonly _drillDownService: ReportDrilldownService,
+    private readonly _mapService: MapService
+  ) {
     this.mapCenterLatlng = latLongConfig.default['IN'];
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
@@ -83,7 +89,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     this.layerGroup.addTo(this.map);
     try {
       let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
-      if (Number(lev)<=1) {
+      if (Number(lev) <= 1) {
         await this.applyCountryBorder(this.mapData);
         if (this.config !== 'NVSK') {
           this.createMarkers(this.mapData);
@@ -166,7 +172,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         let min!: number, max!: number, values: any[] = [];
-        
+
         if (reportTypeIndicator === 'value') {
           mapData.data.forEach((data: any, index: number) => {
             if (index === 0) {
@@ -174,15 +180,15 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               max = data.indicator;
               return;
             }
-  
+
             min = min <= data.indicator ? min : data.indicator;
             max = max >= data.indicator ? max : data.indicator;
           });
-  
+
           let parts = 3;
           max = max > 0 ? max : parts;
           let range = max - min;
-  
+
           let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(2));
           for (let i = 0; i < parts; i++) {
             if (i === 0) {
@@ -216,7 +222,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
               }
             });
           }
-          
+
           if (parent.level === 'state' || parent.config === 'VSK' || parent.config === 'NVSK') {
             return {
               fillColor: singleColor ? (color === '#fff' ? color : singleColor) : color,
@@ -234,7 +240,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         function getPopUp(feature: any) {
-          if(parent.hierarchyLevel > 1 || parent.drillDownLevel > 1) {
+          if (parent.hierarchyLevel > 1 || parent.drillDownLevel > 1) {
             return undefined
           }
           let popup: any;
@@ -251,21 +257,21 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.countryGeoJSON = L.geoJSON(data['features'], {
           onEachFeature: function (feature: any, layer: any) {
-            if (getPopUp(feature)) {
-              layer.bindTooltip(getPopUp(feature), { classname: "app-leaflet-tooltip", sticky: true });
-            }
+            // if (getPopUp(feature)) {
+            //   layer.bindTooltip(getPopUp(feature), { classname: "app-leaflet-tooltip", sticky: true });
+            // }
             layer.on({
               click: this.config !== 'NVSK' ? () => { } : () => {
                 let lev = parent.drillDownLevel ? parent.drillDownLevel : parent.rbacDetails.role
                 if (Number(lev) <= 1) {
                   // parent.drillDownFilter.emit({ id: feature?.properties?.['ID_2'], level: parent.rbacDetails.role });
                   let district_name = parent.getDrillDownDetails(feature?.properties?.['ID_2'], mapData.data)
-                  parent.applyDrillDown({ id: feature?.properties?.['ID_2'], hierarchyLevel: parent.rbacDetails.role + 1 , name: district_name})
+                  parent.applyDrillDown({ id: feature?.properties?.['ID_2'], hierarchyLevel: parent.rbacDetails.role + 1, name: district_name })
                 }
               }
             });
           },
-          style: this.config !== 'NVSK' ? () => {} : styleStates,
+          style: this.config !== 'NVSK' ? () => { } : styleStates,
           color: this.config !== 'NVSK' ? "#6e6d6d" : "#a0a1a3",
           weight: 1,
           fillOpacity: 0,
@@ -344,7 +350,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           let state_code = feature.properties.state_code_2 || feature.properties.state_code;
           return state_code === this.rbacDetails.state;
         });
-        
+
         this.stateGeoJSON = L.geoJSON(geoJSON, {
           // style: {
           //   fillColor: '#fff',
@@ -447,7 +453,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         let re = new RegExp("_id$");
         // let filterIds = {};
         var id;
-        
+
 
         Object.keys(data).forEach((prop: any) => {
           // if(re.test(prop)){
@@ -457,10 +463,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           // return true;
           // if (prop.match(re)) {
           //   id = data[prop.match(re)?.input]
-            // filterIds = {
-            //   ...filterIds,
-            //   [prop.match(re).input]: data[prop.match(re)?.input]
-            // }
+          // filterIds = {
+          //   ...filterIds,
+          //   [prop.match(re).input]: data[prop.match(re)?.input]
+          // }
           // }
           id = data[idProp]
         })
@@ -470,7 +476,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           hierarchyLevel: data.hierarchyLevel,
           color: "gray",
           // fillColor: this.getZoneColor(reportTypeIndicator, data.indicator >= 1 ? (max - min ? (data.indicator - min) / (max - min) * 100 : data.indicator) : -1),
-          fillColor: singleColor ? singleColor : this.getZoneColor(reportTypeIndicator, data.indicator, values),
+          fillColor: this.getZoneColor(reportTypeIndicator, data.indicator, values),
           fillOpacity: 1,
           strokeWeight: 0.01,
           weight: 1
@@ -504,9 +510,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             this.districtGeoJSON = stateGeoJSON.features.find(feature => {
               return feature.properties['ID_2'] == e.target.options.id;
             });
-            this.applyDrillDown({ id: e.target.options.id, hierarchyLevel: this.rbacDetails.role + 1, name: e.target.options.name})
+            this.applyDrillDown({ id: e.target.options.id, hierarchyLevel: this.rbacDetails.role + 1, name: e.target.options.name })
           }
-          if(level < 4) {
+          if (level < 4) {
             this.applyDrillDown({ name: e.target.options.name, id: e.target.options.id, hierarchyLevel: this.drillDownLevel ? this.drillDownLevel + 1 : this.rbacDetails.role + 1 })
           }
         })
@@ -517,11 +523,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       });
 
       this.map.addLayer(this.markers);
-      
-      this.map.fitBounds(this.markers.getBounds(), {
-        padding: [150, 150]
-      });
       if (!singleColor) {
+        this.map.fitBounds(this.markers.getBounds(), {
+          padding: [150, 150]
+        });
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
       }
     }
@@ -554,10 +559,15 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         //   }
         // }
       } else {
+        ref.legendForm = {
+          range1: true,
+          range2: true,
+          range3: true
+        };
         values = values && values.length > 0 && reportTypeIndicator !== 'percent' ? values : [100, 70, 40, 0];
         // div.innerHTML = labels[0] + '</br>';
         div.innerHTML = labels[0];
-  
+
         // Create the reset button element
         const resetButton = L.DomUtil.create('button', 'legend-range-reset pull-right');
         resetButton.innerHTML = '<i class="fa fa-refresh"></i>';
@@ -565,12 +575,13 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           ref.resetRange();
         });
         div.insertBefore(resetButton, div.previousSibling);
-  
+
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</button><br>`;
+          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}"><div class="button-content"><input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</div></button><br>`;
           L.DomEvent.addListener(span, 'click', () => {
-            ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
+            // ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
+            ref.applyRange(i + 1, Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values), Number(values[i] ? values[i] : 0), Number(values[i + 1]))
           });
           div.appendChild(span);
           clickable = true;
@@ -608,26 +619,72 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   resetRange() {
-    this.applyCountryBorder(this.mapData)
+    // this.applyCountryBorder(this.mapData)
+    this.createMarkers(this.mapData)
   }
 
-  applyRange(max: any, min: any, baseValue: any, rangeColour: any): void {
-    let temp = this.mapData.data.filter((obj: any) => {
-      return obj.indicator <= max && (min === baseValue ? obj.indicator >= min : obj.indicator > min)
-    });
+  // applyRange(max: any, min: any, baseValue: any, rangeColour: any): void {
+  //   let temp = this.mapData.data.filter((obj: any) => {
+  //     return obj.indicator <= max && (min === baseValue ? obj.indicator >= min : obj.indicator > min)
+  //   });
+  //   let filteredData = {
+  //     ...this.mapData,
+  //     data: temp
+  //   };
+
+  //   let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
+  //   if (Number(lev) === 1) {
+  //     this.applyCountryBorder(filteredData, rangeColour);
+  //   }
+
+  //   if (this.config !== 'NVSK') {
+  //     this.markers.clearLayers();
+  //     this.createMarkers(filteredData, rangeColour);
+  //   }
+  // }
+
+  applyRange(index: any, baseValue: any, rangeColour: any, max: any, min: any) {
+    let range1Data = [], range2Data = [], range3Data = []
+    console.log(index)
+    switch (index) {
+      case 1:
+        let checkbox1 = <HTMLInputElement>document.getElementById('checkbox-1');
+        checkbox1.checked = !this.legendForm.range1
+        this.legendForm.range1 = !this.legendForm.range1
+        break;
+      case 2:
+        let checkbox2 = <HTMLInputElement>document.getElementById('checkbox-2');
+        checkbox2.checked = !this.legendForm.range2
+        this.legendForm.range2 = !this.legendForm.range2
+        break;
+      case 3:
+        let checkbox3 = <HTMLInputElement>document.getElementById('checkbox-3');
+        checkbox3.checked = !this.legendForm.range3
+        this.legendForm.range3 = !this.legendForm.range3
+        break;
+    }
+    if(this.legendForm.range1) {
+      range1Data = this.mapData.data.filter((obj: any) => {
+        return obj.indicator <= 100 && (70 === baseValue ? obj.indicator >= 70 : obj.indicator > 70)
+      });
+    }
+    if(this.legendForm.range2) {
+      range2Data = this.mapData.data.filter((obj: any) => {
+        return obj.indicator <= 70 && (40 === baseValue ? obj.indicator >= 40 : obj.indicator > 40)
+      });
+    }
+    if(this.legendForm.range3) {
+      range3Data = this.mapData.data.filter((obj: any) => {
+        return obj.indicator <= 40 && (0 === baseValue ? obj.indicator >= 0 : obj.indicator > 0)
+      });
+    }
+
     let filteredData = {
       ...this.mapData,
-      data: temp
+      data: [range1Data, range2Data, range3Data].flat()
     };
 
-    let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
-    if (Number(lev) === 1) {
-      this.applyCountryBorder(filteredData, rangeColour);
-    }
-
-    if (this.config !== 'NVSK') {
-      this.markers.clearLayers();
-      this.createMarkers(filteredData, rangeColour);
-    }
+    this.markers.clearLayers();
+    this.createMarkers(filteredData, rangeColour);
   }
 }
