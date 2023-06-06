@@ -196,34 +196,55 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select t1.course_name , t1.sum as total_enrolment , t2.sum as total_certifications from datasets.nishtha_total_enrolment_coursenishtha as t1 join datasets.nishtha_total_certification_coursenishtha  as t2 on t1.course_name = t2.course_name group by t1.course_name,t1.sum,t2.sum ",
+                        "table": "select t1.course_name , t1.sum as total_enrolment , t2.sum as total_certifications from datasets.nishtha_total_enrolment_coursenishtha as t1 join datasets.nishtha_total_certification_coursenishtha  as t2 on t1.course_name = t2.course_name group by t1.course_name,t1.sum,t2.sum ",
                     },
                     "level": "district"
                 }
             }
         ],
+        // "options": {
+        //     "barChart": {
+        //         "isMultibar": true,
+        //         "valueSuffix": "",
+        //         "yAxis": {
+        //             "title": "Total Enrolement and Certifications"
+        //         },
+        //         "xAxis": {
+        //             "title": " Courses",
+        //             "label": "course_name",
+        //             "value": "course_name",
+        //             "metrics": [
+        //                 {
+        //                     "label": "Total Entrolments",
+        //                     "value": "total_enrolment"
+        //                 },
+        //                 {
+        //                     "label": "Total Certifications",
+        //                     "value": "total_certifications"
+        //                 }
+        //             ]
+        //         }
+        //     }
+        // }
         "options": {
-            "barChart": {
-                "isMultibar": true,
-                "valueSuffix": "",
-                "yAxis": {
-                    "title": "Total Enrolement and Certifications"
-                },
-                "xAxis": {
-                    "title": " Courses",
-                    "label": "course_name",
-                    "value": "course_name",
-                    "metrics": [
-                        {
-                            "label": "Total Entrolments",
-                            "value": "total_enrolment"
-                        },
-                        {
-                            "label": "Total Certifications",
-                            "value": "total_certifications"
-                        }
-                    ]
-                }
+            "table": {
+                "columns": [
+                    {
+                        name: "Courses",
+                        property: "course_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Entrolments",
+                        property: "total_enrolment",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Certifications",
+                        property: "total_certifications",
+                        class: "text-center"
+                    }
+                ],
             }
         }
     },

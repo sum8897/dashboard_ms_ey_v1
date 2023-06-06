@@ -24,8 +24,8 @@ export class CommonService {
   }
   
   getDashboardMetrics(): Observable<ResponseType<any>> {
-    // return this._http.get<ResponseType<any>>(`${environment.apiURL}/metric`);
-    return this._http.get<ResponseType<any>>('../../../assets/data/mock/metric.json');
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/metric`);
+    // return this._http.get<ResponseType<any>>('../../../assets/data/mock/metric.json');
   } 
 
   getGenrateToken(): Observable<ResponseType<any>> {

@@ -178,7 +178,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject, grade, t.lo_code, t.lo_code"
+                        "table": "select t.lo_code, grade, subject, round(cast(sum(t.sum) as numeric),2) as performance, state_name as district_name from datasets.nas_performance_state0lo0subject0grade as t join dimensions.state as d on t.state_id = d.state_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.state_id, state_name, subject, grade, t.lo_code, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -190,7 +190,7 @@ export const config = {
                 "actions":
                 {
                     "queries": {
-                        "table": "select t.lo_code, t.lo_code, grade, subject, round(cast(sum(sum) as numeric),2) as performance, district_name from datasets.nas_performance_axzvtm5yeherjxnvzgcw as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
+                        "table": "select t.lo_code, grade, subject, ROUND(CAST(SUM(t.sum) AS numeric), 2) AS performance, district_name from datasets.nas_performance_axzvtm5yeherjxnvzgcw as t join dimensions.district as d on t.district_id = d.district_id join datasets.nas_performance_lonas as l on t.lo_code = l.lo_code group by t.district_id, district_name, subject, grade, t.lo_code, t.lo_code"
                     },
                     "level": "district",
                     "nextLevel": "block"
