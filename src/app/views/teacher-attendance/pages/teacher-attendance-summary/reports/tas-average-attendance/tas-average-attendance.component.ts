@@ -64,9 +64,11 @@ export class TasAverageAttendanceComponent implements OnInit, OnDestroy {
       }
     })
 
-    this._criteriaService.criteriaObject.subscribe((data) => {
+    this._criteriaService.criteriaObject.subscribe(async (data) => {
       if(data && data?.linkedReports?.includes(this.reportName)) {
-        this.applyCriteria(data)
+       await this.applyCriteria(data);
+       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.csvDownload(reportsData)
       }
     })
     // this.getReportData();

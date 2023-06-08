@@ -165,7 +165,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     let { filters, defaultLevel, options } = config[this.reportName];
     let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics, benchmarkConfig } } = options;
     let annotations = []
-    let colors = ['green', 'yellow', 'orange', 'red' ]
+    let colors = ['green', 'blue', 'orange', 'red' ]
     let objLevel = {
      1 : "State average",
      2 : "Disterict average",
