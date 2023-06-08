@@ -9,6 +9,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { MapService } from 'src/app/core/services/map/map.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 
 @Component({
   selector: 'app-leaflet-map',
@@ -398,11 +399,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  createMarkers(mapData: any, singleColor?: any): void {
+  createMarkers(mapData: any, prevValues?: any): void {
     let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     if (mapData && this.level !== 'state') {
       let min!: number, max!: number, values: any[] = [];
-      if (reportTypeIndicator === 'value') {
+      if (reportTypeIndicator === 'value' && !prevValues) {
         mapData.data.forEach((data: any, index: number) => {
           if (index === 0) {
             min = data.indicator;
@@ -431,6 +432,9 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         values.push(0);
       } else if (reportTypeIndicator === 'percent') {
         values = [100, 70, 40, 0];
+      }
+      else if(prevValues) {
+        values = prevValues
       }
       let level = this.drillDownLevel ? this.drillDownLevel : this.hierarchyLevel
       var idProp;
@@ -523,7 +527,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       });
 
       this.map.addLayer(this.markers);
-      if (!singleColor) {
+      if (!prevValues) {
         this.map.fitBounds(this.markers.getBounds(), {
           padding: [150, 150]
         });
@@ -576,12 +580,36 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
         div.insertBefore(resetButton, div.previousSibling);
 
+        // for (let i = 0; i < values.length - 1; i++) {
+        //   let span = L.DomUtil.create('span', 'clickable-range');
+        //   span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}"><div class="button-content"><input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</div></button><br>`;
+        //   L.DomEvent.addListener(span, 'click', () => {
+        //     // ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
+        //     ref.applyRange(i + 1, Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values), Number(values[i] ? values[i] : 0), Number(values[i + 1]))
+        //   });
+        //   div.appendChild(span);
+        //   clickable = true;
+        // }
+
         for (let i = 0; i < values.length - 1; i++) {
           let span = L.DomUtil.create('span', 'clickable-range');
-          span.innerHTML = `<button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}"><div class="button-content"><input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />${values[i + 1]} &dash; ${values[i] ? values[i] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</div></button><br>`;
+          const lowerValue = values[i + 1];
+          const upperValue = values[i] ? values[i] : 0;
+          const formattedLowerValue = formatNumberForReport(lowerValue);
+          const formattedUpperValue = formatNumberForReport(upperValue);
+          span.innerHTML = `
+            <button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">
+                 <div class="button-content">
+              <label class="checkbox-container">
+                <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
+                <span class="checkmark"></span>
+              </label>
+                <span class="value">${formattedLowerValue} &ndash; ${formattedUpperValue}${reportTypeIndicator === 'percent' ? '%' : ''}</span>
+               </div>
+            </button><br>`;
+
           L.DomEvent.addListener(span, 'click', () => {
-            // ref.applyRange(Number(values[i] ? values[i] : 0), Number(values[i + 1]), Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values));
-            ref.applyRange(i + 1, Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values), Number(values[i] ? values[i] : 0), Number(values[i + 1]))
+            ref.applyRange(i + 1, Number(values[values.length - 1]), ref.getLayerColor(values[i], true, values), values)
           });
           div.appendChild(span);
           clickable = true;
@@ -643,9 +671,8 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   //   }
   // }
 
-  applyRange(index: any, baseValue: any, rangeColour: any, max: any, min: any) {
+  applyRange(index: any, baseValue: any, rangeColour: any, values:any) {
     let range1Data = [], range2Data = [], range3Data = []
-    console.log(index)
     switch (index) {
       case 1:
         let checkbox1 = <HTMLInputElement>document.getElementById('checkbox-1');
@@ -665,17 +692,17 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
     if(this.legendForm.range1) {
       range1Data = this.mapData.data.filter((obj: any) => {
-        return obj.indicator <= 100 && (70 === baseValue ? obj.indicator >= 70 : obj.indicator > 70)
+        return obj.indicator <= values[0] && (values[1] === baseValue ? obj.indicator >= values[1] : obj.indicator > values[1])
       });
     }
     if(this.legendForm.range2) {
       range2Data = this.mapData.data.filter((obj: any) => {
-        return obj.indicator <= 70 && (40 === baseValue ? obj.indicator >= 40 : obj.indicator > 40)
+        return obj.indicator <= values[1] && (values[2] === baseValue ? obj.indicator >= values[2] : obj.indicator > values[2])
       });
     }
     if(this.legendForm.range3) {
       range3Data = this.mapData.data.filter((obj: any) => {
-        return obj.indicator <= 40 && (0 === baseValue ? obj.indicator >= 0 : obj.indicator > 0)
+        return obj.indicator <= values[2] && (values[3] === baseValue ? obj.indicator >= values[3] : obj.indicator > values[3])
       });
     }
 
@@ -685,6 +712,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     };
 
     this.markers.clearLayers();
-    this.createMarkers(filteredData, rangeColour);
+    this.createMarkers(filteredData, values);
   }
 }
