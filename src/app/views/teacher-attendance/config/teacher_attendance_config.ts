@@ -1232,7 +1232,12 @@ export const config = {
                         },
                     }
                 ],
-            }
+            },
+            "searchBar_config": {
+                "title": "UDISE Code",
+                "searchProps": ['udise_code'],
+                "searchType": "number"
+            },
         }
     },
 
