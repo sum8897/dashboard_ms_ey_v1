@@ -33,11 +33,12 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
+  searchFilterConfig: any;
   previousText: any;
   drillDownLevel: any;
   drillDownDetails: any;
   drillDownSubscription: any;
-  hierarchy:any;
+  hierarchy: any;
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -52,27 +53,61 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
+    let { options: { searchBar_config } } = config[this.reportName];
+    this.searchFilterConfig = {
+      ...searchBar_config
+    }
+    this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(async (data) => {
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
-        this.drilldownData(data);
+        this._criteriaService.emit('reset')
+        this.criteriaApplied = false;
+        // this.drilldownData(data);
+        let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
+        this.drillDownDetails = result?.drillDownDetails
+        this.tableReportData = result?.reportData
+        if (this.tableReportData?.data?.length > 0) {
+          let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+          this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
+        }
       }
     })
     this._criteriaService.criteriaObject.subscribe(async (data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
-       await this.applyCriteria(data)
-       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-       this.csv.schoolCsvDownload(reportsData,this.hierarchy)
+        //  await this.applyCriteria(data)
+        if (!this.criteriaApplied) {
+          this.backUpData = this.tableReportData?.data
+        }
+        this.criteriaApplied = true
+        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData)
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.schoolCsvDownload(reportsData, this.hierarchy)
       }
     })
     // this.getReportData();
   }
 
-  getReportData(startDate = undefined, endDate = undefined): void {
+  searchTextUpdate(text: any) {
+    this.searchFilterConfig = {
+      ...this.searchFilterConfig,
+      searchText: text
+    }
+    // this.searchText = text
+  }
+
+  async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
     this.startDate = startDate;
     this.endDate = endDate;
+    this._criteriaService.emit('reset')
+    this.criteriaApplied = false;
     if (this.drillDownDetails !== undefined) {
-      this.drilldownData({ hierarchyLevel: this.drillDownLevel })
+      let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
+      this.drillDownDetails = result?.drillDownDetails
+      this.tableReportData = result?.reportData
+      if (this.tableReportData?.data?.length > 0) {
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
+      }
     }
     else {
       let reportConfig = config;
@@ -137,9 +172,7 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
   }
 
   async getTableReportData(query, options, hierarchyLevel?) {
-    this.hierarchy=hierarchyLevel;
-    this._criteriaService.emit('reset')
-    this.criteriaApplied = false;
+    this.hierarchy = hierarchyLevel;
     this.spinner.show();
 
     try {
@@ -193,98 +226,6 @@ export class AverageAttendanceSchoolTableComponent implements OnInit, OnDestroy 
       this.spinner.hide();
     }
 
-  }
-
-  async drilldownData(event: any) {
-    let { hierarchyLevel, id } = event ?? {}
-    let drillDownDetails;
-
-    switch (Number(hierarchyLevel)) {
-      case 1:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          state: id ? id : this.drillDownDetails.state
-        }
-        break;
-      case 2:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          district: id ? id : this.drillDownDetails.district
-        }
-        break;
-      case 3:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          block: id ? id : this.drillDownDetails.block
-        }
-        break;
-      case 4:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          cluster: id ? id : this.drillDownDetails.cluster
-        }
-        break;
-    }
-    this.drillDownDetails = { ...drillDownDetails }
-
-    let reportConfig = config;
-
-    let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
-    let onLoadQuery;
-    if (this.rbacDetails?.role) {
-      filters.every((filter: any) => {
-        if (Number(hierarchyLevel) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.actions?.queries }
-          timeSeriesQueries = { ...filter?.timeSeriesQueries }
-          Object.keys(queries).forEach((key) => {
-            queries[key] = parseRbacFilter(queries[key], drillDownDetails)
-            timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], drillDownDetails)
-          });
-          return false
-        }
-        return true
-      })
-    } else {
-      this._wrapperService.constructFilters(this.filters, filters);
-    }
-
-    Object.keys(queries).forEach((key: any) => {
-      if (key.toLowerCase().includes('comparison')) {
-        let endDate = new Date();
-        let days = endDate.getDate() - this.compareDateRange;
-        let startDate = new Date();
-        startDate.setDate(days)
-        onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-      }
-      else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      else {
-        onLoadQuery = queries[key]
-      }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-      if (query && key === 'table') {
-        this.getTableReportData(query, options, event.hierarchyLevel);
-      }
-    });
-  }
-
-  applyCriteria(data: any) {
-    if (!this.criteriaApplied) {
-      this.backUpData = this.tableReportData?.data
-    }
-    this.criteriaApplied = true
-    if (data && this.backUpData.length > 0) {
-      let filteredData = this.backUpData.filter((row: any) => {
-        let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
-        return (Number(data?.fromRange) <= Number(value) && Number(value) <= Number(data?.toRange))
-      })
-      this.tableReportData = {
-        ...this.tableReportData,
-        data: filteredData
-      }
-    }
   }
 
   ngOnDestroy(): void {
