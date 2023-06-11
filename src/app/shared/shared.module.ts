@@ -55,6 +55,7 @@ import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core'; // 
 import { MatIconModule } from '@angular/material/icon';
 import { CriteriaComponent } from './components/criteria/criteria.component';
 import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -117,13 +118,14 @@ const DECLARATIONS = [
   SbBarChartComponent,
   CriteriaComponent,
   MaterialHeatChartDrilldownTableComponent,
-  SearchFilterPipe
+  SearchFilterPipe,
+  SearchBarComponent
 ];
 
 @NgModule({
   declarations: [
     DECLARATIONS,
-    BreadcrumbComponentComponent
+    BreadcrumbComponentComponent,
   ],
   imports: [
     CommonModule,

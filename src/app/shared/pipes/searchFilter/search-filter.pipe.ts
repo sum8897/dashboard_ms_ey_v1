@@ -5,7 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SearchFilterPipe implements PipeTransform {
 
-  transform(items: any, searchText: any): any {
+  transform(items: any, searchFilterConfig: any): any {
+    console.log(searchFilterConfig)
+    let {searchProps, searchText} = searchFilterConfig;
     if(searchText) {
       searchText = String(searchText)
       // searchText = searchText ? searchText.toLocaleLowerCase() : '';
@@ -22,7 +24,17 @@ export class SearchFilterPipe implements PipeTransform {
     }
     if (searchText) {
       let filteredData = data.filter((e: any) => {
-        return String(e.udise_code?.value)?.includes(searchText) ? String(e.udise_code?.value)?.includes(searchText) : false
+        let include = false;
+        // return String(e.udise_code?.value)?.includes(searchText) ? String(e.udise_code?.value)?.includes(searchText) : false
+        searchProps.every((prop: any) => {
+          let value = e?.[prop]?.value ? (String(e?.[prop]?.value).toLocaleLowerCase()).includes(searchText.toLocaleLowerCase()) : (e?.[prop] ? (String(e?.[prop]).toLocaleLowerCase()).includes(searchText.toLocaleLowerCase()) : false)
+          if(value) {
+            include = true;
+            return false
+          }
+          return true
+        })
+        return include
       })
       return {
         ...items,

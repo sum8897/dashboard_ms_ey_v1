@@ -30,7 +30,6 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
   filterIndex: any;
   rbacDetails: any;
   drillDownLevel: any;
-  drillDown: any;
   bigNumberReports: any = {};
   maxDate: any;
   minDate: any;
@@ -60,80 +59,25 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.drillDownSubscription = this._drillDownService.drilldownData.subscribe((data) => {
+    this.drillDownSubscription = this._drillDownService.drilldownData.subscribe(async (data) => {
       if (data && data !== 'reset') {
-        this.drilldownData({
-          ...data
-        })
+        this.drillDownLevel = data.hierarchyLevel
+        // this.drilldownData({
+        //   ...data
+        // })
+        let result: any = await this._drillDownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
+        this.drillDownDetails = result?.drillDownDetails
+        this.reportData = result?.reportData
       }
     })
   }
 
-  async drilldownData(details: any) {
-    this.drillDown = true
-    let { hierarchyLevel, id } = details ?? {}
-    let drillDownDetails;
-
-    switch (Number(hierarchyLevel)) {
-      case 1:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          state: id ? id : this.drillDownDetails.state
-        }
-        break;
-      case 2:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          district: id ? id : this.drillDownDetails.district
-        }
-        break;
-      case 3:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          block: id ? id : this.drillDownDetails.block
-        }
-        break;
-      case 4:
-        drillDownDetails = {
-          ...this.rbacDetails,
-          cluster: id ? id : this.drillDownDetails.cluster
-        }
-        break;
-    }
-    this.drillDownDetails = { ...drillDownDetails }
-
-    let reportConfig = config
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
-    filters.every((filter: any) => {
-      if ((Number(hierarchyLevel)) === Number(filter.hierarchyLevel)) {
-        queries = { ...filter?.timeSeriesQueries }
-        queries['map'] = parseRbacFilter(queries['map'], drillDownDetails)
-        return false
-      }
-      return true
-    })
-    let drillDownQuery;
-    if (this.startDate === undefined && this.endDate === undefined) {
-      let endDate = new Date();
-      let days = endDate.getDate() - this.compareDateRange;
-      let startDate = new Date();
-      startDate.setDate(days)
-      drillDownQuery = parseTimeSeriesQuery(queries['map'], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-    }
-    else {
-      drillDownQuery = parseTimeSeriesQuery(queries['map'], this.startDate, this.endDate)
-    }
-    this.reportData = await this._dataService.getMapReportData(drillDownQuery, options, undefined)
-    if (this.reportData?.data?.length > 0) {
-      let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
-      this.exportReportData.emit(reportsData)
-    }
-    this.drillDownLevel = hierarchyLevel
-  }
-
-  getReportData(values: any): void {
+  async getReportData(values: any): Promise<void> {
     if (this.drillDownDetails !== undefined) {
-      this.drilldownData({ hierarchyLevel: this.drillDownLevel })
+      // this.drilldownData({ hierarchyLevel: this.drillDownLevel })
+      let result: any = await this._drillDownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
+      this.drillDownDetails = result?.drillDownDetails
+      this.reportData = result?.reportData
     }
     else {
       this.drillDownLevel = undefined;

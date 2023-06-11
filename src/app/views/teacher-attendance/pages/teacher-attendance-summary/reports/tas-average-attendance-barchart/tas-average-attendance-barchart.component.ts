@@ -39,6 +39,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
   benchmarkSubscription: any;
   benchmarkValues: any;
   drillDownLevel: any;
+  drillDownDetails: any;
 
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
@@ -63,11 +64,18 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
       if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
+        this._criteriaService.emit('reset')
+        this.criteriaApplied = false;
       }
     })
     this._criteriaService.criteriaObject.subscribe((data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
-        this.applyCriteria(data)
+        // this.applyCriteria(data)
+        if (!this.criteriaApplied) {
+          this.backUpData = this.tableReportData?.values
+        }
+        this.criteriaApplied = true
+        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData)
       }
     })
     this.benchmarkSubscription = this._benchmarkService.benchmarkValues.subscribe((values: any) => {
@@ -83,43 +91,51 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
   async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
     this.startDate = startDate;
     this.endDate = endDate;
-    let reportConfig = config
+    this._criteriaService.emit('reset')
+    this.criteriaApplied = false
 
-    let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
-    let onLoadQuery;
+    if (this.drillDownDetails !== undefined) {
+      this.drilldownData({ hierarchyLevel: this.drillDownLevel });
+    }
+    else {
+      let reportConfig = config
 
-    if (this.rbacDetails?.role) {
-      filters.every((filter: any) => {
-        if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-          queries = { ...filter?.actions?.queries }
-          timeSeriesQueries = { ...filter?.timeSeriesQueries }
-          Object.keys(queries).forEach((key) => {
-            timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], this.rbacDetails)
-          });
-          return false
+
+      let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
+      let onLoadQuery;
+
+      if (this.rbacDetails?.role) {
+        filters.every((filter: any) => {
+          if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
+            queries = { ...filter?.actions?.queries }
+            timeSeriesQueries = { ...filter?.timeSeriesQueries }
+            Object.keys(queries).forEach((key) => {
+              timeSeriesQueries[key] = parseRbacFilter(timeSeriesQueries[key], this.rbacDetails)
+            });
+            return false
+          }
+          return true
+        })
+      }
+
+
+      Object.keys(queries).forEach((key: any) => {
+        if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
+          onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
         }
-        return true
+        let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
+
+        if (query && key === 'barChart') {
+          this.getBarChartReportData(query, options, filters, defaultLevel);
+        }
+
+
       })
     }
-
-
-    Object.keys(queries).forEach((key: any) => {
-      if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-        onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-      }
-      let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key);
-
-      if (query && key === 'barChart') {
-        this.getBarChartReportData(query, options, filters, defaultLevel);
-      }
-
-
-    })
   }
 
   getBarChartReportData(query, options, filters, defaultLevel): void {
-    this._criteriaService.emit('reset')
-    this.criteriaApplied = false
+
     let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics, benchmarkConfig } } = options;
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
       let rows = res;
@@ -133,7 +149,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
       }
       this.config = this.getConfig()
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
-        if(values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
+        if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
           setTimeout(() => {
             subscription.unsubscribe()
           }, 100);
@@ -165,21 +181,20 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     let { filters, defaultLevel, options } = config[this.reportName];
     let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics, benchmarkConfig } } = options;
     let annotations = []
-    let colors = ['green', 'blue', 'orange', 'red' ]
+    let colors = ['green', 'blue', 'orange', 'red']
     let objLevel = {
-     1 : "State average",
-     2 : "Disterict average",
-     3 : "Block average",
-     4 : "Cluster average"
+      1: "State average",
+      2: "Disterict average",
+      3: "Block average",
+      4: "Cluster average"
     }
-  console.log(objLevel[1],objLevel[2],objLevel[3],objLevel[4],"levels")   
     let reportValues = this.benchmarkValues?.[benchmarkConfig?.linkedReport]
     let currentLevel = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
-    if(reportValues) {
+    if (reportValues) {
       annotations = Object.keys(reportValues).filter(level => level <= currentLevel).map((level: any, index) => {
         return {
           drawTime: 'afterDraw',
-          id: 'benchmark-' + (index+1),
+          id: 'benchmark-' + (index + 1),
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
@@ -188,19 +203,17 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
           borderWidth: 2,
           label: {
             content: objLevel[level],
-            xAdjust:(120*level) - (350),
+            xAdjust: (120 * level) - (350),
             enabled: true,
             backgroundColor: colors[index],
             color: 'white'
           }
         }
       })
-      console.log(annotations);
-      console.log(reportValues,"gagfJHGF");
-      
+
     }
-    
-    
+
+
     let tooltipObject
     this.tableReportData.values.forEach((row) => {
       let tooltip = this._wrapperService.constructTooltip(tooltipMetrics, row, metricValueProp, 'barChart')
@@ -289,28 +302,29 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
       case 1:
         drillDownDetails = {
           ...this.rbacDetails,
-          state: id
+          state: id ? id : this.drillDownDetails.state
         }
         break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
-          district: id
+          district: id ? id : this.drillDownDetails.district
         }
         break;
       case 3:
         drillDownDetails = {
           ...this.rbacDetails,
-          block: id
+          block: id ? id : this.drillDownDetails.block
         }
         break;
       case 4:
         drillDownDetails = {
           ...this.rbacDetails,
-          cluster: id
+          cluster: id ? id : this.drillDownDetails.cluster
         }
         break;
     }
+    this.drillDownDetails = { ...drillDownDetails }
 
     let reportConfig = config;
 
@@ -348,22 +362,6 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     });
   }
 
-  applyCriteria(data: any) {
-    if (!this.criteriaApplied) {
-      this.backUpData = this.tableReportData?.values
-    }
-    this.criteriaApplied = true
-    if (data && this.backUpData.length > 0) {
-      let filteredData = this.backUpData.filter((row: any) => {
-        let value = row?.[data.unitKey]?.value ? row?.[data.unitKey]?.value : row?.[data.unitKey]
-        return (Number(data?.fromRange) <= Number(value) && Number(value) <= Number(data?.toRange))
-      })
-      this.tableReportData = {
-        ...this.tableReportData,
-        values: filteredData
-      }
-    }
-  }
 
   ngOnDestroy(): void {
     this.drillDownSubscription.unsubscribe()

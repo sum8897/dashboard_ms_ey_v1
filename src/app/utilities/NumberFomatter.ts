@@ -1,7 +1,7 @@
 import { environment } from "src/environments/environment";
 
 function formatNumber(number: number, config: any): string {
-    
+
     if (config.format === 'short') {
         if (config.locale === 'en-IN') {
             if (number < 1000) {
@@ -25,7 +25,7 @@ function formatNumber(number: number, config: any): string {
             }
         }
     }
-      
+
     return new Intl.NumberFormat(config.locale).format(number);
 }
 
@@ -57,6 +57,38 @@ function numberLabelFormat(number: number, config: any, axisRef?: any): string {
     return number;
 }
 
+function removeFormat(string, config) {
+
+    let result;
+    let char = string.charAt(string.length - 1)
+    let number = Number(string.split(char)[0])
+    console.log(char, number)
+    if (config.locale === 'en-IN') {
+      if(char === 'K') {
+        result = number*1000
+      }
+      else if(char === 'L') {
+        result = number*100000
+      }
+      else if(char === 'Cr') {
+        result = number*10000000
+      }
+    }
+    else {
+      if(char === 'K') {
+        result = number*1000
+      }
+      else if(char === 'M') {
+        result = number*1000000
+      }
+      else if(char === 'B') {
+        result = number*1000000000
+      }
+    }
+    return result;
+
+}
+
 export function formatNumberForReport(number: number): string {
     return formatNumber(number, environment.numberFormat.reports);
 }
@@ -79,4 +111,7 @@ export function formatNumberForVanityMetric(number: number): string {
 
 export function numberLabelFormatForVanityMetric(number: number, axisRef?: any): string {
     return numberLabelFormat(number, environment.numberFormat.reports, axisRef);
+}
+export function removeFormatForReport(number) {
+    return removeFormat(number, environment.numberFormat.reports);
 }

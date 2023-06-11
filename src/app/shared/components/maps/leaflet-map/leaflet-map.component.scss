@@ -37,4 +37,9 @@
         display: column;
         // justify-content: space-evenly;
     }
+    .checkbox-container {
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        float: left;
+    }
 }
