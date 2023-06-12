@@ -102,7 +102,8 @@ export class DistrictWiseStatusComponent implements OnInit {
       else if (query && key === 'barChart') {
         let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
         this.reportData = reportData
-        this.config = {...config,options:{...config.options,height:'200'}};
+        // this.config = {...config,options:{...config.options,height:'200'}};
+        this.config = config
         if (this.reportData?.values?.length > 0) {
           let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
           // this.exportReportData.emit(reportsData)

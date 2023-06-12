@@ -10,6 +10,7 @@ export class SbBarChartComponent implements OnInit, OnChanges {
 
   @Input() data: any;
   @Input() config: any;
+  @Input() type: any = 'bar';
 
   filterData: any;
   currentPage = 0;
@@ -35,6 +36,15 @@ export class SbBarChartComponent implements OnInit, OnChanges {
       this.currentPage = 0;
     } else if (event.pageIndex === Math.ceil(this.data.values.length / this.pageSize) - 1) {
       this.currentPage = Math.ceil(this.data.values.length / this.pageSize) - 1;
+    }
+    if(this.type == 'horizontalBar') {
+      this.config = {
+        ...this.config,
+        options: {
+          ...this.config?.options,
+          height: (this.filterData.values.length* 15 + 150).toString()
+        }
+      }
     }
   }
   

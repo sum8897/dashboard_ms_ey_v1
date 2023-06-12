@@ -184,7 +184,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
     let colors = ['green', 'blue', 'orange', 'red']
     let objLevel = {
       1: "State average",
-      2: "Disterict average",
+      2: "District average",
       3: "Block average",
       4: "Cluster average"
     }
@@ -202,8 +202,8 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
           borderColor: colors[index],
           borderWidth: 2,
           label: {
-            content: objLevel[level],
-            xAdjust: (120 * level) - (350),
+            content: objLevel[level] + ' - ' + reportValues[level],
+            xAdjust: (135 * level) - (350),
             enabled: true,
             backgroundColor: colors[index],
             color: 'white'

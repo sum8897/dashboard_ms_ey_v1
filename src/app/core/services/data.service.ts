@@ -101,7 +101,7 @@ export class DataService {
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();
-      let { barChart: { yAxis, xAxis, isCorrelation, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
+      let { barChart: { yAxis, xAxis, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         if (MultibarGroupByNeeded) {
@@ -148,11 +148,13 @@ export class DataService {
                 },
                 ticks: {
                   callback: function (value, index, values) {
-                    let newValue = value.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
-                    if (screen.width <= 768) {
-                      return newValue.substr(0, 8) + '...';
-                    } else {
-                      return newValue;
+                    if(type !== 'horizontal') {
+                      let newValue = value?.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                      if (screen.width <= 768) {
+                        return newValue.substr(0, 8) + '...';
+                      } else {
+                        return newValue;
+                      }
                     }
                   }
                 }
@@ -167,7 +169,7 @@ export class DataService {
   }
 
   getDatasets(barChartOptions: any, filters: any) {
-    let { xAxis, isCorrelation, isMultibar, metricLabelProp, metricValueProp } = barChartOptions;
+    let { xAxis, isCorrelation, type, isMultibar, metricLabelProp, metricValueProp } = barChartOptions;
     if (isCorrelation) {
       return getBarDatasetConfig(
         filters.map((filter: any) => {
@@ -186,7 +188,8 @@ export class DataService {
             dataExpr: metric.value,
             label: metric.label
           }
-        })
+        }),
+        type
       )
     }
     else {

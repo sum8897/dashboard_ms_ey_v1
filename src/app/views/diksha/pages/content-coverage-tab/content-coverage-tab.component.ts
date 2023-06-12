@@ -77,7 +77,7 @@ export class ContentCoverageTabComponent implements OnInit, AfterViewInit {
 
     filtersUpdated(filters: any) {
         this.reportsData = [];
-        this.contentCoverageBigNumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        // this.contentCoverageBigNumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         this.contentCoverage?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     }
 
@@ -86,7 +86,7 @@ export class ContentCoverageTabComponent implements OnInit, AfterViewInit {
         this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
         if (event?.startDate !== null && event?.endDate !== null) {
             this.reportsData = [];
-            this.contentCoverageBigNumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+            // this.contentCoverageBigNumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
             this.contentCoverage?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
         }
     }

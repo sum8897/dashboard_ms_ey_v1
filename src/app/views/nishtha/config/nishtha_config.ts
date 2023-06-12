@@ -243,7 +243,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Total Entrolments",
+                        name: "Total Enrolment",
                         property: "total_enrolment",
                         class: "text-center"
                     },
@@ -275,13 +275,14 @@ export const config = {
         ],
         "options": {
             "barChart": {
+                "type": "horizontal",
                 "isMultibar": true,
                 "valueSuffix": "",
                 "yAxis": {
-                    "title": "Total Enrolment and Certifications"
+                    "title": "Districts"
                 },
                 "xAxis": {
-                    "title": "Districts",
+                    "title": "Total Enrolment and Certifications",
                     "label": "district_name",
                     "value": "district_name",
                     "metrics": [
