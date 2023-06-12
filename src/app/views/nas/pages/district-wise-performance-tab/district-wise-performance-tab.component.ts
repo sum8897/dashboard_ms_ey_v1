@@ -64,7 +64,7 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
             //     }
             // })
             this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-            this.nasMetrics?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+            // this.nasMetrics?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();
@@ -96,7 +96,7 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     filtersUpdated(filters: any) {
         this.reportsData = [];
         this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-        this.nasMetrics?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        // this.nasMetrics?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     }
 
     timeSeriesUpdated(event: any): void {
