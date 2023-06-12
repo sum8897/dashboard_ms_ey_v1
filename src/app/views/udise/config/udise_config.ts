@@ -208,7 +208,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total Students', 'PTR', '% schools with toilets', '% schools having electricity', '% schools having drinking water'],
+                "title": ['Total Students', 'PTR', '% Schools With Toilets', '% Schools Having Electricity', '% Schools Having Drinking Water'],
                 "valueSuffix": ['', '', '%', '%', '%'],
                 "property": ['total_students', 'ptr', 'schs_with_toilet', 'schs_having_electricity', 'schs_having_water']
             }
