@@ -267,6 +267,7 @@ export const config = {
         ],
         "options": {
             "barChart": {
+                "type": "horizontal",
                 "isMultibar": true,
                 "valueSuffix": "",
                 "yAxis": {
