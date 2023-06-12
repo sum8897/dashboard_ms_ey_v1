@@ -271,10 +271,10 @@ export const config = {
                 "isMultibar": true,
                 "valueSuffix": "",
                 "yAxis": {
-                    "title": "Total Enrolment and Certifications"
+                    "title": "Districts"
                 },
                 "xAxis": {
-                    "title": "Districts",
+                    "title": "Total Enrolment and Certifications",
                     "label": "district_name",
                     "value": "district_name",
                     "metrics": [
