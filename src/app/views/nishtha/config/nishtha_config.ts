@@ -131,7 +131,7 @@ export const config = {
                 "isMultibar": true,
                 "valueSuffix": "%",
                 "yAxis": {
-                    "title": "% Target Achieved-Enrolment and \n% Total Target-Enrolment"
+                    "title": ""
                 },
                 "xAxis": {
                     "title": " Programs",
@@ -173,7 +173,7 @@ export const config = {
                 "isMultibar": true,
                 "valueSuffix": "%",
                 "yAxis": {
-                    "title": "% Target Achieved-Certificates and % Total Target-Certificates"
+                    "title": ""
                 },
                 "xAxis": {
                     "title": " Programs",
