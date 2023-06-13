@@ -60,6 +60,7 @@ export const config = {
                 "groupByNeeded": true,
                 "metricLabelProp": "class",
                 "metricValueProp": "performance",
+                "fillEmptyCell": "N/A",
                 "columns": [
 
                     {
@@ -139,6 +140,7 @@ export const config = {
                 "groupByNeeded": true,
                 "metricLabelProp": "class",
                 "metricValueProp": "performance",
+                "fillEmptyCell": "N/A",
                 "columns": [
 
                     {

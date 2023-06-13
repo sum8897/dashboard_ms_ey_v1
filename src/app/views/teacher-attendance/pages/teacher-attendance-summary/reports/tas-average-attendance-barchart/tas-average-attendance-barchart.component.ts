@@ -220,7 +220,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
 
       tooltipObject = {
         ...tooltipObject,
-        [row.level]: tooltip
+        [row.level.trim()]: tooltip
       }
     });
     // let benchmarkValues = 
@@ -253,7 +253,7 @@ export class TasAverageAttendanceBarchartComponent implements OnInit, OnDestroy 
         tooltips: {
           callbacks: {
             label: (tooltipItem, data) => {
-              return tooltipObject[tooltipItem.label]
+              return tooltipObject[tooltipItem.label.trim()]
             }
           }
         },
