@@ -17,7 +17,7 @@ export class DataService {
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         this.spinner.show()
         let rows = res;
-        let { table: { columns, groupByNeeded, metricLabelProp, metricValueProp } } = options;
+        let { table: { columns, groupByNeeded, metricLabelProp, metricValueProp, fillEmptyCell } } = options;
         let newColumns: any = [];
         if (groupByNeeded) {
           let { result, newColumnsProps } = this.tableGroupBy(rows, columns.filter((column: any) => !column?.groupByNeeded || column?.groupByNeeded === undefined).map((column) => column?.property), metricLabelProp, metricValueProp)
@@ -37,12 +37,14 @@ export class DataService {
           data: rows.map(row => {
             columns.forEach((col: any) => {
               let cellValue = row[col.property];
-              if (cellValue === null || cellValue === undefined) {
-                cellValue = "N/A";
+              if (fillEmptyCell && (cellValue === null || cellValue === undefined)) {
+                cellValue = fillEmptyCell;
               }
-              row = {
-                ...row,
-                [col.property]: { value: cellValue }
+              if(cellValue !== null && cellValue !== undefined) {
+                row = {
+                  ...row,
+                  [col.property]: { value: cellValue }
+                }
               }
             });
             return row;
