@@ -235,7 +235,7 @@ export const config = {
                         class: "text-center"
                     },
                     {
-                        name: "Total Entrolments",
+                        name: "Total Enrolment",
                         property: "total_enrolment",
                         class: "text-center"
                     },
