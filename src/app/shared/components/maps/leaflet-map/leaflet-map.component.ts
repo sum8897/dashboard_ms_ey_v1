@@ -88,6 +88,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
     this.map = L.map(this.mapContainer.nativeElement, { zoomSnap: 0.05, minZoom: 4, zoomControl: true, scrollWheelZoom: false, touchZoom: false }).setView([this.mapCenterLatlng.lat, this.mapCenterLatlng.lng], this.mapCenterLatlng.zoomLevel);
     this.layerGroup.addTo(this.map);
+    await this.applyIndiaBorder();
     try {
       let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
       if (Number(lev) <= 1) {
@@ -108,7 +109,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
       if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || Number(lev) > 1 || this.hierarchyLevel > 1) {
         this.map?.removeLayer(this.layerGroup);
-        await this.applyStateBorder();
+        // await this.applyStateBorder();
         this.applyDistrictBorder();
         this.createMarkers(this.mapData);
       }
@@ -367,6 +368,33 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           fontWeight: "bold"
         });
         this.stateGeoJSON.addTo(this.map);
+        resolve('State borders are applied successfully!');
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  async applyIndiaBorder(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await this._mapService.getCountryGeoJSON();
+
+        this.countryGeoJSON = L.geoJSON(data, {
+          // style: {
+          //   fillColor: '#fff',
+          //   weight: 1,
+          //   opacity: 1,
+          //   color: 'grey',
+          //   dashArray: '0',
+          //   fillOpacity: 1
+          // },
+          color: "#6e6d6d",
+          weight: 2,
+          fillOpacity: 0,
+          fontWeight: "bold"
+        });
+        this.countryGeoJSON.addTo(this.map);
         resolve('State borders are applied successfully!');
       } catch (e) {
         reject(e);
