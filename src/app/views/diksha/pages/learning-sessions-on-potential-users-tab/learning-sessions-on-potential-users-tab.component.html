@@ -11,7 +11,7 @@
         <div class="row-wrapper grid grid-cols-1 gap-4">
 
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('learning_sessions_on_potential_users', 'map')" id="map">
+                *ngIf="checkReport('learning_sessions_on_potential_users', 'bigNumber')" id="bigNumber">
                 <app-learning-sessions-on-potential-users #learningSessionsOnPotentialUsers
                     (exportReportData)="csvDownload($event)"></app-learning-sessions-on-potential-users>
             </div>

@@ -1,8 +1,8 @@
 export const config = {
     filters: [
-        {   
+        {
             "label": "ETB Coverage Status",
-            "name":"Medium",
+            "name": "Medium",
             "id": "medium",
             "labelProp": "medium",
             "valueProp": "medium",
@@ -10,7 +10,7 @@ export const config = {
         },
         {
             "label": "Content Coverage on QR",
-            "name":"Medium",
+            "name": "Medium",
             "id": "medium",
             "labelProp": "medium",
             "valueProp": "medium",
@@ -35,7 +35,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title":"Overall ETB Coverage",
+                "title": "Overall ETB Coverage",
                 "valueSuffix": "%",
                 "property": "total_coverage"
             }
@@ -62,7 +62,7 @@ export const config = {
                 "metricValueProp": "performance",
                 "fillEmptyCell": "N/A",
                 "columns": [
-                  
+
                     {
                         name: "Subject",
                         property: "subject",
@@ -104,7 +104,7 @@ export const config = {
         "label": "Content Coverage on QR",
         "filters": [{
             "name": "State",
-             "hierarchyLevel": "1",
+            "hierarchyLevel": "1",
             "actions": {
                 "queries": {
                     "bigNumber": " select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium "
@@ -115,7 +115,7 @@ export const config = {
         }],
         "options": {
             "bigNumber": {
-                "title":"Content Coverage on QR",
+                "title": "Content Coverage on QR",
                 "valueSuffix": "%",
                 "property": "content_coverage"
             }
@@ -142,7 +142,7 @@ export const config = {
                 "metricValueProp": "performance",
                 "fillEmptyCell": "N/A",
                 "columns": [
-                  
+
                     {
                         name: "Subject",
                         property: "subject",
@@ -208,6 +208,44 @@ export const config = {
     //     }
     // },
 
+    // learning_sessions_on_potential_users: {
+    //     "label": "Learning Sessions on Potential Users",
+    //     "filters": [
+    //         {
+    //             "name": "State",
+    //             "hierarchyLevel": "1",
+    //             "actions": {
+    //                 "queries": {
+    //                     "map": "select t2.state_name  ,sum(t1.sum) as users, latitude, longitude from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t2.state_name, latitude, longitude"
+    //                 },
+    //                 "level": "district",
+    //                 "nextLevel": "block"
+    //             }
+    //         }
+    //     ],
+    //     "options": {
+    //         "map": {
+    //             "metricFilterNeeded": false,
+    //             "indicator": "users",
+    //             "legend": {
+    //                 "title": "Learning Sessions on Potential Users"
+    //             },
+    //             "tooltipMetrics": [
+    //                 {
+    //                     "valuePrefix": "State/ UT Name",
+    //                     "value": "state_name",
+    //                     "valueSuffix": "\n"
+    //                 },
+    //                 {
+    //                     "valuePrefix": "Learning Sessions on Potential Users",
+    //                     "value": "users",
+    //                     "valueSuffix": "\n"
+    //                 }
+    //             ]
+    //         }
+    //     }
+    // },
+
     learning_sessions_on_potential_users: {
         "label": "Learning Sessions on Potential Users",
         "filters": [
@@ -216,7 +254,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "map": "select t2.state_name  ,sum(t1.sum) as users, latitude, longitude from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t2.state_name, latitude, longitude"
+                        "bigNumber": "select sum(t1.sum) as users from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -224,24 +262,10 @@ export const config = {
             }
         ],
         "options": {
-            "map": {
-                "metricFilterNeeded": false,
-                "indicator": "users",
-                "legend": {
-                    "title": "Learning Sessions on Potential Users"
-                },
-                "tooltipMetrics": [
-                    {
-                        "valuePrefix": "State/ UT Name",
-                        "value": "state_name",
-                        "valueSuffix": "\n"
-                    },
-                    {
-                        "valuePrefix": "Learning Sessions on Potential Users",
-                        "value": "users",
-                        "valueSuffix": "\n"
-                    }
-                ]
+            "bigNumber": {
+                "title": "Learning Sessions On Potential Users",
+                "valueSuffix": '',
+                "property": 'users'
             }
         }
     },
@@ -259,7 +283,7 @@ export const config = {
                         "bigNumber1": "select sum(sum) as total_etbs from datasets.diksha_resourcecount_textbookdiksha0grade0subject0medium",
                         "bigNumber2": "select sum(sum) as total_qr_codes from datasets.diksha_totalqrcodes_textbookdiksha0grade0subject0medium",
                         "bigNumber3": "select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium",
-                        "bigNumber4":""
+                        "bigNumber4": ""
                     },
                     "level": "district"
                 }
@@ -267,9 +291,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total ETBs','Total QR Codes','Content Coverage on QR','Total Content'],
-                "valueSuffix": ['','','%',''],
-                "property": ['total_etbs','total_qr_codes','content_coverage','']
+                "title": ['Total ETBs', 'Total QR Codes', 'Content Coverage on QR', 'Total Content'],
+                "valueSuffix": ['', '', '%', ''],
+                "property": ['total_etbs', 'total_qr_codes', 'content_coverage', '']
             }
         }
     }
