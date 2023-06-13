@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import moment from 'moment';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
@@ -13,7 +13,7 @@ import { config } from 'src/app/views/teacher-attendance/config/teacher_attendan
   templateUrl: './teacher-attendance-map.component.html',
   styleUrls: ['./teacher-attendance-map.component.scss']
 })
-export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
+export class TeacherAttendanceMapComponent implements OnInit, OnDestroy, AfterViewInit {
   reportName: string = 'tas_average_attendance_map';
   filters: any = [];
   levels: any;
@@ -70,6 +70,19 @@ export class TeacherAttendanceMapComponent implements OnInit, OnDestroy {
         this.reportData = result?.reportData
       }
     })
+  }
+
+  ngAfterViewInit(): void {
+    if (this.startDate === undefined && this.endDate === undefined) {
+      let endDate = new Date();
+      let days = endDate.getDate() - this.defaultSelectedDays;
+      let startDate = new Date();
+      startDate.setDate(days)
+      this.startDate = moment(startDate).format('YYYY-MM-DD');
+      this.endDate = moment(endDate).format('YYYY-MM-DD');
+      this.reportsData = []
+      this.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+    }
   }
 
   async getReportData(values: any): Promise<void> {
