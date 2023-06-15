@@ -24,7 +24,7 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
   reportName: string = 'tas_trendline_chart';
   filters: any = [];
   levels: any;
-  tableReportData: any
+  tableReportData: any;
   minDate: any;
   maxDate: any;
   compareDateRange: any = 30;
@@ -159,11 +159,11 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
           reportType: "table",
           reportName: this.title,
         };
-        // this.csv.csvDownload(reportsData)
-
-        if (chart) {
-          this.updateChart(this.tableReportData);
-        } else this.generateChart(this.tableReportData);
+        this.generateChart(this.tableReportData);
+      }
+      else {
+        let data = null;
+        this.generateChart(data)
       }
     });
   }
@@ -266,7 +266,10 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
 
 
   generateChart(reportData) {
-
+    if (chart) {
+      chart.destroy();
+      chart = null;
+    }
     // const dates = reportData?.data?.map(data => moment(data.perc_teachers.value).format('YYYY-MM-DD'));
     var dates = reportData?.data?.map(data => {
       const dateValue = new Date(data.att_date.value);
@@ -339,10 +342,6 @@ export class TasTrendlineChartComponent implements OnInit, OnDestroy {
     };
     defaultOptions = _.merge(defaultOptions, this.chartConfig);
 
-    if (chart) {
-      chart.destroy();
-      chart = null;
-    }
     chart = new Chart(ctx, defaultOptions);
   }
 
