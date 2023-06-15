@@ -340,7 +340,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
         break;
     }
-    console.log(drillDownDetails)
     this._drillDownService.emit(drillDownDetails)
   }
 
@@ -461,7 +460,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       } else if (reportTypeIndicator === 'percent') {
         values = [100, 70, 40, 0];
       }
-      else if(prevValues) {
+      else if (prevValues) {
         values = prevValues
       }
       let level = this.drillDownLevel ? this.drillDownLevel : this.hierarchyLevel
@@ -561,6 +560,23 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
       }
+      else if (prevValues && mapData?.data?.length === 0) {
+        const NotificationControl = L.Control.extend({
+          onAdd: function (map) {
+            const container = L.DomUtil.create('div', 'leaflet-notification');
+            container.innerHTML = 'No Data for selected legends !';
+            return container;
+          },
+
+          onRemove: function (map) {
+          }
+        });
+        const notificationControl = new NotificationControl({ position: 'topright' });
+        notificationControl.addTo(this.map);
+        setTimeout(() => {
+          notificationControl.remove()
+        }, 2000);
+      }
     }
   }
 
@@ -628,8 +644,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           span.innerHTML = `
             <button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">
                  <div class="button-content">
-              <label class="checkbox-container">
                 <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
+                <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
+                <span class="checkmark"></span>
+              </label>
+                 <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
                 <span class="checkmark"></span>
               </label>
                 <span class="value">${formattedLowerValue} &ndash; ${formattedUpperValue}${reportTypeIndicator === 'percent' ? '%' : ''}</span>
@@ -679,27 +698,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     this.createMarkers(this.mapData)
   }
 
-  // applyRange(max: any, min: any, baseValue: any, rangeColour: any): void {
-  //   let temp = this.mapData.data.filter((obj: any) => {
-  //     return obj.indicator <= max && (min === baseValue ? obj.indicator >= min : obj.indicator > min)
-  //   });
-  //   let filteredData = {
-  //     ...this.mapData,
-  //     data: temp
-  //   };
-
-  //   let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role;
-  //   if (Number(lev) === 1) {
-  //     this.applyCountryBorder(filteredData, rangeColour);
-  //   }
-
-  //   if (this.config !== 'NVSK') {
-  //     this.markers.clearLayers();
-  //     this.createMarkers(filteredData, rangeColour);
-  //   }
-  // }
-
-  applyRange(index: any, baseValue: any, rangeColour: any, values:any) {
+  applyRange(index: any, baseValue: any, rangeColour: any, values: any) {
     let range1Data = [], range2Data = [], range3Data = []
     switch (index) {
       case 1:
@@ -718,17 +717,17 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         this.legendForm.range3 = !this.legendForm.range3
         break;
     }
-    if(this.legendForm.range1) {
+    if (this.legendForm.range1) {
       range1Data = this.mapData.data.filter((obj: any) => {
         return obj.indicator <= values[0] && (values[1] === baseValue ? obj.indicator >= values[1] : obj.indicator > values[1])
       });
     }
-    if(this.legendForm.range2) {
+    if (this.legendForm.range2) {
       range2Data = this.mapData.data.filter((obj: any) => {
         return obj.indicator <= values[1] && (values[2] === baseValue ? obj.indicator >= values[2] : obj.indicator > values[2])
       });
     }
-    if(this.legendForm.range3) {
+    if (this.legendForm.range3) {
       range3Data = this.mapData.data.filter((obj: any) => {
         return obj.indicator <= values[2] && (values[3] === baseValue ? obj.indicator >= values[3] : obj.indicator > values[3])
       });
