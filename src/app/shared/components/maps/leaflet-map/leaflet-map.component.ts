@@ -645,12 +645,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
             <button class="legend-range" style="background-color: ${ref.getLayerColor(values[i], true, values)}; color: ${invert(ref.getLayerColor(values[i], true, values), true)}">
                  <div class="button-content">
                 <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
-                <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
-                <span class="checkmark"></span>
-              </label>
-                 <input type="checkbox" id="checkbox-${i + 1}" class="legend-checkbox" checked />
-                <span class="checkmark"></span>
-              </label>
                 <span class="value">${formattedLowerValue} &ndash; ${formattedUpperValue}${reportTypeIndicator === 'percent' ? '%' : ''}</span>
                </div>
             </button><br>`;
