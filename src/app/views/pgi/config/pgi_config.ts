@@ -116,9 +116,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Outcome'",
-                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Infrastructure, Facilities, Student Entitlements'",
-                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Governance Processes'",
+                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t where category_name = 'outcome'",
+                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t where category_name = 'infrastructure_facilities_studententitlements'",
+                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t where category_name = 'governance_processes'",
                         "bigNumber4": "",
                         "bigNumber5": ""
                     },
