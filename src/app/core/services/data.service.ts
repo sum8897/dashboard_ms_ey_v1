@@ -10,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class DataService {
 
-  constructor(private spinner: NgxSpinnerService,private _commonService: CommonService, private _wrapperService: WrapperService) { }
+  constructor(private spinner: NgxSpinnerService, private _commonService: CommonService, private _wrapperService: WrapperService) { }
 
   getTableReportData(query, options): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -32,29 +32,41 @@ export class DataService {
           })
           columns = columns.concat(newColumns)
         }
-
-        let reportData = {
-          data: rows.map(row => {
-            columns.forEach((col: any) => {
-              let cellValue = row[col.property];
-              if (fillEmptyCell && (cellValue === null || cellValue === undefined)) {
-                cellValue = fillEmptyCell;
+        let newRows = rows.map(row => {
+          columns.forEach((col: any) => {
+            let cellValue = row[col.property];
+            if (fillEmptyCell && (cellValue === null || cellValue === undefined)) {
+              cellValue = fillEmptyCell;
+            }
+            if (cellValue !== null && cellValue !== undefined) {
+              row = {
+                ...row,
+                [col.property]: { value: cellValue }
               }
-              if(cellValue !== null && cellValue !== undefined) {
-                row = {
-                  ...row,
-                  [col.property]: { value: cellValue }
-                }
-              }
-            });
-            return row;
-          }),
-          columns: columns.filter(col => {
-            if (rows[0] && col.property in rows[0] && col.property !== metricLabelProp) {
-              return col;
+            }
+          });
+          return row;
+        })
+        let newCols = columns.filter(col => {
+          if (newRows[0] && col.property in newRows[0] && col.property !== metricLabelProp) {
+            return col;
+          }
+        })
+        let colProps = newCols.map((obj) => {
+          return obj.property
+        })
+        newRows.forEach((obj: any) => {
+          Object.keys(obj).forEach((key) => {
+            if (!colProps.includes(key)) {
+              delete obj[key]
             }
           })
+        })
+        let reportData = {
+          data: newRows,
+          columns: newCols
         }
+
         this.spinner.hide()
         resolve(reportData);
       })
@@ -103,7 +115,7 @@ export class DataService {
   getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();
-      let { barChart: { yAxis, xAxis, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix,metricLabelProp, metricValueProp } } = options;
+      let { barChart: { yAxis, xAxis, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         if (MultibarGroupByNeeded) {
@@ -150,7 +162,7 @@ export class DataService {
                 },
                 ticks: {
                   callback: function (value, index, values) {
-                    if(type !== 'horizontal') {
+                    if (type !== 'horizontal') {
                       let newValue = value?.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
                       if (screen.width <= 768) {
                         return newValue.substr(0, 8) + '...';
@@ -315,5 +327,5 @@ export class DataService {
     }).value()
     return { result, newColumnsProps };
   }
-  
+
 }
