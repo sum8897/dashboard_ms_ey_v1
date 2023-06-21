@@ -57,7 +57,7 @@ export class DataService {
         })
         newRows.forEach((obj: any) => {
           Object.keys(obj).forEach((key) => {
-            if (!colProps.includes(key)) {
+            if (!colProps.includes(key) && !key.includes('id')) {
               delete obj[key]
             }
           })

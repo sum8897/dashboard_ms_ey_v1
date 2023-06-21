@@ -143,7 +143,7 @@ export const config = {
                 "actions": {
                     "queries":
                     {
-                        "map": "SELECT s.state_name, s.state_id, c.category_name, sum(c.sum) as performance FROM dimensions.state s JOIN datasets.pgi_category_state0categorypgi c ON s.state_id = c.state_id GROUP BY s.state_id,s.state_name, c.category_name"
+                        "map": "SELECT s.latitude, s.longitude, s.state_name, s.state_id, c.category_name, sum(c.sum) as performance FROM dimensions.state s JOIN datasets.pgi_category_state0categorypgi c ON s.state_id = c.state_id GROUP BY s.state_id,s.state_name, c.category_name, s.latitude, s.longitude"
                     },
                     "level": "state",
                     "nextLevel": "district"
