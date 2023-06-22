@@ -92,10 +92,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     try {
       let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
       if (Number(lev) <= 1) {
-        await this.applyCountryBorder(this.mapData);
-        if (this.config !== 'NVSK') {
-          this.createMarkers(this.mapData);
-        }
+        // await this.applyCountryBorder(this.mapData);
+        // this.applyDistrictBorder();
+        await this.applyStateWithDistrictsBorder();
+        this.createMarkers(this.mapData);
       }
 
       const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -112,11 +112,6 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         // await this.applyStateBorder();
         this.applyDistrictBorder();
         this.createMarkers(this.mapData);
-      }
-      if (this.hierarchyLevel < 2) {
-        this.map.on('resize', () => {
-          this.fitBoundsToCountryBorder();
-        });
       }
     } catch (e) {
       console.error(e);
@@ -145,7 +140,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   getLayerColor(e: any, legend?: boolean, values?: number[]) {
     if (((this.config === 'NVSK' && this.hierarchyLevel === 0) && this.level === 'district' && !legend) || (this.hierarchyLevel > 1 || this.drillDownLevel > 1) && !legend) {
       return '#fff'
-    } else {
+    }
+    else if (values.length === 1) {
+      return "#007000"
+    }
+    else {
       let value = e;
       let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
@@ -374,6 +373,34 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
+  applyStateWithDistrictsBorder() :Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await this._mapService.getStateGeoJSON();
+        
+
+        this.stateGeoJSON = L.geoJSON(data, {
+          // style: {
+          //   fillColor: '#fff',
+          //   weight: 1,
+          //   opacity: 1,
+          //   color: 'grey',
+          //   dashArray: '0',
+          //   fillOpacity: 1
+          // },
+          color: "#6e6d6d",
+          weight: 2,
+          fillOpacity: 0,
+          fontWeight: "bold"
+        });
+        this.stateGeoJSON.addTo(this.map);
+        resolve('State borders are applied successfully!');
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
   async applyIndiaBorder(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -421,7 +448,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   fitBoundsToCountryBorder(): void {
     if (this.countryGeoJSON) {
       this.map.fitBounds(this.countryGeoJSON.getBounds(), {
-        padding: [100, 100]
+        padding: [50, 50]
       });
     }
   }
@@ -447,17 +474,23 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         max = max > 0 ? max : parts;
         let range = max - min;
 
-        let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(0));
-        for (let i = 0; i < parts; i++) {
-          if (i === 0) {
-            values.push(max);
-          } else {
-            let value = Number((max - partSize * i).toFixed(0));
-            values.push(value);
-          }
+        if (range == 0) {
+          values.push(min)
         }
+        else {
+          let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(0));
+          for (let i = 0; i < parts; i++) {
+            if (i === 0) {
+              values.push(max);
+            }
+            else {
+              let value = Number((max - partSize * i).toFixed(0));
+              values.push(value);
+            }
+          }
 
-        values.push(0);
+          values.push(0);
+        }
       } else if (reportTypeIndicator === 'percent') {
         values = [100, 70, 40, 0];
       }
@@ -556,9 +589,14 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.map.addLayer(this.markers);
       if (!prevValues) {
-        this.map.fitBounds(this.markers.getBounds(), {
-          padding: [150, 150]
-        });
+        if (this.config === 'VSK') {
+          this.map.fitBounds(this.markers.getBounds(), {
+            padding: [150, 150]
+          });
+        }
+        else {
+          this.fitBoundsToCountryBorder();
+        }
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
       }
       else if (prevValues && mapData?.data?.length === 0) {
@@ -596,18 +634,23 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       if (reportTypeIndicator === 'boolean') {
         values = ["Yes", "No"];
         for (let i = 0; i < values.length; i++) {
-          labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[i])}"></i> ${values[i]}`);
+          // labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[i])}"></i> ${values[i]}`);
+          labels.push(`<button class="legend-range" style="background-color: ${ref.getZoneColor(reportTypeIndicator, values[i], values)}; color: ${invert(ref.getZoneColor(reportTypeIndicator, values[i], values), true)}">
+          <div class="button-content">
+         <span class="value">${values[i]}</span>
+        </div>
+     </button><br>`);
         }
-        // } else {
-        //   values = values && values.length > 0 ? values : [100, 75, 50, 25, 0];
-        //   for (let i = values.length; i > 1; i--) {
-        //     labels.push(
-        //       `<i class="fa  fa-square" style="color: ${ref.getLayerColor(25 * (i - 1), true)}"></i>
-        //         <span>${values[values.length - i + 1] ? values[values.length - i + 1] : 0} &dash; ${values[values.length - i]}${reportTypeIndicator === 'percent' ? '%' : ''}</span>`
-        //     );
-        //   }
-        // }
-      } else {
+      }
+      else if (values.length <= 1 && reportTypeIndicator !== 'boolean') {
+        // labels.push(`<i class="fa fa-square" style="color:${ref.getLayerColor(values[0] ? values[0] : -1, true)}"></i> ${formatNumberForReport(values[0])}`);
+        labels.push(`<button class="legend-range" style="background-color: ${ref.getLayerColor(values[0], true, values)}; color: ${invert(ref.getLayerColor(values[0], true, values), true)}">
+          <div class="button-content">
+          <span class="value">${values[0] ? values[0] : 0}${reportTypeIndicator === 'percent' ? '%' : ''}</span>
+          </div>
+          </button><br>`)
+      }
+      else {
         ref.legendForm = {
           range1: true,
           range2: true,
@@ -670,11 +713,15 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   getZoneColor(reportTypeIndicator: string, value: string | number, values?: number[]) {
     if (reportTypeIndicator === 'boolean') {
       if (value == "Yes") {
-        return "#00FF00";
+        return "#007000";
       } else {
-        return "#FF0000";
+        return "#D2222D";
       }
-    } else {
+    }
+    else if (values && values.length === 1) {
+      return "#007000"
+    }
+    else {
       let colors = ["#007000", "#FFBF00", "#D2222D"];
       let color = "#fff";
       value = Number(value);
