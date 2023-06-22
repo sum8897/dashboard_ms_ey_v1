@@ -23,7 +23,7 @@ export class MapService {
   
   async getStateGeoJSON(): Promise<any> {
     if (!this.stateGeoJSON) {
-      const response = await fetch(`/assets/data/${environment.stateCode}.json`);
+      const response = await fetch(`${environment.apiURL}/assets/${environment.stateCode}.json`);
       this.stateGeoJSON = await response.json();
     }
 
