@@ -11,6 +11,14 @@
 //     }
 // }
 ::ng-deep{
+    .leaflet-notification{
+        background-color: white;
+        padding: 10px;
+        margin-right: 0px;
+        color: red;
+        font-size: 11px;
+        font-weight: 700;
+    }
     .leaflet-top {
         pointer-events: auto !important;
     }
@@ -31,15 +39,15 @@
         outline:none;
     }
     .legend-checkbox{
+        display: inline-block;
+        // margin-bottom: 0.5rem;
+        margin-top: 3px;
+        float: left;
+        margin-left: 10px;
         display: flex !important;
     }
     .button-content{
         display: column;
         // justify-content: space-evenly;
-    }
-    .checkbox-container {
-        display: inline-block;
-        margin-bottom: 0.5rem;
-        float: left;
     }
 }

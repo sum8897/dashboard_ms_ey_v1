@@ -109,7 +109,7 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
 
       column.action.dataProps.forEach((prop: any) => {
         let propName = prop.alias ? prop.alias : prop.prop;
-        data[propName] = element[prop.prop].value ? element[prop.prop].value : element[prop.prop];
+        data[propName] = element[prop.prop]?.value ? element[prop.prop]?.value : element[prop.prop];
       });
 
       data = {

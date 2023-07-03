@@ -61,7 +61,7 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select count(distinct(district_id)) as total_districts from datasets.pm_poshan_total_meals_served_daily_district",
-                        "bigNumber2": "select sum(sum) as total_schools from datasets.pm_poshan_category_value_categorypm where category_name = 'Total Schools'",
+                        "bigNumber2": "select sum(sum) as total_schools from datasets.pm_poshan_category_value_categorypm where category_name = 'total_schools'",
                         "bigNumber3": "select sum(sum) as total_meals_served from datasets.pm_poshan_total_meals_served_daily_district",
                         "bigNumber4": "",
                         "bigNumber5": "",

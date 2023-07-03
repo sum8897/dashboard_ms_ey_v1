@@ -116,9 +116,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Outcome'",
-                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Infrastructure, Facilities, Student Entitlements'",
-                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t where category_name = 'Governance Processes'",
+                        "bigNumber1": "select sum(sum) as outcome from datasets.pgi_category_state0district0categorypgi as t where category_name = 'outcome'",
+                        "bigNumber2": "select sum(sum) as infra_score from datasets.pgi_category_state0district0categorypgi as t where category_name = 'infrastructure_facilities_studententitlements'",
+                        "bigNumber3": "select sum(sum) as governance_processes from datasets.pgi_category_state0district0categorypgi as t where category_name = 'governance_processes'",
                         "bigNumber4": "",
                         "bigNumber5": ""
                     },
@@ -143,7 +143,7 @@ export const config = {
                 "actions": {
                     "queries":
                     {
-                        "map": "SELECT s.state_name, s.state_id, c.category_name, sum(c.sum) as performance FROM dimensions.state s JOIN datasets.pgi_category_state0categorypgi c ON s.state_id = c.state_id GROUP BY s.state_id,s.state_name, c.category_name"
+                        "map": "SELECT s.latitude, s.longitude, s.state_name, s.state_id, c.category_name, sum(c.sum) as performance FROM dimensions.state s JOIN datasets.pgi_category_state0categorypgi c ON s.state_id = c.state_id GROUP BY s.state_id,s.state_name, c.category_name, s.latitude, s.longitude"
                     },
                     "level": "state",
                     "nextLevel": "district"
