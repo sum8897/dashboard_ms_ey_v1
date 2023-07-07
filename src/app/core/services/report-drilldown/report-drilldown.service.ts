@@ -16,7 +16,7 @@ export class ReportDrilldownService {
     this.drilldownData.next(data);
   }
 
-  async drilldown(event: any, rbacDetails: any, reportConfig: any, startDate: any, endDate: any, prevDrillDownDetails: any) {
+  async drilldown(event: any, rbacDetails: any, reportConfig: any, startDate: any, endDate: any, prevDrillDownDetails: any, metricFilter?: any, commonFilter?: any) {
       let { hierarchyLevel, id } = event ?? {}
       let drillDownDetails, reportData;
 
@@ -51,7 +51,7 @@ export class ReportDrilldownService {
 
       let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig;
       let onLoadQuery;
-      if (rbacDetails?.role) {
+      if (rbacDetails?.role !== null && rbacDetails.role !== undefined) {
         filters.every((filter: any) => {
           if (Number(hierarchyLevel) === Number(filter.hierarchyLevel)) {
             queries = { ...filter?.actions?.queries }
@@ -84,7 +84,7 @@ export class ReportDrilldownService {
           reportData = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
         }
         else if (query && types[i] === 'map') {
-          reportData = await await this._dataService.getMapReportData(query, options, undefined)
+          reportData = await await this._dataService.getMapReportData(query, options, metricFilter)
         }
       }
 

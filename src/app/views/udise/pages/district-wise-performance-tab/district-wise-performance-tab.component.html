@@ -7,14 +7,17 @@
         <div class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex">
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
+        <div class="col-span-5"> 
+            <app-breadcrumb-component></app-breadcrumb-component>
+        </div>
     </div>
     <div class="reports-row">
-        <div *ngIf="checkReport('udise_metrics', 'bigNumber1')" id="bignumber1">
+        <!-- <div *ngIf="checkReport('udise_metrics', 'bigNumber1')" id="bignumber1">
             <app-udise-bignumber-metrics
                 (exportReportData)="importBigNumberMetrics($event)"></app-udise-bignumber-metrics>
-        </div>
+        </div> -->
 
-        <div class="row-wrapper grid grid-cols-5 gap-4">
+        <div class="row-wrapper grid grid-cols-5 gap-4" *ngIf="!NVSK">
             <div class="col-span-2 xmd:col-span-1 bignumber-container" id="bignumber2"
                 *ngFor="let bigNumberData of bigNumberMetrics; let index = index">
                 <div *ngIf="checkReport('udise_metrics', 'bigNumber' + (index + 1))" id="bignumber2">

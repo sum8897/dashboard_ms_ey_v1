@@ -33,6 +33,11 @@ export class HomePageComponent implements OnInit {
         return role.value !== 0
       })
     }
+    else {
+      this.roles = this.roles.filter((role: any, index: any) => {
+        return role.value === 0
+      })
+    }
   }
 
   ngOnInit(): void {

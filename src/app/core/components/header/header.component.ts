@@ -26,7 +26,7 @@ import { ActivatedRouteSnapshot, Router, NavigationEnd, NavigationStart } from '
 })
 export class HeaderComponent implements OnInit {
   stateName: any;
-  config: string = 'VSK'
+  config: string = environment.config
   NVSK: boolean = true;
 
   faBars = faBars;

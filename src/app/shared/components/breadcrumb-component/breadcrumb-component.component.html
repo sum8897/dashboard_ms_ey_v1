@@ -53,6 +53,15 @@
 </div> -->
 
 <div class="wrapper d-flex">
+  <div class="state col-span-1" *ngIf="NVSK">
+    <p (click)="drilldown(0)" [ngClass]="checkActive(0) ? 'active' : 'notActive'">{{'India'}}</p>
+  </div>
+  <div
+    class="state seperator col-span-1"
+    *ngIf="NVSK && rbacDetails?.['state'] !== null && rbacDetails?.['state'] !== undefined"
+  >
+    {{ ">" }}
+  </div>
   <div class="state col-span-1" *ngIf="rbacDetails?.['state'] !== null && rbacDetails?.['state'] !== undefined">
     <p (click)="drilldown(1)" [ngClass]="checkActive(1) ? 'active' : 'notActive'">{{rbacDetails?.state_name}}</p>
   </div>

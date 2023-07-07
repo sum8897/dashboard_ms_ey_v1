@@ -70,6 +70,10 @@ export const config = {
         "options":
         {
             "map": {
+                "drillDownConfig": {
+                    "enableDrillDown": true,
+                    "allowedLevels": [1, 2, 3]
+                },
                 "indicatorType": "percent",
                 "indicator": "perc_teachers",
                 "legend": { "title": "Average Teachers Present" },

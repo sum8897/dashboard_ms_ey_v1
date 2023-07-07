@@ -41,7 +41,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "map": "select t.state_id,state_name ,t.status from dimensions.state as d join (select state_id , case when sum > 0 then 'YES' else 'NO' end as status from datasets.udise_started_state) as t on  d.state_id = t.state_id order by d.state_name asc"
+                        "map": "select d.latitude, d.longitude, t.state_id,state_name ,t.status from dimensions.state as d join (select state_id , case when sum > 0 then 'YES' else 'NO' end as status from datasets.udise_started_state) as t on  d.state_id = t.state_id order by d.state_name asc"
                     },
                     "level": "state",
                     "nextLevel": "district"
@@ -190,6 +190,20 @@ export const config = {
         "label": "District Wise Performance",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_students from datasets.udise_no_of_students_state",
+                        "bigNumber2": "select round(cast (avg(sum) as numeric),2) as ptr from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = 'ptr'",
+                        "bigNumber3": "select round(cast (avg(sum) as numeric),2) as schs_with_toilet from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_toilet'",
+                        "bigNumber4": "select round(cast (avg(sum) as numeric),2) as schs_having_electricity from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_electricity'",
+                        "bigNumber5": "select round(cast (avg(sum) as numeric),2) as schs_having_water from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_drinking_water'",
+                    },
+                    "level": "state"
+                }
+            },
+            {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
@@ -225,10 +239,23 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map": "select t2.state_name, t1.state_id , t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_state0categoryudise as t1 join dimensions.state as t2 on t2.state_id = t1.state_id group by t1.state_id, t2.state_name,t1.category_name"
+                            "map": "select t2.latitude, t2.longitude, t2.state_name, t1.state_id, t1.state_id as level , t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_state0categoryudise as t1 join dimensions.state as t2 on t2.state_id = t1.state_id group by t1.state_id, t2.state_name,t1.category_name, t2.latitude, t2.longitude"
                         },
                         "level": "state",
                         "nextLevel": "district"
+                    }
+                },
+                {
+                    "name": "State",
+                    "hierarchyLevel": "1",
+                    "actions":
+                    {
+                        "queries":
+                        {
+                            "map": "select t2.district_name, t1.district_id, t1.district_id as level , t1.category_name,latitude, longitude,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t1.district_id, t2.district_name,t1.category_name, latitude, longitude"
+                        },
+                        "level": "district",
+                        "nextLevel": "block"
                     }
                 }
             ],
@@ -239,10 +266,19 @@ export const config = {
                 "indicatorType": "percent",
                 "metricLabelProp": "category_name",
                 "metricValueProp": "percentage",
-                "groupByColumn": "state_id",
+                "groupByColumn": "level",
                 "metricFilterNeeded": true,
                 "legend": { "title": "District Wise Performance" },
+                "drillDownConfig": {
+                    "enableDrillDown": true,
+                    "allowedLevels": [0]
+                },
                 "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/UT name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
                     {
                         "valuePrefix": "District Name: ",
                         "value": "district_name",
