@@ -12,18 +12,21 @@
 <div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
+        <div *ngIf="checkReport('pgi_metrics', 'bigNumber1')" id="bignumber1">
+            <app-pgi-bignumber-metrics (exportReportData)="importBigNumberMetrics($event)"></app-pgi-bignumber-metrics>
+        </div>
 
         <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
-            <app-implementation-status-tab
+            <app-implementation-status-tab [bigNumberMetrics]="bigNumberMetrics"
                 *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
         </mat-tab>
-        <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance')">
+        <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance') && NVSK">
             <app-state-wise-performance-tab
                 *ngIf="selectedTabLabel === 'State Wise Performance'"></app-state-wise-performance-tab>
         </mat-tab>
 
         <mat-tab label='District Wise Performance' *ngIf="tabs.includes('District Wise Performance')">
-            <app-district-wise-performance-tab
+            <app-district-wise-performance-tab [bigNumberMetrics]="bigNumberMetrics"
                 *ngIf="selectedTabLabel === 'District Wise Performance'"></app-district-wise-performance-tab>
         </mat-tab>
 

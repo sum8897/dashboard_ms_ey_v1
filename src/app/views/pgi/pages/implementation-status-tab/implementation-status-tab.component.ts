@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ImplementationStatusComponent } from './reports/implementation-status/implementation-status.component';
 import { config } from '../../config/pgi_config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-implementation-status-tab',
@@ -26,13 +27,18 @@ export class ImplementationStatusTabComponent implements OnInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    bigNumberMetrics: any = [];
+    NVSK: boolean = true;
+    tabName:any='Implementation Status'
     @ViewChild('implementationstatus') implementationStatus:ImplementationStatusComponent ;
+    @Input() bigNumberMetrics: any = [];
 
   constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
     })
+    if(environment.config === 'VSK') {
+        this.NVSK = false
+    }
     }
 
     async ngOnInit(): Promise<void> {
@@ -41,7 +47,7 @@ export class ImplementationStatusTabComponent implements OnInit {
 
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabName);
         this.implementationStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {

@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/pgi_config';
 import { DistrictWisePerformanceComponent } from './reports/district-wise-performance/district-wise-performance.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-district-wise-performance-tab',
@@ -27,14 +28,19 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    bigNumberMetrics: any = [];
     tabName:any='District Wise Performance'
+    NVSK: boolean = true
+
 @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
+@Input() bigNumberMetrics: any = [];
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
     })
+    if(environment.config === 'VSK') {
+        this.NVSK = false
+    }
     }
 
     async ngOnInit(): Promise<void> {

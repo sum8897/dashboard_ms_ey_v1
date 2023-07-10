@@ -170,6 +170,9 @@ export class DataService {
                         return newValue;
                       }
                     }
+                    else {
+                      return value
+                    }
                   }
                 }
               }]
@@ -219,7 +222,7 @@ export class DataService {
       this.spinner.show();
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
+        let { map: { indicator, indicatorType, drillDownConfig, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
         let metricFilter;
         if (metricFilterNeeded) {
           metricFilter = filters.filter((filter: any) => {
@@ -241,6 +244,7 @@ export class DataService {
             return row;
           }),
           options: {
+            drillDownConfig: drillDownConfig,
             reportIndicatorType: indicatorType,
             legend,
             selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
