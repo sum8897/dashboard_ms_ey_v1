@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-breadcrumb-component',
@@ -14,8 +15,12 @@ export class BreadcrumbComponentComponent implements OnInit {
   selectedRole: any;
   linkedReports: any;
   originalDetails: any;
+  NVSK: boolean = true;
 
   constructor(private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
+    if(environment.config === 'VSK') {
+      this.NVSK = false;
+    }
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
       this.originalDetails = rbacDetails
@@ -96,6 +101,7 @@ export class BreadcrumbComponentComponent implements OnInit {
   }
 
   updateBreadcrumb(details: any) {
+    console.log(details)
     let { hierarchyLevel, id } = details ?? {}
     let breadCrumbDrillDownDetails: any = {
       ...this.rbacDetails,

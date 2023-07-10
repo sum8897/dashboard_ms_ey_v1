@@ -156,7 +156,7 @@ export class RbacDialogComponent implements OnInit {
       ...this.updatedForm,
       [option[filter?.valueProp]]: option[filter?.labelProp]
     }
-   
+
     return option[filter?.valueProp]
   }
 
@@ -203,7 +203,8 @@ export class RbacDialogComponent implements OnInit {
   }
 
   setStateDetails(details: any) {
-    let state_id, stateName;
+    if (environment.config === 'VSK') {
+      let state_id, stateName;
       if (environment.stateCode) {
         state_id = StateCodes.indexOf(environment.stateCode)
         this.rbacForm.value.state = state_id
@@ -221,6 +222,14 @@ export class RbacDialogComponent implements OnInit {
         ...this.rbacForm.value,
         state_name: stateName,
       });
+    }
+    else {
+      this._rbacService.setRbacDetails({
+        ...details,
+        ...this.rbacForm.value
+      });
+    }
   }
+
 
 }

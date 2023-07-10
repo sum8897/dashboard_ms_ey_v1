@@ -48,7 +48,7 @@ export const rbacConfig = {
     {
       name: "National Officer",
       value: 0,
-      imageUrl: 'state.png',
+      imageUrl: 'national.png',
       roleImageUrl: 'principle_role.png',
       id:"national"
     },
