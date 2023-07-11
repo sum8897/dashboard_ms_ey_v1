@@ -1,9 +1,10 @@
 <div class="col-span-full tab-wrapper">
-    <div class="filter-row grid grid-cols-6 xmd:grid-cols-4">
-        <div class="col-span-4"> 
+    <div class="filter-row grid grid-cols-4">
+        <div class="col-span-3"> 
             <app-breadcrumb-component></app-breadcrumb-component>
         </div>
-        <div class="col-start-6 col-end-7 xmd:col-start-4 xmd:col-end-5 download-button">
+        <div class="col-start-4 col-end-5 download-button" id="downloadbutton" >
+            <!-- <app-popup-options [data]="reportsData" [reportName]="'pgi'" ></app-popup-options> -->
             <app-download-button [data]="reportsData"></app-download-button>
         </div>
     </div>

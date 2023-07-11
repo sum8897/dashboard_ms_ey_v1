@@ -13,13 +13,13 @@ import { ProgressStatusTabComponent } from '../../progress-status-tab.component'
               styleUrls: ['./progress-status.component.scss']
             })
             export class ProgressStatusComponent implements OnInit {
-              reportName: string = 'progress_status';
+              reportName: string = 'district_wise_progress_status';
               filters: any = [];
               levels: any;
               reportData: any = {
-                reportName: "Progress Status"
+                reportName: "District Wise Progress Status"
               };
-              title: string = 'Progress Status'
+              title: string = 'District Wise Progress Status'
               selectedYear: any;
               selectedMonth: any;
               startDate: any;
@@ -50,7 +50,7 @@ import { ProgressStatusTabComponent } from '../../progress-status-tab.component'
                 let onLoadQuery;
                 let currentLevel;
             
-                if (this.rbacDetails?.role) {
+                if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
                   filters.every((filter: any) => {
                     if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
                       queries = {...filter?.actions?.queries}
@@ -120,7 +120,7 @@ import { ProgressStatusTabComponent } from '../../progress-status-tab.component'
                   else if (query && key === 'map') {
                     this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
                     if (this.reportData?.data?.length > 0) {
-                      let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
+                      let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title, downloadConfig: options?.downloadConfig }
                       // this.exportReportData.emit(reportsData)
                       this.csv.csvDownload(reportsData)
 

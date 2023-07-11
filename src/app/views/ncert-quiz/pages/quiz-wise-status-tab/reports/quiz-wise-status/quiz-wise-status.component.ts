@@ -95,7 +95,7 @@ export class QuizWiseStatusComponent implements OnInit {
       if (query && key === 'table') {
         this.reportData = await this._dataService.getTableReportData(query, options);
         if (this.reportData?.data?.length > 0) {
-          let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
+          let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title, downloadConfig: options?.downloadConfig }
           this.exportReportData.emit(reportsData)
         }
       }

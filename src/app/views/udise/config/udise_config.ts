@@ -49,6 +49,10 @@ export const config = {
             }
         ],
         "options": {
+            "downloadConfig": {
+                "fileName": "Implementation Status",
+                "excludeColumns": ['indicator', 'tooltip', 'Latitude', 'Longitude']
+            },
             "map": {
                 "metricFilterNeeded": false,
                 "indicator": "status",
@@ -103,6 +107,10 @@ export const config = {
             ],
         "options":
         {
+            "downloadConfig": {
+                "fileName": "District Wise Performance",
+                "excludeColumns": ['indicator', 'category_name', 'percentage', 'tooltip', 'Latitude', 'Longitude']
+            },
             "map":
             {
                 "indicatorType": "percent",
@@ -261,6 +269,10 @@ export const config = {
             ],
         "options":
         {
+            "downloadConfig": {
+                "fileName": "State Wise Performance",
+                "excludeColumns": ['indicator', 'tooltip', 'category_name', 'level', 'percentage', 'Latitude', 'Longitude']
+            },
             "map":
             {
                 "indicatorType": "percent",

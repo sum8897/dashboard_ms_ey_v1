@@ -9,13 +9,21 @@ import {PmPoshanComponent} from './pmposhan.component';
 import {ProgressStatusTabComponent} from './pages/progress-status-tab/progress-status-tab.component';
 import {ProgressStatusComponent} from './pages/progress-status-tab/reports/progress-status/progress-status.component';
 import { PmposhanBignumberMetricsComponent } from './pages/progress-status-tab/reports/pmposhan-bignumber-metrics/pmposhan-bignumber-metrics.component';
+import { ImplementationStatusTabComponent } from './pages/implementation-status-tab/implementation-status-tab.component';
+import { ImplementationStatusComponent } from './pages/implementation-status-tab/reports/implementation-status/implementation-status.component';
+import { StateWiseProgressStatusTabComponent } from './pages/state-wise-progress-status-tab/state-wise-progress-status-tab.component';
+import { StateWiseProgressStatusComponent } from './pages/state-wise-progress-status-tab/reports/state-wise-progress-status/state-wise-progress-status.component';
 
 @NgModule({
 declarations: [
     PmPoshanComponent,
     ProgressStatusTabComponent,
     ProgressStatusComponent,
-    PmposhanBignumberMetricsComponent
+    PmposhanBignumberMetricsComponent,
+    ImplementationStatusTabComponent,
+    ImplementationStatusComponent,
+    StateWiseProgressStatusTabComponent,
+    StateWiseProgressStatusComponent
 ],
 imports: [
     DashletModule.forRoot({

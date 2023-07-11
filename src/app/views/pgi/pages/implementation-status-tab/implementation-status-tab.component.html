@@ -4,7 +4,8 @@
             <app-breadcrumb-component></app-breadcrumb-component>
         </div>
         <div class="col-start-4 col-end-5 download-button" id="downloadbutton" >
-            <app-popup-options [data]="reportsData" [reportName]="'pgi'" ></app-popup-options>
+            <!-- <app-popup-options [data]="reportsData" [reportName]="'pgi'" ></app-popup-options> -->
+            <app-download-button [data]="reportsData"></app-download-button>
         </div>
     </div>
     <div class="reports-row" >

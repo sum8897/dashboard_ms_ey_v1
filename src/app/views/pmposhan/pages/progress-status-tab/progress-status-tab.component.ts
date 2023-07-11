@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/pmposhan_config';
 import { ProgressStatusComponent } from './reports/progress-status/progress-status.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-progress-status-tab',
@@ -27,14 +28,18 @@ export class ProgressStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    bigNumberMetrics: any = [];
+    NVSK: boolean = true;
 
     @ViewChild('progressStatus') progressStatus: ProgressStatusComponent;
+    @Input() bigNumberMetrics: any = [];
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
+        if(environment.config === 'VSK') {
+            this.NVSK = false
+        }
     }
 
     async ngOnInit(): Promise<void> {
