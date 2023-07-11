@@ -13,6 +13,7 @@ import { QuizWiseStatusTabComponent } from './pages/quiz-wise-status-tab/quiz-wi
 import { ImplementationStatusComponent } from './pages/implementation-status-tab/reports/implementation-status/implementation-status.component';
 import { ParticipationStatusComponent } from './pages/participation-status-tab/reports/participation-status/participation-status.component';
 import { QuizWiseStatusComponent } from './pages/quiz-wise-status-tab/reports/quiz-wise-status/quiz-wise-status.component';
+import { QuizBignumberMetricsComponent } from './pages/implementation-status-tab/reports/quiz-bignumber-metrics/quiz-bignumber-metrics.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { QuizWiseStatusComponent } from './pages/quiz-wise-status-tab/reports/qu
     QuizWiseStatusTabComponent,
     ImplementationStatusComponent,
     ParticipationStatusComponent,
-    QuizWiseStatusComponent
+    QuizWiseStatusComponent,
+    QuizBignumberMetricsComponent
   ],
   imports: [
     CommonModule,

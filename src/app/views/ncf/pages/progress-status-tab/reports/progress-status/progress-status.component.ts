@@ -117,7 +117,7 @@ export class ProgressStatusComponent implements OnInit {
       else if (query && key === 'map') {
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
-          let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
+          let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title, downloadConfig: options?.downloadConfig }
           this.exportReportData.emit(reportsData)
         }
       }

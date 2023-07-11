@@ -146,7 +146,7 @@ export class DownloadButtonComponent implements OnInit {
     this.download(this.data)
   }
 
-  download(reportInputs: { reportData: any, reportType: string, reportName: string }[]) {
+  download(reportInputs: { reportData: any, reportType: string, reportName: string, downloadConfig?: any }[]) {
     if (reportInputs === undefined || reportInputs?.length <= 0) {
       if (this.isVisible) {
         return;
@@ -154,15 +154,25 @@ export class DownloadButtonComponent implements OnInit {
       this.isVisible = true;
       setTimeout(() => this.isVisible = false, 2500)
     } else {
-     // for (let i = 0; i < reportInputs.length; i++) {
-      for (let i = 0; i < 1; i++) {
+     for (let i = 0; i < reportInputs.length; i++) {
+      // for (let i = 0; i < 1; i++) {
         
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
-        const fileName = reportInputs[i].reportName;
+        const downloadConfig = reportInputs[i].downloadConfig;
+        const fileName = downloadConfig?.fileName ? downloadConfig.fileName :reportInputs[i].reportName;
         let keys: [] | any;
-        keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date', 'Latitude', 'Longitude'].includes(key));
+        // keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date', 'Latitude', 'Longitude'].includes(key));
         let dupData;
+        if(downloadConfig?.includeColumns) {
+          keys = Object.keys(reportData[i]).filter(key => downloadConfig.includeColumns.includes(key));
+        }
+        else if(downloadConfig?.excludeColumns) {
+          keys = Object.keys(reportData[i]).filter(key => !downloadConfig.excludeColumns.includes(key));
+        }
+        else {
+          keys = Object.keys(reportData[i]).filter(key => !['tooltip', 'min_date', 'max_date', 'Latitude', 'Longitude'].includes(key));
+        }
         if (reportType === 'map') {
           dupData = JSON.parse(JSON.stringify(reportData));
         } else if (reportType === 'table') {
