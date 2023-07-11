@@ -12,6 +12,7 @@ import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MicroImprovementsMetricsComponent } from './pages/implementation-status-tab/reports/micro-improvements-metrics/micro-improvements-metrics.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     ImprovementsStatusTabComponent,
     ImplementationStatusComponent,
     ImprovementsStatusComponent,
+    MicroImprovementsMetricsComponent,
 
   ],
   imports: [

@@ -109,7 +109,7 @@ export class DisancSurveyBarComponent implements OnInit {
         this.reportData = reportData
         this.config = config;
         if (this.reportData?.values?.length > 0) {
-          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title, downloadConfig: options?.downloadConfig }
           this.exportReportData.emit(reportsData)
         }
       }

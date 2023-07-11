@@ -33,6 +33,10 @@ export const config = {
             }
         ],
         "options": {
+            "downloadConfig": {
+                "fileName": "Implementation Status",
+                "includeColumns": ['latitude', 'longitude', 'state_id', 'state_name', 'status']
+            },
             "map": {
                 "metricFilterNeeded": false,
                 "indicator": "status",
@@ -85,6 +89,10 @@ export const config = {
             
         ],
         "options": {
+            "downloadConfig": {
+                "fileName": "District Wise Performance",
+                "excludeColumns": ['performance', 'level', 'category_name', 'performance', 'indicator', 'tooltip', 'Latitude', 'Longitude']
+            },
             "map": {
                 "metricLabelProp": "category_name",
                 "metricValueProp": "performance",
@@ -177,6 +185,10 @@ export const config = {
             },
         ],
         "options": {
+            "downloadConfig": {
+                "fileName": "State Wise Performance",
+                "excludeColumns": ['performance', 'level', 'category_name', 'performance', 'indicator', 'tooltip', 'Latitude', 'Longitude']
+            },
             "map": {
                 "metricLabelProp": "category_name",
                 "metricValueProp": "performance",
