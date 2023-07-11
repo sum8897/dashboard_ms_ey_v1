@@ -14,6 +14,9 @@ export class DownloadButtonComponent implements OnInit {
 
 
   @Input() data: any;
+  @Input() reportConfig: any = {
+    formatNumber: true
+  };
   @Input() fileName: any;
   @Input() reportType: any;
 
@@ -28,7 +31,7 @@ export class DownloadButtonComponent implements OnInit {
   // below vars === added for school report download button
   @Input() title: any;
   @Input() pagereportName: any;
-  // 
+  //
   public isVisible: boolean = false;
 
   // @Input() reportData: { reportName: string, data: any }[];
@@ -156,7 +159,6 @@ export class DownloadButtonComponent implements OnInit {
     } else {
      for (let i = 0; i < reportInputs.length; i++) {
       // for (let i = 0; i < 1; i++) {
-        
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const downloadConfig = reportInputs[i].downloadConfig;
@@ -197,7 +199,7 @@ export class DownloadButtonComponent implements OnInit {
         dupData.forEach((obj: any) => {
           Object.keys(obj).forEach((key: any) => {
             if (key !== 'udise_code') {
-              obj[key] = !isNaN(obj[key]) && !key.match(re) ? formatNumberForReport(Number(obj[key])) : obj[key];
+              obj[key] = !isNaN(obj[key]) && !key.match(re) ? (this.reportConfig.formatNumber ? formatNumberForReport(Number(obj[key])) : Number(obj[key])) : obj[key];
             }
           });
         });
