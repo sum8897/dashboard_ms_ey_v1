@@ -1,6 +1,7 @@
 #map {
     height: 90vh;
 }
+
 // ::ng-deep{
 //     .leaflet-pane {
 //         z-index: 1002 !important;
@@ -10,8 +11,13 @@
 //         min-width: fit-content !important;
 //     }
 // }
-::ng-deep{
-    .leaflet-notification{
+::ng-deep {
+    .leaflet-popup {
+        word-break: break-all;
+        // min-width: fit-content !important;
+    }
+
+    .leaflet-notification {
         background-color: white;
         padding: 10px;
         margin-right: 0px;
@@ -19,12 +25,15 @@
         font-size: 11px;
         font-weight: 700;
     }
+
     .leaflet-top {
         pointer-events: auto !important;
     }
-    .clickable-range{
+
+    .clickable-range {
         cursor: pointer;
     }
+
     .legend-range {
         margin-top: 10px;
         padding: 5px;
@@ -35,10 +44,13 @@
         font-weight: bold;
         width: 100%;
     }
-    .leaflet-interactive:focus, .leaflet-interactive:active{
-        outline:none;
+
+    .leaflet-interactive:focus,
+    .leaflet-interactive:active {
+        outline: none;
     }
-    .legend-checkbox{
+
+    .legend-checkbox {
         display: inline-block;
         // margin-bottom: 0.5rem;
         margin-top: 3px;
@@ -46,7 +58,8 @@
         margin-left: 10px;
         display: flex !important;
     }
-    .button-content{
+
+    .button-content {
         display: column;
         // justify-content: space-evenly;
     }

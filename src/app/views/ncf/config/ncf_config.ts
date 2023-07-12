@@ -156,7 +156,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total District Consultation Report (DCR) Completed/Uploaded', 'Total Mobile Survey', 'Total National District Groups (NDGs) created', 'Total Digital Survey for National Curriculum (DiSaNC) Survey',],
+                "title": ['Total District Consultation Report (DCR) Completed/Uploaded', 'Total Mobile Survey', 'Total National District Groups (NDGs) created', 'Total Digital Survey for National Curriculum (DiSaNC) Survey'],
                 "valueSuffix": ['','','',''],
                 "property": ['total_dcr', 'total_mobile_survey', 'total_ndg', 'participants']
             }
