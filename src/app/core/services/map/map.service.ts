@@ -29,7 +29,7 @@ export class MapService {
   }
 
   async getStateGeoJSON(drillDownDetails?: any): Promise<any> {
-    if (!this.stateGeoJSON) {
+    if (!this.stateGeoJSON || environment.config === 'NVSK') {
       var response;
       if (environment.config === 'NVSK' && drillDownDetails?.state) {
         let stateCode = StateCodes[Number(drillDownDetails?.state)]

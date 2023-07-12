@@ -203,10 +203,10 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select sum(sum) as total_students from datasets.udise_no_of_students_state",
-                        "bigNumber2": "select round(cast (avg(sum) as numeric),2) as ptr from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = 'ptr'",
-                        "bigNumber3": "select round(cast (avg(sum) as numeric),2) as schs_with_toilet from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_toilet'",
-                        "bigNumber4": "select round(cast (avg(sum) as numeric),2) as schs_having_electricity from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_electricity'",
-                        "bigNumber5": "select round(cast (avg(sum) as numeric),2) as schs_having_water from datasets.udise_category_ynl7ygbvaaaaaaaaaaaq where category_name = '%_schools_having_drinking_water'",
+                        "bigNumber2": "select round(cast (avg(sum) as numeric),2) as ptr from datasets.udise_category_state0categoryudise where category_name = 'ptr'",
+                        "bigNumber3": "select round(cast (avg(sum) as numeric),2) as schs_with_toilet from datasets.udise_category_state0categoryudise where category_name = '%_schools_having_toilet'",
+                        "bigNumber4": "select round(cast (avg(sum) as numeric),2) as schs_having_electricity from datasets.udise_category_state0categoryudise where category_name = '%_schools_having_electricity'",
+                        "bigNumber5": "select round(cast (avg(sum) as numeric),2) as schs_having_water from datasets.udise_category_state0categoryudise where category_name = '%_schools_having_drinking_water'",
                     },
                     "level": "state"
                 }
@@ -260,7 +260,7 @@ export const config = {
                     {
                         "queries":
                         {
-                            "map": "select t2.district_name, t1.district_id, t1.district_id as level , t1.category_name,latitude, longitude,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t1.district_id, t2.district_name,t1.category_name, latitude, longitude"
+                            "map": "select t2.district_name, t1.district_id, t1.district_id as level , t1.category_name,latitude, longitude,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id where t2.state_id = {state_id} group by t1.district_id, t2.district_name,t1.category_name, latitude, longitude"
                         },
                         "level": "district",
                         "nextLevel": "block"

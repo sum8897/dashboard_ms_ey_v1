@@ -192,7 +192,8 @@ export const config = {
         "options": {
             "bigNumber": {
                 "title": ['Total Quizzes', 'Total Medium', 'Total States/UTs Participating', 'Total Enrolment', 'Total Certification'],
-                "property": ['total_quizzes', 'total_medium', 'total_states', 'total_enrolment', 'total_certification']
+                "property": ['total_quizzes', 'total_medium', 'total_states', 'total_enrolment', 'total_certification'],
+                "valueSuffix": ['', '', '', '', '']
             }
         }
     }
