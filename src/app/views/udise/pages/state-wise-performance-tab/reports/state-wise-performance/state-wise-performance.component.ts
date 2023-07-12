@@ -60,15 +60,25 @@ export class StateWisePerformanceComponent implements OnInit, OnDestroy {
   }
 
   async getReportData(values: any): Promise<void> {
+    let { filterValues, timeSeriesValues } = values ?? {};
+    this.startDate = timeSeriesValues?.startDate;
+    this.endDate = timeSeriesValues?.endDate;
+    let metricFilter = [...filterValues].filter((filter: any) => {
+      return filter.filterType === 'metric'
+    })
+    this.metricFilter = metricFilter
+
+    filterValues = [...filterValues].filter((filter: any) => {
+      return filter.filterType !== 'metric'
+    })
+
+    this.commonFilter = filterValues
     if (this.drillDownDetails !== undefined) {
       let result: any = await this._drillDownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails, this.metricFilter, this.commonFilter)
       this.drillDownDetails = result?.drillDownDetails
       this.reportData = result?.reportData
     }
     else {
-      let { filterValues, timeSeriesValues } = values ?? {};
-      this.startDate = timeSeriesValues?.startDate;
-      this.endDate = timeSeriesValues?.endDate;
       let reportConfig = config
 
       let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
@@ -105,17 +115,6 @@ export class StateWisePerformanceComponent implements OnInit, OnDestroy {
           onLoadQuery = queries[key]
         }
         let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-        let metricFilter = [...filterValues].filter((filter: any) => {
-          return filter.filterType === 'metric'
-        })
-        this.metricFilter = metricFilter
-
-        filterValues = [...filterValues].filter((filter: any) => {
-          return filter.filterType !== 'metric'
-        })
-
-        this.commonFilter = filterValues
 
         filterValues.forEach((filterParams: any) => {
           query = parseFilterToQuery(query, filterParams)
