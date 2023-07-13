@@ -12,9 +12,17 @@
 <div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
+        <div *ngIf="checkReport('diksha_metrics', 'bigNumber1')" id="bignumber1">
+            <app-etb-bignumbers (exportReportData)="importBigNumberMetrics($event)"></app-etb-bignumbers>
+        </div>
+
+        <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
+            <app-implementation-status-tab [bigNumberMetrics]="bigNumberMetrics"
+                *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
+        </mat-tab>
 
         <mat-tab label='ETB Coverage Status' *ngIf="tabs.includes('ETB Coverage Status')">
-            <app-etb-coverage-status-tab
+            <app-etb-coverage-status-tab [bigNumberMetrics]="bigNumberMetrics"
                 *ngIf="selectedTabLabel === 'ETB Coverage Status'"></app-etb-coverage-status-tab>
         </mat-tab>
 

@@ -20,6 +20,16 @@
                 id="table">
                 <app-content-coverage #contentCoverage (exportReportData)="csvDownload($event)"></app-content-coverage>
             </div>
+            <div class="col-span-2 xmd:col-span-1 div-shadow"
+                *ngIf="checkReport('content_coverage_bar', 'barChart')" id="barchart">
+                <app-content-coverage-bar #contentCoverageBar
+                    (exportReportData)="csvDownload($event)"></app-content-coverage-bar>
+            </div>
+            <div class="col-span-2 div-shadow"
+                *ngIf="checkReport('content_coverage_map', 'map')" id="map">
+                <app-content-coverage-map #contentCoverageMap
+                    (exportReportData)="csvDownload($event)"></app-content-coverage-map>
+            </div>
         </div>
     </div>
 </div>

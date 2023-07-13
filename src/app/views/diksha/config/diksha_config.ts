@@ -17,21 +17,58 @@ export const config = {
             "query": "select medium from dimensions.medium ORDER BY id ASC "
         },
     ],
+    implementation_status: {
+        "label": "Implementation Status",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "map": "select d.latitude, d.longitude, t.state_id,state_name ,t.status from dimensions.state as d join (select state_id , case when sum > 0 then 'YES' else 'NO' end as status from datasets.diksha_energized_textbooks_state) as t on  d.state_id = t.state_id order by d.state_name asc"
+                    },
+                    "level": "state",
+                    "nextLevel": "district"
+                }
+            }
+        ],
+        "options": {
+            "map": {
+                "metricFilterNeeded": false,
+                "indicator": "status",
+                "legend": {
+                    "title": "Textbooks Energized"
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/ UT Name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Textbooks Energized: ",
+                        "value": "status",
+                        "valueSuffix": "\n"
+                    }
+                ]
+            }
+        }
+    },
 
     etb_coverage_status_bignumber: {
         "label": "ETB Coverage Status",
         "filters": [
             {
-                "name": "State",
-                "hierarchyLevel": "1",
+                "name": "National",
+                "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "bigNumber": " select round(cast(avg(sum) as numeric),2) as total_coverage from datasets.diksha_linkedqrcount_textbookdiksha0grade0subject0medium"
+                        "bigNumber": "select round(cast(avg(sum) as numeric),2) as total_coverage from datasets.diksha_perc_energized_textbooks_state"
                     },
-                    "level": "District",
-                    "nextLevel": "Block"
+                    "level": "State",
+                    "nextLevel": "District"
                 }
-            }
+            },
         ],
         "options": {
             "bigNumber": {
@@ -99,20 +136,94 @@ export const config = {
         }
     },
 
+    etb_coverage_status_nvsk: {
+        "label": "ETB Coverage Status",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "table": "select s.state_name, sum(t1.sum) as total_curriculum_txbs, sum(t2.sum) as total_energized_txbs, round(cast(avg(t3.sum) as numeric), 2) as perc_energized from datasets.diksha_total_curriculum_textbooks_state as t1 join datasets.diksha_total_energized_textbooks_state as t2 on t1.state_id = t2.state_id join datasets.diksha_perc_energized_textbooks_state as t3 on t1.state_id = t3.state_id join dimensions.state as s on t1.state_id = s.state_id group by t1.state_id, s.state_name order by s.state_name"
+                    },
+                    "level": "District",
+                    "nextLevel": "Block"
+                }
+            },
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State/UT Name",
+                        property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Curriculum Textbooks",
+                        property: "total_curriculum_txbs",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Energized Textbooks",
+                        property: "total_energized_txbs",
+                        class: "text-center"
+                    },
+                    {
+                        name: "% Energized Textbooks",
+                        property: "perc_energized",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    }
+                ],
+                "sortDirection": "asc"
+            }
+        }
+    },
+
     content_coverage_bignumber:
     {
         "label": "Content Coverage on QR",
-        "filters": [{
-            "name": "State",
-            "hierarchyLevel": "1",
-            "actions": {
-                "queries": {
-                    "bigNumber": " select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium "
-                },
-                "level": "District",
-                "nextLevel": "Block"
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "bigNumber": " select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_content_coverage_on_qr_state  "
+                    },
+                    "level": "State",
+                }
+            },
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber": " select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium "
+                    },
+                    "level": "District",
+                    "nextLevel": "Block"
+                }
             }
-        }],
+        ],
         "options": {
             "bigNumber": {
                 "title": "Content Coverage on QR",
@@ -175,6 +286,78 @@ export const config = {
                 ],
                 "sortByProperty": "subject",
                 "sortDirection": "asc"
+            }
+        }
+    },
+
+    content_coverage_bar: {
+        "label": "Content Coverage on QR",
+        "filters": [{
+            "name": "National",
+            "hierarchyLevel": "0",
+            "actions": {
+                "queries": {
+                    "barChart": "select s.state_name, round(cast(avg(t.sum) as numeric),2) as content_coverage from datasets.diksha_content_coverage_on_qr_state as t join dimensions.state as s on t.state_id = s.state_id group by t.state_id, s.state_name order by s.state_name"
+                },
+                "level": "State"
+            }
+        }],
+        "options": {
+            "barChart": {
+                "valueSuffix": "%",
+                "isMultibar": true,
+                "type": "horizontal",
+                "yAxis": {
+                    "title": "States"
+                },
+                "xAxis": {
+                    "title": "Content Coverage on QR",
+                    "label": "state_name",
+                    "value": "state_name",
+                    "metrics": [
+                        {
+                            "label": "Content Coverage on QR",
+                            "value": "content_coverage"
+                        },
+                        
+                    ]
+                }
+            }
+        }
+    },
+
+    content_coverage_map: {
+        "label": "Content Coverage on QR",
+        "filters": [{
+            "name": "National",
+            "hierarchyLevel": "0",
+            "actions": {
+                "queries": {
+                    "map": "select latitude, longitude, s.state_name, round(cast(avg(t.sum) as numeric),2) as content_coverage from datasets.diksha_content_coverage_on_qr_state as t join dimensions.state as s on t.state_id = s.state_id group by t.state_id, s.state_name, latitude, longitude order by s.state_name"
+                },
+                "level": "State",
+            }
+        }],
+        "options": {
+            "map": {
+                "indicatorType": "percent",
+                "metricFilterNeeded": false,
+                "indicator": "content_coverage",
+                "legend": {
+                    "title": "Content Coverage on QR"
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/ UT Name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Content Coverage on QR: ",
+                        "value": "content_coverage",
+                        "valueSuffix": "%\n"
+                    }
+                ]
             }
         }
     },
@@ -256,8 +439,17 @@ export const config = {
                     "queries": {
                         "bigNumber": "select sum(t1.sum) as users from datasets.diksha_plays_per_capita_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id"
                     },
-                    "level": "district",
-                    "nextLevel": "block"
+                    "level": "district"
+                }
+            },
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "map": "select latitude, longitude, t2.state_name, round(cast(sum(t1.sum) as numeric),2) as users from datasets.diksha_learning_session_on_potential_user_state as t1 join dimensions.state as t2 on t1.state_id = t2.state_id group by t1.state_id, t2.state_name, latitude, longitude"
+                    },
+                    "level": "State",
                 }
             }
         ],
@@ -266,6 +458,25 @@ export const config = {
                 "title": "Learning Sessions On Potential Users",
                 "valueSuffix": '',
                 "property": 'users'
+            },
+            "map": {
+                "metricFilterNeeded": false,
+                "indicator": "users",
+                "legend": {
+                    "title": "Learning Sessions on Potential Users"
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/ UT Name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Learning Sessions on Potential Users: ",
+                        "value": "users",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
@@ -273,6 +484,20 @@ export const config = {
     diksha_metrics: {
         "label": "ETB Coverage Status",
         "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_etbs from datasets.diksha_resourcecount_textbookdiksha0grade0subject0medium",
+                        "bigNumber2": "select sum(sum) as total_qr_codes from datasets.diksha_totalqrcodes_textbookdiksha0grade0subject0medium",
+                        "bigNumber3": "select round(cast(avg(sum) as numeric),2) as content_coverage from datasets.diksha_qrcoverage_textbookdiksha0grade0subject0medium",
+                        "bigNumber4": "select count(distinct state_id) as total_states from datasets.diksha_energized_textbooks_state where sum > 0",
+                        "bigNumber5": ""
+                    },
+                    "level": "district"
+                }
+            },
             {
                 "name": "State",
                 "labelProp": "state_name",
@@ -291,9 +516,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total ETBs', 'Total QR Codes', 'Content Coverage on QR', 'Total Content'],
-                "valueSuffix": ['', '', '%', ''],
-                "property": ['total_etbs', 'total_qr_codes', 'content_coverage', '']
+                "title": ['Total ETBs', 'Total QR Codes', 'Content Coverage on QR', 'Total States/UTs Participating', 'Total Content'],
+                "valueSuffix": ['', '', '%', '', ''],
+                "property": ['total_etbs', 'total_qr_codes', 'content_coverage', 'total_states', '']
             }
         }
     }

@@ -1,5 +1,5 @@
 <div class="col-span-full tab-wrapper">
-    <div class="filter-row grid grid-cols-4">
+    <div class="filter-row grid grid-cols-4" *ngIf="NVSK">
         <div class="col-span-2">
         </div>
         <div class="col-start-4 col-end-5 download-button">
@@ -11,7 +11,7 @@
         <div class="row-wrapper grid grid-cols-1 gap-4">
 
             <div class="col-span-2 xmd:col-span-1 div-shadow"
-                *ngIf="checkReport('learning_sessions_on_potential_users', 'bigNumber')" id="bigNumber">
+                *ngIf="checkReport('learning_sessions_on_potential_users', 'bigNumber', 'map')" id="bigNumber">
                 <app-learning-sessions-on-potential-users #learningSessionsOnPotentialUsers
                     (exportReportData)="csvDownload($event)"></app-learning-sessions-on-potential-users>
             </div>

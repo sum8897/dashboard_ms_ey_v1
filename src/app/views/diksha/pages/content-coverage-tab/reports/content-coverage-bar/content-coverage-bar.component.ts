@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common/common.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -7,18 +6,19 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/diksha/config/diksha_config';
 
 @Component({
-  selector: 'app-etb-coverage-status-bignumber',
-  templateUrl: './etb-coverage-status-bignumber.component.html',
-  styleUrls: ['./etb-coverage-status-bignumber.component.scss']
+  selector: 'app-content-coverage-bar',
+  templateUrl: './content-coverage-bar.component.html',
+  styleUrls: ['./content-coverage-bar.component.scss']
 })
-export class EtbCoverageStatusComponentBignumber implements OnInit {
-  reportName: string = 'etb_coverage_status_bignumber';
+export class ContentCoverageBarComponent implements OnInit {
+
+  reportName: string = 'content_coverage_bar';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "etb_coverage_status_bignumber"
+    reportName: "Content Coverage on QR"
   };
-  title: string = 'Overall ETB Coverage '
+  title: string = 'Content Coverage on QR'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -109,8 +109,9 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
         let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
         this.reportData = reportData
         this.config = config;
+        console.log(config)
         if (this.reportData?.values?.length > 0) {
-          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title, downloadConfig: options?.downloadConfig }
           this.exportReportData.emit(reportsData)
         }
       }
@@ -124,4 +125,6 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
       }
     })
   }
+
 }
+

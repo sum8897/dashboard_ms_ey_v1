@@ -49,7 +49,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
                 let onLoadQuery;
                 let currentLevel;
             
-                if (this.rbacDetails?.role) {
+                if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
                   filters.every((filter: any) => {
                     if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
                       queries = {...filter?.actions?.queries}
