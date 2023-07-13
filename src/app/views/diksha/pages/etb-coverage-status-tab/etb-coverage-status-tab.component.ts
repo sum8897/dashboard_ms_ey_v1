@@ -1,9 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/diksha_config';
 import { EtbCoverageStatusComponentBignumber } from './reports/etb-coverage-status-bignumber/etb-coverage-status-bignumber.component';
 import { EtbCoverageStatusComponent } from './reports/etb-coverage-status/etb-coverage-status.component';
+import { environment } from 'src/environments/environment';
+import { EtbCoverageStatusNvskComponent } from './reports/etb-coverage-status-nvsk/etb-coverage-status-nvsk.component';
 
 @Component({
     selector: 'app-etb-coverage-status-tab',
@@ -28,15 +30,21 @@ export class EtbCoverageStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    bigNumberMetrics: any = [];
+    NVSK: boolean = true;
     matLabel:any = "ETB Coverage Status"
     @ViewChild('etbCoverageStatusBignumber') etbCoverageStatusBignumber: EtbCoverageStatusComponentBignumber;
     @ViewChild('etbCoverageStatus') etbCoverageStatus: EtbCoverageStatusComponent;
+    @ViewChild('etbCoverageStatusNVSK') etbCoverageStatusNVSK: EtbCoverageStatusNvskComponent;
+    
+    @Input() bigNumberMetrics: any = [];
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
+        if(environment.config === 'VSK') {
+            this.NVSK = false
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -44,10 +52,14 @@ export class EtbCoverageStatusTabComponent implements OnInit, AfterViewInit {
     }
 
     async ngAfterViewInit(): Promise<void> {
-        if (this.hasCommonFilters) {
+        if (this.hasCommonFilters && !this.NVSK) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
             this.etbCoverageStatusBignumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
             this.etbCoverageStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        }
+        if (this.NVSK) {
+            this.etbCoverageStatusBignumber?.getReportData({ filterValues: []});
+            this.etbCoverageStatusNVSK?.getReportData({ filterValues: []});
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();

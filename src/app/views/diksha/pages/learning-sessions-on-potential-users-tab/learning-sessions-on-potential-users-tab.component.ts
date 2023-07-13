@@ -3,6 +3,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/diksha_config';
 import { LearningSessionsOnPotentialUsersComponent } from './reports/learning-sessions-on-potential-users/learning-sessions-on-potential-users.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-learning-sessions-on-potential-users-tab',
@@ -27,6 +28,7 @@ export class LearningSessionsOnPotentialUsersTabComponent implements OnInit, Aft
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
+    NVSK:boolean = true;
     matLabel:any ="Learning Sessions on Potential Users"
     @ViewChild('learningSessionsOnPotentialUsers') learningSessionsOnPotentialUsers: LearningSessionsOnPotentialUsersComponent;
 
@@ -34,6 +36,9 @@ export class LearningSessionsOnPotentialUsersTabComponent implements OnInit, Aft
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
+        if(environment.config === 'VSK') {
+            this.NVSK = false;
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -54,11 +59,11 @@ export class LearningSessionsOnPotentialUsersTabComponent implements OnInit, Aft
         }
     }
 
-    checkReport(key: string, reportType: string): Boolean {
+    checkReport(key: string, reportType: string, alterReportType?: string): Boolean {
         let reportConfig = config;
         let flag = false;
         reportConfig[key]?.filters?.forEach((filter: any) => {
-            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && (Object.keys(filter?.actions?.queries).includes(reportType) || Object.keys(filter?.actions?.queries).includes(alterReportType))) {
                 flag = true
             }
         })

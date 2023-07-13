@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common/common.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
@@ -7,18 +6,19 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/diksha/config/diksha_config';
 
 @Component({
-  selector: 'app-etb-coverage-status-bignumber',
-  templateUrl: './etb-coverage-status-bignumber.component.html',
-  styleUrls: ['./etb-coverage-status-bignumber.component.scss']
+  selector: 'app-implementation-status',
+  templateUrl: './implementation-status.component.html',
+  styleUrls: ['./implementation-status.component.scss']
 })
-export class EtbCoverageStatusComponentBignumber implements OnInit {
-  reportName: string = 'etb_coverage_status_bignumber';
+export class ImplementationStatusComponent implements OnInit {
+
+  reportName: string = 'implementation_status';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "etb_coverage_status_bignumber"
+    reportName: "Implementation Status"
   };
-  title: string = 'Overall ETB Coverage '
+  title: string = 'Implementation Status'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -87,6 +87,7 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
       filterValues = [...filterValues].filter((filter: any) => {
         return filter.filterType !== 'metric'
       })
+      
 
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
@@ -117,11 +118,12 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
       else if (query && key === 'map') {
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
-
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
           this.exportReportData.emit(reportsData)
         }
       }
     })
   }
+
 }
+

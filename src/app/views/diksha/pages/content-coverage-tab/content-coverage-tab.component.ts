@@ -4,6 +4,9 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/diksha_config';
 import { ContentCoverageComponentBignumber } from './reports/content-coverage-bignumber/content-coverage-bignumber.component';
 import { ContentCoverageComponent } from './reports/content-coverage/content-coverage.component';
+import { environment } from 'src/environments/environment';
+import { ContentCoverageMapComponent } from './reports/content-coverage-map/content-coverage-map.component';
+import { ContentCoverageBarComponent } from './reports/content-coverage-bar/content-coverage-bar.component';
 
 @Component({
     selector: 'app-content-coverage-tab',
@@ -29,13 +32,20 @@ export class ContentCoverageTabComponent implements OnInit, AfterViewInit {
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
     tabLabel: any ="Content Coverage on QR"
+    NVSK: boolean = true;
+    
     @ViewChild('contentCoverageBigNumber') contentCoverageBigNumber: ContentCoverageComponentBignumber;
     @ViewChild('contentCoverage') contentCoverage: ContentCoverageComponent;
+    @ViewChild('contentCoverageBar') contentCoverageBar: ContentCoverageBarComponent;
+    @ViewChild('contentCoverageMap') contentCoverageMap: ContentCoverageMapComponent;
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
+        if(environment.config === 'VSK') {
+            this.NVSK = false
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -43,10 +53,15 @@ export class ContentCoverageTabComponent implements OnInit, AfterViewInit {
     }
 
     async ngAfterViewInit(): Promise<void> {
-        if (this.hasCommonFilters) {
+        if (this.hasCommonFilters && !this.NVSK) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
             this.contentCoverageBigNumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
             this.contentCoverage?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        }
+        if (this.NVSK) {
+            this.contentCoverageBigNumber?.getReportData({ filterValues: []});
+            this.contentCoverageBar?.getReportData({ filterValues: []});
+            this.contentCoverageMap?.getReportData({ filterValues: []});
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();

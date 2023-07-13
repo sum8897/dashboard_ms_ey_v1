@@ -19,7 +19,7 @@ export const config = {
                 "valueProp": "state_id",
                 "actions": {
                     "queries": {
-                        "barChart": "select textbook_name as textbook, avg(sum) as lo_covered from datasets.nipun_bharat_perc_los_covered_textbooknipun group by textbook order by textbook",
+                        "barChart": "select textbook_name as textbook, round(cast(avg(sum) as numeric),2) as lo_covered from datasets.nipun_bharat_perc_los_covered_textbooknipun group by textbook order by textbook",
                     },
                     "level": "state"
                 }
