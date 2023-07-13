@@ -5,6 +5,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/diksha/config/diksha_config';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-learning-sessions-on-potential-users',
@@ -27,6 +28,7 @@ export class LearningSessionsOnPotentialUsersComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  NVSK: boolean = true;
 
   @Output() exportReportData = new EventEmitter<any>();
 
@@ -34,6 +36,9 @@ export class LearningSessionsOnPotentialUsersComponent implements OnInit {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
+    if(environment.config === 'VSK') {
+      this.NVSK = false;
+    }
   }
 
   ngOnInit(): void {
@@ -49,7 +54,7 @@ export class LearningSessionsOnPotentialUsersComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }

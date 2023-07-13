@@ -7,18 +7,18 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/diksha/config/diksha_config';
 
 @Component({
-  selector: 'app-etb-coverage-status-bignumber',
-  templateUrl: './etb-coverage-status-bignumber.component.html',
-  styleUrls: ['./etb-coverage-status-bignumber.component.scss']
+  selector: 'app-etb-coverage-status-nvsk',
+  templateUrl: './etb-coverage-status-nvsk.component.html',
+  styleUrls: ['./etb-coverage-status-nvsk.component.scss']
 })
-export class EtbCoverageStatusComponentBignumber implements OnInit {
-  reportName: string = 'etb_coverage_status_bignumber';
+export class EtbCoverageStatusNvskComponent implements OnInit {
+  reportName: string = 'etb_coverage_status_nvsk';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "etb_coverage_status_bignumber"
+    reportName: "ETB Coverage Status"
   };
-  title: string = 'Overall ETB Coverage '
+  title: string = 'ETB Coverage Status'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -92,7 +92,7 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
         query = parseFilterToQuery(query, filterParams)
       });
 
-      if (query && key === 'table') {
+      if (query && key === 'table') {     
         this.reportData = await this._dataService.getTableReportData(query, options);
         if (this.reportData?.data?.length > 0) {
           let reportsData = { reportData: this.reportData.data, reportType: 'table', reportName: this.title }
@@ -125,3 +125,4 @@ export class EtbCoverageStatusComponentBignumber implements OnInit {
     })
   }
 }
+
