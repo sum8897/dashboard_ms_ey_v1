@@ -165,6 +165,14 @@ routes = [
           ),
         canLoad: [AuthGuard]
       },
+      {
+        path: 'nipunBharat',
+        loadChildren: () =>
+          import('./views/nipun-bharat/nipun-bharat.module').then(
+            (module) => module.NipunBharatModule
+          ),
+        canLoad: [AuthGuard]
+      },
     ],
   },
 ];
