@@ -153,6 +153,17 @@ export class DataService {
                 scaleLabel: {
                   display: true,
                   labelString: yAxis.title
+                },
+                ticks: {
+                  callback: function (value, index, values) {
+                    if (yAxis?.limitCharacters && value.length > Number(yAxis?.limitCharacters)) {
+                      let newValue = value?.substring(0,Number(yAxis?.limitCharacters)) + '...'
+                      return newValue
+                    }
+                    else {
+                      return value
+                    }
+                  }
                 }
               }],
               xAxes: [{

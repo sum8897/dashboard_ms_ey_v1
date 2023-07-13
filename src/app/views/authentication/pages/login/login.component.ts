@@ -51,6 +51,9 @@ export class LoginComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let uiConfig = config;
     this.loginObj = uiConfig['loginObj'];
+    if(this.loginObj?.title === 'State Vidya Samiksha Kendra' && environment.config === 'NVSK') {
+      this.loginObj.title = 'NDEAR Vidya Samiksha Kendra'
+    }
 
     this.isLoggedIn = await this._authenticationService.isUserLoggedIn();
 
