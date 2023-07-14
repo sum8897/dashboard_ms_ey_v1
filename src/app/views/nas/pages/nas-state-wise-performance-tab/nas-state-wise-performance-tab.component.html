@@ -5,7 +5,8 @@
                 colSize="lg:col-span-4 col-span-6"></app-filter-panel>
         </div>
         <div class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex" id="downloadbutton" #downloadbutton>
-            <app-popup-options [data]="reportsData" [reportName]="'nas_state_wise'" ></app-popup-options>
+            <!-- <app-popup-options [data]="reportsData" [reportName]="'nas_state_wise'" ></app-popup-options> -->
+            <app-download-button [data]="reportsData"></app-download-button>
         </div>
     </div>
     <div class="reports-row" >

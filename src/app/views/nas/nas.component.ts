@@ -16,7 +16,8 @@ export class NasComponent implements OnInit {
     tabIndex;
     selectedTabLabel;
     tabs: any = [];
-    programName: any = 'nas'
+    programName: any = 'nas';
+    bigNumberMetrics: any = [];
     
 constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
@@ -56,6 +57,21 @@ constructor(private route: ActivatedRoute, private _rbacService: RbacService, pr
         window.dispatchEvent(new Event('resize'));
         console.log('resize');
     }, 100);
+    }
+
+    checkReport(key: string, reportType: string): Boolean {
+        let reportConfig = config;
+        let flag = false;
+        reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
+                flag = true
+            }
+        })
+        return flag
+    }
+
+    importBigNumberMetrics(bigNumberMetric: any) {
+        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
     }
 
 }
