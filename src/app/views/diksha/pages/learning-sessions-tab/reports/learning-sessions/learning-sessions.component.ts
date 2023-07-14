@@ -16,9 +16,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
               filters: any = [];
               levels: any;
               reportData: any = {
-                reportName: "-------to be filled-------"
+                reportName: "Learning Sessions"
               };
-              title: string = '-------to be filled-------'
+              title: string = 'Learning Sessions'
               selectedYear: any;
               selectedMonth: any;
               startDate: any;
