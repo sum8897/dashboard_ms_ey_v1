@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/nas_config';
 import { DistrictWisePerformanceComponent } from './reports/district-wise-performance/district-wise-performance.component';
 import { NasBignumberMetricsComponent } from './reports/nas-bignumber-metrics/nas-bignumber-metrics.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-district-wise-performance-tab',
@@ -28,15 +29,19 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
     tabLabel: any = 'District Wise Performance';
-    bigNumberMetrics: any = [];
+    NVSK: boolean = true;
 
     @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
     @ViewChild('nasMetrics') nasMetrics: NasBignumberMetricsComponent;
+    @Input() bigNumberMetrics: any = [];
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
         })
+        if(environment.config === 'VSK') {
+            this.NVSK = false
+        }
     }
 
     async ngOnInit(): Promise<void> {

@@ -16,6 +16,30 @@ export const config = {
             "valueProp": "medium",
             "query": "select medium from dimensions.medium ORDER BY id ASC "
         },
+        {
+            "label": "Learning Sessions",
+            "name": "Medium",
+            "labelProp": "medium",
+            "valueProp": "medium",
+            "id": "medium",
+            "query": "select distinct(medium) from datasets.diksha_totalplays_state0grade0subject0medium order by medium"
+        },
+        {
+            "label": "Learning Sessions",
+            "name": "Grade",
+            "labelProp": "grade",
+            "valueProp": "grade",
+            "id": "grade",
+            "query": "select distinct(grade) from datasets.diksha_totalplays_state0grade0subject0medium order by grade"
+        },
+        {
+            "label": "Learning Sessions",
+            "name": "Subject",
+            "labelProp": "subject",
+            "valueProp": "subject",
+            "id": "subject",
+            "query": "select distinct(subject) from datasets.diksha_totalplays_state0grade0subject0medium order by subject"
+        }
     ],
     implementation_status: {
         "label": "Implementation Status",
@@ -319,7 +343,7 @@ export const config = {
                             "label": "Content Coverage on QR",
                             "value": "content_coverage"
                         },
-                        
+
                     ]
                 }
             }
@@ -362,34 +386,42 @@ export const config = {
         }
     },
 
-    // learning_sessions: {
-    //     "label": "Learning Sessions",
-    //     "filters": [{
-    //         "name": "State",
-    //         "hierarchyLevel": "1",
-    //         "actions": {
-    //             "queries": {
-    //                 "barChart": ""
-    //             },
-    //             "level": "district",
-    //             "nextLevel": "block"
-    //         }
-    //     }],
-    //     "options": {
-    //         "barChart": {
-    //             "metricLabelProp": "",
-    //             "metricValueProp": "",
-    //             "yAxis": {
-    //                 "title": ""
-    //             },
-    //             "xAxis": {
-    //                 "title": "",
-    //                 "label": "",
-    //                 "value": ""
-    //             }
-    //         }
-    //     }
-    // },
+    learning_sessions: {
+        "label": "Learning Sessions",
+        "filters": [
+            {
+                "name": "State",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "barChart": "select state_name, sum(sum) as learning_sessions from datasets.diksha_totalplays_state0grade0subject0medium as t join dimensions.state as s on t.state_id = s.state_id group by t.state_id, state_name order by state_name",
+                    },
+                    "level": "district"
+                }
+            }
+        ],
+        "options": {
+            "barChart": {
+                "isMultibar": true,
+                "type": "horizontal",
+                "yAxis": {
+                    "title": "States"
+                },
+                "xAxis": {
+                    "title": "Total No of Learning Sessions",
+                    "label": "state_name",
+                    "value": "state_name",
+                    "metrics": [
+                        {
+                            "label": "Total No of Learning Sessions(App and Portal)",
+                            "value": "learning_sessions"
+                        },
+                        
+                    ]
+                }
+            }
+        }
+    },
 
     // learning_sessions_on_potential_users: {
     //     "label": "Learning Sessions on Potential Users",

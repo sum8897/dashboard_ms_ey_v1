@@ -76,7 +76,7 @@ export class WrapperService {
           });
         }
         let query = filter.values === undefined ? filter.query : undefined
-        if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined) {
+        if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined && updatedFilter) {
           query = parseQueryParam(query, { [filters[index - 1]?.valueProp]: filters[index - 1]?.value })
         }
         if (query) {
