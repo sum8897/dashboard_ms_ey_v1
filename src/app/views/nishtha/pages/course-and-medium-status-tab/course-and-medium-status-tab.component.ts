@@ -3,6 +3,7 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/nishtha_config';
 import { CourseAndMediumStatusComponent } from './reports/course-and-medium-status/course-and-medium-status.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-course-and-medium-status-tab',
@@ -27,13 +28,19 @@ export class CourseAndMediumStatusTabComponent implements OnInit, AfterViewInit 
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLabel: any = 'Courses and Medium Status'
+    matLabel: any = 'Courses and Medium Status';
+    NVSK = true;
+
     @ViewChild('courseAndMediumStatus') courseAndMediumStatus: CourseAndMediumStatusComponent;
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
-        })
+        });
+
+        if(environment.config === 'VSK') {
+            this.NVSK = false;
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -41,10 +48,13 @@ export class CourseAndMediumStatusTabComponent implements OnInit, AfterViewInit 
     }
 
     async ngAfterViewInit(): Promise<void> {
-        if (this.hasCommonFilters) {
+        if (this.NVSK) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
             this.courseAndMediumStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        } else {
+            this.courseAndMediumStatus?.getReportData({ filterValues: [] });
         }
+
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();
             let days = endDate.getDate() - this.defaultSelectedDays;

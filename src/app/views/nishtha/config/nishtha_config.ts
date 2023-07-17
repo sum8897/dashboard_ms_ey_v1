@@ -17,6 +17,15 @@ export const config = {
             "id": "program_name",
             "query": "select program_name from dimensions.programnishtha"
         },
+        {
+            "label": "Courses and Medium Status",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "tableAlias": "ntc",
+            "query": "select program_name from dimensions.programnishtha"
+        },
         // {
         //     "label": "District Wise Performance",
         //     "name": "Metric",
@@ -29,6 +38,17 @@ export const config = {
     implementation_status: {
         "label": "Implementation Status",
         "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "map": "select d.latitude, d.longitude, t.state_id,state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
+                    },
+                    "level": "state",
+                    "nextLevel": "district"
+                }
+            },
             {
                 "name": "State",
                 "hierarchyLevel": "1",
@@ -69,12 +89,42 @@ export const config = {
                         }
                     }
                 ],
+            },
+            "map": {
+                "metricFilterNeeded": false,
+                "indicator": "status",
+                "legend": {
+                    "title": "Implemented PGI"
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "State/ UT Name: ",
+                        "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "Implemented PGI: ",
+                        "value": "status",
+                        "valueSuffix": "\n"
+                    }
+                ]
             }
         }
     },
     course_and_medium_status: {
         "label": "Courses and Medium Status",
         "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                       "table": "select st.state_id, st.state_name, ntc.sum as total_courses, ntm.sum as total_medium from datasets.nishtha_totalcourseslaunched_state0programnishtha as ntc JOIN datasets.nishtha_totalmedium_state0programnishtha as ntm ON ntc.state_id = ntm.state_id AND ntc.program_name = ntm.program_name JOIN dimensions.state as st ON st.state_id = ntc.state_id ORDER BY total_courses DESC"
+                    },
+                    "level": "district",
+                    "nextLevel": "block"
+                }
+            },
             {
                 "name": "State",
                 "hierarchyLevel": "1",
@@ -93,6 +143,11 @@ export const config = {
                     {
                         name: "Program Name",
                         property: "program_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "State Name",
+                        property: "state_name",
                         class: "text-center"
                     },
                     {
