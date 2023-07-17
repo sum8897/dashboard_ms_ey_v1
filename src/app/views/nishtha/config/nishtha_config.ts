@@ -26,6 +26,15 @@ export const config = {
             "tableAlias": "ntc",
             "query": "select program_name from dimensions.programnishtha"
         },
+        {
+            "label": "% against Potential Base",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "tableAlias": "ntae",
+            "query": "select program_name from dimensions.programnishtha"
+        },
         // {
         //     "label": "District Wise Performance",
         //     "name": "Metric",
@@ -169,6 +178,16 @@ export const config = {
         "defaultLevel": "state",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "stackedBarChart": "select st.state_id, st.state_name, ntae.sum as achieved_enrollments_per, (100 - ntae.sum) as expected_enrollments_per, nae.sum as actual_enrollments, nae.sum as expected_enrollments from datasets.nishtha_targetachievedenrolment_state0programnishtha as ntae JOIN datasets.nishtha_actualenrolment_state0programnishtha as nae ON nae.state_id = ntae.state_id AND nae.program_name = ntae.program_name JOIN datasets.nishtha_expectedenrolment_state0programnishtha as nee ON nee.state_id = ntae.state_id AND nee.program_name = ntae.program_name JOIN dimensions.state as st ON st.state_id = ntae.state_id ORDER BY st.state_name",
+                    },
+                    "level": "district"
+                }
+            },
+            {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
@@ -203,6 +222,28 @@ export const config = {
                         }
                     ]
                 }
+            },
+            "stackedBarChart": {
+                "isMultibar": true,
+                "valueSuffix": "%",
+                "yAxis": {
+                    "title": "States",
+                    "label": "state_name",
+                    "value": "state_name",
+                },
+                "xAxis": {
+                    "title": "",
+                    "metrics": [
+                        {
+                            "label": "% Target Achieved-Enrolment",
+                            "value": "achieved_enrollments_per"
+                        },
+                        {
+                            "label": "% Total Target-Enrolment",
+                            "value": "expected_enrollments_per"
+                        }
+                    ]
+                }
             }
         }
     },
@@ -210,6 +251,16 @@ export const config = {
         "label": "% against Potential Base",
         "defaultLevel": "state",
         "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "stackedBarChart": "select st.state_id, st.state_name, ntae.sum as achieved_certificates_per, (100 - ntae.sum) as expected_certificates_per, nac.sum as actual_certificates, nac.sum as expected_certificates from datasets.nishtha_targetachievedcertificates_state0programnishtha as ntae JOIN datasets.nishtha_actualcertification_state0programnishtha as nac ON nac.state_id = ntae.state_id AND nac.program_name = ntae.program_name JOIN datasets.nishtha_expectedcertificates_state0programnishtha as nec ON nec.state_id = ntae.state_id AND nec.program_name = ntae.program_name JOIN dimensions.state as st ON st.state_id = ntae.state_id ORDER BY st.state_name;",
+                    },
+                    "level": "district"
+                }
+            },
             {
                 "name": "State",
                 "labelProp": "state_name",
@@ -242,6 +293,28 @@ export const config = {
                         {
                             "label": "% Total Target-Certificates",
                             "value": "total_target"
+                        }
+                    ]
+                }
+            },
+            "stackedBarChart": {
+                "isMultibar": true,
+                "valueSuffix": "%",
+                "yAxis": {
+                    "title": "States",
+                    "label": "state_name",
+                    "value": "state_name",
+                },
+                "xAxis": {
+                    "title": "",
+                    "metrics": [
+                        {
+                            "label": "% Target Achieved-Certificates",
+                            "value": "achieved_certificates_per"
+                        },
+                        {
+                            "label": "% Total Target-Certificates",
+                            "value": "expected_certificates_per"
                         }
                     ]
                 }
