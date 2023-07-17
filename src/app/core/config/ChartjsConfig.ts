@@ -45,6 +45,11 @@ export const ChartJSConfig = {
         barThickness: 15,
         maxBarThickness: 50
     },
+    stackedBar: {
+        minBarLength: 8,
+        barThickness: 10,
+        maxBarThickness: 12
+    },
     scatter: {
         pointBorderColor: '#7cd6cc',
         pointBorderWidth: 0.5,
@@ -121,14 +126,16 @@ export function getChartJSConfig(config: any): any {
     return _.merge(defaultOptions, config);
 }
 
-export function getBarDatasetConfig(dataset: any,  isMulti?: any, useSingleColor?: boolean): any {
+export function getBarDatasetConfig(dataset: any,  isMulti?: any, useSingleColor?: boolean, defOptions?: any): any {
     dataset = dataset.map((rec, index) => {
-        let options: any;
-        if(isMulti) {
-            options = ChartJSConfig.multiBar;
-        }
-        else {
-            options = ChartJSConfig.bar;
+        let options = defOptions;
+        if (!options) {
+            if(isMulti) {
+                options = ChartJSConfig.multiBar;
+            }
+            else {
+                options = ChartJSConfig.bar;
+            }
         }
 
         if (!useSingleColor) {

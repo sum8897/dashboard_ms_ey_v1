@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getBarDatasetConfig, getChartJSConfig } from '../config/ChartjsConfig';
+import { ChartJSConfig, getBarDatasetConfig, getChartJSConfig } from '../config/ChartjsConfig';
 import { CommonService } from './common/common.service';
 import * as _ from 'lodash';
 import { WrapperService } from './wrapper.service';
@@ -196,6 +196,66 @@ export class DataService {
     });
   }
 
+  getStackedBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.spinner.show();
+      let { stackedBarChart: { yAxis, xAxis, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp } } = options;
+      this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        let rows = res;
+        if (MultibarGroupByNeeded) {
+          rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
+        }
+        let reportData = {
+          values: rows
+        }
+        let config = getChartJSConfig({
+          labelExpr: yAxis.value,
+          datasets: this.getDatasets(options.stackedBarChart, filters),
+
+          options: {
+            height: (rows.length * 15 + 150).toString(),
+            tooltips: {
+              callbacks: {
+                label: (tooltipItem, data) => {
+                  let multistringText = [];
+                  if (isMultibar) {
+                    data.datasets.forEach((dataset: any, index: any) => {
+                      if (index === tooltipItem.datasetIndex) {
+                        multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                      }
+                    })
+                  }
+                  else {
+                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                  }
+                  return multistringText;
+                }
+              }
+            },
+            scales: {
+              yAxes: [{
+                stacked: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: yAxis.title
+                }
+              }],
+              xAxes: [{
+                stacked: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: xAxis.title
+                }
+              }]
+            }
+          }
+        });
+        this.spinner.hide();
+        resolve({ reportData: reportData, config: config })
+      });
+    });
+  }
+
   getDatasets(barChartOptions: any, filters: any) {
     let { xAxis, isCorrelation, type, isMultibar, metricLabelProp, metricValueProp } = barChartOptions;
     if (isCorrelation) {
@@ -217,7 +277,9 @@ export class DataService {
             label: metric.label
           }
         }),
-        type
+        type,
+        false,
+        ChartJSConfig.stackedBar
       )
     }
     else {
