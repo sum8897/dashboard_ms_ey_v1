@@ -11,7 +11,7 @@
     <div class="reports-row">
         <div class="row-wrapper grid grid-cols-2 gap-4">
 
-            <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('correlation', 'barChart')" id="chart">
+            <div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('correlation', 'scatter')" id="chart">
                 <app-correlation #correlation (exportReportData)="csvDownload($event)"></app-correlation>
             </div>
         </div>

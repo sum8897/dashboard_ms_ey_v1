@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ChartJSConfig, getBarDatasetConfig, getChartJSConfig } from '../config/ChartjsConfig';
+import { ChartJSConfig, getBarDatasetConfig, getChartJSConfig, getScatterDatasetConfig } from '../config/ChartjsConfig';
 import { CommonService } from './common/common.service';
 import * as _ from 'lodash';
 import { WrapperService } from './wrapper.service';
@@ -112,10 +112,10 @@ export class DataService {
     });
   }
 
-  getBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
+  getBarChartReportData(query, options, filters, currentLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();
-      let { barChart: { yAxis, xAxis, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp } } = options;
+      let { barChart: { yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
         if (MultibarGroupByNeeded) {
@@ -129,7 +129,7 @@ export class DataService {
           datasets: this.getDatasets(options.barChart, filters),
 
           options: {
-            height: (rows.length * 15 + 150).toString(),
+            height: ((defaultPageSize ? defaultPageSize : 30) * 15 + 150).toString(),
             tooltips: {
               callbacks: {
                 label: (tooltipItem, data) => {
@@ -152,12 +152,12 @@ export class DataService {
               yAxes: [{
                 scaleLabel: {
                   display: true,
-                  labelString: yAxis.title
+                  labelString: Array.isArray(yAxis.title) ? yAxis.title[currentLevel] : yAxis.title
                 },
                 ticks: {
                   callback: function (value, index, values) {
                     if (yAxis?.limitCharacters && value.length > Number(yAxis?.limitCharacters)) {
-                      let newValue = value?.substring(0,Number(yAxis?.limitCharacters)) + '...'
+                      let newValue = value?.substring(0, Number(yAxis?.limitCharacters)) + '...'
                       return newValue
                     }
                     else {
@@ -335,6 +335,80 @@ export class DataService {
     })
   }
 
+  getScatterChartReportData(query: any, options: any, axisFilters: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.spinner.show();
+      let { barChart: { yAxis, xAxis, MultibarGroupByNeeded, groupByLabel, tooltipMetrics, valueSuffix, metricLabelProp, metricValueProp } } = options;
+      this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        let rows = res;
+        if (MultibarGroupByNeeded) {
+          rows = this.scatterChartGroupBy(rows, groupByLabel, metricLabelProp, metricValueProp, axisFilters);
+        }
+        let reportData = {
+          values: rows
+        }
+
+        let tooltipObject
+
+        if (tooltipMetrics?.length > 0) {
+          rows.forEach((row) => {
+            let tooltip = this._wrapperService.constructTooltip(tooltipMetrics, row, axisFilters, 'scatter', valueSuffix)
+            tooltipObject = {
+              ...tooltipObject,
+              [row?.[groupByLabel]?.trim()]: tooltip
+            }
+          });
+        }
+
+        let config = getChartJSConfig({
+          labelExpr: 'random',
+          datasets: getScatterDatasetConfig([{
+            label: 'random',
+            data: rows
+          }]),
+          options: {
+            height: '300',
+            legend: {
+              display: false
+            },
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: this.getAxisTitle(axisFilters[1])
+                },
+                ticks: {
+                  min: 0,
+                  max: 100
+                }
+              }],
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: this.getAxisTitle(axisFilters[0])
+                },
+                ticks: {
+                  min: 0,
+                  max: 100
+                }
+              }]
+            },
+            tooltips: {
+              callbacks: {
+                label: (tooltipItem, data) => {
+                  let tooltipData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]?.[groupByLabel]
+                  return tooltipObject[tooltipData]
+                }
+              }
+            }
+          }
+        });
+        this.spinner.hide();
+        resolve({ reportData: reportData, config: config })
+      });
+    });
+  }
+
   multibarGroupBy(data: any, groupByLabel: any, metricLabelProp: string, metricValueProp: string) {
     let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
       data = {
@@ -344,6 +418,30 @@ export class DataService {
         data = {
           ...data,
           [obj[metricLabelProp]]: obj[metricValueProp]
+        }
+      });
+      return data;
+    }).value()
+    return result;
+  }
+
+  scatterChartGroupBy(data: any, groupByLabel: any, metricLabelProp: string, metricValueProp: string, axisFilters: any) {
+    let result = _.chain(data).groupBy(groupByLabel).map((objs, key) => {
+      data = {
+        [groupByLabel]: key
+      }
+      objs?.forEach((obj: any) => {
+        if (obj[metricLabelProp] === axisFilters[0].value) {
+          data = {
+            ...data,
+            x: obj[metricValueProp]
+          }
+        }
+        if (obj[metricLabelProp] === axisFilters[1].value) {
+          data = {
+            ...data,
+            y: obj[metricValueProp]
+          }
         }
       });
       return data;
@@ -403,6 +501,17 @@ export class DataService {
       return tempData;
     }).value()
     return { result, newColumnsProps };
+  }
+
+  getAxisTitle(axisFilter: any): string {
+    if (axisFilter) {
+      let filterOption = axisFilter.options.find((option: any) => option.value === axisFilter.value)
+      if (filterOption) {
+        return filterOption.label.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+    }
+
+    return "";
   }
 
 }

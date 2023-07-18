@@ -10,6 +10,15 @@ export const config = {
             "query": "select program_name from dimensions.programnishtha"
         },
         {
+            "label": "Course Wise Status",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "tableAlias": "t1",
+            "query": "select program_name from dimensions.programnishtha"
+        },
+        {
             "label": "Implementation Status",
             "name": "Program",
             "labelProp": "program_name",
@@ -128,7 +137,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                       "table": "select st.state_id, st.state_name, ntc.sum as total_courses, ntm.sum as total_medium from datasets.nishtha_totalcourseslaunched_state0programnishtha as ntc JOIN datasets.nishtha_totalmedium_state0programnishtha as ntm ON ntc.state_id = ntm.state_id AND ntc.program_name = ntm.program_name JOIN dimensions.state as st ON st.state_id = ntc.state_id ORDER BY total_courses DESC"
+                        "table": "select st.state_id, st.state_name, ntc.sum as total_courses, ntm.sum as total_medium from datasets.nishtha_totalcourseslaunched_state0programnishtha as ntc JOIN datasets.nishtha_totalmedium_state0programnishtha as ntm ON ntc.state_id = ntm.state_id AND ntc.program_name = ntm.program_name JOIN dimensions.state as st ON st.state_id = ntc.state_id ORDER BY total_courses DESC"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -139,7 +148,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                       "table": "select t1.program_name , sum(t1.sum) as total_courses ,sum(t2.sum) as  total_medium from datasets.nishtha_total_courses_programnishtha as t1 join datasets.nishtha_total_medium_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name"
+                        "table": "select t1.program_name , sum(t1.sum) as total_courses ,sum(t2.sum) as  total_medium from datasets.nishtha_total_courses_programnishtha as t1 join datasets.nishtha_total_medium_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -326,6 +335,16 @@ export const config = {
         "defaultLevel": "state",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "barChart": "select t1.course_name , sum(t1.sum) as total_enrolment , sum(t2.sum) as total_certifications from datasets.nishtha_courseenrolment_coursenishtha0programnishtha as t1 join datasets.nishtha_coursecertification_coursenishtha0programnishtha  as t2 on t1.course_name = t2.course_name group by t1.course_name",
+                    },
+                    "level": "state"
+                }
+            },
+            {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
@@ -363,6 +382,30 @@ export const config = {
         //     }
         // }
         "options": {
+            "barChart": {
+                "defaultPageSize": "30",
+                "type": "horizontal",
+                "isMultibar": true,
+                "valueSuffix": "",
+                "yAxis": {
+                    "title": "Courses"
+                },
+                "xAxis": {
+                    "title": " Total Enrolement and Certifications",
+                    "label": "course_name",
+                    "value": "course_name",
+                    "metrics": [
+                        {
+                            "label": "Total Entrolments",
+                            "value": "total_enrolment"
+                        },
+                        {
+                            "label": "Total Certifications",
+                            "value": "total_certifications"
+                        }
+                    ]
+                }
+            },
             "table": {
                 "columns": [
                     {
@@ -389,13 +432,23 @@ export const config = {
         "defaultLevel": "state",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "barChart": "select d.state_name as level, d.state_name , sum(t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_districtwiseenrolments_state0programnishtha as t1 join datasets.nishtha_districtwisecertifications_state0programnishtha as t2 on t1.state_id = t2.state_id join dimensions.state as d  on t2.state_id=d.state_id group by d.state_name order by d.state_name",
+                    },
+                    "level": "State"
+                }
+            },
+            {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select d.district_name , sum(t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_consumptionenrolment_district0programnishtha as t1 join datasets.nishtha_consumptioncertification_district0programnishtha as t2 on t1.district_id = t2.district_id join dimensions.district as d  on t2.district_id=d.district_id group by d.district_name",
+                        "barChart": "select d.district_name, d.district_name as level , sum(t1.sum) as total_enrolment , sum(t2.sum) as total_certification from datasets.nishtha_consumptionenrolment_district0programnishtha as t1 join datasets.nishtha_consumptioncertification_district0programnishtha as t2 on t1.district_id = t2.district_id join dimensions.district as d  on t2.district_id=d.district_id group by d.district_name",
                     },
                     "level": "district"
                 }
@@ -407,12 +460,12 @@ export const config = {
                 "isMultibar": true,
                 "valueSuffix": "",
                 "yAxis": {
-                    "title": "Districts"
+                    "title": ['States', 'Districts']
                 },
                 "xAxis": {
                     "title": "Total Enrolment and Certifications",
-                    "label": "district_name",
-                    "value": "district_name",
+                    "label": "level",
+                    "value": "level",
                     "metrics": [
                         {
                             "label": "Total Enrolments",
@@ -431,6 +484,20 @@ export const config = {
         "label": "Progress Status",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select sum(sum) as total_enrolment from datasets.nishtha_total_enrolment_state",
+                        "bigNumber2": "select sum(sum) as total_completion from datasets.nishtha_total_completion_state",
+                        "bigNumber3": "select sum(sum) as total_certification from datasets.nishtha_total_certification_state",
+                        "bigNumber4": "select sum(sum) as total_mediums from datasets.nishtha_total_medium_state",
+                        "bigNumber5": "select count(distinct state_id) as total_states from datasets.nishtha_started_state where sum > 0"
+                    },
+                    "level": "state"
+                }
+            },
+            {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
@@ -448,9 +515,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total Enrolment', 'Total Completion', 'Total Certification', 'Total Mediums'],
-                "valueSuffix": ['', '', '', ''],
-                "property": ['total_enrolment', 'total_completion', 'total_certification', 'total_mediums']
+                "title": ['Total Enrolment', 'Total Completion', 'Total Certification', 'Total Mediums', 'Total States/UTs Participating'],
+                "valueSuffix": ['', '', '', '', ''],
+                "property": ['total_enrolment', 'total_completion', 'total_certification', 'total_mediums', 'total_states']
             }
         }
     }
