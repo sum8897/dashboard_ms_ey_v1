@@ -54,15 +54,15 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
         }
     }
 
-    checkReport(key: string, reportType: string): Boolean {
-    let reportConfig = config;
-    let flag = false;
-    reportConfig[key]?.filters?.forEach((filter: any) => {
-        if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
-        flag = true
-        }
-    })
-    return flag
+    checkReport(key: string, reportType: string, alterReportType?: string): Boolean {
+        let reportConfig = config;
+        let flag = false;
+        reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && (Object.keys(filter?.actions?.queries).includes(reportType) || Object.keys(filter?.actions?.queries).includes(alterReportType))) {
+                flag = true
+            }
+        })
+        return flag
     }
 
     csvDownload(csvData: any) {

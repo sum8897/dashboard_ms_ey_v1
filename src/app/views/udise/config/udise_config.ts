@@ -18,18 +18,20 @@ export const config = {
         },
         {
             "label": "Correlation",
-            "name": "First Metric",
+            "name": "X-axis",
             "labelProp": "category_name",
             "valueProp": "category_name",
             "id": "metric",
+            "axis": 'x',
             "query": "select category_name from dimensions.categoryudise"
         },
         {
             "label": "Correlation",
-            "name": "Second Metric",
+            "name": "Y-axis",
             "labelProp": "category_name",
             "valueProp": "category_name",
             "id": "metric",
+            "axis": 'y',
             "query": "select category_name from dimensions.categoryudise"
         },
     ],
@@ -134,66 +136,46 @@ export const config = {
             }
         }
     },
-    // correlation:
-    // {
-    //     "label": "Correlation",
-    //     "filters":
-    //         [
-    //             {
-    //                 "name": "State",
-    //                 "hierarchyLevel": "1",
-    //                 "actions":
-    //                 {
-    //                     "queries":
-    //                     {
-    //                         "barChart": "select t2.district_name, t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t2.district_name,t1.category_name"
-    //                     },
-    //                     "level": "district",
-    //                     "nextLevel": "block"
-    //                 }
-    //             }
-    //         ],
-    //     "options": {
-    //         "barChart": {
-    //             "isCorrelation": true,
-    //             "MultibarGroupByNeeded": false,
-    //             "isMultibar": true,
-    //             "metricLabelProp": "",
-    //             "metricValueProp": "",
-    //             "yAxis": {
-    //                 "title": ""
-    //             },
-    //             "xAxis": {
-    //                 "title": "",
-    //                 "label": "district_name",
-    //                 "value": "district_name",
-    //                 "metrics": [
-    //                     {
-    //                         value: 'PTR', label: 'PTR'
-    //                     },
-    //                     {
-    //                         value: '% schools having toilet', label: '% schools having toilet'
-    //                     },
-    //                     {
-    //                         value: '% schools having drinking water', label: '% schools having drinking water'
-    //                     },
-    //                     {
-    //                         value: '% schools having electricity', label: '% schools having electricity'
-    //                     },
-    //                     {
-    //                         value: '% schools having library', label: '% schools having library'
-    //                     },
-    //                     {
-    //                         value: '% govt aided schools received textbook', label: '% govt aided schools received textbook'
-    //                     },
-    //                     {
-    //                         value: '% schools with Ramp', label: '% schools with Ramp'
-    //                     },
-    //                 ]
-    //             }
-    //         }
-    //     }
-    // },
+    correlation:
+    {
+        "label": "Correlation",
+        "filters":
+            [
+                {
+                    "name": "State",
+                    "hierarchyLevel": "0",
+                    "actions":
+                    {
+                        "queries":
+                        {
+                            "scatter": "select t2.district_name, t1.category_name,round(cast(sum(t1.sum) as numeric ),2) as percentage from datasets.udise_category_district0categoryudise as t1 join dimensions.district as t2 on t2.district_id = t1.district_id group by t2.district_name,t1.category_name"
+                        },
+                        "level": "district",
+                        "nextLevel": "block"
+                    }
+                }
+            ],
+        "options": {
+            "barChart": {
+                "MultibarGroupByNeeded": true,
+                "groupByLabel": 'district_name',
+                "metricLabelProp": "category_name",
+                "metricValueProp": "percentage",
+                "valueSuffix": "%",
+                "yAxis": {
+                },
+                "xAxis": {
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    }
+                ]
+            }
+        }
+    },
     udise_metrics: {
         "label": "District Wise Performance",
         "filters": [

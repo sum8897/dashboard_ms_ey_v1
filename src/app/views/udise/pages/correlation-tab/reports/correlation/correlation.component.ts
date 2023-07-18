@@ -48,7 +48,7 @@ export class CorrelationComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== undefined && this.rbacDetails?.role !== null) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
@@ -120,6 +120,11 @@ export class CorrelationComponent implements OnInit {
           this.exportReportData.emit(reportsData)
         }
       }
+      else if(query && key === 'scatter') {
+        let { reportData, config } = await this._dataService.getScatterChartReportData(query, options, metricFilter)
+        this.reportData = reportData
+        this.config = config;
+      } 
     })
   }
 }

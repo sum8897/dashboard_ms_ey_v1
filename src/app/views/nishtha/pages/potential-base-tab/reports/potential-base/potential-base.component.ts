@@ -6,6 +6,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/nishtha/config/nishtha_config';
 import { PotentialBaseTabComponent } from '../../potential-base-tab.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-potential-base',
@@ -28,12 +29,17 @@ export class PotentialBaseComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  NVSK = true;
 
   @Output() exportReportData = new EventEmitter<any>();
   constructor(private readonly _dataService: DataService, private csv: PotentialBaseTabComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
-    })
+    });
+
+    if (environment.config !== 'NVSK') {
+      this.NVSK = false
+    }
   }
 
   ngOnInit(): void {
@@ -49,7 +55,7 @@ export class PotentialBaseComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
@@ -99,6 +105,19 @@ export class PotentialBaseComponent implements OnInit {
       }
       else if (query && key === 'barChart') {
         let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+        config.options.scales.yAxes[0].scaleLabel.fontSize = 10;
+
+        // console.log('config',config.scales.yAxes[0]);
+        this.reportData = reportData
+        this.config = config;
+        if (this.reportData?.values?.length > 0) {
+          let reportsData = { reportData: this.reportData.values, reportType: 'dashletBar', reportName: this.title }
+          // this.exportReportData.emit(reportsData)
+          this.csv.csvDownload(reportsData)
+        }
+      }
+      else if (query && key === 'stackedBarChart') {
+        let { reportData, config } = await this._dataService.getStackedBarChartReportData(query, options, filters, defaultLevel);
         config.options.scales.yAxes[0].scaleLabel.fontSize = 10;
 
         // console.log('config',config.scales.yAxes[0]);

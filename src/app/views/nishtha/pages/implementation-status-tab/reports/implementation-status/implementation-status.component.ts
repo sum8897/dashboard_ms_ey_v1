@@ -7,6 +7,7 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/nishtha/config/nishtha_config';
 import { ImplementationStatusTabComponent } from '../../implementation-status-tab.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-implementation-status',
@@ -29,10 +30,15 @@ export class ImplementationStatusComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  NVSK = true;
 
   @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private spinner: NgxSpinnerService,private csv: ImplementationStatusTabComponent, private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
+    if(environment.config === 'VSK') {
+      this.NVSK = false
+    }
+
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
@@ -51,7 +57,7 @@ export class ImplementationStatusComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
@@ -82,6 +88,10 @@ export class ImplementationStatusComponent implements OnInit {
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
 
+      let metricFilter = [...filterValues].filter((filter: any) => {
+        return filter.filterType === 'metric'
+      });
+
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
@@ -95,8 +105,15 @@ export class ImplementationStatusComponent implements OnInit {
           // this.exportReportData.emit(reportsData)
           this.csv.csvDownload(reportsData);
         }
-      }
-      else if (query && key === 'bigNumber') {
+      } else if (query && key === 'map') {
+        this.spinner.show();
+        this.reportData = await this._dataService.getMapReportData(query, options, metricFilter);
+        this.spinner.hide();
+        if (this.reportData?.data?.length > 0) {
+          let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title, downloadConfig: options?.downloadConfig }
+          this.exportReportData.emit(reportsData)
+        }
+      } else if (query && key === 'bigNumber') {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'averagePercentage', this.reportData);
       }
       else if (query && key === 'bigNumberComparison') {

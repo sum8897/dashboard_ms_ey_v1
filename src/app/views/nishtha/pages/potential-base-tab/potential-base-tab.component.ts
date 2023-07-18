@@ -4,6 +4,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/nishtha_config';
 import { PotentialBaseCertificatesComponent } from './reports/potential-base-certificates/potential-base-certificates.component';
 import { PotentialBaseComponent } from './reports/potential-base/potential-base.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-potential-base-tab',
@@ -28,27 +29,36 @@ export class PotentialBaseTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLabel='% against Potential Base'
+    matLabel='% against Potential Base';
+    NVSK = true;
+    
 @ViewChild('potentialBase') potentialBase: PotentialBaseComponent;
 @ViewChild('potentialBaseCertificates') potentialBaseCertificates: PotentialBaseCertificatesComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
         this.rbacDetails = rbacDetails;
-    })
+    });
+
+    if (environment.config !== 'NVSK') {
+        this.NVSK = false
     }
+}
 
     async ngOnInit(): Promise<void> {
     // this.renderReports();
     }
 
     async ngAfterViewInit(): Promise<void> {
-    if (this.hasCommonFilters) {
-        this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.matLabel);
+    if (this.NVSK) {
+        this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLabel);
         this.potentialBase?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         this.potentialBaseCertificates?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    } else {
+        this.potentialBase?.getReportData({ filterValues: [] });
+        this.potentialBaseCertificates?.getReportData({ filterValues: [] });
+    }
 
-        }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
         let days = endDate.getDate() - this.defaultSelectedDays;
