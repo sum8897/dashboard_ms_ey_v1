@@ -179,7 +179,7 @@ export class WrapperService {
     return query;
   }
 
-  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any, reportType?: string): any {
+  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any, reportType?: string, valueSuffix?: any): any {
     if (reportType === 'barChart') {
       let tooltip = []
       tooltipMetrics.forEach((metric: any) => {
@@ -187,6 +187,20 @@ export class WrapperService {
           tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])).toLocaleString() + metric.valueSuffix);
         }
       });
+      return tooltip
+    }
+    else if(reportType === 'scatter') {
+      let tooltip = []
+      tooltipMetrics.forEach((metric: any) => {
+        if (row[metric.value] !== undefined && row[metric.value] !== null) {
+          tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])).toLocaleString() + metric.valueSuffix);
+        }
+      });
+      selectedMetricValue.forEach((axis: any) => {
+        if(axis?.value) {
+          tooltip.push(axis.name + ': ' + (isNaN(row[axis.axis]) ? row[axis.axis] : Number(row[axis.axis])).toLocaleString() + valueSuffix)
+        }
+      })
       return tooltip
     }
     let tooltip = '';
