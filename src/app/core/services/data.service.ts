@@ -338,10 +338,10 @@ export class DataService {
   getScatterChartReportData(query: any, options: any, axisFilters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();
-      let { barChart: { yAxis, xAxis, MultibarGroupByNeeded, groupByLabel, tooltipMetrics, valueSuffix, metricLabelProp, metricValueProp } } = options;
+      let { barChart: { yAxis, xAxis, groupByNeeded, groupByLabel, tooltipMetrics, valueSuffix, metricLabelProp, metricValueProp } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        if (MultibarGroupByNeeded) {
+        if (groupByNeeded) {
           rows = this.scatterChartGroupBy(rows, groupByLabel, metricLabelProp, metricValueProp, axisFilters);
         }
         let reportData = {
