@@ -136,8 +136,7 @@ export const config = {
             }
         }
     },
-    correlation:
-    {
+    correlation:{
         "label": "Correlation",
         "filters":
             [
