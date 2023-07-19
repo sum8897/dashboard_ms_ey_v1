@@ -17,12 +17,17 @@ import { ContentCoverageComponentBignumber } from './pages/content-coverage-tab/
 import { LearningSessionsComponent } from './pages/learning-sessions-tab/reports/learning-sessions/learning-sessions.component';
 import { LearningSessionsOnPotentialUsersComponent } from './pages/learning-sessions-on-potential-users-tab/reports/learning-sessions-on-potential-users/learning-sessions-on-potential-users.component';
 import { EtbBignumbersComponent } from './pages/etb-coverage-status-tab/reports/etb-bignumbers/etb-bignumbers.component';
+import { ImplementationStatusTabComponent } from './pages/implementation-status-tab/implementation-status-tab.component';
+import { ImplementationStatusComponent } from './pages/implementation-status-tab/reports/implementation-status/implementation-status.component';
+import { EtbCoverageStatusNvskComponent } from './pages/etb-coverage-status-tab/reports/etb-coverage-status-nvsk/etb-coverage-status-nvsk.component';
+import { ContentCoverageBarComponent } from './pages/content-coverage-tab/reports/content-coverage-bar/content-coverage-bar.component';
+import { ContentCoverageMapComponent } from './pages/content-coverage-tab/reports/content-coverage-map/content-coverage-map.component';
 
 @NgModule({
 declarations: [
     DikshaComponent,
     EtbCoverageStatusTabComponent,ContentCoverageTabComponent,LearningSessionsTabComponent,LearningSessionsOnPotentialUsersTabComponent,
-    EtbCoverageStatusComponentBignumber,EtbCoverageStatusComponent,ContentCoverageComponent,ContentCoverageComponentBignumber,LearningSessionsComponent,LearningSessionsOnPotentialUsersComponent, EtbBignumbersComponent
+    EtbCoverageStatusComponentBignumber,EtbCoverageStatusComponent,ContentCoverageComponent,ContentCoverageComponentBignumber,LearningSessionsComponent,LearningSessionsOnPotentialUsersComponent, EtbBignumbersComponent, ImplementationStatusTabComponent, ImplementationStatusComponent, EtbCoverageStatusNvskComponent, ContentCoverageBarComponent, ContentCoverageMapComponent
 ],
 imports: [
     DashletModule.forRoot({
