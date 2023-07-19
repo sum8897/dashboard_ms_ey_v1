@@ -156,7 +156,7 @@ export const config = {
             ],
         "options": {
             "barChart": {
-                "MultibarGroupByNeeded": true,
+                "groupByNeeded": true,
                 "groupByLabel": 'district_name',
                 "metricLabelProp": "category_name",
                 "metricValueProp": "percentage",
