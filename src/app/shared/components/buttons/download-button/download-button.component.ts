@@ -149,7 +149,7 @@ export class DownloadButtonComponent implements OnInit {
     this.download(this.data)
   }
 
-  download(reportInputs: { reportData: any, reportType: string, reportName: string, downloadConfig?: any }[]) {
+  download(reportInputs: { reportData: any, reportType: string, reportName: string, downloadConfig?: any, metricFilters?: any }[]) {
     if (reportInputs === undefined || reportInputs?.length <= 0) {
       if (this.isVisible) {
         return;
@@ -157,19 +157,20 @@ export class DownloadButtonComponent implements OnInit {
       this.isVisible = true;
       setTimeout(() => this.isVisible = false, 2500)
     } else {
-     for (let i = 0; i < reportInputs.length; i++) {
-      // for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < reportInputs.length; i++) {
+        // for (let i = 0; i < 1; i++) {
         const reportData = reportInputs[i].reportData;
         const reportType = reportInputs[i].reportType;
         const downloadConfig = reportInputs[i].downloadConfig;
-        const fileName = downloadConfig?.fileName ? downloadConfig.fileName :reportInputs[i].reportName;
+        const metricFilters = reportInputs[i].metricFilters;
+        const fileName = downloadConfig?.fileName ? downloadConfig.fileName : reportInputs[i].reportName;
         let keys: [] | any;
         // keys = Object.keys(reportData[0]).filter(key => !['tooltip', 'min_date', 'max_date', 'Latitude', 'Longitude'].includes(key));
         let dupData;
-        if(downloadConfig?.includeColumns) {
+        if (downloadConfig?.includeColumns) {
           keys = Object.keys(reportData[i]).filter(key => downloadConfig.includeColumns.includes(key));
         }
-        else if(downloadConfig?.excludeColumns) {
+        else if (downloadConfig?.excludeColumns) {
           keys = Object.keys(reportData[i]).filter(key => !downloadConfig.excludeColumns.includes(key));
         }
         else {
@@ -190,9 +191,32 @@ export class DownloadButtonComponent implements OnInit {
           keys = keys.filter((ele: any) => {
             return ele !== 'data';
           });
+          keys = keys.map((key: any) => {
+            let updatedKey = key
+            metricFilters.forEach((filter: any) => {
+              if (filter.axis == key) {
+                updatedKey = filter.value
+              }
+            });
+            return updatedKey
+          })
+
           dupData = JSON.parse(JSON.stringify(reportData));
           dupData.forEach((obj: any) => {
             delete obj.data;
+          });
+          dupData.map((obj: any) => {
+            console.log(obj)
+            let updatedObj = obj
+            Object.keys(obj).forEach((key: any) => {
+              metricFilters.forEach((filter: any) => {
+                if (filter.axis == key) {
+                  updatedObj[filter.value] = updatedObj[key]
+                  delete updatedObj[key]
+                }
+              });
+            });
+            return updatedObj
           });
         }
         let re = new RegExp("_id$");

@@ -124,6 +124,8 @@ export class CorrelationComponent implements OnInit {
         let { reportData, config } = await this._dataService.getScatterChartReportData(query, options, metricFilter)
         this.reportData = reportData
         this.config = config;
+        let reportsData = { reportData: this.reportData.values, reportType: 'dashletScatter', reportName: this.title, metricFilters: metricFilter }
+        this.exportReportData.emit(reportsData)
       } 
     })
   }
