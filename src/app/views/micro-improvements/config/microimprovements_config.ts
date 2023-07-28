@@ -108,11 +108,11 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(sum) as total_mi_ongoing from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_micro_improvement_projects'",
-                        "bigNumber2": "select sum(sum) as total_mi_started from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_micro_improvement_started'",
-                        "bigNumber3": "select sum(sum) as total_mi_inprogress from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_micro_improvement_inprogress'",
-                        "bigNumber4": "select sum(sum) as total_mi_submitted from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_micro_improvement_submitted'",
-                        "bigNumber5": "select sum(sum) as total_mi_submitted_with_evidence from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_micro_improvement_submitted_with_evidence'",
+                        "bigNumber1": "select sum(sum) as total_mi_ongoing from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_microimprovement_projects'",
+                        "bigNumber2": "select sum(sum) as total_mi_started from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_microimprovement_started'",
+                        "bigNumber3": "select sum(sum) as total_mi_inprogress from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_microimprovement_inprogress'",
+                        "bigNumber4": "select sum(sum) as total_mi_submitted from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_microimprovement_submitted'",
+                        "bigNumber5": "select sum(sum) as total_mi_submitted_with_evidence from datasets.micro_improvements_categorymicro_state0categorymicro where category_name = 'total_microimprovement_submitted_with_evidence'",
                     },
                     "level": "state"
                 }
