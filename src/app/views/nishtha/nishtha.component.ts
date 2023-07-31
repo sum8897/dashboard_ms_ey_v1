@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { config } from './config/nishtha_config';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-nishtha',
@@ -16,7 +17,8 @@ export class NishthaComponent implements OnInit {
     tabIndex;
     selectedTabLabel;
     tabs: any = [];
-    programName: any = 'nishtha'
+    programName: any = 'nishtha';
+    NVSK = true;
 
     constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) {
         this.route.queryParams.subscribe((param: any) => {
@@ -24,7 +26,12 @@ export class NishthaComponent implements OnInit {
         })
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
             this.rbacDetails = rbacDetails;
-        })
+        });
+
+        if(environment.config === 'VSK') {
+            this.NVSK = false;
+        }
+
         let allTabs = [...Object.keys(config)]
         allTabs.forEach((tab: any) => {
             config?.[tab]?.filters?.every((filter) => {
@@ -37,7 +44,6 @@ export class NishthaComponent implements OnInit {
                 return true
             })
         })
-        console.log(this.tabs)
     }
 
     ngOnInit(): void {
