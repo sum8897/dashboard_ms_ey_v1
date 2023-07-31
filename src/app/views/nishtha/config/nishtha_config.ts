@@ -52,6 +52,14 @@ export const config = {
         //     "id": "metric",
         //     "query": "select category_name from dimensions.categorypgi"
         // },
+        {
+            "label": "Medium of instruction",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "query": "select program_name from dimensions.programnishtha order by program_name"
+        },
     ],
     implementation_status: {
         "label": "Implementation Status",
@@ -180,6 +188,43 @@ export const config = {
                     {
                         name: "Total Mediums",
                         property: "total_medium",
+                        class: "text-center"
+                    }
+                ],
+            }
+        }
+    },
+    medium_of_instruction: {
+        "label": "Medium of instruction",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "table": "SELECT st.state_name, SUM(count) as no_of_languages, string_agg(language, ',' order by language) as list_of_languages FROM datasets.nishtha_totalmedium_dqamdiwbdiicaxv9f2xl as ntm JOIN dimensions.state as st ON st.state_id = ntm.state_id GROUP BY ntm.state_id, st.state_name ORDER BY st.state_name"
+                    },
+                    "level": "state",
+                    "nextLevel": "district"
+                }
+            }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "Name of State/ UT/ Autonomous Organisation",
+                        property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "No.of Languages",
+                        property: "no_of_languages",
+                        class: "text-center"
+                    },
+                    {
+                        name: "List of Languages",
+                        property: "list_of_languages",
                         class: "text-center"
                     }
                 ],

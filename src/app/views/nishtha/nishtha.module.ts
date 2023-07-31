@@ -19,12 +19,14 @@ import { PotentialBaseCertificatesComponent } from './pages/potential-base-tab/r
 import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { NishthaBignumberMetricsComponent } from './pages/implementation-status-tab/reports/nishtha-bignumber-metrics/nishtha-bignumber-metrics.component';
 import { PotentialBaseNvskComponent } from './pages/potential-base-tab/reports/potential-base-nvsk/potential-base-nvsk.component';
+import { MediumOfInstructionTabComponent } from './pages/medium-of-instruction-tab/medium-of-instruction-tab.component';
+import { MediumOfInstructionComponent } from './pages/medium-of-instruction-tab/reports/medium-of-instruction/medium-of-instruction.component';
 
 @NgModule({
 declarations: [
     NishthaComponent,
     ImplementationStatusTabComponent,CourseAndMediumStatusTabComponent,CourseWiseStatusTabComponent,PotentialBaseTabComponent,DistrictWiseStatusTabComponent,
-    ImplementationStatusComponent,CourseAndMediumStatusComponent,PotentialBaseComponent,DistrictWiseStatusComponent,CourseWiseStatusComponent, PotentialBaseCertificatesComponent, NishthaBignumberMetricsComponent, PotentialBaseNvskComponent
+    ImplementationStatusComponent,CourseAndMediumStatusComponent,PotentialBaseComponent,DistrictWiseStatusComponent,CourseWiseStatusComponent, PotentialBaseCertificatesComponent, NishthaBignumberMetricsComponent, PotentialBaseNvskComponent, MediumOfInstructionTabComponent, MediumOfInstructionComponent
 ],
 imports: [
     DashletModule.forRoot({
