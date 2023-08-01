@@ -23,7 +23,7 @@ export const config = {
             "name": "Program",
             "labelProp": "program_name",
             "valueProp": "program_name",
-            "id": "program_name",
+            "id": "metric",
             "query": "select program_name from dimensions.programnishtha order by program_name"
         },
         {
@@ -69,7 +69,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "map": "select d.latitude, d.longitude, t.state_id,state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
+                        "map": "select d.latitude, d.longitude, t.state_id, t.program_name, state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
                     },
                     "level": "state",
                     "nextLevel": "district"
@@ -80,7 +80,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status  order by program_name",
+                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status order by program_name",
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -118,13 +118,15 @@ export const config = {
             },
             "downloadConfig": {
                 "fileName": "Implementation Status",
-                "excludeColumns": ['indicator', 'tooltip', 'Latitude', 'Longitude']
+                "excludeColumns": ['indicator', 'tooltip', 'Latitude', 'Longitude', 'status']
             },
             "map": {
-                "metricFilterNeeded": false,
-                "indicator": "status",
+                "metricLabelProp": "program_name",
+                "metricValueProp": "status",
+                "groupByColumn": "state_id",
+                "metricFilterNeeded": true,
                 "legend": {
-                    "title": "Implemented PGI"
+                    "title": "Implemented Nishtha"
                 },
                 "tooltipMetrics": [
                     {
@@ -133,8 +135,8 @@ export const config = {
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Implemented PGI: ",
-                        "value": "status",
+                        "valuePrefix": "",
+                        "value": "program_name",
                         "valueSuffix": "\n"
                     }
                 ]
@@ -571,7 +573,7 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select count(program_id) as programs from dimensions.programnishtha",
-                        "bigNumber2": "select sum(sum) as beneficiaries from datasets.nishtha_started_programnishtha"
+                        "bigNumber2": "select sum(sum) as beneficiaries from datasets.nishtha_total_participants_programnishtha"
                     },
                     "level": "state"
                 }

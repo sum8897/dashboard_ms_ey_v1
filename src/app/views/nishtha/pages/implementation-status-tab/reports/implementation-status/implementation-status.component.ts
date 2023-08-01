@@ -92,6 +92,10 @@ export class ImplementationStatusComponent implements OnInit {
         return filter.filterType === 'metric'
       });
 
+      filterValues = [...filterValues].filter((filter: any) => {
+        return filter.filterType !== 'metric'
+      })
+
       filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
@@ -108,6 +112,7 @@ export class ImplementationStatusComponent implements OnInit {
       } else if (query && key === 'map') {
         this.spinner.show();
         this.reportData = await this._dataService.getMapReportData(query, options, metricFilter);
+        console.log(this.reportData)
         this.spinner.hide();
         if (this.reportData?.data?.length > 0) {
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title, downloadConfig: options?.downloadConfig }
