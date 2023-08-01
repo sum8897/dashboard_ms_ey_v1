@@ -23,7 +23,7 @@ export const config = {
             "name": "Program",
             "labelProp": "program_name",
             "valueProp": "program_name",
-            "id": "program_name",
+            "id": "metric",
             "query": "select program_name from dimensions.programnishtha order by program_name"
         },
         {
@@ -52,6 +52,14 @@ export const config = {
         //     "id": "metric",
         //     "query": "select category_name from dimensions.categorypgi"
         // },
+        {
+            "label": "Medium of instruction",
+            "name": "Program",
+            "labelProp": "program_name",
+            "valueProp": "program_name",
+            "id": "program_name",
+            "query": "select program_name from dimensions.programnishtha order by program_name"
+        },
     ],
     implementation_status: {
         "label": "Implementation Status",
@@ -61,7 +69,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "map": "select d.latitude, d.longitude, t.state_id,state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
+                        "map": "select d.latitude, d.longitude, t.state_id, t.program_name, state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
                     },
                     "level": "state",
                     "nextLevel": "district"
@@ -72,7 +80,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status  order by program_name",
+                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status order by program_name",
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -110,13 +118,15 @@ export const config = {
             },
             "downloadConfig": {
                 "fileName": "Implementation Status",
-                "excludeColumns": ['indicator', 'tooltip', 'Latitude', 'Longitude']
+                "excludeColumns": ['indicator', 'tooltip', 'Latitude', 'Longitude', 'status']
             },
             "map": {
-                "metricFilterNeeded": false,
-                "indicator": "status",
+                "metricLabelProp": "program_name",
+                "metricValueProp": "status",
+                "groupByColumn": "state_id",
+                "metricFilterNeeded": true,
                 "legend": {
-                    "title": "Implemented PGI"
+                    "title": "Implemented Nishtha"
                 },
                 "tooltipMetrics": [
                     {
@@ -125,8 +135,8 @@ export const config = {
                         "valueSuffix": "\n"
                     },
                     {
-                        "valuePrefix": "Implemented PGI: ",
-                        "value": "status",
+                        "valuePrefix": "",
+                        "value": "program_name",
                         "valueSuffix": "\n"
                     }
                 ]
@@ -180,6 +190,43 @@ export const config = {
                     {
                         name: "Total Mediums",
                         property: "total_medium",
+                        class: "text-center"
+                    }
+                ],
+            }
+        }
+    },
+    medium_of_instruction: {
+        "label": "Medium of instruction",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "table": "SELECT st.state_name, SUM(count) as no_of_languages, string_agg(language, ',' order by language) as list_of_languages FROM datasets.nishtha_totalmedium_dqamdiwbdiicaxv9f2xl as ntm JOIN dimensions.state as st ON st.state_id = ntm.state_id GROUP BY ntm.state_id, st.state_name ORDER BY st.state_name"
+                    },
+                    "level": "state",
+                    "nextLevel": "district"
+                }
+            }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "Name of State/ UT/ Autonomous Organisation",
+                        property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "No.of Languages",
+                        property: "no_of_languages",
+                        class: "text-center"
+                    },
+                    {
+                        name: "List of Languages",
+                        property: "list_of_languages",
                         class: "text-center"
                     }
                 ],
@@ -526,7 +573,7 @@ export const config = {
                 "actions": {
                     "queries": {
                         "bigNumber1": "select count(program_id) as programs from dimensions.programnishtha",
-                        "bigNumber2": "select sum(sum) as beneficiaries from datasets.nishtha_started_programnishtha"
+                        "bigNumber2": "select sum(sum) as beneficiaries from datasets.nishtha_total_participants_programnishtha"
                     },
                     "level": "state"
                 }
