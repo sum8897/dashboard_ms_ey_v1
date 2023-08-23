@@ -34,20 +34,21 @@ export class LayoutComponent implements OnInit {
   environment = environment;
   title: any;
   hierarchyLevel: any;
+  loginNeeded: boolean = environment.loginNeeded
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
   @ViewChild('contentElement', { static: true }) contentElementRef!: ElementRef;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
   constructor(private readonly _commonService: CommonService, private renderer: Renderer2, private _router: Router, private rbac: RbacService, private _authService: AuthenticationService,
     private pdfDownloadService: PdfDownloadService, private cdr: ChangeDetectorRef) {
 
-    if (this._router.url === '/home' || this._router.url === '/rbac') {
+    if (this._router.url === '/home' || this._router.url === '/rbac' || this._router.url === '/public-home') {
       this.isHome = true;
     }
     else {
       this.isHome = false;
     }
 
-    if (this._router.url !== '/home') {
+    if (this._router.url !== '/home' && this._router.url !== '/public-home') {
       this.showBackBtn = true
     }
     else {
@@ -62,6 +63,11 @@ export class LayoutComponent implements OnInit {
       this.NVSK = false;
     }
     this.role = localStorage.getItem('role');
+  }
+
+  checkUser() {
+    let roles = JSON.parse(localStorage.getItem('user_roles'))
+    return roles.includes('private_user') ? 'private_user' : 'guest'
   }
 
 
@@ -221,14 +227,14 @@ export class LayoutComponent implements OnInit {
   activate(componentRef: any) {
     const copyOfContentElementRef = (this.contentElementRef);
     this.pdfDownloadService.contentElementRef = copyOfContentElementRef;
-    if (this._router.url === '/home' || this._router.url === '/rbac') {
+    if (this._router.url === '/home' || this._router.url === '/rbac' || this._router.url === '/public-home') {
       this.isHome = true;
     }
     else {
       this.isHome = false;
       this.checkRbacLevel();
     }
-    if (this._router.url !== '/home') {
+    if (this._router.url !== '/home' && this._router.url !== '/public-home') {
       this.showBackBtn = true
     }
     else {

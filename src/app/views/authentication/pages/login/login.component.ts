@@ -99,6 +99,10 @@ export class LoginComponent implements OnInit {
       this._authenticationService.login(data).subscribe((res: any) => {
         const token = res.access_token
         const refreshToken = res.refresh_token
+        const programAccess = res.program_access
+        const userRoles = res.roles
+        localStorage.setItem('user_roles', JSON.stringify(userRoles))
+        localStorage.setItem('program_access', JSON.stringify(programAccess))
         localStorage.setItem('token', token)
         localStorage.setItem('refresh_token', refreshToken)
         // localStorage.setItem('userName', res.username)
