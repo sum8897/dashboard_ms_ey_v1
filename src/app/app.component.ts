@@ -24,30 +24,30 @@ export class AppComponent {
     translate.use('en');
     /** START : Code to Track Page View using gtag.js */
 
-    this.http.get('assets/config/globalconfig.json').pipe(
-      map(data => ({
-        ...data,
-        track: environment.google_analytics_tracking_id
-      }))
-    ).subscribe(async (data) => {
-      await this.grabTheTrackIds(data)
-    });
+    // this.http.get('assets/config/globalconfig.json').pipe(
+    //   map(data => ({
+    //     ...data,
+    //     track: environment.google_analytics_tracking_id
+    //   }))
+    // ).subscribe(async (data) => {
+    //   await this.grabTheTrackIds(data)
+    // });
     
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      gtag('event', 'page_view', {
-        page_path: event.urlAfterRedirects
-      })
-    })
+    // this.router.events.pipe(
+    //   filter(event => event instanceof NavigationEnd)
+    // ).subscribe((event: NavigationEnd) => {
+    //   gtag('event', 'page_view', {
+    //     page_path: event.urlAfterRedirects
+    //   })
+    // })
 
-    //Add dynamic title for selected pages - Start
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        var title = this.getTitle(router.routerState, router.routerState.root).join(' > ');
-        titleService.setTitle(title);
-      }
-    });
+    // //Add dynamic title for selected pages - Start
+    // router.events.subscribe(event => {
+    //   if (event instanceof NavigationEnd) {
+    //     var title = this.getTitle(router.routerState, router.routerState.root).join(' > ');
+    //     titleService.setTitle(title);
+    //   }
+    // });
 
   }
   ngOnInit() {
