@@ -18,7 +18,13 @@ export class AuthGuard implements CanActivate, CanLoad {
   canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return this.isUserLoggedIn();
+      const nameSpace = route.data['nameSpace']
+      let programs = JSON.parse(localStorage.getItem('program_access'))
+      let programAccess = true;
+      if(nameSpace && programs && programs.indexOf(nameSpace) == -1) {
+        programAccess = false
+      }
+      return programAccess && this.isUserLoggedIn();
   }
 
   isUserLoggedIn(): boolean {
