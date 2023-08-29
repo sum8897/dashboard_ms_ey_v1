@@ -18,22 +18,22 @@ import {config as nipunBharatConfig } from '../../views/nipun-bharat/config/nipu
 
 
 export const configFiles = {
-  studentAttendance: studentAttendaceConfig,
+  std_att: studentAttendaceConfig,
   reviewMeetings: reviewMeetingsConfig,
-  teacherAttendance: teacherAttendanceConfig,
+  sch_att: teacherAttendanceConfig,
   pgi: pgiConfig,
-  pmPoshan: pmPoshanConfig,
+  pm_poshan: pmPoshanConfig,
   nishtha: nishthaConfig,
   udise: udiseConfig,
   nas: nasConfig,
   diksha: dikshaConfig,
-  schoolInfrastructure: infraConfig,
-  studentProgress: progresConfig,
-  studentAssessments:studentAssessments,
+  school_infra: infraConfig,
+  student_progression: progresConfig,
+  assessment:studentAssessments,
   ncf:ncf,
   quiz:quiz,
-  microImprovement:microImprovement,
-  nipunBharat:nipunBharatConfig
+  micro_improvements:microImprovement,
+  nipun_bharat:nipunBharatConfig
 };
 
 export const programFolderNames = {
