@@ -22,6 +22,7 @@ export class HomePageComponent implements OnInit {
   role;
   storage
   hideAdmin
+  NVSK: any = true;
 
   roles: any;
   constructor(public _common: CommonService, public router: Router, public service: AppServiceComponent, private _rbacService: RbacService, private activatedRoute: ActivatedRoute, private readonly _authService: AuthenticationService) {
@@ -30,6 +31,7 @@ export class HomePageComponent implements OnInit {
       return rbacConfig.roles[index - 1]?.['skipNext'] !== true
     })
     if(environment.config === 'VSK') {
+      this.NVSK = false;
       this.roles = this.roles.filter((role: any, index: any) => {
         return role.value !== 0
       })
@@ -49,8 +51,6 @@ export class HomePageComponent implements OnInit {
 
     
     else if(this.activatedRoute.snapshot.url[0].path === 'public-home' && (localStorage.getItem('token') === null)) {
-
-      console.log(localStorage.getItem('token'))
       let data = {
         username: environment.guestUsername,
         password: environment.guestPassword
@@ -61,6 +61,8 @@ export class HomePageComponent implements OnInit {
         const refreshToken = res.refresh_token
         const programAccess = res.program_access
         const userRoles = res.roles
+        const userId = res.userId
+        localStorage.setItem('user_id', userId)
         localStorage.setItem('user_roles', JSON.stringify(userRoles))
         localStorage.setItem('program_access', JSON.stringify(programAccess))
         localStorage.setItem('token', token)
