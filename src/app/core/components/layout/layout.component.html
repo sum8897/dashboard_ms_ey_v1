@@ -6,8 +6,6 @@
         </div>
 
         <div class="btnGroup">
-            <i *ngIf="loginNeeded && !privateUserLoggedIn" class="fa fa-sign-in" aria-hidden="true" matTooltip="Login" (click)="signIn()"
-                id="signIn" name="signIn"></i>
             <i *ngIf="showBackBtn" class="fa fa-home" aria-hidden="true"
                 [routerLink]="checkUser() === 'private_user' ? '/home' : '/public-home'" id="homeButton"></i>
             <button type="button" [attr.aria-pressed]="false" tabindex="0" attr.aria-label="A-"
@@ -21,8 +19,10 @@
                 id="font-size-increase" name="font-size-increase" #increaseFontSize>A+</button>
             <i *ngIf="role==='report_viewer'" class="fa fa-key" aria-hidden="true" [routerLink]="['change-password']"
                 matTooltip="Change Password"></i>
-            <i *ngIf="loginNeeded && privateUserLoggedIn" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout" (click)="signOut()"
-                id="signOut" name="signOut"></i>
+            <i *ngIf="loginNeeded && !privateUserLoggedIn" class="fa fa-sign-in" aria-hidden="true" matTooltip="Login"
+                (click)="signIn()" id="signIn" name="signIn"></i>
+            <i *ngIf="loginNeeded && privateUserLoggedIn" class="fa fa-sign-out" aria-hidden="true" matTooltip="Logout"
+                (click)="signOut()" id="signOut" name="signOut"></i>
             <!-- <button id="dark-mode-toggle" class="dark-mode-toggle" tabindex="0"
              title="{{resourceService?.frmelmnts?.lbl?.accessibilitytheme}}" (click)="changeTheme()"
              (keydown.enter)="changeTheme();" #darkModeToggle>
