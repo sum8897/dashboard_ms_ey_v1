@@ -23,6 +23,7 @@ export class AuthGuard implements CanActivate, CanLoad {
       let programAccess = true;
       if(nameSpace && programs && programs.indexOf(nameSpace) == -1) {
         programAccess = false
+        console.log(nameSpace, ' is not accessible')
       }
       return programAccess && this.isUserLoggedIn();
   }

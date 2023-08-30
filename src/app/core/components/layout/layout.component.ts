@@ -34,7 +34,8 @@ export class LayoutComponent implements OnInit {
   environment = environment;
   title: any;
   hierarchyLevel: any;
-  loginNeeded: boolean = environment.loginNeeded
+  loginNeeded: boolean = environment.loginNeeded;
+  privateUserLoggedIn: boolean = false;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
   @ViewChild('contentElement', { static: true }) contentElementRef!: ElementRef;
   // @ViewChild('darkModeToggle') darkModeToggle: ElementRef;
@@ -54,7 +55,7 @@ export class LayoutComponent implements OnInit {
     else {
       this.showBackBtn = false
     }
-
+    this.updateButtons();
   }
 
   ngOnInit(): void {
@@ -238,6 +239,7 @@ export class LayoutComponent implements OnInit {
       this.showBackBtn = true
     }
     else {
+      this.updateButtons();
       this.showBackBtn = false
     }
     if(this._router.url === '/summary-statistics') {
@@ -248,8 +250,16 @@ export class LayoutComponent implements OnInit {
     }
   }
 
+  updateButtons() {
+    this.privateUserLoggedIn = this._authService.isUserLoggedIn() && localStorage.getItem('user_roles').includes('private_user')
+  }
+
   signOut() {
     this._authService.logout()
+  }
+
+  signIn() {
+    this._authService.publicLogout()
   }
 
 }

@@ -26,7 +26,7 @@
     justify-content: center; 
     gap:0.5rem;
    
-    button, .fa-sign-out, .fa-home, .fa-key{
+    button, .fa-sign-out, .fa-home, .fa-key, .fa-sign-in{
         background:var(--cQ-primary);
         border: 0.0625rem solid rgb(255 255 255 / 25%);
         border-radius: 100%;
@@ -123,7 +123,7 @@
     }
 }
 
-.fa-sign-out, .fa-home{
+.fa-sign-out, .fa-home, .fa-sign-in{
     // color: white;
     // border-radius: 50%;
     cursor: pointer;

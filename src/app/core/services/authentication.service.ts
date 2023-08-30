@@ -18,6 +18,12 @@ export class AuthenticationService {
   logout(): void {
     this.stopRefreshTokenTimer();
     localStorage.clear();
+    this._router.navigate(['/public-home']);
+  }
+
+  publicLogout(): void {
+    this.stopRefreshTokenTimer();
+    localStorage.clear();
     this._router.navigate(['/login']);
   }
 
