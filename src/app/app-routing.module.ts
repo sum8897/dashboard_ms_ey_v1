@@ -11,7 +11,7 @@ var routes: Routes = [];
 if (environment.loginNeeded) {
   routes = [
     {
-      path: '', redirectTo: `home`, pathMatch: 'full'
+      path: '', redirectTo: `public-home`, pathMatch: 'full'
     },
     {
       path: 'public', redirectTo: 'public-home', pathMatch: 'full'
