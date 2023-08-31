@@ -27,7 +27,7 @@ export class JwtInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(catchError(err => {
             if ([401, 403].includes(err.status)) {
                 // auto logout if 401 or 403 response returned from api
-                this.authService.logout();
+                this.authService.publicLogout();
             }
 
             const error = err.error.error?.message || err.error.error;
