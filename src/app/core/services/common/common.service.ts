@@ -37,5 +37,11 @@ export class CommonService {
     return this._http.get<ResponseType<any>>(`${environment.apiURL}/lastmodified?ProgramName=${ProgramFolderName}`);
   }
   
+  getUserAttributes(userId: any) {
+    return this._http.get<ResponseType<any>>(`${environment.apiURL}/getUserAttributes/${userId}`);
+  }
 
+  setUserAttributes(userId: any, details: any) {
+    return this._http.post<ResponseType<any>>(`${environment.apiURL}/setUserAttributes`, details);
+  }
 }
