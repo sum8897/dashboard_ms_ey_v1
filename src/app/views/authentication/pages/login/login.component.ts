@@ -55,6 +55,11 @@ export class LoginComponent implements OnInit {
       this.loginObj.title = 'NDEAR Vidya Samiksha Kendra'
     }
 
+    let user = localStorage.getItem('user_roles')?.includes('private_user') ? 'private' : 'public'
+    if(user === 'public') {
+      localStorage.clear()
+    }
+
     this.isLoggedIn = await this._authenticationService.isUserLoggedIn();
 
     type userRoles = Array<{ id: number, text: string }>
@@ -101,6 +106,8 @@ export class LoginComponent implements OnInit {
         const refreshToken = res.refresh_token
         const programAccess = res.program_access
         const userRoles = res.roles
+        const userId = res.userId
+        localStorage.setItem('user_id', userId)
         localStorage.setItem('user_roles', JSON.stringify(userRoles))
         localStorage.setItem('program_access', JSON.stringify(programAccess))
         localStorage.setItem('token', token)
