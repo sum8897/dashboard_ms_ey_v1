@@ -2,15 +2,15 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/nishtha_config';
-import { CourseWiseStatusComponent } from './reports/course-wise-status/course-wise-status.component';
 import { environment } from 'src/environments/environment';
+import { MediumOfInstructionComponent } from './reports/medium-of-instruction/medium-of-instruction.component';
 
 @Component({
-    selector: 'app-course-wise-status-tab',
-    templateUrl: './course-wise-status-tab.component.html',
-    styleUrls: ['./course-wise-status-tab.component.scss']
+    selector: 'app-medium-of-instruction-tab',
+    templateUrl: './medium-of-instruction-tab.component.html',
+    styleUrls: ['./medium-of-instruction-tab.component.scss']
 })
-export class CourseWiseStatusTabComponent implements OnInit, AfterViewInit {
+export class MediumOfInstructionTabComponent implements OnInit, AfterViewInit {
 
     bigNumberReports: any = {};
     minYear: any;
@@ -28,9 +28,9 @@ export class CourseWiseStatusTabComponent implements OnInit, AfterViewInit {
     defaultSelectedDays: any;
     hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;
-    matLavel = 'Course Wise Status'
+    matLavel = 'Medium of instruction'
     NVSK: boolean = true;
-    @ViewChild('courseWiseStatus') courseWiseStatus: CourseWiseStatusComponent;
+    @ViewChild('mediumOfInstruction') mediumOfInstruction: MediumOfInstructionComponent;
 
     constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
         this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -46,19 +46,17 @@ export class CourseWiseStatusTabComponent implements OnInit, AfterViewInit {
     }
 
     async ngAfterViewInit(): Promise<void> {
-        if (this.hasCommonFilters && this.NVSK) {
+        if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLavel);
-            this.courseWiseStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+            this.mediumOfInstruction?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
-        if (!this.NVSK) {
-            this.courseWiseStatus?.getReportData({ filterValues: [] });
-        }
+        
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
             let endDate = new Date();
             let days = endDate.getDate() - this.defaultSelectedDays;
             let startDate = new Date();
             startDate.setDate(days);
-            this.courseWiseStatus?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+            this.mediumOfInstruction?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
@@ -81,7 +79,7 @@ export class CourseWiseStatusTabComponent implements OnInit, AfterViewInit {
 
     filtersUpdated(filters: any) {
         this.reportsData = [];
-        this.courseWiseStatus?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.mediumOfInstruction?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
     }
 
     timeSeriesUpdated(event: any): void {
@@ -89,7 +87,8 @@ export class CourseWiseStatusTabComponent implements OnInit, AfterViewInit {
         this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
         if (event?.startDate !== null && event?.endDate !== null) {
             this.reportsData = [];
-            this.courseWiseStatus?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+            this.mediumOfInstruction?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
         }
     }
 }
+

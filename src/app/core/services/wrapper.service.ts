@@ -76,7 +76,7 @@ export class WrapperService {
           });
         }
         let query = filter.values === undefined ? filter.query : undefined
-        if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined) {
+        if (query?.indexOf(filters[index - 1]?.id) > -1 && filters[index - 1]?.value !== undefined && updatedFilter) {
           query = parseQueryParam(query, { [filters[index - 1]?.valueProp]: filters[index - 1]?.value })
         }
         if (query) {
@@ -179,7 +179,7 @@ export class WrapperService {
     return query;
   }
 
-  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any, reportType?: string): any {
+  constructTooltip(tooltipMetrics: any, row: any, selectedMetricValue: any, reportType?: string, valueSuffix?: any): any {
     if (reportType === 'barChart') {
       let tooltip = []
       tooltipMetrics.forEach((metric: any) => {
@@ -189,12 +189,29 @@ export class WrapperService {
       });
       return tooltip
     }
+    else if(reportType === 'scatter') {
+      let tooltip = []
+      tooltipMetrics.forEach((metric: any) => {
+        if (row[metric.value] !== undefined && row[metric.value] !== null) {
+          tooltip.push(metric.valuePrefix + (isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value])).toLocaleString() + metric.valueSuffix);
+        }
+      });
+      selectedMetricValue.forEach((axis: any) => {
+        if(axis?.value) {
+          tooltip.push(axis.value + ': ' + (isNaN(row[axis.axis]) ? row[axis.axis] : Number(row[axis.axis])).toLocaleString() + valueSuffix)
+        }
+      })
+      return tooltip
+    }
     let tooltip = '';
     tooltipMetrics.forEach((metric: any) => {
       if (row[metric.value] !== undefined && row[metric.value] !== null) {
         const value = isNaN(row[metric.value]) ? row[metric.value] : Number(row[metric.value]);
         const formattedValue = value.toLocaleString();
-        
+        if(metric.valuePrefix.indexOf('_') > -1) {
+          // console.log(metric.valuePrefix.split(/[_|\s]/))
+          metric.valuePrefix = metric.valuePrefix.split('_').map(word => word[0]?.toUpperCase() + word?.substring(1).toLowerCase()).join(' ')
+        }
         if (metric.value === selectedMetricValue) {
           tooltip += '<b><i>' + metric.valuePrefix.replace(/\n/g, '</br>') + formattedValue + metric.valueSuffix.replace(/\n/g, '</br>') + '</i></b>';
         } else {

@@ -31,10 +31,12 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
   hierarchyLevel: any;
   districtGeoJSON: any;
   legendForm: any;
-  range1: any = true
+  range1: any = true;
+  drillDownDetails: any;
 
   @Input() mapData!: any;
   @Input() level: any;
+  @Input() enableDrillDown: boolean = false;
   @Input() perCapitaReport: any = false;
   @Input() drillDown: boolean = false;
   @Input() drillDownLevel: any;
@@ -91,7 +93,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     await this.applyIndiaBorder();
     try {
       let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
-      if (Number(lev) <= 1) {
+      if (Number(lev) == 1) {
         // await this.applyCountryBorder(this.mapData);
         // this.applyDistrictBorder();
         await this.applyStateWithDistrictsBorder();
@@ -107,7 +109,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       // var imageUrl ='https://i.stack.imgur.com/khgzZ.png',
       // imageBounds = [[80.0, -350.0], [-40.0, 400.0]];
       // L.imageOverlay(imageUrl, imageBounds, {opacity: 0.3}).addTo(this.map);
-      if ((this.config === 'NVSK' && this.hierarchyLevel === 0 && this.level === 'district') || Number(lev) > 1 || this.hierarchyLevel > 1) {
+      if (this.config === 'NVSK' && Number(lev) === 0) {
+        this.map?.removeLayer(this.layerGroup);
+        this.createMarkers(this.mapData);
+      }
+      else if (Number(lev) > 1 || this.hierarchyLevel > 1) {
         this.map?.removeLayer(this.layerGroup);
         // await this.applyStateBorder();
         this.applyDistrictBorder();
@@ -308,6 +314,15 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     let { hierarchyLevel, id } = details ?? {}
 
     switch (Number(hierarchyLevel)) {
+      case 1:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          hierarchyLevel: hierarchyLevel,
+          state: id,
+          id: id,
+          state_name: details?.name
+        }
+        break;
       case 2:
         drillDownDetails = {
           ...this.rbacDetails,
@@ -339,6 +354,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         }
         break;
     }
+    this.drillDownDetails = drillDownDetails
     this._drillDownService.emit(drillDownDetails)
   }
 
@@ -373,11 +389,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  applyStateWithDistrictsBorder() :Promise<any> {
+  applyStateWithDistrictsBorder(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const data = await this._mapService.getStateGeoJSON();
-        
+        const data = await this._mapService.getStateGeoJSON(this.drillDownDetails);
+
 
         this.stateGeoJSON = L.geoJSON(data, {
           // style: {
@@ -453,10 +469,26 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  fitToStateBorder(): void {
+    if (this.stateGeoJSON) {
+      this.map.fitBounds(this.stateGeoJSON.getBounds(), {
+        padding: [50, 50]
+      })
+    }
+  }
+
+  fitToMarkers(): void {
+    if (this.markers) {
+      this.map.fitBounds(this.markers.getBounds(), {
+        padding: [150, 150]
+      });
+    }
+  }
+
   createMarkers(mapData: any, prevValues?: any): void {
     let reportTypeIndicator = this.mapData?.options && this.mapData.options.reportIndicatorType ? this.mapData.options.reportIndicatorType : (typeof this.mapData.data[0].indicator === 'string') ? 'boolean' : 'value'
     mapData.data = mapData.data.filter(data => data.indicator !== undefined && data.indicator !== null)
-    if (mapData && this.level !== 'state') {
+    if (mapData) {
       let min!: number, max!: number, values: any[] = [];
       if (reportTypeIndicator === 'value' && !prevValues) {
         mapData.data.forEach((data: any, index: number) => {
@@ -501,6 +533,10 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       var idProp;
       var nameProp;
       switch (Number(level)) {
+        case 0:
+          nameProp = 'state_name'
+          idProp = 'state_id'
+          break;
         case 1:
           nameProp = 'district_name'
           idProp = 'district_id'
@@ -520,23 +556,24 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         var id;
 
 
-        Object.keys(data).forEach((prop: any) => {
-          // if(re.test(prop)){
-          //   idProp = prop;
-          //   return false;
-          // }
-          // return true;
-          // if (prop.match(re)) {
-          //   id = data[prop.match(re)?.input]
-          // filterIds = {
-          //   ...filterIds,
-          //   [prop.match(re).input]: data[prop.match(re)?.input]
-          // }
-          // }
-          id = data[idProp]
-        })
+        // Object.keys(data).forEach((prop: any) => {
+        //   // if(re.test(prop)){
+        //   //   idProp = prop;
+        //   //   return false;
+        //   // }
+        //   // return true;
+        //   // if (prop.match(re)) {
+        //   //   id = data[prop.match(re)?.input]
+        //   // filterIds = {
+        //   //   ...filterIds,
+        //   //   [prop.match(re).input]: data[prop.match(re)?.input]
+        //   // }
+        //   // }
+        //   id = data[idProp]
+        //   console.log(data[nameProp])
+        // })
         let markerIcon = L.circleMarker([data.Latitude, data.Longitude], {
-          id: id,
+          id: data[idProp],
           name: data[nameProp],
           hierarchyLevel: data.hierarchyLevel,
           color: "gray",
@@ -568,16 +605,17 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         });
 
         markerIcon.on("click", async (e: any) => {
-          let lev = this.drillDownLevel ? this.drillDownLevel : this.rbacDetails.role
-          if (Number(lev) <= 1) {
-            let stateGeoJSON = await this._mapService.getStateGeoJSON();
+          // if (Number(lev) == 1) {
+          //   let stateGeoJSON = await this._mapService.getStateGeoJSON();
 
-            this.districtGeoJSON = stateGeoJSON.features.find(feature => {
-              return feature.properties['ID_2'] == e.target.options.id;
-            });
-            this.applyDrillDown({ id: e.target.options.id, hierarchyLevel: this.rbacDetails.role + 1, name: e.target.options.name })
-          }
-          if (level < 4) {
+          //   this.districtGeoJSON = stateGeoJSON.features.find(feature => {
+          //     return feature.properties['ID_2'] == e.target.options.id;
+          //   });
+          //   this.applyDrillDown({ id: e.target.options.id, hierarchyLevel: this.rbacDetails.role + 1, name: e.target.options.name })
+          // }
+          console.log(mapData?.options?.drillDownConfig?.allowedLevels.includes(level))
+          if (level < 4 && mapData?.options?.drillDownConfig?.enableDrillDown && mapData?.options?.drillDownConfig?.allowedLevels.includes(level)) {
+            console.log(mapData?.options?.drillDownConfig?.enableDrillDown)
             this.applyDrillDown({ name: e.target.options.name, id: e.target.options.id, hierarchyLevel: this.drillDownLevel ? this.drillDownLevel + 1 : this.rbacDetails.role + 1 })
           }
         })
@@ -589,12 +627,16 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.map.addLayer(this.markers);
       if (!prevValues) {
-        if (this.config === 'VSK') {
-          this.map.fitBounds(this.markers.getBounds(), {
-            padding: [150, 150]
-          });
+        if (this.config === 'VSK' || level > 0) {
+          if(level === 1) {
+            this.fitToStateBorder();
+          }
+          else {
+            this.fitToMarkers()
+          }
+          
         }
-        else {
+        else if (this.config === 'NVSK' && level === 0) {
           this.fitBoundsToCountryBorder();
         }
         this.createLegend(reportTypeIndicator, this.mapData.options, values);
@@ -639,7 +681,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           <div class="button-content">
          <span class="value">${values[i]}</span>
         </div>
-     </button><br>`);
+     </button>`);
         }
       }
       else if (values.length <= 1 && reportTypeIndicator !== 'boolean') {
@@ -712,7 +754,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
 
   getZoneColor(reportTypeIndicator: string, value: string | number, values?: number[]) {
     if (reportTypeIndicator === 'boolean') {
-      if (value == "Yes") {
+      if (String(value).toLowerCase() == "yes") {
         return "#007000";
       } else {
         return "#D2222D";

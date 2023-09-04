@@ -50,7 +50,7 @@ export class DistrictWiseStatusComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== undefined && this.rbacDetails?.role !== null) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
@@ -100,7 +100,7 @@ export class DistrictWiseStatusComponent implements OnInit {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
       }
       else if (query && key === 'barChart') {
-        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, this.rbacDetails.role);
         this.reportData = reportData
         // this.config = {...config,options:{...config.options,height:'200'}};
         this.config = config
