@@ -7,6 +7,7 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/nishtha/config/nishtha_config';
 import { CourseWiseStatusTabComponent } from '../../course-wise-status-tab.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-course-wise-status",
@@ -29,6 +30,7 @@ export class CourseWiseStatusComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
+  NVSK: boolean = true;
 
   @Output() exportReportData = new EventEmitter<any>();
 
@@ -42,6 +44,9 @@ export class CourseWiseStatusComponent implements OnInit {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     });
+    if(environment.config === 'VSK') {
+      this.NVSK = false
+    }
   }
 
   ngOnInit(): void {}
@@ -56,7 +61,7 @@ export class CourseWiseStatusComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role) {
+    if (this.rbacDetails?.role !== undefined && this.rbacDetails?.role !== null) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
