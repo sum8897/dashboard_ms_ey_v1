@@ -13,9 +13,21 @@
 <div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
+        <div *ngIf="checkReport('pmposhan_metrics', 'bigNumber1')" id="bignumber1">
+            <app-pmposhan-bignumber-metrics (exportReportData)="importBigNumberMetrics($event)"></app-pmposhan-bignumber-metrics>
+        </div>
 
-        <mat-tab label='Progress Status' *ngIf="tabs.includes('Progress Status')">
-            <app-progress-status-tab *ngIf="selectedTabLabel === 'Progress Status'"></app-progress-status-tab>
+        <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
+            <app-implementation-status-tab [bigNumberMetrics]="bigNumberMetrics"
+                *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
+        </mat-tab>
+
+        <mat-tab label='State Wise Progress Status' *ngIf="tabs.includes('State Wise Progress Status')">
+            <app-state-wise-progress-status-tab *ngIf="selectedTabLabel === 'State Wise Progress Status'"></app-state-wise-progress-status-tab>
+        </mat-tab>
+
+        <mat-tab label='District Wise Progress Status' *ngIf="tabs.includes('District Wise Progress Status')">
+            <app-progress-status-tab [bigNumberMetrics]="bigNumberMetrics" *ngIf="selectedTabLabel === 'District Wise Progress Status'"></app-progress-status-tab>
         </mat-tab>
 
     </mat-tab-group>
