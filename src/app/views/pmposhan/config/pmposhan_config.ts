@@ -116,7 +116,7 @@ export const config = {
                     "actions": {
                         "queries":
                         {
-                            "map": "select latitude, longitude, category_name as category_name,t2.district_name,t1.district_id, cast(sum(t1.sum) as numeric) as total_count FROM datasets.pm_poshan_category_district0categorypm as t1 join dimensions.district as t2 on t1.district_id = t2.district_id group by t1.district_id,t2.district_name, category_name, latitude, longitude"
+                            "map": "select latitude, longitude, category_name as category_name,t2.district_name,t1.district_id, cast(sum(t1.sum) as numeric) as total_count FROM datasets.pm_poshan_category_daily_district0categorypm as t1 join dimensions.district as t2 on t1.district_id = t2.district_id group by t1.district_id,t2.district_name, category_name, latitude, longitude"
                         },
                         "level": "district",
                         "nextLevel": "block"
