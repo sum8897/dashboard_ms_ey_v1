@@ -18,14 +18,14 @@
                 *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
         </mat-tab>
 
-        <ng-container *ngIf="!NVSK">
+        <!-- <ng-container *ngIf="!NVSK">
             <mat-tab label='Courses and Medium Status' *ngIf="tabs.includes('Courses and Medium Status')">
                 <app-course-and-medium-status-tab
                     *ngIf="selectedTabLabel === 'Courses and Medium Status'"></app-course-and-medium-status-tab>
             </mat-tab>
-        </ng-container>
+        </ng-container> -->
 
-        <ng-container *ngIf="NVSK">
+        <ng-container>
             <mat-tab label='Medium of instruction' *ngIf="tabs.includes('Medium of instruction')">
                 <app-medium-of-instruction-tab
                     *ngIf="selectedTabLabel === 'Medium of instruction'"></app-medium-of-instruction-tab>
@@ -39,16 +39,16 @@
             <app-potential-base-tab *ngIf="selectedTabLabel === '% against Potential Base'"></app-potential-base-tab>
         </mat-tab>
 
-        <mat-tab label='District Wise Status' *ngIf="tabs.includes('District Wise Status')">
+        <!-- <mat-tab label='District Wise Status' *ngIf="tabs.includes('District Wise Status')">
             <app-district-wise-status-tab
                 *ngIf="selectedTabLabel === 'District Wise Status'"></app-district-wise-status-tab>
-        </mat-tab>
+        </mat-tab> -->
 
-        <ng-container *ngIf="!NVSK">
+        <!-- <ng-container *ngIf="!NVSK">
             <mat-tab label='Course Wise Status' *ngIf="tabs.includes('Course Wise Status')">
                 <app-course-wise-status-tab *ngIf="selectedTabLabel === 'Course Wise Status'"></app-course-wise-status-tab>
             </mat-tab>
-        </ng-container>
+        </ng-container> -->
 
     </mat-tab-group>
 </div>

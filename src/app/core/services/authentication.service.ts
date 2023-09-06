@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { from, map, Observable } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { BehaviorSubject, from, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,21 +9,29 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthenticationService {
 
+  loggedIn: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+
   constructor(private readonly _router: Router, private readonly _http: HttpClient) { }
 
   isUserLoggedIn(): boolean {
     return localStorage.getItem('token') !== null;
   }
 
+  updateSideNav(flag: boolean): void {
+    this.loggedIn.next(flag);
+  }
+
   logout(): void {
     this.stopRefreshTokenTimer();
     localStorage.clear();
-    this._router.navigate(['/public-home']);
+    this.updateSideNav(false)
+    this._router.navigate(['/summary-statistics']);
   }
 
   publicLogout(): void {
     this.stopRefreshTokenTimer();
     localStorage.clear();
+    this.updateSideNav(false)
     this._router.navigate(['/login']);
   }
 
@@ -32,7 +40,7 @@ export class AuthenticationService {
   }
 
   refreshToken(refreshToken: any) {
-    return this._http.post(`${environment.apiURL}/refresh_token`, {refresh_token: refreshToken}).pipe(map((res: any) => {
+    return this._http.post(`${environment.apiURL}/refresh_token`, { refresh_token: refreshToken }).pipe(map((res: any) => {
       localStorage.setItem('token', res.access_token)
       localStorage.setItem('refresh_token', res.refresh_token)
       this.startRefreshTokenTimer();

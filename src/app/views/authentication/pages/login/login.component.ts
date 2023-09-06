@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { stateNames } from 'src/app/core/config/StateCodes';
+import { StateCodes, stateNames } from 'src/app/core/config/StateCodes';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import * as config from 'src/assets/config/ui_config.json'
+import { RbacService } from 'src/app/core/services/rbac-service.service';
+import { CommonService } from 'src/app/core/services/common/common.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,7 @@ export class LoginComponent implements OnInit {
   tempSecret: string = '';
   error: boolean = false;
   roletype
+  preferences: any;
 
   userStatus = ''
   qrcode
@@ -41,7 +44,7 @@ export class LoginComponent implements OnInit {
   })
   tempUserId: any;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private readonly _authenticationService: AuthenticationService) {
+  constructor(private router: Router, private formBuilder: FormBuilder, private readonly _authenticationService: AuthenticationService, private _rbacService: RbacService, private _commonService: CommonService) {
     // if (this._authenticationService.isUserLoggedIn()) {
     //   this.router.navigate(['/home']);
     // }
@@ -101,7 +104,7 @@ export class LoginComponent implements OnInit {
         username: this.LoginForm.controls.userId.value,
         password: this.LoginForm.controls.password.value
       }
-      this._authenticationService.login(data).subscribe((res: any) => {
+      this._authenticationService.login(data).subscribe(async (res: any) => {
         const token = res.access_token
         const refreshToken = res.refresh_token
         const programAccess = res.program_access
@@ -115,7 +118,23 @@ export class LoginComponent implements OnInit {
         // localStorage.setItem('userName', res.username)
         // localStorage.setItem('user_id', res.userId)
         this._authenticationService.startRefreshTokenTimer();
-        this.router.navigate(['/home']);
+        // this.router.navigate(['/home']);
+
+        let results = await this._commonService.getUserAttributes(userId).toPromise();
+        let preferences = results?.['details']
+        let selectedRole = preferences?.['selectedRole']
+        if(preferences && preferences['selectedRole'] && Object.keys(preferences).includes(String(selectedRole))) {
+          this.preferences = {
+            role: preferences['selectedRole'],
+            ...preferences?.[selectedRole]
+          }
+          this.setStateDetails(preferences?.[selectedRole])
+          this.router.navigate(['/summary-statistics']);
+        }
+        else {
+          this.router.navigate(['/home']);
+        }
+
       },
         err => {
           this.error = true;
@@ -126,6 +145,35 @@ export class LoginComponent implements OnInit {
     }
     
 
+  }
+
+  setStateDetails(details: any) {
+    if (environment.config === 'VSK') {
+      let state_id, stateName;
+      if (environment.stateCode) {
+        state_id = StateCodes.indexOf(environment.stateCode)
+        this.preferences['state'] = state_id
+        let names: any = stateNames;
+        names.every((state: any) => {
+          if (state.stateCode == environment.stateCode) {
+            stateName = state.stateName;
+            return false;
+          }
+          return true;
+        });
+      }
+      this._rbacService.setRbacDetails({
+        ...details,
+        ...this.preferences,
+        state_name: stateName,
+      });
+    }
+    else {
+      this._rbacService.setRbacDetails({
+        ...details,
+        ...this.preferences
+      });
+    }
   }
 
 

@@ -16,7 +16,7 @@ export class MetadataInterceptor implements HttpInterceptor {
         if (event instanceof HttpResponse) {
           let body = event.body;
 
-          if (body.fileMetaData) {
+          if (body?.fileMetaData) {
             this._dataSourceMetadataService.updateMetaData(body.fileMetaData);
           }
         }

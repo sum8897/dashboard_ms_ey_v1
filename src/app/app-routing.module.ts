@@ -5,16 +5,17 @@ import { RbacDialogComponent } from './shared/components/rbac-dialog/rbac-dialog
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { environment } from 'src/environments/environment';
+import { DashboardModule } from './views/dashboard/dashboard.module';
 
 var routes: Routes = [];
 
 if (environment.loginNeeded) {
   routes = [
     {
-      path: '', redirectTo: `public-home`, pathMatch: 'full'
+      path: '', redirectTo: `summary-statistics`, pathMatch: 'full'
     },
     {
-      path: 'public', redirectTo: 'public-home', pathMatch: 'full'
+      path: 'public', redirectTo: 'summary-statistics', pathMatch: 'full'
     },
     {
       path: '',
@@ -26,14 +27,13 @@ if (environment.loginNeeded) {
       children: [
         {
           path: 'rbac', component: RbacDialogComponent,
-          canActivate: [AuthGuard]
+          canActivate: [AuthGuard],
+          data: { allowedUser: 'private_user'}
         },
         {
           path: 'home', component: HomePageComponent,
-          canActivate: [AuthGuard]
-        },
-        {
-          path: 'public-home', component: HomePageComponent
+          canActivate: [AuthGuard],
+          data: { allowedUser: 'private_user'}
         },
         {
           path: 'summary-statistics',
@@ -148,19 +148,12 @@ if (environment.loginNeeded) {
 else {
   routes = [
     {
-      path: '', redirectTo: `public-home`, pathMatch: 'full'
+      path: '', redirectTo: `summary-statistics`, pathMatch: 'full'
     },
     {
       path: '',
       component: LayoutComponent,
       children: [
-        {
-          path: 'rbac', component: RbacDialogComponent,
-          canActivate: [AuthGuard]
-        },
-        {
-          path: 'public-home', component: HomePageComponent
-        },
         {
           path: 'summary-statistics',
           loadChildren: () =>
