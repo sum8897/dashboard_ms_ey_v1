@@ -44,32 +44,6 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    if(this.activatedRoute.snapshot.url[0].path === 'public-home' && JSON.parse(localStorage.getItem('user_roles'))?.indexOf('private_user') > -1) {
-      this.router.navigate(['/home'])
-    }
-
-    
-    else if(this.activatedRoute.snapshot.url[0].path === 'public-home' && (localStorage.getItem('token') === null)) {
-      let data = {
-        username: environment.guestUsername,
-        password: environment.guestPassword
-      }
-      this._authService.login(data).subscribe((res: any) => {
-        localStorage.clear()
-        const token = res.access_token
-        const refreshToken = res.refresh_token
-        const programAccess = res.program_access
-        const userRoles = res.roles
-        const userId = res.userId
-        localStorage.setItem('user_id', userId)
-        localStorage.setItem('user_roles', JSON.stringify(userRoles))
-        localStorage.setItem('program_access', JSON.stringify(programAccess))
-        localStorage.setItem('token', token)
-        localStorage.setItem('refresh_token', refreshToken)
-        this._authService.startRefreshTokenTimer();
-      })
-    }
     this.storage = window.localStorage;
     this.hideAdmin = localStorage.getItem('roleName') === 'admin' ? true : false;
   }

@@ -106,7 +106,7 @@ export class PotentialBaseNvskComponent implements OnInit {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
       }
       else if (query && key === 'barChart') {
-        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, this.rbacDetails.role);
         this.reportData = reportData
         this.config = config;
         if (this.reportData?.values?.length > 0) {

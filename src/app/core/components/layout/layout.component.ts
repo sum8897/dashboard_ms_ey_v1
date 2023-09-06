@@ -64,11 +64,17 @@ export class LayoutComponent implements OnInit {
       this.NVSK = false;
     }
     this.role = localStorage.getItem('role');
+    this._authService.loggedIn.subscribe(flag => {
+      console.log('layout', flag)
+      if(flag) {
+        this.checkRbacLevel();
+      }
+    })
   }
 
   checkUser() {
     let roles = JSON.parse(localStorage.getItem('user_roles'))
-    return roles.includes('private_user') ? 'private_user' : 'guest'
+    return roles?.includes('private_user') ? 'private_user' : 'guest'
   }
 
 
@@ -226,6 +232,12 @@ export class LayoutComponent implements OnInit {
   }
 
   activate(componentRef: any) {
+    console.log('reload')
+    this._authService.loggedIn.subscribe(flag => {
+      if(flag || this._authService.isUserLoggedIn()) {
+        this.checkRbacLevel();
+      }
+    })
     const copyOfContentElementRef = (this.contentElementRef);
     this.pdfDownloadService.contentElementRef = copyOfContentElementRef;
     if (this._router.url === '/home' || this._router.url === '/rbac' || this._router.url === '/public-home') {
@@ -233,9 +245,9 @@ export class LayoutComponent implements OnInit {
     }
     else {
       this.isHome = false;
-      this.checkRbacLevel();
+      // this.checkRbacLevel();
     }
-    if (this._router.url !== '/home' && this._router.url !== '/public-home') {
+    if (this._router.url !== '/home' && this._router.url !== '/public-home' && this._router.url !== '/summary-statistics') {
       this.showBackBtn = true
     }
     else {
@@ -255,6 +267,7 @@ export class LayoutComponent implements OnInit {
   }
 
   signOut() {
+    console.log('here')
     this._authService.logout()
   }
 

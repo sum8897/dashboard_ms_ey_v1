@@ -22,6 +22,7 @@ export class RbacDialogComponent implements OnInit {
   availableFilters: string = '';
   updatedForm: any;
   stateInfo: any;
+  rememberPreferences: any;
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -29,6 +30,7 @@ export class RbacDialogComponent implements OnInit {
       this.selectedRoleLevel = rbacDetails?.role
     })
     this.rbacForm = this.fb.group({
+      savePreferences: [false],
       state: [null],
       district: [null],
       block: [null],
@@ -60,20 +62,56 @@ export class RbacDialogComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.resetFilterForm(this.rbacForm);
-    this.getFilters();
+    // await this.getFilters();
+    let userId = localStorage.getItem('user_id');
+    let preferences;
+    await this._commonService.getUserAttributes(userId).subscribe(res => {
+      preferences = res
+      if (preferences?.details && Object.keys(preferences.details).includes(String(this.selectedRoleLevel))) {
+        this.updatePreferences(preferences.details[String(this.selectedRoleLevel)])
+      }
+      this.getFilters();
+    });
   }
 
   get f() {
     return this.rbacForm.controls;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.rbacForm.valid) {
+      console.log(this.rbacForm.value.savePreferences)
       this.rbacForm.value.role = this.selectedRoleLevel
-      this.setStateDetails(this.updatedForm)
-      this.router.navigate(['/summary-statistics'])
+      if (this.rbacForm.value.savePreferences) {
+        let preferences: any = {};
+        Object.keys(this.rbacForm.value).filter(key => key !== 'role' && this.rbacForm.value[key] !== null).forEach((key) => {
+          preferences[key] = this.rbacForm.value[key],
+            preferences[this.rbacForm.value[key]] = this.updatedForm[this.rbacForm.value[key]]
+        })
+        let userId = localStorage.getItem('user_id');
+        this._commonService.getUserAttributes(userId).subscribe(async (res) => {
+          let prevPreferences = res
+          let payload = {
+            details: {
+              ...prevPreferences['details'],
+              selectedRole: this.selectedRoleLevel,
+              [this.selectedRoleLevel]: preferences
+            },
+            userId
+          }
+
+          const results = await this._commonService.setUserAttributes(userId, payload).toPromise();
+          this.setStateDetails(this.updatedForm)
+          this.router.navigate(['/summary-statistics'])
+        });
+      }
+      else {
+        this.setStateDetails(this.updatedForm)
+        this.router.navigate(['/summary-statistics'])
+      }
+
     }
     else {
       const invalid = [];
@@ -83,7 +121,6 @@ export class RbacDialogComponent implements OnInit {
           invalid.push(name);
         }
       }
-      console.log(invalid)
 
       this.rbacForm.markAllAsTouched()
     }
@@ -103,6 +140,7 @@ export class RbacDialogComponent implements OnInit {
     //   return
     // }
     let { filters, baseHierarchy } = rbacConfig;
+    filters.sort(function (a, b) { return a.hierarchyLevel - b.hierarchyLevel })
     if (environment.config === 'VSK') {
       baseHierarchy = 2;
       filters = filters.filter((filter: any) => {
@@ -121,29 +159,37 @@ export class RbacDialogComponent implements OnInit {
         let masterFilter = filters.filter((prevFilter: any) => {
           return Number(prevFilter.hierarchyLevel) === Number(filters[i].hierarchyLevel) - 1;
         })
-        if (masterFilter?.length > 0 && masterFilter[0].hierarchyLevel && !this.rbacForm.value[filters[i].name.toLowerCase()] && this.rbacForm.value[masterFilter[0].name.toLowerCase()]) {
-          let query = this.parseQuery(filters[i].query, this.rbacForm.value[masterFilter[0].name.toLowerCase()])
-          await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-            let rows = res;
-            filters[i]['options'] = rows;
-            constructedFilters.push(filters[i])
-            this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.setValidators(Validators.required)
-            this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
-          })
+        if (masterFilter?.length > 0 && masterFilter[0].hierarchyLevel && this.rbacForm.value[masterFilter[0].name.toLowerCase()]) {
+          let duplicate = constructedFilters?.find(obj => obj.hierarchyLevel === filters[i].hierarchyLevel)
+          if (duplicate === undefined) {
+            let query = this.parseQuery(filters[i].query, this.rbacForm.value[masterFilter[0].name.toLowerCase()])
+            let rows = await this._commonService.getReportDataNew(query).toPromise();
+            if (rows && rows['length'] > 0) {
+              filters[i]['options'] = rows;
+              constructedFilters.push(filters[i])
+              this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.setValidators(Validators.required)
+              this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
+            }
+          }
         }
         else if (masterFilter?.length > 0 && this.rbacForm.value[masterFilter[0]?.name.toLowerCase()] === null) {
           constructedFilters.splice(i, 1);
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.clearValidators()
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
         }
-        if (filters[i].hierarchyLevel === baseHierarchy && !this.rbacForm.value[filters[i].name.toLowerCase()]) {
+        if (filters[i].hierarchyLevel === baseHierarchy) {
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.setValidators(Validators.required)
           this.rbacForm?.controls?.[filters[i]?.name?.toLowerCase()]?.updateValueAndValidity()
-          await this._commonService.getReportDataNew(filters[i].query).subscribe((res: any) => {
-            let rows = res;
-            filters[i]['options'] = rows;
-            constructedFilters.push(filters[i])
-          })
+          let duplicate = constructedFilters?.find(obj => obj.hierarchyLevel === filters[i].hierarchyLevel)
+          if (duplicate === undefined) {
+            let rows = await this._commonService.getReportDataNew(filters[i].query).toPromise();
+            if (rows && rows['length'] > 0) {
+              filters[i]['options'] = rows;
+              constructedFilters.push(filters[i])
+            }
+          }
+
+
         }
       }
     }
@@ -231,5 +277,11 @@ export class RbacDialogComponent implements OnInit {
     }
   }
 
-
+  updatePreferences(details: any) {
+    Object.keys(details).filter((key) => {
+      return Object.keys(this.rbacForm.value).includes(key)
+    }).forEach((key: string) => {
+      this.rbacForm.get(key).patchValue(details[key])
+    });
+  }
 }
