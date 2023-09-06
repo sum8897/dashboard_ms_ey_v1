@@ -22,6 +22,7 @@ export class RbacDialogComponent implements OnInit {
   availableFilters: string = '';
   updatedForm: any;
   stateInfo: any;
+  rememberPreferences: any;
 
   constructor(private fb: FormBuilder, private _commonService: CommonService, private _rbacService: RbacService, private router: Router) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -29,6 +30,7 @@ export class RbacDialogComponent implements OnInit {
       this.selectedRoleLevel = rbacDetails?.role
     })
     this.rbacForm = this.fb.group({
+      savePreferences: [false],
       state: [null],
       district: [null],
       block: [null],
@@ -80,27 +82,36 @@ export class RbacDialogComponent implements OnInit {
 
   async onSubmit() {
     if (this.rbacForm.valid) {
+      console.log(this.rbacForm.value.savePreferences)
       this.rbacForm.value.role = this.selectedRoleLevel
-      let preferences: any = {};
-      Object.keys(this.rbacForm.value).filter(key => key !== 'role' && this.rbacForm.value[key] !== null).forEach((key) => {
-        preferences[key] = this.rbacForm.value[key],
-          preferences[this.rbacForm.value[key]] = this.updatedForm[this.rbacForm.value[key]]
-      })
-      let userId = localStorage.getItem('user_id');
-      this._commonService.getUserAttributes(userId).subscribe(async (res) => {
-        let prevPreferences = res
-        let payload = {
-          details: {
-            ...prevPreferences['details'],
-            [this.selectedRoleLevel]: preferences
-          },
-          userId
-        }
+      if (this.rbacForm.value.savePreferences) {
+        let preferences: any = {};
+        Object.keys(this.rbacForm.value).filter(key => key !== 'role' && this.rbacForm.value[key] !== null).forEach((key) => {
+          preferences[key] = this.rbacForm.value[key],
+            preferences[this.rbacForm.value[key]] = this.updatedForm[this.rbacForm.value[key]]
+        })
+        let userId = localStorage.getItem('user_id');
+        this._commonService.getUserAttributes(userId).subscribe(async (res) => {
+          let prevPreferences = res
+          let payload = {
+            details: {
+              ...prevPreferences['details'],
+              selectedRole: this.selectedRoleLevel,
+              [this.selectedRoleLevel]: preferences
+            },
+            userId
+          }
 
-        const results = await this._commonService.setUserAttributes(userId, payload).toPromise();
+          const results = await this._commonService.setUserAttributes(userId, payload).toPromise();
+          this.setStateDetails(this.updatedForm)
+          this.router.navigate(['/summary-statistics'])
+        });
+      }
+      else {
         this.setStateDetails(this.updatedForm)
         this.router.navigate(['/summary-statistics'])
-      });
+      }
+
     }
     else {
       const invalid = [];

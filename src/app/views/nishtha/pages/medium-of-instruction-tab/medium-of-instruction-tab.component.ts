@@ -46,7 +46,7 @@ export class MediumOfInstructionTabComponent implements OnInit, AfterViewInit {
     }
 
     async ngAfterViewInit(): Promise<void> {
-        if (this.hasCommonFilters && this.NVSK) {
+        if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.matLavel);
             this.mediumOfInstruction?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }

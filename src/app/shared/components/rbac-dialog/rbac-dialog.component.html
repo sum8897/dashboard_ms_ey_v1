@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="flex justify-center mb-2">
-        <div class="text-center">            
+        <div class="text-center">
             <span class="samikshadiv">VIDYA SAMIKSHA KENDRA</span><br>
         </div>
     </div>
@@ -60,13 +60,21 @@
                         [id]="filter?.name?.toLowerCase() + 'filter'" [placeholder]="'Select ' + filter?.name"
                         (change)="changeFilter(filter)">
                         <ng-option *ngFor="let option of filter?.options" [value]="updateForm(option, filter)">
-                            {{option[filter?.labelProp]}} 
+                            {{option[filter?.labelProp]}}
                         </ng-option>
                     </ng-select>
                     <span style="color:white" class=""
                         *ngIf="f?.[filter?.name?.toLowerCase()]?.touched && f?.[filter?.name?.toLowerCase()]?.errors?.['required']">
                         <small class="text-danger">{{'Please Select a ' + filter.name}}</small>
                     </span>
+                </div>
+            </div>
+            <div class="grid grid-cols-4">
+                <div class="col-start-2 col-end-5">
+                    <input type="checkbox"  id="remember-preferences" class="" formControlName="savePreferences"
+                        name="element_name"/>
+                    <label class="form-label col-span-1 my-3 ml-3"
+                            for="savePreferences">Remember my preferences</label>
                 </div>
             </div>
             <div class="submit-wrapper my-4">

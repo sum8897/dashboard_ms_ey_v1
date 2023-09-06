@@ -69,7 +69,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "map": "select d.latitude, d.longitude, t.state_id, t.program_name, state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
+                        "map": "select d.latitude, d.longitude, t.state_id, t.state_id as level, t.program_name, state_name ,t.status from dimensions.state as d join (select state_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_state0programnishtha) as t on  d.state_id = t.state_id order by d.state_name asc"
                     },
                     "level": "state",
                     "nextLevel": "district"
@@ -80,7 +80,8 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status order by program_name",
+                        // "table": "select  program_name , case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_started_programnishtha group by program_name,status order by program_name",
+                        "map": "select d.latitude, d.longitude, t.district_id, t.district_id as level, t.program_name, district_name ,t.status from dimensions.district as d join (select district_id, program_name, case when sum > 0 then 'YES' else 'NO' end as status from datasets.nishtha_programstarted_district0programnishtha) as t on  d.district_id = t.district_id order by d.district_name asc"
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -123,7 +124,7 @@ export const config = {
             "map": {
                 "metricLabelProp": "program_name",
                 "metricValueProp": "status",
-                "groupByColumn": "state_id",
+                "groupByColumn": "level",
                 "metricFilterNeeded": true,
                 "legend": {
                     "title": "Implemented Nishtha"
@@ -132,6 +133,11 @@ export const config = {
                     {
                         "valuePrefix": "State/ UT Name: ",
                         "value": "state_name",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
                         "valueSuffix": "\n"
                     },
                     {
@@ -206,8 +212,17 @@ export const config = {
                     "queries": {
                         "table": "SELECT st.state_name, SUM(count) as no_of_languages, string_agg(language, ',' order by language) as list_of_languages FROM datasets.nishtha_totalmedium_dqamdiwbdiicaxv9f2xl as ntm JOIN dimensions.state as st ON st.state_id = ntm.state_id GROUP BY ntm.state_id, st.state_name ORDER BY st.state_name"
                     },
-                    "level": "state",
-                    "nextLevel": "district"
+                    "level": "state"
+                }
+            },
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "table": "SELECT d.district_name, SUM(count) as no_of_languages, string_agg(language, ',' order by language) as list_of_languages FROM datasets.nishtha_totalmedium_district0programnishtha0languagenishtha as ntm JOIN dimensions.district as d ON d.district_id = ntm.district_id GROUP BY ntm.district_id, d.district_name ORDER BY d.district_name"
+                    },
+                    "level": "district"
                 }
             }
         ],
@@ -217,6 +232,11 @@ export const config = {
                     {
                         name: "Name of State/ UT/ Autonomous Organisation",
                         property: "state_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "District Name",
+                        property: "district_name",
                         class: "text-center"
                     },
                     {
@@ -390,7 +410,17 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "barChart": "select s.state_name, sum(ntae.sum) as achieved_certifications from datasets.nishtha_achievedcertification_chydbgqxd0rtzw5hz3zt as ntae JOIN dimensions.state as s ON s.state_id = ntae.state_id group by s.state_name ORDER BY s.state_name;",
+                        "barChart": "select s.state_name, s.state_name as level, sum(ntae.sum) as achieved_certifications from datasets.nishtha_achievedcertification_chydbgqxd0rtzw5hz3zt as ntae JOIN dimensions.state as s ON s.state_id = ntae.state_id group by s.state_name ORDER BY s.state_name;",
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "National",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "barChart": "select d.district_name, d.district_name as level, sum(ntae.sum) as achieved_certifications from datasets.nishtha_achievedcertification_district0programnishtha as ntae JOIN dimensions.district as d ON d.district_id = ntae.district_id group by d.district_name ORDER BY d.district_name;",
                     },
                     "level": "district"
                 }
@@ -401,12 +431,12 @@ export const config = {
                 "isMultibar": true,
                 "type": "horizontal",
                 "yAxis": {
-                    "title": "States"
+                    "title": ['States', 'Districts']
                 },
                 "xAxis": {
                     "title": "Achieved Certifications",
-                    "label": "state_name",
-                    "value": "state_name",
+                    "label": "level",
+                    "value": "level",
                     "metrics": [
                         {
                             "label": "Achieved Certifications",
@@ -434,12 +464,11 @@ export const config = {
             },
             {
                 "name": "State",
-                "labelProp": "state_name",
-                "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "table": "select t1.course_name , t1.sum as total_enrolment , t2.sum as total_certifications from datasets.nishtha_total_enrolment_coursenishtha as t1 join datasets.nishtha_total_certification_coursenishtha  as t2 on t1.course_name = t2.course_name group by t1.course_name,t1.sum,t2.sum ",
+                        // "table": "select t1.course_name , t1.sum as total_enrolment , t2.sum as total_certifications from datasets.nishtha_total_enrolment_coursenishtha as t1 join datasets.nishtha_total_certification_coursenishtha  as t2 on t1.course_name = t2.course_name group by t1.course_name,t1.sum,t2.sum ",
+                        "barChart": "select t1.course_name , sum(t1.sum) as total_certifications from datasets.nishtha_totalcertification_crwedrorgzcbcxsof35_ as t1 group by t1.course_name",
                     },
                     "level": "district"
                 }
@@ -578,6 +607,17 @@ export const config = {
                     "level": "state"
                 }
             },
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+                        "bigNumber1": "select count(program_id) as programs from dimensions.programnishtha",
+                        "bigNumber2": "select sum(sum) as beneficiaries from datasets.nishtha_total_participants_programnishtha"
+                    },
+                    "level": "state"
+                }
+            },
         ],
         "options": {
             "bigNumber": {
@@ -597,14 +637,9 @@ export const config = {
                     "queries": {
                         "bigNumber1": "",
                         "bigNumber2": "",
-                        "bigNumber3": "",
-                        "bigNumber4": "",
-                        "bigNumber5": "",
-                        "bigNumber6": "",
-                        "bigNumber7": "",
-                        "bigNumber8": "select sum(sum) as participants_3 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA Secondary'",
-                        "bigNumber9": "select sum(sum) as participants_4 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA FLN'",
-                        "bigNumber10": "select sum(sum) as participants_5 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA ECCE'",
+                        "bigNumber3": "select sum(sum) as participants_3 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA Secondary'",
+                        "bigNumber4": "select sum(sum) as participants_4 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA FLN'",
+                        "bigNumber5": "select sum(sum) as participants_5 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA ECCE'",
                     },
                     "level": "state"
                 }
@@ -616,10 +651,12 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select sum(sum) as total_enrolment from datasets.nishtha_total_enrolment_district",
-                        "bigNumber2": "select sum(sum) as total_completion from datasets.nishtha_total_completion_district",
-                        "bigNumber3": "select sum(sum) as total_certification from datasets.nishtha_total_certification_district",
-                        "bigNumber4": "select sum(sum) as total_mediums from datasets.nishtha_total_medium_programnishtha"
+                        "bigNumber1": "",
+                        "bigNumber2": "",
+                        "bigNumber3": "",
+                        "bigNumber4": "",
+                        "bigNumber5": "",
+                        "bigNumber6": "select sum(sum) as participants_6 from datasets.nishtha_total_participants_programnishtha where program_name = 'NISHTHA 4.0'"
                     },
                     "level": "district"
                 }
@@ -627,9 +664,9 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total Enrolment', 'Total Completion', 'Total Certification', 'Total Mediums', 'Total States/UTs Participating', 'NISHTHA Elementary (Face-to-face)', 'NISHTHA Elementary (Online)', 'NISHTHA Secondary', 'NISHTHA FLN', 'NISHTHA ECCE'],
-                "valueSuffix": ['', '', '', '', '', '', '', '', '', ''],
-                "property": ['total_enrolment', 'total_completion', 'total_certification', 'total_mediums', 'total_states', 'participants_1', 'participants_2', 'participants_3', 'participants_4', 'participants_5']
+                "title": ['NISHTHA Elementary (Face-to-face)', 'NISHTHA Elementary (Online)', 'NISHTHA Secondary', 'NISHTHA FLN', 'NISHTHA ECCE', 'NISHTHA 4.0'],
+                "valueSuffix": ['', '', '', '', '', ''],
+                "property": ['participants_1', 'participants_2', 'participants_3', 'participants_4', 'participants_5', 'participants_6']
             }
         }
     }
