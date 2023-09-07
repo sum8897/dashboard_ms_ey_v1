@@ -123,7 +123,7 @@ export class LoginComponent implements OnInit {
         let results = await this._commonService.getUserAttributes(userId).toPromise();
         let preferences = results?.['details']
         let selectedRole = preferences?.['selectedRole']
-        if(preferences && preferences['selectedRole'] && Object.keys(preferences).includes(String(selectedRole))) {
+        if(preferences && preferences['selectedRole'] && (preferences['selectedRole'] == 1 || Object.keys(preferences).includes(String(selectedRole)))) {
           this.preferences = {
             role: preferences['selectedRole'],
             ...preferences?.[selectedRole]

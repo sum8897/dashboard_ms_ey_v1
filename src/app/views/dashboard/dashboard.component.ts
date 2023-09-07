@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
         this._authService.startRefreshTokenTimer();
         this._authService.updateSideNav(true);
         let preferences = {
-          role: 0
+          role: 1
         }
         this.setStateDetails(preferences)
       }
