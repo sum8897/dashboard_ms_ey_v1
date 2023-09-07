@@ -47,7 +47,20 @@ export class RbacDialogComponent implements OnInit {
       baseHierarchy = 1;
     }
     if (this.selectedRoleLevel < baseHierarchy) {
-      router.navigate(['/summary-statistics'])
+      let userId = localStorage.getItem('user_id');
+      this._commonService.getUserAttributes(userId).subscribe(async (res) => {
+        let prevPreferences = res
+        let payload = {
+          details: {
+            ...prevPreferences['details'],
+            selectedRole: this.selectedRoleLevel
+          },
+          userId
+        }
+
+        const results = await this._commonService.setUserAttributes(userId, payload).toPromise();
+        this.router.navigate(['/summary-statistics'])
+      });
     }
     this.selectedRoleObject = rbacConfig.roles.filter((roleObj: any) => {
       return roleObj.value === this.selectedRoleLevel;
