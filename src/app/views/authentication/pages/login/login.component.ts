@@ -54,12 +54,12 @@ export class LoginComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let uiConfig = config;
     this.loginObj = uiConfig['loginObj'];
-    if(this.loginObj?.title === 'State Vidya Samiksha Kendra' && environment.config === 'NVSK') {
+    if (this.loginObj?.title === 'State Vidya Samiksha Kendra' && environment.config === 'NVSK') {
       this.loginObj.title = 'NDEAR Vidya Samiksha Kendra'
     }
 
     let user = localStorage.getItem('user_roles')?.includes('private_user') ? 'private' : 'public'
-    if(user === 'public') {
+    if (user === 'public') {
       localStorage.clear()
     }
 
@@ -123,7 +123,12 @@ export class LoginComponent implements OnInit {
         let results = await this._commonService.getUserAttributes(userId).toPromise();
         let preferences = results?.['details']
         let selectedRole = preferences?.['selectedRole']
-        if(preferences && preferences['selectedRole'] && (preferences['selectedRole'] == 1 || Object.keys(preferences).includes(String(selectedRole)))) {
+        if (userRoles.includes('admin')) {
+          this.preferences = { role: environment.config === 'VSK' ? 1 : 0, }
+          this.setStateDetails(this.preferences)
+          this.router.navigate(['/summary-statistics']);
+        }
+        else if (preferences && preferences['selectedRole'] && (preferences['selectedRole'] == 1 || Object.keys(preferences).includes(String(selectedRole)))) {
           this.preferences = {
             role: preferences['selectedRole'],
             ...preferences?.[selectedRole]
@@ -143,7 +148,7 @@ export class LoginComponent implements OnInit {
     else {
       this.error = true
     }
-    
+
 
   }
 

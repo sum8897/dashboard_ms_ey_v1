@@ -1,0 +1,38 @@
+<div class="metric-card-wrapper">
+    <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+        <div class="col-span-12">
+            <p class="program-title">Telemetry+</p>
+            <p class="program-desc"> The Unified District Information System for Education is an educational
+                management information system collected by school administrators on a yearly basis.</p>
+        </div>
+    </div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
+        (selectedTabChange)="onTabChanged($event)" appFullScreen>
+        <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
+            <app-telemetry-big-number
+                (exportReportData)="importBigNumberMetrics($event)"></app-telemetry-big-number>
+        </div>
+
+        <!-- <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
+            <app-implementation-status-tab [bigNumberMetrics]="bigNumberMetrics" *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
+        </mat-tab> -->
+
+        <mat-tab label='Telemetry' *ngIf="tabs.includes('Telemetry')">
+            <app-telemetry-tab [bigNumberMetrics]="bigNumberMetrics"
+                *ngIf="selectedTabLabel === 'Telemetry'"></app-telemetry-tab>
+        </mat-tab>
+
+        <!-- <mat-tab label='State Wise Performance' *ngIf="tabs.includes('State Wise Performance') && NVSK">
+            <app-state-wise-performance-tab
+                *ngIf="selectedTabLabel === 'State Wise Performance'"></app-state-wise-performance-tab>
+        </mat-tab>
+
+        <mat-tab label='Correlation' *ngIf="tabs.includes('Correlation')">
+            <app-correlation-tab *ngIf="selectedTabLabel === 'Correlation'"></app-correlation-tab>
+        </mat-tab> -->
+
+    </mat-tab-group>
+</div>
