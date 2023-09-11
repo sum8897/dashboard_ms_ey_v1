@@ -34,39 +34,41 @@
         </div>
 
         <div class="row-wrapper grid grid-cols-5 gap-4">
-            <div class="col-span-2 xmd:col-span-1 bignumber-container" id="bignumber2"
+            <div class="col-span-1 xmd:col-span-1 bignumber-container" id="bignumber2"
                 *ngFor="let bigNumberData of bigNumberMetrics; let index = index">
                 <div *ngIf="checkReport('telemetry_metrics', 'bigNumber' + (index + 1))" id="bignumber2">
                     <app-big-number [bigNumberReportData]="bigNumberData"></app-big-number>
                 </div>
             </div>
         </div>
-        <!-- <div class="row-wrapper grid">
+
+            <!-- <div class="row-wrapper grid">
             <div class="col-span-1 xmd:col-span-1 div-shadow" *ngIf="checkReport('district_wise_performance', 'map')"
                 id="map">
                 <app-telemetry-big-number #telemetryBigNumber
                     (exportReportData)="csvDownload($event)"></app-telemetry-big-number>
             </div>
         </div> -->
-        <div class="col-span-2 xmd:col-span-2 div-shadow"
-            *ngIf="checkReport('browserTypeWiseBarChart', 'barChart')" id="bar">
-            <app-browser-type-wise-bar-chart
-                #browserTypeWiseBarChartComponent></app-browser-type-wise-bar-chart>
-        </div>
-        <div class="col-span-2 xmd:col-span-2 div-shadow"
-            *ngIf="checkReport('deviceTypeWiseBarChart', 'barChart')" id="bar">
-            <app-device-type-wise-bar-chart #deviceTypeWiseBarChartComponent>
-            </app-device-type-wise-bar-chart>
-        </div>
-        <div class="col-span-2 xmd:col-span-2 div-shadow"
-            *ngIf="checkReport('popularLandingPagesBarChart', 'barChart')" id="bar">
-            <app-popular-landing-pages-bar-chart
-                #popularLandingPagesBarChartComponent></app-popular-landing-pages-bar-chart>
-        </div>
-        <div class="col-span-2 xmd:col-span-2 div-shadow"
-            *ngIf="checkReport('timeSpentPerPageBarChart', 'barChart')" id="bar">
-            <app-time-spent-per-page-bar-chart
-                #timeSpentPerPageBarChartComponent></app-time-spent-per-page-bar-chart>
+        <div class="row-wrapper grid grid-cols-4 gap-4">
+            <div class="col-span-1 xmd:col-span-2 div-shadow" *ngIf="checkReport('browserTypeWiseBarChart', 'barChart')"
+                id="bar">
+                <app-browser-type-wise-bar-chart #browserTypeWiseBarChartComponent></app-browser-type-wise-bar-chart>
+            </div>
+            <div class="col-span-1 xmd:col-span-2 div-shadow" *ngIf="checkReport('deviceTypeWiseBarChart', 'barChart')"
+                id="bar">
+                <app-device-type-wise-bar-chart #deviceTypeWiseBarChartComponent>
+                </app-device-type-wise-bar-chart>
+            </div>
+            <div class="col-span-1 xmd:col-span-2 div-shadow"
+                *ngIf="checkReport('popularLandingPagesBarChart', 'barChart')" id="bar">
+                <app-popular-landing-pages-bar-chart
+                    #popularLandingPagesBarChartComponent></app-popular-landing-pages-bar-chart>
+            </div>
+            <div class="col-span-1 xmd:col-span-2 div-shadow"
+                *ngIf="checkReport('timeSpentPerPageBarChart', 'barChart')" id="bar">
+                <app-time-spent-per-page-bar-chart
+                    #timeSpentPerPageBarChartComponent></app-time-spent-per-page-bar-chart>
+            </div>
         </div>
     </div>
 </div>
