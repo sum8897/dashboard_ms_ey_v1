@@ -4,6 +4,11 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { config } from '../../config/telemetry_config';
 import { environment } from 'src/environments/environment';
 import { TelemetryBigNumberComponent } from './reports/telemetry-big-number/telemetry-big-number.component';
+import { BrowserTypeWiseBarChartComponent } from './reports/browser-type-wise-bar-chart/browser-type-wise-bar-chart.component';
+import { DeviceTypeWiseBarChartComponent } from './reports/device-type-wise-bar-chart/device-type-wise-bar-chart.component';
+import { PopularLandingPagesBarChartComponent } from './reports/popular-landing-pages-bar-chart/popular-landing-pages-bar-chart.component';
+import { TimeSpentPerPageBarChartComponent } from './reports/time-spent-per-page-bar-chart/time-spent-per-page-bar-chart.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-telemetry-tab',
@@ -25,13 +30,19 @@ export class TelemetryTabComponent implements OnInit {
   reportsData: any = [];
   startDate: any;
   endDate: any;
-  defaultSelectedDays: any = 1;
-  hasTimeSeriesFilters: boolean = false;
-  hasCommonFilters: boolean = true;
+  defaultSelectedDays: any = 7;
+  hasTimeSeriesFilters: boolean = true;
+  hasCommonFilters: boolean = false;
   tabLabel: any = "telemetry";
   NVSK: boolean = true;
+  matLabel = 'Telemtery';
 
   @ViewChild('telemetryBigNumber') telemetryBigNumber: TelemetryBigNumberComponent;
+  @ViewChild('browserTypeWiseBarChartComponent') browserTypeWiseBarChartComponent: BrowserTypeWiseBarChartComponent;
+  @ViewChild('deviceTypeWiseBarChartComponent') deviceTypeWiseBarChartComponent: DeviceTypeWiseBarChartComponent;
+  @ViewChild('popularLandingPagesBarChartComponent') popularLandingPagesBarChartComponent: PopularLandingPagesBarChartComponent;
+  @ViewChild('timeSpentPerPageBarChartComponent') timeSpentPerPageBarChartComponent: TimeSpentPerPageBarChartComponent;
+
   @Input() bigNumberMetrics: any = [];
 
   constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -51,13 +62,24 @@ export class TelemetryTabComponent implements OnInit {
       if (this.hasCommonFilters) {
           this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
           this.telemetryBigNumber?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+          this.browserTypeWiseBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+          this.deviceTypeWiseBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+          this.popularLandingPagesBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+          this.timeSpentPerPageBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+
       }
-      if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
-          let endDate = new Date();
-          let days = endDate.getDate() - this.defaultSelectedDays;
-          let startDate = new Date();
-          startDate.setDate(days);
-          this.telemetryBigNumber?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+
+      if (this.startDate != undefined && this.endDate != undefined && this.hasTimeSeriesFilters) {
+        //   let endDate = new Date();
+        //   let days = endDate.getDate() - this.defaultSelectedDays;
+        //   let startDate = new Date();
+        //   startDate.setDate(days);
+        let startDate = moment(this.startDate).format('YYYY-MM-DD');
+        let endDate = moment(this.endDate).format('YYYY-MM-DD');
+          this.browserTypeWiseBarChartComponent?.getReportData({ timeSeriesValues: { startDate: startDate, endDate: endDate } });
+          this.deviceTypeWiseBarChartComponent?.getReportData({ timeSeriesValues: { startDate: startDate, endDate: endDate } });
+          this.popularLandingPagesBarChartComponent?.getReportData({ timeSeriesValues: { startDate:startDate, endDate:endDate } });
+          this.timeSpentPerPageBarChartComponent?.getReportData({ timeSeriesValues: { startDate: startDate, endDate: endDate } });
       }
   }
 
@@ -81,14 +103,24 @@ export class TelemetryTabComponent implements OnInit {
   filtersUpdated(filters: any) {
       this.reportsData = [];
       this.telemetryBigNumber?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+      this.browserTypeWiseBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+      this.deviceTypeWiseBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+      this.popularLandingPagesBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+      this.timeSpentPerPageBarChartComponent?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+
   }
 
   timeSeriesUpdated(event: any): void {
-      this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-      this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    this.startDate = moment(event.startDate).format('YYYY-MM-DD');
+    this.endDate = moment(event.endDate).format('YYYY-MM-DD');
       if (event?.startDate !== null && event?.endDate !== null) {
+        console.log(event);
           this.reportsData = [];
-          this.telemetryBigNumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+        //   this.telemetryBigNumber?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+          this.browserTypeWiseBarChartComponent?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+          this.deviceTypeWiseBarChartComponent?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+          this.popularLandingPagesBarChartComponent?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
+          this.timeSpentPerPageBarChartComponent?.getReportData({ timeSeriesValues: { startDate: this.startDate, endDate: this.endDate } });
       }
   }
 

@@ -1,8 +1,8 @@
 <div class="col-span-full tab-wrapper">
     <div class="filter-row grid grid-cols-10">
         <div class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10">
-            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" 
-                 [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
+            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)"
+                [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
         </div>
         <!-- <div class="download-button py-2 xmd:col-start-6 xmd:col-end-11 md:col-start-5 md:col-end-11 col-start-11 col-end-20 flex">
             <app-download-button [data]="reportsData"></app-download-button>
@@ -30,11 +30,10 @@
     </div> -->
     <div class="reports-row">
         <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
-            <app-telemetry-big-number
-                (exportReportData)="importBigNumberMetrics($event)"></app-telemetry-big-number>
+            <app-telemetry-big-number (exportReportData)="importBigNumberMetrics($event)"></app-telemetry-big-number>
         </div>
 
-        <div class="row-wrapper grid grid-cols-5 gap-4" >
+        <div class="row-wrapper grid grid-cols-5 gap-4">
             <div class="col-span-2 xmd:col-span-1 bignumber-container" id="bignumber2"
                 *ngFor="let bigNumberData of bigNumberMetrics; let index = index">
                 <div *ngIf="checkReport('telemetry_metrics', 'bigNumber' + (index + 1))" id="bignumber2">
@@ -42,12 +41,32 @@
                 </div>
             </div>
         </div>
-        <div class="row-wrapper grid">
+        <!-- <div class="row-wrapper grid">
             <div class="col-span-1 xmd:col-span-1 div-shadow" *ngIf="checkReport('district_wise_performance', 'map')"
                 id="map">
                 <app-telemetry-big-number #telemetryBigNumber
                     (exportReportData)="csvDownload($event)"></app-telemetry-big-number>
             </div>
+        </div> -->
+        <div class="col-span-2 xmd:col-span-2 div-shadow"
+            *ngIf="checkReport('browserTypeWiseBarChart', 'barChart')" id="bar">
+            <app-browser-type-wise-bar-chart
+                #browserTypeWiseBarChartComponent></app-browser-type-wise-bar-chart>
+        </div>
+        <div class="col-span-2 xmd:col-span-2 div-shadow"
+            *ngIf="checkReport('deviceTypeWiseBarChart', 'barChart')" id="bar">
+            <app-device-type-wise-bar-chart #deviceTypeWiseBarChartComponent>
+            </app-device-type-wise-bar-chart>
+        </div>
+        <div class="col-span-2 xmd:col-span-2 div-shadow"
+            *ngIf="checkReport('popularLandingPagesBarChart', 'barChart')" id="bar">
+            <app-popular-landing-pages-bar-chart
+                #popularLandingPagesBarChartComponent></app-popular-landing-pages-bar-chart>
+        </div>
+        <div class="col-span-2 xmd:col-span-2 div-shadow"
+            *ngIf="checkReport('timeSpentPerPageBarChart', 'barChart')" id="bar">
+            <app-time-spent-per-page-bar-chart
+                #timeSpentPerPageBarChartComponent></app-time-spent-per-page-bar-chart>
         </div>
     </div>
 </div>

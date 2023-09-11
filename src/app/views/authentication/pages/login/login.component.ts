@@ -128,6 +128,10 @@ export class LoginComponent implements OnInit {
           this.setStateDetails(this.preferences)
           this.router.navigate(['/summary-statistics']);
         }
+        else if(environment.config === 'NVSK') {
+          this.setStateDetails({})
+          this.router.navigate(['/summary-statistics']);
+        }
         else if (preferences && preferences['selectedRole'] && (preferences['selectedRole'] == 1 || Object.keys(preferences).includes(String(selectedRole)))) {
           this.preferences = {
             role: preferences['selectedRole'],

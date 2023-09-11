@@ -11,10 +11,10 @@
 <div class="custom-tab-group-wrapper">
     <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
         (selectedTabChange)="onTabChanged($event)" appFullScreen>
-        <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
+        <!-- <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
             <app-telemetry-big-number
                 (exportReportData)="importBigNumberMetrics($event)"></app-telemetry-big-number>
-        </div>
+        </div> -->
 
         <!-- <mat-tab label='Implementation Status' *ngIf="tabs.includes('Implementation Status')">
             <app-implementation-status-tab [bigNumberMetrics]="bigNumberMetrics" *ngIf="selectedTabLabel === 'Implementation Status'"></app-implementation-status-tab>
