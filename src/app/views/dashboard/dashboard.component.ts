@@ -29,11 +29,11 @@ export class DashboardComponent implements OnInit {
   // isNvsk = environment.config.toLocaleLowerCase() === 'nvsk';
   isNvsk = false;
   rbacDetails: any;
-  constructor(private spinner: NgxSpinnerService, private readonly _commonService: CommonService, private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService, private _authService: AuthenticationService,private _rbacService: RbacService) {
+  constructor(private spinner: NgxSpinnerService, private readonly _commonService: CommonService, private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService, private _authService: AuthenticationService, private _rbacService: RbacService) {
     this._router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    
+
     this.mySubscription = this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Trick the Router into believing it's last link wasn't previously loaded
@@ -49,8 +49,8 @@ export class DashboardComponent implements OnInit {
         password: environment.guestPassword
       }
       let response = await this._authService.login(data).toPromise();
-      if(response && response['access_token']) {
-        
+      if (response && response['access_token']) {
+
         localStorage.clear()
         const token = response['access_token']
         const refreshToken = response['refresh_token']
@@ -222,7 +222,8 @@ export class DashboardComponent implements OnInit {
   }
 
   setStateDetails(details) {
-    let state_id, stateName;
+    if (environment.config === 'VSK') {
+      let state_id, stateName;
       if (environment.stateCode) {
         state_id = StateCodes.indexOf(environment.stateCode)
         details.state = state_id
@@ -239,6 +240,13 @@ export class DashboardComponent implements OnInit {
         ...details,
         state_name: stateName,
       });
+    }
+    else {
+      this._rbacService.setRbacDetails({
+        ...details
+      });
+    }
+
   }
 
   ngOnDestroy() {
