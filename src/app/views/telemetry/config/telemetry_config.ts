@@ -17,8 +17,8 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "bigNumber1":"select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
-                        "bigNumber2":"select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
+                        "bigNumber1": "select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
+                        "bigNumber2": "select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
                     },
                     "level": "state"
                 }
@@ -30,8 +30,9 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1":"select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
-                        "bigNumber2":"select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "                    },
+                        "bigNumber1": "select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
+                        "bigNumber2": "select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
+                    },
                     "level": "district"
                 }
             },
@@ -71,7 +72,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultibar": true,
+                "metricLabelProp": "User Count",
+                "metricValueProp": "user_count",
                 "valueSuffix": "",
                 "yAxis": {
                     "title": "User Count"
@@ -80,12 +82,6 @@ export const config = {
                     "title": "Browsers",
                     "label": "browsername",
                     "value": "browsername",
-                    "metrics": [
-                        {
-                            "label": "User Count",
-                            "value": "user_count"
-                        },
-                    ]
                 }
             },
         }
@@ -117,7 +113,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultibar": true,
+                "metricLabelProp": "User Count",
+                "metricValueProp": "user_count",
                 "valueSuffix": "",
                 "yAxis": {
                     "title": "User Conunt"
@@ -126,15 +123,10 @@ export const config = {
                     "title": "Device Name",
                     "label": "devicename",
                     "value": "devicename",
-                    "metrics": [
-                        {
-                            "label": "User Count",
-                            "value": "user_count"
-                        },
-                    
-                    ]
+
                 }
             },
+
         }
     },
     popularLandingPagesBarChart: {
@@ -156,7 +148,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultibar": true,
+                "metricLabelProp": "% Target Achieved-Enrolment",
+                "metricValueProp": "target_achieved",
                 "valueSuffix": "%",
                 "yAxis": {
                     "title": ""
@@ -165,40 +158,8 @@ export const config = {
                     "title": " Programs",
                     "label": "program_name",
                     "value": "program_name",
-                    "metrics": [
-                        {
-                            "label": "% Target Achieved-Enrolment",
-                            "value": "target_achieved"
-                        },
-                        {
-                            "label": "% Total Target-Enrolment",
-                            "value": "total_target"
-                        }
-                    ]
                 }
             },
-            "stackedBarChart": {
-                "isMultibar": true,
-                "valueSuffix": "%",
-                "yAxis": {
-                    "title": "States",
-                    "label": "state_name",
-                    "value": "state_name",
-                },
-                "xAxis": {
-                    "title": "",
-                    "metrics": [
-                        {
-                            "label": "% Target Achieved-Enrolment",
-                            "value": "achieved_enrollments_per"
-                        },
-                        {
-                            "label": "% Total Target-Enrolment",
-                            "value": "expected_enrollments_per"
-                        }
-                    ]
-                }
-            }
         }
     },
     timeSpentPerPageBarChart: {
@@ -220,7 +181,8 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "isMultibar": true,
+                "metricLabelProp": "% Target Achieved-Enrolment",
+                "metricValueProp": "target_achieved",
                 "valueSuffix": "%",
                 "yAxis": {
                     "title": ""
@@ -229,38 +191,6 @@ export const config = {
                     "title": " Programs",
                     "label": "program_name",
                     "value": "program_name",
-                    "metrics": [
-                        {
-                            "label": "% Target Achieved-Enrolment",
-                            "value": "target_achieved"
-                        },
-                        {
-                            "label": "% Total Target-Enrolment",
-                            "value": "total_target"
-                        }
-                    ]
-                }
-            },
-            "stackedBarChart": {
-                "isMultibar": true,
-                "valueSuffix": "%",
-                "yAxis": {
-                    "title": "States",
-                    "label": "state_name",
-                    "value": "state_name",
-                },
-                "xAxis": {
-                    "title": "",
-                    "metrics": [
-                        {
-                            "label": "% Target Achieved-Enrolment",
-                            "value": "achieved_enrollments_per"
-                        },
-                        {
-                            "label": "% Total Target-Enrolment",
-                            "value": "expected_enrollments_per"
-                        }
-                    ]
                 }
             }
         }
