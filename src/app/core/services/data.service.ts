@@ -173,7 +173,8 @@ export class DataService {
                 },
                 ticks: {
                   callback: function (value, index, values) {
-                    if (type !== 'horizontal') {
+                    console.log(value);
+                    if (type !== 'horizontal' && typeof value == 'string') {
                       let newValue = value?.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
                       if (screen.width <= 768) {
                         return newValue.substr(0, 8) + '...';

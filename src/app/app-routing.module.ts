@@ -43,6 +43,15 @@ if (environment.loginNeeded) {
             )
         },
         {
+          path: 'telemetry',
+          loadChildren: () =>
+          import('./views/telemetry/telemetry.module').then(
+          (module) => module.TelemetryModule
+          ),
+          canLoad: [AuthGuard],
+          data: { nameSpace: 'telemetry' }
+          },
+        {
           path: 'teacher-attendance',
           loadChildren: () =>
             import('./views/teacher-attendance/teacher-attendance.module').then(
@@ -168,6 +177,15 @@ else {
         //       (module) => module.StudentAttendanceModule
         //     )
         // },
+        {
+          path: 'telemetry',
+          loadChildren: () =>
+          import('./views/telemetry/telemetry.module').then(
+          (module) => module.TelemetryModule
+          ),
+          canLoad: [AuthGuard],
+          data: { nameSpace: 'telemetry' }
+          },
         {
           path: 'teacher-attendance',
           loadChildren: () =>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate, CanLoad {
       if(allowedUser && !userRoles?.includes(allowedUser) ) {
         programAccess = false;
       }
-    return programAccess && this.isUserLoggedIn();
+    return programAccess && this.isUserLoggedIn() && environment.config === 'VSK';
   }
 
   canLoad(

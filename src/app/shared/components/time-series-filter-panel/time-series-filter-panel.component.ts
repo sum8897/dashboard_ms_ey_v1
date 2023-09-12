@@ -19,7 +19,10 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
   prevStartDate: any;
   prevEndDate: any;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder) {}
+  
+
+  ngOnInit(): void {
     let startDate, endDate;
     this.range = this.formBuilder.group({
       start: [startDate],
@@ -45,11 +48,6 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
         }, 100);
       }
     });
-
-  }
-  
-
-  ngOnInit(): void {
   }
 
   private emitTimeSeriesUpdated(startDate: any, endDate: any): void {
