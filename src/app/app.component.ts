@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'src/environments/environment';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { AppConfig } from './app.config';
 import { HttpClient } from '@angular/common/http';
+import { PageTrackerService } from './core/services/page-tracker.service';
 declare const gtag: Function; // <------------Important: the declartion for gtag is required!
 declare var dataLayer: Array<any>;
 
@@ -19,7 +19,7 @@ export class AppComponent {
   title = 'cQube National';
   loadingDataImg: boolean = false;
   constructor(private translate: TranslateService, private titleService: Title,
-    private router: Router, private activatedRoute: ActivatedRoute, public config: AppConfig, private http: HttpClient) {
+    private router: Router, private activatedRoute: ActivatedRoute, public config: AppConfig, private http: HttpClient, private pageTrackerService: PageTrackerService) {
     translate.setDefaultLang('en');
     translate.use('en');
     /** START : Code to Track Page View using gtag.js */
@@ -41,18 +41,20 @@ export class AppComponent {
     //   })
     // })
 
-    // //Add dynamic title for selected pages - Start
-    // router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd) {
-    //     var title = this.getTitle(router.routerState, router.routerState.root).join(' > ');
-    //     titleService.setTitle(title);
-    //   }
-    // });
-
+    //Add dynamic title for selected pages - Start
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (event.url !== '/login') {
+          this.pageTrackerService.onPageChange(event);
+        }
+      }
+    });
   }
+
   ngOnInit() {
     window.scrollTo(0, 0);
   }
+
   // collect that title data properties from all child routes
   getTitle(state, parent) {
     var data = [];
@@ -88,7 +90,7 @@ export class AppComponent {
     }
   }
 
- async grabTheTrackIds(trackIds) {
+  async grabTheTrackIds(trackIds) {
     for (const [key, value] of Object.entries(trackIds)) {
       const gaTrackId = value;
       let customGtagScriptEle = document.createElement('script');
@@ -107,5 +109,10 @@ export class AppComponent {
     }
   }
   
-
+  @HostListener('window:beforeunload', ['$event'])
+  handleUnload(event: Event): void {
+    if (this.router.url !== '/login') {
+      this.pageTrackerService.onPageChange(event);
+    }
+  }
 }

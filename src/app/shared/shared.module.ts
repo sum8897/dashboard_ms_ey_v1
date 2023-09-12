@@ -56,6 +56,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { CriteriaComponent } from './components/criteria/criteria.component';
 import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { ClickDirective } from './directives/click.directive';
+import { ChangeDirective } from './directives/change.directive';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -119,13 +121,15 @@ const DECLARATIONS = [
   CriteriaComponent,
   MaterialHeatChartDrilldownTableComponent,
   SearchFilterPipe,
-  SearchBarComponent
+  SearchBarComponent,
+  ClickDirective,
+  ChangeDirective
 ];
 
 @NgModule({
   declarations: [
     DECLARATIONS,
-    BreadcrumbComponentComponent,
+    BreadcrumbComponentComponent
   ],
   imports: [
     CommonModule,

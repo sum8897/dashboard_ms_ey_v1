@@ -56,6 +56,7 @@
     "ng-circle-progress": "^1.6.0",
     "ngx-bootstrap": "^9.0.0",
     "ngx-daterangepicker-material": "^6.0.4",
+    "ngx-device-detector": "^4.0.1",
     "ngx-spinner": "^14.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

@@ -2,11 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+export const environment = {  
   production: false,
-  google_analytics_tracking_id: "UA-260554959-3",
   // apiURL: 'https://qr.staging.cqube.samagra.io',
   apiURL: 'http://localhost:3008',
+  // apiURL: 'http://192.168.1.159:3008',
   stateCode: "NA",
   numberFormat: {
     reports: {
@@ -15,7 +15,9 @@ export const environment = {
     }
   },
   config: "NVSK",
-
+  loginNeeded: true,
+  guestUsername: "guest-user",
+  guestPassword: "guest"
 };
 
 /*
