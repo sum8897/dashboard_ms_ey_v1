@@ -29,7 +29,7 @@
         </div>
     </div> -->
     <div class="reports-row">
-        <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
+        <!-- <div *ngIf="checkReport('telemetry_metrics', 'bigNumber1')" id="bignumber1">
             <app-telemetry-big-number (exportReportData)="importBigNumberMetrics($event)"></app-telemetry-big-number>
         </div>
 
@@ -40,7 +40,7 @@
                     <app-big-number [bigNumberReportData]="bigNumberData"></app-big-number>
                 </div>
             </div>
-        </div>
+        </div> -->
 
             <!-- <div class="row-wrapper grid">
             <div class="col-span-1 xmd:col-span-1 div-shadow" *ngIf="checkReport('district_wise_performance', 'map')"
@@ -50,21 +50,28 @@
             </div>
         </div> -->
         <div class="row-wrapper grid grid-cols-4 gap-4">
-            <div class="col-span-1 xmd:col-span-2 div-shadow" *ngIf="checkReport('browserTypeWiseBarChart', 'barChart')"
+            <div class="col-span-4 xmd:col-span-2 div-shadow" id="bignumber"
+                *ngIf="checkReport('active_users_trendline', 'table')">
+                <!-- <app-tas-average-attendance-bignumber  #averageAttendanceBigNumber></app-tas-average-attendance-bignumber> -->
+                <app-telemetry-active-users-big-number #activeUsersBignumber></app-telemetry-active-users-big-number>
+                <hr>
+                <app-telemetry-active-users-trendline [chartConfig]="trendLineConfig" #activeUsersTrendline></app-telemetry-active-users-trendline>
+            </div>
+            <div class="col-span-4 xmd:col-span-2 div-shadow" *ngIf="checkReport('browserTypeWiseBarChart', 'barChart')"
                 id="bar">
                 <app-browser-type-wise-bar-chart #browserTypeWiseBarChartComponent></app-browser-type-wise-bar-chart>
             </div>
-            <div class="col-span-1 xmd:col-span-2 div-shadow" *ngIf="checkReport('deviceTypeWiseBarChart', 'barChart')"
+            <div class="col-span-4 xmd:col-span-2 div-shadow" *ngIf="checkReport('deviceTypeWiseBarChart', 'barChart')"
                 id="bar">
                 <app-device-type-wise-bar-chart #deviceTypeWiseBarChartComponent>
                 </app-device-type-wise-bar-chart>
             </div>
-            <div class="col-span-1 xmd:col-span-2 div-shadow"
+            <div class="col-span-4 xmd:col-span-2 div-shadow"
                 *ngIf="checkReport('popularLandingPagesBarChart', 'barChart')" id="bar">
                 <app-popular-landing-pages-bar-chart
                     #popularLandingPagesBarChartComponent></app-popular-landing-pages-bar-chart>
             </div>
-            <div class="col-span-1 xmd:col-span-2 div-shadow"
+            <div class="col-span-4 xmd:col-span-2 div-shadow"
                 *ngIf="checkReport('timeSpentPerPageBarChart', 'barChart')" id="bar">
                 <app-time-spent-per-page-bar-chart
                     #timeSpentPerPageBarChartComponent></app-time-spent-per-page-bar-chart>
