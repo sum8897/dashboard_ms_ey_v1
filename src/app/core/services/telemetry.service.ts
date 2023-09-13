@@ -14,7 +14,7 @@ export class TelemetryService {
   constructor(private _http: HttpClient, private _browserDetectionService: BrowserDetectionService, private _deviceDetectionService: DeviceDetectionService) { }
 
   saveTelemetry(eventData: any): Observable<any>  {
-    let data = {
+    let data = [{
       date: formatDateToDDMMYY(new Date()),
       timestamp: new Date().getTime(),
       userId: localStorage.getItem('user_id'),
@@ -22,8 +22,8 @@ export class TelemetryService {
       userLocation: "",
       browserType: this._browserDetectionService.getBrowserType(),
       ...eventData
-    };
+    }];
 
-    return this._http.post<any>(`${environment.apiURL}/captureTelemetry`, data);
+    return this._http.post<any>(`${environment.apiURL}/captureTelemetry`, {data, isTelemetryWritingEnd: false});
   }
 }
