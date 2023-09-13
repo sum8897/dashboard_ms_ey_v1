@@ -17,8 +17,8 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
-                        "bigNumber2": "select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
+                        "bigNumber1": "select count(distinct userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
+                        "bigNumber2": "select count(distinct userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
                     },
                     "level": "state"
                 }
@@ -30,8 +30,8 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select count(userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
-                        "bigNumber2": "select count(userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
+                        "bigNumber1": "select count(distinct userid) as daily_user_count from datasets.telemetry_usercount_daily_users where date = current_date",
+                        "bigNumber2": "select count(distinct userid) as weekly_user_count from datasets.telemetry_usercount_daily_users where date between current_date - interval '7 days' and current_date "
                     },
                     "level": "district"
                 }
@@ -54,7 +54,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
+                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
                     },
                     "level": "district"
                 }
@@ -64,7 +64,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
+                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
                     },
                     "level": "district"
                 }
@@ -95,7 +95,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
+                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
                     },
                     "level": "district"
                 }
@@ -105,7 +105,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
+                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
                     },
                     "level": "district"
                 }
@@ -195,5 +195,90 @@ export const config = {
             }
         }
     },
-
+    active_users_trendline: {
+        "label": "Telemetry",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "timeSeriesQueries": {
+                    "table": "select count(distinct userid) as user_count, date from datasets.telemetry_usercount_daily_users where date between startDate and endDate group by date order by date"
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select count(distinct userid) as user_count, date from datasets.telemetry_usercount_daily_users where date between startDate and endDate group by date order by date"
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": "select count(distinct userid) as user_count, date from datasets.telemetry_usercount_daily_users where date between startDate and endDate group by date order by date"
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select count(distinct userid) as user_count, date from datasets.telemetry_usercount_daily_users where date between startDate and endDate group by date order by date"
+                    },
+                    "level": "school"
+                }
+            }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "date",
+                        property: "date",
+                        class: "text-center"
+                    },
+                    {
+                        name: "avarage",
+                        property: "user_count",
+                        class: "text-center",
+                    }
+                ],
+            }
+        }
+    },
+    active_users_bignumber: {
+        "label": "Average Teachers Present",
+        "filters": [
+            {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "timeSeriesQueries": {
+                    "bigNumber": "select count(distinct userid) as user_count from datasets.telemetry_usercount_daily_users where date between startDate and endDate",
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select count(distinct userid) as user_count from datasets.telemetry_usercount_daily_users where date between startDate and endDate",
+                    },
+                    "level": "state"
+                }
+            },
+            {
+                "name": "State",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": "select count(distinct userid) as user_count from datasets.telemetry_usercount_daily_users where date between startDate and endDate",
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select count(distinct userid) as user_count from datasets.telemetry_usercount_daily_users where date between startDate and endDate",
+                    },
+                    "level": "district"
+                }
+            }
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Total Active Users",
+                "valueSuffix": '',
+                "property": 'user_count'
+            }
+        }
+    },
 }
