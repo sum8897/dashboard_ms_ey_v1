@@ -11,6 +11,8 @@ import { BrowserTypeWiseBarChartComponent } from './pages/telemetry-tab/reports/
 import { DeviceTypeWiseBarChartComponent } from './pages/telemetry-tab/reports/device-type-wise-bar-chart/device-type-wise-bar-chart.component';
 import { PopularLandingPagesBarChartComponent } from './pages/telemetry-tab/reports/popular-landing-pages-bar-chart/popular-landing-pages-bar-chart.component';
 import { TimeSpentPerPageBarChartComponent } from './pages/telemetry-tab/reports/time-spent-per-page-bar-chart/time-spent-per-page-bar-chart.component';
+import { TelemetryActiveUsersTrendlineComponent } from './pages/telemetry-tab/reports/telemetry-active-users-trendline/telemetry-active-users-trendline.component';
+import { TelemetryActiveUsersBigNumberComponent } from './pages/telemetry-tab/reports/telemetry-active-users-big-number/telemetry-active-users-big-number.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { TimeSpentPerPageBarChartComponent } from './pages/telemetry-tab/reports
     BrowserTypeWiseBarChartComponent,
     DeviceTypeWiseBarChartComponent,
     PopularLandingPagesBarChartComponent,
-    TimeSpentPerPageBarChartComponent
+    TimeSpentPerPageBarChartComponent,
+    TelemetryActiveUsersTrendlineComponent,
+    TelemetryActiveUsersBigNumberComponent
   ],
   imports: [
     DashletModule.forRoot({
