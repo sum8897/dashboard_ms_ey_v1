@@ -102,21 +102,29 @@ export class WrapperService {
     return filters;
   }
 
-  runQuery(query: string): any {
+  runQuery(query: string, noSpinner?: boolean): any {
     return new Promise((resolve, reject) => {
-      this.spinner.show();
+      if(!noSpinner) {
+        this.spinner.show();
+      }
       try {
         this._commonService.getReportDataNew(query).subscribe((res: any) => {
-          this.spinner.hide()
+          if(!noSpinner) {
+            this.spinner.hide()
+          }
           resolve(res);
         },
           (error) => {
-            this.spinner.hide()
+            if(!noSpinner) {
+              this.spinner.hide()
+            }
             resolve(undefined)
           },
         );
       } catch (error) {
-        this.spinner.hide()
+        if(!noSpinner) {
+          this.spinner.hide()
+        }
         reject(error)
       }
     })

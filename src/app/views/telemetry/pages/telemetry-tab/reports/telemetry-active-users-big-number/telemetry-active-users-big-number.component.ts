@@ -152,7 +152,7 @@ export class TelemetryActiveUsersBigNumberComponent implements OnInit, OnDestroy
   // }
 
   ngOnDestroy(): void {
-    this.drillDownSubscription.unsubscribe()
+    // this.drillDownSubscription.unsubscribe()
   }
 
 }
