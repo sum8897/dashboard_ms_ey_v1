@@ -277,7 +277,7 @@ export class TelemetryActiveUsersTrendlineComponent implements OnInit, OnDestroy
       chart.destroy();
       chart = null;
     }
-    this.drillDownSubscription.unsubscribe()
+    // this.drillDownSubscription.unsubscribe()
   }
 }
 

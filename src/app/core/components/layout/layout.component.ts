@@ -263,7 +263,7 @@ export class LayoutComponent implements OnInit {
   }
 
   updateButtons() {
-    this.privateUserLoggedIn = this._authService.isUserLoggedIn() && localStorage.getItem('user_roles').includes('private_user')
+    this.privateUserLoggedIn = this._authService.isUserLoggedIn() && ( localStorage.getItem('user_roles').includes('private_user') || localStorage.getItem('user_roles').includes('admin'))
   }
 
   signOut() {

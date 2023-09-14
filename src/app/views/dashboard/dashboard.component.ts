@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  checkRbacLevel() {
+  async checkRbacLevel() {
     const programIds = Object.keys(configFiles);
     const hierarchyLevels = {};
     programIds.forEach(key => {
@@ -106,29 +106,28 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+    let promises = []
+    this.spinner.show();
+    this.dashboardMenu = [];
+    let promise = await this._commonService.getDashboardMetrics().toPromise()
+    let menuData = promise['data']
+    for (let i = 0; i < menuData?.length; i++) {
+      if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
 
-    this._commonService.getDashboardMetrics().subscribe(async (menuResult: any) => {
-      this.dashboardMenu = [];
-      let rbacDetails;
-      let menuData = menuResult?.data
-      for (let i = 0; i < menuData?.length; i++) {
-        if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
-
-          let menuToDisplay: IMenuItem | any = {};
-          menuToDisplay.title = menuData[i].programName;
-          menuToDisplay.navigationURL = menuData[i].navigationUrl;
-          menuToDisplay.icon = menuData[i].imageUrl;
-          menuToDisplay.tooltip = menuData[i].tooltip;
-          this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
-            .then(d => {
-              menuToDisplay.metrics = d;
-            });
-          this.dashboardMenu.push(menuToDisplay);
-
-        }
+        let menuToDisplay: IMenuItem | any = {};
+        menuToDisplay.title = menuData[i].programName;
+        menuToDisplay.navigationURL = menuData[i].navigationUrl;
+        menuToDisplay.icon = menuData[i].imageUrl;
+        menuToDisplay.tooltip = menuData[i].tooltip;
+        let results: any = this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
+        promises.push(results)
+        menuToDisplay.metrics = results
+        this.dashboardMenu.push(menuToDisplay);
       }
+    }
+    Promise.allSettled(promises).then(() => {
+      this.spinner.hide();
     })
-
   }
 
   getDashboardMetrics(programConfig: any, rbacDetails: any) {
@@ -194,7 +193,7 @@ export class DashboardComponent implements OnInit {
                 }
                 else if (metricQueriesKeys[k].indexOf('bigNumber') > -1) {
                   let query = parseRbacFilter(metricQueries[metricQueriesKeys[k]], rbacDetails)
-                  let res = await this._wrapperService.runQuery(query)
+                  let res = await this._wrapperService.runQuery(query, true)
                   if (res && res.length > 0) {
                     let metricData = {
                       value: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k]] : String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
