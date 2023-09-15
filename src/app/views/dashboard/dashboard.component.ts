@@ -119,15 +119,16 @@ export class DashboardComponent implements OnInit {
         menuToDisplay.navigationURL = menuData[i].navigationUrl;
         menuToDisplay.icon = menuData[i].imageUrl;
         menuToDisplay.tooltip = menuData[i].tooltip;
-        let results: any = this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
+        let results: any = await this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
         promises.push(results)
         menuToDisplay.metrics = results
         this.dashboardMenu.push(menuToDisplay);
       }
     }
-    Promise.allSettled(promises).then(() => {
-      this.spinner.hide();
-    })
+    // Promise.allSettled(promises).then(() => {
+    //   this.spinner.hide();
+    // })
+    this.spinner.hide();
   }
 
   getDashboardMetrics(programConfig: any, rbacDetails: any) {
