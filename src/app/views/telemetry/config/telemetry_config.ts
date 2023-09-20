@@ -54,7 +54,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
+                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6dhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
                     },
                     "level": "district"
                 }
@@ -64,7 +64,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6vhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
+                        "barChart": "select count(distinct userid) as user_count, browsername from datasets.telemetry_browserscount_zgr6dhegehrjbhb__cx0s where date between startDate and endDate group by browsername",
                     },
                     "level": "district"
                 }
@@ -95,7 +95,7 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
+                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynn9eshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
                     },
                     "level": "district"
                 }
@@ -105,7 +105,7 @@ export const config = {
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynndeshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
+                        "barChart": "select count(distinct userid) as user_count, devicename from datasets.telemetry_devicescount_ynn9eshvzvtuxwh6dzyw where date between startDate and endDate group by devicename",
                     },
                     "level": "district"
                 }
