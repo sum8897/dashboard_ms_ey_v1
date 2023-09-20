@@ -10,20 +10,20 @@ export class DomEventTrackerService {
   constructor(private readonly _router: Router, private readonly _telemetryService: TelemetryService) { }
 
   onClick(event): void {
-    const { pageName, eventName } = event;
+    const { pagename, eventName } = event;
     this._telemetryService.saveTelemetry({
-      pageName: pageName ? pageName : this._router.url?.slice(1),
-      pageEvent: "click",
-      pageEventName: eventName ? eventName : "filter"
+      pagename: pagename ? pagename : this._router.url?.slice(1),
+      pageevent: "click",
+      pageeventname: eventName ? eventName : "filter"
     }).subscribe(res => console.log('telemetry saved!!!'));;
   }
 
   onChange(event): void {
-    const { pageName, eventName } = event;
+    const { pagename, eventName } = event;
     this._telemetryService.saveTelemetry({
-      pageName: pageName ? pageName : this._router.url?.slice(1),
-      pageEvent: "change",
-      pageEventName: eventName ? eventName : "filter"
+      pagename: pagename ? pagename : this._router.url?.slice(1),
+      pageevent: "change",
+      pageeventname: eventName ? eventName : "filter"
     }).subscribe(res => console.log('telemetry saved!!!'));;
   }
 }
