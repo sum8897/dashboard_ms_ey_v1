@@ -88,7 +88,7 @@ export class PopupOptionsComponent implements OnInit {
     // }
     this.showOptionsvalue = false;
     let headerText = `${this.title.dashboard_header2_title ? this.title.dashboard_header2_title : this.stateName}  - VIDYA SAMIKSHA KENDRA ('VSK')`
-    let headerImgUrl = '../../../../../assets/images/MoE.png';
+    let headerImgUrl = 'assets/images/MoE.png';
     const headerImg = new Image();
     headerImg.src = headerImgUrl;
     // Wait for the header image to load
