@@ -18,7 +18,7 @@ export class PopularLandingPagesBarChartComponent implements OnInit {
   reportData: any = {
     reportName: "Telemetry"
   };
-  title: string = 'popularLandingPagesBarChart'
+  title: string = 'Popular Landing Pages'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;

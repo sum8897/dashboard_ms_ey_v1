@@ -18,7 +18,7 @@ export class DeviceTypeWiseBarChartComponent implements OnInit {
   reportData: any = {
     reportName: "Telemetry"
   };
-  title: string = 'deviceTypeWiseBarChart'
+  title: string = 'Device Type Wise User Count'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
