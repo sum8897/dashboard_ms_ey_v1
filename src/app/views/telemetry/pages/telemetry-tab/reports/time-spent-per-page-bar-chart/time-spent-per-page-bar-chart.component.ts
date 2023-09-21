@@ -18,7 +18,7 @@ export class TimeSpentPerPageBarChartComponent implements OnInit {
   reportData: any = {
     reportName: "Telemetry"
   };
-  title: string = 'Telemetry'
+  title: string = 'Time Spent Per Page'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;

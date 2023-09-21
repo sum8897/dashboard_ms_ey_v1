@@ -17,7 +17,7 @@ export class BrowserTypeWiseBarChartComponent implements OnInit {
   reportData: any = {
     reportName: "Telemetry"
   };
-  title: string = 'browserTypeWiseBarChart'
+  title: string = 'Browser Type Wise User Count'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;

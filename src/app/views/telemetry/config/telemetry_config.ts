@@ -76,6 +76,7 @@ export const config = {
                 "metricValueProp": "user_count",
                 "valueSuffix": "",
                 "yAxis": {
+                    "onlyIntegers": true,
                     "title": "User Count"
                 },
                 "xAxis": {
@@ -117,6 +118,7 @@ export const config = {
                 "metricValueProp": "user_count",
                 "valueSuffix": "",
                 "yAxis": {
+                    "onlyIntegers": true,
                     "title": "User Conunt"
                 },
                 "xAxis": {
@@ -134,13 +136,21 @@ export const config = {
         "defaultLevel": "state",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "barChart": "select sum(sum) as pageeventcount, pagename from datasets.telemetry_pageeventcount_OAYGGB8XYHFocwRwb255 where pageevent = 'onLoad' and date between startDate and endDate group by pagename order by pageeventcount desc",
+                    },
+                    "level": "state"
+                }
+            },
+            {
                 "name": "State",
-                "labelProp": "state_name",
-                "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select t1.program_name, round(cast(avg(t1.sum) as numeric),2) as target_achieved, round(cast(avg(t1.sum) as numeric) + (cast(avg(t2.sum) as numeric)),2) as total_target from datasets.nishtha_perc_target_achieved_enrolment_programnishtha as t1 join datasets.nishtha_perc_target_remaining_enrolment_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name",
+                        "barChart": "select sum(sum) as pageeventcount, pagename from datasets.telemetry_pageeventcount_OAYGGB8XYHFocwRwb255 where pageevent = 'onLoad' and date between startDate and endDate group by pagename order by pageeventcount desc",
                     },
                     "level": "district"
                 }
@@ -148,16 +158,17 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "% Target Achieved-Enrolment",
-                "metricValueProp": "target_achieved",
-                "valueSuffix": "%",
+                "metricLabelProp": "Page Visits",
+                "metricValueProp": "pageeventcount",
+                "valueSuffix": "",
                 "yAxis": {
-                    "title": ""
+                    "onlyIntegers": true,
+                    "title": "Page Visits"
                 },
                 "xAxis": {
-                    "title": " Programs",
-                    "label": "program_name",
-                    "value": "program_name",
+                    "title": "Page Name",
+                    "label": "pagename",
+                    "value": "pagename",
                 }
             },
         }
@@ -167,13 +178,21 @@ export const config = {
         "defaultLevel": "state",
         "filters": [
             {
+                "name": "National",
+                "hierarchyLevel": "0",
+                "actions": {
+                    "queries": {
+                        "barChart": "select sum(avg) as timespent, pagename from datasets.telemetry_timespent_daily_pagenames where date between startDate and endDate group by pagename",
+                    },
+                    "level": "state"
+                }
+            },
+            {
                 "name": "State",
-                "labelProp": "state_name",
-                "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "actions": {
                     "queries": {
-                        "barChart": "select t1.program_name, round(cast(avg(t1.sum) as numeric),2) as target_achieved, round(cast(avg(t1.sum) as numeric) + (cast(avg(t2.sum) as numeric)),2) as total_target from datasets.nishtha_perc_target_achieved_enrolment_programnishtha as t1 join datasets.nishtha_perc_target_remaining_enrolment_programnishtha as t2 on t1.program_name = t2.program_name group by t1.program_name",
+                        "barChart": "select sum(avg) as timespent, pagename from datasets.telemetry_timespent_daily_pagenames where date between startDate and endDate group by pagename",
                     },
                     "level": "district"
                 }
@@ -181,16 +200,17 @@ export const config = {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "% Target Achieved-Enrolment",
-                "metricValueProp": "target_achieved",
-                "valueSuffix": "%",
+                "metricLabelProp": "Time spent per page (in minutes)",
+                "metricValueProp": "timespent",
+                "valueSuffix": "",
                 "yAxis": {
-                    "title": ""
+                    "onlyIntegers": true,
+                    "title": "Time spent per page (in minutes)"
                 },
                 "xAxis": {
-                    "title": " Programs",
-                    "label": "program_name",
-                    "value": "program_name",
+                    "title": "Pages",
+                    "label": "pagename",
+                    "value": "pagename",
                 }
             }
         }
