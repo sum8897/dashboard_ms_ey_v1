@@ -278,7 +278,7 @@ a.zocial  {
     }
     .login-pf body {
         /* background:  url("../../assets/img/Group.svg"); */
-        background-image: url("/assets/images/Group.svg");
+        background-image: url("~src/assets/images/Group.svg");
         height:100%;
         width: 100%;
         background-repeat: no-repeat;
@@ -298,7 +298,7 @@ a.zocial  {
 @media (max-width: 767px) {
 
     .login-pf body {
-        background:  url("/assets/images/Group.svg");
+        background:  url("~src/assets/images/Group.svg");
         height:100%;
         width: 100%;
         background-repeat: no-repeat;
@@ -547,7 +547,7 @@ input:focus {
 }
 
    #background{
-    background: url("/assets/images/Group.svg") no-repeat center center fixed !important;
+    background: url("~src/assets/images/Group.svg") no-repeat center center fixed !important;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
