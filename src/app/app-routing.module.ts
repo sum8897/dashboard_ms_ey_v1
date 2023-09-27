@@ -12,7 +12,7 @@ var routes: Routes = [];
 if (environment.loginNeeded) {
   routes = [
     {
-      path: '', redirectTo: `summary-statistics`, pathMatch: 'full'
+      path: '/', redirectTo: `summary-statistics`, pathMatch: 'full'
     },
     {
       path: 'public', redirectTo: 'summary-statistics', pathMatch: 'full'

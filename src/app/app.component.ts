@@ -20,8 +20,8 @@ export class AppComponent {
   loadingDataImg: boolean = false;
   constructor(private translate: TranslateService, private titleService: Title,
     private router: Router, private activatedRoute: ActivatedRoute, public config: AppConfig, private http: HttpClient, private pageTrackerService: PageTrackerService) {
-    translate.setDefaultLang('en');
-    translate.use('en');
+    // translate.setDefaultLang('en');
+    // translate.use('en');
     /** START : Code to Track Page View using gtag.js */
 
     // this.http.get('assets/config/globalconfig.json').pipe(

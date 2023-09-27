@@ -160,6 +160,12 @@ export class DataService {
                       let newValue = value?.substring(0, Number(yAxis?.limitCharacters)) + '...'
                       return newValue
                     }
+                    else if (yAxis?.onlyIntegers) {
+                      if (value % 1 === 0) {
+                        return value;
+                      }
+                      else return null
+                    }
                     else {
                       return value
                     }
@@ -175,7 +181,7 @@ export class DataService {
                   callback: function (value, index, values) {
                     console.log(value);
                     if (type !== 'horizontal' && typeof value == 'string') {
-                      let newValue = value?.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                      let newValue = value?.split('_').map((word: any) => word[0]?.toUpperCase() + word?.substring(1)).join(' ')
                       if (screen.width <= 768) {
                         return newValue.substr(0, 8) + '...';
                       } else {
