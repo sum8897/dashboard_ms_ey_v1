@@ -14,8 +14,7 @@ import {config as ncf } from '../../views/ncf/config/ncf_config';
 import {config as quiz} from '../../views/ncert-quiz/config/quiz_config';
 import{config as microImprovement} from '../../views/micro-improvements/config/microimprovements_config';
 import {config as nipunBharatConfig } from '../../views/nipun-bharat/config/nipun_bharat_config';
-
-
+import {config as pmShriConfig } from '../../views/pm-shri/config/pm_shri_config';
 
 export const configFiles = {
   studentAttendance: studentAttendaceConfig,
@@ -33,7 +32,8 @@ export const configFiles = {
   ncf:ncf,
   quiz:quiz,
   microImprovement:microImprovement,
-  nipunBharat:nipunBharatConfig
+  nipunBharat:nipunBharatConfig,
+  pmShri: pmShriConfig
 };
 
 export const programFolderNames = {
@@ -50,6 +50,7 @@ export const programFolderNames = {
   ncf:'ncf',
   quiz:'quiz',
   microImprovement:'microImprovement',
+  pmShri: 'pm_shri'
 }
 
 export const stateProgramsFolderNames = {
@@ -66,4 +67,5 @@ export const stateProgramsFolderNames = {
   ncf:'',
   quiz:'',
   microImprovement:'',
+  pmShri: ''
 }
