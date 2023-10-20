@@ -310,6 +310,10 @@ export class DataService {
               tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
 
+            if (indicator) {
+              row.indicator = Number(row[indicator]);
+            }
+
             return row;
           }),
           options: {
