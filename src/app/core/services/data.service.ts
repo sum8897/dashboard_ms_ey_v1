@@ -311,7 +311,7 @@ export class DataService {
             };
 
             if (indicator) {
-              row.indicator = Number(row[indicator]);
+              row.indicator = isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]);
             }
 
             return row;
