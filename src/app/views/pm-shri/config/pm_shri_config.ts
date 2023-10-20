@@ -114,11 +114,14 @@ export const config = {
                 "hierarchyLevel": "0",
                 "actions": {
                     "queries": {
-                        "bigNumber1": "select SUM(count) as total_states from datasets.pm_shri_started_state",
-                        "bigNumber2": "select SUM(sum) as total_schools from datasets.pm_shri_total_schools_state",
-                        "bigNumber3": "select sum(sum) as only_boys_schools from datasets.pm_shri_pm_shri_category_state0categorypmshri where category_name = 'only_boys_school'",
-                        "bigNumber4": "select sum(sum) as only_girls_schools from datasets.pm_shri_pm_shri_category_state0categorypmshri where category_name = 'only_girls_school'",
-                        "bigNumber5": "select sum(sum) as co_ed_schools from datasets.pm_shri_pm_shri_category_state0categorypmshri where category_name = 'co-ed_school'"
+                        "bigNumber1": "6448",
+                        "bigNumber2": "763",
+                        "bigNumber3": "863",
+                        "bigNumber4": "1533",
+                        "bigNumber5": "1384",
+                        "bigNumber6": "1616",
+                        "bigNumber7": "735",
+                        "bigNumber8": "317"
                     },
                     "level": "state"
                 }
@@ -126,9 +129,8 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total states/UTs', 'Total schools', 'Only boys schools', 'Only girls schools', 'Co-ed schools'],
-                "valueSuffix": ['', '', '', '', ''],
-                "property": ['total_states', 'total_schools', 'only_boys_schools', 'only_girls_schools', 'co_ed_schools']
+                "title": ['Total PM SHRI schools', 'Total districts', 'Total districts', 'No. of primary schools', 'No. of upper primary schools', 'No. of secondary schools', 'No. of higher secondary schools', 'KVS', 'NVS'],
+                "formatter": { locale: 'en-IN', format: "long" }
             }
         }
     }
