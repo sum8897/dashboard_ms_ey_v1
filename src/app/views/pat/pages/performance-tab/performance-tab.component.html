@@ -1,0 +1,66 @@
+<!-- <p>performance-tab works!</p> -->
+<div class="col-span-full tab-wrapper">
+	<!-- <div class="xmd:col-span-3 col-span-3">
+		<mat-checkbox
+			color="primary"
+			[(ngModel)]="hasCommonFilters"
+			(change)="filterapplyRequest()"
+		>
+			Filters
+		</mat-checkbox>
+	</div> -->
+	<!-- <div class="filter-row grid grid-cols-4">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			colsize="lg:col-span-3 col-span-6"
+		>
+		</app-filter-panel>
+	</div> -->
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+	<!-- <div class="filter-row grid grid-cols-10">
+		<div
+			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
+		>
+			<app-time-series-filter-panel
+				(timeSeriesUpdated)="timeSeriesUpdated($event)"
+				[minDate]="minDate"
+				[maxDate]="maxDate"
+				[defaultSelectedDays]="defaultSelectedDays"
+			></app-time-series-filter-panel>
+		</div>
+	</div> -->
+	<!-- <div
+			class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex"
+			id="downloadbutton"
+			#downloadbutton
+		>
+			<app-download-button [data]="reportsData"></app-download-button>
+		</div> -->
+	<div class="grid grid-cols-4 gap-8">
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+	</div>
+
+	<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-1 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('student_availability', 'map')"
+				id="map"
+			>
+				<app-performance
+					#studentavailability
+					(exportReportData)="csvDownload($event)"
+				></app-performance>
+			</div>
+		</div>
+	</div>
+</div>

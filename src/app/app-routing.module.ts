@@ -54,6 +54,30 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'pat',
+        loadChildren: () =>
+          import('./views/pat/pat.module').then(
+            (module) => module.PatModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
+        path: 'udise-schoolinfra',
+        loadChildren: () =>
+            import('./views/udise-schoolinfra/udise-schoolinfra.module').then(
+                (module) => module.UdiseSchoolinfraModule
+            ),
+        canLoad: [AuthGuard]
+      },
+      {
+        path: 'teacher-attendance',
+        loadChildren: () =>
+          import('./views/teacher-attendance/teacher-attendance.module').then(
+            (module) => module.TeacherAttendanceModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'review-meetings',
         loadChildren: () =>
           import('./views/review-meetings/review-meetings.module').then(

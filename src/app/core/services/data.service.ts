@@ -174,7 +174,7 @@ export class DataService {
                 ticks: {
                   callback: function (value, index, values) {
                     if (type !== 'horizontal') {
-                      let newValue = value?.split('_').map((word: any) => word[0].toUpperCase() + word.substring(1)).join(' ')
+                      let newValue = value?.split('_').map((word: any) => word[0] + word.substring(1)).join(' ')
                       if (screen.width <= 768) {
                         return newValue.substr(0, 8) + '...';
                       } else {
@@ -288,22 +288,21 @@ export class DataService {
       }])
     }
   }
-
   getMapReportData(query: any, options: any, filters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let reportData;
       this.spinner.show();
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        let { map: { indicator, indicatorType, drillDownConfig, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
+        let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
         let metricFilter;
         if (metricFilterNeeded) {
-          metricFilter = filters.filter((filter: any) => {
+          metricFilter = filters?.filter((filter: any) => {
             return filter.filterType === 'metric'
           })[0]
-          rows = this.mapGroupBy(rows, groupByColumn, metricLabelProp, metricValueProp, tooltipMetrics, metricFilter.value)
+          // rows = this.mapGroupBy(rows, groupByColumn, metricLabelProp, metricValueProp, tooltipMetrics, metricFilter.value)
         }
-
+ 
         reportData = {
           data: rows.map(row => {
             row = {
@@ -313,11 +312,10 @@ export class DataService {
               indicator: metricFilter ? isNaN(row[metricFilter.value]) ? row[metricFilter.value] : Number(row[metricFilter.value]) : isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]),
               tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
-
+ 
             return row;
           }),
           options: {
-            drillDownConfig: drillDownConfig,
             reportIndicatorType: indicatorType,
             legend,
             selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
@@ -334,7 +332,6 @@ export class DataService {
       );
     })
   }
-
   getScatterChartReportData(query: any, options: any, axisFilters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();
@@ -507,7 +504,7 @@ export class DataService {
     if (axisFilter) {
       let filterOption = axisFilter.options.find((option: any) => option.value === axisFilter.value)
       if (filterOption) {
-        return filterOption.label.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        return filterOption.label.split('_').map(word => word.charAt(0) + word.slice(1)).join(' ');
       }
     }
 

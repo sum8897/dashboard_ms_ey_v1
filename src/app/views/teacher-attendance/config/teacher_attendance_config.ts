@@ -538,7 +538,156 @@ export const config = {
     //     }
     // },
 
+ tas_average_attendance_rank: {
+        "label": "Average Teachers Present",
+        "defaultLevel": "district",
+        "filters": [
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": "select district_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name,t.percentage",
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": "select block_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where a.att_date between startDate and endDate and district_id = {district_id} group by a.block_id, block_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name,t.percentage",
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": "select cluster_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name",
+                },
+                "actions": {
+                    "queries": {
+                        "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name,t.percentage",
+                    },
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": "select school_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) desc) as rank from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_school as present_table join datasets.sch_att_teachers_marked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name,t.percentage",
+            //         },
+            //         "level": "class"
+            //     }
+            // },
+            // {
+            //     "name": "Grade",
+            //     "labelProp": "grade",
+            //     "valueProp": "grade",
+            //     "hierarchyLevel": "6",
+            //     "timeSeriesQueries": {
+            //         "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) desc) as rank from (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number",
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
+            //         },
+            //         "level": "class"
+            //     }
+            // }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-left"
+                    },
+                    {
+                        name: "Grade",
+                        property: "grade_number",
+                        class: "text-left"
+                    },
+                    {
+                        name: "% Teachers Present",
+                        property: "perc_teachers",
+                        valueSuffix: '%',
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Rank in % Teachers Present",
+                        property: "rank",
+                        class: "text-center",
+                        isHeatMapRequired: true,
+                        color: '#fff'
+                    },
 
+                ],
+            }
+        }
+    },
     tas_average_attendance: {
         "label": "Average Teachers Present",
         "defaultLevel": "state",
@@ -820,156 +969,7 @@ export const config = {
         }
     },
 
-    tas_average_attendance_rank: {
-        "label": "Average Teachers Present",
-        "defaultLevel": "district",
-        "filters": [
-            {
-                "name": "District",
-                "labelProp": "district_name",
-                "valueProp": "district_id",
-                "hierarchyLevel": "2",
-                "timeSeriesQueries": {
-                    "table": "select district_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.district_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_district as present_table join datasets.sch_att_total_teachers_daily_district as total_teachers on present_table.date = total_teachers.date and present_table.district_id = total_teachers.district_id) as a join dimensions.district as district_wise_table on district_wise_table.district_id = a.district_id where a.att_date between startDate and endDate group by a.district_id, district_name",
-                },
-                "actions": {
-                    "queries": {
-                        "table": "select district_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_district as d on t.district_id = d.district_id left join (select distinct(district_id), state_id from ingestion.dimension_master) as m on m.district_id = t.district_id where state_id = {state_id} group by t.district_id, district_name,t.percentage",
-                    },
-                    "level": "block"
-                }
-            },
-            {
-                "name": "Block",
-                "labelProp": "block_name",
-                "valueProp": "block_id",
-                "hierarchyLevel": "3",
-                "timeSeriesQueries": {
-                    "table": "select block_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.block_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_block as present_table join datasets.sch_att_total_teachers_daily_block as total_teachers on present_table.date = total_teachers.date and present_table.block_id = total_teachers.block_id) as a join dimensions.block as block_wise_table on block_wise_table.block_id = a.block_id where a.att_date between startDate and endDate and district_id = {district_id} group by a.block_id, block_name",
-                },
-                "actions": {
-                    "queries": {
-                        "table": "select block_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_block as b on t.block_id = b.block_id left join (select distinct(block_id), district_id from ingestion.dimension_master) as m on m.block_id = t.block_id where district_id = {district_id} group by t.block_id, block_name,t.percentage",
-                    },
-                    "level": "cluster"
-                }
-            },
-            {
-                "name": "Cluster",
-                "labelProp": "cluster_name",
-                "valueProp": "cluster_id",
-                "hierarchyLevel": "4",
-                "timeSeriesQueries": {
-                    "table": "select cluster_name, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) desc) as rank from  (select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.cluster_id, cluster_name",
-                },
-                "actions": {
-                    "queries": {
-                        "table": "select cluster_name, dense_rank() over(order by avg(percentage) desc) as rank,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_cluster as c on t.cluster_id = c.cluster_id left join (select distinct(cluster_id), block_id from ingestion.dimension_master) as m on m.cluster_id = t.cluster_id where block_id = {block_id} group by t.cluster_id, cluster_name,t.percentage",
-                    },
-                    "level": "school"
-                }
-            },
-            // {
-            //     "name": "School",
-            //     "labelProp": "school_name",
-            //     "valueProp": "school_id",
-            //     "hierarchyLevel": "5",
-            //     "timeSeriesQueries": {
-            //         "table": "select school_name, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) desc) as rank from  (select present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teachers_marked_present_daily_school as present_table join datasets.sch_att_teachers_marked_daily_school as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id) as a join dimensions.school as school_wise_table on school_wise_table.school_id = a.school_id where cluster_id = {cluster_id} and a.att_date between startDate and endDate group by a.school_id, school_name",
-            //     },
-            //     "actions": {
-            //         "queries": {
-            //             "table": "select school_name, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_school as s on t.school_id = s.school_id left join (select distinct(school_id), cluster_id from ingestion.dimension_master) as m on m.school_id = t.school_id where cluster_id = {cluster_id} group by t.school_id, school_name,t.percentage",
-            //         },
-            //         "level": "class"
-            //     }
-            // },
-            // {
-            //     "name": "Grade",
-            //     "labelProp": "grade",
-            //     "valueProp": "grade",
-            //     "hierarchyLevel": "6",
-            //     "timeSeriesQueries": {
-            //         "table": "select grade_number, ceil(round(CAST(avg(a.teachers_present/a.teachers_marked)*100 as numeric),2)) as perc_teachers, dense_rank() over(order by ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) desc) as rank from (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state ) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number",
-            //     },
-            //     "actions": {
-            //         "queries": {
-            //             "table": "select t.grade, dense_rank() over(order by avg(percentage) desc) as rank ,round(percentage ,0) as percentage  from ingestion.sac_stds_avg_atd_by_grade as t where school_id = {school_id} group by t.grade,t.percentage",
-            //         },
-            //         "level": "class"
-            //     }
-            // }
-        ],
-        "options": {
-            "table": {
-                "columns": [
-                    {
-                        name: "State",
-                        property: "state_name",
-                        class: "text-left"
-                    },
-                    {
-                        name: "District",
-                        property: "district_name",
-                        class: "text-left"
-                    },
-                    {
-                        name: "Block",
-                        property: "block_name",
-                        class: "text-left"
-                    },
-                    {
-                        name: "Cluster",
-                        property: "cluster_name",
-                        class: "text-left"
-                    },
-                    {
-                        name: "School",
-                        property: "school_name",
-                        class: "text-left"
-                    },
-                    {
-                        name: "Grade",
-                        property: "grade_number",
-                        class: "text-left"
-                    },
-                    {
-                        name: "% Teachers Present",
-                        property: "perc_teachers",
-                        valueSuffix: '%',
-                        class: "text-center",
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
-                    },
-                    {
-                        name: "Rank in % Teachers Present",
-                        property: "rank",
-                        class: "text-center",
-                        isHeatMapRequired: true,
-                        color: '#fff'
-                    },
-
-                ],
-            }
-        }
-    },
+   
 
     tas_average_attendance_barchart:{
         "defaultLevel": "state",

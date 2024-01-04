@@ -20,6 +20,7 @@ import { AverageAttendanceSchoolTableComponent } from './pages/teacher-attendanc
 import { TasTrendlineChartComponent } from './pages/teacher-attendance-summary/reports/tas-trendline-chart/tas-trendline-chart.component';
 
 
+
 @NgModule({
   declarations: [
     TeacherAttendanceComponent,
@@ -34,7 +35,8 @@ import { TasTrendlineChartComponent } from './pages/teacher-attendance-summary/r
     TeacherAttendanceMapComponent,
     TasAverageAttendanceBarchartComponent,
     AverageAttendanceSchoolTableComponent,
-    TasTrendlineChartComponent
+    TasTrendlineChartComponent,
+   
   ],
   imports: [
     DashletModule.forRoot({

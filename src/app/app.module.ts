@@ -22,7 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/metadata-interceptor.service';
 import { JwtInterceptor } from './utilities/jwtInterceptor';
 import { AppConfig }  from './app.config';
-
+import { ChartsModule } from 'ng2-charts';
 //Add this function as initiating load method first
 
 function initConfig(config: AppConfig){
@@ -49,6 +49,7 @@ function initConfig(config: AppConfig){
     NgxSpinnerModule,
     CqubeLibraryModule,
     MatTooltipModule,
+    ChartsModule,
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,

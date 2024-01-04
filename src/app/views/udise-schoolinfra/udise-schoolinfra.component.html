@@ -1,0 +1,43 @@
+<div class="metric-card-wrapper">
+    <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+        <div class="col-span-12">
+            <p class="program-title">UDISE School Infrastructure </p>
+            <p class="program-desc ">State specific UDISE School Infrastructure</p>
+        </div>
+    </div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+    <mat-tab-group [selectedIndex]="tabIndex" mat-align-tabs="start" animationDuration="0ms"
+        (selectedTabChange)="onTabChanged($event)" appFullScreen>
+
+        <mat-tab label='Electricity' *ngIf="tabs.includes('Electricity')">
+           <app-electricity
+                *ngIf="selectedTabLabel === 'Electricity'">
+            </app-electricity>
+        </mat-tab>
+
+        <mat-tab label='Water' *ngIf="tabs.includes('Water')">
+            <app-water
+                 *ngIf="selectedTabLabel === 'Water'">
+             </app-water>
+         </mat-tab>
+         <mat-tab label='Toilet & Urinal' *ngIf="tabs.includes('Toilet & Urinal')">
+            <app-toilet-urinal
+                 *ngIf="selectedTabLabel === 'Toilet & Urinal'">
+             </app-toilet-urinal>
+         </mat-tab>
+         <mat-tab label='Bulding & Facilities' *ngIf="tabs.includes('Bulding & Facilities')">
+            <app-bulding-facilities
+                 *ngIf="selectedTabLabel === 'Bulding & Facilities'">
+             </app-bulding-facilities>
+         </mat-tab>
+         <mat-tab label='Cleanliness & Hygiene' *ngIf="tabs.includes('Cleanliness & Hygiene')">
+            <app-cleanliness-hygiene
+                 *ngIf="selectedTabLabel === 'Cleanliness & Hygiene'">
+             </app-cleanliness-hygiene>
+         </mat-tab>
+       
+
+    </mat-tab-group>
+</div>

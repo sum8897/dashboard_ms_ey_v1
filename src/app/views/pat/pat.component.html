@@ -1,0 +1,43 @@
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				STUDENT PERFORMANCE <em><small>(STUDENT-PERFORMANCE)</small></em>
+			</p>
+			<p class="program-desc">
+				The Performance Grading Index (PGI) is a tool to provide insights on the
+				status of school education in States and Union territories including key
+				levers that drive their performance and critical areas for improvement.
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab
+			label="Student Availability"
+			*ngIf="tabs.includes('Student Availability')"
+		>
+			<app-performance-tab
+				*ngIf="selectedTabLabel === 'Student Availability'"
+			></app-performance-tab>
+		</mat-tab>
+		<mat-tab label="LO Wise Performance">
+			<app-lo-wise-performance-tab
+				*ngIf="selectedTabLabel === 'LO Wise Performance'"
+			></app-lo-wise-performance-tab>
+		</mat-tab>
+		<mat-tab label="Question Wise Performance">
+			<app-ques-wise-performance-tab
+				*ngIf="selectedTabLabel === 'Question Wise Performance'"
+			></app-ques-wise-performance-tab>
+		</mat-tab>
+	</mat-tab-group>
+</div>

@@ -13,6 +13,9 @@ import { config as studentAssessments } from '../../../app/views/student-assessm
 import {config as ncf } from '../../views/ncf/config/ncf_config';
 import {config as quiz} from '../../views/ncert-quiz/config/quiz_config';
 import{config as microImprovement} from '../../views/micro-improvements/config/microimprovements_config';
+import{ config as patConfig} from '../../views/pat/config/pat_config.ts';
+// import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
+import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
 
 
 
@@ -32,6 +35,9 @@ export const configFiles = {
   ncf:ncf,
   quiz:quiz,
   microImprovement:microImprovement,
+  pat:patConfig,
+  // udiseSchoolInfra:udiseSchoolinfraConfig,
+  udiseschoolinfrastructure:udiseschoolinfra,
 };
 
 export const programFolderNames = {
@@ -48,6 +54,8 @@ export const programFolderNames = {
   ncf:'ncf',
   quiz:'quiz',
   microImprovement:'microImprovement',
+  pat:'pat',
+  // udiseSchoolInfra:'udiseSchoolInfra'
 }
 
 export const stateProgramsFolderNames = {
@@ -64,4 +72,7 @@ export const stateProgramsFolderNames = {
   ncf:'',
   quiz:'',
   microImprovement:'',
+  pat:'',
+  // udiseSchoolInfra:'',
+  udiseschoolinfra:'',
 }

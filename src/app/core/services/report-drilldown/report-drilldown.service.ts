@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { DataService } from '../data.service';
 
 @Injectable({
@@ -16,8 +16,9 @@ export class ReportDrilldownService {
     this.drilldownData.next(data);
   }
 
-  async drilldown(event: any, rbacDetails: any, reportConfig: any, startDate: any, endDate: any, prevDrillDownDetails: any) {
+  async drilldown(event: any, rbacDetails: any, reportConfig: any, startDate: any, endDate: any, prevDrillDownDetails: any, filterValues?: any, matric_filter?:any, filterneed?:false) {
       let { hierarchyLevel, id } = event ?? {}
+      
       let drillDownDetails, reportData;
 
       switch (Number(hierarchyLevel)) {
@@ -75,7 +76,20 @@ export class ReportDrilldownService {
         else {
           onLoadQuery = queries[types[i]]
         }
+        
+
         let query = buildQuery(onLoadQuery, defaultLevel, undefined, undefined, startDate, endDate, types[i], undefined);
+
+        let metricFilter = [...filterValues].filter((filter: any) => {
+          return filter.filterType === 'metric'
+        })
+
+   
+          filterValues.forEach((filterParams: any) => {
+            query = parseFilterToQuery(query, filterParams)
+          });
+
+          console.log('typei',types[i])
         if (query && types[i] === 'table') {
           // this.getTableReportData(query, options);
           reportData = await this._dataService.getTableReportData(query, options);
@@ -83,8 +97,13 @@ export class ReportDrilldownService {
         else if (query && types[i] === 'barChart') {
           reportData = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
         }
-        else if (query && types[i] === 'map') {
-          reportData = await await this._dataService.getMapReportData(query, options, undefined)
+        else if (query && types[i] === 'map' && filterneed) {
+          
+          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?metricFilter:undefined)
+        }
+        else if (query && types[i] === 'map_without_filter' && !filterneed) {
+       
+          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?metricFilter:undefined)
         }
       }
 
