@@ -8,7 +8,7 @@ export const environment = {
   // apiURL: 'http://localhost:3008',
   // apiURL: 'http://192.168.1.159:3008',
   apiURL: 'https://cqubedemo.gpsdemo.live/api/queryBuilder',
-  stateCode: "NL",
+  stateCode: "AS",
   numberFormat: {
     reports: {
       locale: 'en-IN',
