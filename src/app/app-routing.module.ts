@@ -62,6 +62,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'library',
+        loadChildren: () =>
+          import('./views/library/library.module').then(
+            (module) => module.LibraryModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'udise-schoolinfra',
         loadChildren: () =>
             import('./views/udise-schoolinfra/udise-schoolinfra.module').then(

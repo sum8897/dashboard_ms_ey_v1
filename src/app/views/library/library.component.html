@@ -1,0 +1,40 @@
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				LIBRARY <em><small>(LIBRARY)</small></em>
+			</p>
+			<p class="program-desc">
+				The Performance Grading Index (PGI) is a tool to provide insights on the
+				status of school education in States and Union territories including key
+				levers that drive their performance and critical areas for improvement.
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab label="Overall Summary">
+			<app-summary-tab
+				*ngIf="selectedTabLabel === 'Student Availability'"
+			></app-summary-tab>
+		</mat-tab>
+		<mat-tab label="District Wise Summary">
+			<app-district-wise-summary-tab
+				*ngIf="selectedTabLabel === 'District Wise Summary'"
+			></app-district-wise-summary-tab>
+		</mat-tab>
+		<mat-tab label="School Wise Library">
+			<app-school-wise-library-tab
+				*ngIf="selectedTabLabel === 'School Wise Library'"
+			></app-school-wise-library-tab>
+		</mat-tab>
+	</mat-tab-group>
+</div>

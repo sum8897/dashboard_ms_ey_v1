@@ -23,6 +23,7 @@ import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/me
 import { JwtInterceptor } from './utilities/jwtInterceptor';
 import { AppConfig }  from './app.config';
 import { ChartsModule } from 'ng2-charts';
+
 //Add this function as initiating load method first
 
 function initConfig(config: AppConfig){

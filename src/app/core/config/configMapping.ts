@@ -16,6 +16,7 @@ import{config as microImprovement} from '../../views/micro-improvements/config/m
 import{ config as patConfig} from '../../views/pat/config/pat_config.ts';
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
+import {config as libraryConfig} from '../../views/library/config.ts';
 
 
 
@@ -36,6 +37,7 @@ export const configFiles = {
   quiz:quiz,
   microImprovement:microImprovement,
   pat:patConfig,
+  library:libraryConfig,
   // udiseSchoolInfra:udiseSchoolinfraConfig,
   udiseschoolinfrastructure:udiseschoolinfra,
 };
@@ -55,6 +57,7 @@ export const programFolderNames = {
   quiz:'quiz',
   microImprovement:'microImprovement',
   pat:'pat',
+  library:'library',
   // udiseSchoolInfra:'udiseSchoolInfra'
 }
 
@@ -73,6 +76,7 @@ export const stateProgramsFolderNames = {
   quiz:'',
   microImprovement:'',
   pat:'',
+  library:'',
   // udiseSchoolInfra:'',
   udiseschoolinfra:'',
 }

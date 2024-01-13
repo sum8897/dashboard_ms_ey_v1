@@ -41,25 +41,25 @@ export const config = {
 
         },
 
-        {
+        // {
 
-            label: 'Electricity',
+        //     label: 'Electricity',
 
-            name: 'Subcategory',
+        //     name: 'Subcategory',
 
-            labelProp: 'schoolsubcategory_name',
+        //     labelProp: 'schoolsubcategory_name',
 
-            valueProp: 'schoolsubcategory_id',
+        //     valueProp: 'schoolsubcategory_id',
 
-            id: 'subcategory',
+        //     id: 'subcategory',
 
-            tableAlias: 't',
+        //     tableAlias: 't',
 
-            query:
+        //     query:
 
-                'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
+        //         'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
 
-        },
+        // },
 
         {
 
@@ -113,25 +113,25 @@ export const config = {
 
         },
 
-        {
+        // {
 
-            label: 'Water',
+        //     label: 'Water',
 
-            name: 'Subcategory',
+        //     name: 'Subcategory',
 
-            labelProp: 'schoolsubcategory_name',
+        //     labelProp: 'schoolsubcategory_name',
 
-            valueProp: 'schoolsubcategory_id',
+        //     valueProp: 'schoolsubcategory_id',
 
-            id: 'subcategory',
+        //     id: 'subcategory',
 
-            tableAlias: 't',
+        //     tableAlias: 't',
 
-            query:
+        //     query:
 
-                'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
+        //         'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
 
-        },
+        // },
 
         {
 
@@ -185,25 +185,25 @@ export const config = {
 
         },
 
-        {
+        // {
 
-            label: 'Toilet & Urinal',
+        //     label: 'Toilet & Urinal',
 
-            name: 'Subcategory',
+        //     name: 'Subcategory',
 
-            labelProp: 'schoolsubcategory_name',
+        //     labelProp: 'schoolsubcategory_name',
 
-            valueProp: 'schoolsubcategory_id',
+        //     valueProp: 'schoolsubcategory_id',
 
-            id: 'subcategory',
+        //     id: 'subcategory',
 
-            tableAlias: 't',
+        //     tableAlias: 't',
 
-            query:
+        //     query:
 
-                'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
+        //         'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
 
-        },
+        // },
 
         {
 
@@ -257,25 +257,25 @@ export const config = {
 
         },
 
-        {
+        // {
 
-            label: 'Cleanliness & Hygiene',
+        //     label: 'Cleanliness & Hygiene',
 
-            name: 'Subcategory',
+        //     name: 'Subcategory',
 
-            labelProp: 'schoolsubcategory_name',
+        //     labelProp: 'schoolsubcategory_name',
 
-            valueProp: 'schoolsubcategory_id',
+        //     valueProp: 'schoolsubcategory_id',
 
-            id: 'subcategory',
+        //     id: 'subcategory',
 
-            tableAlias: 't',
+        //     tableAlias: 't',
 
-            query:
+        //     query:
 
-                'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
+        //         'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
 
-        },
+        // },
 
         {
 
@@ -329,25 +329,25 @@ export const config = {
 
         },
 
-        {
+        // {
 
-            label: 'Bulding & Facilities',
+        //     label: 'Bulding & Facilities',
 
-            name: 'Subcategory',
+        //     name: 'Subcategory',
 
-            labelProp: 'schoolsubcategory_name',
+        //     labelProp: 'schoolsubcategory_name',
 
-            valueProp: 'schoolsubcategory_id',
+        //     valueProp: 'schoolsubcategory_id',
 
-            id: 'subcategory',
+        //     id: 'subcategory',
 
-            tableAlias: 't',
+        //     tableAlias: 't',
 
-            query:
+        //     query:
 
-                'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
+        //         'SELECT schoolsubcategory_id,schoolsubcategory_name FROM dimensions.schoolsubcategory ORDER BY schoolsubcategory_name ASC ',
 
-        },
+        // },
 
         {
 
@@ -375,7 +375,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                    SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                    SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                         ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                         d.latitude,d.longitude,t.district_id,d.district_name, 
                         CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
@@ -386,13 +386,13 @@ export const config = {
                     	JOIN datasets.sch_infra_schoolinfrasolarpanel_ZlhVQ2YjfmRbUXZ9eWZv as sp on
                     	sp.district_id=t.district_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                    
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         JOIN dimensions.district AS d ON t.district_id = d.district_id 
                         JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id
-                        JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                        
                         JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id, 
+                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name, 
                         ss.schoolsubcategory_name, t.schoolmanagement_id,sm.schoolmanagement_name,
                         d.latitude, d.longitude, t.district_id,d.district_name`,
 
@@ -419,7 +419,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
                             CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
@@ -430,14 +430,14 @@ export const config = {
 							JOIN datasets.sch_infra_schoolinfrasolarpanel_bEkBW3p0cnpPWHhwHBMA as sp
 							ON  sp.block_id=t.block_id
                             and sp.schoolcategory_id = t.schoolcategory_id
-                            and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                            
                             and sp.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.block AS b ON t.block_id = b.block_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                          
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
                         where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id,  
+                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,  
                             ss.schoolsubcategory_name, t.schoolmanagement_id,
                             b.latitude, b.longitude,b.district_id,b.district_name, 
                             t.block_id,b.block_name,sm.schoolmanagement_name, 
@@ -470,7 +470,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name,
@@ -482,14 +482,14 @@ export const config = {
 							JOIN datasets.sch_infra_schoolinfrasolarpanel_eF9AQCR6eW1ZQ3Bib3kZ as sp 
 								ON  t.cluster_id = sp.cluster_id 
 								and sp.schoolcategory_id = t.schoolcategory_id
-                            	and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                            	
                             	and sp.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                           
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id,
 						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name`,
@@ -655,7 +655,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                    SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                    SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                         ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                         d.latitude,d.longitude,t.district_id,d.district_name, 
                         CAST(SUM(t.sum) AS NUMERIC) AS ro_water, 
@@ -666,13 +666,13 @@ export const config = {
                     	JOIN datasets.sch_infra_schoolinfradrinkingwater_DhkGXklceH0kWmFcaX92 as sp on
                     	sp.district_id=t.district_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                       
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         JOIN dimensions.district AS d ON t.district_id = d.district_id 
                         JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id
-                        JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                       
                         JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id, 
+                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,
                         ss.schoolsubcategory_name, t.schoolmanagement_id,sm.schoolmanagement_name,
                         d.latitude, d.longitude, t.district_id,d.district_name`,
 
@@ -699,7 +699,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
                             CAST(SUM(t.sum) AS NUMERIC) AS ro_water, 
@@ -710,14 +710,14 @@ export const config = {
 							JOIN datasets.sch_infra_schoolinfradrinkingwater_a2xpVFgIYGFzVn9IYHF7 as sp
 							ON  sp.block_id=t.block_id
                             and sp.schoolcategory_id = t.schoolcategory_id
-                            and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                           
                             and sp.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.block AS b ON t.block_id = b.block_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                            
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
                         where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id,  
+                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name, 
                             ss.schoolsubcategory_name, t.schoolmanagement_id,
                             b.latitude, b.longitude,b.district_id,b.district_name, 
                             t.block_id,b.block_name,sm.schoolmanagement_name, 
@@ -750,7 +750,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name,
@@ -762,14 +762,14 @@ export const config = {
 							JOIN datasets.sch_infra_schoolinfradrinkingwater_GAZwQE5Jez99XWhee3lp as sp 
 								ON  t.cluster_id = sp.cluster_id 
 								and sp.schoolcategory_id = t.schoolcategory_id
-                            	and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                            	
                             	and sp.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                          
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id,
 						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name`,
@@ -937,7 +937,7 @@ export const config = {
                         "map": `
                         SELECT 
                         t.schoolcategory_id, sc.schoolcategory_name, 
-                        t.schoolsubcategory_id, ss.schoolsubcategory_name,
+                         ss.schoolsubcategory_name,
                         t.schoolmanagement_id, sm.schoolmanagement_name, 
                         d.latitude, d.longitude, 
                         t.district_id, d.district_name, 
@@ -955,37 +955,36 @@ export const config = {
                     JOIN datasets.sch_infra_schoolinfrakitchendustbin_Ag4DNWBdXmFoEHB_UGRt AS sp 
                         ON  sp.district_id = t.district_id
                         AND sp.schoolcategory_id = t.schoolcategory_id
-                        AND sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                       
                         AND sp.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfrahandwashfacaftermeal_UgIeCQAdEg4NP31QSH10 AS shw 
                         ON shw.district_id = t.district_id
                         AND shw.schoolcategory_id = t.schoolcategory_id
-                        AND shw.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         AND shw.schoolmanagement_id = t.schoolmanagement_id
                         
                     JOIN datasets.sch_infra_schoolinfranoofwashpnts_Fhtga0h1dTFlQFJtbGlv AS wnp
                         ON wnp.district_id = t.district_id
                         AND wnp.schoolcategory_id = t.schoolcategory_id
-                        AND wnp.schoolsubcategory_id = t.schoolsubcategory_id 
+                     
                         AND wnp.schoolmanagement_id = t.schoolmanagement_id
                        
                     JOIN datasets.sch_infra_schoolinfrainceravailgtoilet_JQIFOAIED31QaXt_MmV_ AS ia
                         ON ia.district_id = t.district_id
                         AND ia.schoolcategory_id = t.schoolcategory_id
-                        AND ia.schoolsubcategory_id = t.schoolsubcategory_id 
+                      
                         AND ia.schoolmanagement_id = t.schoolmanagement_id
                         
                     JOIN dimensions.district AS d 
                         ON t.district_id = d.district_id 
                     JOIN dimensions.schoolcategory AS sc 
                         ON t.schoolcategory_id = sc.schoolcategory_id
-                    JOIN dimensions.schoolsubcategory AS ss 
-                        ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                   
                     JOIN dimensions.schoolmanagementcategory AS sm 
                         ON t.schoolmanagement_id = sm.schoolmanagement_id
                     GROUP BY 
                         t.schoolcategory_id, sc.schoolcategory_name, 
-                        t.schoolsubcategory_id, ss.schoolsubcategory_name, 
+                         ss.schoolsubcategory_name, 
                         t.schoolmanagement_id, sm.schoolmanagement_name,
                         d.latitude, d.longitude, 
                         t.district_id, d.district_name;`
@@ -1035,7 +1034,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
                         COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
@@ -1051,33 +1050,31 @@ export const config = {
                         FROM datasets.sch_infra_schoolinfratoiletdustbin_fnplSFgIcHxzVHFVamN_ AS t 
                     LEFT JOIN datasets.sch_infra_schoolinfrakitchendustbin_D2t2WmpMCnl0R3xhRG1j AS sp
 							ON  sp.block_id=t.block_id
-                            and sp.schoolcategory_id = t.schoolcategory_id
-                            and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                            and sp.schoolcategory_id = t.schoolcategory_id                            
                             and sp.schoolmanagement_id = t.schoolmanagement_id
                             LEFT JOIN datasets.sch_infra_schoolinfrahandwashfacaftermeal_BQ4AHQkTH2t4UHdBHGVo AS shw 
                         ON shw.block_id = t.block_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                            and shw.schoolsubcategory_id = t.schoolsubcategory_id 
-                            and shw.schoolmanagement_id = t.schoolmanagement_id
+                             and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                             LEFT JOIN datasets.sch_infra_schoolinfranoofwashpnts_Y3RqehxtaWZpXkZkYmQK AS wnp
                         ON wnp.block_id = t.block_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                            and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
+                           
                             and wnp.schoolmanagement_id = t.schoolmanagement_id
                         
                             LEFT JOIN datasets.sch_infra_schoolinfrainceravailgtoilet_MQsLNWdxYHdBPWNjZWlh AS ia
                         ON ia.block_id = t.block_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                            and ia.schoolsubcategory_id = t.schoolsubcategory_id 
+                           
                             and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                             JOIN dimensions.block AS b ON t.block_id = b.block_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                           
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
                         where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id,  
+                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,
                             ss.schoolsubcategory_name, t.schoolmanagement_id,
                             b.latitude, b.longitude,b.district_id,b.district_name, 
                             t.block_id,b.block_name,sm.schoolmanagement_name, 
@@ -1125,7 +1122,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name,
@@ -1143,32 +1140,32 @@ export const config = {
                             LEFT JOIN datasets.sch_infra_schoolinfrakitchendustbin_HRgcQ35aS2IqSXd2UnZr AS sp 
 								ON  t.cluster_id = sp.cluster_id 
 								and sp.schoolcategory_id = t.schoolcategory_id
-                            	and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                            	
                             	and sp.schoolmanagement_id = t.schoolmanagement_id
                                 LEFT JOIN datasets.sch_infra_schoolinfrahandwashfacaftermeal_CwUXCxIbDRgSSWNXXX42 AS shw 
                         ON shw.cluster_id = t.cluster_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                            	and shw.schoolsubcategory_id = t.schoolsubcategory_id 
+                            	
                             	and shw.schoolmanagement_id = t.schoolmanagement_id
                         
                                 LEFT JOIN datasets.sch_infra_schoolinfranoofwashpnts_CW1__bF12N2hiSVB_anZ5 AS wnp
                         ON wnp.cluster_id = t.cluster_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
                         
                         LEFT JOIN datasets.sch_infra_schoolinfrainceravailgtoilet_JxADJxQbeWNXfHg9a2J2 AS ia
                         ON ia.cluster_id = t.cluster_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                             JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                           
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
 						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name,
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name`,
@@ -1389,7 +1386,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                    SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                    SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                         ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                         d.latitude,d.longitude,t.district_id,d.district_name, 
                         CAST(SUM(t.sum) AS NUMERIC) AS schtoilet, 
@@ -1424,76 +1421,76 @@ export const config = {
                     JOIN datasets.sch_infra_schoolinfratoiletcwsnbtot_HxgVM3pdQWd1H31uXXdr as sp on
                     	sp.district_id=t.district_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         JOIN datasets.sch_infra_schoolinfratoiletcwsnbfunc_BgYQKxB5QE5yTjp8ck5z AS shw 
                         ON shw.district_id = t.district_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                        and shw.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                     JOIN datasets.sch_infra_schoolinfratoiletcwsngtot_Hx0VM3pdQWd1H31uXXdr AS wnp
                         ON wnp.district_id = t.district_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
                        
                     JOIN datasets.sch_infra_schoolinfratoiletcwsngfunc_BgMQKxB5QE5yTjp8ck5z AS ia
                         ON ia.district_id = t.district_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                     JOIN datasets.sch_infra_schoolinfraurnlbtot_THB7FXB2RW94XWFwYg49 AS rr
                         ON rr.district_id = t.district_id
                         and rr.schoolcategory_id = t.schoolcategory_id
-                        and rr.schoolsubcategory_id = t.schoolsubcategory_id 
+                         
                         and rr.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfraurnlbfunc_TVl8RDdkalZgRH91emQZ AS uf
                         ON uf.district_id = t.district_id
                         and uf.schoolcategory_id = t.schoolcategory_id
-                        and uf.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and uf.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfraurnlgtot_THB7FXB2RW94XWRwYg49 AS ut
                         ON ut.district_id = t.district_id
                         and ut.schoolcategory_id = t.schoolcategory_id
-                        and ut.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and ut.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfraurnlgfunc_TVl8RDdkalZgRHp1emQZ AS gf
                         ON gf.district_id = t.district_id
                         and gf.schoolcategory_id = t.schoolcategory_id
-                        and gf.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and gf.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfratoiletrunwatb_GAwXTklcaGAkWG9BdW1v AS rb
                         ON rb.district_id = t.district_id
                         and rb.schoolcategory_id = t.schoolcategory_id
-                        and rb.schoolsubcategory_id = t.schoolsubcategory_id 
+                      
                         and rb.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfratoiletrunwatg_GAwXS0lcaGAkWG9BdW1v AS rg
                         ON rg.district_id = t.district_id
                         and rg.schoolcategory_id = t.schoolcategory_id
-                        and rg.schoolsubcategory_id = t.schoolsubcategory_id 
+                       
                         and rg.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfraurnlrunwaterb_GwgRTklcaX0jWHhAaW9g AS rw
                         ON rw.district_id = t.district_id
                         and rw.schoolcategory_id = t.schoolcategory_id
-                        and rw.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and rw.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfraurnlrunwaterg_GwgRS0lcaX0jWHhAaW9g AS urg
                         ON urg.district_id = t.district_id
                         and urg.schoolcategory_id = t.schoolcategory_id
-                        and urg.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and urg.schoolmanagement_id = t.schoolmanagement_id
                     JOIN datasets.sch_infra_schoolinfrahandwashfactoileturnl_A0UZLyQMHAkKLg97SVRz AS ht
                         ON ht.district_id = t.district_id
                         and ht.schoolcategory_id = t.schoolcategory_id
-                        and ht.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and ht.schoolmanagement_id = t.schoolmanagement_id
                         JOIN dimensions.district AS d ON t.district_id = d.district_id 
                         JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id
-                        JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                        
                         JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id, 
+                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name, 
                         ss.schoolsubcategory_name, t.schoolmanagement_id,sm.schoolmanagement_name,
                         d.latitude, d.longitude, t.district_id,d.district_name`,
 
@@ -1572,7 +1569,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
                             
@@ -1608,77 +1605,67 @@ export const config = {
                     LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsnbtot_En1gXHBMFX9pSHFwSX5l as sp on
                     	sp.block_id=t.block_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
+                       
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsnbfunc_CAt1Xn9zURpqUm1wbFp6 AS shw 
                         ON shw.block_id = t.block_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                        and shw.schoolsubcategory_id = t.schoolsubcategory_id 
+                      
                         and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsngtot_EnhgXHBMFX9pSHFwSX5l AS wnp
                         ON wnp.block_id = t.block_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
+                        
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
                        
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsngfunc_CA51Xn9zURpqUm1wbFp6 AS ia
                         ON ia.block_id = t.block_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlbtot_GGhnQnxoUWZ2UAQFDQQs AS rr
                         ON rr.block_id = t.block_id
-                        and rr.schoolcategory_id = t.schoolcategory_id
-                        and rr.schoolsubcategory_id = t.schoolsubcategory_id 
+                        and rr.schoolcategory_id = t.schoolcategory_id 
                         and rr.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlbfunc_XA1kWGBodEJpSnIQDwsT AS uf
                         ON uf.block_id = t.block_id
                         and uf.schoolcategory_id = t.schoolcategory_id
-                        and uf.schoolsubcategory_id = t.schoolsubcategory_id 
                         and uf.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlgtot_GGhnQnxoUWZ2UAEFDQQs AS ut
                         ON ut.block_id = t.block_id
                         and ut.schoolcategory_id = t.schoolcategory_id
-                        and ut.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ut.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlgfunc_XA1kWGBodEJpSncQDwsT AS gf
                         ON gf.block_id = t.block_id
                         and gf.schoolcategory_id = t.schoolcategory_id
-                        and gf.schoolsubcategory_id = t.schoolsubcategory_id 
                         and gf.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletrunwatb_fXl4RFgIcHxzVHFVfGNi AS rb
                         ON rb.block_id = t.block_id
                         and rb.schoolcategory_id = t.schoolcategory_id
-                        and rb.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rb.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletrunwatg_fXl4QVgIcHxzVHFVfGNi AS rg
                         ON rg.block_id = t.block_id
                         and rg.schoolcategory_id = t.schoolcategory_id
-                        and rg.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rg.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlrunwaterb_fn1__RFgIcWF0VGZUYGFt AS rw
                         ON rw.block_id = t.block_id
                         and rw.schoolcategory_id = t.schoolcategory_id
-                        and rw.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rw.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlrunwaterg_fn1__QVgIcWF0VGZUYGFt AS urg
                         ON urg.block_id = t.block_id
                         and urg.schoolcategory_id = t.schoolcategory_id
-                        and urg.schoolsubcategory_id = t.schoolsubcategory_id 
                         and urg.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfrahandwashfactoileturnl_HxIVMTAFEgRvW2BxWABr AS ht
                         ON ht.block_id = t.block_id
                         and ht.schoolcategory_id = t.schoolcategory_id
-                        and ht.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ht.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.block AS b ON t.block_id = b.block_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                            
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
                         where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id,  
+                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,  
                             ss.schoolsubcategory_name, t.schoolmanagement_id,
                             b.latitude, b.longitude,b.district_id,b.district_name, 
                             t.block_id,b.block_name,sm.schoolmanagement_name, 
@@ -1765,7 +1752,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name,
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name,
@@ -1801,78 +1788,64 @@ export const config = {
                     LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsnbtot_AA4KRWRaVGQ3RnpnX2Vt as sp on
                     	sp.cluster_id=t.cluster_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsnbfunc_ABkGNGZnR1txDGN7e0xh AS shw 
                         ON shw.cluster_id = t.cluster_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                        and shw.schoolsubcategory_id = t.schoolsubcategory_id 
                         and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsngtot_AAsKRWRaVGQ3RnpnX2Vt AS wnp
                         ON wnp.cluster_id = t.cluster_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
                        
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletcwsngfunc_ABwGNGZnR1txDGN7e0xh AS ia
                         ON ia.cluster_id = t.cluster_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlbtot_WXM5THd_R31__QndvFBA6 AS rr
                         ON rr.cluster_id = t.cluster_id
                         and rr.schoolcategory_id = t.schoolcategory_id
-                        and rr.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rr.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlbfunc_Skx_Bm5jY1RyQmBjZRIH AS uf
                         ON uf.cluster_id = t.cluster_id
                         and uf.schoolcategory_id = t.schoolcategory_id
-                        and uf.schoolsubcategory_id = t.schoolsubcategory_id 
                         and uf.schoolmanagement_id = t.schoolmanagement_id
 
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlgtot_WXM5THd_R31__QnJvFBA6 AS ut
                         ON ut.cluster_id = t.cluster_id
                         and ut.schoolcategory_id = t.schoolcategory_id
-                        and ut.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ut.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlgfunc_Skx_Bm5jY1RyQmVjZRIH AS gf
                         ON gf.cluster_id = t.cluster_id
                         and gf.schoolcategory_id = t.schoolcategory_id
-                        and gf.schoolsubcategory_id = t.schoolsubcategory_id 
                         and gf.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletrunwatb_DhNhUE5JayJ9X2ZDZ2tw AS rb
                         ON rb.cluster_id = t.cluster_id
                         and rb.schoolcategory_id = t.schoolcategory_id
-                        and rb.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rb.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfratoiletrunwatg_DhNhVU5JayJ9X2ZDZ2tw AS rg
                         ON rg.cluster_id = t.cluster_id
                         and rg.schoolcategory_id = t.schoolcategory_id
-                        and rg.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rg.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlrunwaterb_DRdnUE5Jaj96X3FCe2l_ AS rw
                         ON rw.cluster_id = t.cluster_id
                         and rw.schoolcategory_id = t.schoolcategory_id
-                        and rw.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rw.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfraurnlrunwaterg_DRdnVU5Jaj96X3FCe2l_ AS urg
                         ON urg.cluster_id = t.cluster_id
                         and urg.schoolcategory_id = t.schoolcategory_id
-                        and urg.schoolsubcategory_id = t.schoolsubcategory_id 
                         and urg.schoolmanagement_id = t.schoolmanagement_id
                         LEFT JOIN datasets.sch_infra_schoolinfrahandwashfactoileturnl_QRweJiYeGhYcMXllTkFw AS ht
                         ON ht.cluster_id = t.cluster_id
-                        and ht.schoolcategory_id = t.schoolcategory_id
-                        and ht.schoolsubcategory_id = t.schoolsubcategory_id 
+                        and ht.schoolcategory_id = t.schoolcategory_id 
                         and ht.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
 						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             c.latitude,c.longitude,t.cluster_id,c.cluster_name,
                             c.block_id,c.block_name,c.district_id, c.district_name`,
@@ -2258,7 +2231,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                    SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                    SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                         ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                         d.latitude,d.longitude,t.district_id,d.district_name, 
                         CAST(SUM(t.sum) AS NUMERIC) AS landavail_exp_schfacl, 
@@ -2277,37 +2250,32 @@ export const config = {
                     	JOIN datasets.sch_infra_schoolinfralibrary_ZXcqUmJZZWxtXXV0BD08 as sp on
                     	sp.district_id=t.district_id
                         and sp.schoolcategory_id = t.schoolcategory_id
-                        and sp.schoolsubcategory_id = t.schoolsubcategory_id 
                         and sp.schoolmanagement_id = t.schoolmanagement_id
                         JOIN datasets.sch_infra_schoolinfraplaygrndfac_G3xUamFyOnV5cHtmaHtu AS shw 
                         ON shw.district_id = t.district_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                        and shw.schoolsubcategory_id = t.schoolsubcategory_id 
                         and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                     JOIN datasets.sch_infra_schoolinfrafurnitureavail_EAwANWJdU31uHXFuS3J9 AS wnp
                         ON wnp.district_id = t.district_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
                        
                     JOIN datasets.sch_infra_schoolinfrarampavail_TVl8RDdkbUVjWHxlbmMW AS ia
                         ON ia.district_id = t.district_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                     JOIN datasets.sch_infra_schoolinfraavailhandrailsramp_FD0AIgYNAQxlZExxdC1g AS rr
                         ON rr.district_id = t.district_id
                         and rr.schoolcategory_id = t.schoolcategory_id
-                        and rr.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rr.schoolmanagement_id = t.schoolmanagement_id
                         
                         JOIN dimensions.district AS d ON t.district_id = d.district_id 
                         JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id
-                        JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                        
                         JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id, 
+                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name,
                         ss.schoolsubcategory_name, t.schoolmanagement_id,sm.schoolmanagement_name,
                         d.latitude, d.longitude, t.district_id,d.district_name`,
 
@@ -2350,7 +2318,7 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, t.schoolsubcategory_id,
+                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
                             ss.schoolsubcategory_name,t.schoolmanagement_id,sm.schoolmanagement_name, 
                             b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
                             COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS landavail_exp_schfacl, 
@@ -2369,36 +2337,31 @@ export const config = {
 							LEFT JOIN datasets.sch_infra_schoolinfralibrary_fWt9XnxNbGJgOAAbDixo as sp
 							ON  sp.block_id=t.block_id
                             and sp.schoolcategory_id = t.schoolcategory_id
-                            and sp.schoolsubcategory_id = t.schoolsubcategory_id 
                             and sp.schoolmanagement_id = t.schoolmanagement_id
                             LEFT JOIN datasets.sch_infra_schoolinfrafurnitureavail_HWl1WmhMB2VySn1wX3tz AS wnp
                         ON wnp.block_id = t.block_id
                         and wnp.schoolcategory_id = t.schoolcategory_id
-                        and wnp.schoolsubcategory_id = t.schoolsubcategory_id 
                         and wnp.schoolmanagement_id = t.schoolmanagement_id
 						 LEFT JOIN datasets.sch_infra_schoolinfraplaygrndfac_dHZFPnlubXlnZHJoZR4b AS shw
                         ON shw.block_id = t.block_id
                         and shw.schoolcategory_id = t.schoolcategory_id
-                        and shw.schoolsubcategory_id = t.schoolsubcategory_id 
                         and shw.schoolmanagement_id = t.schoolmanagement_id
                        
                         LEFT JOIN datasets.sch_infra_schoolinfrarampavail_XA1kWGBoc1FqVnEAGwwc AS ia
                         ON ia.block_id = t.block_id
                         and ia.schoolcategory_id = t.schoolcategory_id
-                        and ia.schoolsubcategory_id = t.schoolsubcategory_id 
                         and ia.schoolmanagement_id = t.schoolmanagement_id
                         
                         LEFT JOIN datasets.sch_infra_schoolinfraavailhandrailsramp_CikJLAtodGNvdRhpaHps AS rr
                         ON rr.block_id = t.block_id
                         and rr.schoolcategory_id = t.schoolcategory_id
-                        and rr.schoolsubcategory_id = t.schoolsubcategory_id 
                         and rr.schoolmanagement_id = t.schoolmanagement_id
                             JOIN dimensions.block AS b ON t.block_id = b.block_id 
                             JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                            JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
+                            
                             JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
                         where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,t.schoolsubcategory_id,  
+                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,
                             ss.schoolsubcategory_name, t.schoolmanagement_id,
                             b.latitude, b.longitude,b.district_id,b.district_name, 
                             t.block_id,b.block_name,sm.schoolmanagement_name, 
@@ -2457,7 +2420,7 @@ t.schoolcategory_id,
 
 sc.schoolcategory_name, 
 
-t.schoolsubcategory_id,
+
 
 ss.schoolsubcategory_name,
 
@@ -2513,8 +2476,6 @@ ON sp.cluster_id = t.cluster_id
 
 AND sp.schoolcategory_id = t.schoolcategory_id
 
-AND sp.schoolsubcategory_id = t.schoolsubcategory_id 
-
 AND sp.schoolmanagement_id = t.schoolmanagement_id
 
 LEFT JOIN datasets.sch_infra_schoolinfraplaygrndfac_bWJTf2IwY3Jwcmlgd21x as shw
@@ -2522,8 +2483,6 @@ LEFT JOIN datasets.sch_infra_schoolinfraplaygrndfac_bWJTf2IwY3Jwcmlgd21x as shw
 ON shw.cluster_id = t.cluster_id
 
 AND shw.schoolcategory_id = t.schoolcategory_id
-
-AND shw.schoolsubcategory_id = t.schoolsubcategory_id 
 
 AND shw.schoolmanagement_id = t.schoolmanagement_id
 
@@ -2533,8 +2492,6 @@ ON wnp.cluster_id = t.cluster_id
 
 AND wnp.schoolcategory_id = t.schoolcategory_id
 
-AND wnp.schoolsubcategory_id = t.schoolsubcategory_id 
-
 AND wnp.schoolmanagement_id = t.schoolmanagement_id
 
 LEFT JOIN datasets.sch_infra_schoolinfrarampavail_Skx_Bm5jZEdxXmNzcRUI AS ia
@@ -2542,8 +2499,6 @@ LEFT JOIN datasets.sch_infra_schoolinfrarampavail_Skx_Bm5jZEdxXmNzcRUI AS ia
 ON ia.cluster_id = t.cluster_id
 
 AND ia.schoolcategory_id = t.schoolcategory_id
-
-AND ia.schoolsubcategory_id = t.schoolsubcategory_id 
 
 AND ia.schoolmanagement_id = t.schoolmanagement_id
 
@@ -2553,15 +2508,12 @@ ON rr.cluster_id = t.cluster_id
 
 AND rr.schoolcategory_id = t.schoolcategory_id
 
-AND rr.schoolsubcategory_id = t.schoolsubcategory_id 
-
 AND rr.schoolmanagement_id = t.schoolmanagement_id
 
 JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
 
 JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id -- Add this JOIN
 
-JOIN dimensions.schoolsubcategory AS ss ON t.schoolsubcategory_id = ss.schoolsubcategory_id 
 
 JOIN dimensions.schoolmanagementcategory AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
 
@@ -2573,7 +2525,7 @@ t.schoolcategory_id,
 
 sc.schoolcategory_name, 
 
-t.schoolsubcategory_id,
+
 
 ss.schoolsubcategory_name,
 
