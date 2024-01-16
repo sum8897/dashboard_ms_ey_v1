@@ -9,7 +9,7 @@ export const environment = {
   // apiURL: 'http://192.168.1.159:3008',
   // apiURL: 'https://cqubedemo.gpsdemo.live/api/queryBuilder',
   apiURL: 'https://vsk-py.in/api/queryBuilder',
-  stateCode: "PY",
+  stateCode: "AS",
   numberFormat: {
     reports: {
       locale: 'en-IN',
