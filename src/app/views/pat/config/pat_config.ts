@@ -164,56 +164,55 @@ export const config = {
             label: 'Student Availability',
             filters: [
    
-		{
-			"name": "State",
-			"hierarchyLevel": "1",
-			"actions": {
-				"queries":
-                
-	// 			{
-	// 				"map": `
-	// 				SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-	// 				d.latitude,d.longitude,t.district_id,d.district_name,t.date,
+		// {
+		// 	"name": "State",
+		// 	"hierarchyLevel": "1",
+		// 	"actions": {
+		// 		"queries":	
+		// 		{
+		// 			"map": `
+		// 			SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
+		// 			d.latitude,d.longitude,t.district_id,d.district_name, 
 
-    //                 COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-    //                 COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-    //                 COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-    //                 COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-    //                 COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-    //                 COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-	// 			FROM datasets.pat_student_present_EwccPGggSAkCBSM7KXJk
-	// 			AS t 
-	// 				JOIN datasets.pat_student_absent_FgkXRCdJGAMOORAGYWNj
-	// 				as sp on
-	// 				sp.district_id=t.district_id
-    //                  and sp.exam_id = t.exam_id
-    //                     and sp.class_id = t.class_id 
-    //                     and sp.subject_id = t.subject_id
-	// 				JOIN datasets.pat_total_students_daily_district
-	// 				as sh on
-	// 				sh.district_id=t.district_id
+        //             COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
+        //             COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
+        //             COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
+        //             COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
+        //             COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
+        //             COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
+		// 		FROM datasets.pat_student_present_AhQZLTtpAFkTCR8IFCtl
+		// 		AS t 
+		// 			JOIN datasets.pat_student_absent_BQwGF24BSBICBSM7OGJy
+		// 			as sp on
+		// 			sp.district_id=t.district_id
+        //              and sp.exam_id = t.exam_id
+        //                 and sp.class_id = t.class_id 
+        //                 and sp.subject_id = t.subject_id
+		// 			JOIN datasets.pat_total_students_Yearly_district
+		// 			as sh on
+		// 			sh.district_id=t.district_id
 				   
-	// 				JOIN dimensions.district AS d ON t.district_id = d.district_id 
-	// 				JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
-	// 				JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
-	// 				JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
-	// 				WHERE
-    // t.date BETWEEN startDate AND endDate
+		// 			JOIN dimensions.district AS d ON t.district_id = d.district_id 
+		// 			JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
+		// 			JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
+		// 			JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
 				   
-	// 			GROUP BY 
-	// 				t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-	// 				d.latitude,d.longitude,t.district_id,d.district_name,t.date`,
+		// 		GROUP BY 
+		// 			t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
+		// 			d.latitude,d.longitude,t.district_id,d.district_name`,
 
 			
-	// 			},
-	// 			"level": "district",
-	// 			"nextLevel": "block"
-	// 		}
-	// 	},
-				{
-					"map": `
-					SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name, 
+		// 		},
+		// 		"level": "district",
+		// 		"nextLevel": "block"
+		// 	}
+		// },
+
+        {
+			"name": "State",
+			"hierarchyLevel": "1",
+			"timeSeriesQueries": {"map": `SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
+					d.latitude,d.longitude,t.district_id,d.district_name,t.date,
 
                     COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
                     COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
@@ -221,15 +220,15 @@ export const config = {
                     COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
                     COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
                     COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-				FROM datasets.pat_student_present_AhQZLTtpAFkTCR8IFCtl
+				FROM datasets.pat_student_present_EwccPGggSAkCBSM7KXJk
 				AS t 
-					JOIN datasets.pat_student_absent_BQwGF24BSBICBSM7OGJy
+					JOIN datasets.pat_student_absent_FgkXRCdJGAMOORAGYWNj
 					as sp on
 					sp.district_id=t.district_id
                      and sp.exam_id = t.exam_id
                         and sp.class_id = t.class_id 
                         and sp.subject_id = t.subject_id
-					JOIN datasets.pat_total_students_Yearly_district
+					JOIN datasets.pat_total_students_daily_district
 					as sh on
 					sh.district_id=t.district_id
 				   
@@ -237,10 +236,46 @@ export const config = {
 					JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
 					JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
 					JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
+					WHERE
+    t.date BETWEEN startDate AND endDate
 				   
 				GROUP BY 
 					t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name`,
+					d.latitude,d.longitude,t.district_id,d.district_name,t.date`,},
+			"actions": {
+				"queries":	
+				{
+					"map": `SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
+					d.latitude,d.longitude,t.district_id,d.district_name,t.date,
+
+                    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
+                    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
+                    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
+                    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
+                    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
+                    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
+				FROM datasets.pat_student_present_EwccPGggSAkCBSM7KXJk
+				AS t 
+					JOIN datasets.pat_student_absent_FgkXRCdJGAMOORAGYWNj
+					as sp on
+					sp.district_id=t.district_id
+                     and sp.exam_id = t.exam_id
+                        and sp.class_id = t.class_id 
+                        and sp.subject_id = t.subject_id
+					JOIN datasets.pat_total_students_daily_district
+					as sh on
+					sh.district_id=t.district_id
+				   
+					JOIN dimensions.district AS d ON t.district_id = d.district_id 
+					JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
+					JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
+					JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
+					WHERE
+    t.date BETWEEN startDate AND endDate
+				   
+				GROUP BY 
+					t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
+					d.latitude,d.longitude,t.district_id,d.district_name,t.date`,
 
 			
 				},
@@ -251,9 +286,7 @@ export const config = {
 		{
             "name": "District",
             "hierarchyLevel": "2",
-            "actions": {
-                "queries":
-                {
+            "timeSeriesQueries":  {
                     "map": `
                     SELECT
     t.exam_id,
@@ -268,6 +301,7 @@ export const config = {
     b.block_name,
     b.district_id,
     b.district_name,
+    t.date,
     
     COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
     COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
@@ -275,19 +309,20 @@ export const config = {
     COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
     COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
     COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-FROM datasets.pat_student_present_BQxeO3ApGxcfAj1zZ3xg AS t
-JOIN datasets.pat_student_absent_HUsQXC4aBh4JJ1hIb2d1 AS sp ON
+FROM datasets.pat_student_present_C0AKdyg7BgUJJ1hIfndj AS t
+JOIN datasets.pat_student_absent_UR9cBDwHFAgsQmNRZGR7 AS sp ON
     sp.block_id = t.block_id
     AND sp.exam_id = t.exam_id
     AND sp.class_id = t.class_id
     AND sp.subject_id = t.subject_id
-JOIN datasets.pat_total_students_Yearly_block AS sh ON
+JOIN datasets.pat_total_students_daily_block AS sh ON
     sh.block_id = t.block_id
 JOIN dimensions.block AS b ON t.block_id = b.block_id
 JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
 JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
 JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-WHERE b.district_id = {district_id}
+WHERE b.district_id = {district_id} and 
+t.date BETWEEN startDate AND endDate
 GROUP BY
     t.exam_id,
     e.examLO,
@@ -300,7 +335,65 @@ GROUP BY
     b.district_id,
     b.district_name,
     t.block_id,
+    t.date,
     b.block_name;
+`,
+
+                    
+                },
+            "actions": {
+                "queries":
+                {
+                    "map": `
+                    SELECT
+                    t.exam_id,
+                    e.examLO,
+                    cc.class_name,
+                    t.class_id,
+                    t.subject_id,
+                    s.subject_name,
+                    b.latitude,
+                    b.longitude,
+                    t.block_id,
+                    b.block_name,
+                    b.district_id,
+                    b.district_name,
+                    t.date,
+                    
+                    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
+                    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
+                    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
+                    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
+                    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
+                    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
+                FROM datasets.pat_student_present_C0AKdyg7BgUJJ1hIfndj AS t
+                JOIN datasets.pat_student_absent_UR9cBDwHFAgsQmNRZGR7 AS sp ON
+                    sp.block_id = t.block_id
+                    AND sp.exam_id = t.exam_id
+                    AND sp.class_id = t.class_id
+                    AND sp.subject_id = t.subject_id
+                JOIN datasets.pat_total_students_daily_block AS sh ON
+                    sh.block_id = t.block_id
+                JOIN dimensions.block AS b ON t.block_id = b.block_id
+                JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
+                JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
+                JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
+                WHERE b.district_id = {district_id} and 
+                t.date BETWEEN startDate AND endDate
+                GROUP BY
+                    t.exam_id,
+                    e.examLO,
+                    cc.class_name,
+                    t.class_id,
+                    t.subject_id,
+                    s.subject_name,
+                    b.latitude,
+                    b.longitude,
+                    b.district_id,
+                    b.district_name,
+                    t.block_id,
+                    t.date,
+                    b.block_name;
 `,
 
                     
@@ -312,6 +405,63 @@ GROUP BY
         {
             "name": "Block",
             "hierarchyLevel": "3",
+            "timeSeriesQueries":  {
+                "map": `
+                SELECT
+t.exam_id,
+e.examLO,
+cc.class_name,
+t.class_id,
+t.subject_id,
+s.subject_name,
+c.latitude,
+c.longitude,
+t.cluster_id,
+c.cluster_name,
+c.block_id,
+c.block_name,
+c.district_id,
+c.district_name,
+t.date,
+COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
+COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
+COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
+COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
+COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
+COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
+FROM datasets.pat_student_present_HQQLbzxsEAYbHysMb3J0 AS t
+JOIN datasets.pat_student_absent_FR5EEGsRFxoUMSdAYXNt AS sp ON
+sp.cluster_id = t.cluster_id
+AND sp.exam_id = t.exam_id
+AND sp.class_id = t.class_id
+AND sp.subject_id = t.subject_id
+JOIN datasets.pat_total_students_daily_cluster AS sh ON
+sh.cluster_id = t.cluster_id
+JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id
+JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
+JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
+JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
+WHERE c.block_id = {block_id} and 
+t.date BETWEEN startDate AND endDate
+GROUP BY
+t.exam_id,
+e.examLO,
+cc.class_name,
+t.class_id,
+t.subject_id,
+s.subject_name,
+c.latitude,
+c.longitude,
+t.cluster_id,
+c.cluster_name,
+c.block_id,
+c.block_name,
+c.district_id,
+t.date,
+c.district_name;
+`,
+
+            },
             "actions": {
                 "queries":
                 {
@@ -331,25 +481,27 @@ GROUP BY
     c.block_name,
     c.district_id,
     c.district_name,
+    t.date,
     COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
     COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
     COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
     COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
     COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
     COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-FROM datasets.pat_student_present_EhoaOmg9TAEcEAUAI21l AS t
-JOIN datasets.pat_student_absent_Cw8RRDpNEB0bHysMfmJi AS sp ON
+FROM datasets.pat_student_present_HQQLbzxsEAYbHysMb3J0 AS t
+JOIN datasets.pat_student_absent_FR5EEGsRFxoUMSdAYXNt AS sp ON
     sp.cluster_id = t.cluster_id
     AND sp.exam_id = t.exam_id
     AND sp.class_id = t.class_id
     AND sp.subject_id = t.subject_id
-JOIN datasets.pat_total_students_Yearly_cluster AS sh ON
+JOIN datasets.pat_total_students_daily_cluster AS sh ON
     sh.cluster_id = t.cluster_id
 JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id
 JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
 JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
 JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-WHERE c.block_id = {block_id}
+WHERE c.block_id = {block_id} and 
+t.date BETWEEN startDate AND endDate
 GROUP BY
     t.exam_id,
     e.examLO,
@@ -364,6 +516,7 @@ GROUP BY
     c.block_id,
     c.block_name,
     c.district_id,
+    t.date,
     c.district_name;
 `,
 
@@ -395,7 +548,7 @@ GROUP BY
 						valueSuffix: '\n',
 					},
 					{
-						valuePrefix: 'District NAME: ',
+						valuePrefix: 'District Name: ',
 						value: 'district_name',
 						valueSuffix: '\n',
 					},
@@ -405,32 +558,32 @@ GROUP BY
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'Block NAME: ',
+                        valuePrefix: 'Block Name: ',
                         value: 'block_name',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'CLUSTER ID: ',
+                        valuePrefix: 'Cluster ID: ',
                         value: 'cluster_id',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'CLUSTER NAME: ',
+                        valuePrefix: 'Cluster Name: ',
                         value: 'cluster_name',
                         valueSuffix: '\n',
                     },
 					{
-						valuePrefix: 'student present: ',
+						valuePrefix: 'Student Present: ',
 						value: 'student_present',
 						valueSuffix: '\n',
 					},
 					{
-						valuePrefix: '-student absent: ',
+						valuePrefix: 'Student Absent: ',
 						value: 'student_absent',
 						valueSuffix: '\n',
 					},
 					{
-						valuePrefix: 'total_students: ',
+						valuePrefix: 'Total Students: ',
 						value: 'total_students',
 						valueSuffix: '\n',
 					},
@@ -771,8 +924,8 @@ GROUP BY
                 ],
             },
             "searchBar_config": {
-                "title": "UDISE Code",
-                "searchProps": ['udise_code'],
+                "title": "SCHOOL Code",
+                "searchProps": ['school_id'],
                 "searchType": "number"
             },
         }
@@ -1007,6 +1160,7 @@ GROUP BY
 
     //lo-wise-query
 
+    ///right table for lo
     lo_wise_performance: {
         "label": "Average Score",
         "defaultLevel": "state",
@@ -1206,44 +1360,94 @@ GROUP BY
             }
         }
     },
-
+//left table for bignumber
     lo_average_bignumber: {
         "label": "Average Score",
         "filters": [
+            // {
+            //     "name": "State",
+            //     "labelProp": "state_name",
+            //     "valueProp": "state_id",
+            //     "hierarchyLevel": "1",
+            //     "timeSeriesQueries": {
+            //         "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;                    ",
+            //         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
+            //             // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            //         },
+            //         "level": "district"
+            //     }
+            // },
             {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;                    ",
-                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                    "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name) AS avg_query;"
+
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
-                        // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                        "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name) AS avg_query;"
                     },
                     "level": "district"
                 }
             },
+            // {
+            //     "name": "District",
+            //     "labelProp": "district_name",
+            //     "valueProp": "district_id",
+            //     "hierarchyLevel": "2",
+            //     "timeSeriesQueries": {
+            //         "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id,ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id,a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
+            //         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id,ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id,a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
+            //             // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
+            //         },
+            //         "level": "block"
+            //     }
+            // },
+            //working query
             {
                 "name": "District",
                 "labelProp": "district_name",
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id,ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id,a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
-                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
+                    "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC)AS avg_query;"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id,ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id,a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
-                        // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
+                        "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC)AS avg_query;"
                     },
                     "level": "block"
                 }
             },
+
+            //query without district
+            // {
+            //     "name": "District",
+            //     "labelProp": "district_name",
+            //     "valueProp": "district_id",
+            //     "hierarchyLevel": "2",
+            //     "timeSeriesQueries": {
+            //         "bigNumber": "SELECT AVG(perc_lo) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, ROUND(lo_table.avg) AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_lO ASC) AS avg_query;                    "
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "bigNumber": "SELECT AVG(perc_lo) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, ROUND(lo_table.avg) AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_lO ASC) AS avg_query;                        "
+            //         },
+            //         "level": "block"
+            //     }
+            // },
+           
             {
                 "name": "Block",
                 "labelProp": "block_name",
@@ -1287,6 +1491,8 @@ GROUP BY
             }
         }
     },
+
+    //bottom table for all data
      lo_average_school: {
         "label": "Average Teachers Present",
         "defaultLevel": "state",
@@ -1297,11 +1503,11 @@ GROUP BY
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name;"
+                    "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name,EX_date, cluster_name;"
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name;",
+                        "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name,EX_date;",
                     },
                     "level": "school"
                 }
@@ -1312,11 +1518,11 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select avg_lo.date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,  round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,avg_lo.date"
+                    "table": "select avg_lo.date AS EX_date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,  round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,EX_date"
                 },
                 "actions": {
                     "queries": {
-                        "table": "select avg_lo.date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,   round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,avg_lo.date",
+                        "table": "select avg_lo.date AS EX_date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,  round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,EX_date",
                     },
                     "level": "school"
                 }
@@ -1355,6 +1561,12 @@ GROUP BY
         "options": {
             "table": {
                 "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
                     {
                         name: "District",
                         property: "district_name",
@@ -1386,14 +1598,14 @@ GROUP BY
                         class: "text-left"
                     },
                     {
-                        name: "% LO",
+                        name: "Mean Score",
                         property: "perc_lo",
                         class: "text-center",
-                        valueSuffix: '%',
+                        valueSuffix: '',
                         isHeatMapRequired: true,
                         type: "number",
                         color: {
-                            type: "percentage",
+                            type: "number",
                             values: [
                                 {
                                     color: "#007000",
@@ -1413,10 +1625,11 @@ GROUP BY
                 ],
             },
             "searchBar_config": {
-                "title": "UDISE Code",
-                "searchProps": ['udise_code'],
+                "title": "School Code",
+                "searchProps": ['school_id'],
                 "searchType": "number"
             },
+            
         }
     },
 

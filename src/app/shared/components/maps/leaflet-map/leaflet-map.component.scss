@@ -47,7 +47,9 @@
         display: flex !important;
     }
     .button-content{
-        display: column;
+        // display: column;
         // justify-content: space-evenly;
+    display: flex;
+    justify-content: center;
     }
 }

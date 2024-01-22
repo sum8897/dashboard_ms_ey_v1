@@ -626,12 +626,12 @@ export const config = {
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'no. of Schools having Electricity: ',
+                        valuePrefix: 'No. of Schools Having Electricity: ',
                         value: 'electricity',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'no. of Schools having Solar Panel: ',
+                        valuePrefix: 'No. of Schools Having Solar Panel: ',
                         value: 'solar',
                         valueSuffix: '\n',
                     }
@@ -906,12 +906,12 @@ export const config = {
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'no. of Schools having RO water Purifier: ',
+                        valuePrefix: 'No. Of Schools Having RO water Purifier: ',
                         value: 'ro_water',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'no. of Schools having Drinking Water: ',
+                        valuePrefix: 'No. Of Schools having Drinking Water: ',
                         value: 'drinking_water',
                         valueSuffix: '\n',
                     }
@@ -1342,27 +1342,27 @@ export const config = {
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet dustbin: ',
+                        valuePrefix: 'Total School Toilet Dustbin: ',
                         value: 'toilet_dustbin',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school kitchen dustbin: ',
+                        valuePrefix: 'Total School Kitchen Dustbin: ',
                         value: 'kitchen_dustbin',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school handwashfac after meal: ',
+                        valuePrefix: 'Total School Handwashfac After Meal: ',
                         value: 'handwashfac_after_meal',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school no of washpnts: ',
+                        valuePrefix: 'Total School No Of Washpnts: ',
                         value: 'no_of_washpnts',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school inceravail gtoilet: ',
+                        valuePrefix: 'Total School Inceravail Gtoilet: ',
                         value: 'inceravail_gtoilet',
                         valueSuffix: '\n',
                     },
@@ -2137,80 +2137,81 @@ export const config = {
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'No. of Schools: ',
+                        valuePrefix: 'No. Of Schools: ',
                         value: 'total_school',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school schtoilet: ',
+                        valuePrefix: 'Total School Schtoilet: ',
                         value: 'schtoilet',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet cwsn b tot: ',
+                        valuePrefix: 'Total School Toilet CWSN B Tot: ',
                         value: 'toilet_cwsn_b_tot',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet cwsn b func: ',
+                        valuePrefix: 'Total School Toilet CWSN B Func: ',
                         value: 'toilet_cwsn_b_func',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet cwsn g tot: ',
+                        valuePrefix: 'Total School Toilet CWSN G Tot: ',
                         value: 'toilet_cwsn_g_tot',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet cwsn g func: ',
+                        valuePrefix: 'Total School Toilet CWSN G Func: ',
                         value: 'toilet_cwsn_g_func',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school urnl b tot: ',
+                        valuePrefix: 'Total School Urnl B Tot: ',
                         value: 'urnl_b_tot',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school urnl b func: ',
+                        valuePrefix: 'Total School Urnl B Func: ',
                         value: 'urnl_b_func',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school urnl g tot: ',
+                        valuePrefix: 'Total School Urnl G Tot: ',
                         value: 'urnl_g_tot',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school urnl g func: ',
+                        valuePrefix: 'Total School Urnl G Func: ',
                         value: 'urnl_g_func',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet runwat b: ',
+                        valuePrefix: 'Total School Toilet Runwat B: ',
                         value: 'toilet_runwat_b',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school toilet runwat g: ',
+                        valuePrefix: 'Total School Toilet Runwat g: ',
                         value: 'toilet_runwat_g',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school urnl runwater b: ',
+                        valuePrefix: 'Total School Urnl Runwater B: ',
                         value: 'urnl_runwater_b',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'urnl_runwater_g: ',
-                        value: 'total school urnl runwater g',
+                        valuePrefix: 'Total School Urnl Runwater G: ',
+                        value: 'rnl_runwater_g',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school handwashfac toilet urnl: ',
+                        valuePrefix: 'Total School Handwashfac Toilet Urnl: ',
                         value: 'handwashfac_toilet_urnl',
                         valueSuffix: '\n',
-                    }
+                    },
+                    
                 ],
 
             },
@@ -2736,32 +2737,32 @@ sc.schoolcategory_name;
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school landavail exp schfacl: ',
+                        valuePrefix: 'Total School Landavail Exp Schfacl: ',
                         value: 'landavail_exp_schfacl',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school library: ',
+                        valuePrefix: 'Total School Library: ',
                         value: 'library',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school playgrnd fac: ',
+                        valuePrefix: 'Total School Playgrnd Fac: ',
                         value: 'playgrnd_fac',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school no of furniture avail: ',
+                        valuePrefix: 'Total School No Of Furniture Avail: ',
                         value: 'furniture_avail',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school rampavail: ',
+                        valuePrefix: 'Total School Rampavail: ',
                         value: 'rampavail',
                         valueSuffix: '\n',
                     },
                     {
-                        valuePrefix: 'total school avail hand rails ramp: ',
+                        valuePrefix: 'Total School Avail Hand Rails Ramp: ',
                         value: 'avail_hand_rails_ramp',
                         valueSuffix: '\n'
                     },

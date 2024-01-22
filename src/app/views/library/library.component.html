@@ -2,7 +2,7 @@
 	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
 		<div class="col-span-12">
 			<p class="program-title">
-				LIBRARY <em><small>(LIBRARY)</small></em>
+				CIVIL WORKS<em><small>(CIVIL-WORKS)</small></em>
 			</p>
 			<p class="program-desc">
 				The Performance Grading Index (PGI) is a tool to provide insights on the
@@ -21,20 +21,20 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<mat-tab label="Overall Summary">
+		<!-- <mat-tab label="Overall Summary">
 			<app-summary-tab
-				*ngIf="selectedTabLabel === 'Student Availability'"
+				*ngIf="selectedTabLabel === 'Overall Summary'"
 			></app-summary-tab>
+		</mat-tab> -->
+		<mat-tab label="Overall Summary">
+			<app-school-wise-library-tab
+				*ngIf="selectedTabLabel === 'Overall Summary'"
+			></app-school-wise-library-tab>
 		</mat-tab>
 		<mat-tab label="District Wise Summary">
 			<app-district-wise-summary-tab
 				*ngIf="selectedTabLabel === 'District Wise Summary'"
 			></app-district-wise-summary-tab>
-		</mat-tab>
-		<mat-tab label="School Wise Library">
-			<app-school-wise-library-tab
-				*ngIf="selectedTabLabel === 'School Wise Library'"
-			></app-school-wise-library-tab>
 		</mat-tab>
 	</mat-tab-group>
 </div>

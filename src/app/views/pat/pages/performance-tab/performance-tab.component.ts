@@ -65,8 +65,8 @@ export class PerformanceTabComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-        this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+        this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         }
     else if(this.hasCommonFilters===false){
         // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters});
@@ -77,7 +77,9 @@ export class PerformanceTabComponent implements OnInit, AfterViewInit {
         let days = endDate.getDate() - this.defaultSelectedDays;
         let startDate = new Date();
         startDate.setDate(days);
-        this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        this.startDate = moment(startDate).format('YYYY-MM-DD');
+        this.endDate = moment(endDate).format('YYYY-MM-DD');
+        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         }
     }
@@ -104,46 +106,48 @@ export class PerformanceTabComponent implements OnInit, AfterViewInit {
     // console.log("my csv",csvData)
     }
 
-    filtersUpdated(filters: any) {
-    this.reportsData = [];
-    this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-    // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        }
+    // filtersUpdated(filters: any) {
+    // this.reportsData = [];
+    // this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
+    // // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    //     }
 
-    timeSeriesUpdated(event: any): void {
-    this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    if (event?.startDate !== null && event?.endDate !== null) {
-        this.reportsData = [];
-        this.studentavailability?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
-        }
-    }
-    // updateReportsData( ): void {
-     
-    //   console.log(this.filters,this.startDate,this.endDate)
-
-    //   // this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    //   this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    // timeSeriesUpdated(event: any): void {
+    // this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
+    // this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
+    // if (event?.startDate !== null && event?.endDate !== null) {
+    //     this.reportsData = [];
+    //     this.studentavailability?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+    //     }
     // }
+
+
+    updateReportsData( ): void {
+     
+      console.log(this.filters,this.startDate,this.endDate)
+
+      // this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+      this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    }
     
 
-    // filtersUpdated(filters: any) {
-    //   this.reportsData = [];
-    //   this.filters = filters
-    //   this.updateReportsData()
-    //       }
+    filtersUpdated(filters: any) {
+      this.reportsData = [];
+      this.filters = filters
+      this.updateReportsData()
+          }
 
-    //       timeSeriesUpdated(event: any): void {
-    //         if (event?.startDate !== null && event?.endDate !== null) {
-    //               this.reportsData = []
-    //               // this.schoolReportsData = []
-    //         this.startDate = moment(event.startDate).format('YYYY-MM-DD');
-    //         this.endDate = moment(event.endDate).format('YYYY-MM-DD');
-    //         this.updateReportsData()
-    //         }
+          timeSeriesUpdated(event: any): void {
+            if (event?.startDate !== null && event?.endDate !== null) {
+                  this.reportsData = []
+                  // this.schoolReportsData = []
+            this.startDate = moment(event.startDate).format('YYYY-MM-DD');
+            this.endDate = moment(event.endDate).format('YYYY-MM-DD');
+            this.updateReportsData()
+            }
            
             
-    //       }
+          }
           
 
     importBigNumberMetrics(bigNumberMetric: any) {

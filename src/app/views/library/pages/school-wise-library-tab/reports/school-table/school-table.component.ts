@@ -30,7 +30,7 @@ export class SchoolTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = ' School Wise % Average Score';
+  title = 'Overall Summary';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;

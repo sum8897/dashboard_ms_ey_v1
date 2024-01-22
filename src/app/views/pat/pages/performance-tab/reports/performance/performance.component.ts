@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit,Input, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -20,11 +20,11 @@ export class PerformanceComponent implements OnInit {
   reportData: any = {
     reportName: "Student Availability"
   };
-  title: string = 'Student Availability'
+  title: string = ''
   selectedYear: any;
   selectedMonth: any;
-  startDate: any;
-  endDate: any;
+  // startDate: any;
+  // endDate: any;
   tableReportData: any;
   config: any;
   compareDateRange: any = 30;
@@ -38,6 +38,9 @@ export class PerformanceComponent implements OnInit {
   metricFilter:any;
 
   @Output() exportReportData = new EventEmitter<any>();
+  @Output() exportDates = new EventEmitter<any>();
+  @Input() startDate: any;
+  @Input() endDate: any;
 
   constructor(private readonly _dataService: DataService,
     private readonly _wrapperService: WrapperService,
@@ -64,7 +67,7 @@ export class PerformanceComponent implements OnInit {
     })
   }
  
-  async getReportData(values: any): Promise<void> {
+  async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
     let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
     if (filterValues === undefined) {
       filterValues = []
@@ -78,7 +81,7 @@ export class PerformanceComponent implements OnInit {
     this.filterneed=filterneed;
     // console.log("reportData:",this.drillDownDetails)
      if (this.drillDownDetails !== undefined) {
-      let result: any = await this._drillDownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails, this.filterValues,this.metricFilter,this.filterneed)
+      let result: any = await this._drillDownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], startDate, endDate, this.drillDownDetails, this.filterValues,this.metricFilter,this.filterneed)
       this.drillDownDetails = result?.drillDownDetails
       this.reportData = result?.reportData
       
@@ -92,8 +95,10 @@ export class PerformanceComponent implements OnInit {
       }
     
       // this.filterValues = filterValues
-      this.startDate = timeSeriesValues?.startDate;
-      this.endDate = timeSeriesValues?.endDate;
+      // this.startDate = timeSeriesValues?.startDate;
+      // this.endDate = timeSeriesValues?.endDate;
+      this.startDate = startDate;
+      this.endDate = endDate;
       let reportConfig = config
 
       let { timeSeriesQueries, queries, levels, defaultLevel, filters, options } = reportConfig[this.reportName];
