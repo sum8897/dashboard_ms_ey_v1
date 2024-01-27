@@ -2775,4 +2775,68 @@ sc.schoolcategory_name;
         },
 
     },
+
+//infra-bignumber1
+infra_bignumber: {
+    "label": "Average Teachers Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": "select 3800 as total_count",
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": "select 3800 as total_count",
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+        
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Total No Of Schools",
+            "valueSuffix": '',
+            "property": 'total_count'
+        }
+    }
+},
+
+//infra-bignumber2
+
+infra_bignumber2: {
+    "label": "Average Teachers Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": "select 3500 as total_count",
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": "select 3500 as total_count",
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "School having Electricity ",
+            "valueSuffix": '',
+            "property": 'total_count'
+        }
+    }
+},
 }

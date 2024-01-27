@@ -4,6 +4,8 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { SchoolTableComponent } from './reports/school-table/school-table.component';
+
+import { SummaryBarChartComponent } from './reports/summary-bar-chart/summary-bar-chart.component';
 import moment from 'moment';
 import {config} from '../../config'
 
@@ -35,7 +37,7 @@ hasCommonFilters: boolean = true;
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='School Wise Library';
+  tabLabel:any='Overall Summary';
 
   //added for full school report download
   // title = "Download School Report"
@@ -43,6 +45,8 @@ hasCommonFilters: boolean = true;
   pagereportName = "teachers_present"
   //
   @ViewChild('schoolTable') schoolTable: SchoolTableComponent;
+  @ViewChild('summaryBarchart') summaryBarchart: SummaryBarChartComponent;
+ 
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -73,6 +77,12 @@ hasCommonFilters: boolean = true;
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
           this.schoolTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
+          console.log('line103- filters',this.filters)
+          
+          this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
+          console.log('line103- filters',this.filters)
+          this.summaryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -118,6 +128,8 @@ hasCommonFilters: boolean = true;
    
 
     this.schoolTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    
+    this.summaryBarchart?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
 

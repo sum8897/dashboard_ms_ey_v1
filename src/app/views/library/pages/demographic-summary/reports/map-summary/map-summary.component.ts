@@ -4,21 +4,21 @@ import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder'
-import { config } from '../../../../config/pat_config'
+import { config } from '../../../../config';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 
 @Component({
-  selector: 'app-performance',
-  templateUrl: './performance.component.html',
-  styleUrls: ['./performance.component.scss']
+  selector: 'app-map-summary',
+  templateUrl: './map-summary.component.html',
+  styleUrls: ['./map-summary.component.scss']
 })
-export class PerformanceComponent implements OnInit {
+export class MapSummaryComponent implements OnInit {
 
-  reportName: string = 'student_availability';
+  reportName: string = 'summary_map';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "Student Availability"
+    reportName: ""
   };
   title: string = ''
   selectedYear: any;
@@ -166,6 +166,7 @@ export class PerformanceComponent implements OnInit {
         }
         
         else if (query && key === 'map' && filterneed) {
+          console.log('169',query, options, metricFilter)
           this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
          
           if (this.reportData?.data?.length > 0) {

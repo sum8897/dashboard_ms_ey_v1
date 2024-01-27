@@ -9,7 +9,7 @@
 		></app-filter-panel>
 	</div>
 	<div class="filter-row grid grid-cols-10">
-		<!-- <div
+		<div
 			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
 		>
 			<app-time-series-filter-panel
@@ -18,7 +18,7 @@
 				[maxDate]="maxDate"
 				[defaultSelectedDays]="defaultSelectedDays"
 			></app-time-series-filter-panel>
-		</div> -->
+		</div>
 		<div
 			class="download-button py-2 xmd:col-start-6 xmd:col-end-11 md:col-start-5 md:col-end-11 col-start-11 col-end-20 flex"
 		>
@@ -31,20 +31,43 @@
 		</div>
 	</div>
 
-	<!-- <div class="grid grid-cols-4 gap-8">
-    <div class="md:col-span-2 col-span-4">
-        <app-breadcrumb-component></app-breadcrumb-component>
-    </div>
-    
-</div> -->
-	<div
-		class="col-span-2 xmd:col-span-2 div-shadow"
-		*ngIf="checkReport('school_table_library', 'table')"
-		id="table3"
-	>
-		<app-school-table
-			#schoolTable
-			(exportReportData)="csvDownload($event)"
-		></app-school-table>
+	<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('school_table_library', 'table')"
+				id="table3"
+			>
+				<app-school-table
+					#schoolTable
+					(exportReportData)="csvDownload($event)"
+				></app-school-table>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('summary_overall_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-summary-bar-chart
+					#summaryBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-summary-bar-chart>
+			</div>
+		</div>
 	</div>
+	<!-- <div class="reports-row">
+		<div class="row-wrapper grid grid-cols-1 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('summary_map', 'map')"
+				id="map"
+			>
+				<app-summary-map
+					#summarymap
+					(exportReportData)="csvDownload($event)"
+				></app-summary-map>
+			</div>
+		</div>
+	</div> -->
 </div>

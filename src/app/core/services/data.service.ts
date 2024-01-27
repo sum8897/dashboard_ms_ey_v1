@@ -294,14 +294,17 @@ export class DataService {
       this.spinner.show();
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
-        let { map: { indicator, indicatorType, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
+        let { map: { indicator, indicatorType,totalOfPercentage, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
         let metricFilter;
+        // console.log(tooltipMetrics, metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label);
         if (metricFilterNeeded) {
           metricFilter = filters?.filter((filter: any) => {
             return filter.filterType === 'metric'
           })[0]
           // rows = this.mapGroupBy(rows, groupByColumn, metricLabelProp, metricValueProp, tooltipMetrics, metricFilter.value)
         }
+
+      
  
         reportData = {
           data: rows.map(row => {
@@ -309,16 +312,19 @@ export class DataService {
               ...row,
               Latitude: row['latitude'],
               Longitude: row['longitude'],
-              indicator: metricFilter ? isNaN(row[metricFilter.value]) ? row[metricFilter.value] : Number(row[metricFilter.value]) : isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]),
+              indicator: indicatorType && indicatorType==='percent'? Number((metricFilter ? row[metricFilter.value]:row[indicator])/(totalOfPercentage?row[totalOfPercentage]:1)*100) : metricFilter ? isNaN(row[metricFilter.value]) ? row[metricFilter.value] : Number(row[metricFilter.value]) : isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]),
               tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
             };
  
             return row;
           }),
+          
           options: {
             reportIndicatorType: indicatorType,
-            legend,
-            selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
+            legend, 
+            legendLabel:tooltipMetrics && metricFilter ? tooltipMetrics?.filter(item=> item.value === (metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label))[0].valuePrefix:undefined,
+            selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined,
+            reporttotalOfPercentage:totalOfPercentage ? totalOfPercentage: undefined
           }
         }
         this.spinner.hide();

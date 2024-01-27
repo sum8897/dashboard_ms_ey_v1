@@ -8,25 +8,30 @@ import { LibraryComponent } from './library.component';
 import { LibraryRoutingModule } from './library-routing.module';
 import { ChartsModule } from 'ng2-charts';
 
-import { SummaryTabComponent } from './pages/summary-tab/summary-tab.component';
+
 import { DistrictWiseSummaryTabComponent } from './pages/district-wise-summary-tab/district-wise-summary-tab.component';
 import { SchoolWiseLibraryTabComponent } from './pages/school-wise-library-tab/school-wise-library-tab.component';
 import { SchoolTableComponent } from './pages/school-wise-library-tab/reports/school-table/school-table.component';
 import { DistrictTableComponent } from './pages/district-wise-summary-tab/reports/district-table/district-table.component';
-import { SummaryTableComponent } from './pages/summary-tab/reports/summary-table/summary-table.component';
-import { SummaryChartComponent } from './pages/summary-tab/reports/summary-chart/summary-chart.component';
+import { SummaryBarChartComponent } from './pages/school-wise-library-tab/reports/summary-bar-chart/summary-bar-chart.component';
+import { DemographicSummaryComponent } from './pages/demographic-summary/demographic-summary.component';
+import { MapSummaryComponent } from './pages/demographic-summary/reports/map-summary/map-summary.component';
+import { AnalysisBarchartComponent } from './pages/district-wise-summary-tab/reports/analysis-barchart/analysis-barchart.component';
+
 
 
 @NgModule({
     declarations: [
       LibraryComponent,
-      SummaryTabComponent,
       DistrictWiseSummaryTabComponent,
       SchoolWiseLibraryTabComponent,
       SchoolTableComponent,
       DistrictTableComponent,
-      SummaryTableComponent,
-      SummaryChartComponent
+      SummaryBarChartComponent,
+      DemographicSummaryComponent,
+      MapSummaryComponent,
+      AnalysisBarchartComponent,
+     
      
     ],
     imports: [DashletModule.forRoot({

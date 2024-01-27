@@ -99,11 +99,12 @@ export class ReportDrilldownService {
         }
         else if (query && types[i] === 'map' && filterneed) {
           
-          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?metricFilter:undefined)
+          
+          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?matric_filter:undefined)
         }
         else if (query && types[i] === 'map_without_filter' && !filterneed) {
        
-          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?metricFilter:undefined)
+          reportData = await await this._dataService.getMapReportData(query, options, matric_filter?matric_filter:undefined)
         }
       }
 

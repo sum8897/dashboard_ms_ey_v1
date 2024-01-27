@@ -172,6 +172,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
         else {
           data = await this._mapService.getStateGeoJSON();
         }
+        console.log('mapdata:',this.mapData)
 
         let min!: number, max!: number, values: any[] = [];
 
@@ -190,7 +191,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           let parts = 3;
           max = max > 0 ? max : parts;
           let range = max - min;
-
+// console.log('range:', range ,'min', min, 'max',max, 'values', values);
           let partSize = (range / parts % 1 === 0) ? range / parts : Number((range / parts).toFixed(2));
           for (let i = 0; i < parts; i++) {
             if (i === 0) {
@@ -249,9 +250,11 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
           mapData.data.forEach((state: any) => {
             if (state.state_id == feature.properties.state_code && !state.district_id) {
               popup = state.tooltip
+              console.log("popup 253",popup);
             }
             else if (state.district_id && state.district_id == feature.properties.ID_2) {
               popup = state.tooltip
+              console.log("popup 257",popup);
             }
           });
           return popup;
@@ -574,7 +577,7 @@ export class LeafletMapComponent implements OnInit, AfterViewInit, OnChanges {
       let div = L.DomUtil.create('div', 'info legend text-center');
       let clickable = false;
       if (mapOptions.legend && mapOptions.legend.title) {
-        labels.push(`<strong>${mapOptions.selectedMetric ? mapOptions.selectedMetric : mapOptions.legend.title}:</strong>`)
+        labels.push(`<strong>${mapOptions.legendLabel ? mapOptions.legendLabel : mapOptions.legend.title}</strong>`)
       }
 
       if (reportTypeIndicator === 'boolean') {

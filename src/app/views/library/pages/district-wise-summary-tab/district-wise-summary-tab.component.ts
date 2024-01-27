@@ -4,6 +4,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { DistrictTableComponent } from './reports/district-table/district-table.component';
+import { AnalysisBarchartComponent } from './reports/analysis-barchart/analysis-barchart.component';
 import moment from 'moment';
 import {config} from '../../config'
 
@@ -35,7 +36,7 @@ hasCommonFilters: boolean = true;
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='District Wise Summary';
+  tabLabel:any='Analysis';
 
   //added for full school report download
   // title = "Download School Report"
@@ -43,6 +44,7 @@ hasCommonFilters: boolean = true;
   pagereportName = "teachers_present"
   //
   @ViewChild('districtTable') districtTable:DistrictTableComponent;
+  @ViewChild('analysisBarchart') analysisBarchart:AnalysisBarchartComponent;
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -73,6 +75,9 @@ hasCommonFilters: boolean = true;
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
           this.districtTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
+          console.log('line103- filters',this.filters)
+          this.analysisBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -118,6 +123,7 @@ hasCommonFilters: boolean = true;
    
 
     this.districtTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.analysisBarchart?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
 

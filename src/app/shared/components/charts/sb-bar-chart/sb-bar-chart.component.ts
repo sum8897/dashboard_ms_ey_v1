@@ -17,6 +17,7 @@ export class SbBarChartComponent implements OnInit, OnChanges {
   pageSize = 30;
 
   ngOnInit() {
+// console.log('inside barchart',this.data,this.config)
     this.filterData = { values: this.data.values.slice(0, this.pageSize) };
   }
 

@@ -56,6 +56,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CriteriaComponent } from './components/criteria/criteria.component';
 import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { NewBarChartComponent } from './components/charts/new-bar-chart/new-bar-chart.component';
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -126,6 +127,7 @@ const DECLARATIONS = [
   declarations: [
     DECLARATIONS,
     BreadcrumbComponentComponent,
+    NewBarChartComponent,
   ],
   imports: [
     CommonModule,

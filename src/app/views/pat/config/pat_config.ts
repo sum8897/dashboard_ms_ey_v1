@@ -533,7 +533,9 @@ GROUP BY
 
 				metricFilterNeeded: true,
 
-				indicator: 'student_present',
+				indicator: 'metric',
+                totalOfPercentage:"total_students",
+                indicatorType: "percent",
 
 				legend: {
 
@@ -1171,11 +1173,11 @@ GROUP BY
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name ORDER BY perc_LO ASC;",
+                    "table": "SELECT lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(AVG(lo_table.avg)) AS avg_lo, ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id WHERE lo_table.date BETWEEN startDate AND endDate GROUP BY lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name ORDER BY perc_lo ASC;                    ",
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name ORDER BY perc_LO ASC;",
+                        "table": "SELECT lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(AVG(lo_table.avg)) AS avg_lo, ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id WHERE lo_table.date BETWEEN startDate AND endDate GROUP BY lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name ORDER BY perc_lo ASC;                        ",
                     },
                     "level": "district"
                 }
@@ -1186,11 +1188,11 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo, tlt.sum AS total_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN datasets.pat_total_lo_Daily_block AS tlt ON lt.date = tlt.date AND lt.block_id = tlt.block_id JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id  JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, cc.class_name, cc.class_id, ing.indicator,a.avg_lo,ing.indicator_id, block_wise_table.block_name, a.ex_date ORDER BY perc_LO ASC;",
+                    "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(AVG(a.avg_lo)) AS avg_lo, ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id ORDER BY perc_lo ASC;                    ",
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo, tlt.sum AS total_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN datasets.pat_total_lo_Daily_block AS tlt ON lt.date = tlt.date AND lt.block_id = tlt.block_id JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id  JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, cc.class_name, cc.class_id, ing.indicator,a.avg_lo,ing.indicator_id, block_wise_table.block_name, a.ex_date ORDER BY perc_LO ASC; ",
+                        "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(AVG(a.avg_lo)) AS avg_lo, ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id ORDER BY perc_lo ASC;                        ",
                     },
                     "level": "block"
                 }
@@ -1201,11 +1203,111 @@ GROUP BY
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select a.cluster_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, cluster_name, round(a.avg_lo) as perc_LO from( select lo_table.cluster_id,lo_table.subject_id,lo_table.class_id, lo_table.indicator_id,lo_table.date as EX_date,lo_table.avg as avg_lo,total_lo_table.sum as total_lo from datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table join datasets.pat_total_lo_Daily_cluster as total_lo_table on lo_table.date = total_lo_table.date and lo_table.cluster_id = total_lo_table.cluster_id) as a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.EX_date between startDate and endDate group by a.cluster_id,a.avg_lo,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, cluster_name order by perc_LO asc",
+                    "table": `SELECT
+                    a.cluster_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    cluster_wise_table.cluster_name, 
+                    ROUND(a.avg_lo) AS avg_lo,
+                    ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
+                FROM
+                    (
+                        SELECT
+                            lo_table.cluster_id,
+                            lo_table.subject_id,
+                            lo_table.class_id,
+                            lo_table.indicator_id,
+                            lo_table.date AS EX_date,
+                            lo_table.avg AS avg_lo,
+                            total_lo_table.sum AS total_lo
+                        FROM
+                            datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
+                        JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
+                            AND lo_table.cluster_id = total_lo_table.cluster_id
+                    JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
+                    JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
+                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id  
+                        WHERE
+                            lo_table.date BETWEEN startDate AND endDate 
+                    ) AS a
+                JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
+                JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
+                JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
+                JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
+                     where  block_id = {block_id}
+                GROUP BY
+                    a.cluster_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    cluster_wise_table.cluster_name,
+                    a.avg_lo,
+                    ts.avg
+                ORDER BY
+                    perc_lo ASC;`,
                 },
                 "actions": {
                     "queries": {
-                        "table": "select a.cluster_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, cluster_name, round(a.avg_lo) as perc_LO from( select lo_table.cluster_id,lo_table.subject_id,lo_table.class_id, lo_table.indicator_id,lo_table.date as EX_date,lo_table.avg as avg_lo,total_lo_table.sum as total_lo from datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table join datasets.pat_total_lo_Daily_cluster as total_lo_table on lo_table.date = total_lo_table.date and lo_table.cluster_id = total_lo_table.cluster_id) as a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.EX_date between startDate and endDate group by a.cluster_id,a.avg_lo,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, cluster_name order by perc_LO asc",
+                        "table": `SELECT
+                        a.cluster_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        cluster_wise_table.cluster_name, 
+                        ROUND(a.avg_lo) AS avg_lo,
+                        ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
+                    FROM
+                        (
+                            SELECT
+                                lo_table.cluster_id,
+                                lo_table.subject_id,
+                                lo_table.class_id,
+                                lo_table.indicator_id,
+                                lo_table.date AS EX_date,
+                                lo_table.avg AS avg_lo,
+                                total_lo_table.sum AS total_lo
+                            FROM
+                                datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
+                            JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
+                                AND lo_table.cluster_id = total_lo_table.cluster_id
+                        JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
+                        JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
+                        JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
+                        JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id  
+                            WHERE
+                                lo_table.date BETWEEN startDate AND endDate 
+                        ) AS a
+                    JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
+                    JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
+                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
+                    JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
+                         where  block_id = {block_id}
+                    GROUP BY
+                        a.cluster_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        cluster_wise_table.cluster_name,
+                        a.avg_lo,
+                        ts.avg
+                    ORDER BY
+                        perc_lo ASC;`,
                     },
                     "level": "cluster"
                 }
@@ -1216,11 +1318,59 @@ GROUP BY
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,  school.school_name, round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id inner join dimensions.school on school.school_id = total_lo.school_id where  school.cluster_id = {cluster_id} and avg_lo.date between startDate and endDate group by  school.school_id,avg_lo.avg,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name"
+                    "table": `SELECT
+                    school.school_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    school.school_name, 
+                    ROUND(AVG(avg_lo.avg)) AS avg_lo,
+                    ROUND((AVG(avg_lo.avg) / ts.avg) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS avg_lo
+                INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON avg_lo.school_id = total_lo.school_id AND avg_lo.date = total_lo.date
+                JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id 
+                JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id 
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id 
+                INNER JOIN dimensions.school ON school.school_id = total_lo.school_id 
+                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
+                WHERE  
+                    school.cluster_id = {cluster_id} AND avg_lo.date BETWEEN startDate AND endDate
+                GROUP BY  
+                    school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name,ts.avg
+                ORDER BY  
+                    perc_lo;`
                 },
                 "actions": {
                     "queries": {
-                        "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,  school.school_name, round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id inner join dimensions.school on school.school_id = total_lo.school_id where  school.cluster_id = {cluster_id} and avg_lo.date between startDate and endDate group by  school.school_id,avg_lo.avg,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name",
+                        "table": `SELECT
+                        school.school_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        school.school_name, 
+                        ROUND(AVG(avg_lo.avg)) AS avg_lo,
+                        ROUND((AVG(avg_lo.avg) / ts.avg) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS avg_lo
+                    INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON avg_lo.school_id = total_lo.school_id AND avg_lo.date = total_lo.date
+                    JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id 
+                    JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id 
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id 
+                    INNER JOIN dimensions.school ON school.school_id = total_lo.school_id 
+                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
+                    WHERE  
+                        school.cluster_id = {cluster_id} AND avg_lo.date BETWEEN startDate AND endDate
+                    GROUP BY  
+                        school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name,ts.avg
+                    ORDER BY  
+                        perc_lo;`,
                     },
                     "level": "school"
                 }
@@ -1364,35 +1514,86 @@ GROUP BY
     lo_average_bignumber: {
         "label": "Average Score",
         "filters": [
-            // {
-            //     "name": "State",
-            //     "labelProp": "state_name",
-            //     "valueProp": "state_id",
-            //     "hierarchyLevel": "1",
-            //     "timeSeriesQueries": {
-            //         "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;                    ",
-            //         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-            //     },
-            //     "actions": {
-            //         "queries": {
-            //             "bigNumber": "SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id WHERE lo_table.date BETWEEN startDate AND endDate ) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id GROUP BY s.subject_name,a.avg_lo, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC;",
-            //             // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-            //         },
-            //         "level": "district"
-            //     }
-            // },
             {
                 "name": "State",
                 "labelProp": "state_name",
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name) AS avg_query;"
+                    "bigNumber": `SELECT 
+                    ROUND(AVG(perc_lo)) AS perc_lo
+                    from (SELECT
+                    lo_table.district_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    district_wise_table.district_name,
+                    ROUND(AVG(lo_table.avg)) AS avg_lo,
+                    ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
+                JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
+                JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
+                JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
+                JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
+                WHERE
+                    lo_table.date BETWEEN startDate AND endDate
+                    
+                GROUP BY
+                    lo_table.district_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    district_wise_table.district_name
+                ORDER BY
+                    perc_lo ASC) as avg_query;`
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.district_id, lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.date AS EX_date, lo_table.avg AS avg_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date AND lo_table.district_id = total_lo_table.district_id) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id WHERE a.EX_date BETWEEN startDate AND endDate GROUP BY a.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, a.avg_lo, ing.indicator_id, district_wise_table.district_name) AS avg_query;"
+                        "bigNumber": `SELECT 
+                        ROUND(AVG(perc_lo)) AS perc_lo
+                        from (SELECT
+                        lo_table.district_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        district_wise_table.district_name,
+                        ROUND(AVG(lo_table.avg)) AS avg_lo,
+                        ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
+                    JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
+                    JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
+                    JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
+                    JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
+                    WHERE
+                        lo_table.date BETWEEN startDate AND endDate
+                        
+                    GROUP BY
+                        lo_table.district_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        district_wise_table.district_name
+                    ORDER BY
+                        perc_lo ASC) as avg_query;`
                     },
                     "level": "district"
                 }
@@ -1421,11 +1622,89 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC)AS avg_query;"
+                    "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
+                    from (SELECT
+                    a.block_id,
+                    block_wise_table.block_name,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    a.ex_date,
+                    ing.indicator_id,
+                    ROUND(AVG(a.avg_lo)) AS avg_lo,
+                    ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    (
+                        SELECT
+                            lt.block_id,
+                            lt.class_id,
+                            lt.subject_id,
+                            lt.indicator_id,
+                            lt.date AS ex_date,
+                            lt.avg AS avg_lo
+                        FROM
+                            datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt
+                        JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id
+                        JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id
+                        JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id
+                        JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id
+                        WHERE
+                            lt.date BETWEEN startDate AND endDate
+                    ) AS a
+                JOIN dimensions.classes AS cc ON cc.class_id = a.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id
+                JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
+                JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id
+                WHERE
+                    block_wise_table.district_id = {district_id}
+                GROUP BY
+                    a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id
+                ORDER BY
+                    perc_lo ASC) as avg_query;`
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "SELECT AVG(perc_LO) AS perc_lo FROM (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, ROUND(a.avg_lo) AS perc_LO FROM (SELECT lo_table.class_id, lo_table.subject_id, lo_table.indicator_id, lo_table.district_id, lo_table.date AS att_date, lo_table.avg AS avg_lo, total_lo.sum AS total_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN datasets.pat_total_lo_Daily_district AS total_lo ON lo_table.date = total_lo.date AND lo_table.district_id = total_lo.district_id WHERE lo_table.date BETWEEN startDate AND endDate AND lo_table.district_id = {district_id}) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = a.district_id GROUP BY s.subject_name, s.subject_id, a.avg_lo, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id ORDER BY perc_LO ASC)AS avg_query;"
+                        "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
+                        from (SELECT
+                        a.block_id,
+                        block_wise_table.block_name,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        a.ex_date,
+                        ing.indicator_id,
+                        ROUND(AVG(a.avg_lo)) AS avg_lo,
+                        ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        (
+                            SELECT
+                                lt.block_id,
+                                lt.class_id,
+                                lt.subject_id,
+                                lt.indicator_id,
+                                lt.date AS ex_date,
+                                lt.avg AS avg_lo
+                            FROM
+                                datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt
+                            JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id
+                            JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id
+                            JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id
+                            JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id
+                            WHERE
+                                lt.date BETWEEN startDate AND endDate
+                        ) AS a
+                    JOIN dimensions.classes AS cc ON cc.class_id = a.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id
+                    JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
+                    JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id
+                    WHERE
+                        block_wise_table.district_id = {district_id}
+                    GROUP BY
+                        a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id
+                    ORDER BY
+                        perc_lo ASC) as avg_query;`
                     },
                     "level": "block"
                 }
@@ -1503,11 +1782,71 @@ GROUP BY
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name,EX_date, cluster_name;"
+                    "table": `SELECT
+                    LO_AVG.date AS EX_date,
+                    school.school_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    school.school_name,
+                    district_name,
+                    block_name,
+                    cluster_name,
+                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                 JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                WHERE
+                    LO_AVG.date BETWEEN startDate AND endDate
+                GROUP BY
+                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                    ing.indicator_id, school.school_name, district_name, block_name,
+                    EX_date, cluster_name, ts.avg
+                ORDER BY perc_lo;`
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT LO_AVG.date AS EX_date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name, SUM(total_lo.sum) AS total_lo, SUM(LO_AVG.sum) AS LO_AVG, ROUND(LO_AVG.avg) AS perc_LO FROM datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id AND LO_AVG.date = total_lo.date INNER JOIN dimensions.school ON school.school_id = total_lo.school_id WHERE LO_AVG.date BETWEEN startDate AND endDate GROUP BY LO_AVG.date,LO_AVG.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name, district_name, block_name, cluster_name,EX_date;",
+                        "table": `SELECT
+                        LO_AVG.date AS EX_date,
+                        school.school_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        school.school_name,
+                        district_name,
+                        block_name,
+                        cluster_name,
+                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                     JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                    WHERE
+                        LO_AVG.date BETWEEN startDate AND endDate
+                    GROUP BY
+                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                        ing.indicator_id, school.school_name, district_name, block_name,
+                        EX_date, cluster_name, ts.avg
+                    ORDER BY perc_lo;`,
                     },
                     "level": "school"
                 }
@@ -1518,11 +1857,71 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "select avg_lo.date AS EX_date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,  round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,EX_date"
+                    "table": `SELECT
+                    LO_AVG.date AS EX_date,
+                    school.school_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    school.school_name,
+                    district_name,
+                    block_name,
+                    cluster_name,
+                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                WHERE
+                    LO_AVG.date BETWEEN startDate AND endDate and school.district_id= {district_id}
+                GROUP BY
+                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                    ing.indicator_id, school.school_name, district_name, block_name,
+                    EX_date, cluster_name, ts.avg
+                ORDER BY perc_lo;`
                 },
                 "actions": {
                     "queries": {
-                        "table": "select avg_lo.date AS EX_date,school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,  round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.district_id = {district_id} AND avg_lo.date BETWEEN startDate AND endDate group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name, avg_lo.avg,   district_name,    block_name,    cluster_name,EX_date",
+                        "table": `SELECT
+                        LO_AVG.date AS EX_date,
+                        school.school_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        school.school_name,
+                        district_name,
+                        block_name,
+                        cluster_name,
+                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                    WHERE
+                        LO_AVG.date BETWEEN startDate AND endDate and school.district_id= {district_id}
+                    GROUP BY
+                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                        ing.indicator_id, school.school_name, district_name, block_name,
+                        EX_date, cluster_name, ts.avg
+                    ORDER BY perc_lo;`,
                     },
                     "level": "school"
                 }
@@ -1533,11 +1932,71 @@ GROUP BY
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,     round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.block_id = {block_id} group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,avg_lo.avg,   school_name,    district_name,    block_name,    cluster_name"
+                    "table": `SELECT
+                    LO_AVG.date AS EX_date,
+                    school.school_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    school.school_name,
+                    district_name,
+                    block_name,
+                    cluster_name,
+                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                WHERE
+                    LO_AVG.date BETWEEN startDate AND endDate and school.block_id= {block_id} 
+                GROUP BY
+                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                    ing.indicator_id, school.school_name, district_name, block_name,
+                    EX_date, cluster_name, ts.avg
+                ORDER BY perc_lo;`
                 },
                 "actions": {
                     "queries": {
-                        "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,     round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.block_id = {block_id} group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,avg_lo.avg,   school_name,    district_name,    block_name,    cluster_name",
+                        "table": `SELECT
+                        LO_AVG.date AS EX_date,
+                        school.school_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        school.school_name,
+                        district_name,
+                        block_name,
+                        cluster_name,
+                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                    WHERE
+                        LO_AVG.date BETWEEN startDate AND endDate and school.block_id= {block_id} 
+                    GROUP BY
+                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                        ing.indicator_id, school.school_name, district_name, block_name,
+                        EX_date, cluster_name, ts.avg
+                    ORDER BY perc_lo;`,
                     },
                     "level": "school"
                 }
@@ -1548,11 +2007,71 @@ GROUP BY
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,        round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.cluster_id = {cluster_id} group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name,avg_lo.avg,    district_name,    block_name,    cluster_name"
+                    "table":`SELECT
+                    LO_AVG.date AS EX_date,
+                    school.school_id,
+                    s.subject_name,
+                    s.subject_id,
+                    cc.class_name,
+                    cc.class_id,
+                    ing.indicator,
+                    ing.indicator_id,
+                    school.school_name,
+                    district_name,
+                    block_name,
+                    cluster_name,
+                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                FROM
+                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                WHERE
+                    LO_AVG.date BETWEEN startDate AND endDate and school.cluster_id= {cluster_id} 
+                GROUP BY
+                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                    ing.indicator_id, school.school_name, district_name, block_name,
+                    EX_date, cluster_name, ts.avg
+                ORDER BY perc_lo;`
                 },
                 "actions": {
                     "queries": {
-                        "table": "select  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id, school.school_name,        district_name,        block_name,        cluster_name ,        round(avg_lo.avg) as perc_LO from datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 as avg_lo  inner join  datasets.pat_total_lo_Daily_school as total_lo on avg_lo.school_id = total_lo.school_id and avg_lo.date = total_lo.date inner JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id join dimensions.school on school.school_id = total_lo.school_id where school.cluster_id = {cluster_id} group by  school.school_id,s.subject_name,s.subject_id,cc.class_name,cc.class_id,ing.indicator,ing.indicator_id,   school_name,avg_lo.avg,    district_name,    block_name,    cluster_name",
+                        "table": `SELECT
+                        LO_AVG.date AS EX_date,
+                        school.school_id,
+                        s.subject_name,
+                        s.subject_id,
+                        cc.class_name,
+                        cc.class_id,
+                        ing.indicator,
+                        ing.indicator_id,
+                        school.school_name,
+                        district_name,
+                        block_name,
+                        cluster_name,
+                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    FROM
+                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
+                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
+                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
+                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
+                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
+                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
+                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                    WHERE
+                        LO_AVG.date BETWEEN startDate AND endDate and school.cluster_id= {cluster_id} 
+                    GROUP BY
+                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
+                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
+                        ing.indicator_id, school.school_name, district_name, block_name,
+                        EX_date, cluster_name, ts.avg
+                    ORDER BY perc_lo;`,
                     },
                     "level": "school"
                 }
@@ -1598,7 +2117,7 @@ GROUP BY
                         class: "text-left"
                     },
                     {
-                        name: "Mean Score",
+                        name: "% LO",
                         property: "perc_lo",
                         class: "text-center",
                         valueSuffix: '',
@@ -1821,7 +2340,7 @@ GROUP BY
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": "select a.att_date, ceil(round(cast((sum(a.teachers_present)/sum(a.total_teachers))*100 as numeric),2)) as perc_teachers from(select present_table.cluster_id,present_table.date as att_date,present_table.sum as teachers_present,total_teachers.sum as total_teachers from datasets.sch_att_teachers_marked_present_daily_cluster as present_table join datasets.sch_att_total_teachers_daily_cluster as total_teachers on present_table.date = total_teachers.date and present_table.cluster_id = total_teachers.cluster_id) as a join dimensions.cluster as cluster_wise_table on cluster_wise_table.cluster_id = a.cluster_id where block_id = {block_id} and a.att_date between startDate and endDate group by a.att_date order by a.att_date asc"
+                    "table": "WITH DateRange AS (SELECT generate_series(startDate::date, endDate::date, '1 day'::interval)::date AS date) SELECT d.date AS EX_date, COALESCE(ROUND(AVG(CAST(a.avg_lo / NULLIF(a.total_lo, 0) AS numeric) * 100), 2), 0) AS perc_LO FROM DateRange d LEFT JOIN (SELECT s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, l.block_id, l.date AS EX_date, l.sum AS avg_lo, t.sum AS total_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh l JOIN datasets.pat_total_lo_Daily_block t ON l.date = t.date AND l.block_id = t.block_id JOIN dimensions.subjects AS s ON s.subject_id = l.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = l.indicator_id JOIN dimensions.classes AS cc ON cc.class_id = l.class_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = l.block_id where district_id = {district_id} and l.date BETWEEN startDate AND endDate GROUP BY s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, l.block_id, l.date, l.sum, t.sum) a ON d.date = a.EX_date GROUP BY d.date ORDER BY d.date ASC;"
                 },
                 "actions": {
                     "queries": {
@@ -1864,7 +2383,70 @@ GROUP BY
         }
     },
 
+//pat bignumber1
 
+pat_bignumber: {
+    "label": "Average Teachers Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": "select 8000 as total_count",
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": "select 8000 as total_count",
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+        
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Total No Of Students",
+            "valueSuffix": '',
+            "property": 'total_count'
+        }
+    }
+},
+
+//pat bignumber2
+
+pat_bignumber2: {
+    "label": "Average Teachers Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": "select 5000 as total_count",
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": "select 5000 as total_count",
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Total Present ",
+            "valueSuffix": '',
+            "property": 'total_count'
+        }
+    }
+},
 
 
 }

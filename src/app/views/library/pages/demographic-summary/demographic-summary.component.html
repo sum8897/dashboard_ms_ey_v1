@@ -39,13 +39,13 @@
 		<div class="row-wrapper grid grid-cols-1 gap-4">
 			<div
 				class="col-span-2 xmd:col-span-1 div-shadow"
-				*ngIf="checkReport('student_availability', 'map')"
+				*ngIf="checkReport('summary_map', 'map')"
 				id="map"
 			>
-				<app-performance
-					#studentavailability
+				<app-map-summary
+					#summarymap
 					(exportReportData)="csvDownload($event)"
-				></app-performance>
+				></app-map-summary>
 			</div>
 		</div>
 	</div>

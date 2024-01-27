@@ -21,19 +21,20 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<!-- <mat-tab label="Overall Summary">
-			<app-summary-tab
-				*ngIf="selectedTabLabel === 'Overall Summary'"
-			></app-summary-tab>
-		</mat-tab> -->
 		<mat-tab label="Overall Summary">
 			<app-school-wise-library-tab
 				*ngIf="selectedTabLabel === 'Overall Summary'"
 			></app-school-wise-library-tab>
 		</mat-tab>
-		<mat-tab label="District Wise Summary">
+
+		<mat-tab label="Demographic Summary">
+			<app-demographic-summary
+				*ngIf="selectedTabLabel === 'Demographic Summary'"
+			></app-demographic-summary>
+		</mat-tab>
+		<mat-tab label="Analysis">
 			<app-district-wise-summary-tab
-				*ngIf="selectedTabLabel === 'District Wise Summary'"
+				*ngIf="selectedTabLabel === 'Analysis'"
 			></app-district-wise-summary-tab>
 		</mat-tab>
 	</mat-tab-group>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryTableComponent } from './summary-table.component';
+import { MapSummaryComponent } from './map-summary.component';
 
-describe('SummaryTableComponent', () => {
-  let component: SummaryTableComponent;
-  let fixture: ComponentFixture<SummaryTableComponent>;
+describe('MapSummaryComponent', () => {
+  let component: MapSummaryComponent;
+  let fixture: ComponentFixture<MapSummaryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SummaryTableComponent ]
+      declarations: [ MapSummaryComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SummaryTableComponent);
+    fixture = TestBed.createComponent(MapSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

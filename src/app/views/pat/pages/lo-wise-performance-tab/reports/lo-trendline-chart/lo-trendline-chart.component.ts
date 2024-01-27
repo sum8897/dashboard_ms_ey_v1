@@ -376,10 +376,10 @@ async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
   updateChart(reportData) {
 
     var dates = reportData?.data?.map(data => {
-      const dateValue = new Date(data.att_date.value);
+      const dateValue = new Date(data.ex_date.value);
       return dateValue.toLocaleDateString();
     });
-    const values = reportData?.data?.map(data => data.perc_teachers.value);
+    const values = reportData?.data?.map(data => data.perc_lo.value);
 
     chart.data.labels = dates;
     chart.data.datasets = [
@@ -404,10 +404,10 @@ async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
     // const dates = reportData?.data?.map(data => moment(data.perc_teachers.value).format('YYYY-MM-DD'));
     console.log('report data',reportData)
     var dates = reportData?.data?.map(data => {
-      const dateValue = new Date(data.att_date.value);
+      const dateValue = new Date(data.ex_date.value);
       return dateValue.toLocaleDateString();
     });
-    const values = reportData?.data?.map(data => data.perc_teachers.value);
+    const values = reportData?.data?.map(data => data.perc_lo.value);
     const ctx = document.getElementById('trendlineChart') as HTMLCanvasElement;
     let defaultOptions = {
       type: 'line',
