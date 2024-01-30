@@ -4,6 +4,7 @@ import { LayoutComponent } from './core/components/layout/layout.component';
 import { RbacDialogComponent } from './shared/components/rbac-dialog/rbac-dialog.component';
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { NewChartComponent } from './views/new-chart/new-chart.component';
 
 var routes: Routes = [];
 
@@ -17,6 +18,10 @@ routes = [
     loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
   },
   {
+    path: 'chart', component: NewChartComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
     path: '',
     component: LayoutComponent,
     children: [
@@ -25,6 +30,11 @@ routes = [
         canActivate: [AuthGuard]
 
       },
+      {
+        path: 'home', component: HomePageComponent,
+        canActivate: [AuthGuard]
+      },
+      
       {
         path: 'home', component: HomePageComponent,
         canActivate: [AuthGuard]

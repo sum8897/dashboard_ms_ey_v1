@@ -7,7 +7,7 @@
 			class="col-span-12"
 		></app-filter-panel>
 	</div>
-	<div class="filter-row grid grid-cols-10">
+	<!-- <div class="filter-row grid grid-cols-10">
 		<div
 			class="download-button py-2 xmd:col-start-6 xmd:col-end-11 md:col-start-5 md:col-end-11 col-start-11 col-end-20 flex"
 		>
@@ -18,7 +18,7 @@
 			&nbsp;
 			<app-download-button [data]="reportsData"></app-download-button>
 		</div>
-	</div>
+	</div> -->
 	<div class="filter-row grid grid-cols-10">
 		<div
 			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
@@ -49,7 +49,7 @@
 			(exportReportData)="csvDownload($event)"
 		></app-district-table>
 	</div>
-	<div
+	<!-- <div
 		class="col-span-2 xmd:col-span-1 div-shadow"
 		*ngIf="checkReport('analysis_barchart', 'barChart')"
 		id="bar"
@@ -58,5 +58,5 @@
 			#analysisBarchart
 			(exportReportData)="csvDownload($event)"
 		></app-analysis-barchart>
-	</div>
+	</div> -->
 </div>

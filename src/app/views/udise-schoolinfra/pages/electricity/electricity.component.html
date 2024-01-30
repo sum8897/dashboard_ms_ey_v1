@@ -9,11 +9,11 @@
 				Filters
 			</mat-checkbox>
 		</div>
-		<div class="xmd:col-span-3 col-span-7">
+		<div class="xmd:col-span-3 col-span-7 flex">
 			<app-filter-panel
 				[filters]="filters"
 				(filtersUpdated)="filtersUpdated($event)"
-				colSize="lg:col-span-3 col-span-6"
+				class="col-span-12"
 			></app-filter-panel>
 			<div
 				class="breadcrumbs-wrapper xmd:col-start-3 xmd:col-end-5 col-span-10"

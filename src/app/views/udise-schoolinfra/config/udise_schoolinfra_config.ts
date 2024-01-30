@@ -572,6 +572,7 @@ export const config = {
                 metricFilterNeeded: true,
 
                 indicator: 'electricity',
+                // indicatorType: "percent",
 
                 legend: {
 

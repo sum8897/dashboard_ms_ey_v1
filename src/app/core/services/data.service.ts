@@ -114,10 +114,17 @@ export class DataService {
 
   getBarChartReportData(query, options, filters, currentLevel): Promise<any> {
     return new Promise((resolve, reject) => {
+  
       this.spinner.show();
-      let { barChart: { yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp } } = options;
+      let {
+         barChart: { 
+          yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp 
+        } 
+      } = options;
+      
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
+  
         if (MultibarGroupByNeeded) {
           rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
         }

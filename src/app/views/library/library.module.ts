@@ -17,6 +17,7 @@ import { SummaryBarChartComponent } from './pages/school-wise-library-tab/report
 import { DemographicSummaryComponent } from './pages/demographic-summary/demographic-summary.component';
 import { MapSummaryComponent } from './pages/demographic-summary/reports/map-summary/map-summary.component';
 import { AnalysisBarchartComponent } from './pages/district-wise-summary-tab/reports/analysis-barchart/analysis-barchart.component';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 
@@ -37,12 +38,16 @@ import { AnalysisBarchartComponent } from './pages/district-wise-summary-tab/rep
     imports: [DashletModule.forRoot({
       dataService: DataService
   }),
+  NgxEchartsModule.forRoot({
+    echarts: () => import('echarts')
+  }),
       CommonModule,
       MatTabsModule,
       MatCheckboxModule,
       SharedModule,
       LibraryRoutingModule,
       ChartsModule,
+      NgxEchartsModule,
   
     ]
   })

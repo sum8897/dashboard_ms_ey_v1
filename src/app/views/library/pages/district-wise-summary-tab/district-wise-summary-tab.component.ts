@@ -13,7 +13,7 @@ import {config} from '../../config'
   templateUrl: './district-wise-summary-tab.component.html',
   styleUrls: ['./district-wise-summary-tab.component.scss']
 })
-export class DistrictWiseSummaryTabComponent implements OnInit, OnDestroy {
+export class DistrictWiseSummaryTabComponent implements OnInit,AfterViewInit, OnDestroy {
 
   bigNumberReports: any = {};
   filters: any;
@@ -63,6 +63,7 @@ hasCommonFilters: boolean = true;
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
+  
 
  
   ngOnDestroy(): void {

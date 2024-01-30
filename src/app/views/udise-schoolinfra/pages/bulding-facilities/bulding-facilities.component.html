@@ -1,27 +1,39 @@
 <div class="col-span-full tab-wrapper">
-    <div class="filter-row grid grid-cols-5">
-        <div class="xmd:col-span-3 col-span-3">
-            <mat-checkbox color="primary" [(ngModel)]="hasCommonFilters" (change)="filterapplyRequest()"> 
-                Filters
-              </mat-checkbox>
-        </div>
-        <div class="xmd:col-span-3 col-span-7">
-            <app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)"
-                colSize="lg:col-span-3 col-span-6"></app-filter-panel>
-        </div>
-        <div class="breadcrumbs-wrapper xmd:col-start-3 xmd:col-end-5 col-span-10">
-            <app-breadcrumb-component></app-breadcrumb-component>
-          </div>
-        <!-- <div class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex" id="downloadbutton" #downloadbutton>
+	<div class="filter-row grid grid-cols-5">
+		<div class="xmd:col-span-3 col-span-3">
+			<mat-checkbox
+				color="primary"
+				[(ngModel)]="hasCommonFilters"
+				(change)="filterapplyRequest()"
+			>
+				Filters
+			</mat-checkbox>
+		</div>
+		<div class="xmd:col-span-3 col-span-7 flex">
+			<app-filter-panel
+				[filters]="filters"
+				(filtersUpdated)="filtersUpdated($event)"
+				colSize="lg:col-span-3 col-span-6"
+			></app-filter-panel>
+
+			<div
+				class="breadcrumbs-wrapper xmd:col-start-3 xmd:col-end-5 col-span-10"
+			>
+				<app-breadcrumb-component></app-breadcrumb-component>
+			</div>
+		</div>
+		<!-- <div class="download-button xmd:col-start-4 xmd:col-end-6 col-span-5 flex" id="downloadbutton" #downloadbutton>
             <app-download-button [data]="reportsData"></app-download-button>
         </div> -->
-    </div>
-    <div class="reports-row" >
-        <div class="row-wrapper grid grid-cols-1 gap-4">
-                <div class="col-span-2 xmd:col-span-1 div-shadow" 
-                id="map">
-                <app-udise-schoolinfra-building-map #udiseschoolinframap (exportReportData)="csvDownload($event)"></app-udise-schoolinfra-building-map>
-            </div>  
-        </div>
-    </div>
+	</div>
+	<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-1 gap-4">
+			<div class="col-span-2 xmd:col-span-1 div-shadow" id="map">
+				<app-udise-schoolinfra-building-map
+					#udiseschoolinframap
+					(exportReportData)="csvDownload($event)"
+				></app-udise-schoolinfra-building-map>
+			</div>
+		</div>
+	</div>
 </div>

@@ -117,6 +117,7 @@ export class AnalysisBarchartComponent implements OnInit, OnDestroy {
       }
     })
     // this.getReportData();
+
   }
 
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
@@ -254,6 +255,7 @@ export class AnalysisBarchartComponent implements OnInit, OnDestroy {
       let { barChart: { yAxis, xAxis, isMultibar, metricLabelProp, metricValueProp, tooltipMetrics, benchmarkConfig } } = options;
       this._commonService.getReportDataNew(query).subscribe((res: any) => {
         let rows = res;
+       
         // if(isMultibar){
         //   rows = multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
         // }

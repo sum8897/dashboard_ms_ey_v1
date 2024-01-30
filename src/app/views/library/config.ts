@@ -46,7 +46,18 @@ export const config = {
 
     //     label: 'Analysis',
 
-    //     name: 'Metric',
+    //     name: 'From',
+
+    //     id: 'metric',
+
+    //     values: ['not started', 'started','upto foundation','up to lintel','up to plinth','up to roof','completed'],
+
+    // },
+    // {
+
+    //     label: 'Analysis',
+
+    //     name: 'To',
 
     //     id: 'metric',
 
@@ -1979,6 +1990,217 @@ export const config = {
 
 
 
+    // {
+    //     "name": "State",
+    //     "hierarchyLevel": "1",
+    //     "timeSeriesQueries": {"map": `WITH work_summary AS (
+    //         SELECT
+    //             cc.work_name,
+    //             d.district_id,
+    //             d.district_name,
+    //             d.latitude AS Latitude,
+    //             d.longitude AS Longitude,
+    //             COALESCE(SUM(nt.sum), 0) AS not_started,
+    //             COALESCE(SUM(st.sum), 0) AS started,
+    //             COALESCE(SUM(tf.sum), 0) AS up_tofoundation,
+    //             COALESCE(SUM(tl.sum), 0) AS up_tolintel,
+    //             COALESCE(SUM(tp.sum), 0) AS up_toplinth,
+    //             COALESCE(SUM(tr.sum), 0) AS up_toroof,
+    //             COALESCE(SUM(tc.sum), 0) AS completed
+    //         FROM
+    //             dimensions.work AS cc
+    //         CROSS JOIN (
+    //             SELECT date 
+    //             FROM (
+    //                 SELECT date FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
+    //                 UNION
+    //                 SELECT date FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
+    //             ) AS all_dates
+    //             WHERE date BETWEEN startDate AND endDate
+    //         ) AS l
+    //         LEFT JOIN dimensions.district AS d ON 1=1
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
+    //             GROUP BY district_id, date
+    //         ) AS nt ON d.district_id = nt.district_id AND l.date = nt.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
+    //             GROUP BY district_id, date
+    //         ) AS st ON d.district_id = st.district_id AND l.date = st.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
+    //             GROUP BY district_id, date
+    //         ) AS tf ON d.district_id = tf.district_id AND l.date = tf.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
+    //             GROUP BY district_id, date
+    //         ) AS tl ON d.district_id = tl.district_id AND l.date = tl.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
+    //             GROUP BY district_id, date
+    //         ) AS tp ON d.district_id = tp.district_id AND l.date = tp.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
+    //             GROUP BY district_id, date
+    //         ) AS tr ON d.district_id = tr.district_id AND l.date = tr.date
+    //         LEFT JOIN (
+    //             SELECT district_id, date, SUM(sum) AS sum
+    //             FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
+    //             GROUP BY district_id, date
+    //         ) AS tc ON d.district_id = tc.district_id AND l.date = tc.date
+    //         GROUP BY
+    //             cc.work_name, d.district_id, d.district_name, d.latitude, d.longitude
+    //     )
+        
+    //     SELECT
+    //         work_name,
+    //         district_id,
+    //         district_name,
+    //         Latitude,
+    //         Longitude,
+    //         not_started,
+    //         started,
+    //         up_tofoundation,
+    //         up_tolintel,
+    //         up_toplinth,
+    //         up_toroof,
+    //         completed,
+    //         GREATEST(
+    //             (not_started + started + up_tofoundation),
+    //             (up_tolintel + up_toplinth),
+    //             (up_toroof + completed )
+    //             )/(not_started + started + up_tofoundation + up_tolintel + up_toplinth + up_toroof + completed)as work_percentage
+    //     FROM
+    //         work_summary
+    //     ORDER BY
+    //         district_id;
+        
+    //     `,},
+    //     "actions": {
+    //         "queries":	
+    //         {
+    //             "map": `WITH work_summary AS (
+    //                 SELECT
+    //                     cc.work_name,
+    //                     d.district_id,
+    //                     d.district_name,
+    //                     d.latitude AS Latitude,
+    //                     d.longitude AS Longitude,
+    //                     COALESCE(SUM(nt.sum), 0) AS not_started,
+    //                     COALESCE(SUM(st.sum), 0) AS started,
+    //                     COALESCE(SUM(tf.sum), 0) AS up_tofoundation,
+    //                     COALESCE(SUM(tl.sum), 0) AS up_tolintel,
+    //                     COALESCE(SUM(tp.sum), 0) AS up_toplinth,
+    //                     COALESCE(SUM(tr.sum), 0) AS up_toroof,
+    //                     COALESCE(SUM(tc.sum), 0) AS completed
+    //                 FROM
+    //                     dimensions.work AS cc
+    //                 CROSS JOIN (
+    //                     SELECT date 
+    //                     FROM (
+    //                         SELECT date FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
+    //                         UNION
+    //                         SELECT date FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
+    //                     ) AS all_dates
+    //                     WHERE date BETWEEN startDate AND endDate
+    //                 ) AS l
+    //                 LEFT JOIN dimensions.district AS d ON 1=1
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
+    //                     GROUP BY district_id, date
+    //                 ) AS nt ON d.district_id = nt.district_id AND l.date = nt.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
+    //                     GROUP BY district_id, date
+    //                 ) AS st ON d.district_id = st.district_id AND l.date = st.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
+    //                     GROUP BY district_id, date
+    //                 ) AS tf ON d.district_id = tf.district_id AND l.date = tf.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
+    //                     GROUP BY district_id, date
+    //                 ) AS tl ON d.district_id = tl.district_id AND l.date = tl.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
+    //                     GROUP BY district_id, date
+    //                 ) AS tp ON d.district_id = tp.district_id AND l.date = tp.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
+    //                     GROUP BY district_id, date
+    //                 ) AS tr ON d.district_id = tr.district_id AND l.date = tr.date
+    //                 LEFT JOIN (
+    //                     SELECT district_id, date, SUM(sum) AS sum
+    //                     FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
+    //                     GROUP BY district_id, date
+    //                 ) AS tc ON d.district_id = tc.district_id AND l.date = tc.date
+    //                 GROUP BY
+    //                     cc.work_name, d.district_id, d.district_name, d.latitude, d.longitude
+    //             )
+                
+    //             SELECT
+    //                 work_name,
+    //                 district_id,
+    //                 district_name,
+    //                 Latitude,
+    //                 Longitude,
+    //                 not_started,
+    //                 started,
+    //                 up_tofoundation,
+    //                 up_tolintel,
+    //                 up_toplinth,
+    //                 up_toroof,
+    //                 completed,
+    //                 GREATEST(
+    //                     (not_started + started + up_tofoundation),
+    //                     (up_tolintel + up_toplinth),
+    //                     (up_toroof + completed )
+    //                     )/(not_started + started + up_tofoundation + up_tolintel + up_toplinth + up_toroof + completed)as work_percentage
+    //             FROM
+    //                 work_summary
+    //             ORDER BY
+    //                 district_id;
+                
+    //             `,
+
+        
+    //         },
+    //         "level": "district",
+    //         "nextLevel": "block"
+    //     }
+    // },
     {
         "name": "State",
         "hierarchyLevel": "1",
