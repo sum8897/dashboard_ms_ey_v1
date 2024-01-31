@@ -42,7 +42,7 @@ hasCommonFilters: boolean = true;
   //added for full school report download
   // title = "Download School Report"
   schoolReportsData: any[] = [];
-  pagereportName = "teachers_present"
+  // pagereportName = "teachers_present"
   //
   @ViewChild('schoolTable') schoolTable: SchoolTableComponent;
   @ViewChild('summaryBarchart') summaryBarchart: SummaryBarChartComponent;
@@ -178,19 +178,7 @@ hasCommonFilters: boolean = true;
       this.startDate = startDate?.toISOString().split('T')[0];
       this.endDate = endDate?.toISOString().split('T')[0];
     }
-    if (this.rbacDetails?.role == 1) {
-      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_lo.sum) as total_lo,  sum(avg_lo.sum) as avg_lo,   ceil(round(cast((sum(avg_lo.sum)/sum(total_lo.sum) )*100 as numeric),2)) as average_percent_lo from datasets.pat_avg_lo_daily_school as avg_lo  inner join  datasets.pat_total_lo_daily_school as total_lo on avg_lo.school_id = total_lo.school_id inner join dimensions.school on school.school_id = total_lo.school_id where total_lo.date between '${this.startDate}' and '${this.endDate}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name; 
-  `
-    } else if (this.rbacDetails?.role == 2) {
-      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_lo.sum) as total_lo,  sum(avg_lo.sum) as avg_lo,   ceil(round(cast((sum(avg_lo.sum)/sum(total_lo.sum) )*100 as numeric),2)) as average_percent_lo from datasets.pat_avg_lo_daily_school as avg_lo  inner join  datasets.pat_total_lo_daily_school as total_lo on avg_lo.school_id = total_lo.school_id inner join dimensions.school on school.school_id = total_lo.school_id where total_lo.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-  
-    } else if (this.rbacDetails?.role == 3) {
-      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_lo.sum) as total_lo,  sum(avg_lo.sum) as avg_lo,   ceil(round(cast((sum(avg_lo.sum)/sum(total_lo.sum) )*100 as numeric),2)) as average_percent_lo from datasets.pat_avg_lo_daily_school as avg_lo  inner join  datasets.pat_total_lo_daily_school as total_lo on avg_lo.school_id = total_lo.school_id inner join dimensions.school on school.school_id = total_lo.school_id where total_lo.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-  
-  
-    } else if (this.rbacDetails?.role == 4) {
-      query = `select  school.school_id,  school.school_name,        district_name,        block_name,        cluster_name ,       sum(total_lo.sum) as total_lo,  sum(avg_lo.sum) as avg_lo,   ceil(round(cast((sum(avg_lo.sum)/sum(total_lo.sum) )*100 as numeric),2)) as average_percent_lo from datasets.pat_avg_lo_daily_school as avg_lo  inner join  datasets.pat_total_lo_daily_school as total_lo on avg_lo.school_id = total_lo.school_id inner join dimensions.school on school.school_id = total_lo.school_id where total_lo.date between '${this.startDate}' and '${this.endDate}' and district_id = '${this.rbacDetails?.district}' and block_id = '${this.rbacDetails?.block}' and cluster_id = '${this.rbacDetails?.cluster}' group by  school.school_id,   school_name,    district_name,    block_name,    cluster_name;  `;
-    }
+   
 
 
 

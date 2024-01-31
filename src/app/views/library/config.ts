@@ -1,15 +1,15 @@
 
 // main query
 export const config = {
-    criteria_config: {
-        indicatorName: 'Teacher Attendance',
-        minRange: 0,
-        maxRange: 100,
-        defaultFromRange: 0,
-        defaultToRange: 100,
-        unitKey: "perc_teachers",
-        linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
-    },
+    // criteria_config: {
+    //     indicatorName: 'Teacher Attendance',
+    //     minRange: 0,
+    //     maxRange: 100,
+    //     defaultFromRange: 0,
+    //     defaultToRange: 100,
+    //     unitKey: "perc_teachers",
+    //     linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
+    // },
 	filters: [
 
 
@@ -27,7 +27,7 @@ export const config = {
         // },
  
     // {
-    //     label: 'Analysis',
+    //     label: 'Overall Summary',
 
     //     name: 'work',
 
