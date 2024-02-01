@@ -1,7 +1,7 @@
 <div class="col-span-full tab-wrapper">
 	<p class="tab-desc">
-		This report shows the % of LO in the school within the selected time
-		duration on average
+		This report shows the % of Teacher Present in the school within the selected
+		time duration on average
 	</p>
 
 	<!-- <div class="filter-row grid grid-cols-4">
@@ -48,49 +48,32 @@
 			<div
 				class="col-span-2 xmd:col-span-1 div-shadow"
 				id="bignumber"
-				*ngIf="checkReport('lo_average_bignumber', 'bigNumber')"
+				*ngIf="checkReport('teacher_bignumber', 'bigNumber')"
 			>
-				<app-lo-average-bignumber #AverageBigNumber></app-lo-average-bignumber>
-				<!-- (exportReportData)="csvDownload($event)" -->
-				<hr />
-				<!-- <app-lo-trendline-chart
-					[chartConfig]="trendLineConfig"
-					#LoTrendlineChartComponent
-				></app-lo-trendline-chart> -->
+				<app-teacher-bignumber #teacherBigNumber></app-teacher-bignumber>
 			</div>
 
 			<div
 				class="col-span-2 xmd:col-span-1 div-shadow"
-				*ngIf="checkReport('lo_wise_performance', 'table')"
+				*ngIf="checkReport('teacher_average_table', 'table')"
 				id="table1"
 			>
-				<app-lo-wise-performance
-					#loWisePerformance
+				<app-teacher-average-table
+					#teacherAverageTable
 					(exportReportData)="csvDownload($event)"
-				></app-lo-wise-performance>
+				></app-teacher-average-table>
 			</div>
 
 			<div
 				class="col-span-2 xmd:col-span-2 div-shadow"
-				*ngIf="checkReport('lo_average_school', 'table')"
+				*ngIf="checkReport('teacher_average_school', 'table')"
 				id="table3"
 			>
-				<app-lo-average-school-table
-					#averageSchool
+				<app-teacher-school-table
+					#teacherAverageSchool
 					(exportReportData)="csvDownload($event)"
-				></app-lo-average-school-table>
+				></app-teacher-school-table>
 			</div>
-
-			<!-- <div
-				class="col-span-2 xmd:col-span-2 div-shadow"
-				*ngIf="checkReport('lo_average_barchart', 'barChart')"
-				id="bar"
-			>
-				<app-lo-average-barchart
-					#averageBarchart
-					(exportReportData)="csvDownload($event)"
-				></app-lo-average-barchart>
-			</div> -->
 		</div>
 	</div>
 </div>

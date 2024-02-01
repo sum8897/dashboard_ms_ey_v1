@@ -3,33 +3,33 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery,parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-import { config } from '../../../../config/pat_config';
-import { QuesWisePerformanceTabComponent } from '../../ques-wise-performance-tab.component';
+import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
+import { TeacherSummaryTabComponent } from '../../teacher-summary-tab.component';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 import { DataService } from 'src/app/core/services/data.service';
-import { CriteriaService } from 'src/app/core/services/criteria.service';
-@Component({
-  selector: 'app-ques-average-bignumber',
-  templateUrl: './ques-average-bignumber.component.html',
-  styleUrls: ['./ques-average-bignumber.component.scss']
-})
-export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
 
-  reportName: string = 'ques_average_bignumber';
+@Component({
+  selector: 'app-teacher-bignumber',
+  templateUrl: './teacher-bignumber.component.html',
+  styleUrls: ['./teacher-bignumber.component.scss']
+})
+export class TeacherBignumberComponent implements OnInit, OnDestroy {
+
+  reportName: string = 'teacher_bignumber';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average % Score"
+    reportName: "Average % Teacher present"
   };
-  currentReportName: string = "Average % Score";
+  currentReportName: string = "Average % Teacher present";
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
-  title = 'Score Summary %';
+  title = '';
   @Input() startDate: any;
   @Input() endDate: any;
   drillDownSubscription: any;
@@ -46,11 +46,10 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
 
 
   constructor(private readonly _commonService: CommonService,
-    private csv: QuesWisePerformanceTabComponent, 
+    private csv: TeacherSummaryTabComponent, 
     private readonly _wrapperService: WrapperService, 
     private _rbacService: RbacService, 
     private readonly _reportDrilldownService: ReportDrilldownService,
-    private readonly _criteriaService: CriteriaService,
     private readonly _dataService: DataService,
     private readonly _benchmarkService: BarchartBenchmarkService
     ) {
@@ -60,16 +59,18 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
     this.drillDownSubscription = this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
+    console.log('subscription',this.drillDownSubscription)
     this._reportDrilldownService.drilldownData.subscribe(data => {
+      console.log('data',data)
       if(data && data?.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
+        // data.values ?? {}
       }
     })
-   
+    
     
   }
-  
 
   
 
@@ -141,6 +142,7 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
         }
 
         let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+        console.log('outside query',query)
 
         let metricFilter = [...filterValues].filter((filter: any) => {
           return filter.filterType === 'metric'
@@ -269,7 +271,9 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
   }
 
   async drilldownData(event: any) {
-   
+    
+
+
     let { hierarchyLevel, id } = event ?? {}
     let drillDownDetails;
 
@@ -347,9 +351,18 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
         onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, undefined);
+      // let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+      // let metricFilter = [...filterValues].filter((filter: any) => {
+      //   return filter.filterType === 'metric'
+      // })
+     
+
       this.filterValues.forEach((filterParams: any) => {
         query = parseFilterToQuery(query, filterParams)
       });
+     
+      console.log('inside drilldown',query)
 
       if (query && key === 'bigNumber') {
         this.getBigNumberReportData(query, options, 'averagePercentage');
