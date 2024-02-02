@@ -22,7 +22,7 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
   bigNumberReportData: any = {
     reportName: "Average % Score"
   };
-  currentReportName: string = "Average % Score";
+  currentReportName: string = "Average % LO";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

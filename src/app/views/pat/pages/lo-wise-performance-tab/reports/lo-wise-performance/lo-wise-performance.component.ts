@@ -31,7 +31,7 @@ export class LoWisePerformanceComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = '% Average Score';
+  title = '% Average LO';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

@@ -21,9 +21,9 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average % Score"
+    reportName: "Average % Question"
   };
-  currentReportName: string = "Average % Score";
+  currentReportName: string = "Average % Question";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

@@ -34,7 +34,7 @@ export class QuesWisePerformanceComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = '% Average Score';
+  title = '% Average Question';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

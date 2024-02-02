@@ -1097,8 +1097,10 @@ GROUP BY
                     district_name, 
                     block_name, 
                     cluster_name, 
-                    ROUND(QUES_AVG.avg) AS avg_ques,
-                    ROUND((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+		    COALESCE(SUM(QUES_AVG.avg), 0) AS total_students_correct_ques,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(QUES_AVG.avg) AS avg_ques,
+		    ROUND(CAST((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                     FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS QUES_AVG 
                     JOIN dimensions.classes AS cc ON cc.class_id = QUES_AVG.class_id 
                     JOIN dimensions.subjects AS s ON s.subject_id = QUES_AVG.subject_id 
@@ -1124,8 +1126,10 @@ GROUP BY
                         district_name, 
                         block_name, 
                         cluster_name, 
-                        ROUND(QUES_AVG.avg) AS avg_ques,
-                        ROUND((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                COALESCE(SUM(QUES_AVG.avg), 0) AS total_students_correct_ques,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(QUES_AVG.avg) AS avg_ques,
+                ROUND(CAST((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                         FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS QUES_AVG 
                         JOIN dimensions.classes AS cc ON cc.class_id = QUES_AVG.class_id 
                         JOIN dimensions.subjects AS s ON s.subject_id = QUES_AVG.subject_id 
@@ -1158,8 +1162,10 @@ GROUP BY
                     district_name,
                     block_name, 
                     cluster_name,
-                    ROUND (avg_ques.avg) AS avg_ques,
-                    ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                    COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(avg_ques.avg) AS avg_ques,
+		    ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                     FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques
                     INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                     AND avg_ques.date = total_ques.date 
@@ -1170,7 +1176,8 @@ GROUP BY
                     JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                     WHERE school.district_id = {district_id} 
                     AND avg_ques.date BETWEEN startDate AND endDate 
-                    GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;
+                    GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
+
                     `
                 },
                 "actions": {
@@ -1187,8 +1194,10 @@ GROUP BY
                         district_name,
                         block_name, 
                         cluster_name,
-                        ROUND (avg_ques.avg) AS avg_ques,
-                        ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                        COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(avg_ques.avg) AS avg_ques,
+                ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                         FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques
                         INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                         AND avg_ques.date = total_ques.date 
@@ -1199,7 +1208,8 @@ GROUP BY
                         JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                         WHERE school.district_id = {district_id} 
                         AND avg_ques.date BETWEEN startDate AND endDate 
-                        GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;
+                        GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
+    
                         `,
                     },
                     "level": "school"
@@ -1222,8 +1232,10 @@ GROUP BY
                     district_name, 
                     block_name,
                     cluster_name,
-                    ROUND(avg_ques.avg) AS avg_ques,
-                    ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                    COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(avg_ques.avg) AS avg_ques,
+		    ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                     FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
                     INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                     AND avg_ques.date = total_ques.date 
@@ -1234,7 +1246,7 @@ GROUP BY
                     JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                     WHERE school.block_id = {block_id}
                     AND avg_ques.date BETWEEN startDate AND endDate  
-                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;
+                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
                     `
                 },
                 "actions": {
@@ -1250,8 +1262,10 @@ GROUP BY
                         district_name, 
                         block_name,
                         cluster_name,
-                        ROUND(avg_ques.avg) AS avg_ques,
-                        ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                        COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(avg_ques.avg) AS avg_ques,
+                ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
                         FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
                         INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                         AND avg_ques.date = total_ques.date 
@@ -1262,7 +1276,7 @@ GROUP BY
                         JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                         WHERE school.block_id = {block_id}
                         AND avg_ques.date BETWEEN startDate AND endDate  
-                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;
+                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
                         `,
                     },
                     "level": "school"
@@ -1285,8 +1299,10 @@ GROUP BY
                     district_name, 
                     block_name,
                     cluster_name,
-                    ROUND(avg_ques.avg) AS avg_ques,
-                    ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                    COALESCE(SUM(avg_ques .avg), 0) AS total_students_correct_ques,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(avg_ques .avg) AS avg_ques,
+		    ROUND(CAST((AVG(avg_ques .avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES  
                     FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
                     INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                     AND avg_ques.date = total_ques.date 
@@ -1297,7 +1313,7 @@ GROUP BY
                     JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                     WHERE school.cluster_id = {cluster_id} 
                     AND avg_ques.date BETWEEN startDate AND endDate  
-                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;`
+                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;					`
                 },
                 "actions": {
                     "queries": {
@@ -1312,8 +1328,10 @@ GROUP BY
                         district_name, 
                         block_name,
                         cluster_name,
-                        ROUND(avg_ques.avg) AS avg_ques,
-                        ROUND((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100) AS perc_QUES 
+                        COALESCE(SUM(avg_ques .avg), 0) AS total_students_correct_ques,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(avg_ques .avg) AS avg_ques,
+                ROUND(CAST((AVG(avg_ques .avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES  
                         FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
                         INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
                         AND avg_ques.date = total_ques.date 
@@ -1324,7 +1342,7 @@ GROUP BY
                         JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
                         WHERE school.cluster_id = {cluster_id} 
                         AND avg_ques.date BETWEEN startDate AND endDate  
-                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;`,
+                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;					`,
                     },
                     "level": "school"
                 }
@@ -1336,17 +1354,17 @@ GROUP BY
                     {
                         name: "District",
                         property: "district_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "Block",
                         property: "block_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "Cluster",
                         property: "cluster_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     // {
                     //     name: "UDISE Code",
@@ -1356,12 +1374,22 @@ GROUP BY
                     {
                         name: "SCHOOL Code",
                         property: "school_id",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "School",
                         property: "school_name",
-                        class: "text-left"
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Students",
+                        property: "total_students",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total students correct the Question",
+                        property: "total_students_correct_ques",
+                        class: "text-center"
                     },
                     {
                         name: "% QUESTION",
@@ -2710,8 +2738,10 @@ GROUP BY
                     district_name,
                     block_name,
                     cluster_name,
-                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                 FROM
                     datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                 JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2744,8 +2774,10 @@ GROUP BY
                         district_name,
                         block_name,
                         cluster_name,
-                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                        COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                     FROM
                         datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                     JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2785,8 +2817,10 @@ GROUP BY
                     district_name,
                     block_name,
                     cluster_name,
-                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                    COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                 FROM
                     datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                 JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2802,7 +2836,8 @@ GROUP BY
                     s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                     ing.indicator_id, school.school_name, district_name, block_name,
                     EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;`
+                ORDER BY perc_lo;
+`
                 },
                 "actions": {
                     "queries": {
@@ -2819,8 +2854,10 @@ GROUP BY
                         district_name,
                         block_name,
                         cluster_name,
-                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                        COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                     FROM
                         datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                     JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2836,7 +2873,8 @@ GROUP BY
                         s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                         ing.indicator_id, school.school_name, district_name, block_name,
                         EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;`,
+                    ORDER BY perc_lo;
+    `,
                     },
                     "level": "school"
                 }
@@ -2860,8 +2898,10 @@ GROUP BY
                     district_name,
                     block_name,
                     cluster_name,
-                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                   COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                 FROM
                     datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                 JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2877,7 +2917,8 @@ GROUP BY
                     s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                     ing.indicator_id, school.school_name, district_name, block_name,
                     EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;`
+                ORDER BY perc_lo;
+`
                 },
                 "actions": {
                     "queries": {
@@ -2894,8 +2935,10 @@ GROUP BY
                         district_name,
                         block_name,
                         cluster_name,
-                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                       COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                     FROM
                         datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                     JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2911,7 +2954,8 @@ GROUP BY
                         s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                         ing.indicator_id, school.school_name, district_name, block_name,
                         EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;`,
+                    ORDER BY perc_lo;
+    `,
                     },
                     "level": "school"
                 }
@@ -2935,8 +2979,10 @@ GROUP BY
                     district_name,
                     block_name,
                     cluster_name,
-                    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                    ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                   COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+    		    COALESCE(SUM(ts.avg), 0) AS total_students,
+		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
+		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                 FROM
                     datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                 JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2952,7 +2998,10 @@ GROUP BY
                     s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                     ing.indicator_id, school.school_name, district_name, block_name,
                     EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;`
+                ORDER BY perc_lo;				
+
+
+`
                 },
                 "actions": {
                     "queries": {
@@ -2969,8 +3018,10 @@ GROUP BY
                         district_name,
                         block_name,
                         cluster_name,
-                        ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                        ROUND((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100) AS perc_lo
+                       COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
+                    COALESCE(SUM(ts.avg), 0) AS total_students,
+                ROUND(AVG(LO_AVG.avg)) as avg_lo,
+                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
                     FROM
                         datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
                     JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
@@ -2986,7 +3037,10 @@ GROUP BY
                         s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
                         ing.indicator_id, school.school_name, district_name, block_name,
                         EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;`,
+                    ORDER BY perc_lo;				
+    
+    
+    `,
                     },
                     "level": "school"
                 }
@@ -3004,17 +3058,17 @@ GROUP BY
                     {
                         name: "District",
                         property: "district_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "Block",
                         property: "block_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "Cluster",
                         property: "cluster_name",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     // {
                     //     name: "UDISE Code",
@@ -3024,12 +3078,22 @@ GROUP BY
                     {
                         name: "SCHOOL Code",
                         property: "school_id",
-                        class: "text-left"
+                        class: "text-center"
                     },
                     {
                         name: "School",
                         property: "school_name",
-                        class: "text-left"
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Students",
+                        property: "total_students",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total students correct the LO",
+                        property: "total_students_lo_present",
+                        class: "text-center"
                     },
                     {
                         name: "% LO",
@@ -3039,7 +3103,7 @@ GROUP BY
                         isHeatMapRequired: true,
                         type: "number",
                         color: {
-                            type: "number",
+                            type: "percentage",
                             values: [
                                 {
                                     color: "#007000",

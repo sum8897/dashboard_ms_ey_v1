@@ -29,7 +29,7 @@ export class LoAverageSchoolTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = ' School Wise % Average Score';
+  title = ' School Wise % Average LO';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
