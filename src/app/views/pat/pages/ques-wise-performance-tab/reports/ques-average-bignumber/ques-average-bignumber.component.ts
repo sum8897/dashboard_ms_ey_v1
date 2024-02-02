@@ -26,7 +26,7 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
   currentReportName: string = "Average % Score";
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
   title = 'Score Summary %';

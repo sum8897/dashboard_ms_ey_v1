@@ -20,7 +20,7 @@ import { SchoolWiseLibraryTabComponent } from '../../school-wise-library-tab.com
   styleUrls: ['./summary-bar-chart.component.scss']
 })
 export class SummaryBarChartComponent implements OnInit, OnDestroy {
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   title: any;
   chartHeight: any;
   marginTop: any;

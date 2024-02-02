@@ -27,7 +27,7 @@ export class PerformanceComponent implements OnInit {
   // endDate: any;
   tableReportData: any;
   config: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
   drillDownSubscription: any;
