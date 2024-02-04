@@ -131,7 +131,7 @@ export const config = {
         }
     },
     school_table_library: {
-        "label": "Average Teachers Present",
+        "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
             // {
@@ -1419,6 +1419,7 @@ export const config = {
     },
 
     summary_overall_barchart:{
+        "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
             {

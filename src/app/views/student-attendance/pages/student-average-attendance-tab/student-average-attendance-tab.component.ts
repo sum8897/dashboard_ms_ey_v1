@@ -3,18 +3,18 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
-import { SchoolTableComponent } from './reports/school-table/school-table.component';
-
-import { SummaryBarChartComponent } from './reports/summary-bar-chart/summary-bar-chart.component';
+import { StudentAverageTableComponent } from './reports/student-average-table/student-average-table.component';
+import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
+import { StudentSchoolTableComponent } from './reports/student-school-table/student-school-table.component';
+import { StudentBignumberComponent } from './reports/student-bignumber/student-bignumber.component';
 import moment from 'moment';
-import {config} from '../../config'
 
 @Component({
-  selector: 'app-school-wise-library-tab',
-  templateUrl: './school-wise-library-tab.component.html',
-  styleUrls: ['./school-wise-library-tab.component.scss']
+  selector: 'app-student-average-attendance-tab',
+  templateUrl: './student-average-attendance-tab.component.html',
+  styleUrls: ['./student-average-attendance-tab.component.scss']
 })
-export class SchoolWiseLibraryTabComponent implements OnInit, OnDestroy {
+export class StudentAverageAttendanceTabComponent implements OnInit, OnDestroy {
 
   bigNumberReports: any = {};
   filters: any;
@@ -28,7 +28,7 @@ export class SchoolWiseLibraryTabComponent implements OnInit, OnDestroy {
   drillDownLevel: any =1;
   hasTimeSeriesFilters: boolean = false;
 hasCommonFilters: boolean = true;
-  // criteriaConfig: any = config.criteria_config;
+  criteriaConfig: any = config.criteria_config;
   trendLineConfig = {
     options: {
       tooltips: { displayColors: false},
@@ -37,16 +37,16 @@ hasCommonFilters: boolean = true;
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='Overall Summary';
+  tabLabel:any='Schools Reporting Student Attendance';
 
   //added for full school report download
   // title = "Download School Report"
   schoolReportsData: any[] = [];
-  // pagereportName = "teachers_present"
+  pagereportName = "teachers_present"
   //
-  @ViewChild('schoolTable') schoolTable: SchoolTableComponent;
-  @ViewChild('summaryBarchart') summaryBarchart: SummaryBarChartComponent;
- 
+  @ViewChild('studentBigNumber') studentBigNumber: StudentBignumberComponent;
+  @ViewChild('studentAverageTable') studentAverageTable: StudentAverageTableComponent;
+  @ViewChild('studentAverageSchool') studentAverageSchool: StudentSchoolTableComponent;
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -62,11 +62,13 @@ hasCommonFilters: boolean = true;
       }
     })
   }
+ 
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    
+    // this._reportDrilldownService.emit()
   }
 
- 
   ngOnDestroy(): void {
     this._reportDrilldownService.emit('reset')
     this.drillDownSubscription.unsubscribe()
@@ -76,9 +78,8 @@ hasCommonFilters: boolean = true;
       if (this.hasCommonFilters) {
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
-          this.schoolTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          
-          this.summaryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.studentAverageTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.studentBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -93,9 +94,10 @@ hasCommonFilters: boolean = true;
       startDate.setDate(days)
        this.startDate = moment(startDate).format('YYYY-MM-DD');
        this.endDate = moment(endDate).format('YYYY-MM-DD');
-     
+       console.log('datess',startDate,endDate)
+      
+      this.updateReportsData()
     }
-    this.updateReportsData();
   }
 
 
@@ -116,21 +118,18 @@ hasCommonFilters: boolean = true;
       this.reportsData.push(csvData)
     }
   }
- 
+  
 
   updateReportsData( ): void {
    
-    console.log(this.filters,this.startDate,this.endDate)
+    console.log('dttttttt',this.filters,this.startDate,this.endDate)
 
-   
+    this.studentAverageTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-    this.schoolTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    
-    this.summaryBarchart?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.studentAverageSchool?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-   
+    this.studentBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-    
   
 
     }
@@ -195,5 +194,6 @@ hasCommonFilters: boolean = true;
   
 
 }
+
 
 

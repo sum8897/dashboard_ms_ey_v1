@@ -3,22 +3,21 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder'
-import { config } from '../../../../config';
+import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
-
+import { config } from 'src/app/views/student-ai-attendance/config/student_ai_attendance_config';
 @Component({
-  selector: 'app-map-summary',
-  templateUrl: './map-summary.component.html',
-  styleUrls: ['./map-summary.component.scss']
+  selector: 'app-student-map-view',
+  templateUrl: './student-map-view.component.html',
+  styleUrls: ['./student-map-view.component.scss']
 })
-export class MapSummaryComponent implements OnInit {
+export class StudentMapViewComponent implements OnInit {
 
-  reportName: string = 'summary_map';
+  reportName: string = 'student_map';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: ""
+    reportName: "Map View OF Student Attendance"
   };
   title: string = ''
   selectedYear: any;
@@ -166,7 +165,6 @@ export class MapSummaryComponent implements OnInit {
         }
         
         else if (query && key === 'map' && filterneed) {
-          console.log('169',query, options, metricFilter)
           this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
          
           if (this.reportData?.data?.length > 0) {
@@ -175,13 +173,7 @@ export class MapSummaryComponent implements OnInit {
             this.exportReportData.emit(reportsData)
           }
         }
-        // else if (query && key=== 'map_without_filter' && !filterneed) {
-        //   this.reportData = await await this._dataService.getMapReportData(query, options, metricFilter)
-        //   if (this.reportData?.data?.length > 0) {
-        //     let reportsData = { reportData: this.reportData.data, reportType: 'map_without_filter', reportName: this.title }
-        //     this.exportReportData.emit(reportsData)
-        //   }
-        // }
+        
         
       })
     }

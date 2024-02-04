@@ -17,7 +17,7 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<mat-tab label="Overall Summary">
+		<mat-tab label="Overall Summary" *ngIf="tabs.includes('Overall Summary')">
 			<app-school-wise-library-tab
 				*ngIf="selectedTabLabel === 'Overall Summary'"
 			></app-school-wise-library-tab>

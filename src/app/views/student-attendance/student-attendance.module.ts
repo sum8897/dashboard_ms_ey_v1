@@ -16,6 +16,12 @@ import { SacAttendanceComplianceRankComponent } from './pages/student-attendance
 import { SasAverageAttendanceRankComponent } from './pages/student-attendance-summary/reports/sas-average-attendance-rank/sas-average-attendance-rank.component';
 import { SasAverageAttendanceBignumberComponent } from './pages/student-attendance-summary/reports/sas-average-attendance-bignumber/sas-average-attendance-bignumber.component';
 import { SacAverageAttendanceComplianceBignumberComponent } from './pages/student-attendance-compliance/reports/sac-average-attendance-compliance-bignumber/sac-average-attendance-compliance-bignumber.component';
+import { StudentSummaryTabComponent } from './pages/student-summary-tab/student-summary-tab.component';
+import { StudentMapComponent } from './pages/student-summary-tab/reports/student-map/student-map.component';
+import { StudentAverageAttendanceTabComponent } from './pages/student-average-attendance-tab/student-average-attendance-tab.component';
+import { StudentAverageTableComponent } from './pages/student-average-attendance-tab/reports/student-average-table/student-average-table.component';
+import { StudentBignumberComponent } from './pages/student-average-attendance-tab/reports/student-bignumber/student-bignumber.component';
+import { StudentSchoolTableComponent } from './pages/student-average-attendance-tab/reports/student-school-table/student-school-table.component';
 
 
 @NgModule({
@@ -30,7 +36,13 @@ import { SacAverageAttendanceComplianceBignumberComponent } from './pages/studen
     SacAttendanceComplianceRankComponent,
     SasAverageAttendanceRankComponent,
     SasAverageAttendanceBignumberComponent,
-    SacAverageAttendanceComplianceBignumberComponent
+    SacAverageAttendanceComplianceBignumberComponent,
+    StudentSummaryTabComponent,
+    StudentMapComponent,
+    StudentAverageAttendanceTabComponent,
+    StudentAverageTableComponent,
+    StudentBignumberComponent,
+    StudentSchoolTableComponent
   ],
   imports: [
     DashletModule.forRoot({
