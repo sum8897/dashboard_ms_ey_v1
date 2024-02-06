@@ -181,7 +181,21 @@ export function parseQueryParam(query: string, params: any) {
     });
     return newQuery ? newQuery : query;
 }
-
+export function addQueryCondition(query: string, filters: any, parents: any) {
+    let newQuery:string;
+    parents?.forEach((p:any,index:any)=>{
+            if(index==0)
+            {
+                newQuery = query.replace(":"+filters[p].name+":",filters[p].value+"");
+                
+            }
+            else
+            {
+                newQuery = newQuery.replace(":"+filters[p].name+":",filters[p].value)
+            }
+    })
+    return newQuery ? newQuery : query;
+}
 export function parseFilterToQuery(query: string, params?: any, filters?: any): string {
     let filterIndex = query.toLowerCase().indexOf('filter');
     if (filterIndex > -1) {

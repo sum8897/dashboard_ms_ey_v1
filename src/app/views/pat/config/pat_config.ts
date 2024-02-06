@@ -71,6 +71,8 @@ export const config = {
 
 			tableAlias: 's',
 
+            child : [2],
+            
 			query:
 				'SELECT subject_id,subject_name FROM dimensions.subjects ORDER BY subject_name DESC',
 		},
@@ -84,6 +86,8 @@ export const config = {
 			valueProp: 'class_id',
 
 			id: 'classes',
+
+            child : [2],
 
 			tableAlias: 'cc',
 
@@ -103,8 +107,11 @@ export const config = {
 
 			tableAlias: 'ing',
 
+            parent: 'Y',
+            parents: [0,1],
+
 			query:
-				'SELECT indicator_id,indicator FROM dimensions.indicators ORDER BY indicator ASC ',
+				'SELECT indicator_id,indicator FROM dimensions.indicators where subject_id=:Subjects: and class_id=:classes: ORDER BY indicator ASC ',
 		},
 
         //question-wise
