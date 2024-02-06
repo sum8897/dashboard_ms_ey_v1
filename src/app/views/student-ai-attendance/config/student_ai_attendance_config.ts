@@ -24,7 +24,7 @@ export const config = {
 
 			id: 'class',
 
-			tableAlias: 'c',
+			tableAlias: 'cc',
 
 			query:
 				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
@@ -38,7 +38,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['total_students_present', 'total_students_absent'],
+            values: ['present_students', 'absent_students'],
 
         },
 		//lo-wise
@@ -54,7 +54,7 @@ export const config = {
 
 			id: 'class',
 
-			tableAlias: 'c',
+			tableAlias: 'cc',
 
 			query:
 				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
@@ -73,73 +73,45 @@ export const config = {
         {
 			"name": "State",
 			"hierarchyLevel": "1",
-			"timeSeriesQueries": {"map": `SELECT
+			"timeSeriesQueries": {"map": `SELECT 
             ts.district_id,
             d.district_name,
             d.latitude,
             d.longitude,
-            ts.class_id,
-            c.class_name,
-            COALESCE(SUM(tp.sum), 0) AS total_students_present,
-            COALESCE(SUM(ta.sum), 0) AS total_students_absent,
-            COALESCE(SUM(ts.sum), 0) AS total_students,
-            ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_present_students,
-            ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-            FROM
-            datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
-            JOIN
-            datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-            AND ts.date = tp.date
-            JOIN
-            datasets.studentattendance_total_students_absent_OwYcAhwbGQAraDYWCBsK AS ta ON ts.district_id = ta.district_id AND ts.class_id = ta.class_id AND ts.date = ta.date
-            JOIN
-            dimensions.district AS d ON ts.district_id = d.district_id 
-            LEFT JOIN 
-            dimensions.class as c on ts.class_id = c.class_id
-            WHERE
-            ts.date BETWEEN startDate AND endDate 
-            GROUP BY
-            ts.district_id,
-            d.district_name,
-            ts.class_id,
-            c.class_name,
-            d.latitude,
-            d.longitude;`,},
+            SUM(ts.attendance_status) AS present_students,
+            COUNT(ts.attendance_status) AS total_students,
+            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+        FROM
+            student_attendance.student_attendance_master ts
+        JOIN
+            dimensions.district d ON ts.district_id = d.district_id
+        JOIN
+            dimensions.class cc ON ts.class_id = cc.class_id
+        WHERE
+            ts.date between startDate AND endDate 
+        GROUP BY
+            ts.district_id, d.district_name, d.latitude, d.longitude;`,},
 			"actions": {
 				"queries":	
 				{
-					"map": `SELECT
+					"map": `SELECT 
                     ts.district_id,
                     d.district_name,
                     d.latitude,
                     d.longitude,
-                    ts.class_id,
-                    c.class_name,
-                    COALESCE(SUM(tp.sum), 0) AS total_students_present,
-                    COALESCE(SUM(ta.sum), 0) AS total_students_absent,
-                    COALESCE(SUM(ts.sum), 0) AS total_students,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_present_students,
-                    ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-                    FROM
-                    datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
-                    JOIN
-                    datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-                    AND ts.date = tp.date
-                    JOIN
-                    datasets.studentattendance_total_students_absent_OwYcAhwbGQAraDYWCBsK AS ta ON ts.district_id = ta.district_id AND ts.class_id = ta.class_id AND ts.date = ta.date
-                    JOIN
-                    dimensions.district AS d ON ts.district_id = d.district_id 
-                    LEFT JOIN 
-                    dimensions.class as c on ts.class_id = c.class_id
-                    WHERE
-                    ts.date BETWEEN startDate AND endDate 
-                    GROUP BY
-                    ts.district_id,
-                    d.district_name,
-                    ts.class_id,
-                    c.class_name,
-                    d.latitude,
-                    d.longitude;`,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date between startDate AND endDate 
+                GROUP BY
+                    ts.district_id, d.district_name, d.latitude, d.longitude;`,
 
 			
 				},
@@ -152,42 +124,29 @@ export const config = {
             "hierarchyLevel": "2",
             "timeSeriesQueries":  {
                     "map": `
-                    select
- b.district_id,
-b.district_name,
-ts.block_id,
-b.block_name,
-ts.class_id,
-c.class_name,
-b.latitude,
-b.longitude,
-COALESCE(sum(tp.sum),0) as total_students_present,
-COALESCE(sum(ta.sum),0) as total_students_absent,
-COALESCE(sum(ts.sum),0) as total_students,
-ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-from
-datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
+                    SELECT 
+	ts.block_id,
+	b.block_name,
+    b.district_id,
+    d.district_name,
+    d.latitude,
+    d.longitude,
+    CAST(SUM(ts.attendance_status)AS INT) AS present_students,
+   CAST(COUNT(ts.attendance_status)AS INT) AS total_students,
+    CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_students
+FROM
+    student_attendance.student_attendance_master ts
 JOIN
-datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
+	dimensions.block b on ts.block_id = b.block_id
 JOIN
-datasets.studentattendance_total_students_absent_OwAZHgsCQAAzOSYJaWh5 as ta on ts.block_id = ta.block_id and ts.class_id = ta.class_id AND ts.date = ta.date
-LEFT JOIN
-dimensions.block as b on ts.block_id = b.block_id
-LEFT Join
-dimensions.district as d on b.district_id = d.district_id
-LEFT JOIN 
-dimensions.class as c on ts.class_id = c.class_id
-Where ts.date BETWEEN startDate AND endDate  and b.district_id = {district_id} 
-Group by
-b.district_id,
-b.district_name,
-ts.block_id,
-b.block_name,
-ts.class_id,
-c.class_name,
-b.latitude,
-b.longitude
+    dimensions.district d ON b.district_id = d.district_id
+JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
+WHERE
+    ts.date between startDate AND endDate AND b.district_id = {district_id}
+GROUP BY
+   ts.block_id,
+	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
 `,
 
@@ -197,42 +156,29 @@ b.longitude
                 "queries":
                 {
                     "map": `
-                    select
- b.district_id,
-b.district_name,
-ts.block_id,
-b.block_name,
-ts.class_id,
-c.class_name,
-b.latitude,
-b.longitude,
-COALESCE(sum(tp.sum),0) as total_students_present,
-COALESCE(sum(ta.sum),0) as total_students_absent,
-COALESCE(sum(ts.sum),0) as total_students,
-ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-from
-datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
+                    SELECT 
+	ts.block_id,
+	b.block_name,
+    b.district_id,
+    d.district_name,
+    d.latitude,
+    d.longitude,
+    CAST(SUM(ts.attendance_status)AS INT) AS present_students,
+   CAST(COUNT(ts.attendance_status)AS INT) AS total_students,
+    CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_students
+FROM
+    student_attendance.student_attendance_master ts
 JOIN
-datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
+	dimensions.block b on ts.block_id = b.block_id
 JOIN
-datasets.studentattendance_total_students_absent_OwAZHgsCQAAzOSYJaWh5 as ta on ts.block_id = ta.block_id and ts.class_id = ta.class_id AND ts.date = ta.date
-LEFT JOIN
-dimensions.block as b on ts.block_id = b.block_id
-LEFT Join
-dimensions.district as d on b.district_id = d.district_id
-LEFT JOIN 
-dimensions.class as c on ts.class_id = c.class_id
-Where ts.date BETWEEN startDate AND endDate  and b.district_id = {district_id}  
-Group by
-b.district_id,
-b.district_name,
-ts.block_id,
-b.block_name,
-ts.class_id,
-c.class_name,
-b.latitude,
-b.longitude
+    dimensions.district d ON b.district_id = d.district_id
+JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
+WHERE
+    ts.date between startDate AND endDate AND b.district_id = {district_id}
+GROUP BY
+   ts.block_id,
+	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
 `,
 
@@ -247,49 +193,35 @@ b.longitude
             "hierarchyLevel": "3",
             "timeSeriesQueries":  {
                 "map": `
-                select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        ts.cluster_id,
-                        cc.cluster_name,
-			ts.class_id,
-			c.class_name,
-                        cc.latitude,
-                        cc.longitude,
-                        COALESCE(sum(tp.sum),0) as total_students_present,
-                        COALESCE(sum(ta.sum),0) as total_students_absent,
-                        COALESCE(sum(ts.sum),0) as total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-			ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-                        from
-                        datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                        JOIN
-                        datasets.studentattendance_total_students_absent_OwEZBBsdFRFvOzkbGht5 as ta on ts.cluster_id = ta.cluster_id and ts.class_id = ta.class_id AND ts.date = ta.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-		    	LEFT JOIN 
-		  	dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id} 
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        ts.cluster_id,
-                        cc.cluster_name,
-			ts.class_id,
-			c.class_name,
-                        cc.latitude,
-                        cc.longitude
-
+                SELECT 
+	ts.cluster_id,
+	c.cluster_name,
+	c.block_id,
+	b.block_name,
+    b.district_id,
+    d.district_name,
+    d.latitude,
+    d.longitude,
+    SUM(ts.attendance_status) AS present_students,
+    COUNT(ts.attendance_status) AS total_students,
+    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+FROM
+    student_attendance.student_attendance_master ts
+JOIN
+	dimensions.cluster c on ts.cluster_id = c.cluster_id
+JOIN
+	dimensions.block b on c.block_id = b.block_id
+JOIN
+    dimensions.district d ON b.district_id = d.district_id
+JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
+WHERE
+    ts.date between startDate AND endDate AND c.block_id = {block_id}
+GROUP BY
+   ts.cluster_id,
+	c.cluster_name,
+	c.block_id,
+	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
 `,
 
@@ -298,49 +230,35 @@ b.longitude
                 "queries":
                 {
                     "map": `
-                    select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        ts.cluster_id,
-                        cc.cluster_name,
-			ts.class_id,
-			c.class_name,
-                        cc.latitude,
-                        cc.longitude,
-                        COALESCE(sum(tp.sum),0) as total_students_present,
-                        COALESCE(sum(ta.sum),0) as total_students_absent,
-                        COALESCE(sum(ts.sum),0) as total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-			ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-                        from
-                        datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                        JOIN
-                        datasets.studentattendance_total_students_absent_OwEZBBsdFRFvOzkbGht5 as ta on ts.cluster_id = ta.cluster_id and ts.class_id = ta.class_id AND ts.date = ta.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-		    	LEFT JOIN 
-		  	dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id} 
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        ts.cluster_id,
-                        cc.cluster_name,
-			ts.class_id,
-			c.class_name,
-                        cc.latitude,
-                        cc.longitude
-
+                    SELECT 
+	ts.cluster_id,
+	c.cluster_name,
+	c.block_id,
+	b.block_name,
+    b.district_id,
+    d.district_name,
+    d.latitude,
+    d.longitude,
+    SUM(ts.attendance_status) AS present_students,
+    COUNT(ts.attendance_status) AS total_students,
+    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+FROM
+    student_attendance.student_attendance_master ts
+JOIN
+	dimensions.cluster c on ts.cluster_id = c.cluster_id
+JOIN
+	dimensions.block b on c.block_id = b.block_id
+JOIN
+    dimensions.district d ON b.district_id = d.district_id
+JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
+WHERE
+    ts.date between startDate AND endDate AND c.block_id = {block_id}
+GROUP BY
+   ts.cluster_id,
+	c.cluster_name,
+	c.block_id,
+	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
 `,
 
@@ -353,105 +271,79 @@ b.longitude
                     "name": "Cluster",
                     "hierarchyLevel": "4",
                     "timeSeriesQueries": {
-                        "map": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
+                        "map": `SELECT 
                         ts.school_id,
                         sch.school_name,
-			ts.class_id,
-			c.class_name,
-                        sch.latitude,
-                        sch.longitude,
-                        COALESCE(sum(tp.sum),0) as total_students_present,
-                        COALESCE(sum(ta.sum),0) as total_students_absent,
-                        COALESCE(sum(ts.sum),0) as total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-			ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-                        from
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                        JOIN
-                        datasets.studentattendance_total_students_absent_OxEWGQcGHFM8NDQJGmh5 as ta on ts.school_id = ta.school_id and ts.class_id = ta.class_id AND ts.date = ta.date
-                        LEFT JOIN
-                        dimensions.school as sch on ts.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-			LEFT JOIN 
-		       dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-			Group by
-                        d.district_id,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
                         d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        ts.school_id,
+                        d.latitude,
+                        d.longitude,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.school sch on ts.school_id = sch.school_id
+                    JOIN
+                        dimensions.cluster c on sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b on c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
                         sch.school_name,
-			ts.class_id,
-			c.class_name,
-                        sch.latitude,
-                        sch.longitude`,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            d.district_id,
-                            d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
+                            "map": `SELECT 
                             ts.school_id,
                             sch.school_name,
-                ts.class_id,
-                c.class_name,
-                            sch.latitude,
-                            sch.longitude,
-                            COALESCE(sum(tp.sum),0) as total_students_present,
-                            COALESCE(sum(ta.sum),0) as total_students_absent,
-                            COALESCE(sum(ts.sum),0) as total_students,
-                            ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_present_students,
-                ROUND(CAST((SUM(ta.sum) / SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_absent_students
-                            from
-                            datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                            JOIN
-                            datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                            JOIN
-                            datasets.studentattendance_total_students_absent_OxEWGQcGHFM8NDQJGmh5 as ta on ts.school_id = ta.school_id and ts.class_id = ta.class_id AND ts.date = ta.date
-                            LEFT JOIN
-                            dimensions.school as sch on ts.school_id = sch.school_id
-                            Left JOIN
-                            dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                            LEFT JOIN
-                            dimensions.block as b on cc.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                LEFT JOIN 
-                   dimensions.class as c on ts.class_id = c.class_id
-                            Where ts.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-                Group by
-                            d.district_id,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name,
+                            b.district_id,
                             d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
-                            ts.school_id,
+                            d.latitude,
+                            d.longitude,
+                            SUM(ts.attendance_status) AS present_students,
+                            COUNT(ts.attendance_status) AS total_students,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                        FROM
+                            student_attendance.student_attendance_master ts
+                        JOIN
+                            dimensions.school sch on ts.school_id = sch.school_id
+                        JOIN
+                            dimensions.cluster c on sch.cluster_id = c.cluster_id
+                        JOIN
+                            dimensions.block b on c.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                        WHERE
+                            ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        GROUP BY
+                           ts.school_id,
                             sch.school_name,
-                ts.class_id,
-                c.class_name,
-                            sch.latitude,
-                            sch.longitude`,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                         },
                         "level": "school"
                     }
@@ -508,12 +400,12 @@ b.longitude
                     },
 					{
 						valuePrefix: 'Student Present: ',
-						value: 'total_students_present',
+						value: 'present_students',
 						valueSuffix: '\n',
 					},
 					{
 						valuePrefix: 'Student Absent: ',
-						value: 'total_students_absent',
+						value: 'absent_students',
 						valueSuffix: '\n',
 					},
 					{
@@ -558,45 +450,41 @@ b.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
+                    "table": `SELECT 
                     ts.district_id,
                     d.district_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                 FROM
-                    datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                    student_attendance.student_attendance_master ts
                 JOIN
-                    datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-                AND ts.date = tp.date
+                    dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.district AS d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
-                    ts.date BETWEEN  startDate AND endDate
+                    ts.date BETWEEN startDate AND endDate 
                 GROUP BY
-                    ts.district_id,
-                    d.district_name`,
+                    ts.district_id, d.district_name;`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
+                        "table": `SELECT 
                         ts.district_id,
                         d.district_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     FROM
-                        datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                        student_attendance.student_attendance_master ts
                     JOIN
-                        datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-                    AND ts.date = tp.date
+                        dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.district AS d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
-                        ts.date BETWEEN  startDate AND endDate
+                        ts.date BETWEEN startDate AND endDate 
                     GROUP BY
-                        ts.district_id,
-                        d.district_name`,
+                        ts.district_id, d.district_name;`,
                     },
                     "level": "district"
                 }
@@ -607,53 +495,51 @@ b.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select
-                    b.district_id,
-                    
+                    "table": `SELECT
                     ts.block_id,
                     b.block_name,
-                    CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2)) AS perc_students
-                    from
-                    datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
-                    JOIN
-                    datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.block as b on ts.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and b.district_id = {district_id} 
-                    Group by
                     b.district_id,
-                    
+                   
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                GROUP BY
                     ts.block_id,
-                    b.block_name`,
+                    b.block_name,b.district_id;`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,
-                        
+                        "table": `SELECT
                         ts.block_id,
                         b.block_name,
-                        CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2)) AS perc_students
-                        from
-                        datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.block as b on ts.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and b.district_id = {district_id} 
-                        Group by
                         b.district_id,
-                        
+                       
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
                         ts.block_id,
-                        b.block_name`,
+                        b.block_name,b.district_id;`,
                     },
                     "level": "block"
                 }
@@ -664,65 +550,63 @@ b.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select
-                    d.district_id,
-                    
-                    cc.block_id,
-                    
+                    "table": `SELECT
                     ts.cluster_id,
-                    cc.cluster_name,
-                    CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2)) AS perc_students
-                    from
-                    datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
-                    JOIN
-                    datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    LEFT JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                    Group by
-                    d.district_id,
+                    c.cluster_name,
+                    c.block_id,
                     
-                    cc.block_id,
-                    
+                    b.district_id,
+                   
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                GROUP BY
                     ts.cluster_id,
-                    cc.cluster_name`,
+                    c.cluster_name,
+                    c.block_id,
+                    b.district_id;`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        d.district_id,
-                        
-                        cc.block_id,
-                        
+                        "table": `SELECT
                         ts.cluster_id,
-                        cc.cluster_name,
-                        CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2)) AS perc_students
-                        from
-                        datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        LEFT JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
+                        c.cluster_name,
+                        c.block_id,
                         
-                        cc.block_id,
-                        
+                        b.district_id,
+                       
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                    GROUP BY
                         ts.cluster_id,
-                        cc.cluster_name`,
+                        c.cluster_name,
+                        c.block_id,
+                        b.district_id;`,
                     },
                     "level": "cluster"
                 }
@@ -733,78 +617,78 @@ b.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `select
-                    d.district_id,
-                    
-                    cc.block_id,
-                    
-                    cc.cluster_id,
-                    
+                    "table": `SELECT
                     ts.school_id,
                     sch.school_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
-                    from
-                    datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                    JOIN
-                    datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on ts.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    LEFT JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id} 
-                    Group by
-                    d.district_id,
+                    sch.cluster_id,
                     
-                    cc.block_id,
+                    c.block_id,
                     
-                    cc.cluster_id,
+                    b.district_id,
                     
-                    ts.school_id,
-                    sch.school_name
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.school sch ON sch.school_id = ts.school_id
+                JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                GROUP BY
+                   ts.school_id,
+                    sch.school_name,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    b.district_id;
+                
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        d.district_id,
-                        
-                        cc.block_id,
-                        
-                        cc.cluster_id,
-                        
+                        "table": `SELECT
                         ts.school_id,
                         sch.school_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
-                        from
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                        JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on ts.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        LEFT JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id} 
-                        Group by
-                        d.district_id,
+                        sch.cluster_id,
                         
-                        cc.block_id,
+                        c.block_id,
                         
-                        cc.cluster_id,
+                        b.district_id,
                         
-                        ts.school_id,
-                        sch.school_name
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.school sch ON sch.school_id = ts.school_id
+                    JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
+                        sch.school_name,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        b.district_id;
+                    
                         `,
                     },
                     "level": "school"
@@ -957,50 +841,44 @@ student_average_bignumber: {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_students)) AS percentage_students
-                    from (
-                        SELECT
+                    from (SELECT 
                     ts.district_id,
                     d.district_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0) AS perc_students
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                 FROM
-                    datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                    student_attendance.student_attendance_master ts
                 JOIN
-                    datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-                AND ts.date = tp.date
+                    dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.district AS d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate
+                    ts.date BETWEEN startDate AND endDate 
                 GROUP BY
-                    ts.district_id,
-                    d.district_name) AS avg_query;`
+                    ts.district_id, d.district_name) AS avg_query;`
 
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_students)) AS percentage_students
-                        from (
-                            SELECT
+                        from (SELECT 
                         ts.district_id,
                         d.district_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0) AS perc_students
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     FROM
-                        datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                        student_attendance.student_attendance_master ts
                     JOIN
-                        datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
-                    AND ts.date = tp.date
+                        dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.district AS d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate
+                        ts.date BETWEEN startDate AND endDate 
                     GROUP BY
-                        ts.district_id,
-                        d.district_name) AS avg_query;`
+                        ts.district_id, d.district_name) AS avg_query;`
                     },
                     "level": "district"
                 }
@@ -1013,47 +891,43 @@ student_average_bignumber: {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_students)) AS percentage_students
-                    from (
-                        SELECT
+                    from (SELECT 
                     ts.district_id,
                     d.district_name,
-                    CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_students
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                 FROM
-                    datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                    student_attendance.student_attendance_master ts
                 JOIN
-                    datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
+                    dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.district AS d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                 GROUP BY
-                    ts.district_id,
-                    d.district_name) AS avg_query;`
+                    ts.district_id, d.district_name) AS avg_query;`
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_students)) AS percentage_students
-                        from (
-                            SELECT
+                        from (SELECT 
                         ts.district_id,
                         d.district_name,
-                        CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_students
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     FROM
-                        datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
+                        student_attendance.student_attendance_master ts
                     JOIN
-                        datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id 
+                        dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.district AS d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class AS c on ts.class_id = c.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                     GROUP BY
-                        ts.district_id,
-                        d.district_name) AS avg_query;`
+                        ts.district_id, d.district_name) AS avg_query;`
                     },
                     "level": "block"
                 }
@@ -1066,64 +940,56 @@ student_average_bignumber: {
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
-                    ROUND(AVG(perc_studentss)) AS percentage_students
-                    from (
-                select
-                b.district_id,
-                b.district_name,
-                ts.block_id,
-                b.block_name,
-                CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_studentss
-                from
-                datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
+                    ROUND(AVG(perc_students)) AS percentage_students
+                    from (SELECT
+                    ts.block_id,
+                    b.block_name,
+                    b.district_id,
+                    d.district_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
                 JOIN
-                datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
-                LEFT JOIN
-                dimensions.block as b on ts.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
+                    dimensions.block b ON ts.block_id = b.block_id
                 JOIN
-                dimensions.class AS c on ts.class_id = c.class_id
-                Where ts.date BETWEEN startDate AND endDate and b.block_id = {block_id}
-                Group by
-                b.district_id,
-                b.district_name,
-                ts.block_id,
-                b.block_name
-                ) AS avg_query;	
-                
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
+                GROUP BY
+                    ts.block_id,
+                    b.block_name,b.district_id, d.district_name) AS avg_query;
                     `,
                     
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
-                        ROUND(AVG(perc_studentss)) AS percentage_students
-                        from (
-                    select
-                    b.district_id,
-                    b.district_name,
-                    ts.block_id,
-                    b.block_name,
-                    CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_studentss
-                    from
-                    datasets.studentattendance_total_students_Bw4UJxhzeXR0ZX10Y28w as ts
+                        ROUND(AVG(perc_students)) AS percentage_students
+                        from (SELECT
+                        ts.block_id,
+                        b.block_name,
+                        b.district_id,
+                        d.district_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
                     JOIN
-                    datasets.studentattendance_total_students_present_HT0XDBccDVgmHy8sEm1s as tp on ts.block_id = tp.block_id and ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.block as b on ts.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
+                        dimensions.block b ON ts.block_id = b.block_id
                     JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and b.block_id = {block_id}
-                    Group by
-                    b.district_id,
-                    b.district_name,
-                    ts.block_id,
-                    b.block_name
-                    ) AS avg_query;	
-                    
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
+                    GROUP BY
+                        ts.block_id,
+                        b.block_name,b.district_id, d.district_name) AS avg_query;
                         `,
                        
                     },
@@ -1138,70 +1004,66 @@ student_average_bignumber: {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_students)) AS percentage_students
-                    from (select
-                d.district_id,
-                d.district_name,
-                cc.block_id,
-                cc.block_name,
-                ts.cluster_id,
-                cc.cluster_name,
-                CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_students
-                from
-                datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
+                    from (SELECT
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.block_name,
+                    b.district_id,
+                    d.district_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
                 JOIN
-                datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                LEFT JOIN
-                dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                LEFT JOIN
-                dimensions.block as b on cc.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
-                LEFT JOIN
-                dimensions.class AS c on ts.class_id = c.class_id
-                Where ts.date BETWEEN startDate AND endDate and cc.cluster_id = {cluster_id}
-                Group by
-                d.district_id,
-                d.district_name,
-                cc.block_id,
-                cc.block_name,
-                ts.cluster_id,
-                cc.cluster_name
-                ) AS avg_query;	`,
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
+                GROUP BY
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.block_name,b.district_id, d.district_name) AS avg_query;	`,
                    
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_students)) AS percentage_students
-                        from (select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    ts.cluster_id,
-                    cc.cluster_name,
-                    CEIL(ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),0)) AS perc_students
-                    from
-                    datasets.studentattendance_total_students_FlIWOAoACnR0ZH1uc3Bl as ts 
+                        from (SELECT
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
+                        d.district_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
                     JOIN
-                    datasets.studentattendance_total_students_present_HT0WDA0MEg03Qy0zAB4f as tp on ts.cluster_id = tp.cluster_id AND ts.class_id= tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.cluster as cc on ts.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    LEFT JOIN
-                    dimensions.class AS c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and cc.cluster_id = {cluster_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    ts.cluster_id,
-                    cc.cluster_name
-                    ) AS avg_query;	`,
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
+                    GROUP BY
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,b.district_id, d.district_name) AS avg_query;`,
                         
                     },
                     "level": "school"
@@ -1228,71 +1090,53 @@ student_average_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    d.district_id,
-                    d.district_name,
-                    ts.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_students_present,
-		    COALESCE(SUM(ts.sum), 0) AS total_students,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
-                FROM
-                    datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                JOIN
-                    datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                LEFT JOIN
-                dimensions.school as sch on ts.school_id = sch.school_id
-                Left JOIN
-                dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                LEFT JOIN
-                dimensions.block as b on cc.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
-		LEFT JOIN 
-		dimensions.class as c on ts.class_id = c.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate
-                GROUP BY
-                    d.district_id,
-                    d.district_name,
-                    ts.school_id,
-                    sch.school_name
-                ORDER BY
-                    d.district_id;`
+                    "table": `select
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    from
+                    student_attendance.student_attendance_master ts
+                    JOIN
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    Where ts.date between startDate AND endDate 
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        d.district_id,
-                        d.district_name,
-                        ts.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_students_present,
-                COALESCE(SUM(ts.sum), 0) AS total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
-                    FROM
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
-                    JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on ts.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-            LEFT JOIN 
-            dimensions.class as c on ts.class_id = c.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate
-                    GROUP BY
-                        d.district_id,
-                        d.district_name,
-                        ts.school_id,
-                        sch.school_name
-                    ORDER BY
-                        d.district_id;`,
+                        "table": `select
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                        from
+                        student_attendance.student_attendance_master ts
+                        JOIN
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                        Where ts.date between startDate AND endDate 
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name`,
                     },
                     "level": "school"
                 }
@@ -1304,78 +1148,54 @@ student_average_bignumber: {
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "table": `select
-                    b.district_id,
-                    b.district_name,
-                    b.block_id,
-                    b.block_name,
-                    ts.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_students_present,
-		    COALESCE(SUM(ts.sum), 0) AS total_students,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
-                    datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                    student_attendance.student_attendance_master ts
                     JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on ts.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-		    LEFT JOIN 
-		    dimensions.class as c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and b.district_id = {district_id}
-					Group by
-                    b.district_id,
-                    b.district_name,
-                    b.block_id,
-                    b.block_name,
-                    ts.school_id,
-                    sch.school_name
-                    ORDER BY
-                    b.block_id
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name
 ;
 `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        b.district_id,
-                        b.district_name,
-                        b.block_id,
-                        b.block_name,
-                        ts.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_students_present,
-                COALESCE(SUM(ts.sum), 0) AS total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                        student_attendance.student_attendance_master ts
                         JOIN
-                            datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on ts.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                LEFT JOIN 
-                dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and b.district_id = {district_id}
-                        Group by
-                        b.district_id,
-                        b.district_name,
-                        b.block_id,
-                        b.block_name,
-                        ts.school_id,
-                        sch.school_name
-                        ORDER BY
-                        b.block_id
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                        Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name
     
     `,
                     },
@@ -1389,86 +1209,59 @@ student_average_bignumber: {
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "table": `select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    sch.cluster_id,
-                    cc.cluster_name,
-                    ts.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_students_present,
-		    COALESCE(SUM(ts.sum), 0) AS total_students,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
-                    datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                    student_attendance.student_attendance_master ts
                     JOIN
-                    datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on ts.school_id = sch.school_id
-                    LEFT JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-		    LEFT JOIN 
-		    dimensions.class as c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    sch.cluster_id,
-                    cc.cluster_name,
-                    ts.school_id,
-                    sch.school_name
-                    ORDER BY
-                    sch.cluster_id;
-
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    Where ts.date between startDate AND endDate AND c.block_id = {block_id}
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    ts.school_id,sch.school_name
+                    
 `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        sch.cluster_id,
-                        cc.cluster_name,
-                        ts.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_students_present,
-                COALESCE(SUM(ts.sum), 0) AS total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                        student_attendance.student_attendance_master ts
                         JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on ts.school_id = sch.school_id
-                        LEFT JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                LEFT JOIN 
-                dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        sch.cluster_id,
-                        cc.cluster_name,
-                        ts.school_id,
-                        sch.school_name
-                        ORDER BY
-                        sch.cluster_id;
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                        Where ts.date between startDate AND endDate AND c.block_id = {block_id}
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        ts.school_id,sch.school_name
+                        
     
     `,
                     },
@@ -1482,88 +1275,62 @@ student_average_bignumber: {
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "table":`select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    cc.cluster_id,
-                    cc.cluster_name,
-                    ts.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_students_present,
-		    COALESCE(SUM(ts.sum), 0) AS total_students,
-                    ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    sch.cluster_id, c.cluster_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
-                    datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                    student_attendance.student_attendance_master ts
                     JOIN
-                    datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on ts.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-					LEFT JOIN 
-		    		dimensions.class as c on ts.class_id = c.class_id
-                    Where ts.date BETWEEN startDate And endDate and sch.cluster_id = {cluster_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    cc.cluster_id,
-                    cc.cluster_name,
-                    ts.school_id,
-                    sch.school_name
-                    ORDER BY
-                    ts.school_id;				
-
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    sch.cluster_id, c.cluster_name,
+                    ts.school_id,sch.school_name
 
 `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        ts.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_students_present,
-                COALESCE(SUM(ts.sum), 0) AS total_students,
-                        ROUND(CAST((SUM(tp.sum) / SUM(ts.sum)) * 100 AS NUMERIC),2) AS perc_students
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        sch.cluster_id, c.cluster_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
-                        datasets.studentattendance_total_students_VAEZNRgAeXR0dHJzb2ts as ts 
+                        student_attendance.student_attendance_master ts
                         JOIN
-                        datasets.studentattendance_total_students_present_HT0GAxAQCQR1ECI__Eh5s as tp on ts.school_id = tp.school_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on ts.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        LEFT JOIN 
-                        dimensions.class as c on ts.class_id = c.class_id
-                        Where ts.date BETWEEN startDate And endDate and sch.cluster_id = {cluster_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        ts.school_id,
-                        sch.school_name
-                        ORDER BY
-                        ts.school_id;				
-    
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                        Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        sch.cluster_id, c.cluster_name,
+                        ts.school_id,sch.school_name
     
     `,
                     },
@@ -1617,7 +1384,7 @@ student_average_bignumber: {
                     },
                     {
                         name: "Total Students Present",
-                        property: "total_students_present",
+                        property: "present_students",
                         class: "text-center"
                     },
                     {
