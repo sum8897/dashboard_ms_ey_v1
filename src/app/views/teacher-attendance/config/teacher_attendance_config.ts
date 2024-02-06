@@ -18,7 +18,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['total_teachers_present', 'total_teachers_absent'],
+            values: ['present_teachers', 'absent_teachers'],
         },
         {
 
@@ -28,7 +28,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['total_nonteachers_present', 'total_nonteachers_absent'],
+            values: ['present_nonteachers', 'absent_nonteachers'],
         },
     ],
 
@@ -1558,43 +1558,37 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    tt.district_id,
+                    "table": `SELECT 
+                    ts.district_id,
                     d.district_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    datasets.staffattendance_total_teachers_Daily_district AS tt
+                    teacher_attendance.teaching_staff ts
                 JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                JOIN
-                    dimensions.district AS d ON tt.district_id = d.district_id
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    tt.date BETWEEN startDate AND endDate
+                    ts.date BETWEEN startDate AND endDate
                 GROUP BY
-                    tt.district_id,
-                    d.district_name
-                ORDER BY
-                    tt.district_id;`,
+                    ts.district_id, d.district_name;`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        tt.district_id,
+                        "table": `SELECT 
+                        ts.district_id,
                         d.district_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        datasets.staffattendance_total_teachers_Daily_district AS tt
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        tt.date BETWEEN startDate AND endDate
+                        ts.date BETWEEN startDate AND endDate
                     GROUP BY
-                        tt.district_id,
-                        d.district_name
-                    ORDER BY
-                        tt.district_id;`                       ,
+                        ts.district_id, d.district_name;`                       ,
                     },
                     "level": "district"
                 }
@@ -1605,53 +1599,47 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select
-                    b.district_id,
-                    
-                    tt.block_id,
+                    "table": `SELECT
+                    ts.block_id,
                     b.block_name,
-                   ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    from
-                    datasets.staffattendance_total_teachers_Daily_block as tt
-                    JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.block as b on tt.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate and endDate and b.district_id = {district_id}
-                    Group by
                     b.district_id,
                     
-                    tt.block_id,
-                    b.block_name
-                    ORDER BY
-                    tt.block_id;`,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                GROUP BY
+                    ts.block_id,
+                    b.block_name,b.district_id; `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,
-                        
-                        tt.block_id,
+                        "table": `SELECT
+                        ts.block_id,
                         b.block_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_block as tt
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.block as b on tt.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate and endDate and b.district_id = {district_id}
-                        Group by
                         b.district_id,
                        
-                        tt.block_id,
-                        b.block_name
-                        ORDER BY
-                        tt.block_id;`,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                        ts.block_id,
+                        b.block_name,b.district_id;`,
                     },
                     "level": "block"
                 }
@@ -1662,64 +1650,60 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select
-                    d.district_id,
-                    cc.block_id,
-                   
-                    tt.cluster_id,
-                    cc.cluster_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    from
-                    datasets.staffattendance_total_teachers_Daily_cluster as tt 
-                    JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate and endDate and cc.block_id = {block_id}
-                    Group by
-                    d.district_id,
-                    cc.block_id,
+                    "table": `SELECT
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
                     
-                    tt.cluster_id,
-                    cc.cluster_name
-                    ORDER BY
-                    tt.cluster_id;
+                    b.district_id,
+                    
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                GROUP BY
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.district_id;
                     `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        d.district_id,
-                       
-                        cc.block_id,
+                        "table": `SELECT
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
                         
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_cluster as tt 
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate and endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
+                        b.district_id,
                         
-                        cc.block_id,
-                        
-                        tt.cluster_id,
-                        cc.cluster_name
-                        ORDER BY
-                        tt.cluster_id;
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                    GROUP BY
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.district_id;
                         `,
                     },
                     "level": "cluster"
@@ -1731,77 +1715,71 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `select
-                    d.district_id,
-                   
-                    cc.block_id,
-                    
-                    cc.cluster_id,
-                   
-                    tt.school_id,
+                    "table": `SELECT
+                    ts.school_id,
                     sch.school_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    from
-                    datasets.staffattendance_total_teachers_Daily_school as tt 
-                    JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on tt.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-                    Group by
-                    d.district_id,
-                   
-                    cc.block_id,
-                   
-                    cc.cluster_id,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    
+                    b.district_id,
                   
-                    tt.school_id,
-                    sch.school_name
-                    ORDER BY
-                    tt.school_id;`
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.school sch ON sch.school_id = ts.school_id
+                JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                GROUP BY
+                   ts.school_id,
+                    sch.school_name,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    b.district_id;`
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        d.district_id,
-                       
-                        cc.block_id,
-                        
-                        cc.cluster_id,
-                       
-                        tt.school_id,
+                        "table": `SELECT
+                        ts.school_id,
                         sch.school_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_school as tt 
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-                        Group by
-                        d.district_id,
-                       
-                        cc.block_id,
-                       
-                        cc.cluster_id,
+                        sch.cluster_id,
                         
-                        tt.school_id,
-                        sch.school_name
-                        ORDER BY
-                        tt.school_id;`,
+                        c.block_id,
+                        
+                        b.district_id,
+                      
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.school sch ON sch.school_id = ts.school_id
+                    JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
+                        sch.school_name,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        b.district_id;`,
                     },
                     "level": "school"
                 }
@@ -1952,44 +1930,40 @@ export const config = {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_teachers)) AS perc_teachers
-                    from (
-                        SELECT
-                    tt.district_id,
+                    from (SELECT 
+                    ts.district_id,
                     d.district_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    datasets.staffattendance_total_teachers_Daily_district AS tt
+                    teacher_attendance.teaching_staff ts
                 JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                JOIN
-                    dimensions.district AS d ON tt.district_id = d.district_id
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    tt.date BETWEEN startDate AND endDate
+                    ts.date BETWEEN startDate AND endDate
                 GROUP BY
-                    tt.district_id,
-                    d.district_name) AS avg_query;`
+                    ts.district_id, d.district_name) AS avg_query;`
 
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_teachers)) AS perc_teachers
-                        from (
-                            SELECT
-                        tt.district_id,
+                        from (SELECT 
+                        ts.district_id,
                         d.district_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        datasets.staffattendance_total_teachers_Daily_district AS tt
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        tt.date BETWEEN startDate AND endDate
+                        ts.date BETWEEN startDate AND endDate
                     GROUP BY
-                        tt.district_id,
-                        d.district_name) AS avg_query;`
+                        ts.district_id, d.district_name) AS avg_query;`
                     },
                     "level": "district"
                 }
@@ -2002,43 +1976,39 @@ export const config = {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_teachers)) AS perc_teachers
-                    from (
-                        SELECT
-                    tt.district_id,
+                    from (SELECT 
+                    ts.district_id,
                     d.district_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    datasets.staffattendance_total_teachers_Daily_district AS tt
+                    teacher_attendance.teaching_staff ts
                 JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                JOIN
-                    dimensions.district AS d ON tt.district_id = d.district_id
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    tt.date BETWEEN startDate AND endDate AND tt.district_id = {district_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                 GROUP BY
-                    tt.district_id,
-                    d.district_name) AS avg_query;`
+                    ts.district_id, d.district_name) AS avg_query;`
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_teachers)) AS perc_teachers
-                        from (
-                            SELECT
-                        tt.district_id,
+                        from (SELECT 
+                        ts.district_id,
                         d.district_name,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        datasets.staffattendance_total_teachers_Daily_district AS tt
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        tt.date BETWEEN startDate AND endDate AND tt.district_id = {district_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                     GROUP BY
-                        tt.district_id,
-                        d.district_name) AS avg_query;`
+                        ts.district_id, d.district_name) AS avg_query;`
                     },
                     "level": "block"
                 }
@@ -2052,56 +2022,50 @@ export const config = {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_teachers)) AS perc_teachers
-                    from (
-                select
-                b.district_id,
-                b.district_name,
-                tt.block_id,
-                b.block_name,
-                ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                from
-                datasets.staffattendance_total_teachers_Daily_block as tt
+                    from (SELECT
+                    ts.block_id,
+                    b.block_name,
+                    b.district_id,
+                    d.district_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
                 JOIN
-                datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                LEFT JOIN
-                dimensions.block as b on tt.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
-                Where tt.date BETWEEN startDate AND endDate and b.block_id = {block_id}
-                Group by
-                b.district_id,
-                b.district_name,
-                tt.block_id,
-                b.block_name
-                ) AS avg_query;`,
+                    dimensions.block b ON ts.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
+                GROUP BY
+                    ts.block_id,
+                    b.block_name,b.district_id, d.district_name) AS avg_query;`,
                     
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_teachers)) AS perc_teachers
-                        from (
-                    select
-                    b.district_id,
-                    b.district_name,
-                    tt.block_id,
-                    b.block_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    from
-                    datasets.staffattendance_total_teachers_Daily_block as tt
+                        from (SELECT
+                        ts.block_id,
+                        b.block_name,
+                        b.district_id,
+                        d.district_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.block as b on tt.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate AND endDate and b.block_id = {block_id}
-                    Group by
-                    b.district_id,
-                    b.district_name,
-                    tt.block_id,
-                    b.block_name
-                    ) AS avg_query;
+                        dimensions.block b ON ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
+                    GROUP BY
+                        ts.block_id,
+                        b.block_name,b.district_id, d.district_name) AS avg_query;
                         `,
                        
                     },
@@ -2116,34 +2080,31 @@ export const config = {
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
                     ROUND(AVG(perc_teachers)) AS perc_teachers
-                    from (select
-                d.district_id,
-                d.district_name,
-                cc.block_id,
-                cc.block_name,
-                tt.cluster_id,
-                cc.cluster_name,
-                ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                from
-                datasets.staffattendance_total_teachers_Daily_cluster as tt 
+                    from (SELECT
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.block_name,
+                    b.district_id,
+                    d.district_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
                 JOIN
-                datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                LEFT JOIN
-                dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                LEFT JOIN
-                dimensions.block as b on cc.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
-                Where tt.date BETWEEN startDate AND endDate and cc.cluster_id = {cluster_id}
-                Group by
-                d.district_id,
-                d.district_name,
-                cc.block_id,
-                cc.block_name,
-                tt.cluster_id,
-                cc.cluster_name
-                ) AS avg_query;		 
-                
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
+                GROUP BY
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.block_name,b.district_id, d.district_name) AS avg_query;
                 
                 
                 `,
@@ -2153,34 +2114,31 @@ export const config = {
                     "queries": {
                         "bigNumber": `SELECT 
                         ROUND(AVG(perc_teachers)) AS perc_teachers
-                        from (select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    tt.cluster_id,
-                    cc.cluster_name,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    from
-                    datasets.staffattendance_total_teachers_Daily_cluster as tt 
+                        from (SELECT
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
+                        d.district_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate AND endDate and cc.cluster_id = {cluster_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    tt.cluster_id,
-                    cc.cluster_name
-                    ) AS avg_query;		 
-                    
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
+                    GROUP BY
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,b.district_id, d.district_name) AS avg_query;
                     
                     
                     `,
@@ -2208,67 +2166,49 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    d.district_id,
-                    d.district_name,
-                    tt.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-		    COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                FROM
-                    datasets.staffattendance_total_teachers_Daily_school AS tt
-                JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_school AS tp ON tt.school_id = tp.school_id AND tt.date = tp.date
-                LEFT JOIN
-                dimensions.school as sch on tt.school_id = sch.school_id
-                Left JOIN
-                dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                LEFT JOIN
-                dimensions.block as b on cc.block_id = b.block_id
-                LEFT Join
-                dimensions.district as d on b.district_id = d.district_id
-                WHERE
-                    tt.date BETWEEN startDate AND endDate
-                GROUP BY
-                    d.district_id,
-                    d.district_name,
-                    tt.school_id,
-                    sch.school_name
-                ORDER BY
-                    d.district_id;`
+                    "table": `select
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    from
+                    teacher_attendance.teaching_staff ts
+                    JOIN
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    Where ts.date between startDate AND endDate
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        d.district_id,
-                        d.district_name,
-                        tt.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
-                    FROM
-                        datasets.staffattendance_total_teachers_Daily_school AS tt
-                    JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school AS tp ON tt.school_id = tp.school_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on tt.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    WHERE
-                        tt.date BETWEEN startDate AND endDate
-                    GROUP BY
-                        d.district_id,
-                        d.district_name,
-                        tt.school_id,
-                        sch.school_name
-                    ORDER BY
-                        d.district_id;`,
+                        "table": `select
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                        from
+                        teacher_attendance.teaching_staff ts
+                        JOIN
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        Where ts.date between startDate AND endDate
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name`,
                     },
                     "level": "school"
                 }
@@ -2280,76 +2220,48 @@ export const config = {
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "table": `select
-                    b.district_id,
-                    b.district_name,
-                    b.block_id,
-                    b.block_name,
-                    tt.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-		    COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     from
-                    datasets.staffattendance_total_teachers_Daily_school AS tt
+                    teacher_attendance.teaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school AS tp ON tt.school_id = tp.school_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on tt.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate AND endDate and b.district_id = {district_id}
-                    Group by
-                    b.district_id,
-                    b.district_name,
-                    b.block_id,
-                    b.block_name,
-                    tt.school_id,
-                    sch.school_name
-                    ORDER BY
-                    b.block_id
-
-                    `
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    ts.school_id,sch.school_name`
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        b.district_id,
-                        b.district_name,
-                        b.block_id,
-                        b.block_name,
-                        tt.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                         from
-                        datasets.staffattendance_total_teachers_Daily_school AS tt
+                        teacher_attendance.teaching_staff ts
                         JOIN
-                            datasets.staffattendance_total_teachers_present_Daily_school AS tp ON tt.school_id = tp.school_id AND tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate and b.district_id = {district_id}
-                        Group by
-                        b.district_id,
-                        b.district_name,
-                        b.block_id,
-                        b.block_name,
-                        tt.school_id,
-                        sch.school_name
-                        ORDER BY
-                        b.block_id
-    
-                        `,
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        ts.school_id,sch.school_name`,
                     },
                     "level": "school"
                 }
@@ -2361,84 +2273,54 @@ export const config = {
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "table": `select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    sch.cluster_id,
-                    cc.cluster_name,
-                    tt.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-		    COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     from
-                    datasets.staffattendance_total_teachers_Daily_school as tt 
+                    teacher_attendance.teaching_staff ts
                     JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on tt.school_id = sch.school_id
-                    LEFT JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    sch.cluster_id,
-                    cc.cluster_name,
-                    tt.school_id,
-                    sch.school_name
-                    ORDER BY
-                    sch.cluster_id;
-
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    Where ts.date between startDate AND endDate AND c.block_id ={block_id} 
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    ts.school_id,sch.school_name
 
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        sch.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                         from
-                        datasets.staffattendance_total_teachers_Daily_school as tt 
+                        teacher_attendance.teaching_staff ts
                         JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        LEFT JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        sch.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
-                        sch.school_name
-                        ORDER BY
-                        sch.cluster_id;
-    
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        Where ts.date between startDate AND endDate AND c.block_id ={block_id} 
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        ts.school_id,sch.school_name
     
                         `,
                     },
@@ -2452,81 +2334,57 @@ export const config = {
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "table":`select
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    cc.cluster_id,
-                    cc.cluster_name,
-                    tt.school_id,
-                    sch.school_name,
-		    COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-		    COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                    ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    sch.cluster_id, c.cluster_name,
+                    ts.school_id,sch.school_name,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     from
-                    datasets.staffattendance_total_teachers_Daily_school as tt 
+                    teacher_attendance.teaching_staff ts
                     JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                    LEFT JOIN
-                    dimensions.school as sch on tt.school_id = sch.school_id
-                    Left JOIN
-                    dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                    LEFT JOIN
-                    dimensions.block as b on cc.block_id = b.block_id
-                    LEFT Join
-                    dimensions.district as d on b.district_id = d.district_id
-                    Where tt.date BETWEEN startDate And endDate and sch.cluster_id = {cluster_id}
-                    Group by
-                    d.district_id,
-                    d.district_name,
-                    cc.block_id,
-                    cc.block_name,
-                    cc.cluster_id,
-                    cc.cluster_name,
-                    tt.school_id,
-                    sch.school_name
-                    ORDER BY
-                    tt.school_id;
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                    JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                    Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                    b.district_id,d.district_name,
+                    c.block_id,b.block_name,
+                    sch.cluster_id, c.cluster_name,
+                    ts.school_id,sch.school_name
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
-                        sch.school_name,
-                COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        sch.cluster_id, c.cluster_name,
+                        ts.school_id,sch.school_name,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                         from
-                        datasets.staffattendance_total_teachers_Daily_school as tt 
+                        teacher_attendance.teaching_staff ts
                         JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate And endDate and sch.cluster_id = {cluster_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
-                        sch.school_name
-                        ORDER BY
-                        tt.school_id;
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                        JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                        JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                        JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                        Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        GROUP BY
+                        b.district_id,d.district_name,
+                        c.block_id,b.block_name,
+                        sch.cluster_id, c.cluster_name,
+                        ts.school_id,sch.school_name
                         `,
                     },
                     "level": "school"
@@ -2579,7 +2437,7 @@ export const config = {
                     },
                     {
                         name: "Total Teachers Present",
-                        property: "total_teachers_present",
+                        property: "present_teachers",
                         class: "text-center"
                     },
                     
@@ -2626,63 +2484,41 @@ export const config = {
                     "name": "State",
                     "hierarchyLevel": "1",
                     "timeSeriesQueries": {
-                        "map": `SELECT
-                        tt.district_id,
+                        "map": `SELECT 
+                        ts.district_id,
                         d.district_name,
                         d.latitude,
                         d.longitude,
-                        COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                        COALESCE(SUM(ta.sum), 0) AS total_teachers_absent,
-                        COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                        ROUND(CAST((SUM(tp.sum) /
-                                         SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) /
-                                         SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
                     FROM
-                        datasets.staffattendance_total_teachers_Daily_district AS tt
+                        teacher_attendance.teaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                        datasets.staffattendance_total_teachers_absent_Daily_district AS ta ON tt.district_id = ta.district_id AND tt.date = ta.date
-                    JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        tt.date BETWEEN startDate AND endDate
+                        ts.date between startDate AND endDate
                     GROUP BY
-                        tt.district_id,
-                        d.district_name,
-                        d.latitude,
-                        d.longitude;`
+                        ts.district_id, d.district_name, d.latitude, d.longitude;`
                     },
                     "actions": {
                         "queries": {
-                            "map": `SELECT
-                            tt.district_id,
+                            "map": `SELECT 
+                            ts.district_id,
                             d.district_name,
                             d.latitude,
                             d.longitude,
-                            COALESCE(SUM(tp.sum), 0) AS total_teachers_present,
-                            COALESCE(SUM(ta.sum), 0) AS total_teachers_absent,
-                            COALESCE(SUM(tt.sum), 0) AS total_teachers,
-                            ROUND(CAST((SUM(tp.sum) /
-                                             SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) /
-                                             SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
+                            SUM(ts.attendance_status) AS present_teachers,
+                            COUNT(ts.attendance_status) AS total_teachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
                         FROM
-                            datasets.staffattendance_total_teachers_Daily_district AS tt
+                            teacher_attendance.teaching_staff ts
                         JOIN
-                            datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                        JOIN
-                            datasets.staffattendance_total_teachers_absent_Daily_district AS ta ON tt.district_id = ta.district_id AND tt.date = ta.date
-                        JOIN
-                            dimensions.district AS d ON tt.district_id = d.district_id
+                            dimensions.district d ON ts.district_id = d.district_id
                         WHERE
-                            tt.date BETWEEN startDate AND endDate
+                            ts.date between startDate AND endDate
                         GROUP BY
-                            tt.district_id,
-                            d.district_name,
-                            d.latitude,
-                            d.longitude;`,
+                            ts.district_id, d.district_name, d.latitude, d.longitude;`,
                         },
                         "level": "district"
                     }
@@ -2691,75 +2527,53 @@ export const config = {
                     "name": "District",
                     "hierarchyLevel": "2",
                     "timeSeriesQueries": {
-                        "map": `select
-                        b.district_id,
-                        b.district_name,
-                        tt.block_id,
+                        "map": `SELECT 
+                        ts.block_id,
                         b.block_name,
-                        b.latitude,
-                        b.longitude,
-                        COALESCE(sum(tp.sum),0) as total_teachers_present,
-                        COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_block as tt
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_teachers_absent_Daily_block as ta on tt.block_id = ta.block_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.block as b on tt.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate  and b.district_id = {district_id}
-                        Group by
                         b.district_id,
-                        b.district_name,
-                        tt.block_id,
-                        b.block_name,
-                        b.latitude,
-                        b.longitude
-
-
+                        d.district_name,
+                        d.latitude,
+                        d.longitude,
+                        CAST(SUM(ts.attendance_status)AS INT) AS present_teachers,
+                       CAST(COUNT(ts.attendance_status)AS INT) AS total_teachers,
+                        CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.block b on ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                       ts.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
                         `,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            b.district_id,
-                            b.district_name,
-                            tt.block_id,
+                            "map": `SELECT 
+                            ts.block_id,
                             b.block_name,
-                            b.latitude,
-                            b.longitude,
-                            COALESCE(sum(tp.sum),0) as total_teachers_present,
-                            COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                            COALESCE(sum(tt.sum),0) as total_teachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                            from
-                            datasets.staffattendance_total_teachers_Daily_block as tt
-                            JOIN
-                            datasets.staffattendance_total_teachers_present_Daily_block as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                            JOIN
-                            datasets.staffattendance_total_teachers_absent_Daily_block as ta on tt.block_id = ta.block_id and tt.date = ta.date
-                            LEFT JOIN
-                            dimensions.block as b on tt.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                            Where tt.date BETWEEN startDate AND endDate  and b.district_id = {district_id}
-                            Group by
                             b.district_id,
-                            b.district_name,
-                            tt.block_id,
-                            b.block_name,
-                            b.latitude,
-                            b.longitude
-    
-    
+                            d.district_name,
+                            d.latitude,
+                            d.longitude,
+                            CAST(SUM(ts.attendance_status)AS INT) AS present_teachers,
+                           CAST(COUNT(ts.attendance_status)AS INT) AS total_teachers,
+                            CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_teachers
+                        FROM
+                            teacher_attendance.teaching_staff ts
+                        JOIN
+                            dimensions.block b on ts.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND b.district_id = {district_id}
+                        GROUP BY
+                           ts.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
     
                             `,
                         },
@@ -2770,84 +2584,64 @@ export const config = {
                     "name": "Block",
                     "hierarchyLevel": "3",
                     "timeSeriesQueries": {
-                        "map": `select
-                        d.district_id,
+                        "map": `SELECT 
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
                         d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude,
-                        COALESCE(sum(tp.sum),0) as total_teachers_present,
-                        COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_cluster as tt 
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_teachers_absent_Daily_cluster as ta on tt.cluster_id = ta.cluster_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude
-
+                        d.latitude,
+                        d.longitude,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.cluster c on ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b on c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND c.block_id = {block_id}
+                    GROUP BY
+                       ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
                         `,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            d.district_id,
+                            "map": `SELECT 
+                            ts.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name,
+                            b.district_id,
                             d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            tt.cluster_id,
-                            cc.cluster_name,
-                            cc.latitude,
-                            cc.longitude,
-                            COALESCE(sum(tp.sum),0) as total_teachers_present,
-                            COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                            COALESCE(sum(tt.sum),0) as total_teachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                            from
-                            datasets.staffattendance_total_teachers_Daily_cluster as tt 
-                            JOIN
-                            datasets.staffattendance_total_teachers_present_Daily_cluster as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                            JOIN
-                            datasets.staffattendance_total_teachers_absent_Daily_cluster as ta on tt.cluster_id = ta.cluster_id and tt.date = ta.date
-                            LEFT JOIN
-                            dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                            LEFT JOIN
-                            dimensions.block as b on cc.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                            Where tt.date BETWEEN startDate AND endDate and cc.block_id = {block_id}
-                            Group by
-                            d.district_id,
-                            d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            tt.cluster_id,
-                            cc.cluster_name,
-                            cc.latitude,
-                            cc.longitude
-    
+                            d.latitude,
+                            d.longitude,
+                            SUM(ts.attendance_status) AS present_teachers,
+                            COUNT(ts.attendance_status) AS total_teachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
+                        FROM
+                            teacher_attendance.teaching_staff ts
+                        JOIN
+                            dimensions.cluster c on ts.cluster_id = c.cluster_id
+                        JOIN
+                            dimensions.block b on c.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND c.block_id = {block_id}
+                        GROUP BY
+                           ts.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
                             `,
                         },
                         "level": "cluster"
@@ -2857,93 +2651,75 @@ export const config = {
                     "name": "Cluster",
                     "hierarchyLevel": "4",
                     "timeSeriesQueries": {
-                        "map": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
+                        "map": `SELECT 
+                        ts.school_id,
                         sch.school_name,
-                        sch.latitude,
-                        sch.longitude,
-                        COALESCE(sum(tp.sum),0) as total_teachers_present,
-                        COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_teachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_teachers_Daily_school as tt 
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_teachers_absent_Daily_school as ta on tt.school_id = ta.school_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-                        Group by
-                        d.district_id,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
                         d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
+                        d.latitude,
+                        d.longitude,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.school sch on ts.school_id = sch.school_id
+                    JOIN
+                        dimensions.cluster c on sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b on c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
                         sch.school_name,
-                        sch.latitude,
-                        sch.longitude`,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            d.district_id,
-                            d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
-                            tt.school_id,
+                            "map": `SELECT 
+                            ts.school_id,
                             sch.school_name,
-                            sch.latitude,
-                            sch.longitude,
-                            COALESCE(sum(tp.sum),0) as total_teachers_present,
-                            COALESCE(sum(ta.sum),0) as total_teachers_absent,
-                            COALESCE(sum(tt.sum),0) as total_teachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                            from
-                            datasets.staffattendance_total_teachers_Daily_school as tt 
-                            JOIN
-                            datasets.staffattendance_total_teachers_present_Daily_school as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                            JOIN
-                            datasets.staffattendance_total_teachers_absent_Daily_school as ta on tt.school_id = ta.school_id and tt.date = ta.date
-                            LEFT JOIN
-                            dimensions.school as sch on tt.school_id = sch.school_id
-                            Left JOIN
-                            dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                            LEFT JOIN
-                            dimensions.block as b on cc.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                            Where tt.date BETWEEN startDate AND endDate and sch.cluster_id = {cluster_id}
-                            Group by
-                            d.district_id,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name,
+                            b.district_id,
                             d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
-                            tt.school_id,
+                            d.latitude,
+                            d.longitude,
+                            SUM(ts.attendance_status) AS present_teachers,
+                            COUNT(ts.attendance_status) AS total_teachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_teachers
+                        FROM
+                            teacher_attendance.teaching_staff ts
+                        JOIN
+                            dimensions.school sch on ts.school_id = sch.school_id
+                        JOIN
+                            dimensions.cluster c on sch.cluster_id = c.cluster_id
+                        JOIN
+                            dimensions.block b on c.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        GROUP BY
+                           ts.school_id,
                             sch.school_name,
-                            sch.latitude,
-                            sch.longitude`,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                         },
                         "level": "school"
                     }
@@ -3009,12 +2785,12 @@ export const config = {
                     },
                     {
                         "valuePrefix": "Total Teachers Present: ",
-                        "value": "total_teachers_present",
+                        "value": "present_teachers",
                         "valueSuffix": "\n"
                     },
                     {
                         "valuePrefix": "Total Teachers Absent: ",
-                        "value": "total_teachers_absent",
+                        "value": "absent_teachers",
                         "valueSuffix": "\n"
                     },
                     {
@@ -3054,59 +2830,41 @@ export const config = {
                     "name": "State",
                     "hierarchyLevel": "1",
                     "timeSeriesQueries": {
-                        "map": `SELECT
-                        tt.district_id,
+                        "map": `SELECT 
+                        ts.district_id,
                         d.district_name,
                         d.latitude,
                         d.longitude,
-                        COALESCE(SUM(tp.sum), 0) AS total_nonteachers_present,
-                        COALESCE(SUM(ta.sum), 0) AS total_nonteachers_absent,
-                        COALESCE(SUM(tt.sum), 0) AS total_nonteachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
+                        SUM(ts.attendance_status) AS present_nonteachers,
+                        COUNT(ts.attendance_status) AS total_nonteachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
                     FROM
-                        datasets.staffattendance_total_nonteachers_IBEJTUNsQnZzX3RtfHR_ AS tt
+                        teacher_attendance.nonteaching_staff ts
                     JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiKR4MOhsGDRBbS2Fk AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                        datasets.staffattendance_total_nonteachers_absent_MC0ZJBUbKhYHAE9Abmlh AS ta ON tt.district_id = ta.district_id AND tt.date = ta.date
-                    JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        tt.date between startDate AND endDate
+                        ts.date between startDate AND endDate
                     GROUP BY
-                        tt.district_id,
-                        d.district_name,
-                        d.latitude,
-                        d.longitude;`
+                        ts.district_id, d.district_name, d.latitude, d.longitude;`
                     },
                     "actions": {
                         "queries": {
-                            "map": `SELECT
-                            tt.district_id,
+                            "map": `SELECT 
+                            ts.district_id,
                             d.district_name,
                             d.latitude,
                             d.longitude,
-                            COALESCE(SUM(tp.sum), 0) AS total_nonteachers_present,
-                            COALESCE(SUM(ta.sum), 0) AS total_nonteachers_absent,
-                            COALESCE(SUM(tt.sum), 0) AS total_nonteachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
+                            SUM(ts.attendance_status) AS present_nonteachers,
+                            COUNT(ts.attendance_status) AS total_nonteachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
                         FROM
-                            datasets.staffattendance_total_nonteachers_IBEJTUNsQnZzX3RtfHR_ AS tt
+                            teacher_attendance.nonteaching_staff ts
                         JOIN
-                            datasets.staffattendance_total_nonteachers_present_JQsiKR4MOhsGDRBbS2Fk AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                        JOIN
-                            datasets.staffattendance_total_nonteachers_absent_MC0ZJBUbKhYHAE9Abmlh AS ta ON tt.district_id = ta.district_id AND tt.date = ta.date
-                        JOIN
-                            dimensions.district AS d ON tt.district_id = d.district_id
+                            dimensions.district d ON ts.district_id = d.district_id
                         WHERE
-                            tt.date between startDate AND endDate
+                            ts.date between startDate AND endDate
                         GROUP BY
-                            tt.district_id,
-                            d.district_name,
-                            d.latitude,
-                            d.longitude;`,
+                            ts.district_id, d.district_name, d.latitude, d.longitude;`,
                         },
                         "level": "district"
                     }
@@ -3115,73 +2873,53 @@ export const config = {
                     "name": "District",
                     "hierarchyLevel": "2",
                     "timeSeriesQueries": {
-                        "map": `select
-                        b.district_id,
-                        b.district_name,
-                        tt.block_id,
+                        "map": `SELECT 
+                        ts.block_id,
                         b.block_name,
-                        b.latitude,
-                        b.longitude,
-                        COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                        COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_nonteachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_nonteachers_SXJ9TUNsQnZzX3JoYGNm as tt
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiLxsQLQJvbmRbS2Fk as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_absent_MC0fIQkMM39kdE9Abmlh as ta on tt.block_id = ta.block_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.block as b on tt.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date between startDate AND endDate and b.district_id = {district_id}
-                        Group by
                         b.district_id,
-                        b.district_name,
-                        tt.block_id,
-                        b.block_name,
-                        b.latitude,
-                        b.longitude
-
+                        d.district_name,
+                        d.latitude,
+                        d.longitude,
+                        CAST(SUM(ts.attendance_status)AS INT) AS present_nonteachers,
+                       CAST(COUNT(ts.attendance_status)AS INT) AS total_nonteachers,
+                        CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_nonteachers
+                    FROM
+                        teacher_attendance.nonteaching_staff ts
+                    JOIN
+                        dimensions.block b on ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                       ts.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
                         `,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            b.district_id,
-                            b.district_name,
-                            tt.block_id,
+                            "map": `SELECT 
+                            ts.block_id,
                             b.block_name,
-                            b.latitude,
-                            b.longitude,
-                            COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                            COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                            COALESCE(sum(tt.sum),0) as total_nonteachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                            from
-                            datasets.staffattendance_total_nonteachers_SXJ9TUNsQnZzX3JoYGNm as tt
-                            JOIN
-                            datasets.staffattendance_total_nonteachers_present_JQsiLxsQLQJvbmRbS2Fk as tp on tt.block_id = tp.block_id and tt.date = tp.date
-                            JOIN
-                            datasets.staffattendance_total_nonteachers_absent_MC0fIQkMM39kdE9Abmlh as ta on tt.block_id = ta.block_id and tt.date = ta.date
-                            LEFT JOIN
-                            dimensions.block as b on tt.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                            Where tt.date between startDate AND endDate and b.district_id = {district_id}
-                            Group by
                             b.district_id,
-                            b.district_name,
-                            tt.block_id,
-                            b.block_name,
-                            b.latitude,
-                            b.longitude
-    
+                            d.district_name,
+                            d.latitude,
+                            d.longitude,
+                            CAST(SUM(ts.attendance_status)AS INT) AS present_nonteachers,
+                           CAST(COUNT(ts.attendance_status)AS INT) AS total_nonteachers,
+                            CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_nonteachers
+                        FROM
+                            teacher_attendance.nonteaching_staff ts
+                        JOIN
+                            dimensions.block b on ts.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND b.district_id = {district_id}
+                        GROUP BY
+                           ts.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
     
                             `,
                         },
@@ -3192,83 +2930,64 @@ export const config = {
                     "name": "Block",
                     "hierarchyLevel": "3",
                     "timeSeriesQueries": {
-                        "map": `select
-                        d.district_id,
+                        "map": `SELECT 
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
                         d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude,
-                        COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                        COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_nonteachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_nonteachers_LAB9TUNsQnZzX3NoenN5 as tt 
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiLhsKPR0KHGRbS2Fk as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_absent_MC0eIRMcLBoWdE9Abmlh as ta on tt.cluster_id = ta.cluster_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date between startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude
-
+                        d.latitude,
+                        d.longitude,
+                        SUM(ts.attendance_status) AS present_nonteachers,
+                        COUNT(ts.attendance_status) AS total_nonteachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
+                    FROM
+                        teacher_attendance.nonteaching_staff ts
+                    JOIN
+                        dimensions.cluster c on ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b on c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND c.block_id = {block_id}
+                    GROUP BY
+                       ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 `,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude,
-                        COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                        COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_nonteachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_nonteachers_LAB9TUNsQnZzX3NoenN5 as tt 
+                            "map": `SELECT 
+                            ts.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name,
+                            b.district_id,
+                            d.district_name,
+                            d.latitude,
+                            d.longitude,
+                            SUM(ts.attendance_status) AS present_nonteachers,
+                            COUNT(ts.attendance_status) AS total_nonteachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
+                        FROM
+                            teacher_attendance.nonteaching_staff ts
                         JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiLhsKPR0KHGRbS2Fk as tp on tt.cluster_id = tp.cluster_id AND tt.date = tp.date
+                            dimensions.cluster c on ts.cluster_id = c.cluster_id
                         JOIN
-                        datasets.staffattendance_total_nonteachers_absent_MC0eIRMcLBoWdE9Abmlh as ta on tt.cluster_id = ta.cluster_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.cluster as cc on tt.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date between startDate AND endDate and cc.block_id = {block_id}
-                        Group by
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        tt.cluster_id,
-                        cc.cluster_name,
-                        cc.latitude,
-                        cc.longitude
+                            dimensions.block b on c.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND c.block_id = {block_id}
+                        GROUP BY
+                           ts.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
 
 `,
                         },
@@ -3279,93 +2998,75 @@ export const config = {
                     "name": "Cluster",
                     "hierarchyLevel": "4",
                     "timeSeriesQueries": {
-                        "map": `select
-                        d.district_id,
-                        d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
+                        "map": `SELECT 
+                        ts.school_id,
                         sch.school_name,
-                        sch.latitude,
-                        sch.longitude,
-                        COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                        COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                        COALESCE(sum(tt.sum),0) as total_nonteachers,
-                        ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-			ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                        from
-                        datasets.staffattendance_total_nonteachers_JXJ9TUNsQnZzX2NnZ29i as tt 
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiPhQXIQYDbmRbS2Fk as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_absent_MC0OLg4ANxNkdE9Abmlh as ta on tt.school_id = ta.school_id and tt.date = ta.date
-                        LEFT JOIN
-                        dimensions.school as sch on tt.school_id = sch.school_id
-                        Left JOIN
-                        dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                        LEFT JOIN
-                        dimensions.block as b on cc.block_id = b.block_id
-                        LEFT Join
-                        dimensions.district as d on b.district_id = d.district_id
-                        Where tt.date between startDate AND endDate and sch.cluster_id = {cluster_id}
-                        Group by
-                        d.district_id,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name,
+                        b.district_id,
                         d.district_name,
-                        cc.block_id,
-                        cc.block_name,
-                        cc.cluster_id,
-                        cc.cluster_name,
-                        tt.school_id,
+                        d.latitude,
+                        d.longitude,
+                        SUM(ts.attendance_status) AS present_nonteachers,
+                        COUNT(ts.attendance_status) AS total_nonteachers,
+                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
+                    FROM
+                        teacher_attendance.nonteaching_staff ts
+                    JOIN
+                        dimensions.school sch on ts.school_id = sch.school_id
+                    JOIN
+                        dimensions.cluster c on sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b on c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
                         sch.school_name,
-                        sch.latitude,
-                        sch.longitude`,
+                        sch.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                     },
                     "actions": {
                         "queries": {
-                            "map": `select
-                            d.district_id,
-                            d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
-                            tt.school_id,
+                            "map": `SELECT 
+                            ts.school_id,
                             sch.school_name,
-                            sch.latitude,
-                            sch.longitude,
-                            COALESCE(sum(tp.sum),0) as total_nonteachers_present,
-                            COALESCE(sum(ta.sum),0) as total_nonteachers_absent,
-                            COALESCE(sum(tt.sum),0) as total_nonteachers,
-                            ROUND(CAST((SUM(tp.sum) / SUM(tt.sum)) * 100 AS NUMERIC),2) AS perc_teachers,
-                ROUND(CAST((SUM(ta.sum) / SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_absent_teachers
-                            from
-                            datasets.staffattendance_total_nonteachers_JXJ9TUNsQnZzX2NnZ29i as tt 
-                            JOIN
-                            datasets.staffattendance_total_nonteachers_present_JQsiPhQXIQYDbmRbS2Fk as tp on tt.school_id = tp.school_id AND tt.date = tp.date
-                            JOIN
-                            datasets.staffattendance_total_nonteachers_absent_MC0OLg4ANxNkdE9Abmlh as ta on tt.school_id = ta.school_id and tt.date = ta.date
-                            LEFT JOIN
-                            dimensions.school as sch on tt.school_id = sch.school_id
-                            Left JOIN
-                            dimensions.cluster as cc on sch.cluster_id = cc.cluster_id
-                            LEFT JOIN
-                            dimensions.block as b on cc.block_id = b.block_id
-                            LEFT Join
-                            dimensions.district as d on b.district_id = d.district_id
-                            Where tt.date between startDate AND endDate and sch.cluster_id = {cluster_id}
-                            Group by
-                            d.district_id,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name,
+                            b.district_id,
                             d.district_name,
-                            cc.block_id,
-                            cc.block_name,
-                            cc.cluster_id,
-                            cc.cluster_name,
-                            tt.school_id,
+                            d.latitude,
+                            d.longitude,
+                            SUM(ts.attendance_status) AS present_nonteachers,
+                            COUNT(ts.attendance_status) AS total_nonteachers,
+                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_nonteachers
+                        FROM
+                            teacher_attendance.nonteaching_staff ts
+                        JOIN
+                            dimensions.school sch on ts.school_id = sch.school_id
+                        JOIN
+                            dimensions.cluster c on sch.cluster_id = c.cluster_id
+                        JOIN
+                            dimensions.block b on c.block_id = b.block_id
+                        JOIN
+                            dimensions.district d ON b.district_id = d.district_id
+                        WHERE
+                            ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        GROUP BY
+                           ts.school_id,
                             sch.school_name,
-                            sch.latitude,
-                            sch.longitude`,
+                            sch.cluster_id,
+                            c.cluster_name,
+                            c.block_id,
+                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
                         },
                         "level": "school"
                     }
@@ -3431,12 +3132,12 @@ export const config = {
                     },
                     {
                         "valuePrefix": "Total Non-Teaching Present: ",
-                        "value": "total_nonteachers_present",
+                        "value": "present_nonteachers",
                         "valueSuffix": "\n"
                     },
                     {
                         "valuePrefix": "Total Non Teaching Absent: ",
-                        "value": "total_nonteachers_absent",
+                        "value": "absent_nonteachers",
                         "valueSuffix": "\n"
                     },
                     {
