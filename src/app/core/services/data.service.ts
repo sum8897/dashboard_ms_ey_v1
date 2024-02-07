@@ -202,7 +202,43 @@ export class DataService {
       });
     });
   }
-
+  extraLine(data:any,config:any,param:any)
+  {
+    console.log("extraLine ===== ", data);
+    const minValue = Math.min(...data.values.map((reportData:any) => reportData[param]));
+    const minObject = {
+            type: 'line',
+            label: 'Min',
+            data: Array(data.values.length).fill(minValue),
+            borderColor: 'rgba(255, 0, 0, 1)',
+            borderWidth: 2,
+            fill: false
+    }
+          // To get the maximum value
+    const maxValue = Math.max(...data.values.map((reportData:any) => reportData[param]));
+    const maxObject = {
+      type: 'line',
+      label: 'Max',
+      data: Array(data.values.length).fill(maxValue),
+      borderColor: 'rgba(0, 225, 0, 1)',
+      borderWidth: 2,
+      fill: false
+    }
+          // Calculate the average value
+    const total = data.values.reduce((sum:any, reportData:any) => sum + reportData[param], 0);
+    const averageValue = total / data.values.length;
+    const avgObject = {
+      type: 'line',
+      label: 'Average',
+      data: Array(data.values.length).fill(averageValue),
+      borderColor: 'rgba(0, 0, 255, 1)',
+      borderWidth: 2,
+      fill: false
+    }
+    config.datasets.push(avgObject);
+    config.datasets.push(maxObject);
+    config.datasets.push(minObject);
+  }
   getStackedBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { parseQueryParam } from 'src/app/utilities/QueryBuilder';
+import { addQueryCondition, parseQueryParam } from 'src/app/utilities/QueryBuilder';
 import { CommonService } from './common/common.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -57,7 +57,7 @@ export class WrapperService {
     }
     console.log('sdghvfhvdsghfvh', tabLabel, filterConfig);
     for (let index = 0; index < filterConfig.length; index++) {
-
+      
       if (changedInd === undefined || (changedInd < index && filterConfig[changedInd]?.dependentFilter)) {
         let filter = filterConfig[index];
         filter.options = [];
@@ -80,6 +80,10 @@ export class WrapperService {
           query = parseQueryParam(query, { [filters[index - 1]?.valueProp]: filters[index - 1]?.value })
         }
         if (query) {
+          if(filter.parent=='Y')
+          {
+            query = addQueryCondition(query,filters,filter.parents);
+          }
           let res = await this.runQuery(query);
           if (res) {
             let rows = res;
@@ -121,7 +125,28 @@ export class WrapperService {
       }
     })
   }
+  runChildQuery(filters:any,ind:any)
+  {
+    filters.map(async (filter:any,index:any)=>{
+      if(filter.child && index==ind)
+      {
+        let filterPopulate = filters[filter.child];
+        let query =  addQueryCondition(filterPopulate.query,filters,filterPopulate.parents);
+        let res = await this.runQuery(query);
+        if (res) {
+          let rows = res;
+          filterPopulate.options = rows.map((row) => {
+            return {
+              value: row?.[filter.valueProp],
+              label: row?.[filter.labelProp]
+            }
+          })
+        }
+      }
+    })
 
+    return filters;
+  }
   formatToolTip(tooltipTemplate: string, record: any): string {
     if (this.validateBrackets(tooltipTemplate)) {
       tooltipTemplate.replace(/\n/g, '<br>');
