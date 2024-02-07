@@ -1439,29 +1439,29 @@ student_attendance_bignumber1: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":`SELECT
-                ROUND(CAST((SUM(tp.sum) /SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_students
-                FROM
-                datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
-                JOIN
-                datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                JOIN
-                dimensions.district AS d ON ts.district_id = d.district_id
-                JOIN
-                dimensions.class as c ON ts.class_id = c.class_id;`,
+                ROUND(AVG(perc_students)) AS percentage_students
+                from (SELECT
+                ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+            FROM
+                student_attendance.student_attendance_master ts
+            JOIN
+                dimensions.district d ON ts.district_id = d.district_id
+            GROUP BY
+                ts.district_id, d.district_name) AS avg_query;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": `SELECT
-                    ROUND(CAST((SUM(tp.sum) /SUM(ts.sum)) * 100 AS NUMERIC), 2) AS perc_students
-                    FROM
-                    datasets.studentattendance_total_students_BxZFNwcSCgd0Y3hodHZp AS ts
-                    JOIN
-                    datasets.studentattendance_total_students_present_bj0RCQsLFAEmB348DQwf AS tp ON ts.district_id = tp.district_id AND ts.class_id = tp.class_id AND ts.date = tp.date
-                    JOIN
-                    dimensions.district AS d ON ts.district_id = d.district_id
-                    JOIN
-                    dimensions.class as c ON ts.class_id = c.class_id;`,
+                    ROUND(AVG(perc_students)) AS percentage_students
+                    from (SELECT
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                GROUP BY
+                    ts.district_id, d.district_name) AS avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1473,7 +1473,7 @@ student_attendance_bignumber1: {
         "bigNumber": {
             "title": "Average Total Students Present",
             "valueSuffix": '%',
-            "property": 'perc_students'
+            "property": 'percentage_students'
         }
     }
 },

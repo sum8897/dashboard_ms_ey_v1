@@ -3,17 +3,15 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
-import { config } from 'src/app/views/student-ai-attendance/config/student_ai_attendance_config';
-import { StudentAverageBignumberComponent } from './reports/student-average-bignumber/student-average-bignumber.component';
-import { StudentAverageTableComponent } from './reports/student-average-table/student-average-table.component';
-import { StudentAverageSchoolTableComponent } from './reports/student-average-school-table/student-average-school-table.component';
+import { config } from 'src/app/views/school-library/config/school_library_config';
+import { SummaryTableComponent } from './reports/summary-table/summary-table.component';
 import moment from 'moment';
 @Component({
-  selector: 'app-student-average-tab',
-  templateUrl: './student-average-tab.component.html',
-  styleUrls: ['./student-average-tab.component.scss']
+  selector: 'app-overall-summary-tab',
+  templateUrl: './overall-summary-tab.component.html',
+  styleUrls: ['./overall-summary-tab.component.scss']
 })
-export class StudentAverageTabComponent implements OnInit, OnDestroy {
+export class OverallSummaryTabComponent implements OnInit, OnDestroy {
 
   bigNumberReports: any = {};
   filters: any;
@@ -36,16 +34,16 @@ hasCommonFilters: boolean = true;
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='Average Student Present';
+  tabLabel:any='Overall Summary';
 
   //added for full school report download
   // title = "Download School Report"
   schoolReportsData: any[] = [];
   pagereportName = "teachers_present"
   //
-  @ViewChild('studentAverageTable') studentAverageTable: StudentAverageTableComponent;
-  @ViewChild('studentAverageBigNumber') studentAverageBigNumber: StudentAverageBignumberComponent;
-  @ViewChild('averageSchool') averageSchool: StudentAverageSchoolTableComponent;
+  @ViewChild('summaryTable') summaryTable: SummaryTableComponent;
+  // @ViewChild('studentAverageBigNumber') studentAverageBigNumber: StudentAverageBignumberComponent;
+  // @ViewChild('averageSchool') averageSchool: StudentAverageSchoolTableComponent;
   
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
@@ -78,9 +76,9 @@ hasCommonFilters: boolean = true;
       if (this.hasCommonFilters) {
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
-          this.studentAverageTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.summaryTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         
-          this.studentAverageBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          // this.studentAverageBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -127,11 +125,11 @@ hasCommonFilters: boolean = true;
    
     console.log('dttttttt',this.filters,this.startDate,this.endDate)
 
-    this.studentAverageTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.summaryTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-    this.averageSchool?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    // this.averageSchool?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-    this.studentAverageBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    // this.studentAverageBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
   

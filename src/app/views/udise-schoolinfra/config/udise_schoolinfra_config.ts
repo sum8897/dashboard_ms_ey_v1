@@ -13,7 +13,7 @@ export const config = {
 
             id: 'management',
 
-            tableAlias: 't',
+            tableAlias: 'sm',
 
             query:
 
@@ -33,7 +33,7 @@ export const config = {
 
             id: 'category',
 
-            tableAlias: 't',
+            tableAlias: 'sc',
 
             query:
 
@@ -69,7 +69,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['electricity', 'solar'],
+            values: ['schools_with_electricity', 'schools_with_solar'],
 
         },
 //water
@@ -375,38 +375,60 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
-                        t.schoolmanagement_id,sm.schoolmanagement_name, 
-                        d.latitude,d.longitude,t.district_id,d.district_name, 
-                        CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                        CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                        CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                        CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                    FROM datasets.school_infra_schnfelec_cWRnenFqQF5ZdxMTMwo8 AS t 
-                    	JOIN datasets.school_infra_schnfsolarpanel_Cmx8cHlfVHJ3d25nT0RU as sp on
-                    	sp.district_id=t.district_id
-                        and sp.schoolcategory_id = t.schoolcategory_id
-                    
-                        and sp.schoolmanagement_id = t.schoolmanagement_id
-                        JOIN dimensions.district AS d ON t.district_id = d.district_id 
-                        JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id
-                        
-                        JOIN dimensions.schoolmanagement AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY t.schoolcategory_id,sc.schoolcategory_name, 
-                       t.schoolmanagement_id,sm.schoolmanagement_name,
-                        d.latitude, d.longitude, t.district_id,d.district_name`,
+                        select
+	e.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
+    and e.district_id = s.district_id and e.schoolmanagement_id = s.schoolmanagement_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
+group by 
+	 e.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude
+order by district_id;`,
 
                     "map_without_filter": `
-                    SELECT d.latitude,d.longitude,t.district_id,d.district_name, 
-                        CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                        CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                        CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                        CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                    FROM datasets.school_infra_electricity_Yearly_district AS t 
-                        JOIN datasets.school_infra_solar_panel_Yearly_district as sp 
-						ON sp.district_id=t.district_id
-						JOIN dimensions.district AS d ON t.district_id = d.district_id
-                    GROUP BY d.latitude, d.longitude, t.district_id,d.district_name`
+                    select
+                    e.district_id ,
+                    d.district_name,
+                    d.latitude,
+                    d.longitude,
+                    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+                    COUNT(e.electricity) AS total_schools,
+                    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+                    COUNT(s.solar_panel) as total_schools
+                FROM
+                    school_infrastructure.elec_event_data  e
+                LEFT JOIN
+                    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id  
+                    and e.district_id = s.district_id 
+                left join 
+                    dimensions.district d on e.district_id = d.district_id
+                left join 
+                    dimensions.school sch on e.school_id = sch.school_id
+                group by 
+                     e.district_id ,
+                    d.district_name,
+                    d.latitude,
+                    d.longitude
+                order by district_id;`
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -419,45 +441,75 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
-                            t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_schnfelec_fWFrdnRnSDY3AxMTPQom AS t
-							JOIN datasets.school_infra_schnfsolarpanel_fmx8fnlFWHd7e2tqRyw6 as sp
-							ON  sp.block_id=t.block_id
-                            and sp.schoolcategory_id = t.schoolcategory_id
-                            
-                            and sp.schoolmanagement_id = t.schoolmanagement_id
-                            JOIN dimensions.block AS b ON t.block_id = b.block_id 
-                            JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                          
-                            JOIN dimensions.schoolmanagement AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
-                        where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,  
-                             t.schoolmanagement_id,
-                            b.latitude, b.longitude,b.district_id,b.district_name, 
-                            t.block_id,b.block_name,sm.schoolmanagement_name, 
-                            sc.schoolcategory_name`,
+                        select
+	e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
+    and e.block_id = s.block_id and e.schoolmanagement_id = s.schoolmanagement_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.block b on e.block_id = b.block_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
+    where e.district_id = {district_id}
+group by 
+	 e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT 
-                            b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_electricity_Yearly_block AS t 
-							JOIN datasets.school_infra_solar_panel_Yearly_block as sp
-                             	ON t.block_id = sp.block_id
-							JOIN dimensions.block AS b ON sp.block_id = b.block_id
-                        where (b.district_id = {district_id}) 
-                        GROUP BY 
-                            b.latitude, b.longitude,b.district_id,b.district_name, 
-                            t.block_id,b.block_name`
+                        select
+	e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id  
+    and e.block_id = s.block_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.block b on e.block_id = b.block_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+where e.district_id = {district_id}
+group by 
+	 e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude
+order by district_id;
+`
                     },
                     "level": "block",
                     "nextLevel": "cluster"
@@ -470,46 +522,87 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
-                            t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name,
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_schnfelec_eHt_eX1zUlhDAxMTMwoy AS t 
-							JOIN datasets.school_infra_schnfsolarpanel_fmx8cHlRXW1vdGJ__XUJO as sp 
-								ON  t.cluster_id = sp.cluster_id 
-								and sp.schoolcategory_id = t.schoolcategory_id
-                            	
-                            	and sp.schoolmanagement_id = t.schoolmanagement_id
-                            JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
-                            JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                           
-                            JOIN dimensions.schoolmanagement AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name, 
-                            t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name`,
+                        select
+	e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	c.latitude,
+	c.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
+    and e.cluster_id = s.cluster_id and e.schoolmanagement_id = s.schoolmanagement_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.block b on e.block_id = b.block_id
+left join 
+	dimensions.cluster c on e.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
+    where e.block_id = {block_id}
+group by 
+	 e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	c.latitude,
+	c.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name,
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_electricity_Yearly_cluster AS t
-							JOIN datasets.school_infra_solar_panel_Yearly_cluster as sp
-								ON t.cluster_id = sp.cluster_id
-                            JOIN dimensions.cluster AS c ON sp.cluster_id = c.cluster_id 
-                        where (c.block_id = {block_id}) 
-                        GROUP BY 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name`
+                        select
+                        e.district_id ,
+                        d.district_name,
+                        e.block_id,
+                        b.block_name,
+                        e.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude,
+                        SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+                        COUNT(e.electricity) AS total_schools,
+                        SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+                        COUNT(s.solar_panel) as total_schools
+                    FROM
+                        school_infrastructure.elec_event_data  e
+                    LEFT JOIN
+                        school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id  
+                        and e.block_id = s.block_id 
+                    left join 
+                        dimensions.district d on e.district_id = d.district_id
+                    left join 
+                        dimensions.block b on e.block_id = b.block_id
+                    left join 
+                        dimensions.cluster c on e.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on e.school_id = sch.school_id
+                    where e.block_id = {block_id}
+                    group by 
+                         e.district_id ,
+                        d.district_name,
+                        e.block_id,
+                        b.block_name,
+                        e.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude
+                    order by district_id;
+                    `
                     },
                     "level": "cluster",
                     "nextLevel": "school"
@@ -522,42 +615,96 @@ export const config = {
                     "queries":
                     {
                         "map": `
-                        SELECT
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name,
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_electricity_Yearly_school AS t 
-							JOIN datasets.school_infra_solar_panel_Yearly_school as sp
-								ON t.school_id = sp.school_id
-                            JOIN dimensions.school AS sch ON t.school_id = sch.school_id
-                        WHERE (sch.cluster_id = {cluster_id}) 
-                        GROUP BY
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name`,
+                        select
+	e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	e.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
+    and e.cluster_id = s.cluster_id and e.schoolmanagement_id = s.schoolmanagement_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.block b on e.block_id = b.block_id
+left join 
+	dimensions.cluster c on e.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
+    where e.cluster_id = {cluster_id}
+group by 
+	 e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	e.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name,
-                            CAST(SUM(t.sum) AS NUMERIC) AS electricity, 
-                            CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                            CAST(SUM(sp.sum) AS NUMERIC) AS solar,
-                            CAST(SUM(sp.count) AS NUMERIC) AS total_school_solar
-                        FROM datasets.school_infra_electricity_yearly_school AS t 
-							JOIN datasets.school_infra_solar_panel_yearly_school as sp
-								ON t.school_id = sp.school_id
-                            JOIN dimensions.school AS sch ON t.school_id = sch.school_id
-                       WHERE (sch.cluster_id = {cluster_id}) 
-                        GROUP BY
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name`
+                        select
+	e.district_id ,
+	d.district_name, 
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	e.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude,
+    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+    COUNT(e.electricity) AS total_schools,
+    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+    COUNT(s.solar_panel) as total_schools
+FROM
+    school_infrastructure.elec_event_data  e
+LEFT JOIN
+    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id  
+    and e.cluster_id = s.cluster_id 
+left join 
+	dimensions.district d on e.district_id = d.district_id
+left join 
+	dimensions.block b on e.block_id = b.block_id
+left join 
+	dimensions.cluster c on e.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on e.school_id = sch.school_id
+where e.cluster_id = {cluster_id}
+group by 
+	 e.district_id ,
+	d.district_name,
+	e.block_id,
+	b.block_name,
+	e.cluster_id,
+	c.cluster_name,
+	e.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude
+order by district_id;
+
+`
                     },
                     "level": "school"
                 }
@@ -570,8 +717,11 @@ export const config = {
             map: {
 
                 metricFilterNeeded: true,
+                // indicator: 'metric',
+                totalOfPercentage:"total_schools",
+                indicatorType: "percent",
 
-                indicator: 'electricity',
+                indicator: 'schools_with_electricity',
                 // indicatorType: "percent",
 
                 legend: {
@@ -623,17 +773,17 @@ export const config = {
                     },
                     {
                         valuePrefix: 'No. of Schools: ',
-                        value: 'total_school',
+                        value: 'total_schools',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'No. of Schools Having Electricity: ',
-                        value: 'electricity',
+                        value: 'schools_with_electricity',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'No. of Schools Having Solar Panel: ',
-                        value: 'solar',
+                        value: 'schools_with_solar',
                         valueSuffix: '\n',
                     }
                 ],

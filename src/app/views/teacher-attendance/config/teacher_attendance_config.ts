@@ -3179,25 +3179,29 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT
-                    ROUND(CAST((SUM(tp.sum) /SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers
-                    FROM
-                    datasets.staffattendance_total_teachers_Daily_district AS tt
-                    JOIN
-                    datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                    dimensions.district AS d ON tt.district_id = d.district_id;`,
+                    ROUND(AVG(perc_teachers)) AS percentage_teachers
+                    from (SELECT
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                GROUP BY
+                    ts.district_id, d.district_name) AS avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT
-                        ROUND(CAST((SUM(tp.sum) /SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers
-                        FROM
-                        datasets.staffattendance_total_teachers_Daily_district AS tt
-                        JOIN
-                        datasets.staffattendance_total_teachers_present_Daily_district AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                        JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id;`,
+                        ROUND(AVG(perc_teachers)) AS percentage_teachers
+                        from (SELECT
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                    GROUP BY
+                        ts.district_id, d.district_name) AS avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"
@@ -3208,7 +3212,7 @@ export const config = {
             "bigNumber": {
                 "title": "Average Total Teacher Present ",
                 "valueSuffix": '%',
-                "property": 'perc_teachers'
+                "property": 'percentage_teachers'
             }
         }
     },
@@ -3222,25 +3226,29 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT
-                    ROUND(CAST((SUM(tp.sum) /SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers
-                    FROM
-                    datasets.staffattendance_total_nonteachers_IBEJTUNsQnZzX3RtfHR_ AS tt
-                    JOIN
-                    datasets.staffattendance_total_nonteachers_present_JQsiKR4MOhsGDRBbS2Fk AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                    JOIN
-                    dimensions.district AS d ON tt.district_id = d.district_id`,
+                    ROUND(AVG(perc_teachers)) AS percentage_teachers
+                    from (SELECT
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.nonteaching_staff ts
+                JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                GROUP BY
+                    ts.district_id, d.district_name) AS avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT
-                        ROUND(CAST((SUM(tp.sum) /SUM(tt.sum)) * 100 AS NUMERIC), 2) AS perc_teachers
-                        FROM
-                        datasets.staffattendance_total_nonteachers_IBEJTUNsQnZzX3RtfHR_ AS tt
-                        JOIN
-                        datasets.staffattendance_total_nonteachers_present_JQsiKR4MOhsGDRBbS2Fk AS tp ON tt.district_id = tp.district_id AND tt.date = tp.date
-                        JOIN
-                        dimensions.district AS d ON tt.district_id = d.district_id`,
+                        ROUND(AVG(perc_teachers)) AS percentage_teachers
+                        from (SELECT
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.nonteaching_staff ts
+                    JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                    GROUP BY
+                        ts.district_id, d.district_name) AS avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"
@@ -3251,7 +3259,7 @@ export const config = {
             "bigNumber": {
                 "title": "Average Non Teaching Staff Present ",
                 "valueSuffix": '%',
-                "property": 'perc_teachers'
+                "property": 'percentage_teachers'
             }
         }
     },

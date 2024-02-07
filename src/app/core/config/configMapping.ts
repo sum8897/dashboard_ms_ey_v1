@@ -15,6 +15,7 @@ import {config as quiz} from '../../views/ncert-quiz/config/quiz_config';
 import{config as microImprovement} from '../../views/micro-improvements/config/microimprovements_config';
 import{ config as patConfig} from '../../views/pat/config/pat_config.ts';
 import{ config as studentAiAttendanceConfig} from '../../views/student-ai-attendance/config/student_ai_attendance_config';
+import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
@@ -23,6 +24,7 @@ import {config as libraryConfig} from '../../views/library/config.ts';
 
 
 export const configFiles = {
+  schoolLibrary:schoolLibraryConfig,
   studentAiAttendance:studentAiAttendanceConfig,
   studentAttendance: studentAttendaceConfig,
   reviewMeetings: reviewMeetingsConfig,
@@ -62,12 +64,14 @@ export const programFolderNames = {
   microImprovement:'microImprovement',
   pat:'pat',
   library:'library',
-  studentAiAttendance:'studentattendance'
+  studentAiAttendance:'studentattendance',
+  schoolLibrary:'schoollibrary'
   // udiseSchoolInfra:'udiseSchoolInfra'
 }
 
 export const stateProgramsFolderNames = {
   studentAiAttendance:'',
+  schoolLibrary:'',
   studentAttendance: '',
   reviewMeetings: '',
   teacherAttendance: '',
