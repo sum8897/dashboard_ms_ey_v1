@@ -137,8 +137,8 @@ export class WrapperService {
           let rows = res;
           filterPopulate.options = rows.map((row) => {
             return {
-              value: row?.[filter.valueProp],
-              label: row?.[filter.labelProp]
+              value: row?.[filterPopulate.valueProp],
+              label: row?.[filterPopulate.labelProp]
             }
           })
         }
