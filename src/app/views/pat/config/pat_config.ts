@@ -54,7 +54,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['student_present', 'student_absent','total_students'],
+            values: ['present_students', 'absent_students'],
 
         },
 		//lo-wise
@@ -111,7 +111,8 @@ export const config = {
             parents: [0,1],
 
 			query:
-				'SELECT indicator_id,indicator FROM dimensions.indicators where subject_id=:Subjects: and class_id=:classes: ORDER BY indicator ASC ',
+				`SELECT indicator_id,indicator FROM dimensions.indicators where subject_id=':Subjects:' and class_id=':classes:' ORDER BY indicator ASC `,
+			
 		},
 
         //question-wise
@@ -168,442 +169,581 @@ export const config = {
     //student-availability query
 	student_availability: {
 
-            label: 'Student Availability',
-            filters: [
-   
-		// {
-		// 	"name": "State",
-		// 	"hierarchyLevel": "1",
-		// 	"actions": {
-		// 		"queries":	
-		// 		{
-		// 			"map": `
-		// 			SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-		// 			d.latitude,d.longitude,t.district_id,d.district_name, 
+        label: 'Student Availability',
+        filters: [
 
-        //             COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-        //             COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-        //             COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-        //             COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-        //             COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-        //             COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-		// 		FROM datasets.pat_student_present_AhQZLTtpAFkTCR8IFCtl
-		// 		AS t 
-		// 			JOIN datasets.pat_student_absent_BQwGF24BSBICBSM7OGJy
-		// 			as sp on
-		// 			sp.district_id=t.district_id
-        //              and sp.exam_id = t.exam_id
-        //                 and sp.class_id = t.class_id 
-        //                 and sp.subject_id = t.subject_id
-		// 			JOIN datasets.pat_total_students_Yearly_district
-		// 			as sh on
-		// 			sh.district_id=t.district_id
-				   
-		// 			JOIN dimensions.district AS d ON t.district_id = d.district_id 
-		// 			JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
-		// 			JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
-		// 			JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
-				   
-		// 		GROUP BY 
-		// 			t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-		// 			d.latitude,d.longitude,t.district_id,d.district_name`,
-
-			
-		// 		},
-		// 		"level": "district",
-		// 		"nextLevel": "block"
-		// 	}
-		// },
-
-        {
-			"name": "State",
-			"hierarchyLevel": "1",
-			"timeSeriesQueries": {"map": `SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name,t.date,
-
-                    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-                    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-                    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-                    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-                    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-                    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-				FROM datasets.pat_student_present_EwccPGggSAkCBSM7KXJk
-				AS t 
-					JOIN datasets.pat_student_absent_FgkXRCdJGAMOORAGYWNj
-					as sp on
-					sp.district_id=t.district_id
-                     and sp.exam_id = t.exam_id
-                        and sp.class_id = t.class_id 
-                        and sp.subject_id = t.subject_id
-					JOIN datasets.pat_total_students_daily_district
-					as sh on
-					sh.district_id=t.district_id
-				   
-					JOIN dimensions.district AS d ON t.district_id = d.district_id 
-					JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
-					JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
-					JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
-					WHERE
-    t.date BETWEEN startDate AND endDate
-				   
-				GROUP BY 
-					t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name,t.date`,},
-			"actions": {
-				"queries":	
-				{
-					"map": `SELECT t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name,t.date,
-
-                    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-                    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-                    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-                    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-                    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-                    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-				FROM datasets.pat_student_present_EwccPGggSAkCBSM7KXJk
-				AS t 
-					JOIN datasets.pat_student_absent_FgkXRCdJGAMOORAGYWNj
-					as sp on
-					sp.district_id=t.district_id
-                     and sp.exam_id = t.exam_id
-                        and sp.class_id = t.class_id 
-                        and sp.subject_id = t.subject_id
-					JOIN datasets.pat_total_students_daily_district
-					as sh on
-					sh.district_id=t.district_id
-				   
-					JOIN dimensions.district AS d ON t.district_id = d.district_id 
-					JOIN dimensions.classes AS cc ON t.class_id = cc.class_id 
-					JOIN dimensions.exams AS e ON t.exam_id = e.exam_id 
-					JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id 
-					WHERE
-    t.date BETWEEN startDate AND endDate
-				   
-				GROUP BY 
-					t.exam_id,e.examLO,cc.class_name, t.class_id, t.subject_id,s.subject_name,
-					d.latitude,d.longitude,t.district_id,d.district_name,t.date`,
-
-			
-				},
-				"level": "district",
-				"nextLevel": "block"
-			}
-		},
-		{
-            "name": "District",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries":  {
-                    "map": `
-                    SELECT
-    t.exam_id,
-    e.examLO,
-    cc.class_name,
-    t.class_id,
-    t.subject_id,
-    s.subject_name,
-    b.latitude,
-    b.longitude,
-    t.block_id,
-    b.block_name,
-    b.district_id,
-    b.district_name,
-    t.date,
     
-    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-FROM datasets.pat_student_present_C0AKdyg7BgUJJ1hIfndj AS t
-JOIN datasets.pat_student_absent_UR9cBDwHFAgsQmNRZGR7 AS sp ON
-    sp.block_id = t.block_id
-    AND sp.exam_id = t.exam_id
-    AND sp.class_id = t.class_id
-    AND sp.subject_id = t.subject_id
-JOIN datasets.pat_total_students_daily_block AS sh ON
-    sh.block_id = t.block_id
-JOIN dimensions.block AS b ON t.block_id = b.block_id
-JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
-JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
-JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-WHERE b.district_id = {district_id} and 
-t.date BETWEEN startDate AND endDate
-GROUP BY
-    t.exam_id,
-    e.examLO,
-    cc.class_name,
-    t.class_id,
-    t.subject_id,
-    s.subject_name,
-    b.latitude,
-    b.longitude,
-    b.district_id,
-    b.district_name,
-    t.block_id,
-    t.date,
-    b.block_name;
-`,
 
-                    
-                },
-            "actions": {
-                "queries":
-                {
-                    "map": `
-                    SELECT
-                    t.exam_id,
-                    e.examLO,
-                    cc.class_name,
-                    t.class_id,
-                    t.subject_id,
-                    s.subject_name,
-                    b.latitude,
-                    b.longitude,
-                    t.block_id,
-                    b.block_name,
-                    b.district_id,
-                    b.district_name,
-                    t.date,
-                    
-                    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-                    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-                    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-                    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-                    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-                    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-                FROM datasets.pat_student_present_C0AKdyg7BgUJJ1hIfndj AS t
-                JOIN datasets.pat_student_absent_UR9cBDwHFAgsQmNRZGR7 AS sp ON
-                    sp.block_id = t.block_id
-                    AND sp.exam_id = t.exam_id
-                    AND sp.class_id = t.class_id
-                    AND sp.subject_id = t.subject_id
-                JOIN datasets.pat_total_students_daily_block AS sh ON
-                    sh.block_id = t.block_id
-                JOIN dimensions.block AS b ON t.block_id = b.block_id
-                JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
-                JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
-                JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-                WHERE b.district_id = {district_id} and 
-                t.date BETWEEN startDate AND endDate
-                GROUP BY
-                    t.exam_id,
-                    e.examLO,
-                    cc.class_name,
-                    t.class_id,
-                    t.subject_id,
-                    s.subject_name,
-                    b.latitude,
-                    b.longitude,
-                    b.district_id,
-                    b.district_name,
-                    t.block_id,
-                    t.date,
-                    b.block_name;
-`,
+    {
+        "name": "State",
+        "hierarchyLevel": "1",
+        "timeSeriesQueries": {"map": `select 
+        tsed.exam_id,
+        e.examLO,
+        cc.class_name, 
+        tsed.class_id, 
+        tsed.subject_id,
+        s.subject_name,
+        tsed.district_id,
+        d.district_name ,
+        d.latitude ,
+        d.longitude ,
+        sum(tsed.total_students) as total_students,
+        sum(sped.student_present) as present_students,
+        sum(saed.student_absent) as absent_students
+        from 
+        pat.total_student_event_data tsed 
+        join
+        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+        and sped.class_id = tsed.class_id 
+        join 
+        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+        and saed.class_id = tsed.class_id 
+        join 
+        dimensions.district d on d.district_id = tsed.district_id 
+        join 
+        dimensions.classes cc on cc.class_id = tsed.class_id 
+        join 
+        dimensions.subjects s on s.subject_id  = tsed.subject_id 
+        join 
+        dimensions.exams e on e.exam_id = tsed.exam_id 
+        where 
+        tsed.date between startDate and endDate 
+        group by 
+        tsed.exam_id,
+        e.examLO,
+        cc.class_name, 
+        tsed.class_id, 
+        tsed.subject_id,
+        s.subject_name,
+        tsed.district_id,
+        d.district_name ,
+        d.latitude ,
+        d.longitude `,},
+        "actions": {
+            "queries":	
+            {
+                "map": `select 
+        tsed.exam_id,
+        e.examLO,
+        cc.class_name, 
+        tsed.class_id, 
+        tsed.subject_id,
+        s.subject_name,
+        tsed.district_id,
+        d.district_name ,
+        d.latitude ,
+        d.longitude ,
+        sum(tsed.total_students) as total_students,
+        sum(sped.student_present) as present_students,
+        sum(saed.student_absent) as absent_students
+        from 
+        pat.total_student_event_data tsed 
+        join
+        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+        and sped.class_id = tsed.class_id 
+        join 
+        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+        and saed.class_id = tsed.class_id 
+        join 
+        dimensions.district d on d.district_id = tsed.district_id 
+        join 
+        dimensions.classes cc on cc.class_id = tsed.class_id 
+        join 
+        dimensions.subjects s on s.subject_id  = tsed.subject_id 
+        join 
+        dimensions.exams e on e.exam_id = tsed.exam_id 
+        where 
+        tsed.date between startDate and endDate 
+        group by 
+        tsed.exam_id,
+        e.examLO,
+        cc.class_name, 
+        tsed.class_id, 
+        tsed.subject_id,
+        s.subject_name,
+        tsed.district_id,
+        d.district_name ,
+        d.latitude ,
+        d.longitude `,
 
-                    
-                },
-                "level": "block",
-                "nextLevel": "cluster"
-            }
-        },
-        {
-            "name": "Block",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries":  {
+        
+            },
+            "level": "district",
+            "nextLevel": "block"
+        }
+    },
+    {
+        "name": "District",
+        "hierarchyLevel": "2",
+        "timeSeriesQueries":  {
                 "map": `
-                SELECT
-t.exam_id,
+                select 
+tsed.exam_id,
 e.examLO,
-cc.class_name,
-t.class_id,
-t.subject_id,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
 s.subject_name,
-c.latitude,
-c.longitude,
-t.cluster_id,
-c.cluster_name,
-c.block_id,
-c.block_name,
-c.district_id,
-c.district_name,
-t.date,
-COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-FROM datasets.pat_student_present_HQQLbzxsEAYbHysMb3J0 AS t
-JOIN datasets.pat_student_absent_FR5EEGsRFxoUMSdAYXNt AS sp ON
-sp.cluster_id = t.cluster_id
-AND sp.exam_id = t.exam_id
-AND sp.class_id = t.class_id
-AND sp.subject_id = t.subject_id
-JOIN datasets.pat_total_students_daily_cluster AS sh ON
-sh.cluster_id = t.cluster_id
-JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id
-JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
-JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
-JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-WHERE c.block_id = {block_id} and 
-t.date BETWEEN startDate AND endDate
-GROUP BY
-t.exam_id,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+b.latitude ,
+b.longitude ,
+sum(tsed.total_students) as total_students,
+sum(sped.student_present) as present_students,
+sum(saed.student_absent) as absent_students
+from 
+pat.total_student_event_data tsed 
+join
+pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+and sped.class_id = tsed.class_id 
+join 
+pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+and saed.class_id = tsed.class_id 
+join 
+dimensions.district d on d.district_id = tsed.district_id 
+join 
+dimensions.block b on b.block_id = tsed.block_id
+join 
+dimensions.classes cc on cc.class_id = tsed.class_id 
+join 
+dimensions.subjects s on s.subject_id  = tsed.subject_id 
+join 
+dimensions.exams e on e.exam_id = tsed.exam_id 
+where 
+tsed.date between startDate and endDate and tsed.district_id = {district_id}
+group by 
+tsed.exam_id,
 e.examLO,
-cc.class_name,
-t.class_id,
-t.subject_id,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
 s.subject_name,
-c.latitude,
-c.longitude,
-t.cluster_id,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+b.latitude ,
+b.longitude 
+
+`,
+
+                
+            },
+        "actions": {
+            "queries":
+            {
+                "map": `
+                select 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+b.latitude ,
+b.longitude ,
+sum(tsed.total_students) as total_students,
+sum(sped.student_present) as present_students,
+sum(saed.student_absent) as absent_students
+from 
+pat.total_student_event_data tsed 
+join
+pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+and sped.class_id = tsed.class_id 
+join 
+pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+and saed.class_id = tsed.class_id 
+join 
+dimensions.district d on d.district_id = tsed.district_id 
+join 
+dimensions.block b on b.block_id = tsed.block_id
+join 
+dimensions.classes cc on cc.class_id = tsed.class_id 
+join 
+dimensions.subjects s on s.subject_id  = tsed.subject_id 
+join 
+dimensions.exams e on e.exam_id = tsed.exam_id 
+where 
+tsed.date between startDate and endDate and tsed.district_id = {district_id}
+group by 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+b.latitude ,
+b.longitude 
+`,
+
+                
+            },
+            "level": "block",
+            "nextLevel": "cluster"
+        }
+    },
+    {
+        "name": "Block",
+        "hierarchyLevel": "3",
+        "timeSeriesQueries":  {
+            "map": `
+           select 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+tsed.cluster_id,
+c.cluster_id,
 c.cluster_name,
-c.block_id,
-c.block_name,
-c.district_id,
-t.date,
-c.district_name;
+c.latitude ,
+c.longitude ,
+sum(tsed.total_students) as total_students,
+sum(sped.student_present) as present_students,
+sum(saed.student_absent) as absent_students
+from 
+pat.total_student_event_data tsed 
+join
+pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+and sped.class_id = tsed.class_id 
+join 
+pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+and saed.class_id = tsed.class_id 
+join 
+dimensions.district d on d.district_id = tsed.district_id 
+join 
+dimensions.block b on b.block_id = tsed.block_id
+join 
+dimensions.cluster c on c.cluster_id = tsed.cluster_id 
+join 
+dimensions.classes cc on cc.class_id = tsed.class_id 
+join 
+dimensions.subjects s on s.subject_id  = tsed.subject_id 
+join 
+dimensions.exams e on e.exam_id = tsed.exam_id 
+where 
+tsed.date between startDate and endDate and tsed.block_id = {block_id}
+group by 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+tsed.cluster_id,
+c.cluster_id,
+c.cluster_name,
+c.latitude ,
+c.longitude
+
+`,
+
+        },
+        "actions": {
+            "queries":
+            {
+                "map": `
+                select 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+tsed.cluster_id,
+c.cluster_id,
+c.cluster_name,
+c.latitude ,
+c.longitude ,
+sum(tsed.total_students) as total_students,
+sum(sped.student_present) as present_students,
+sum(saed.student_absent) as absent_students
+from 
+pat.total_student_event_data tsed 
+join
+pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+and sped.class_id = tsed.class_id 
+join 
+pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+and saed.class_id = tsed.class_id 
+join 
+dimensions.district d on d.district_id = tsed.district_id 
+join 
+dimensions.block b on b.block_id = tsed.block_id
+join 
+dimensions.cluster c on c.cluster_id = tsed.cluster_id 
+join 
+dimensions.classes cc on cc.class_id = tsed.class_id 
+join 
+dimensions.subjects s on s.subject_id  = tsed.subject_id 
+join 
+dimensions.exams e on e.exam_id = tsed.exam_id 
+where 
+tsed.date between startDate and endDate and tsed.block_id = {block_id}
+group by 
+tsed.exam_id,
+e.examLO,
+cc.class_name, 
+tsed.class_id, 
+tsed.subject_id,
+s.subject_name,
+tsed.district_id,
+d.district_name ,
+tsed.block_id,
+b.block_name,
+tsed.cluster_id,
+c.cluster_id,
+c.cluster_name,
+c.latitude ,
+c.longitude
+
 `,
 
             },
-            "actions": {
-                "queries":
-                {
-                    "map": `
-                    SELECT
-    t.exam_id,
-    e.examLO,
-    cc.class_name,
-    t.class_id,
-    t.subject_id,
-    s.subject_name,
-    c.latitude,
-    c.longitude,
-    t.cluster_id,
-    c.cluster_name,
-    c.block_id,
-    c.block_name,
-    c.district_id,
-    c.district_name,
-    t.date,
-    COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS student_present,
-    COALESCE(CAST(SUM(t.count) AS NUMERIC), 0)  AS total_student_present,
-    COALESCE(CAST(SUM(sp.sum) AS NUMERIC), 0)  AS student_absent,
-    COALESCE(CAST(SUM(sp.count) AS NUMERIC), 0)  AS total_student_absent,
-    COALESCE(CAST(SUM(sh.sum) AS NUMERIC), 0) AS total_students,
-    COALESCE(CAST(SUM(sh.count) AS NUMERIC), 0)  AS total_total_students
-FROM datasets.pat_student_present_HQQLbzxsEAYbHysMb3J0 AS t
-JOIN datasets.pat_student_absent_FR5EEGsRFxoUMSdAYXNt AS sp ON
-    sp.cluster_id = t.cluster_id
-    AND sp.exam_id = t.exam_id
-    AND sp.class_id = t.class_id
-    AND sp.subject_id = t.subject_id
-JOIN datasets.pat_total_students_daily_cluster AS sh ON
-    sh.cluster_id = t.cluster_id
-JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id
-JOIN dimensions.exams AS e ON t.exam_id = e.exam_id
-JOIN dimensions.classes AS cc ON t.class_id = cc.class_id
-JOIN dimensions.subjects AS s ON t.subject_id = s.subject_id
-WHERE c.block_id = {block_id} and 
-t.date BETWEEN startDate AND endDate
-GROUP BY
-    t.exam_id,
-    e.examLO,
-    cc.class_name,
-    t.class_id,
-    t.subject_id,
-    s.subject_name,
-    c.latitude,
-    c.longitude,
-    t.cluster_id,
-    c.cluster_name,
-    c.block_id,
-    c.block_name,
-    c.district_id,
-    t.date,
-    c.district_name;
-`,
-
+            "level": "cluster",
+            "nextLevel": "school"
+        }
+    },
+     {
+                "name": "Cluster",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "map": `select 
+                    tsed.exam_id,
+                    e.examLO,
+                    cc.class_name, 
+                    tsed.class_id, 
+                    tsed.subject_id,
+                    s.subject_name,
+                    tsed.district_id,
+                    d.district_name ,
+                    tsed.block_id,
+                    b.block_name,
+                    tsed.cluster_id,
+                    c.cluster_name,
+                    tsed.school_id,
+                    sch.school_name,
+                    sch.latitude ,
+                    sch.longitude ,
+                    sum(tsed.total_students) as total_students,
+                    sum(sped.student_present) as present_students,
+                    sum(saed.student_absent) as absent_students
+                    from 
+                    pat.total_student_event_data tsed 
+                    join
+                    pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+                    and sped.class_id = tsed.class_id 
+                    join 
+                    pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+                    and saed.class_id = tsed.class_id 
+                    join 
+                    dimensions.district d on d.district_id = tsed.district_id 
+                    join 
+                    dimensions.block b on b.block_id = tsed.block_id
+                    join 
+                    dimensions.cluster c on c.cluster_id = tsed.cluster_id 
+                    join 
+                    dimensions.school sch on sch.school_id = tsed.school_id
+                    join 
+                    dimensions.classes cc on cc.class_id = tsed.class_id 
+                    join 
+                    dimensions.subjects s on s.subject_id  = tsed.subject_id 
+                    join 
+                    dimensions.exams e on e.exam_id = tsed.exam_id 
+                    where 
+                    tsed.date between startDate and endDate and tsed.cluster_id = {cluster_id}
+                    group by 
+                    tsed.exam_id,
+                    e.examLO,
+                    cc.class_name, 
+                    tsed.class_id, 
+                    tsed.subject_id,
+                    s.subject_name,
+                    tsed.district_id,
+                    d.district_name ,
+                    tsed.block_id,
+                    b.block_name,
+                    tsed.cluster_id,
+                    c.cluster_name,
+                    tsed.school_id,
+                    sch.school_name,
+                    sch.latitude ,
+                    sch.longitude `,
                 },
-                "level": "cluster",
-                "nextLevel": "school"
+                "actions": {
+                    "queries": {
+                        "map": `select 
+                        tsed.exam_id,
+                        e.examLO,
+                        cc.class_name, 
+                        tsed.class_id, 
+                        tsed.subject_id,
+                        s.subject_name,
+                        tsed.district_id,
+                        d.district_name ,
+                        tsed.block_id,
+                        b.block_name,
+                        tsed.cluster_id,
+                        c.cluster_name,
+                        tsed.school_id,
+                        sch.school_name,
+                        sch.latitude ,
+                        sch.longitude ,
+                        sum(tsed.total_students) as total_students,
+                        sum(sped.student_present) as present_students,
+                        sum(saed.student_absent) as absent_students
+                        from 
+                        pat.total_student_event_data tsed 
+                        join
+                        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
+                        and sped.class_id = tsed.class_id 
+                        join 
+                        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
+                        and saed.class_id = tsed.class_id 
+                        join 
+                        dimensions.district d on d.district_id = tsed.district_id 
+                        join 
+                        dimensions.block b on b.block_id = tsed.block_id
+                        join 
+                        dimensions.cluster c on c.cluster_id = tsed.cluster_id 
+                        join 
+                        dimensions.school sch on sch.school_id = tsed.school_id
+                        join 
+                        dimensions.classes cc on cc.class_id = tsed.class_id 
+                        join 
+                        dimensions.subjects s on s.subject_id  = tsed.subject_id 
+                        join 
+                        dimensions.exams e on e.exam_id = tsed.exam_id 
+                        where 
+                        tsed.date between startDate and endDate and tsed.cluster_id = {cluster_id}
+                        group by 
+                        tsed.exam_id,
+                        e.examLO,
+                        cc.class_name, 
+                        tsed.class_id, 
+                        tsed.subject_id,
+                        s.subject_name,
+                        tsed.district_id,
+                        d.district_name ,
+                        tsed.block_id,
+                        b.block_name,
+                        tsed.cluster_id,
+                        c.cluster_name,
+                        tsed.school_id,
+                        sch.school_name,
+                        sch.latitude ,
+                        sch.longitude `,
+                    },
+                    "level": "school"
+                }
             }
-        },
-	],
-    
-		options: {
+        
+],
 
-			map: {
+    options: {
 
-				metricFilterNeeded: true,
+        map: {
 
-				indicator: 'metric',
-                totalOfPercentage:"total_students",
-                indicatorType: "percent",
+            metricFilterNeeded: true,
 
-				legend: {
+            indicator: 'metric',
+            totalOfPercentage:"total_students",
+            indicatorType: "percent",
 
-					title: 'Student Availability',
+            legend: {
 
-				},
+                title: 'Student Availability',
 
-				tooltipMetrics: [
-					{
-						valuePrefix: 'District ID: ',
-						value: 'district_id',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'District Name: ',
-						value: 'district_name',
-						valueSuffix: '\n',
-					},
-					{
-                        valuePrefix: 'Block ID: ',
-                        value: 'block_id',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Block Name: ',
-                        value: 'block_name',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Cluster ID: ',
-                        value: 'cluster_id',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Cluster Name: ',
-                        value: 'cluster_name',
-                        valueSuffix: '\n',
-                    },
-					{
-						valuePrefix: 'Student Present: ',
-						value: 'student_present',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'Student Absent: ',
-						value: 'student_absent',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'Total Students: ',
-						value: 'total_students',
-						valueSuffix: '\n',
-					},
-					
-				]
+            },
 
-			}
+            tooltipMetrics: [
+                {
+                    valuePrefix: 'District ID: ',
+                    value: 'district_id',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'District Name: ',
+                    value: 'district_name',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Block ID: ',
+                    value: 'block_id',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Block Name: ',
+                    value: 'block_name',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Cluster ID: ',
+                    value: 'cluster_id',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Cluster Name: ',
+                    value: 'cluster_name',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'School ID: ',
+                    value: 'school_id',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'School Name: ',
+                    value: 'school_name',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Student Present: ',
+                    value: 'present_students',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Student Absent: ',
+                    value: 'absent_students',
+                    valueSuffix: '\n',
+                },
+                {
+                    valuePrefix: 'Total Students: ',
+                    value: 'total_students',
+                    valueSuffix: '\n',
+                },
+                
+            ]
 
-		}
+        }
 
-	},
+    }
+
+},
 	
 
     //ques-wise-query

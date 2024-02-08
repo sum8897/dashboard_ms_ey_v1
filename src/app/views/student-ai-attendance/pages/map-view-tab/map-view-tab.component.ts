@@ -43,30 +43,11 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
 
     async ngOnInit(): Promise<void> {
   }
-  // async filterapplyRequest(): Promise<void> {
-  //   if (this.hasCommonFilters) {
-  //       this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-  //       this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-  //     }
-  //     else if(!this.hasCommonFilters){
-  //       //    this.checkReport('electricity', 'map_without_filter');
-  //           this.filters = [];
-  //           this.studentavailability?.getReportData({filterneed: this.hasCommonFilters});
-            
-  //       }
-  //   if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
-  //       let endDate = new Date();
-  //       let days = endDate.getDate() - this.defaultSelectedDays;
-  //       let startDate = new Date();
-  //       startDate.setDate(days);
-  //       this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
-  //     }
-  // }
+ 
 
   async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         this.studentmap?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         }
     else if(this.hasCommonFilters===false){
@@ -80,8 +61,7 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
         startDate.setDate(days);
         this.startDate = moment(startDate).format('YYYY-MM-DD');
         this.endDate = moment(endDate).format('YYYY-MM-DD');
-        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
-        // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+       
         }
     }
     checkReport(key: string, reportType: string): Boolean {
@@ -107,27 +87,14 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
     // console.log("my csv",csvData)
     }
 
-    // filtersUpdated(filters: any) {
-    // this.reportsData = [];
-    // this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
-    // // this.studentavailability?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    //     }
-
-    // timeSeriesUpdated(event: any): void {
-    // this.startDate = event?.startDate?.toDate().toISOString().split('T')[0]
-    // this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
-    // if (event?.startDate !== null && event?.endDate !== null) {
-    //     this.reportsData = [];
-    //     this.studentavailability?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
-    //     }
-    // }
+    
 
 
     updateReportsData( ): void {
      
       console.log(this.filters,this.startDate,this.endDate)
 
-      // this.studentavailability?.getReportData({ filterneed: this.hasCommonFilters, filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+      
       this.studentmap?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     }
     

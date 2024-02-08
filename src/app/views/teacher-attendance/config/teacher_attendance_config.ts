@@ -1816,7 +1816,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1834,7 +1834,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1852,7 +1852,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1870,7 +1870,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
 
@@ -3260,6 +3260,318 @@ export const config = {
                 "title": "Average Non Teaching Staff Present ",
                 "valueSuffix": '%',
                 "property": 'percentage_teachers'
+            }
+        }
+    },
+
+    teacher_barchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT 
+                    
+                    d.district_name as level,
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate
+                GROUP BY
+                     d.district_name;
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT 
+                        
+                        d.district_name as level,
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate
+                    GROUP BY
+                         d.district_name;
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                   
+                    b.block_name as level,
+                   
+                    
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                GROUP BY
+                    
+                    b.block_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `SELECT
+                       
+                        b.block_name as level,
+                       
+                        
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                        
+                        b.block_name `,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    
+                    c.cluster_name as level,
+                    
+                    
+                    
+                    
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                GROUP BY
+                    
+                    c.cluster_name
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        
+                        c.cluster_name as level,
+                        
+                        
+                        
+                        
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                    GROUP BY
+                        
+                        c.cluster_name
+                        `
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    ts.school_id,
+                    sch.school_name as level,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    
+                    b.district_id,
+                  
+                    SUM(ts.attendance_status) AS present_teachers,
+                    COUNT(ts.attendance_status) AS total_teachers,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                FROM
+                    teacher_attendance.teaching_staff ts
+                JOIN
+                    dimensions.school sch ON sch.school_id = ts.school_id
+                JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                WHERE
+                ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                GROUP BY
+                   ts.school_id,
+                    sch.school_name,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    b.district_id;`,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        ts.school_id,
+                        sch.school_name as level,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        
+                        b.district_id,
+                      
+                        SUM(ts.attendance_status) AS present_teachers,
+                        COUNT(ts.attendance_status) AS total_teachers,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
+                    FROM
+                        teacher_attendance.teaching_staff ts
+                    JOIN
+                        dimensions.school sch ON sch.school_id = ts.school_id
+                    JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    WHERE
+                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
+                        sch.school_name,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        b.district_id;`
+                    },
+                    "level": "school"
+                }
+            },
+
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Percentage",
+                "metricValueProp": "perc_teachers",
+                "yAxis": {
+                    "title": "Average Percentage"
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "District",
+                    "label": "level",
+                    "value": "level",
+
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Teacher: ",
+                        "value": "perc_teachers",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
             }
         }
     },

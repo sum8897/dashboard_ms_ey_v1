@@ -7,6 +7,7 @@ import { config } from 'src/app/views/student-ai-attendance/config/student_ai_at
 import { StudentAverageBignumberComponent } from './reports/student-average-bignumber/student-average-bignumber.component';
 import { StudentAverageTableComponent } from './reports/student-average-table/student-average-table.component';
 import { StudentAverageSchoolTableComponent } from './reports/student-average-school-table/student-average-school-table.component';
+import { StudentBarchartComponent } from './reports/student-barchart/student-barchart.component';
 import moment from 'moment';
 @Component({
   selector: 'app-student-average-tab',
@@ -46,6 +47,7 @@ hasCommonFilters: boolean = true;
   @ViewChild('studentAverageTable') studentAverageTable: StudentAverageTableComponent;
   @ViewChild('studentAverageBigNumber') studentAverageBigNumber: StudentAverageBignumberComponent;
   @ViewChild('averageSchool') averageSchool: StudentAverageSchoolTableComponent;
+  @ViewChild('studentBarchart') studentBarchart: StudentBarchartComponent;
   
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
@@ -81,6 +83,7 @@ hasCommonFilters: boolean = true;
           this.studentAverageTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         
           this.studentAverageBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.studentBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -133,6 +136,7 @@ hasCommonFilters: boolean = true;
 
     this.studentAverageBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
+    this.studentBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
    
   
 

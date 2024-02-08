@@ -131,26 +131,31 @@ export class DataService {
         let reportData = {
           values: rows
         }
+        
         let config = getChartJSConfig({
           labelExpr: xAxis.value,
           datasets: this.getDatasets(options.barChart, filters),
 
           options: {
-            height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+          
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 6).toString(),
+            height: '150',
+
             tooltips: {
               callbacks: {
                 label: (tooltipItem, data) => {
                   let multistringText = [];
-                  if (isMultibar) {
+                  // if (isMultibar) {
                     data.datasets.forEach((dataset: any, index: any) => {
                       if (index === tooltipItem.datasetIndex) {
                         multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                       }
                     })
-                  }
-                  else {
-                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
-                  }
+                  // }
+                  // else {
+                  //   multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                  // }
                   return multistringText;
                 }
               }
@@ -208,6 +213,7 @@ export class DataService {
     const minValue = Math.min(...data.values.map((reportData:any) => reportData[param]));
     const minObject = {
             type: 'line',
+            metricLabelProp: 'Min',
             label: 'Min',
             data: Array(data.values.length).fill(minValue),
             borderColor: 'rgba(255, 0, 0, 1)',
@@ -218,6 +224,7 @@ export class DataService {
     const maxValue = Math.max(...data.values.map((reportData:any) => reportData[param]));
     const maxObject = {
       type: 'line',
+      metricLabelProp: 'Max',
       label: 'Max',
       data: Array(data.values.length).fill(maxValue),
       borderColor: 'rgba(0, 225, 0, 1)',
@@ -225,10 +232,14 @@ export class DataService {
       fill: false
     }
           // Calculate the average value
-    const total = data.values.reduce((sum:any, reportData:any) => sum + reportData[param], 0);
+          let total = 0;
+    data.values.forEach(( reportData:any) => total = total + parseFloat(reportData[param]));
+    console.log('total',total)
+    console.log('length',data.values.length)
     const averageValue = total / data.values.length;
     const avgObject = {
       type: 'line',
+      metricLabelProp: "Average",
       label: 'Average',
       data: Array(data.values.length).fill(averageValue),
       borderColor: 'rgba(0, 0, 255, 1)',
@@ -238,6 +249,11 @@ export class DataService {
     config.datasets.push(avgObject);
     config.datasets.push(maxObject);
     config.datasets.push(minObject);
+    console.log("extraLine ===== config ", config);
+    console.log("extraLine ===== minValue ", minValue);
+    console.log("extraLine ===== maxValue ", maxValue);
+    console.log("extraLine ===== averageValue ", averageValue);
+
   }
   getStackedBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {

@@ -64,6 +64,17 @@
 				></app-teacher-average-table>
 			</div>
 
+			<!-- <div
+				class="col-span-2 xmd:col-span-2 div-shadow"
+				*ngIf="checkReport('teacher_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-teacher-barchart
+					#teacherBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-teacher-barchart>
+			</div> -->
+
 			<div
 				class="col-span-2 xmd:col-span-2 div-shadow"
 				*ngIf="checkReport('teacher_average_school', 'table')"

@@ -13,22 +13,22 @@ export const config = {
 	filters: [
         //student-availability
 
-		{
-        label: 'Overall Summary',
+	// 	{
+    //     label: 'Overall Summary',
 
-        name: 'work',
+    //     name: 'work',
 
-        labelProp: 'work_name',
+    //     labelProp: 'work_name',
 
-        valueProp: 'work_id',
+    //     valueProp: 'work_id',
 
-        id: 'Work',
+    //     id: 'Work',
 
-        tableAlias: 'cc',
+    //     tableAlias: 'cc',
 
-        query:
-            'SELECT work_id,work_name FROM dimensions.work ORDER BY work_name ASC ',
-    },
+    //     query:
+    //         'SELECT work_id,work_name FROM dimensions.work ORDER BY work_name ASC ',
+    // },
 		
         
 	
@@ -413,285 +413,29 @@ summary_table_library: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "table": `WITH DateRange AS (
-                    SELECT date
-                    FROM (
-                        SELECT date FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
-                        UNION
-                        SELECT date FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
-                        UNION
-                        SELECT date FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
-                        UNION
-                        SELECT date FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
-                        UNION
-                        SELECT date FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
-                        UNION
-                        SELECT date FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
-                        UNION
-                        SELECT date FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
-                    ) AS all_dates
-                    WHERE date BETWEEN startDate AND endDate
-                )
-                
-                SELECT
-                    'Not Started' AS status,
-                    COALESCE(SUM(nt.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY   
-                    GROUP BY date
-                ) AS nt ON l.date = nt.date
-                GROUP BY
-                    cc.work_name
-                
+                "table": `SELECT status, COUNT(*) AS Count
+                FROM library.library_data
+                WHERE DATE(date) BETWEEN startDate And endDate
+                GROUP BY status
+                 
                 UNION ALL
-                
-                SELECT
-                    'Started' AS status,
-                    COALESCE(SUM(st.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7    
-                    GROUP BY date
-                ) AS st ON l.date = st.date
-                GROUP BY
-                    cc.work_name
-                    
-                UNION ALL
-                
-                SELECT
-                    'Up to Foundation' AS status,
-                    COALESCE(SUM(tf.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw    
-                    GROUP BY date
-                ) AS tf ON l.date = tf.date
-                GROUP BY
-                    cc.work_name
-                    
-                UNION ALL
-                
-                SELECT
-                    'Up to Lintel' AS status,
-                    COALESCE(SUM(tl.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
-                    GROUP BY date
-                ) AS tl ON l.date = tl.date
-                GROUP BY
-                    cc.work_name
-                    
-                UNION ALL
-                
-                SELECT
-                    'Up to Plinth' AS status,
-                    COALESCE(SUM(tp.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
-                    GROUP BY date
-                ) AS tp ON l.date = tp.date
-                GROUP BY
-                    cc.work_name
-                    
-                UNION ALL
-                
-                SELECT
-                    'Up to Rooftop' AS status,
-                    COALESCE(SUM(tr.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR    
-                    GROUP BY date
-                ) AS tr ON l.date = tr.date
-                GROUP BY
-                    cc.work_name
-                    
-                UNION ALL
-                
-                SELECT
-                    'Completed' AS status,
-                    COALESCE(SUM(tc.sum), 0) AS Total_libraries_count,
-                    cc.work_name
-                FROM
-                    dimensions.work AS cc
-                CROSS JOIN DateRange as l
-                LEFT JOIN (
-                    SELECT date, SUM(sum) AS sum
-                    FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm    
-                    GROUP BY date
-                ) AS tc ON l.date = tc.date
-                GROUP BY
-                    cc.work_name
-                ORDER BY
-                    work_name;`,
+                 
+                SELECT 'AllTotal' AS status, COUNT(*) AS Count
+                FROM library.library_data
+                WHERE DATE(date) BETWEEN startDate And endDate;`,
             },
             "actions": {
                 "queries": {
-                    "table": `WITH DateRange AS (
-                        SELECT date
-                        FROM (
-                            SELECT date FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY
-                            UNION
-                            SELECT date FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7
-                            UNION
-                            SELECT date FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw
-                            UNION
-                            SELECT date FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
-                            UNION
-                            SELECT date FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
-                            UNION
-                            SELECT date FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR
-                            UNION
-                            SELECT date FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm
-                        ) AS all_dates
-                        WHERE date BETWEEN startDate AND endDate
-                    )
-                    
-                    SELECT
-                        'Not Started' AS status,
-                        COALESCE(SUM(nt.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_notstarted_e1lyaGZneUJ1ZA5He2hY   
-                        GROUP BY date
-                    ) AS nt ON l.date = nt.date
-                    GROUP BY
-                        cc.work_name
-                    
+                    "table": `SELECT status, COUNT(*) AS Count
+                    FROM library.library_data
+                    WHERE DATE(date) BETWEEN startDate And endDate
+                    GROUP BY status
+                     
                     UNION ALL
-                    
-                    SELECT
-                        'Started' AS status,
-                        COALESCE(SUM(st.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_started_dm53cnx0aTBAenpzDCw7    
-                        GROUP BY date
-                    ) AS st ON l.date = st.date
-                    GROUP BY
-                        cc.work_name
-                        
-                    UNION ALL
-                    
-                    SELECT
-                        'Up to Foundation' AS status,
-                        COALESCE(SUM(tf.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_uptofoundation_KhcNGn5CaFhkYWd0eWkw    
-                        GROUP BY date
-                    ) AS tf ON l.date = tf.date
-                    GROUP BY
-                        cc.work_name
-                        
-                    UNION ALL
-                    
-                    SELECT
-                        'Up to Lintel' AS status,
-                        COALESCE(SUM(tl.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_uptolintel_YEZydH5vZUJ1bA5He2hY
-                        GROUP BY date
-                    ) AS tl ON l.date = tl.date
-                    GROUP BY
-                        cc.work_name
-                        
-                    UNION ALL
-                    
-                    SELECT
-                        'Up to Plinth' AS status,
-                        COALESCE(SUM(tp.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_uptoplinth_YEZydGJqYlhkaA5He2hY
-                        GROUP BY date
-                    ) AS tp ON l.date = tp.date
-                    GROUP BY
-                        cc.work_name
-                        
-                    UNION ALL
-                    
-                    SELECT
-                        'Up to Rooftop' AS status,
-                        COALESCE(SUM(tr.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_uptoroofcast_Ah5vQnd0ZU1ifHF0GkBR    
-                        GROUP BY date
-                    ) AS tr ON l.date = tr.date
-                    GROUP BY
-                        cc.work_name
-                        
-                    UNION ALL
-                    
-                    SELECT
-                        'Completed' AS status,
-                        COALESCE(SUM(tc.sum), 0) AS Total_libraries_count,
-                        cc.work_name
-                    FROM
-                        dimensions.work AS cc
-                    CROSS JOIN DateRange as l
-                    LEFT JOIN (
-                        SELECT date, SUM(sum) AS sum
-                        FROM datasets.library_status_completed_UGJmcXllZFljG1J6bnQm    
-                        GROUP BY date
-                    ) AS tc ON l.date = tc.date
-                    GROUP BY
-                        cc.work_name
-                    ORDER BY
-                        work_name;`,
+                     
+                    SELECT 'AllTotal' AS status, COUNT(*) AS Count
+                    FROM library.library_data
+                    WHERE DATE(date) BETWEEN startDate And endDate;`,
                 },
                 "level": "district"
             }
@@ -1005,7 +749,7 @@ summary_table_library: {
                 },
                 {
                     name: "Number of Libraries",
-                    property: "total_libraries_count",
+                    property: "count",
                     class: "text-center"
                 },
                 {
