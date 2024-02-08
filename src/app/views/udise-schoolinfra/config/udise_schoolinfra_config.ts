@@ -811,8 +811,8 @@ order by district_id;
 	d.district_name,
 	d.latitude,
 	d.longitude,
-    SUM(CASE WHEN w.water_ro  = 1 OR w.water_ro = 3 THEN 1 ELSE 0 END) AS schools_with_water_purifier,
-    SUM(ded.drinking_water) as no_of_schools_having_drinking_water,
+    SUM(w.water_ro) AS schools_with_water_purifier,
+    COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
     COUNT(w.water_ro) AS total_schools
 FROM
     school_infrastructure.waterro_event_data w 
@@ -876,8 +876,8 @@ order by district_id;`
 	b.block_name,
 	b.latitude,
 	b.longitude,
-    SUM(CASE WHEN w.water_ro  = 1 OR w.water_ro = 3 THEN 1 ELSE 0 END) AS schools_with_water_purifier,
-    SUM(ded.drinking_water) as no_of_schools_having_drinking_water,
+    SUM(w.water_ro) AS schools_with_water_purifier,
+    COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
     COUNT(w.water_ro) AS total_schools
 FROM
     school_infrastructure.waterro_event_data w 
@@ -902,7 +902,8 @@ group by
 	b.block_name,
 	b.latitude,
 	b.longitude
-order by district_id;`,
+order by district_id;
+`,
 
                         "map_without_filter": `
                         select
@@ -955,8 +956,8 @@ order by district_id;`
 	c.cluster_name,
 	c.latitude,
 	c.longitude,
-    SUM(CASE WHEN w.water_ro  = 1 OR w.water_ro = 3 THEN 1 ELSE 0 END) AS schools_with_water_purifier,
-    SUM(ded.drinking_water) as no_of_schools_having_drinking_water,
+    SUM(w.water_ro) AS schools_with_water_purifier,
+    COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
     COUNT(w.water_ro) AS total_schools
 FROM
     school_infrastructure.waterro_event_data w 
@@ -1047,8 +1048,8 @@ order by district_id;
 	sch.school_name,
 	sch.latitude,
 	sch.longitude,
-    SUM(CASE WHEN w.water_ro  = 1 OR w.water_ro = 3 THEN 1 ELSE 0 END) AS schools_with_water_purifier,
-    SUM(ded.drinking_water) as no_of_schools_having_drinking_water,
+    SUM(w.water_ro) AS schools_with_water_purifier,
+    COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
     COUNT(w.water_ro) AS total_schools
 FROM
     school_infrastructure.waterro_event_data w 
@@ -1080,6 +1081,8 @@ group by
 	sch.latitude,
 	sch.longitude
 order by district_id;
+
+
 
 `,
 
@@ -1134,9 +1137,18 @@ order by district_id;`
 
             map: {
 
+                // metricFilterNeeded: true,
+                // totalOfPercentage:"total_schools",
+                // indicatorType: "percent",
+
+                // indicator: 'schools_with_water_purifier',
+
+                // legend: {
+
+                //     title: 'Water',
+
+                // },
                 metricFilterNeeded: true,
-                totalOfPercentage:"total_schools",
-                indicatorType: "percent",
 
                 indicator: 'schools_with_water_purifier',
 

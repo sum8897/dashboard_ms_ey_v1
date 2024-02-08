@@ -27,6 +27,7 @@ import { TeacherBignumberComponent } from './pages/teacher-summary-tab/reports/t
 import { TeacherSchoolTableComponent } from './pages/teacher-summary-tab/reports/teacher-school-table/teacher-school-table.component';
 import { TeacherAverageTableComponent } from './pages/teacher-summary-tab/reports/teacher-average-table/teacher-average-table.component';
 import { TeacherBarchartComponent } from './pages/teacher-summary-tab/reports/teacher-barchart/teacher-barchart.component';
+import { NonTeachingSummaryTabComponent } from './pages/non-teaching-summary-tab/non-teaching-summary-tab.component';
 
 
 
@@ -54,6 +55,7 @@ import { TeacherBarchartComponent } from './pages/teacher-summary-tab/reports/te
     TeacherSchoolTableComponent,
     TeacherAverageTableComponent,
     TeacherBarchartComponent,
+    NonTeachingSummaryTabComponent,
    
   ],
   imports: [
