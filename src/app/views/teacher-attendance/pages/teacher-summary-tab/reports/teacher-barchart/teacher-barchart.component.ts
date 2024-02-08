@@ -363,18 +363,19 @@ export class TeacherBarchartComponent implements OnInit, OnDestroy {
               const meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 const data = dataset.data[index];
-                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+               // ctx.fillText(data, bar._model.x, bar._model.y - 5);
               });
             });
           }
         },
         height: '120',
         tooltips: {
-          callbacks: {
-            label: (tooltipItem, data) => {
-              return tooltipObject[tooltipItem.label.trim()]
-            }
-          }
+          // callbacks: {
+          //   label: (tooltipItem, data) => {
+          //     console.log("drill tooltips" ,data);
+          //     return tooltipObject[tooltipItem.label.trim()]
+          //   }
+          // }
         },
         scales: {
           yAxes: [{
