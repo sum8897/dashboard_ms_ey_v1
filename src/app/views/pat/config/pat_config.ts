@@ -32,6 +32,7 @@ export const config = {
 		},
 		{
 			label: 'Student Availability',
+            
 
 			name: 'classes',
 
@@ -60,6 +61,7 @@ export const config = {
 		//lo-wise
         {
 			label: 'LO Wise Performance',
+            displayLabel:'Subject',
 
 			name: 'Subjects',
 
@@ -78,6 +80,7 @@ export const config = {
 		},
         {
 			label: 'LO Wise Performance',
+            displayLabel:'Class',
 
 			name: 'classes',
 
@@ -96,6 +99,7 @@ export const config = {
 		},
         {
 			label: 'LO Wise Performance',
+            displayLabel:'Indicator',
 
 			name: 'LO',
 
