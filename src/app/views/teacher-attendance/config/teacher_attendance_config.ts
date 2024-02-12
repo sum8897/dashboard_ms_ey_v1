@@ -18,7 +18,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['present_teachers', 'absent_teachers'],
+            values: ['percentage_of_teacher_present', 'percentage_of_teacher_absent'],
         },
         {
 
@@ -28,7 +28,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['present_nonteachers', 'absent_nonteachers'],
+            values: ['percentage_of_non_teacher_present', 'absent_non_teachers_percentage'],
         },
     ],
 
@@ -2575,9 +2575,11 @@ export const config = {
                         d.district_name,
                         d.latitude,
                         d.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                     FROM
                         teacher_attendance.teaching_staff ts
                     LEFT JOIN
@@ -2592,7 +2594,7 @@ export const config = {
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate  
+                    Where ts.date BETWEEN startDate AND endDate  
                     GROUP BY
                         ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`
                     },
@@ -2603,9 +2605,11 @@ export const config = {
                             d.district_name,
                             d.latitude,
                             d.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                         FROM
                             teacher_attendance.teaching_staff ts
                         LEFT JOIN
@@ -2620,7 +2624,7 @@ export const config = {
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate  
+                        Where ts.date BETWEEN startDate AND endDate  
                         GROUP BY
                             ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`,
                         },
@@ -2638,9 +2642,11 @@ export const config = {
                         d.district_name,
                         b.latitude,
                         b.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                     FROM
                         teacher_attendance.teaching_staff ts
                     left JOIN
@@ -2653,16 +2659,14 @@ export const config = {
                       COUNT(DISTINCT ts.date) AS total_days
                       FROM
                        teacher_attendance.teaching_staff ts
-                       where ts.date between startDate AND endDate  
+                       where ts.date BETWEEN startDate AND endDate
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate    and ts.district_id = {district_id}
+                    Where ts.date BETWEEN startDate AND endDate  and ts.district_id = {district_id}
                     GROUP BY
                        ts.block_id,
-                        b.block_name, ts.district_id, d.district_name,  b.latitude,
-                        b.longitude,days_count.total_days;
-                    
+                        b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;                    
                         `,
                     },
                     "actions": {
@@ -2674,9 +2678,11 @@ export const config = {
                             d.district_name,
                             b.latitude,
                             b.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                         FROM
                             teacher_attendance.teaching_staff ts
                         left JOIN
@@ -2689,16 +2695,14 @@ export const config = {
                           COUNT(DISTINCT ts.date) AS total_days
                           FROM
                            teacher_attendance.teaching_staff ts
-                           where ts.date between startDate AND endDate  
+                           where ts.date BETWEEN startDate AND endDate
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate    and ts.district_id = {district_id}
+                        Where ts.date BETWEEN startDate AND endDate  and ts.district_id = {district_id}
                         GROUP BY
                            ts.block_id,
-                            b.block_name, ts.district_id, d.district_name,  b.latitude,
-                            b.longitude,days_count.total_days;
-                        
+                            b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
                             `,
                         },
                         "level": "block"
@@ -2717,9 +2721,11 @@ export const config = {
                         d.district_name,
                         c.latitude,
                         c.longitude,
-                       (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                       (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                     FROM
                         teacher_attendance.teaching_staff ts
                     left JOIN
@@ -2738,14 +2744,12 @@ export const config = {
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate  and ts.block_id = {block_id}
+                    Where ts.date BETWEEN startDate AND endDate  and ts.block_id = {block_id}
                     GROUP BY
                        ts.cluster_id,
                         c.cluster_name,
                         ts.block_id,
-                        b.block_name, ts.district_id, d.district_name, c.latitude,
-                        c.longitude,days_count.total_days;
-                        `,
+                        b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;                       `,
                     },
                     "actions": {
                         "queries": {
@@ -2758,9 +2762,11 @@ export const config = {
                             d.district_name,
                             c.latitude,
                             c.longitude,
-                           (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                           (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                         FROM
                             teacher_attendance.teaching_staff ts
                         left JOIN
@@ -2779,13 +2785,12 @@ export const config = {
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate  and ts.block_id = {block_id}
+                        Where ts.date BETWEEN startDate AND endDate  and ts.block_id = {block_id}
                         GROUP BY
                            ts.cluster_id,
                             c.cluster_name,
                             ts.block_id,
-                            b.block_name, ts.district_id, d.district_name, c.latitude,
-                            c.longitude,days_count.total_days;
+                            b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;
                             `,
                         },
                         "level": "cluster"
@@ -2806,9 +2811,11 @@ export const config = {
                         d.district_name,
                         sch.latitude,
                         sch.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                     FROM
                         teacher_attendance.teaching_staff ts
                     left JOIN
@@ -2829,15 +2836,14 @@ export const config = {
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate  and ts.cluster_id = {cluster_id}
+                    Where ts.date BETWEEN startDate AND endDate  and ts.cluster_id = {cluster_id}
                     GROUP BY
                        ts.school_id,
                         sch.school_name,
                         ts.cluster_id,
                         c.cluster_name,
                         ts.block_id,
-                        b.block_name, ts.district_id, d.district_name, sch.latitude,
-                        sch.longitude,days_count.total_days;`,
+                        b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
                     },
                     "actions": {
                         "queries": {
@@ -2852,9 +2858,11 @@ export const config = {
                             d.district_name,
                             sch.latitude,
                             sch.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,
-                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_teachers
+                            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_teachers_percentage
                         FROM
                             teacher_attendance.teaching_staff ts
                         left JOIN
@@ -2875,15 +2883,14 @@ export const config = {
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate  and ts.cluster_id = {cluster_id}
+                        Where ts.date BETWEEN startDate AND endDate  and ts.cluster_id = {cluster_id}
                         GROUP BY
                            ts.school_id,
                             sch.school_name,
                             ts.cluster_id,
                             c.cluster_name,
                             ts.block_id,
-                            b.block_name, ts.district_id, d.district_name, sch.latitude,
-                            sch.longitude,days_count.total_days;`,
+                            b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
                         },
                         "level": "school"
                     }
@@ -2949,12 +2956,12 @@ export const config = {
                     },
                     {
                         "valuePrefix": "Total Teachers Present: ",
-                        "value": "present_teachers",
+                        "value": "percentage_of_teacher_present",
                         "valueSuffix": "\n"
                     },
                     {
                         "valuePrefix": "Total Teachers Absent: ",
-                        "value": "absent_teachers",
+                        "value": "percentage_of_teacher_absent",
                         "valueSuffix": "\n"
                     },
                     {
@@ -2962,16 +2969,7 @@ export const config = {
                         "value": "total_teachers",
                         "valueSuffix": "\n"
                     },
-                    // {
-                    //     "valuePrefix": "Total Teachers: ",
-                    //     "value": "total_teachers",
-                    //     "valueSuffix": "\n"
-                    // },
-                    // {
-                    //     "valuePrefix": "Total Teachers Present: ",
-                    //     "value": "teachers_present",
-                    //     "valueSuffix": "\n"
-                    // },
+                    
                     {
                         "valuePrefix": "Average Teachers Present: ",
                         "value": "perc_teachers",
@@ -2979,7 +2977,7 @@ export const config = {
                     },
                     {
                         "valuePrefix": "Average Teachers Absent: ",
-                        "value": "perc_absent_teachers",
+                        "value": "absent_teachers_percentage",
                         "valueSuffix": "%\n"
                     }
                 ]
@@ -2999,9 +2997,11 @@ export const config = {
                         d.district_name,
                         d.latitude,
                         d.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                     FROM
                         teacher_attendance.nonteaching_staff ts
                     LEFT JOIN
@@ -3017,7 +3017,7 @@ export const config = {
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
                     WHERE
-                        ts.date between startDate AND endDate
+                        ts.date BETWEEN startDate AND endDate
                     GROUP BY
                         ts.district_id, d.district_name, d.latitude, d.longitude,days_count,days_count.total_days;`
                     },
@@ -3028,9 +3028,11 @@ export const config = {
                             d.district_name,
                             d.latitude,
                             d.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                         FROM
                             teacher_attendance.nonteaching_staff ts
                         LEFT JOIN
@@ -3046,7 +3048,7 @@ export const config = {
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
                         WHERE
-                            ts.date between startDate AND endDate
+                            ts.date BETWEEN startDate AND endDate
                         GROUP BY
                             ts.district_id, d.district_name, d.latitude, d.longitude,days_count,days_count.total_days;`,
                         },
@@ -3065,9 +3067,11 @@ export const config = {
                         d.district_name,
                         b.latitude,
                         b.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                     FROM
                         teacher_attendance.nonteaching_staff ts
                     LEFT JOIN
@@ -3085,12 +3089,10 @@ export const config = {
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
                     WHERE
-                        ts.date between startDate AND endDate AND ts.district_id = {district_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                     GROUP BY
                        ts.block_id,
-                        b.block_name, ts.district_id, d.district_name,  b.latitude,
-                        b.longitude,days_count.total_days;
-
+                        b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
                         `,
                     },
                     "actions": {
@@ -3102,9 +3104,11 @@ export const config = {
                             d.district_name,
                             b.latitude,
                             b.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                         FROM
                             teacher_attendance.nonteaching_staff ts
                         LEFT JOIN
@@ -3122,11 +3126,10 @@ export const config = {
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
                         WHERE
-                            ts.date between startDate AND endDate AND ts.district_id = {district_id}
+                            ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                         GROUP BY
                            ts.block_id,
-                            b.block_name, ts.district_id, d.district_name,  b.latitude,
-                            b.longitude,days_count.total_days;   
+                            b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;  
                             `,
                         },
                         "level": "block"
@@ -3145,9 +3148,11 @@ export const config = {
                         d.district_name,
                         c.latitude,
                         c.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                     FROM
                         teacher_attendance.nonteaching_staff ts
                     LEFT JOIN
@@ -3167,13 +3172,12 @@ export const config = {
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
                     WHERE
-                        ts.date between startDate AND endDate AND ts.block_id = {block_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                     GROUP BY
                        ts.cluster_id,
                         c.cluster_name,
                         ts.block_id,
-                        b.block_name, ts.district_id, d.district_name, c.latitude,
-                        c.longitude,days_count.total_days;`,
+                        b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;`,
                     },
                     "actions": {
                         "queries": {
@@ -3186,9 +3190,11 @@ export const config = {
                             d.district_name,
                             c.latitude,
                             c.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                         FROM
                             teacher_attendance.nonteaching_staff ts
                         LEFT JOIN
@@ -3208,14 +3214,12 @@ export const config = {
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
                         WHERE
-                            ts.date between startDate AND endDate AND ts.block_id = {block_id}
+                            ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                         GROUP BY
                            ts.cluster_id,
                             c.cluster_name,
                             ts.block_id,
-                            b.block_name, ts.district_id, d.district_name, c.latitude,
-                            c.longitude,days_count.total_days;
-
+                            b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;
 `,
                         },
                         "level": "cluster"
@@ -3236,9 +3240,11 @@ export const config = {
                         d.district_name,
                         sch.latitude,
                         sch.longitude,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                        (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                     FROM
                         teacher_attendance.nonteaching_staff ts
                     LEFT JOIN
@@ -3260,15 +3266,14 @@ export const config = {
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
                     WHERE
-                        ts.date between startDate AND endDate AND ts.cluster_id = {cluster_id}
+                        ts.date  BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                     GROUP BY
                        ts.school_id,
                         sch.school_name,
                         ts.cluster_id,
                         c.cluster_name,
                         ts.block_id,
-                        b.block_name, ts.district_id, d.district_name, sch.latitude,
-                        sch.longitude,days_count.total_days;`,
+                        b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
                     },
                     "actions": {
                         "queries": {
@@ -3283,9 +3288,11 @@ export const config = {
                             d.district_name,
                             sch.latitude,
                             sch.longitude,
-                            (SUM(ts.attendance_status)/days_count.total_days) as present_nonteachers,
+                            (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_non_teacher_present,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_nonteachers,
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_nonteachers
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_non_teacher_absent,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_non_teachers,
+                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100.0 / COUNT(ts.attendance_status), 2) AS absent_non_teachers_percentage
                         FROM
                             teacher_attendance.nonteaching_staff ts
                         LEFT JOIN
@@ -3307,15 +3314,14 @@ export const config = {
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
                         WHERE
-                            ts.date between startDate AND endDate AND ts.cluster_id = {cluster_id}
+                            ts.date  BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                         GROUP BY
                            ts.school_id,
                             sch.school_name,
                             ts.cluster_id,
                             c.cluster_name,
                             ts.block_id,
-                            b.block_name, ts.district_id, d.district_name, sch.latitude,
-                            sch.longitude,days_count.total_days;`,
+                            b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
                         },
                         "level": "school"
                     }
@@ -3381,12 +3387,12 @@ export const config = {
                     },
                     {
                         "valuePrefix": "Total Non-Teaching Present: ",
-                        "value": "present_nonteachers",
+                        "value": "percentage_of_non_teacher_present",
                         "valueSuffix": "\n"
                     },
                     {
                         "valuePrefix": "Total Non Teaching Absent: ",
-                        "value": "absent_nonteachers",
+                        "value": "percentage_of_non_teacher_absent",
                         "valueSuffix": "\n"
                     },
                     {
@@ -3406,12 +3412,12 @@ export const config = {
                     // },
                     {
                         "valuePrefix": "Average Non Teachers Present: ",
-                        "value": "perc_teachers",
+                        "value": "perc_non_teachers",
                         "valueSuffix": "%\n"
                     },
                     {
                         "valuePrefix": "Average Non Teachers Absent: ",
-                        "value": "perc_absent_teachers",
+                        "value": "absent_non_teachers_percentage",
                         "valueSuffix": "%\n"
                     }
                 ]
@@ -3835,37 +3841,37 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    
+                    ts.district_id,
                     d.district_name as level,
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    teacher_attendance.teaching_staff ts
-                JOIN
+                    teacher_attendance.nonteaching_staff ts
+                LEFT JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate
                 GROUP BY
-                     d.district_name;
+                    ts.district_id, d.district_name;
                     `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        
+                        ts.district_id,
                         d.district_name as level,
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        teacher_attendance.teaching_staff ts
-                    JOIN
+                        teacher_attendance.nonteaching_staff ts
+                    LEFT JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate
                     GROUP BY
-                         d.district_name;
+                        ts.district_id, d.district_name;
                         `
                     
                     },
@@ -3879,47 +3885,45 @@ export const config = {
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "barChart": `SELECT
-                   
+                    ts.block_id,
                     b.block_name as level,
                    
-                    
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    teacher_attendance.teaching_staff ts
-                JOIN
+                    teacher_attendance.nonteaching_staff ts
+                LEFT JOIN
                     dimensions.block b ON ts.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                 GROUP BY
-                    
-                    b.block_name `,
+                    ts.block_id,
+                    b.block_name;`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":
                         `SELECT
-                       
+                        ts.block_id,
                         b.block_name as level,
                        
-                        
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        teacher_attendance.teaching_staff ts
-                    JOIN
+                        teacher_attendance.nonteaching_staff ts
+                    LEFT JOIN
                         dimensions.block b ON ts.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                     GROUP BY
-                        
-                        b.block_name `,
+                        ts.block_id,
+                        b.block_name;`,
                     },
                     "level": "block"
                 }
@@ -3931,55 +3935,51 @@ export const config = {
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "barChart": `SELECT
-                    
+                    ts.cluster_id,
                     c.cluster_name as level,
-                    
-                    
-                    
                     
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    teacher_attendance.teaching_staff ts
-                JOIN
+                    teacher_attendance.nonteaching_staff ts
+                LEFT JOIN
                     dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                 GROUP BY
-                    
+                    ts.cluster_id,
                     c.cluster_name
+                    ;
                     `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT
-                        
+                        ts.cluster_id,
                         c.cluster_name as level,
-                        
-                        
-                        
                         
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        teacher_attendance.teaching_staff ts
-                    JOIN
+                        teacher_attendance.nonteaching_staff ts
+                    LEFT JOIN
                         dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                     GROUP BY
-                        
+                        ts.cluster_id,
                         c.cluster_name
+                        ;
                         `
                     },
                     "level": "cluster"
@@ -3994,68 +3994,52 @@ export const config = {
                     "barChart": `SELECT
                     ts.school_id,
                     sch.school_name as level,
-                    sch.cluster_id,
                     
-                    c.block_id,
-                    
-                    b.district_id,
-                  
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
-                    teacher_attendance.teaching_staff ts
-                JOIN
-                    dimensions.school sch ON sch.school_id = ts.school_id
-                JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                    teacher_attendance.nonteaching_staff ts
+                LEFT JOIN
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                LEFT JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                 GROUP BY
                    ts.school_id,
-                    sch.school_name,
-                    sch.cluster_id,
-                    
-                    c.block_id,
-                    b.district_id;`,
+                    sch.school_name;
+                    `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT
                         ts.school_id,
                         sch.school_name as level,
-                        sch.cluster_id,
                         
-                        c.block_id,
-                        
-                        b.district_id,
-                      
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
-                        teacher_attendance.teaching_staff ts
-                    JOIN
-                        dimensions.school sch ON sch.school_id = ts.school_id
-                    JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                        teacher_attendance.nonteaching_staff ts
+                    LEFT JOIN
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                    LEFT JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                     GROUP BY
                        ts.school_id,
-                        sch.school_name,
-                        sch.cluster_id,
-                        
-                        c.block_id,
-                        b.district_id;`
+                        sch.school_name;
+                        `
                     },
                     "level": "school"
                 }
@@ -4153,7 +4137,7 @@ export const config = {
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                LEFT JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate
@@ -4170,7 +4154,7 @@ export const config = {
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
+                    LEFT JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate
@@ -4187,39 +4171,43 @@ export const config = {
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "table": `SELECT
-	
+                    ts.block_id,
                     b.block_name,
+                   
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                LEFT JOIN
                     dimensions.block b ON ts.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                 GROUP BY
+                    ts.block_id,
                     b.block_name; `,
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
-	
+                        ts.block_id,
                         b.block_name,
+                       
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
+                    LEFT JOIN
                         dimensions.block b ON ts.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                     GROUP BY
+                        ts.block_id,
                         b.block_name;`,
                     },
                     "level": "block"
@@ -4234,28 +4222,24 @@ export const config = {
                     "table": `SELECT
                     ts.cluster_id,
                     c.cluster_name,
-                    c.block_id,
-                    
-                    b.district_id,
                     
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                LEFT JOIN
                     dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
-                    ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                 GROUP BY
                     ts.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.district_id;
+                    c.cluster_name
+                    ;
                     ;`,
                 },
                 "actions": {
@@ -4263,28 +4247,24 @@ export const config = {
                         "table": `SELECT
                         ts.cluster_id,
                         c.cluster_name,
-                        c.block_id,
-                        
-                        b.district_id,
                         
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
+                    LEFT JOIN
                         dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
-                        ts.date BETWEEN startDate AND endDate AND c.block_id = {block_id}
+                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                     GROUP BY
                         ts.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.district_id;
+                        c.cluster_name
+                        ;
                         ;`,
                     },
                     "level": "cluster"
@@ -4299,68 +4279,51 @@ export const config = {
                     "table": `SELECT
                     ts.school_id,
                     sch.school_name,
-                    sch.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.block_name,
-                    b.district_id,
-                    d.district_name,
+                    
                     SUM(ts.attendance_status) AS present_teachers,
                     COUNT(ts.attendance_status) AS total_teachers,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
-                    dimensions.school sch ON sch.school_id = ts.school_id
-                JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.school sch ON ts.school_id = sch.school_id
+                LEFT JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                 GROUP BY
                    ts.school_id,
-                    sch.school_name,
-                    sch.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.block_name,b.district_id, d.district_name;`
+                    sch.school_name;`
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
                         ts.school_id,
                         sch.school_name,
-                        sch.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.block_name,
-                        b.district_id,
-                        d.district_name,
+                        
                         SUM(ts.attendance_status) AS present_teachers,
                         COUNT(ts.attendance_status) AS total_teachers,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
-                        dimensions.school sch ON sch.school_id = ts.school_id
-                    JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.school sch ON ts.school_id = sch.school_id
+                    LEFT JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                     GROUP BY
                        ts.school_id,
-                        sch.school_name,
-                        sch.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.block_name,b.district_id, d.district_name;`,
+                        sch.school_name;
+                        `,
                     },
                     "level": "school"
                 }
@@ -4397,7 +4360,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["staff_bignumber", "staff_average_school","teacher_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4415,7 +4378,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["staff_bignumber", "staff_average_school","teacher_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4433,7 +4396,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["staff_bignumber", "staff_average_school","teacher_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4451,7 +4414,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["staff_bignumber", "staff_average_school","teacher_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
 
@@ -4519,7 +4482,7 @@ export const config = {
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                    LEFT JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate
@@ -4539,7 +4502,7 @@ export const config = {
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
+                        LEFT JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate
@@ -4565,7 +4528,7 @@ export const config = {
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                    LEFT JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
@@ -4584,8 +4547,7 @@ export const config = {
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
+                        LEFT JOIN                        dimensions.district d ON ts.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                     GROUP BY
@@ -4613,10 +4575,9 @@ export const config = {
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                    LEFT JOIN
                     dimensions.block b ON ts.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
+                    LEFT JOIN                    dimensions.district d ON b.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                 GROUP BY
@@ -4638,9 +4599,8 @@ export const config = {
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                    JOIN
+                        LEFT JOIN                        dimensions.block b ON ts.block_id = b.block_id
+                        LEFT JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
@@ -4673,11 +4633,11 @@ export const config = {
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                 FROM
                     teacher_attendance.nonteaching_staff ts
-                JOIN
+                    LEFT JOIN
                     dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                JOIN
+                    LEFT JOIN
                     dimensions.block b ON c.block_id = b.block_id
-                JOIN
+                    LEFT JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
@@ -4707,11 +4667,11 @@ export const config = {
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_teachers
                     FROM
                         teacher_attendance.nonteaching_staff ts
-                    JOIN
+                        LEFT JOIN
                         dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    JOIN
+                        LEFT JOIN
                         dimensions.block b ON c.block_id = b.block_id
-                    JOIN
+                        LEFT JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
@@ -4768,12 +4728,12 @@ export const config = {
                       select ts.school_id,
                       COUNT(DISTINCT ts.date) AS total_days
                       FROM
-                       teacher_attendance.teaching_staff ts
+                       teacher_attendance.nonteaching_staff ts
                        where ts.date BETWEEN startDate AND endDate
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate
+                    Where ts.date BETWEEN startDate AND endDate
                     GROUP BY
                     ts.district_id,d.district_name,
                     ts.school_id,sch.school_name,days_count.total_days`
@@ -4801,12 +4761,12 @@ export const config = {
                           select ts.school_id,
                           COUNT(DISTINCT ts.date) AS total_days
                           FROM
-                           teacher_attendance.teaching_staff ts
+                           teacher_attendance.nonteaching_staff ts
                            where ts.date BETWEEN startDate AND endDate
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate
+                        Where ts.date BETWEEN startDate AND endDate
                         GROUP BY
                         ts.district_id,d.district_name,
                         ts.school_id,sch.school_name,days_count.total_days`,
@@ -4841,17 +4801,17 @@ export const config = {
                       select ts.school_id,
                       COUNT(DISTINCT ts.date) AS total_days
                       FROM
-                       teacher_attendance.teaching_staff ts
+                       teacher_attendance.nonteaching_staff ts
                        where ts.date BETWEEN startDate AND endDate
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate AND ts.district_id = {district_id}
+                    Where ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                     GROUP BY
                     ts.district_id,d.district_name,
                     ts.school_id,sch.school_name,days_count.total_days
                     order by total_teachers;
-                    `
+                                       `
                 },
                 "actions": {
                     "queries": {
@@ -4876,16 +4836,17 @@ export const config = {
                           select ts.school_id,
                           COUNT(DISTINCT ts.date) AS total_days
                           FROM
-                           teacher_attendance.teaching_staff ts
+                           teacher_attendance.nonteaching_staff ts
                            where ts.date BETWEEN startDate AND endDate
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate AND ts.district_id = {district_id}
+                        Where ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
                         GROUP BY
                         ts.district_id,d.district_name,
                         ts.school_id,sch.school_name,days_count.total_days
                         order by total_teachers;
+                        
                         `,
                     },
                     "level": "school"
@@ -4900,7 +4861,6 @@ export const config = {
                     "table": `select
                     ts.district_id,d.district_name,
                     ts.block_id,b.block_name,
-                    
                     ts.school_id,sch.school_name,
                     (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
                     (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,          
@@ -4920,12 +4880,12 @@ export const config = {
                       select ts.school_id,
                       COUNT(DISTINCT ts.date) AS total_days
                       FROM
-                       teacher_attendance.teaching_staff ts
+                       teacher_attendance.nonteaching_staff ts
                        where ts.date BETWEEN startDate AND endDate
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate AND ts.block_id = {block_id}
+                    Where ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                     GROUP BY
                     ts.district_id,d.district_name,
                     ts.block_id,b.block_name,
@@ -4937,7 +4897,6 @@ export const config = {
                         "table": `select
                         ts.district_id,d.district_name,
                         ts.block_id,b.block_name,
-                        
                         ts.school_id,sch.school_name,
                         (SUM(ts.attendance_status)/days_count.total_days) as present_teachers,
                         (COUNT(ts.attendance_status)/ days_count.total_days) AS total_teachers,          
@@ -4957,12 +4916,12 @@ export const config = {
                           select ts.school_id,
                           COUNT(DISTINCT ts.date) AS total_days
                           FROM
-                           teacher_attendance.teaching_staff ts
+                           teacher_attendance.nonteaching_staff ts
                            where ts.date BETWEEN startDate AND endDate
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate AND ts.block_id = {block_id}
+                        Where ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                         GROUP BY
                         ts.district_id,d.district_name,
                         ts.block_id,b.block_name,
@@ -5001,17 +4960,19 @@ export const config = {
                       select ts.school_id,
                       COUNT(DISTINCT ts.date) AS total_days
                       FROM
-                       teacher_attendance.teaching_staff ts
+                       teacher_attendance.nonteaching_staff ts
                        where ts.date BETWEEN startDate AND endDate
                        GROUP BY
                        ts.school_id
                         ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate AND ts.cluster_id = {cluster_id}
+                    Where ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                     GROUP BY
                     ts.district_id,d.district_name,
                     ts.block_id,b.block_name,
                     ts.cluster_id, c.cluster_name,
                     ts.school_id,sch.school_name,days_count.total_days
+                    
+                    
                     `
                 },
                 "actions": {
@@ -5039,17 +5000,19 @@ export const config = {
                           select ts.school_id,
                           COUNT(DISTINCT ts.date) AS total_days
                           FROM
-                           teacher_attendance.teaching_staff ts
+                           teacher_attendance.nonteaching_staff ts
                            where ts.date BETWEEN startDate AND endDate
                            GROUP BY
                            ts.school_id
                             ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate AND ts.cluster_id = {cluster_id}
+                        Where ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                         GROUP BY
                         ts.district_id,d.district_name,
                         ts.block_id,b.block_name,
                         ts.cluster_id, c.cluster_name,
                         ts.school_id,sch.school_name,days_count.total_days
+                        
+                        
                         `,
                     },
                     "level": "school"
