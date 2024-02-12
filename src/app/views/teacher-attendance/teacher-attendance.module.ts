@@ -28,6 +28,10 @@ import { TeacherSchoolTableComponent } from './pages/teacher-summary-tab/reports
 import { TeacherAverageTableComponent } from './pages/teacher-summary-tab/reports/teacher-average-table/teacher-average-table.component';
 import { TeacherBarchartComponent } from './pages/teacher-summary-tab/reports/teacher-barchart/teacher-barchart.component';
 import { NonTeachingSummaryTabComponent } from './pages/non-teaching-summary-tab/non-teaching-summary-tab.component';
+import { StaffAverageTableComponent } from './pages/non-teaching-summary-tab/reports/staff-average-table/staff-average-table.component';
+import { StaffBarchartComponent } from './pages/non-teaching-summary-tab/reports/staff-barchart/staff-barchart.component';
+import { StaffBignumberComponent } from './pages/non-teaching-summary-tab/reports/staff-bignumber/staff-bignumber.component';
+import { StaffSchoolTableComponent } from './pages/non-teaching-summary-tab/reports/staff-school-table/staff-school-table.component';
 
 
 
@@ -56,6 +60,10 @@ import { NonTeachingSummaryTabComponent } from './pages/non-teaching-summary-tab
     TeacherAverageTableComponent,
     TeacherBarchartComponent,
     NonTeachingSummaryTabComponent,
+    StaffAverageTableComponent,
+    StaffBarchartComponent,
+    StaffBignumberComponent,
+    StaffSchoolTableComponent,
    
   ],
   imports: [

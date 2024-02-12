@@ -4,10 +4,7 @@
 			<div class="grid grid-cols-12">
 				<ng-container *ngFor="let filter of filters; let i = index">
 					<div class="filter-wrapper" [ngClass]="colSize">
-						<!-- <label>{{ filter.displayLabel }}</label> -->
-						<label class="font-weight-bold ml-3">{{
-							filter.displayLabel
-						}}</label>
+						<label class="ml-2 less-bold">{{ filter.displayLabel }}</label>
 						<ng-select
 							#selectRef
 							class="mx-2 custom-dropdown"

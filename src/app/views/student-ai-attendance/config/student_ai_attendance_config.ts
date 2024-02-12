@@ -16,18 +16,18 @@ export const config = {
 		{
 			label: 'Map View OF Student Attendance',
 
-			name: 'classes',
+			name: 'class',
 
 			labelProp: 'class_name',
 
 			valueProp: 'class_id',
 
-			id: 'classes',
+			id: 'class',
 
 			tableAlias: 'cc',
 
 			query:
-				'SELECT class_id,class_name FROM dimensions.classes ORDER BY class_name ASC ',
+				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
 		},
 		
 		{
@@ -43,21 +43,24 @@ export const config = {
         },
 		//lo-wise
        
+
         {
 			label: 'Average Student Present',
 
-			name: 'classes',
+            // displayLabel:'Class',
+
+			name: 'class',
 
 			labelProp: 'class_name',
 
 			valueProp: 'class_id',
 
-			id: 'classes',
+			id: 'class',
 
 			tableAlias: 'cc',
 
 			query:
-				'SELECT class_id,class_name FROM dimensions.classes ORDER BY class_name ASC ',
+				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
 		},
         
 	
@@ -78,19 +81,31 @@ export const config = {
             d.district_name,
             d.latitude,
             d.longitude,
-            SUM(ts.attendance_status) AS present_students,
-            COUNT(ts.attendance_status) AS total_students,
-            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+         (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
         FROM
             student_attendance.student_attendance_master ts
-        JOIN
+        LEFT JOIN
             dimensions.district d ON ts.district_id = d.district_id
+        LEFT JOIN
+            dimensions.class cc ON ts.class_id = cc.class_id
         JOIN
-            dimensions.classes cc ON ts.class_id = cc.class_id
+         (
+          select ts.school_id,
+          COUNT(DISTINCT ts.date) AS total_days
+          FROM
+           student_attendance.student_attendance_master ts
+           join dimensions.class cc on cc.class_id = ts.class_id
+           where 
+           ts.date BETWEEN startDate AND endDate
+           GROUP BY
+           ts.school_id
+            ) AS days_count ON ts.school_id = days_count.school_id
         WHERE
             ts.date between startDate AND endDate 
         GROUP BY
-            ts.district_id, d.district_name, d.latitude, d.longitude;`,},
+            ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`,},
 			"actions": {
 				"queries":	
 				{
@@ -99,19 +114,31 @@ export const config = {
                     d.district_name,
                     d.latitude,
                     d.longitude,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                 (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+                ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
                 FROM
                     student_attendance.student_attendance_master ts
-                JOIN
+                LEFT JOIN
                     dimensions.district d ON ts.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                 (
+                  select ts.school_id,
+                  COUNT(DISTINCT ts.date) AS total_days
+                  FROM
+                   student_attendance.student_attendance_master ts
+                   join dimensions.class cc on cc.class_id = ts.class_id
+                   where 
+                   ts.date BETWEEN startDate AND endDate
+                   GROUP BY
+                   ts.school_id
+                    ) AS days_count ON ts.school_id = days_count.school_id
                 WHERE
                     ts.date between startDate AND endDate 
                 GROUP BY
-                    ts.district_id, d.district_name, d.latitude, d.longitude;`,
+                    ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`,
 
 			
 				},
@@ -129,24 +156,37 @@ export const config = {
 	b.block_name,
     b.district_id,
     d.district_name,
-    d.latitude,
-    d.longitude,
-    CAST(SUM(ts.attendance_status)AS INT) AS present_students,
-   CAST(COUNT(ts.attendance_status)AS INT) AS total_students,
-    CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_students
+    b.latitude,
+    b.longitude,
+   (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
 FROM
     student_attendance.student_attendance_master ts
-JOIN
+LEFT JOIN
 	dimensions.block b on ts.block_id = b.block_id
+LEFT JOIN
+    dimensions.district d ON ts.district_id = d.district_id
+LEFT JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
 JOIN
-    dimensions.district d ON b.district_id = d.district_id
-JOIN
-    dimensions.classes cc ON ts.class_id = cc.class_id
+ (
+  select ts.school_id,
+  COUNT(DISTINCT ts.date) AS total_days
+  FROM
+   student_attendance.student_attendance_master ts
+  join dimensions.class cc on cc.class_id = ts.class_id
+   where 
+   
+ ts.date BETWEEN startDate AND endDate
+   GROUP BY
+   ts.school_id
+    ) AS days_count ON ts.school_id = days_count.school_id
 WHERE
-    ts.date between startDate AND endDate AND b.district_id = {district_id}
+    ts.date between startDate AND endDate  AND b.district_id = {district_id}
 GROUP BY
    ts.block_id,
-	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
+	b.block_name, b.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
 
 `,
 
@@ -161,24 +201,37 @@ GROUP BY
 	b.block_name,
     b.district_id,
     d.district_name,
-    d.latitude,
-    d.longitude,
-    CAST(SUM(ts.attendance_status)AS INT) AS present_students,
-   CAST(COUNT(ts.attendance_status)AS INT) AS total_students,
-    CAST((COUNT(ts.attendance_status) - SUM(ts.attendance_status))AS INT) AS absent_students
+    b.latitude,
+    b.longitude,
+   (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
 FROM
     student_attendance.student_attendance_master ts
-JOIN
+LEFT JOIN
 	dimensions.block b on ts.block_id = b.block_id
+LEFT JOIN
+    dimensions.district d ON ts.district_id = d.district_id
+LEFT JOIN
+    dimensions.class cc ON ts.class_id = cc.class_id
 JOIN
-    dimensions.district d ON b.district_id = d.district_id
-JOIN
-    dimensions.classes cc ON ts.class_id = cc.class_id
+ (
+  select ts.school_id,
+  COUNT(DISTINCT ts.date) AS total_days
+  FROM
+   student_attendance.student_attendance_master ts
+  join dimensions.class cc on cc.class_id = ts.class_id
+   where 
+   
+ ts.date BETWEEN startDate AND endDate
+   GROUP BY
+   ts.school_id
+    ) AS days_count ON ts.school_id = days_count.school_id
 WHERE
-    ts.date between startDate AND endDate AND b.district_id = {district_id}
+    ts.date between startDate AND endDate  AND b.district_id = {district_id}
 GROUP BY
    ts.block_id,
-	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
+	b.block_name, b.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
 
 `,
 
@@ -196,32 +249,46 @@ GROUP BY
                 SELECT 
 	ts.cluster_id,
 	c.cluster_name,
-	c.block_id,
+	ts.block_id,
 	b.block_name,
-    b.district_id,
+    ts.district_id,
     d.district_name,
-    d.latitude,
-    d.longitude,
-    SUM(ts.attendance_status) AS present_students,
-    COUNT(ts.attendance_status) AS total_students,
-    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+    c.latitude,
+    c.longitude,
+   (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
 FROM
     student_attendance.student_attendance_master ts
-JOIN
+LEFT JOIN
 	dimensions.cluster c on ts.cluster_id = c.cluster_id
+LEFT JOIN
+	dimensions.block b on ts.block_id = b.block_id
+LEFT JOIN
+    dimensions.district d ON ts.district_id = d.district_id
 JOIN
-	dimensions.block b on c.block_id = b.block_id
-JOIN
-    dimensions.district d ON b.district_id = d.district_id
-JOIN
-    dimensions.classes cc ON ts.class_id = cc.class_id
+    dimensions.class cc ON ts.class_id = cc.class_id
+    JOIN
+ (
+  select ts.school_id,
+  COUNT(DISTINCT ts.date) AS total_days
+  FROM
+   student_attendance.student_attendance_master ts
+   join dimensions.class cc on cc.class_id = ts.class_id
+   where 
+  
+ts.date BETWEEN startDate AND endDate
+   GROUP BY
+   ts.school_id
+    ) AS days_count ON ts.school_id = days_count.school_id
 WHERE
     ts.date between startDate AND endDate AND c.block_id = {block_id}
 GROUP BY
    ts.cluster_id,
 	c.cluster_name,
-	c.block_id,
-	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
+	ts.block_id,
+	b.block_name, ts.district_id, d.district_name, c.latitude,
+    c.longitude,days_count.total_days;
 
 `,
 
@@ -233,32 +300,46 @@ GROUP BY
                     SELECT 
 	ts.cluster_id,
 	c.cluster_name,
-	c.block_id,
+	ts.block_id,
 	b.block_name,
-    b.district_id,
+    ts.district_id,
     d.district_name,
-    d.latitude,
-    d.longitude,
-    SUM(ts.attendance_status) AS present_students,
-    COUNT(ts.attendance_status) AS total_students,
-    (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+    c.latitude,
+    c.longitude,
+   (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
 FROM
     student_attendance.student_attendance_master ts
-JOIN
+LEFT JOIN
 	dimensions.cluster c on ts.cluster_id = c.cluster_id
+LEFT JOIN
+	dimensions.block b on ts.block_id = b.block_id
+LEFT JOIN
+    dimensions.district d ON ts.district_id = d.district_id
 JOIN
-	dimensions.block b on c.block_id = b.block_id
-JOIN
-    dimensions.district d ON b.district_id = d.district_id
-JOIN
-    dimensions.classes cc ON ts.class_id = cc.class_id
+    dimensions.class cc ON ts.class_id = cc.class_id
+    JOIN
+ (
+  select ts.school_id,
+  COUNT(DISTINCT ts.date) AS total_days
+  FROM
+   student_attendance.student_attendance_master ts
+   join dimensions.class cc on cc.class_id = ts.class_id
+   where 
+  
+ts.date BETWEEN startDate AND endDate
+   GROUP BY
+   ts.school_id
+    ) AS days_count ON ts.school_id = days_count.school_id
 WHERE
     ts.date between startDate AND endDate AND c.block_id = {block_id}
 GROUP BY
    ts.cluster_id,
 	c.cluster_name,
-	c.block_id,
-	b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;
+	ts.block_id,
+	b.block_name, ts.district_id, d.district_name, c.latitude,
+    c.longitude,days_count.total_days;
 
 `,
 
@@ -274,76 +355,104 @@ GROUP BY
                         "map": `SELECT 
                         ts.school_id,
                         sch.school_name,
-                        sch.cluster_id,
+                        ts.cluster_id,
                         c.cluster_name,
-                        c.block_id,
+                        ts.block_id,
                         b.block_name,
-                        b.district_id,
+                        ts.district_id,
                         d.district_name,
-                        d.latitude,
-                        d.longitude,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                        sch.latitude,
+                        sch.longitude,
+                       (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
                     FROM
                         student_attendance.student_attendance_master ts
-                    JOIN
+                    LEFT JOIN
                         dimensions.school sch on ts.school_id = sch.school_id
+                    LEFT JOIN
+                        dimensions.cluster c on ts.cluster_id = c.cluster_id
+                    LEFT JOIN
+                        dimensions.block b on ts.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     JOIN
-                        dimensions.cluster c on sch.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b on c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                     (
+                      select ts.school_id,
+                      COUNT(DISTINCT ts.date) AS total_days
+                      FROM
+                       student_attendance.student_attendance_master ts
+                       join dimensions.class cc on cc.class_id = ts.class_id
+                       where 
+                      
+                    ts.date BETWEEN startDate and endDate
+                       GROUP BY
+                       ts.school_id
+                        ) AS days_count ON ts.school_id = days_count.school_id
                     WHERE
-                        ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        ts.date BETWEEN startDate and endDate AND sch.cluster_id = {cluster_id}
                     GROUP BY
                        ts.school_id,
                         sch.school_name,
-                        sch.cluster_id,
+                        ts.cluster_id,
                         c.cluster_name,
-                        c.block_id,
-                        b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
+                        ts.block_id,
+                        b.block_name, ts.district_id, d.district_name, sch.latitude,
+                        sch.longitude,days_count.total_days;`,
                     },
                     "actions": {
                         "queries": {
                             "map": `SELECT 
                             ts.school_id,
                             sch.school_name,
-                            sch.cluster_id,
+                            ts.cluster_id,
                             c.cluster_name,
-                            c.block_id,
+                            ts.block_id,
                             b.block_name,
-                            b.district_id,
+                            ts.district_id,
                             d.district_name,
-                            d.latitude,
-                            d.longitude,
-                            SUM(ts.attendance_status) AS present_students,
-                            COUNT(ts.attendance_status) AS total_students,
-                            (COUNT(ts.attendance_status) - SUM(ts.attendance_status)) AS absent_students
+                            sch.latitude,
+                            sch.longitude,
+                           (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
+                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS absent_students
                         FROM
                             student_attendance.student_attendance_master ts
-                        JOIN
+                        LEFT JOIN
                             dimensions.school sch on ts.school_id = sch.school_id
+                        LEFT JOIN
+                            dimensions.cluster c on ts.cluster_id = c.cluster_id
+                        LEFT JOIN
+                            dimensions.block b on ts.block_id = b.block_id
+                        LEFT JOIN
+                            dimensions.district d ON ts.district_id = d.district_id
+                        LEFT JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
                         JOIN
-                            dimensions.cluster c on sch.cluster_id = c.cluster_id
-                        JOIN
-                            dimensions.block b on c.block_id = b.block_id
-                        JOIN
-                            dimensions.district d ON b.district_id = d.district_id
-                        JOIN
-                            dimensions.classes cc ON ts.class_id = cc.class_id
+                         (
+                          select ts.school_id,
+                          COUNT(DISTINCT ts.date) AS total_days
+                          FROM
+                           student_attendance.student_attendance_master ts
+                           join dimensions.class cc on cc.class_id = ts.class_id
+                           where 
+                          
+                        ts.date BETWEEN startDate and endDate
+                           GROUP BY
+                           ts.school_id
+                            ) AS days_count ON ts.school_id = days_count.school_id
                         WHERE
-                            ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                            ts.date BETWEEN startDate and endDate AND sch.cluster_id = {cluster_id}
                         GROUP BY
                            ts.school_id,
                             sch.school_name,
-                            sch.cluster_id,
+                            ts.cluster_id,
                             c.cluster_name,
-                            c.block_id,
-                            b.block_name, b.district_id, d.district_name, d.latitude, d.longitude;`,
+                            ts.block_id,
+                            b.block_name, ts.district_id, d.district_name, sch.latitude,
+                            sch.longitude,days_count.total_days;`,
                         },
                         "level": "school"
                     }
@@ -461,7 +570,7 @@ GROUP BY
                 JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate 
                 GROUP BY
@@ -480,7 +589,7 @@ GROUP BY
                     JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate 
                     GROUP BY
@@ -510,7 +619,7 @@ GROUP BY
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                 GROUP BY
@@ -534,7 +643,7 @@ GROUP BY
                     JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                     GROUP BY
@@ -569,7 +678,7 @@ GROUP BY
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                 GROUP BY
@@ -599,7 +708,7 @@ GROUP BY
                     JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                     GROUP BY
@@ -640,7 +749,7 @@ GROUP BY
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                 GROUP BY
@@ -678,7 +787,7 @@ GROUP BY
                     JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                     GROUP BY
@@ -852,7 +961,7 @@ student_average_bignumber: {
                 JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate 
                 GROUP BY
@@ -874,7 +983,7 @@ student_average_bignumber: {
                     JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate 
                     GROUP BY
@@ -902,7 +1011,7 @@ student_average_bignumber: {
                 JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                 GROUP BY
@@ -923,7 +1032,7 @@ student_average_bignumber: {
                     JOIN
                         dimensions.district d ON ts.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
                     GROUP BY
@@ -956,7 +1065,7 @@ student_average_bignumber: {
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                 GROUP BY
@@ -984,7 +1093,7 @@ student_average_bignumber: {
                     JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
                     GROUP BY
@@ -1023,7 +1132,7 @@ student_average_bignumber: {
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                 GROUP BY
@@ -1056,7 +1165,7 @@ student_average_bignumber: {
                     JOIN
                         dimensions.district d ON b.district_id = d.district_id
                     JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
+                        dimensions.class cc ON ts.class_id = cc.class_id
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
                     GROUP BY
@@ -1090,53 +1199,83 @@ student_average_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `select
-                    b.district_id,d.district_name,
+                    "table": `
+                    select
+                    ts.district_id,d.district_name,
                     ts.school_id,sch.school_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
+                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
                     student_attendance.student_attendance_master ts
-                    JOIN
+                    LEFT JOIN
                     dimensions.school sch ON ts.school_id = sch.school_id
+                    LEFT JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.class cc ON cc.class_id = ts.class_id
                     JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
-                    Where ts.date between startDate AND endDate 
+                    (
+                      select ts.school_id,
+                      COUNT(DISTINCT ts.date) AS total_days
+                      FROM
+                       student_attendance.student_attendance_master ts
+                       join dimensions.class cc on cc.class_id = ts.class_id
+                       where
+                       
+                       ts.date BETWEEN startDate AND endDate
+                       GROUP BY
+                       ts.school_id
+                        ) AS days_count ON ts.school_id = days_count.school_id
+                    Where ts.date between startDate AND endDate
                     GROUP BY
-                    b.district_id,d.district_name,
-                    ts.school_id,sch.school_name`
+                    ts.district_id,d.district_name,
+                    ts.school_id,sch.school_name,days_count.total_days
+                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,d.district_name,
+                        "table": `
+                        select
+                        ts.district_id,d.district_name,
                         ts.school_id,sch.school_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
+                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
                         student_attendance.student_attendance_master ts
-                        JOIN
+                        LEFT JOIN
                         dimensions.school sch ON ts.school_id = sch.school_id
+                        LEFT JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                        LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                        LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                        LEFT JOIN
+                            dimensions.class cc ON cc.class_id = ts.class_id
                         JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                        JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                        JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                        JOIN
-                            dimensions.classes cc ON ts.class_id = cc.class_id
-                        Where ts.date between startDate AND endDate 
+                        (
+                          select ts.school_id,
+                          COUNT(DISTINCT ts.date) AS total_days
+                          FROM
+                           student_attendance.student_attendance_master ts
+                           join dimensions.class cc on cc.class_id = ts.class_id
+                           where
+                           
+                           ts.date BETWEEN startDate AND endDate
+                           GROUP BY
+                           ts.school_id
+                            ) AS days_count ON ts.school_id = days_count.school_id
+                        Where ts.date between startDate AND endDate
                         GROUP BY
-                        b.district_id,d.district_name,
-                        ts.school_id,sch.school_name`,
+                        ts.district_id,d.district_name,
+                        ts.school_id,sch.school_name,days_count.total_days
+                         `,
                     },
                     "level": "school"
                 }
@@ -1149,54 +1288,80 @@ student_average_bignumber: {
                 "timeSeriesQueries": {
                     "table": `select
                     b.district_id,d.district_name,
+                    
                     ts.school_id,sch.school_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
+                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
                     student_attendance.student_attendance_master ts
-                    JOIN
+                    LEFT JOIN
                     dimensions.school sch ON ts.school_id = sch.school_id
-                    JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
-                    Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                    LEFT JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    LEFT JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                    LEFT JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                        JOIN
+                     (
+                      select ts.school_id,
+                      COUNT(DISTINCT ts.date) AS total_days
+                      FROM
+                       student_attendance.student_attendance_master ts
+                       join dimensions.class cc on cc.class_id = ts.class_id
+                       where 
+                      
+                       ts.date BETWEEN startDate AND endDate
+                       GROUP BY
+                       ts.school_id
+                        ) AS days_count ON ts.school_id = days_count.school_id
+                    where ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                     GROUP BY
                     b.district_id,d.district_name,
-                    ts.school_id,sch.school_name
-;
+                    ts.school_id,sch.school_name,days_count.total_days
 `
                 },
                 "actions": {
                     "queries": {
                         "table": `select
                         b.district_id,d.district_name,
+                        
                         ts.school_id,sch.school_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
+                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
                         student_attendance.student_attendance_master ts
-                        JOIN
+                        LEFT JOIN
                         dimensions.school sch ON ts.school_id = sch.school_id
-                        JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                        JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                        JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                        JOIN
-                            dimensions.classes cc ON ts.class_id = cc.class_id
-                        Where ts.date between startDate AND endDate AND b.district_id = {district_id}
+                        LEFT JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                        LEFT JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                        LEFT JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                        LEFT JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                            JOIN
+                         (
+                          select ts.school_id,
+                          COUNT(DISTINCT ts.date) AS total_days
+                          FROM
+                           student_attendance.student_attendance_master ts
+                           join dimensions.class cc on cc.class_id = ts.class_id
+                           where 
+                          
+                        ts.date BETWEEN startDate AND endDate
+                           GROUP BY
+                           ts.school_id
+                            ) AS days_count ON ts.school_id = days_count.school_id
+                        where ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                         GROUP BY
                         b.district_id,d.district_name,
-                        ts.school_id,sch.school_name
-    
+                        ts.school_id,sch.school_name,days_count.total_days
     `,
                     },
                     "level": "school"
@@ -1212,28 +1377,40 @@ student_average_bignumber: {
                     b.district_id,d.district_name,
                     c.block_id,b.block_name,
                     ts.school_id,sch.school_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
+                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
                     student_attendance.student_attendance_master ts
-                    JOIN
+                    left JOIN
                     dimensions.school sch ON ts.school_id = sch.school_id
-                    JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
-                    Where ts.date between startDate AND endDate AND c.block_id = {block_id}
+                    left JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    left JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                    left JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                    left JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                        JOIN
+                     (
+                      select ts.school_id,
+                      COUNT(DISTINCT ts.date) AS total_days
+                      FROM
+                       student_attendance.student_attendance_master ts
+                       join dimensions.class cc on cc.class_id = ts.class_id
+                       where 
+                        
+                       ts.date BETWEEN startDate AND endDate
+                       GROUP BY
+                       ts.school_id
+                        ) AS days_count ON ts.school_id = days_count.school_id
+                    Where ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                     GROUP BY
                     b.district_id,d.district_name,
                     c.block_id,b.block_name,
-                    ts.school_id,sch.school_name
-                    
-`
+                    ts.school_id,sch.school_name,days_count.total_days
+                    `
                 },
                 "actions": {
                     "queries": {
@@ -1241,28 +1418,40 @@ student_average_bignumber: {
                         b.district_id,d.district_name,
                         c.block_id,b.block_name,
                         ts.school_id,sch.school_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
+                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
                         student_attendance.student_attendance_master ts
-                        JOIN
+                        left JOIN
                         dimensions.school sch ON ts.school_id = sch.school_id
-                        JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                        JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                        JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                        JOIN
-                            dimensions.classes cc ON ts.class_id = cc.class_id
-                        Where ts.date between startDate AND endDate AND c.block_id = {block_id}
+                        left JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                        left JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                        left JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                        left JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                            JOIN
+                         (
+                          select ts.school_id,
+                          COUNT(DISTINCT ts.date) AS total_days
+                          FROM
+                           student_attendance.student_attendance_master ts
+                           join dimensions.class cc on cc.class_id = ts.class_id
+                           where 
+                            
+                           ts.date BETWEEN startDate AND endDate
+                           GROUP BY
+                           ts.school_id
+                            ) AS days_count ON ts.school_id = days_count.school_id
+                        Where ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                         GROUP BY
                         b.district_id,d.district_name,
                         c.block_id,b.block_name,
-                        ts.school_id,sch.school_name
+                        ts.school_id,sch.school_name,days_count.total_days
                         
-    
     `,
                     },
                     "level": "school"
@@ -1279,28 +1468,40 @@ student_average_bignumber: {
                     c.block_id,b.block_name,
                     sch.cluster_id, c.cluster_name,
                     ts.school_id,sch.school_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
+                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                     from
                     student_attendance.student_attendance_master ts
-                    JOIN
+                    left JOIN
                     dimensions.school sch ON ts.school_id = sch.school_id
-                    JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.classes cc ON ts.class_id = cc.class_id
-                    Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    left JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    left JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                    left JOIN
+                    dimensions.district d ON ts.district_id = d.district_id
+                    left JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                        JOIN
+                     (
+                      select ts.school_id,
+                      COUNT(DISTINCT ts.date) AS total_days
+                      FROM
+                       student_attendance.student_attendance_master ts
+                       join dimensions.class cc on cc.class_id = ts.class_id
+                       where 
+                        
+                       ts.date BETWEEN startDate AND endDate
+                       GROUP BY
+                       ts.school_id
+                        ) AS days_count ON ts.school_id = days_count.school_id
+                    Where  ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                     GROUP BY
                     b.district_id,d.district_name,
                     c.block_id,b.block_name,
                     sch.cluster_id, c.cluster_name,
-                    ts.school_id,sch.school_name
-
+                    ts.school_id,sch.school_name,days_count.total_days
 `
                 },
                 "actions": {
@@ -1310,29 +1511,40 @@ student_average_bignumber: {
                         c.block_id,b.block_name,
                         sch.cluster_id, c.cluster_name,
                         ts.school_id,sch.school_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
+                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
+                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
                         from
                         student_attendance.student_attendance_master ts
-                        JOIN
+                        left JOIN
                         dimensions.school sch ON ts.school_id = sch.school_id
-                        JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                        JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                        JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                        JOIN
-                            dimensions.classes cc ON ts.class_id = cc.class_id
-                        Where ts.date between startDate AND endDate AND sch.cluster_id = {cluster_id}
+                        left JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                        left JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                        left JOIN
+                        dimensions.district d ON ts.district_id = d.district_id
+                        left JOIN
+                            dimensions.class cc ON ts.class_id = cc.class_id
+                            JOIN
+                         (
+                          select ts.school_id,
+                          COUNT(DISTINCT ts.date) AS total_days
+                          FROM
+                           student_attendance.student_attendance_master ts
+                           join dimensions.class cc on cc.class_id = ts.class_id
+                           where 
+                            
+                           ts.date BETWEEN startDate AND endDate
+                           GROUP BY
+                           ts.school_id
+                            ) AS days_count ON ts.school_id = days_count.school_id
+                        Where  ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                         GROUP BY
                         b.district_id,d.district_name,
                         c.block_id,b.block_name,
                         sch.cluster_id, c.cluster_name,
-                        ts.school_id,sch.school_name
-    
-    `,
+                        ts.school_id,sch.school_name,days_count.total_days`,
                     },
                     "level": "school"
                 }
@@ -1530,7 +1742,7 @@ student_barchart:{
             JOIN
                 dimensions.district d ON ts.district_id = d.district_id
             JOIN
-                dimensions.classes cc ON ts.class_id = cc.class_id
+                dimensions.class cc ON ts.class_id = cc.class_id
             WHERE
                 ts.date BETWEEN startDate AND endDate 
             GROUP BY
@@ -1550,7 +1762,7 @@ student_barchart:{
                 JOIN
                     dimensions.district d ON ts.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate 
                 GROUP BY
@@ -1582,7 +1794,7 @@ student_barchart:{
             JOIN
                 dimensions.district d ON b.district_id = d.district_id
             JOIN
-                dimensions.classes cc ON ts.class_id = cc.class_id
+                dimensions.class cc ON ts.class_id = cc.class_id
             WHERE
                 ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
             GROUP BY
@@ -1607,7 +1819,7 @@ student_barchart:{
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                 GROUP BY
@@ -1642,7 +1854,7 @@ student_barchart:{
             JOIN
                 dimensions.district d ON b.district_id = d.district_id
             JOIN
-                dimensions.classes cc ON ts.class_id = cc.class_id
+                dimensions.class cc ON ts.class_id = cc.class_id
             WHERE
                 ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
             GROUP BY
@@ -1672,7 +1884,7 @@ student_barchart:{
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                 GROUP BY
@@ -1713,7 +1925,7 @@ student_barchart:{
             JOIN
                 dimensions.district d ON b.district_id = d.district_id
             JOIN
-                dimensions.classes cc ON ts.class_id = cc.class_id
+                dimensions.class cc ON ts.class_id = cc.class_id
             WHERE
                 ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
             GROUP BY
@@ -1750,7 +1962,7 @@ student_barchart:{
                 JOIN
                     dimensions.district d ON b.district_id = d.district_id
                 JOIN
-                    dimensions.classes cc ON ts.class_id = cc.class_id
+                    dimensions.class cc ON ts.class_id = cc.class_id
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
                 GROUP BY
@@ -1818,6 +2030,16 @@ student_barchart:{
                 {
                     "valuePrefix": "School Id: ",
                     "value": "school_id",
+                    "valueSuffix": ""
+                },
+                {
+                    "valuePrefix": "Present Students ",
+                    "value": "present_students",
+                    "valueSuffix": ""
+                },
+                {
+                    "valuePrefix": "Present Students ",
+                    "value": "total_students",
                     "valueSuffix": ""
                 },
                 {

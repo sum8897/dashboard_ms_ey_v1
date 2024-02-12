@@ -6,6 +6,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { config } from 'src/app/views/student-ai-attendance/config/student_ai_attendance_config';
+import moment from 'moment';
 @Component({
   selector: 'app-student-map-view',
   templateUrl: './student-map-view.component.html',
@@ -35,6 +36,7 @@ export class StudentMapViewComponent implements OnInit {
   filterValues:any;
   filterneed:any;
   metricFilter:any;
+  defaultSelectedDays:any=7;
 
   @Output() exportReportData = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
@@ -56,6 +58,16 @@ export class StudentMapViewComponent implements OnInit {
       if (data && data !== 'reset') {
         console.log("reportData:",this.drillDownLevel)
         this.drillDownLevel = data.hierarchyLevel
+        if (this.startDate === undefined && this.endDate === undefined) {
+          let endDate = new Date();
+          let days = endDate.getDate() - this.defaultSelectedDays;
+          let startDate = new Date();
+          startDate.setDate(days);
+          this.startDate = moment(startDate).format('YYYY-MM-DD');
+          this.endDate = moment(endDate).format('YYYY-MM-DD');
+         
+          }
+        console.log('startdate and enddate',this.startDate,this.endDate)
         let result: any = await this._drillDownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails, this.filterValues, this.metricFilter,this.filterneed)
         
         this.drillDownDetails = result?.drillDownDetails
@@ -65,8 +77,9 @@ export class StudentMapViewComponent implements OnInit {
       }
     })
   }
- 
+
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
+    // console.log('inside function startDate and enddd',this.startDate,this.endDate)
     let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
     if (filterValues === undefined) {
       filterValues = []

@@ -10,14 +10,15 @@ import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { filter, isNull, omitBy } from 'lodash';
 import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 import { DataService } from 'src/app/core/services/data.service';
-import { StudentAverageTabComponent } from '../../student-average-tab.component';
-import { config } from 'src/app/views/student-ai-attendance/config/student_ai_attendance_config';
+import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
+import { NonTeachingSummaryTabComponent } from '../../non-teaching-summary-tab.component';
+
 @Component({
-  selector: 'app-student-barchart',
-  templateUrl: './student-barchart.component.html',
-  styleUrls: ['./student-barchart.component.scss']
+  selector: 'app-staff-barchart',
+  templateUrl: './staff-barchart.component.html',
+  styleUrls: ['./staff-barchart.component.scss']
 })
-export class StudentBarchartComponent implements OnInit, OnDestroy {
+export class StaffBarchartComponent implements OnInit, OnDestroy {
   compareDateRange: any = 7;
   title: any;
   chartHeight: any;
@@ -25,7 +26,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
   config;
   data;
   fileName: string = "";
-  reportName: string = 'student_barchart';
+  reportName: string = 'staff_barchart';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -64,7 +65,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
     private readonly _criteriaService: CriteriaService,
     private readonly _benchmarkService: BarchartBenchmarkService,
     private readonly _dataService: DataService,
-    private csv: StudentAverageTabComponent
+    private csv: NonTeachingSummaryTabComponent
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -212,7 +213,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-          this._dataService.extraLine(reportData,config,"perc_students");
+          // this._dataService.extraLine(reportData,config,"perc_teachers");
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
@@ -262,7 +263,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
       }
       console.log('tablereprtdata 261',this.tableReportData)
       this.config = this.getConfig()
-      this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
+      // this._dataService.extraLine(this.tableReportData,this.config,"perc_teachers");
       console.log('configgg', this.config)
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
         if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
@@ -363,7 +364,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
               const meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 const data = dataset.data[index];
-                // ctx.fillText(data, bar._model.x, bar._model.y - 5);
+               // ctx.fillText(data, bar._model.x, bar._model.y - 5);
               });
             });
           }
@@ -372,6 +373,7 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
         tooltips: {
           // callbacks: {
           //   label: (tooltipItem, data) => {
+          //     console.log("drill tooltips" ,data);
           //     return tooltipObject[tooltipItem.label.trim()]
           //   }
           // }
@@ -475,12 +477,10 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, undefined);
 
-      this.filterValues.forEach((filterParams: any) => {
-        query = parseFilterToQuery(query, filterParams)
-      });
-
       if (query && key === 'barChart') {
         this.getBarChartReportData(query, options, filters, defaultLevel);
+        
+        
       }
     });
   }
@@ -494,3 +494,4 @@ export class StudentBarchartComponent implements OnInit, OnDestroy {
 
 
 }
+

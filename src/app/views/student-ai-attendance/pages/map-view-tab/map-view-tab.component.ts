@@ -26,7 +26,7 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
   reportsData: any = [];
   startDate: any;
   endDate: any;
-  defaultSelectedDays: any;
+  defaultSelectedDays: 7;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
   bigNumberMetrics: any = [];
@@ -112,6 +112,7 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
             this.startDate = moment(event.startDate).format('YYYY-MM-DD');
             this.endDate = moment(event.endDate).format('YYYY-MM-DD');
             this.updateReportsData()
+            console.log('inside timeseries ',this.startDate,this.endDate)
             }
            
             
