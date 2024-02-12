@@ -28,7 +28,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['percentage_of_non_teacher_present', 'absent_non_teachers_percentage'],
+            values: ['percentage_of_non_teacher_present', 'percentage_of_non_teacher_absent'],
         },
     ],
 

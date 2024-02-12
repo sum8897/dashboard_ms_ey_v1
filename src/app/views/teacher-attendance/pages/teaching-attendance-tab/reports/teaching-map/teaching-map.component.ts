@@ -178,6 +178,7 @@ export class TeachingMapComponent implements OnInit {
         }
         
         else if (query && key === 'map' && filterneed) {
+          console.log('line no 181',query)
           this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
          
           if (this.reportData?.data?.length > 0) {

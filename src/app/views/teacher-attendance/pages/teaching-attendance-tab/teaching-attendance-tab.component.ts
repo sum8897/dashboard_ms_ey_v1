@@ -26,7 +26,7 @@ export class TeachingAttendanceTabComponent implements OnInit, AfterViewInit {
   reportsData: any = [];
   startDate: any;
   endDate: any;
-  defaultSelectedDays: any;
+  defaultSelectedDays: any = 7;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
   bigNumberMetrics: any = [];
@@ -48,7 +48,7 @@ export class TeachingAttendanceTabComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-       
+       console.log('line no 51 inside ngafter',this.startDate,this.endDate);
         this.teachingmap?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         }
     else if(this.hasCommonFilters===false){
@@ -98,6 +98,16 @@ export class TeachingAttendanceTabComponent implements OnInit, AfterViewInit {
     filtersUpdated(filters: any) {
       this.reportsData = [];
       this.filters = filters
+      if (this.startDate === undefined && this.endDate === undefined) {
+        let endDate = new Date();
+        let days = endDate.getDate() - this.defaultSelectedDays;
+        let startDate = new Date();
+        startDate.setDate(days);
+        this.startDate = moment(startDate).format('YYYY-MM-DD');
+        this.endDate = moment(endDate).format('YYYY-MM-DD');
+       
+        }
+      console.log('line 100 inside tab',this.startDate,this.endDate,this.minDate,this.maxDate,this.defaultSelectedDays)
       this.updateReportsData()
           }
 
@@ -107,6 +117,7 @@ export class TeachingAttendanceTabComponent implements OnInit, AfterViewInit {
                   // this.schoolReportsData = []
             this.startDate = moment(event.startDate).format('YYYY-MM-DD');
             this.endDate = moment(event.endDate).format('YYYY-MM-DD');
+            console.log('line 110 inside tab',this.startDate,this.endDate)
             this.updateReportsData()
             }
            

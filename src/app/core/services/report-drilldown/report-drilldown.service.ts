@@ -79,7 +79,7 @@ export class ReportDrilldownService {
         
 
         let query = buildQuery(onLoadQuery, defaultLevel, undefined, undefined, startDate, endDate, types[i], undefined);
-
+console.log('line no 82 inside drilldown services',query)
         let metricFilter = [...filterValues].filter((filter: any) => {
           return filter.filterType === 'metric'
         })

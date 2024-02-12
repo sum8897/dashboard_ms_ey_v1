@@ -26,7 +26,7 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
   reportsData: any = [];
   startDate: any;
   endDate: any;
-  defaultSelectedDays: 7;
+  defaultSelectedDays: any = 7;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
   bigNumberMetrics: any = [];
@@ -102,6 +102,16 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
     filtersUpdated(filters: any) {
       this.reportsData = [];
       this.filters = filters
+      if (this.startDate === undefined && this.endDate === undefined) {
+        let endDate = new Date();
+        let days = endDate.getDate() - this.defaultSelectedDays;
+        let startDate = new Date();
+        startDate.setDate(days);
+        this.startDate = moment(startDate).format('YYYY-MM-DD');
+        this.endDate = moment(endDate).format('YYYY-MM-DD');
+       
+        }
+      console.log('line 100 inside tab',this.startDate,this.endDate,this.minDate,this.maxDate,this.defaultSelectedDays)
       this.updateReportsData()
           }
 
@@ -111,8 +121,8 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
                   // this.schoolReportsData = []
             this.startDate = moment(event.startDate).format('YYYY-MM-DD');
             this.endDate = moment(event.endDate).format('YYYY-MM-DD');
+            console.log('line 110 inside tab',this.startDate,this.endDate)
             this.updateReportsData()
-            console.log('inside timeseries ',this.startDate,this.endDate)
             }
            
             
@@ -123,3 +133,4 @@ export class MapViewTabComponent implements OnInit, AfterViewInit {
       this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
   }
   }
+
