@@ -236,7 +236,8 @@ export class DataService {
     data.values.forEach(( reportData:any) => total = total + parseFloat(reportData[param]));
     console.log('total',total)
     console.log('length',data.values.length)
-    const averageValue = total / data.values.length;
+    // const averageValue = total / data.values.length;
+    const averageValue = (total / data.values.length).toFixed(2);
     const avgObject = {
       type: 'line',
       metricLabelProp: "Average",
