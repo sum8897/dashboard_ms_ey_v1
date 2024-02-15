@@ -13,6 +13,7 @@ import { StudentAverageBignumberComponent } from './pages/student-average-tab/re
 import { StudentAverageTableComponent } from './pages/student-average-tab/reports/student-average-table/student-average-table.component';
 import { StudentAverageSchoolTableComponent } from './pages/student-average-tab/reports/student-average-school-table/student-average-school-table.component';
 import { StudentBarchartComponent } from './pages/student-average-tab/reports/student-barchart/student-barchart.component';
+import { StudentTrendlineComponent } from './pages/student-average-tab/reports/student-trendline/student-trendline.component';
 
 
 
@@ -25,7 +26,8 @@ import { StudentBarchartComponent } from './pages/student-average-tab/reports/st
     StudentAverageBignumberComponent,
     StudentAverageTableComponent,
     StudentAverageSchoolTableComponent,
-    StudentBarchartComponent
+    StudentBarchartComponent,
+    StudentTrendlineComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

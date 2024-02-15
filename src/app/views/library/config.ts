@@ -81,12 +81,12 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": "select 2000 as total_count",
+                    "bigNumber": "select 1000 as total_count",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select 2000 as total_count",
+                        "bigNumber": "select 1000 as total_count",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"
@@ -110,12 +110,12 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": "select 1000 as total_count",
+                    "bigNumber": "select 2000 as total_count",
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": "select 1000 as total_count",
+                        "bigNumber": "select 2000 as total_count",
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
                     "level": "district"

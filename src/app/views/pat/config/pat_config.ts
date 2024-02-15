@@ -55,7 +55,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['present_students', 'absent_students'],
+            values: ['percentage_of_present_students', 'percentage_of_absent_students'],
 
         },
 		//lo-wise
@@ -182,94 +182,96 @@ export const config = {
         "name": "State",
         "hierarchyLevel": "1",
         "timeSeriesQueries": {"map": `select 
-        tsed.exam_id,
-        e.examLO,
-        cc.class_name, 
-        tsed.class_id, 
-        tsed.subject_id,
-        s.subject_name,
         tsed.district_id,
         d.district_name ,
         d.latitude ,
         d.longitude ,
-        sum(tsed.total_students) as total_students,
-        sum(sped.student_present) as present_students,
-        sum(saed.student_absent) as absent_students
+        ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+        ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+        ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+        ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+        ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
         from 
         pat.total_student_event_data tsed 
-        join
-        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-        and sped.class_id = tsed.class_id 
-        join 
-        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-        and saed.class_id = tsed.class_id 
-        join 
-        dimensions.district d on d.district_id = tsed.district_id 
-        join 
-        dimensions.classes cc on cc.class_id = tsed.class_id 
-        join 
-        dimensions.subjects s on s.subject_id  = tsed.subject_id 
-        join 
-        dimensions.exams e on e.exam_id = tsed.exam_id 
+        left join
+        pat.student_present_event_data sped on tsed.district_id = sped.district_id  and tsed.school_id = sped.school_id 
+        and tsed.class_id = sped.class_id and tsed.date = sped.date
+        left join 
+        pat.student_absent_event_data saed on tsed.district_id = saed.district_id  and tsed.school_id = saed.school_id 
+        and tsed.class_id = saed.class_id and tsed.date = saed.date
+        LEFT JOIN
+            dimensions.classes AS cc ON tsed.class_id = cc.class_id
+        LEFT JOIN
+            dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+        LEFT JOIN
+            dimensions.district AS d ON tsed.district_id = d.district_id
+        LEFT JOIN
+            dimensions.school sch ON tsed.school_id = sch.school_id
+        JOIN
+            (SELECT
+                 sped.school_id,
+                 COUNT(DISTINCT sped.date) AS total_days
+             FROM
+                 pat.student_present_event_data sped
+             WHERE
+                 sped.date BETWEEN startDate AND endDate
+             GROUP BY
+                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
         where 
-        tsed.date between startDate and endDate 
+        tsed.date between startDate and endDate  
         group by 
-        tsed.exam_id,
-        e.examLO,
-        cc.class_name, 
-        tsed.class_id, 
-        tsed.subject_id,
-        s.subject_name,
         tsed.district_id,
         d.district_name ,
         d.latitude ,
-        d.longitude `,},
+        d.longitude,
+        days_count.total_days `,},
         "actions": {
             "queries":	
             {
                 "map": `select 
-        tsed.exam_id,
-        e.examLO,
-        cc.class_name, 
-        tsed.class_id, 
-        tsed.subject_id,
-        s.subject_name,
-        tsed.district_id,
-        d.district_name ,
-        d.latitude ,
-        d.longitude ,
-        sum(tsed.total_students) as total_students,
-        sum(sped.student_present) as present_students,
-        sum(saed.student_absent) as absent_students
-        from 
-        pat.total_student_event_data tsed 
-        join
-        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-        and sped.class_id = tsed.class_id 
-        join 
-        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-        and saed.class_id = tsed.class_id 
-        join 
-        dimensions.district d on d.district_id = tsed.district_id 
-        join 
-        dimensions.classes cc on cc.class_id = tsed.class_id 
-        join 
-        dimensions.subjects s on s.subject_id  = tsed.subject_id 
-        join 
-        dimensions.exams e on e.exam_id = tsed.exam_id 
-        where 
-        tsed.date between startDate and endDate 
-        group by 
-        tsed.exam_id,
-        e.examLO,
-        cc.class_name, 
-        tsed.class_id, 
-        tsed.subject_id,
-        s.subject_name,
-        tsed.district_id,
-        d.district_name ,
-        d.latitude ,
-        d.longitude `,
+                tsed.district_id,
+                d.district_name ,
+                d.latitude ,
+                d.longitude ,
+                ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+                ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+                ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+                ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+                ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
+                from 
+                pat.total_student_event_data tsed 
+                left join
+                pat.student_present_event_data sped on tsed.district_id = sped.district_id  and tsed.school_id = sped.school_id 
+                and tsed.class_id = sped.class_id and tsed.date = sped.date
+                left join 
+                pat.student_absent_event_data saed on tsed.district_id = saed.district_id  and tsed.school_id = saed.school_id 
+                and tsed.class_id = saed.class_id and tsed.date = saed.date
+                LEFT JOIN
+                    dimensions.classes AS cc ON tsed.class_id = cc.class_id
+                LEFT JOIN
+                    dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+                LEFT JOIN
+                    dimensions.district AS d ON tsed.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.school sch ON tsed.school_id = sch.school_id
+                JOIN
+                    (SELECT
+                         sped.school_id,
+                         COUNT(DISTINCT sped.date) AS total_days
+                     FROM
+                         pat.student_present_event_data sped
+                     WHERE
+                         sped.date BETWEEN startDate AND endDate
+                     GROUP BY
+                         sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                where 
+                tsed.date between startDate and endDate  
+                group by 
+                tsed.district_id,
+                d.district_name ,
+                d.latitude ,
+                d.longitude,
+                days_count.total_days  `,
 
         
             },
@@ -283,54 +285,59 @@ export const config = {
         "timeSeriesQueries":  {
                 "map": `
                 select 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 b.latitude ,
 b.longitude ,
-sum(tsed.total_students) as total_students,
-sum(sped.student_present) as present_students,
-sum(saed.student_absent) as absent_students
+ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
 from 
 pat.total_student_event_data tsed 
-join
-pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-and sped.class_id = tsed.class_id 
-join 
-pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-and saed.class_id = tsed.class_id 
-join 
-dimensions.district d on d.district_id = tsed.district_id 
-join 
-dimensions.block b on b.block_id = tsed.block_id
-join 
-dimensions.classes cc on cc.class_id = tsed.class_id 
-join 
-dimensions.subjects s on s.subject_id  = tsed.subject_id 
-join 
-dimensions.exams e on e.exam_id = tsed.exam_id 
+LEFT JOIN
+pat.student_present_event_data sped on tsed.block_id = sped.block_id  and tsed.school_id = sped.school_id 
+and tsed.class_id = sped.class_id and tsed.date = sped.date
+LEFT JOIN 
+pat.student_absent_event_data saed on tsed.block_id = saed.block_id and tsed.school_id = saed.school_id 
+and tsed.class_id = saed.class_id  and tsed.date = saed.date 
+LEFT JOIN
+    dimensions.classes AS cc ON tsed.class_id = cc.class_id
+LEFT JOIN
+    dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+LEFT JOIN 
+   dimensions.exams e on e.exam_id = tsed.exam_id
+LEFT JOIN
+    dimensions.district AS d ON tsed.district_id = d.district_id
+LEFT JOIN 
+dimensions.block b on tsed.block_id = b.block_id
+LEFT JOIN
+    dimensions.school sch ON tsed.school_id = sch.school_id
+JOIN
+    (SELECT
+         sped.school_id,
+         COUNT(DISTINCT sped.date) AS total_days
+     FROM
+         pat.student_present_event_data sped
+     WHERE
+         sped.date BETWEEN startDate AND endDate
+     GROUP BY
+         sped.school_id) AS days_count ON sped.school_id = days_count.school_id
 where 
 tsed.date between startDate and endDate and tsed.district_id = {district_id}
+ 
 group by 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 b.latitude ,
-b.longitude 
+b.longitude ,
+days_count.total_days
+
 
 `,
 
@@ -341,54 +348,59 @@ b.longitude
             {
                 "map": `
                 select 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 b.latitude ,
 b.longitude ,
-sum(tsed.total_students) as total_students,
-sum(sped.student_present) as present_students,
-sum(saed.student_absent) as absent_students
+ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
 from 
 pat.total_student_event_data tsed 
-join
-pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-and sped.class_id = tsed.class_id 
-join 
-pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-and saed.class_id = tsed.class_id 
-join 
-dimensions.district d on d.district_id = tsed.district_id 
-join 
-dimensions.block b on b.block_id = tsed.block_id
-join 
-dimensions.classes cc on cc.class_id = tsed.class_id 
-join 
-dimensions.subjects s on s.subject_id  = tsed.subject_id 
-join 
-dimensions.exams e on e.exam_id = tsed.exam_id 
+LEFT JOIN
+pat.student_present_event_data sped on tsed.block_id = sped.block_id  and tsed.school_id = sped.school_id 
+and tsed.class_id = sped.class_id and tsed.date = sped.date
+LEFT JOIN 
+pat.student_absent_event_data saed on tsed.block_id = saed.block_id and tsed.school_id = saed.school_id 
+and tsed.class_id = saed.class_id  and tsed.date = saed.date 
+LEFT JOIN
+    dimensions.classes AS cc ON tsed.class_id = cc.class_id
+LEFT JOIN
+    dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+LEFT JOIN 
+   dimensions.exams e on e.exam_id = tsed.exam_id
+LEFT JOIN
+    dimensions.district AS d ON tsed.district_id = d.district_id
+LEFT JOIN 
+dimensions.block b on tsed.block_id = b.block_id
+LEFT JOIN
+    dimensions.school sch ON tsed.school_id = sch.school_id
+JOIN
+    (SELECT
+         sped.school_id,
+         COUNT(DISTINCT sped.date) AS total_days
+     FROM
+         pat.student_present_event_data sped
+     WHERE
+         sped.date BETWEEN startDate AND endDate
+     GROUP BY
+         sped.school_id) AS days_count ON sped.school_id = days_count.school_id
 where 
 tsed.date between startDate and endDate and tsed.district_id = {district_id}
+ 
 group by 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 b.latitude ,
-b.longitude 
+b.longitude ,
+days_count.total_days
+
 `,
 
                 
@@ -402,63 +414,65 @@ b.longitude
         "hierarchyLevel": "3",
         "timeSeriesQueries":  {
             "map": `
-           select 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
-tsed.district_id,
-d.district_name ,
-tsed.block_id,
-b.block_name,
-tsed.cluster_id,
-c.cluster_id,
-c.cluster_name,
-c.latitude ,
-c.longitude ,
-sum(tsed.total_students) as total_students,
-sum(sped.student_present) as present_students,
-sum(saed.student_absent) as absent_students
-from 
-pat.total_student_event_data tsed 
-join
-pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-and sped.class_id = tsed.class_id 
-join 
-pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-and saed.class_id = tsed.class_id 
-join 
-dimensions.district d on d.district_id = tsed.district_id 
-join 
-dimensions.block b on b.block_id = tsed.block_id
-join 
-dimensions.cluster c on c.cluster_id = tsed.cluster_id 
-join 
-dimensions.classes cc on cc.class_id = tsed.class_id 
-join 
-dimensions.subjects s on s.subject_id  = tsed.subject_id 
-join 
-dimensions.exams e on e.exam_id = tsed.exam_id 
-where 
-tsed.date between startDate and endDate and tsed.block_id = {block_id}
-group by 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
-tsed.district_id,
-d.district_name ,
-tsed.block_id,
-b.block_name,
-tsed.cluster_id,
-c.cluster_id,
-c.cluster_name,
-c.latitude ,
-c.longitude
+            select 
+            tsed.district_id,
+            d.district_name ,
+            tsed.block_id,
+            b.block_name,
+            tsed.cluster_id,
+            c.cluster_id,
+            c.latitude ,
+            c.longitude ,
+            ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+            ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+            ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+            ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+            ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
+            from 
+            pat.total_student_event_data tsed 
+            LEFT JOIN
+            pat.student_present_event_data sped on tsed.cluster_id = sped.cluster_id  and tsed.school_id = sped.school_id
+            and tsed.class_id = sped.class_id and tsed.date = sped.date
+            LEFT JOIN 
+            pat.student_absent_event_data saed on tsed.cluster_id = saed.cluster_id  and tsed.school_id = saed.school_id
+            and tsed.class_id = saed.class_id and tsed.date = saed.date
+            LEFT JOIN
+                dimensions.classes AS cc ON tsed.class_id = cc.class_id
+            LEFT JOIN
+                dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+            LEFT JOIN 
+               dimensions.exams e on e.exam_id = tsed.exam_id
+            LEFT JOIN
+                dimensions.district AS d ON tsed.district_id = d.district_id
+            LEFT JOIN 
+               dimensions.block b on tsed.block_id = b.block_id
+            LEFT JOIN 
+              dimensions.cluster c on tsed.cluster_id = c.cluster_id 
+            LEFT JOIN
+                dimensions.school sch ON tsed.school_id = sch.school_id
+            JOIN
+                (SELECT
+                     sped.school_id,
+                     COUNT(DISTINCT sped.date) AS total_days
+                 FROM
+                     pat.student_present_event_data sped
+                 WHERE
+                     sped.date BETWEEN startDate AND endDate
+                 GROUP BY
+                     sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+            where 
+            tsed.date between startDate and endDate and tsed.block_id = {block_id}
+             
+            group by 
+            tsed.district_id,
+            d.district_name ,
+            tsed.block_id,
+            b.block_name,
+            tsed.cluster_id,
+            c.cluster_id,
+            c.latitude ,
+            c.longitude,
+            days_count.total_days
 
 `,
 
@@ -468,62 +482,64 @@ c.longitude
             {
                 "map": `
                 select 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 tsed.cluster_id,
 c.cluster_id,
-c.cluster_name,
 c.latitude ,
 c.longitude ,
-sum(tsed.total_students) as total_students,
-sum(sped.student_present) as present_students,
-sum(saed.student_absent) as absent_students
+ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
 from 
 pat.total_student_event_data tsed 
-join
-pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-and sped.class_id = tsed.class_id 
-join 
-pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-and saed.class_id = tsed.class_id 
-join 
-dimensions.district d on d.district_id = tsed.district_id 
-join 
-dimensions.block b on b.block_id = tsed.block_id
-join 
-dimensions.cluster c on c.cluster_id = tsed.cluster_id 
-join 
-dimensions.classes cc on cc.class_id = tsed.class_id 
-join 
-dimensions.subjects s on s.subject_id  = tsed.subject_id 
-join 
-dimensions.exams e on e.exam_id = tsed.exam_id 
+LEFT JOIN
+pat.student_present_event_data sped on tsed.cluster_id = sped.cluster_id  and tsed.school_id = sped.school_id
+and tsed.class_id = sped.class_id and tsed.date = sped.date
+LEFT JOIN 
+pat.student_absent_event_data saed on tsed.cluster_id = saed.cluster_id  and tsed.school_id = saed.school_id
+and tsed.class_id = saed.class_id and tsed.date = saed.date
+LEFT JOIN
+    dimensions.classes AS cc ON tsed.class_id = cc.class_id
+LEFT JOIN
+    dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+LEFT JOIN 
+   dimensions.exams e on e.exam_id = tsed.exam_id
+LEFT JOIN
+    dimensions.district AS d ON tsed.district_id = d.district_id
+LEFT JOIN 
+   dimensions.block b on tsed.block_id = b.block_id
+LEFT JOIN 
+  dimensions.cluster c on tsed.cluster_id = c.cluster_id 
+LEFT JOIN
+    dimensions.school sch ON tsed.school_id = sch.school_id
+JOIN
+    (SELECT
+         sped.school_id,
+         COUNT(DISTINCT sped.date) AS total_days
+     FROM
+         pat.student_present_event_data sped
+     WHERE
+         sped.date BETWEEN startDate AND endDate
+     GROUP BY
+         sped.school_id) AS days_count ON sped.school_id = days_count.school_id
 where 
 tsed.date between startDate and endDate and tsed.block_id = {block_id}
+ 
 group by 
-tsed.exam_id,
-e.examLO,
-cc.class_name, 
-tsed.class_id, 
-tsed.subject_id,
-s.subject_name,
 tsed.district_id,
 d.district_name ,
 tsed.block_id,
 b.block_name,
 tsed.cluster_id,
 c.cluster_id,
-c.cluster_name,
 c.latitude ,
-c.longitude
+c.longitude,
+days_count.total_days
 
 `,
 
@@ -537,12 +553,6 @@ c.longitude
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "map": `select 
-                    tsed.exam_id,
-                    e.examLO,
-                    cc.class_name, 
-                    tsed.class_id, 
-                    tsed.subject_id,
-                    s.subject_name,
                     tsed.district_id,
                     d.district_name ,
                     tsed.block_id,
@@ -553,40 +563,47 @@ c.longitude
                     sch.school_name,
                     sch.latitude ,
                     sch.longitude ,
-                    sum(tsed.total_students) as total_students,
-                    sum(sped.student_present) as present_students,
-                    sum(saed.student_absent) as absent_students
+                    ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+                    ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+                    ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+                    ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+                    ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
                     from 
                     pat.total_student_event_data tsed 
-                    join
-                    pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-                    and sped.class_id = tsed.class_id 
-                    join 
-                    pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-                    and saed.class_id = tsed.class_id 
-                    join 
-                    dimensions.district d on d.district_id = tsed.district_id 
-                    join 
-                    dimensions.block b on b.block_id = tsed.block_id
-                    join 
-                    dimensions.cluster c on c.cluster_id = tsed.cluster_id 
-                    join 
-                    dimensions.school sch on sch.school_id = tsed.school_id
-                    join 
-                    dimensions.classes cc on cc.class_id = tsed.class_id 
-                    join 
-                    dimensions.subjects s on s.subject_id  = tsed.subject_id 
-                    join 
-                    dimensions.exams e on e.exam_id = tsed.exam_id 
+                    LEFT JOIN
+                    pat.student_present_event_data sped on tsed.school_id = sped.school_id 
+                    and sped.class_id = tsed.class_id and tsed.date = sped.date
+                    LEFT JOIN
+                    pat.student_absent_event_data saed on tsed.school_id = saed.school_id
+                    and tsed.class_id = saed.class_id and tsed.date = saed.date
+                    LEFT JOIN
+                        dimensions.classes AS cc ON tsed.class_id = cc.class_id
+                    LEFT JOIN
+                        dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+                    LEFT JOIN 
+                       dimensions.exams e on e.exam_id = tsed.exam_id
+                    LEFT JOIN
+                        dimensions.district AS d ON tsed.district_id = d.district_id
+                    LEFT JOIN 
+                       dimensions.block b on tsed.block_id = b.block_id
+                    LEFT JOIN 
+                      dimensions.cluster c on tsed.cluster_id = c.cluster_id 
+                    LEFT JOIN
+                        dimensions.school sch ON tsed.school_id = sch.school_id
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
                     where 
                     tsed.date between startDate and endDate and tsed.cluster_id = {cluster_id}
+                     
                     group by 
-                    tsed.exam_id,
-                    e.examLO,
-                    cc.class_name, 
-                    tsed.class_id, 
-                    tsed.subject_id,
-                    s.subject_name,
                     tsed.district_id,
                     d.district_name ,
                     tsed.block_id,
@@ -596,17 +613,13 @@ c.longitude
                     tsed.school_id,
                     sch.school_name,
                     sch.latitude ,
-                    sch.longitude `,
+                    sch.longitude ,
+                    days_count.total_days
+                     `,
                 },
                 "actions": {
                     "queries": {
                         "map": `select 
-                        tsed.exam_id,
-                        e.examLO,
-                        cc.class_name, 
-                        tsed.class_id, 
-                        tsed.subject_id,
-                        s.subject_name,
                         tsed.district_id,
                         d.district_name ,
                         tsed.block_id,
@@ -617,40 +630,47 @@ c.longitude
                         sch.school_name,
                         sch.latitude ,
                         sch.longitude ,
-                        sum(tsed.total_students) as total_students,
-                        sum(sped.student_present) as present_students,
-                        sum(saed.student_absent) as absent_students
+                        ROUND((sum(sped.student_present) / days_count.total_days),2) as percentage_of_present_students,
+                        ROUND((sum(tsed.total_students)/ days_count.total_days),2) as total_students,
+                        ROUND((sum(saed.student_absent) / days_count.total_days),2) as percentage_of_absent_students,
+                        ROUND(SUM(sped.student_present) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_present_students,
+                        ROUND(SUM(saed.student_absent) * 100.0 / SUM(tsed.total_students), 2) AS perc_of_absent_students
                         from 
                         pat.total_student_event_data tsed 
-                        join
-                        pat.student_present_event_data sped on sped.district_id = tsed.district_id and sped.school_id = tsed.school_id 
-                        and sped.class_id = tsed.class_id 
-                        join 
-                        pat.student_absent_event_data saed on saed.district_id = tsed.district_id and saed.school_id = tsed.school_id 
-                        and saed.class_id = tsed.class_id 
-                        join 
-                        dimensions.district d on d.district_id = tsed.district_id 
-                        join 
-                        dimensions.block b on b.block_id = tsed.block_id
-                        join 
-                        dimensions.cluster c on c.cluster_id = tsed.cluster_id 
-                        join 
-                        dimensions.school sch on sch.school_id = tsed.school_id
-                        join 
-                        dimensions.classes cc on cc.class_id = tsed.class_id 
-                        join 
-                        dimensions.subjects s on s.subject_id  = tsed.subject_id 
-                        join 
-                        dimensions.exams e on e.exam_id = tsed.exam_id 
+                        LEFT JOIN
+                        pat.student_present_event_data sped on tsed.school_id = sped.school_id 
+                        and sped.class_id = tsed.class_id and tsed.date = sped.date
+                        LEFT JOIN
+                        pat.student_absent_event_data saed on tsed.school_id = saed.school_id
+                        and tsed.class_id = saed.class_id and tsed.date = saed.date
+                        LEFT JOIN
+                            dimensions.classes AS cc ON tsed.class_id = cc.class_id
+                        LEFT JOIN
+                            dimensions.subjects AS s ON tsed.subject_id = s.subject_id
+                        LEFT JOIN 
+                           dimensions.exams e on e.exam_id = tsed.exam_id
+                        LEFT JOIN
+                            dimensions.district AS d ON tsed.district_id = d.district_id
+                        LEFT JOIN 
+                           dimensions.block b on tsed.block_id = b.block_id
+                        LEFT JOIN 
+                          dimensions.cluster c on tsed.cluster_id = c.cluster_id 
+                        LEFT JOIN
+                            dimensions.school sch ON tsed.school_id = sch.school_id
+                        JOIN
+                            (SELECT
+                                 sped.school_id,
+                                 COUNT(DISTINCT sped.date) AS total_days
+                             FROM
+                                 pat.student_present_event_data sped
+                             WHERE
+                                 sped.date BETWEEN startDate AND endDate
+                             GROUP BY
+                                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
                         where 
                         tsed.date between startDate and endDate and tsed.cluster_id = {cluster_id}
+                         
                         group by 
-                        tsed.exam_id,
-                        e.examLO,
-                        cc.class_name, 
-                        tsed.class_id, 
-                        tsed.subject_id,
-                        s.subject_name,
                         tsed.district_id,
                         d.district_name ,
                         tsed.block_id,
@@ -660,7 +680,9 @@ c.longitude
                         tsed.school_id,
                         sch.school_name,
                         sch.latitude ,
-                        sch.longitude `,
+                        sch.longitude ,
+                        days_count.total_days
+                         `,
                     },
                     "level": "school"
                 }
@@ -727,20 +749,30 @@ c.longitude
                 },
                 {
                     valuePrefix: 'Student Present: ',
-                    value: 'present_students',
+                    value: 'percentage_of_present_students',
                     valueSuffix: '\n',
                 },
                 {
                     valuePrefix: 'Student Absent: ',
-                    value: 'absent_students',
+                    value: 'percentage_of_absent_students',
                     valueSuffix: '\n',
                 },
+                
                 {
                     valuePrefix: 'Total Students: ',
                     value: 'total_students',
                     valueSuffix: '\n',
                 },
-                
+                {
+                    valuePrefix: 'Percentage Student Present: ',
+                    value: 'perc_of_present_students',
+                    valueSuffix: '%\n',
+                },
+                {
+                    valuePrefix: 'Percentage Student Absent: ',
+                    value: 'perc_of_absent_students',
+                    valueSuffix: '%\n',
+                },
             ]
 
         }
@@ -762,69 +794,83 @@ c.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT 
-                    qt.district_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    qt.date AS EX_date, 
-                    district_wise_table.district_name, 
-                    ROUND(AVG(qt.avg)) AS avg_que,
-                    ROUND((AVG(qt.avg) / AVG(total_ques_table.avg)) * 100) AS perc_QUES
-                FROM 
-                    datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = qt.question_id 
-                JOIN 
-                    dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                JOIN 
-                    datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS total_ques_table ON qt.date = total_ques_table.date AND qt.district_id = total_ques_table.district_id
-                WHERE 
-                    qt.date BETWEEN startDate AND endDate
-                GROUP BY 
-                    qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
-                ORDER BY 
-                    perc_QUES ASC;`,
+                    "table": `select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(avg(qwscmed.total_count)) as avg_ques,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id   
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT 
-                        qt.district_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        qt.date AS EX_date, 
-                        district_wise_table.district_name, 
-                        ROUND(AVG(qt.avg)) AS avg_que,
-                        ROUND((AVG(qt.avg) / AVG(total_ques_table.avg)) * 100) AS perc_QUES
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = qt.question_id 
-                    JOIN 
-                        dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                    JOIN 
-                        datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS total_ques_table ON qt.date = total_ques_table.date AND qt.district_id = total_ques_table.district_id
-                    WHERE 
-                        qt.date BETWEEN startDate AND endDate
-                    GROUP BY 
-                        qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
-                    ORDER BY 
-                        perc_QUES ASC;`,
+                        "table": `select 
+                        qwscmed.district_id,
+                        d.district_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date,
+                        ROUND(avg(qwscmed.total_count)) as avg_ques,
+                        ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id   
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id   
+                        where 
+                        qwscmed.date between startDate and endDate
+                        group by 
+                        qwscmed.district_id,
+                        d.district_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date`,
                     },
                     "level": "district"
                 }
@@ -835,103 +881,95 @@ c.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `SELECT 
-                    a.block_id,
-                    block_wise_table.block_name, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    a.ex_date, 
+                    "table": `select 
+
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
                     q.question,
-                    q.question_id, 
-                    ROUND(AVG(a.avg_ques)) AS avg_ques,
-                    ROUND((AVG(a.avg_ques) / AVG(tlt.avg)) * 100) AS perc_ques
-                FROM (
-                    SELECT 
-                        lt.block_id, 
-                        lt.class_id, 
-                        lt.subject_id, 
-                        lt.question_id, 
-                        lt.date AS ex_date, 
-                        lt.avg AS avg_ques 
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_OwU0BRoAWANGRn9__UWli AS lt 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = lt.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = lt.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = lt.question_id 
-                    JOIN 
-                        dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id 
-                    WHERE 
-                        lt.date BETWEEN startDate AND endDate
-                ) AS a 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = a.question_id 
-                JOIN 
-                    dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                JOIN 
-                    datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS tlt ON a.ex_date = tlt.date AND a.block_id = tlt.block_id  
-                WHERE 
-                    block_wise_table.district_id = {district_id} 
-                GROUP BY 
-                    a.block_id, cc.class_name, cc.class_id, q.question, q.question_id, block_wise_table.block_name, a.avg_ques, a.ex_date 
-                ORDER BY 
-                    perc_ques ASC;`,
+                    qwscmed.date,
+                    ROUND(avg(qwscmed.total_count)) as avg_ques,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.block_id = sped.block_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate
+                    and qwscmed.district_id = {district_id}
+                    group by 
+                    
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
+                    `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT 
-                        a.block_id,
-                        block_wise_table.block_name, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        a.ex_date, 
+                        "table": `select 
+
+                        qwscmed.block_id,
+                        b.block_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
                         q.question,
-                        q.question_id, 
-                        ROUND(AVG(a.avg_ques)) AS avg_ques,
-                        ROUND((AVG(a.avg_ques) / AVG(tlt.avg)) * 100) AS perc_ques
-                    FROM (
-                        SELECT 
-                            lt.block_id, 
-                            lt.class_id, 
-                            lt.subject_id, 
-                            lt.question_id, 
-                            lt.date AS ex_date, 
-                            lt.avg AS avg_ques 
-                        FROM 
-                            datasets.pat_question_wise_student_correct_marks_OwU0BRoAWANGRn9__UWli AS lt 
-                        JOIN 
-                            dimensions.classes AS cc ON cc.class_id = lt.class_id 
-                        JOIN 
-                            dimensions.subjects AS s ON s.subject_id = lt.subject_id 
-                        JOIN 
-                            dimensions.questions AS q ON q.question_id = lt.question_id 
-                        JOIN 
-                            dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id 
-                        WHERE 
-                            lt.date BETWEEN startDate AND endDate
-                    ) AS a 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = a.question_id 
-                    JOIN 
-                        dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                    JOIN 
-                        datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS tlt ON a.ex_date = tlt.date AND a.block_id = tlt.block_id  
-                    WHERE 
-                        block_wise_table.district_id = {district_id} 
-                    GROUP BY 
-                        a.block_id, cc.class_name, cc.class_id, q.question, q.question_id, block_wise_table.block_name, a.avg_ques, a.ex_date 
-                    ORDER BY 
-                        perc_ques ASC;`,
+                        qwscmed.date,
+                        ROUND(avg(qwscmed.total_count)) as avg_ques,
+                        ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.block_id = sped.block_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on qwscmed.block_id = b.block_id 
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id   
+                        where 
+                        qwscmed.date between startDate and endDate
+                        and qwscmed.district_id = {district_id}
+                        group by 
+                        
+                        qwscmed.block_id,
+                        b.block_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date
+                        `,
                     },
                     "level": "block"
                 }
@@ -942,95 +980,97 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `SELECT 
-                    a.cluster_id,
-                    s.subject_name, 
-                    s.subject_id,
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    cluster_wise_table.cluster_name, 
-                    ROUND(AVG(a.avg_ques)) AS avg_ques,
-                    ROUND((AVG(a.avg_ques) / AVG(ts.avg)) * 100) AS perc_QUES 
-                FROM (
-                    SELECT 
-                        ques_table.cluster_id, 
-                        ques_table.subject_id, 
-                        ques_table.class_id, 
-                        ques_table.question_id, 
-                        ques_table.date AS EX_date, 
-                        ques_table.avg AS avg_ques 
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_OQQxBhwMBwVCPFtoUntq AS ques_table 
-                    JOIN 
-                        datasets.pat_total_count_Daily_cluster AS total_ques_table 
-                        ON ques_table.date = total_ques_table.date AND ques_table.cluster_id = total_ques_table.cluster_id
-                ) AS a 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = a.question_id 
-                JOIN 
-                    dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                JOIN 
-                    datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                WHERE 
-                    cluster_wise_table.block_id = {block_id}
-                 
-                    AND a.EX_date BETWEEN startDate AND endDate 
-                GROUP BY 
-                    a.cluster_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, a.avg_ques, cluster_wise_table.cluster_name 
-                ORDER BY 
-                    perc_QUES ASC;`,
+                    "table": `select 
+
+                    qwscmed.cluster_id ,
+                    c.cluster_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(AVG(qwscmed.total_count)) as avg_ques,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id  
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id   
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate 
+                    and qwscmed.block_id = {block_id}
+                    group by 
+                    
+                    qwscmed.cluster_id ,
+                    c.cluster_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT 
-                        a.cluster_id,
-                        s.subject_name, 
-                        s.subject_id,
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        cluster_wise_table.cluster_name, 
-                        ROUND(AVG(a.avg_ques)) AS avg_ques,
-                        ROUND((AVG(a.avg_ques) / AVG(ts.avg)) * 100) AS perc_QUES 
-                    FROM (
-                        SELECT 
-                            ques_table.cluster_id, 
-                            ques_table.subject_id, 
-                            ques_table.class_id, 
-                            ques_table.question_id, 
-                            ques_table.date AS EX_date, 
-                            ques_table.avg AS avg_ques 
-                        FROM 
-                            datasets.pat_question_wise_student_correct_marks_OQQxBhwMBwVCPFtoUntq AS ques_table 
-                        JOIN 
-                            datasets.pat_total_count_Daily_cluster AS total_ques_table 
-                            ON ques_table.date = total_ques_table.date AND ques_table.cluster_id = total_ques_table.cluster_id
-                    ) AS a 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = a.question_id 
-                    JOIN 
-                        dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                    JOIN 
-                        datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                    WHERE 
-                        cluster_wise_table.block_id = {block_id}
-                     
-                        AND a.EX_date BETWEEN startDate AND endDate 
-                    GROUP BY 
-                        a.cluster_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, a.avg_ques, cluster_wise_table.cluster_name 
-                    ORDER BY 
-                        perc_QUES ASC;`,
+                        "table": `select 
+
+                        qwscmed.cluster_id ,
+                        c.cluster_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date,
+                        ROUND(AVG(qwscmed.total_count)) as avg_ques,
+                        ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id  
+                        left join 
+                        dimensions.block b on qwscmed.block_id = b.block_id   
+                        left join 
+                        dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id   
+                        where 
+                        qwscmed.date between startDate and endDate 
+                        and qwscmed.block_id = {block_id}
+                        group by 
+                        
+                        qwscmed.cluster_id ,
+                        c.cluster_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date`,
                     },
                     "level": "cluster"
                 }
@@ -1041,51 +1081,105 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `SELECT school.school_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    school.school_name, 
-                    ROUND(avg_ques.avg) AS avg_ques,
-                    ROUND((AVG(avg_ques.avg) / AVG(ts.avg)) * 100) AS perc_QUES 
-                    FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                    INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                    AND avg_ques.date = total_ques.date 
-                    JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                    JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                    INNER JOIN dimensions.school ON school.school_id = total_ques.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
-                    WHERE school.cluster_id = {cluster_id} 
-                    AND avg_ques.date BETWEEN startDate AND endDate 
-                    GROUP BY school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, avg_ques.avg, school.school_name;`
+                    "table": `select 
+
+                    qwscmed.school_id,
+                    sch.school_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(AVG(qwscmed.total_count)) as avg_ques,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.school_id = sped.school_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id  
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id   
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate 
+                    and qwscmed.cluster_id = {cluster_id}
+                    group by 
+                    
+                    qwscmed.school_id ,
+                    sch.school_name, 
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
+                    
+                    `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT school.school_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        school.school_name, 
-                        ROUND(avg_ques.avg) AS avg_ques,
-                        ROUND((AVG(avg_ques.avg) / AVG(ts.avg)) * 100) AS perc_QUES 
-                        FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                        INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                        AND avg_ques.date = total_ques.date 
-                        JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                        JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                        INNER JOIN dimensions.school ON school.school_id = total_ques.school_id
-                        JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
-                        WHERE school.cluster_id = {cluster_id} 
-                        AND avg_ques.date BETWEEN startDate AND endDate 
-                        GROUP BY school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, avg_ques.avg, school.school_name;`,
+                        "table": `select 
+
+                        qwscmed.school_id,
+                        sch.school_name,
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date,
+                        ROUND(AVG(qwscmed.total_count)) as avg_ques,
+                        ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.school_id = sped.school_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id  
+                        left join 
+                        dimensions.block b on qwscmed.block_id = b.block_id   
+                        left join 
+                        dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                        left join 
+                        dimensions.school sch on qwscmed.school_id = sch.school_id 
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id   
+                        where 
+                        qwscmed.date between startDate and endDate 
+                        and qwscmed.cluster_id = {cluster_id}
+                        group by 
+                        
+                        qwscmed.school_id ,
+                        sch.school_name, 
+                        qwscmed.subject_id,
+                        s.subject_name,
+                        qwscmed.class_id,
+                        cc.class_name,
+                        qwscmed.question_id,
+                        q.question,
+                        qwscmed.date
+                        
+                        `,
                     },
                     "level": "school"
                 }
@@ -1236,61 +1330,95 @@ c.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT QUES_AVG.date AS EX_date,
-                    school.school_id, 
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    school.school_name, 
-                    district_name, 
-                    block_name, 
-                    cluster_name, 
-		    COALESCE(SUM(QUES_AVG.avg), 0) AS total_students_correct_ques,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(QUES_AVG.avg) AS avg_ques,
-		    ROUND(CAST((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                    FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS QUES_AVG 
-                    JOIN dimensions.classes AS cc ON cc.class_id = QUES_AVG.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = QUES_AVG.subject_id 
-                    JOIN dimensions.questions AS q ON q.question_id = QUES_AVG.question_id 
-                    INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON QUES_AVG.school_id = total_ques.school_id 
-                    AND QUES_AVG.date = total_ques.date 
-                    INNER JOIN dimensions.school ON school.school_id = total_ques.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = QUES_AVG.school_id
-                    WHERE QUES_AVG.date BETWEEN startDate AND endDate and q.question_id='16'
-                    GROUP BY QUES_AVG.date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, QUES_AVG.avg, block_name, cluster_name;`
+                    "table": `select 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.school_id,
+                    sch.school_name,
+                    ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                    ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                    ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id  and qwscmed.school_id = sped.school_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id   
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id  
+                    left join 
+                    dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                    where 
+                    qwscmed.date between startDate and endDate   
+                    group by 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.school_id ,
+                    sch.school_name,
+                    days_count.total_days`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT QUES_AVG.date AS EX_date,
-                        school.school_id, 
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        school.school_name, 
-                        district_name, 
-                        block_name, 
-                        cluster_name, 
-                COALESCE(SUM(QUES_AVG.avg), 0) AS total_students_correct_ques,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(QUES_AVG.avg) AS avg_ques,
-                ROUND(CAST((AVG(QUES_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                        FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS QUES_AVG 
-                        JOIN dimensions.classes AS cc ON cc.class_id = QUES_AVG.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = QUES_AVG.subject_id 
-                        JOIN dimensions.questions AS q ON q.question_id = QUES_AVG.question_id 
-                        INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON QUES_AVG.school_id = total_ques.school_id 
-                        AND QUES_AVG.date = total_ques.date 
-                        INNER JOIN dimensions.school ON school.school_id = total_ques.school_id
-                        JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = QUES_AVG.school_id
-                        WHERE QUES_AVG.date BETWEEN startDate AND endDate and q.question_id='16'
-                        GROUP BY QUES_AVG.date, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, QUES_AVG.avg, block_name, cluster_name;`,
+                        "table": `select 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.school_id,
+                        sch.school_name,
+                        ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                        ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                        ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.district_id = sped.district_id  and qwscmed.school_id = sped.school_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id   
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id  
+                        left join 
+                        dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                        left join 
+                        dimensions.school sch on qwscmed.school_id = sch.school_id 
+                        JOIN
+                            (SELECT
+                                 sped.school_id,
+                                 COUNT(DISTINCT sped.date) AS total_days
+                             FROM
+                                 pat.student_present_event_data sped
+                             WHERE
+                                 sped.date BETWEEN startDate AND endDate
+                             GROUP BY
+                                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                        where 
+                        qwscmed.date between startDate and endDate   
+                        group by 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.school_id ,
+                        sch.school_name,
+                        days_count.total_days`,
                     },
                     "level": "school"
                 }
@@ -1301,66 +1429,112 @@ c.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table":`SELECT avg_ques.date,
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id, 
-                    cc.class_name,
-                    cc.class_id,
-                    q.question,
-                    q.question_id, 
-                    school.school_name,
-                    district_name,
-                    block_name, 
-                    cluster_name,
-                    COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(avg_ques.avg) AS avg_ques,
-		    ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                    FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques
-                    INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                    AND avg_ques.date = total_ques.date 
-                    INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                    JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                    JOIN dimensions.school ON school.school_id = total_ques.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                    WHERE school.district_id = {district_id} 
-                    AND avg_ques.date BETWEEN startDate AND endDate 
-                    GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
-
+                    "table":`select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.school_id,
+                    sch.school_name,
+                    ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                    ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                    ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.block_id = sped.block_id and qwscmed.school_id = sped.school_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id   
+                    left join
+                    dimensions.block b on qwscmed.block_id = b.block_id
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id  
+                    left join 
+                    dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                    where 
+                    qwscmed.date between startDate and endDate  
+                    and qwscmed.district_id ={district_id} 
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.school_id ,
+                    sch.school_name,
+                    days_count.total_days
+                    order by perc_ques desc
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT avg_ques.date,
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id, 
-                        cc.class_name,
-                        cc.class_id,
-                        q.question,
-                        q.question_id, 
-                        school.school_name,
-                        district_name,
-                        block_name, 
-                        cluster_name,
-                        COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(avg_ques.avg) AS avg_ques,
-                ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                        FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques
-                        INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                        AND avg_ques.date = total_ques.date 
-                        INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                        JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                        JOIN dimensions.school ON school.school_id = total_ques.school_id
-                        JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                        WHERE school.district_id = {district_id} 
-                        AND avg_ques.date BETWEEN startDate AND endDate 
-                        GROUP BY avg_ques.date, avg_ques.avg, school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
-    
+                        "table": `select 
+                        qwscmed.district_id,
+                        d.district_name,
+                        qwscmed.block_id,
+                        b.block_name,
+                        qwscmed.school_id,
+                        sch.school_name,
+                        ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                        ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                        ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.block_id = sped.block_id and qwscmed.school_id = sped.school_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id   
+                        left join
+                        dimensions.block b on qwscmed.block_id = b.block_id
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id  
+                        left join 
+                        dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                        left join 
+                        dimensions.school sch on qwscmed.school_id = sch.school_id 
+                        JOIN
+                            (SELECT
+                                 sped.school_id,
+                                 COUNT(DISTINCT sped.date) AS total_days
+                             FROM
+                                 pat.student_present_event_data sped
+                             WHERE
+                                 sped.date BETWEEN startDate AND endDate
+                             GROUP BY
+                                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                        where 
+                        qwscmed.date between startDate and endDate  
+                        and qwscmed.district_id ={district_id} 
+                        group by 
+                        qwscmed.district_id,
+                        d.district_name,
+                        qwscmed.block_id,
+                        b.block_name,
+                        qwscmed.school_id ,
+                        sch.school_name,
+                        days_count.total_days
+                        order by perc_ques desc
                         `,
                     },
                     "level": "school"
@@ -1372,62 +1546,126 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `SELECT school.school_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name,
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    school.school_name,
-                    district_name, 
-                    block_name,
-                    cluster_name,
-                    COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(avg_ques.avg) AS avg_ques,
-		    ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                    FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                    INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                    AND avg_ques.date = total_ques.date 
-                    INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                    JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                    JOIN dimensions.school ON school.school_id = total_ques.school_id 
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                    WHERE school.block_id = {block_id}
-                    AND avg_ques.date BETWEEN startDate AND endDate  
-                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
+                    "table": `select 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.school_id,
+                    sch.school_name,
+                    ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                    ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                    ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id  and qwscmed.school_id = sped.school_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id  
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id  
+                    left join 
+                    dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                    where 
+                    qwscmed.date between startDate and endDate  
+                    and qwscmed.block_id = {block_id} 
+                    group by 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.school_id ,
+                    sch.school_name,
+                    days_count.total_days
+                    order by perc_ques desc
+                    
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table":`SELECT school.school_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name,
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        school.school_name,
-                        district_name, 
-                        block_name,
-                        cluster_name,
-                        COALESCE(SUM(avg_ques.avg), 0) AS total_students_correct_ques,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(avg_ques.avg) AS avg_ques,
-                ROUND(CAST((AVG(avg_ques.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES 
-                        FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                        INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                        AND avg_ques.date = total_ques.date 
-                        INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                        JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                        JOIN dimensions.school ON school.school_id = total_ques.school_id 
-                        JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                        WHERE school.block_id = {block_id}
-                        AND avg_ques.date BETWEEN startDate AND endDate  
-                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name
+                        "table":`select 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.block_id ,
+                        b.block_name,
+                        qwscmed.cluster_id ,
+                        c.cluster_name ,
+                        qwscmed.school_id,
+                        sch.school_name,
+                        ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                        ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                        ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id  and qwscmed.school_id = sped.school_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id  
+                        left join 
+                        dimensions.block b on qwscmed.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id  
+                        left join 
+                        dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                        left join 
+                        dimensions.school sch on qwscmed.school_id = sch.school_id 
+                        JOIN
+                            (SELECT
+                                 sped.school_id,
+                                 COUNT(DISTINCT sped.date) AS total_days
+                             FROM
+                                 pat.student_present_event_data sped
+                             WHERE
+                                 sped.date BETWEEN startDate AND endDate
+                             GROUP BY
+                                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                        where 
+                        qwscmed.date between startDate and endDate  
+                        and qwscmed.block_id = {block_id} 
+                        group by 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.block_id ,
+                        b.block_name,
+                        qwscmed.cluster_id ,
+                        c.cluster_name ,
+                        qwscmed.school_id ,
+                        sch.school_name,
+                        days_count.total_days
+                        order by perc_ques desc
+                        
                         `,
                     },
                     "level": "school"
@@ -1439,61 +1677,123 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `SELECT school.school_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    school.school_name, 
-                    district_name, 
-                    block_name,
-                    cluster_name,
-                    COALESCE(SUM(avg_ques .avg), 0) AS total_students_correct_ques,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(avg_ques .avg) AS avg_ques,
-		    ROUND(CAST((AVG(avg_ques .avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES  
-                    FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                    INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                    AND avg_ques.date = total_ques.date 
-                    INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                    JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                    JOIN dimensions.school ON school.school_id = total_ques.school_id 
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                    WHERE school.cluster_id = {cluster_id} 
-                    AND avg_ques.date BETWEEN startDate AND endDate  
-                    GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;					`
+                    "table": `select 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.school_id,
+                    sch.school_name,
+                    ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                    ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                    ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id  and qwscmed.school_id = sped.school_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id  
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id  
+                    left join 
+                    dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                    where 
+                    qwscmed.date between startDate and endDate  
+                    and qwscmed.cluster_id = {cluster_id} 
+                    group by 
+                    qwscmed.district_id ,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.school_id ,
+                    sch.school_name,
+                    days_count.total_days
+                    order by perc_ques desc				`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT school.school_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        school.school_name, 
-                        district_name, 
-                        block_name,
-                        cluster_name,
-                        COALESCE(SUM(avg_ques .avg), 0) AS total_students_correct_ques,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(avg_ques .avg) AS avg_ques,
-                ROUND(CAST((AVG(avg_ques .avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_QUES  
-                        FROM datasets.pat_question_wise_student_correct_marks_ORY8HB4fFVYXbXBnS2Fi AS avg_ques 
-                        INNER JOIN datasets.pat_total_count_Daily_school AS total_ques ON avg_ques.school_id = total_ques.school_id 
-                        AND avg_ques.date = total_ques.date 
-                        INNER JOIN dimensions.classes AS cc ON cc.class_id = avg_ques.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = avg_ques.subject_id 
-                        JOIN dimensions.questions AS q ON q.question_id = avg_ques.question_id 
-                        JOIN dimensions.school ON school.school_id = total_ques.school_id 
-                        JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = avg_ques.school_id
-                        WHERE school.cluster_id = {cluster_id} 
-                        AND avg_ques.date BETWEEN startDate AND endDate  
-                        GROUP BY school.school_id,avg_ques.avg, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, school.school_name, district_name, block_name, cluster_name;					`,
+                        "table": `select 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.block_id ,
+                        b.block_name,
+                        qwscmed.cluster_id ,
+                        c.cluster_name ,
+                        qwscmed.school_id,
+                        sch.school_name,
+                        ROUND((SUM(qwscmed.total_count)/ days_count.total_days), 2) as total_ques,
+                        ROUND((SUM(sped.student_present) / days_count.total_days), 2) as total_student_present,
+                        ROUND(SUM(qwscmed.total_count)::numeric / SUM(sped.student_present)::numeric * 100, 2) AS perc_ques
+                        from
+                        pat.question_wise_student_correct_marks_event_data qwscmed  
+                        left join
+                        pat.student_present_event_data sped on qwscmed.cluster_id = sped.cluster_id  and qwscmed.school_id = sped.school_id 
+                        and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id and qwscmed.date = sped.date
+                        left join 
+                        dimensions.district d on qwscmed.district_id = d.district_id  
+                        left join 
+                        dimensions.block b on qwscmed.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                        left join 
+                        dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                        left join 
+                        dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                        left join 
+                        dimensions.questions q on qwscmed.question_id = q.question_id  
+                        left join 
+                        dimensions.indicators ing on qwscmed.indicator_id = ing.indicator_id 
+                        left join 
+                        dimensions.school sch on qwscmed.school_id = sch.school_id 
+                        JOIN
+                            (SELECT
+                                 sped.school_id,
+                                 COUNT(DISTINCT sped.date) AS total_days
+                             FROM
+                                 pat.student_present_event_data sped
+                             WHERE
+                                 sped.date BETWEEN startDate AND endDate
+                             GROUP BY
+                                 sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                        where 
+                        qwscmed.date between startDate and endDate  
+                        and qwscmed.cluster_id = {cluster_id} 
+                        group by 
+                        qwscmed.district_id ,
+                        d.district_name,
+                        qwscmed.block_id ,
+                        b.block_name,
+                        qwscmed.cluster_id ,
+                        c.cluster_name ,
+                        qwscmed.school_id ,
+                        sch.school_name,
+                        days_count.total_days
+                        order by perc_ques desc					`,
                     },
                     "level": "school"
                 }
@@ -1533,13 +1833,13 @@ c.longitude
                         class: "text-center"
                     },
                     {
-                        name: "Total Students",
-                        property: "total_students",
+                        name: "total question",
+                        property: "total_ques",
                         class: "text-center"
                     },
                     {
-                        name: "Total students correct the Question",
-                        property: "total_students_correct_ques",
+                        name: " Total Student Present",
+                        property: "total_student_present",
                         class: "text-center"
                     },
                     {
@@ -1587,71 +1887,89 @@ c.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_QUES)) AS perc_QUES
-                    from (SELECT 
-                    qt.district_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    qt.date AS EX_date, 
-                    district_wise_table.district_name, 
-                    ROUND(AVG(qt.avg)) AS avg_que,
-                    ROUND((AVG(qt.avg) / AVG(ts.avg)) * 100) AS perc_QUES
-                FROM 
-                    datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = qt.question_id 
-                JOIN 
-                    dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                JOIN 
-                    datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON qt.date = ts.date AND qt.district_id = ts.district_id
-                WHERE 
-                    qt.date BETWEEN startDate AND endDate 
-                GROUP BY 
-                    qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
+                    "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                    from (select 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date,
+                ROUND(avg(qwscmed.total_count)) as avg_ques,
+                ROUND(avg(sped.student_present)) as avg_students,
+                ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                from
+                pat.question_wise_student_correct_marks_event_data qwscmed  
+                left join
+                pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                left join 
+                dimensions.district d on qwscmed.district_id = d.district_id   
+                left join 
+                dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                left join 
+                dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                left join 
+                dimensions.questions q on qwscmed.question_id = q.question_id   
+                where 
+                qwscmed.date between startDate and endDate
+                group by 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date
                 ) as avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_QUES)) AS perc_QUES
-                        from (SELECT 
-                        qt.district_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        qt.date AS EX_date, 
-                        district_wise_table.district_name, 
-                        ROUND(AVG(qt.avg)) AS avg_que,
-                        ROUND((AVG(qt.avg) / AVG(ts.avg)) * 100) AS perc_QUES
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = qt.question_id 
-                    JOIN 
-                        dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                    JOIN 
-                        datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON qt.date = ts.date AND qt.district_id = ts.district_id
-                    WHERE 
-                        qt.date BETWEEN startDate AND endDate 
-                    GROUP BY 
-                        qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
+                        "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                        from (select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(avg(qwscmed.total_count)) as avg_ques,
+                    ROUND(avg(sped.student_present)) as avg_students,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id   
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
                     ) as avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                     },
@@ -1664,71 +1982,103 @@ c.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_QUES)) AS perc_QUES
-                    from (SELECT 
-                    qt.district_id,
-                    s.subject_name, 
-                    s.subject_id, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    qt.date AS EX_date, 
-                    district_wise_table.district_name, 
-                    ROUND(AVG(qt.avg)) AS avg_que,
-                    ROUND((AVG(qt.avg) / AVG(ts.avg)) * 100) AS perc_QUES
-                FROM 
-                    datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = qt.question_id 
-                JOIN 
-                    dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                JOIN 
-                    datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON qt.date = ts.date AND qt.district_id = ts.district_id
-                WHERE 
-                    qt.date BETWEEN startDate AND endDate  AND qt.district_id ={district_id}
-                GROUP BY 
-                    qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
+                    "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                    from (select 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id ,
+                b.block_name,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date,
+                ROUND(avg(qwscmed.total_count)) as avg_ques,
+                ROUND(avg(sped.student_present)) as avg_students,
+                ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                from
+                pat.question_wise_student_correct_marks_event_data qwscmed  
+                left join
+                pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                left join 
+                dimensions.district d on qwscmed.district_id = d.district_id 
+                left join 
+                dimensions.block b on qwscmed.block_id = b.block_id 
+                left join 
+                dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                left join 
+                dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                left join 
+                dimensions.questions q on qwscmed.question_id = q.question_id   
+                where 
+                qwscmed.date between startDate and endDate
+                and qwscmed.district_id = {district_id}
+                group by 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id ,
+                b.block_name ,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date
                 ) as avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_QUES)) AS perc_QUES
-                        from (SELECT 
-                        qt.district_id,
-                        s.subject_name, 
-                        s.subject_id, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        qt.date AS EX_date, 
-                        district_wise_table.district_name, 
-                        ROUND(AVG(qt.avg)) AS avg_que,
-                        ROUND((AVG(qt.avg) / AVG(ts.avg)) * 100) AS perc_QUES
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_MQM2AhwUAw8XaQpDXWJw AS qt 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = qt.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = qt.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = qt.question_id 
-                    JOIN 
-                        dimensions.district AS district_wise_table ON district_wise_table.district_id = qt.district_id
-                    JOIN 
-                        datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON qt.date = ts.date AND qt.district_id = ts.district_id
-                    WHERE 
-                        qt.date BETWEEN startDate AND endDate  AND qt.district_id ={district_id}
-                    GROUP BY 
-                        qt.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, qt.date, district_wise_table.district_name 
+                        "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                        from (select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(avg(qwscmed.total_count)) as avg_ques,
+                    ROUND(avg(sped.student_present)) as avg_students,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate
+                    and qwscmed.district_id = {district_id}
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id ,
+                    b.block_name ,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
                     ) as avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_block as t left join ingestion.dimension_master as m on t.block_id = m.block_id left join ingestion.dimension_block as b on t.block_id = b.block_id left join ingestion.dimension_district as d on m.district_id = d.district_id where (date between startDate and endDate) and m.district_id={district_id}"
                     },
@@ -1741,106 +2091,116 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_ques)) AS perc_ques
-                    from (SELECT 
-                    a.block_id,
-                    block_wise_table.block_name, 
-                    cc.class_name, 
-                    cc.class_id, 
-                    a.ex_date, 
-                    q.question,
-                    q.question_id, 
-                    ROUND(AVG(a.avg_ques)) AS avg_ques,
-                    ROUND((AVG(a.avg_ques) / AVG(tlt.avg)) * 100) AS perc_ques
-                FROM (
-                    SELECT 
-                        lt.block_id, 
-                        lt.class_id, 
-                        lt.subject_id, 
-                        lt.question_id, 
-                        lt.date AS ex_date, 
-                        lt.avg AS avg_ques 
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_OwU0BRoAWANGRn9__UWli AS lt 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = lt.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = lt.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = lt.question_id 
-                    JOIN 
-                        dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id 
-                    WHERE 
-                        lt.date BETWEEN startDate AND endDate
-                ) AS a 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = a.question_id 
-                JOIN 
-                    dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                JOIN 
-                    datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS tlt ON a.ex_date = tlt.date AND a.block_id = tlt.block_id  
-                WHERE 
-                    block_wise_table.block_id = {block_id}  
-                GROUP BY 
-                    a.block_id, cc.class_name, cc.class_id, q.question, q.question_id, block_wise_table.block_name, a.avg_ques, a.ex_date 
-                ) AS avg_query;`,
+                    "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                    from (select 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id,
+                b.block_name,
+                qwscmed.cluster_id ,
+                c.cluster_name ,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date,
+                ROUND(avg(qwscmed.total_count)) as avg_ques,
+                ROUND(avg(sped.student_present)) as avg_students,
+                ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                from
+                pat.question_wise_student_correct_marks_event_data qwscmed  
+                left join
+                pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                left join 
+                dimensions.district d on qwscmed.district_id = d.district_id 
+                left join 
+                dimensions.block b on qwscmed.block_id = b.block_id 
+                left join 
+                dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                left join 
+                dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                left join 
+                dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                left join 
+                dimensions.questions q on qwscmed.question_id = q.question_id   
+                where 
+                qwscmed.date between startDate and endDate
+                and qwscmed.block_id = {block_id}
+                group by 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id,
+                b.block_name,
+                qwscmed.cluster_id ,
+                c.cluster_name ,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date
+                ) as avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id}"
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_ques)) AS perc_ques
-                        from (SELECT 
-                        a.block_id,
-                        block_wise_table.block_name, 
-                        cc.class_name, 
-                        cc.class_id, 
-                        a.ex_date, 
-                        q.question,
-                        q.question_id, 
-                        ROUND(AVG(a.avg_ques)) AS avg_ques,
-                        ROUND((AVG(a.avg_ques) / AVG(tlt.avg)) * 100) AS perc_ques
-                    FROM (
-                        SELECT 
-                            lt.block_id, 
-                            lt.class_id, 
-                            lt.subject_id, 
-                            lt.question_id, 
-                            lt.date AS ex_date, 
-                            lt.avg AS avg_ques 
-                        FROM 
-                            datasets.pat_question_wise_student_correct_marks_OwU0BRoAWANGRn9__UWli AS lt 
-                        JOIN 
-                            dimensions.classes AS cc ON cc.class_id = lt.class_id 
-                        JOIN 
-                            dimensions.subjects AS s ON s.subject_id = lt.subject_id 
-                        JOIN 
-                            dimensions.questions AS q ON q.question_id = lt.question_id 
-                        JOIN 
-                            dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id 
-                        WHERE 
-                            lt.date BETWEEN startDate AND endDate
-                    ) AS a 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = a.question_id 
-                    JOIN 
-                        dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                    JOIN 
-                        datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS tlt ON a.ex_date = tlt.date AND a.block_id = tlt.block_id  
-                    WHERE 
-                        block_wise_table.block_id = {block_id}  
-                    GROUP BY 
-                        a.block_id, cc.class_name, cc.class_id, q.question, q.question_id, block_wise_table.block_name, a.avg_ques, a.ex_date 
-                    ) AS avg_query;`,
+                        "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                        from (select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(avg(qwscmed.total_count)) as avg_ques,
+                    ROUND(avg(sped.student_present)) as avg_students,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate
+                    and qwscmed.block_id = {block_id}
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name ,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
+                    ) as avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_cluster as t left join ingestion.dimension_master as m on t.cluster_id = m.cluster_id where (date between startDate and endDate) and m.block_id={block_id}"
                     },
                     "level": "cluster"
@@ -1852,96 +2212,128 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_QUES)) AS perc_QUES
-                    from (SELECT 
-                    a.cluster_id,
-                    s.subject_name, 
-                    s.subject_id,
-                    cc.class_name, 
-                    cc.class_id, 
-                    q.question, 
-                    q.question_id, 
-                    cluster_wise_table.cluster_name, 
-                    ROUND(AVG(a.avg_ques)) AS avg_ques,
-                    ROUND((AVG(a.avg_ques) / AVG(ts.avg)) * 100) AS perc_QUES 
-                FROM (
-                    SELECT 
-                        ques_table.cluster_id, 
-                        ques_table.subject_id, 
-                        ques_table.class_id, 
-                        ques_table.question_id, 
-                        ques_table.date AS EX_date, 
-                        ques_table.avg AS avg_ques 
-                    FROM 
-                        datasets.pat_question_wise_student_correct_marks_OQQxBhwMBwVCPFtoUntq AS ques_table 
-                    JOIN 
-                        datasets.pat_total_count_Daily_cluster AS total_ques_table 
-                        ON ques_table.date = total_ques_table.date AND ques_table.cluster_id = total_ques_table.cluster_id
-                ) AS a 
-                JOIN 
-                    dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN 
-                    dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN 
-                    dimensions.questions AS q ON q.question_id = a.question_id 
-                JOIN 
-                    dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                JOIN 
-                    datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                WHERE 
-                    cluster_wise_table.cluster_id = {cluster_id}  
-                    AND a.EX_date BETWEEN startDate AND endDate 
-                GROUP BY 
-                    a.cluster_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, a.avg_ques, cluster_wise_table.cluster_name 
-                ) AS avg_query;`,
+                    "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                    from (select 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id,
+                b.block_name,
+                qwscmed.cluster_id ,
+                c.cluster_name,
+                qwscmed.school_id ,
+                sch.school_name ,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date,
+                ROUND(sum(qwscmed.total_count)) as tot_ques,
+                ROUND(SUM(sped.student_present)) as tot_students,
+                ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                from
+                pat.question_wise_student_correct_marks_event_data qwscmed  
+                left join
+                pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                left join 
+                dimensions.district d on qwscmed.district_id = d.district_id  
+                left join 
+                dimensions.block b on qwscmed.block_id = b.block_id   
+                left join 
+                dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                left join 
+                dimensions.school sch on qwscmed.school_id = sch.school_id 
+                left join 
+                dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                left join 
+                dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                left join 
+                dimensions.questions q on qwscmed.question_id = q.question_id   
+                where 
+                qwscmed.date between startDate and endDate 
+                and qwscmed.cluster_id = {cluster_id}
+                group by 
+                qwscmed.district_id,
+                d.district_name,
+                qwscmed.block_id,
+                b.block_name,
+                qwscmed.cluster_id ,
+                c.cluster_name,
+                qwscmed.school_id ,
+                sch.school_name,
+                qwscmed.subject_id,
+                s.subject_name,
+                qwscmed.class_id,
+                cc.class_name,
+                qwscmed.question_id,
+                q.question,
+                qwscmed.date
+                ) as avg_query;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id}",
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_QUES)) AS perc_QUES
-                        from (SELECT 
-                        a.cluster_id,
-                        s.subject_name, 
-                        s.subject_id,
-                        cc.class_name, 
-                        cc.class_id, 
-                        q.question, 
-                        q.question_id, 
-                        cluster_wise_table.cluster_name, 
-                        ROUND(AVG(a.avg_ques)) AS avg_ques,
-                        ROUND((AVG(a.avg_ques) / AVG(ts.avg)) * 100) AS perc_QUES 
-                    FROM (
-                        SELECT 
-                            ques_table.cluster_id, 
-                            ques_table.subject_id, 
-                            ques_table.class_id, 
-                            ques_table.question_id, 
-                            ques_table.date AS EX_date, 
-                            ques_table.avg AS avg_ques 
-                        FROM 
-                            datasets.pat_question_wise_student_correct_marks_OQQxBhwMBwVCPFtoUntq AS ques_table 
-                        JOIN 
-                            datasets.pat_total_count_Daily_cluster AS total_ques_table 
-                            ON ques_table.date = total_ques_table.date AND ques_table.cluster_id = total_ques_table.cluster_id
-                    ) AS a 
-                    JOIN 
-                        dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN 
-                        dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN 
-                        dimensions.questions AS q ON q.question_id = a.question_id 
-                    JOIN 
-                        dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                    JOIN 
-                        datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                    WHERE 
-                        cluster_wise_table.cluster_id = {cluster_id}  
-                        AND a.EX_date BETWEEN startDate AND endDate 
-                    GROUP BY 
-                        a.cluster_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, q.question, q.question_id, a.avg_ques, cluster_wise_table.cluster_name 
-                    ) AS avg_query;`,
+                        "bigNumber": `select ROUND(AVG(perc_QUES)) AS perc_QUES
+                        from (select 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name,
+                    qwscmed.school_id ,
+                    sch.school_name ,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date,
+                    ROUND(sum(qwscmed.total_count)) as tot_ques,
+                    ROUND(SUM(sped.student_present)) as tot_students,
+                    ROUND((avg(qwscmed.total_count)/avg(sped.student_present)*100)) as perc_QUES
+                    from
+                    pat.question_wise_student_correct_marks_event_data qwscmed  
+                    left join
+                    pat.student_present_event_data sped on qwscmed.district_id = sped.district_id 
+                    and qwscmed.class_id = sped.class_id and qwscmed.subject_id = qwscmed.subject_id 
+                    left join 
+                    dimensions.district d on qwscmed.district_id = d.district_id  
+                    left join 
+                    dimensions.block b on qwscmed.block_id = b.block_id   
+                    left join 
+                    dimensions.cluster c on qwscmed.cluster_id = c.cluster_id 
+                    left join 
+                    dimensions.school sch on qwscmed.school_id = sch.school_id 
+                    left join 
+                    dimensions.classes cc on qwscmed.class_id = cc.class_id 
+                    left join 
+                    dimensions.subjects s on qwscmed.subject_id = s.subject_id   
+                    left join 
+                    dimensions.questions q on qwscmed.question_id = q.question_id   
+                    where 
+                    qwscmed.date between startDate and endDate 
+                    and qwscmed.cluster_id = {cluster_id}
+                    group by 
+                    qwscmed.district_id,
+                    d.district_name,
+                    qwscmed.block_id,
+                    b.block_name,
+                    qwscmed.cluster_id ,
+                    c.cluster_name,
+                    qwscmed.school_id ,
+                    sch.school_name,
+                    qwscmed.subject_id,
+                    s.subject_name,
+                    qwscmed.class_id,
+                    cc.class_name,
+                    qwscmed.question_id,
+                    q.question,
+                    qwscmed.date
+                    ) as avg_query;`,
                         // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_school as t left join ingestion.dimension_master as m on t.school_id = m.school_id where (date between startDate and endDate) and m.cluster_id={cluster_id}",
                     },
                     "level": "school"
@@ -2116,11 +2508,69 @@ c.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": "SELECT lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(AVG(lo_table.avg)) AS avg_lo, ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id WHERE lo_table.date BETWEEN startDate AND endDate GROUP BY lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name ORDER BY perc_lo ASC;                    ",
+                    "table": ` select 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator ,
+                    ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                    ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   where 
+                    lwed.date between startDate and endDate
+                    group by 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator `,
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name, ROUND(AVG(lo_table.avg)) AS avg_lo, ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo FROM datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id WHERE lo_table.date BETWEEN startDate AND endDate GROUP BY lo_table.district_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, district_wise_table.district_name ORDER BY perc_lo ASC;                        ",
+                        "table": ` select 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator ,
+                        ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                        ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       where 
+                        lwed.date between startDate and endDate
+                        group by 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator `,
                     },
                     "level": "district"
                 }
@@ -2131,11 +2581,75 @@ c.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(AVG(a.avg_lo)) AS avg_lo, ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id ORDER BY perc_lo ASC;                    ",
+                    "table": `select 
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator ,
+                    ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                    ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   where 
+                    lwed.date between startDate and endDate
+                    and lwed.district_id = {district_id}
+                    group by 
+                     lwed.block_id ,
+                    b.block_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator
+                    `,
                 },
                 "actions": {
                     "queries": {
-                        "table": "SELECT a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id, ROUND(AVG(a.avg_lo)) AS avg_lo, ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo FROM (SELECT lt.block_id, lt.class_id, lt.subject_id, lt.indicator_id, lt.date AS ex_date, lt.avg AS avg_lo FROM datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id WHERE lt.date BETWEEN startDate AND endDate) AS a JOIN dimensions.classes AS cc ON cc.class_id = a.class_id JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id WHERE block_wise_table.district_id = {district_id} GROUP BY a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id ORDER BY perc_lo ASC;                        ",
+                        "table": `select 
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator ,
+                        ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                        ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       where 
+                        lwed.date between startDate and endDate
+                        and lwed.district_id = {district_id}
+                        group by 
+                         lwed.block_id ,
+                        b.block_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator
+                        `,
                     },
                     "level": "block"
                 }
@@ -2146,111 +2660,75 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    a.cluster_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    cluster_wise_table.cluster_name, 
-                    ROUND(a.avg_lo) AS avg_lo,
-                    ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
-                FROM
-                    (
-                        SELECT
-                            lo_table.cluster_id,
-                            lo_table.subject_id,
-                            lo_table.class_id,
-                            lo_table.indicator_id,
-                            lo_table.date AS EX_date,
-                            lo_table.avg AS avg_lo,
-                            total_lo_table.sum AS total_lo
-                        FROM
-                            datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
-                        JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
-                            AND lo_table.cluster_id = total_lo_table.cluster_id
-                    JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id  
-                        WHERE
-                            lo_table.date BETWEEN startDate AND endDate 
-                    ) AS a
-                JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
-                JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                     where  block_id = {block_id}
-                GROUP BY
-                    a.cluster_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    cluster_wise_table.cluster_name,
-                    a.avg_lo,
-                    ts.avg
-                ORDER BY
-                    perc_lo ASC;`,
+                    "table": ` select 
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator ,
+                    ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                    ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                   where 
+                    lwed.date between startDate and endDate
+                    and lwed.block_id = {block_id}
+                    group by 
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        a.cluster_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        cluster_wise_table.cluster_name, 
-                        ROUND(a.avg_lo) AS avg_lo,
-                        ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
-                    FROM
-                        (
-                            SELECT
-                                lo_table.cluster_id,
-                                lo_table.subject_id,
-                                lo_table.class_id,
-                                lo_table.indicator_id,
-                                lo_table.date AS EX_date,
-                                lo_table.avg AS avg_lo,
-                                total_lo_table.sum AS total_lo
-                            FROM
-                                datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
-                            JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
-                                AND lo_table.cluster_id = total_lo_table.cluster_id
-                        JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
-                        JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
-                        JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                        JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id  
-                            WHERE
-                                lo_table.date BETWEEN startDate AND endDate 
-                        ) AS a
-                    JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
-                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                    JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id 
-                         where  block_id = {block_id}
-                    GROUP BY
-                        a.cluster_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        cluster_wise_table.cluster_name,
-                        a.avg_lo,
-                        ts.avg
-                    ORDER BY
-                        perc_lo ASC;`,
+                        "table": ` select 
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator ,
+                        ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                        ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                       where 
+                        lwed.date between startDate and endDate
+                        and lwed.block_id = {block_id}
+                        group by 
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator`,
                     },
                     "level": "cluster"
                 }
@@ -2261,59 +2739,81 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    school.school_name, 
-                    ROUND(AVG(avg_lo.avg)) AS avg_lo,
-                    ROUND((AVG(avg_lo.avg) / ts.avg) * 100) AS perc_lo
-                FROM
-                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS avg_lo
-                INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON avg_lo.school_id = total_lo.school_id AND avg_lo.date = total_lo.date
-                JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id 
-                JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id 
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id 
-                INNER JOIN dimensions.school ON school.school_id = total_lo.school_id 
-                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
-                WHERE  
-                    school.cluster_id = {cluster_id} AND avg_lo.date BETWEEN startDate AND endDate
-                GROUP BY  
-                    school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name,ts.avg
-                ORDER BY  
-                    perc_lo;`
+                    "table": `select 
+                    lwed.school_id ,
+                    sch.school_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator ,
+                    ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                    ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date AND lwed.school_id = sped.school_id
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                   LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                   where 
+                    lwed.date between startDate and endDate
+                    and lwed.cluster_id = {cluster_id}
+                    group by 
+                    lwed.school_id ,
+                    sch.school_name,
+                    lwed.class_id,
+                    cc.class_name ,
+                    lwed.subject_id,
+                    s.subject_name ,
+                    lwed.indicator_id ,
+                    ing.indicator
+                    
+                   `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        school.school_name, 
-                        ROUND(AVG(avg_lo.avg)) AS avg_lo,
-                        ROUND((AVG(avg_lo.avg) / ts.avg) * 100) AS perc_lo
-                    FROM
-                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS avg_lo
-                    INNER JOIN datasets.pat_total_lo_Daily_school AS total_lo ON avg_lo.school_id = total_lo.school_id AND avg_lo.date = total_lo.date
-                    JOIN dimensions.classes AS cc ON cc.class_id = avg_lo.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = avg_lo.subject_id 
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = avg_lo.indicator_id 
-                    INNER JOIN dimensions.school ON school.school_id = total_lo.school_id 
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = school.school_id
-                    WHERE  
-                        school.cluster_id = {cluster_id} AND avg_lo.date BETWEEN startDate AND endDate
-                    GROUP BY  
-                        school.school_id, s.subject_name, s.subject_id, cc.class_name, cc.class_id, ing.indicator, ing.indicator_id, school.school_name,ts.avg
-                    ORDER BY  
-                        perc_lo;`,
+                        "table": `select 
+                        lwed.school_id ,
+                        sch.school_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator ,
+                        ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                        ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date AND lwed.school_id = sped.school_id
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                       LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                       where 
+                        lwed.date between startDate and endDate
+                        and lwed.cluster_id = {cluster_id}
+                        group by 
+                        lwed.school_id ,
+                        sch.school_name,
+                        lwed.class_id,
+                        cc.class_name ,
+                        lwed.subject_id,
+                        s.subject_name ,
+                        lwed.indicator_id ,
+                        ing.indicator
+                        
+                       `,
                     },
                     "level": "school"
                 }
@@ -2464,79 +2964,75 @@ c.longitude
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
-                    ROUND(AVG(perc_lo)) AS perc_lo
-                    from (SELECT
-                    lo_table.district_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    district_wise_table.district_name,
-                    ROUND(AVG(lo_table.avg)) AS avg_lo,
-                    ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
-                FROM
-                    datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
-                JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
-                JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
-                JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
-                WHERE
-                    lo_table.date BETWEEN startDate AND endDate
-                    
-                GROUP BY
-                    lo_table.district_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    district_wise_table.district_name
-                ORDER BY
-                    perc_lo ASC) as avg_query;`
+                    ROUND(AVG(perc_of_total_students)) AS perc_lo
+                    from ( select 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator ,
+                 ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                 ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                 from
+                 pat.lo_wise_event_data lwed 
+                 left join 
+                 pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                where 
+                 lwed.date between startDate and endDate 
+                 group by 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator 
+                 ) as avg_query;`
 
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
-                        ROUND(AVG(perc_lo)) AS perc_lo
-                        from (SELECT
-                        lo_table.district_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        district_wise_table.district_name,
-                        ROUND(AVG(lo_table.avg)) AS avg_lo,
-                        ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
-                    FROM
-                        datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
-                    JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                    JOIN dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
-                    JOIN datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
-                    JOIN datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
-                    WHERE
-                        lo_table.date BETWEEN startDate AND endDate
-                        
-                    GROUP BY
-                        lo_table.district_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        district_wise_table.district_name
-                    ORDER BY
-                        perc_lo ASC) as avg_query;`
+                        ROUND(AVG(perc_of_total_students)) AS perc_lo
+                        from ( select 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator ,
+                     ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                     ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                     from
+                     pat.lo_wise_event_data lwed 
+                     left join 
+                     pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                    LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                    LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                    LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                    LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                    where 
+                     lwed.date between startDate and endDate 
+                     group by 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator 
+                     ) as avg_query;`
                     },
                     "level": "district"
                 }
@@ -2548,94 +3044,88 @@ c.longitude
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "bigNumber": `SELECT 
-                    ROUND(AVG(perc_lo)) AS perc_lo
-                FROM (
-                    SELECT
-                        lo_table.district_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        district_wise_table.district_name,
-                        ROUND(AVG(lo_table.avg)) AS avg_lo,
-                        ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
-                    FROM
-                        datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
-                    JOIN
-                        dimensions.classes AS cc ON cc.class_id = lo_table.class_id
-                    JOIN
-                        dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
-                    JOIN
-                        dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                    JOIN
-                        dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
-                    JOIN
-                        datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
-                    JOIN
-                        datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
-                    WHERE
-                        lo_table.date BETWEEN startDate AND endDate
-                        AND lo_table.district_id = {district_id} 
-                    GROUP BY
-                        lo_table.district_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        district_wise_table.district_name
-                    ORDER BY
-                        perc_lo ASC
-                ) AS avg_query;`
+                    ROUND(AVG(perc_of_total_students)) AS perc_lo
+                    from ( select 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.block_id ,
+                 b.block_name,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator ,
+                 ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                 ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                 from
+                 pat.lo_wise_event_data lwed 
+                 left join 
+                 pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                where 
+                 lwed.date between startDate and endDate
+                 and lwed.district_id = {district_id}
+                 group by 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.block_id ,
+                 b.block_name ,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator 
+                 ) as avg_query;
+                `
                 },
                 "actions": {
                     "queries": {
                         "bigNumber": `SELECT 
-                        ROUND(AVG(perc_lo)) AS perc_lo
-                    FROM (
-                        SELECT
-                            lo_table.district_id,
-                            s.subject_name,
-                            s.subject_id,
-                            cc.class_name,
-                            cc.class_id,
-                            ing.indicator,
-                            ing.indicator_id,
-                            district_wise_table.district_name,
-                            ROUND(AVG(lo_table.avg)) AS avg_lo,
-                            ROUND((AVG(lo_table.avg) / AVG(ts.avg)) * 100) AS perc_lo
-                        FROM
-                            datasets.pat_lo_wise_FwojOwUGMAMDFhNvO08e AS lo_table
-                        JOIN
-                            dimensions.classes AS cc ON cc.class_id = lo_table.class_id
-                        JOIN
-                            dimensions.subjects AS s ON s.subject_id = lo_table.subject_id
-                        JOIN
-                            dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id
-                        JOIN
-                            dimensions.district AS district_wise_table ON district_wise_table.district_id = lo_table.district_id
-                        JOIN
-                            datasets.pat_total_lo_Daily_district AS total_lo_table ON lo_table.date = total_lo_table.date
-                        JOIN
-                            datasets.pat_total_student_GAJvC0kCEwo7Oyp0dHRm AS ts ON lo_table.district_id = ts.district_id 
-                        WHERE
-                            lo_table.date BETWEEN startDate AND endDate
-                            AND lo_table.district_id = {district_id} 
-                        GROUP BY
-                            lo_table.district_id,
-                            s.subject_name,
-                            s.subject_id,
-                            cc.class_name,
-                            cc.class_id,
-                            ing.indicator,
-                            ing.indicator_id,
-                            district_wise_table.district_name
-                        ORDER BY
-                            perc_lo ASC
-                    ) AS avg_query;`
+                        ROUND(AVG(perc_of_total_students)) AS perc_lo
+                        from ( select 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.block_id ,
+                     b.block_name,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator ,
+                     ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                     ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                     from
+                     pat.lo_wise_event_data lwed 
+                     left join 
+                     pat.student_present_event_data sped on lwed.date = sped.date AND lwed.district_id = sped.district_id
+                    LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                    LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                    LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                    LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                    LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                    where 
+                     lwed.date between startDate and endDate
+                     and lwed.district_id = {district_id}
+                     group by 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.block_id ,
+                     b.block_name ,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator 
+                     ) as avg_query;
+                    `
                     },
                     "level": "block"
                 }
@@ -2647,90 +3137,101 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
-                    from (SELECT
-                    a.block_id,
-                    block_wise_table.block_name,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    a.ex_date,
-                    ing.indicator_id,
-                    ROUND(AVG(a.avg_lo)) AS avg_LO,
-                    ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo
-                FROM
-                    (
-                        SELECT
-                            lt.block_id,
-                            lt.class_id,
-                            lt.subject_id,
-                            lt.indicator_id,
-                            lt.date AS ex_date,
-                            lt.avg AS avg_lo
-                        FROM
-                            datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt
-                        JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id
-                        JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id
-                        JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id
-                        JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id
-                        WHERE
-                           lt.date BETWEEN startDate AND endDate  
-                        AND block_wise_table.block_id = {block_id}
-                    ) AS a
-                JOIN dimensions.classes AS cc ON cc.class_id = a.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id
-                JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id
-                GROUP BY
-                    a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id
-                ORDER BY
-                    perc_lo ASC) as avg_query;
+                    "bigNumber": `SELECT 
+                    ROUND(AVG(perc_of_total_students)) AS perc_lo
+                    from ( select 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.block_id ,
+                 b.block_name,
+                 lwed.cluster_id ,
+                 c.cluster_name,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator ,
+                 ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                 ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                 from
+                 pat.lo_wise_event_data lwed 
+                 left join 
+                 pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                where 
+                 lwed.date between startDate and endDate 
+                 and lwed.block_id = {block_id}
+                 group by 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.cluster_id ,
+                 c.cluster_name,
+                 lwed.block_id ,
+                 b.block_name ,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator 
+                 ) as avg_query;
+                 
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
-                        from (SELECT
-                        a.block_id,
-                        block_wise_table.block_name,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        a.ex_date,
-                        ing.indicator_id,
-                        ROUND(AVG(a.avg_lo)) AS avg_LO,
-                        ROUND((AVG(a.avg_lo) / AVG(ts.avg)) * 100) AS perc_lo
-                    FROM
-                        (
-                            SELECT
-                                lt.block_id,
-                                lt.class_id,
-                                lt.subject_id,
-                                lt.indicator_id,
-                                lt.date AS ex_date,
-                                lt.avg AS avg_lo
-                            FROM
-                                datasets.pat_lo_wise_HBgxJgYDOh5ZDEsoT3Nh AS lt
-                            JOIN dimensions.classes AS cc ON cc.class_id = lt.class_id
-                            JOIN dimensions.subjects AS s ON s.subject_id = lt.subject_id
-                            JOIN dimensions.indicators AS ing ON ing.indicator_id = lt.indicator_id
-                            JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = lt.block_id
-                            WHERE
-                               lt.date BETWEEN startDate AND endDate  
-                            AND block_wise_table.block_id = {block_id}
-                        ) AS a
-                    JOIN dimensions.classes AS cc ON cc.class_id = a.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id
-                    JOIN dimensions.block AS block_wise_table ON block_wise_table.block_id = a.block_id
-                    JOIN datasets.pat_total_student_DkkvEAcOGChASH1xc2wh AS ts ON ts.block_id = a.block_id
-                    GROUP BY
-                        a.block_id, block_wise_table.block_name, cc.class_name, cc.class_id, ing.indicator, a.ex_date, ing.indicator_id
-                    ORDER BY
-                        perc_lo ASC) as avg_query;
-                        `,
+                        "bigNumber": `SELECT 
+                        ROUND(AVG(perc_of_total_students)) AS perc_lo
+                        from ( select 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.block_id ,
+                     b.block_name,
+                     lwed.cluster_id ,
+                     c.cluster_name,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator ,
+                     ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                     ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                     from
+                     pat.lo_wise_event_data lwed 
+                     left join 
+                     pat.student_present_event_data sped on lwed.date = sped.date AND lwed.block_id = sped.block_id
+                    LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                    LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                    LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                    LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                    LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                    LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                    where 
+                     lwed.date between startDate and endDate 
+                     and lwed.block_id = {block_id}
+                     group by 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.cluster_id ,
+                     c.cluster_name,
+                     lwed.block_id ,
+                     b.block_name ,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator 
+                     ) as avg_query;
+                     `,
                        
                     },
                     "level": "cluster"
@@ -2742,114 +3243,116 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
-                    from (SELECT
-                    a.cluster_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    cluster_wise_table.cluster_name, 
-                    ROUND(a.avg_lo) AS avg_lo,
-                    ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
-                FROM
-                    (
-                        SELECT
-                            lo_table.cluster_id,
-                            lo_table.subject_id,
-                            lo_table.class_id,
-                            lo_table.indicator_id,
-                            lo_table.date AS EX_date,
-                            lo_table.avg AS avg_lo,
-                            total_lo_table.sum AS total_lo
-                        FROM
-                            datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
-                        JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
-                            AND lo_table.cluster_id = total_lo_table.cluster_id
-                            JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
-                JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id 
-                JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id 
-                                WHERE
-                            lo_table.date BETWEEN startDate AND endDate 
-                    ) AS a
-                JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
-                JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
-                JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id
-                    where  cluster_wise_table.cluster_id = {cluster_id}
-                GROUP BY
-                    a.cluster_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    cluster_wise_table.cluster_name,
-                    a.avg_lo,
-                    ts.avg
-                ORDER BY
-                    perc_lo ASC) as avg_query;`,
+                    "bigNumber": `SELECT 
+                    ROUND(AVG(perc_of_total_students)) AS perc_lo
+                    from ( select 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.block_id ,
+                 b.block_name,
+                 lwed.cluster_id ,
+                 c.cluster_name,
+                 lwed.school_id ,
+                 sch.school_name,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator ,
+                 ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                 ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                 from
+                 pat.lo_wise_event_data lwed 
+                 left join 
+                 pat.student_present_event_data sped on lwed.date = sped.date AND lwed.cluster_id = sped.cluster_id
+                LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                where 
+                 lwed.date between startDate and endDate 
+                 and lwed.cluster_id = {cluster_id}
+                 group by 
+                 lwed.district_id,
+                 d.district_name,
+                 lwed.cluster_id ,
+                 c.cluster_name,
+                 lwed.school_id ,
+                 sch.school_name ,
+                 lwed.block_id ,
+                 b.block_name ,
+                 lwed.class_id,
+                 cc.class_name ,
+                 lwed.subject_id,
+                 s.subject_name ,
+                 lwed.indicator_id ,
+                 ing.indicator 
+                 ) as avg_query;
+                 
+                 
+                 
+                 `,
                    
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select ROUND(avg(perc_lo)) AS perc_lo
-                        from (SELECT
-                        a.cluster_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        cluster_wise_table.cluster_name, 
-                        ROUND(a.avg_lo) AS avg_lo,
-                        ROUND((a.avg_lo / ts.avg) * 100) AS perc_lo
-                    FROM
-                        (
-                            SELECT
-                                lo_table.cluster_id,
-                                lo_table.subject_id,
-                                lo_table.class_id,
-                                lo_table.indicator_id,
-                                lo_table.date AS EX_date,
-                                lo_table.avg AS avg_lo,
-                                total_lo_table.sum AS total_lo
-                            FROM
-                                datasets.pat_lo_wise_DhArPBoBKgAKA1UgahZi AS lo_table 
-                            JOIN datasets.pat_total_lo_Daily_cluster AS total_lo_table ON lo_table.date = total_lo_table.date 
-                                AND lo_table.cluster_id = total_lo_table.cluster_id
-                                JOIN dimensions.classes AS cc ON cc.class_id = lo_table.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = lo_table.subject_id 
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = lo_table.indicator_id 
-                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = lo_table.cluster_id 
-                                    WHERE
-                                lo_table.date BETWEEN startDate AND endDate 
-                        ) AS a
-                    JOIN dimensions.classes AS cc ON cc.class_id = a.class_id 
-                    JOIN dimensions.subjects AS s ON s.subject_id = a.subject_id 
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = a.indicator_id 
-                    JOIN dimensions.cluster AS cluster_wise_table ON cluster_wise_table.cluster_id = a.cluster_id 
-                    JOIN datasets.pat_total_student_D1E7RxENChAzDGx0ZHpl AS ts ON ts.cluster_id = a.cluster_id
-                        where  cluster_wise_table.cluster_id = {cluster_id}
-                    GROUP BY
-                        a.cluster_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        cluster_wise_table.cluster_name,
-                        a.avg_lo,
-                        ts.avg
-                    ORDER BY
-                        perc_lo ASC) as avg_query;`,
+                        "bigNumber": `SELECT 
+                        ROUND(AVG(perc_of_total_students)) AS perc_lo
+                        from ( select 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.block_id ,
+                     b.block_name,
+                     lwed.cluster_id ,
+                     c.cluster_name,
+                     lwed.school_id ,
+                     sch.school_name,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator ,
+                     ROUND(AVG(lwed.avg_lo)) as avg_lo,
+                     ROUND((AVG(lwed.avg_lo)/AVG(sped.student_present))*100) as perc_of_total_students
+                     from
+                     pat.lo_wise_event_data lwed 
+                     left join 
+                     pat.student_present_event_data sped on lwed.date = sped.date AND lwed.cluster_id = sped.cluster_id
+                    LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                    LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                    LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                    LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                    LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                    LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                    LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                    where 
+                     lwed.date between startDate and endDate 
+                     and lwed.cluster_id = {cluster_id}
+                     group by 
+                     lwed.district_id,
+                     d.district_name,
+                     lwed.cluster_id ,
+                     c.cluster_name,
+                     lwed.school_id ,
+                     sch.school_name ,
+                     lwed.block_id ,
+                     b.block_name ,
+                     lwed.class_id,
+                     cc.class_name ,
+                     lwed.subject_id,
+                     s.subject_name ,
+                     lwed.indicator_id ,
+                     ing.indicator 
+                     ) as avg_query;
+                     
+                     
+                     
+                     `,
                         
                     },
                     "level": "school"
@@ -2876,75 +3379,101 @@ c.longitude
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    LO_AVG.date AS EX_date,
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    school.school_name,
-                    district_name,
-                    block_name,
-                    cluster_name,
-                    COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
+                    "table": `SELECT 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.school_id,
+                    sch.school_name,
+                     ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                    ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                    ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
                 FROM
-                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                 JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                    pat.lo_wise_event_data lwed
+                LEFT JOIN
+                    pat.student_present_event_data sped ON lwed.date = sped.date
+                        AND lwed.district_id = sped.district_id
+                        AND lwed.school_id = sped.school_id
+                LEFT JOIN
+                    pat.total_student_event_data tsed ON lwed.date = tsed.date and lwed.district_id = tsed.district_id
+                        AND lwed.school_id = tsed.school_id
+                LEFT JOIN
+                    dimensions.classes AS cc ON lwed.class_id = cc.class_id
+                LEFT JOIN
+                    dimensions.subjects AS s ON lwed.subject_id = s.subject_id
+                LEFT JOIN
+                    dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id
+                LEFT JOIN
+                    dimensions.district AS d ON lwed.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.school sch ON lwed.school_id = sch.school_id
+                JOIN
+                    (SELECT
+                         sped.school_id,
+                         COUNT(DISTINCT sped.date) AS total_days
+                     FROM
+                         pat.student_present_event_data sped
+                     WHERE
+                         sped.date BETWEEN startDate AND endDate
+                     GROUP BY
+                         sped.school_id) AS days_count ON sped.school_id = days_count.school_id
                 WHERE
-                    LO_AVG.date BETWEEN startDate AND endDate
+                    lwed.date BETWEEN startDate AND endDate
+                     
                 GROUP BY
-                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                    ing.indicator_id, school.school_name, district_name, block_name,
-                    EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;`
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.school_id,
+                    sch.school_name,days_count.total_days;
+                `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        LO_AVG.date AS EX_date,
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        school.school_name,
-                        district_name,
-                        block_name,
-                        cluster_name,
-                        COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
+                        "table": `SELECT 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.school_id,
+                        sch.school_name,
+                         ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                        ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                        ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
                     FROM
-                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                     JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
+                        pat.lo_wise_event_data lwed
+                    LEFT JOIN
+                        pat.student_present_event_data sped ON lwed.date = sped.date
+                            AND lwed.district_id = sped.district_id
+                            AND lwed.school_id = sped.school_id
+                    LEFT JOIN
+                        pat.total_student_event_data tsed ON lwed.date = tsed.date and lwed.district_id = tsed.district_id
+                            AND lwed.school_id = tsed.school_id
+                    LEFT JOIN
+                        dimensions.classes AS cc ON lwed.class_id = cc.class_id
+                    LEFT JOIN
+                        dimensions.subjects AS s ON lwed.subject_id = s.subject_id
+                    LEFT JOIN
+                        dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id
+                    LEFT JOIN
+                        dimensions.district AS d ON lwed.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.school sch ON lwed.school_id = sch.school_id
+                    JOIN
+                        (SELECT
+                             sped.school_id,
+                             COUNT(DISTINCT sped.date) AS total_days
+                         FROM
+                             pat.student_present_event_data sped
+                         WHERE
+                             sped.date BETWEEN startDate AND endDate
+                         GROUP BY
+                             sped.school_id) AS days_count ON sped.school_id = days_count.school_id
                     WHERE
-                        LO_AVG.date BETWEEN startDate AND endDate
+                        lwed.date BETWEEN startDate AND endDate
+                         
                     GROUP BY
-                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                        ing.indicator_id, school.school_name, district_name, block_name,
-                        EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;`,
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.school_id,
+                        sch.school_name,days_count.total_days;
+                    `,
                     },
                     "level": "school"
                 }
@@ -2955,76 +3484,96 @@ c.longitude
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    LO_AVG.date AS EX_date,
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    school.school_name,
-                    district_name,
-                    block_name,
-                    cluster_name,
-                    COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                FROM
-                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                WHERE
-                    LO_AVG.date BETWEEN startDate AND endDate and school.district_id= {district_id}
-                GROUP BY
-                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                    ing.indicator_id, school.school_name, district_name, block_name,
-                    EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;
+                    "table": `select 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.school_id ,
+                    sch.school_name,
+                    ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                       ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                       ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date and lwed.block_id= sped.block_id and lwed.school_id = sped.school_id 
+                    left join 
+                    pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.block_id = tsed.block_id  and lwed.school_id = tsed.school_id 
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                   JOIN
+                       (SELECT
+                            sped.school_id,
+                            COUNT(DISTINCT sped.date) AS total_days
+                        FROM
+                            pat.student_present_event_data sped
+                        WHERE
+                            sped.date BETWEEN startDate AND endDate
+                        GROUP BY
+                            sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                   where 
+                    lwed.date between startDate and endDate  
+                    and lwed.district_id = {district_id}
+                    group by 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.school_id ,
+                    sch.school_name ,
+                    days_count.total_days
 `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        LO_AVG.date AS EX_date,
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        school.school_name,
-                        district_name,
-                        block_name,
-                        cluster_name,
-                        COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                    FROM
-                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                    WHERE
-                        LO_AVG.date BETWEEN startDate AND endDate and school.district_id= {district_id}
-                    GROUP BY
-                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                        ing.indicator_id, school.school_name, district_name, block_name,
-                        EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;
+                        "table": `select 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.school_id ,
+                        sch.school_name,
+                        ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                           ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                           ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date and lwed.block_id= sped.block_id and lwed.school_id = sped.school_id 
+                        left join 
+                        pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.block_id = tsed.block_id  and lwed.school_id = tsed.school_id 
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                       JOIN
+                           (SELECT
+                                sped.school_id,
+                                COUNT(DISTINCT sped.date) AS total_days
+                            FROM
+                                pat.student_present_event_data sped
+                            WHERE
+                                sped.date BETWEEN startDate AND endDate
+                            GROUP BY
+                                sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                       where 
+                        lwed.date between startDate and endDate  
+                        and lwed.district_id = {district_id}
+                        group by 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.school_id ,
+                        sch.school_name ,
+                        days_count.total_days
     `,
                     },
                     "level": "school"
@@ -3036,76 +3585,108 @@ c.longitude
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    LO_AVG.date AS EX_date,
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    school.school_name,
-                    district_name,
-                    block_name,
-                    cluster_name,
-                   COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                FROM
-                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                WHERE
-                    LO_AVG.date BETWEEN startDate AND endDate and school.block_id= {block_id} 
-                GROUP BY
-                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                    ing.indicator_id, school.school_name, district_name, block_name,
-                    EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;
+                    "table": `select 
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.school_id ,
+                    sch.school_name,
+                    ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                       ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                       ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date and lwed.cluster_id= sped.cluster_id and lwed.school_id = sped.school_id 
+                    left join 
+                    pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.cluster_id = tsed.cluster_id  and lwed.school_id = tsed.school_id 
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                   LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                   JOIN
+                       (SELECT
+                            sped.school_id,
+                            COUNT(DISTINCT sped.date) AS total_days
+                        FROM
+                            pat.student_present_event_data sped
+                        WHERE
+                            sped.date BETWEEN startDate AND endDate
+                        GROUP BY
+                            sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                   where 
+                    lwed.date between startDate and endDate  
+                    and lwed.block_id = {block_id}
+                    group by 
+                    lwed.date ,
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.school_id ,
+                    sch.school_name ,
+                    days_count.total_days
 `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        LO_AVG.date AS EX_date,
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        school.school_name,
-                        district_name,
-                        block_name,
-                        cluster_name,
-                       COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                    FROM
-                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                    WHERE
-                        LO_AVG.date BETWEEN startDate AND endDate and school.block_id= {block_id} 
-                    GROUP BY
-                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                        ing.indicator_id, school.school_name, district_name, block_name,
-                        EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;
+                        "table": `select 
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.school_id ,
+                        sch.school_name,
+                        ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                           ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                           ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date and lwed.cluster_id= sped.cluster_id and lwed.school_id = sped.school_id 
+                        left join 
+                        pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.cluster_id = tsed.cluster_id  and lwed.school_id = tsed.school_id 
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id 
+                       LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                       JOIN
+                           (SELECT
+                                sped.school_id,
+                                COUNT(DISTINCT sped.date) AS total_days
+                            FROM
+                                pat.student_present_event_data sped
+                            WHERE
+                                sped.date BETWEEN startDate AND endDate
+                            GROUP BY
+                                sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                       where 
+                        lwed.date between startDate and endDate  
+                        and lwed.block_id = {block_id}
+                        group by 
+                        lwed.date ,
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.school_id ,
+                        sch.school_name ,
+                        days_count.total_days
     `,
                     },
                     "level": "school"
@@ -3117,78 +3698,111 @@ c.longitude
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table":`SELECT
-                    LO_AVG.date AS EX_date,
-                    school.school_id,
-                    s.subject_name,
-                    s.subject_id,
-                    cc.class_name,
-                    cc.class_id,
-                    ing.indicator,
-                    ing.indicator_id,
-                    school.school_name,
-                    district_name,
-                    block_name,
-                    cluster_name,
-                   COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-    		    COALESCE(SUM(ts.avg), 0) AS total_students,
-		    ROUND(AVG(LO_AVG.avg)) as avg_lo,
-		    ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                FROM
-                    datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                    AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                WHERE
-                    LO_AVG.date BETWEEN startDate AND endDate and school.cluster_id= {cluster_id} 
-                GROUP BY
-                    LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                    s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                    ing.indicator_id, school.school_name, district_name, block_name,
-                    EX_date, cluster_name, ts.avg
-                ORDER BY perc_lo;				
-
+                    "table":`select 
+                    lwed.date,
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.school_id ,
+                    sch.school_name,
+                     ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                       ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                       ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                    from
+                    pat.lo_wise_event_data lwed 
+                    left join 
+                    pat.student_present_event_data sped on lwed.date = sped.date and lwed.school_id = sped.school_id 
+                    left join 
+                    pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.school_id = tsed.school_id 
+                   LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                   LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                   LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                   LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                   LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                   LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                   LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                   JOIN
+                       (SELECT
+                            sped.school_id,
+                            COUNT(DISTINCT sped.date) AS total_days
+                        FROM
+                            pat.student_present_event_data sped
+                        WHERE
+                            sped.date BETWEEN startDate AND endDate
+                        GROUP BY
+                            sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                   where 
+                    lwed.date between startDate and endDate  
+                    and lwed.cluster_id = {cluster_id}
+                    group by 
+                    lwed.date ,
+                    lwed.district_id,
+                    d.district_name,
+                    lwed.block_id ,
+                    b.block_name,
+                    lwed.cluster_id ,
+                    c.cluster_name,
+                    lwed.school_id ,
+                    sch.school_name ,
+                    days_count.total_days
 
 `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        LO_AVG.date AS EX_date,
-                        school.school_id,
-                        s.subject_name,
-                        s.subject_id,
-                        cc.class_name,
-                        cc.class_id,
-                        ing.indicator,
-                        ing.indicator_id,
-                        school.school_name,
-                        district_name,
-                        block_name,
-                        cluster_name,
-                       COALESCE(SUM(LO_AVG.avg), 0) AS total_students_lo_present,
-                    COALESCE(SUM(ts.avg), 0) AS total_students,
-                ROUND(AVG(LO_AVG.avg)) as avg_lo,
-                ROUND(CAST((AVG(LO_AVG.avg)/ AVG(ts.avg)) * 100 AS NUMERIC),2) AS perc_LO
-                    FROM
-                        datasets.pat_lo_wise_FBgrNhQBMx4HQxpxM2p7 AS LO_AVG
-                    JOIN dimensions.classes AS cc ON cc.class_id = LO_AVG.class_id
-                    JOIN dimensions.subjects AS s ON s.subject_id = LO_AVG.subject_id
-                    JOIN dimensions.indicators AS ing ON ing.indicator_id = LO_AVG.indicator_id
-                    JOIN datasets.pat_total_lo_Daily_school AS total_lo ON LO_AVG.school_id = total_lo.school_id
-                        AND LO_AVG.date = total_lo.date JOIN dimensions.school ON school.school_id = total_lo.school_id
-                    JOIN datasets.pat_total_student_WgV3Hx4UEBgDX2V__cG5q AS ts ON ts.school_id = LO_AVG.school_id
-                    WHERE
-                        LO_AVG.date BETWEEN startDate AND endDate and school.cluster_id= {cluster_id} 
-                    GROUP BY
-                        LO_AVG.date, LO_AVG.avg, school.school_id, s.subject_name, 
-                        s.subject_id, cc.class_name, cc.class_id, ing.indicator, 
-                        ing.indicator_id, school.school_name, district_name, block_name,
-                        EX_date, cluster_name, ts.avg
-                    ORDER BY perc_lo;				
+                        "table": `select 
+                        lwed.date,
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.school_id ,
+                        sch.school_name,
+                         ROUND((AVG(lwed.avg_lo) / days_count.total_days), 2) AS avg_lo,
+                           ROUND(SUM(sped.student_present) / days_count.total_days, 2) AS total_students_lo_present,
+                           ROUND((AVG(lwed.avg_lo) / AVG(sped.student_present)) * 100, 2) AS perc_lo
+                        from
+                        pat.lo_wise_event_data lwed 
+                        left join 
+                        pat.student_present_event_data sped on lwed.date = sped.date and lwed.school_id = sped.school_id 
+                        left join 
+                        pat.total_student_event_data tsed on lwed.date = tsed.date and lwed.school_id = tsed.school_id 
+                       LEFT JOIN dimensions.classes AS cc ON lwed.class_id =cc.class_id
+                       LEFT JOIN dimensions.subjects AS s ON lwed.subject_id = s.subject_id 
+                       LEFT JOIN dimensions.indicators AS ing ON lwed.indicator_id = ing.indicator_id 
+                       LEFT JOIN dimensions.district AS d ON lwed.district_id = d.district_id 
+                       LEFT JOIN dimensions.block b on lwed.block_id = b.block_id
+                       LEFT JOIN dimensions.cluster c on lwed.cluster_id = c.cluster_id
+                       LEFT JOIN dimensions.school sch on lwed.school_id = sch.school_id 
+                       JOIN
+                           (SELECT
+                                sped.school_id,
+                                COUNT(DISTINCT sped.date) AS total_days
+                            FROM
+                                pat.student_present_event_data sped
+                            WHERE
+                                sped.date BETWEEN startDate AND endDate
+                            GROUP BY
+                                sped.school_id) AS days_count ON sped.school_id = days_count.school_id
+                       where 
+                        lwed.date between startDate and endDate  
+                        and lwed.cluster_id = {cluster_id}
+                        group by 
+                        lwed.date ,
+                        lwed.district_id,
+                        d.district_name,
+                        lwed.block_id ,
+                        b.block_name,
+                        lwed.cluster_id ,
+                        c.cluster_name,
+                        lwed.school_id ,
+                        sch.school_name ,
+                        days_count.total_days				
     
     
     `,
@@ -3237,12 +3851,17 @@ c.longitude
                         class: "text-center"
                     },
                     {
-                        name: "Total Students",
-                        property: "total_students",
+                        name: "Average learning outcome",
+                        property: "avg_lo",
                         class: "text-center"
                     },
+                    // {
+                    //     name: "Total students correct the LO",
+                    //     property: "total_students_lo_present",
+                    //     class: "text-center"
+                    // },
                     {
-                        name: "Total students correct the LO",
+                        name: "present students count",
                         property: "total_students_lo_present",
                         class: "text-center"
                     },

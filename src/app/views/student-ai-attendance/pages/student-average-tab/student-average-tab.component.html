@@ -4,14 +4,6 @@
 		selected time duration on average
 	</p>
 
-	<!-- <div class="filter-row grid grid-cols-4">
-		<app-filter-panel
-			[filters]="filters"
-			(filtersUpdated)="filtersUpdated($event)"
-			colsize="lg:col-span-3 col-span-6"
-		>
-		</app-filter-panel>
-	</div> -->
 	<div class="filter-row grid grid-cols-12">
 		<app-filter-panel
 			[filters]="filters"
@@ -36,13 +28,6 @@
 		</div>
 	</div>
 
-	<!-- <div class="grid grid-cols-4 gap-8">
-		<div class="md:col-span-2 col-span-4">
-			<app-breadcrumb-component></app-breadcrumb-component>
-		</div>
-		
-	</div> -->
-
 	<div class="reports-row">
 		<div class="row-wrapper grid grid-cols-2 gap-4">
 			<div
@@ -53,6 +38,21 @@
 				<app-student-average-bignumber
 					#studentAverageBigNumber
 				></app-student-average-bignumber>
+				<!-- <hr />
+				<app-student-trendline
+					#studentTrendchart
+					(exportReportData)="csvDownload($event)"
+				></app-student-trendline> -->
+				<!-- <div
+					class="col-span-2 xmd:col-span-2 div-shadow"
+					*ngIf="checkReport('student_trendchart', 'barChart')"
+					id="bar"
+				>
+					<app-student-trendline
+						#studentTrendchart
+						(exportReportData)="csvDownload($event)"
+					></app-student-trendline>
+				</div> -->
 			</div>
 
 			<div
@@ -75,7 +75,16 @@
 					(exportReportData)="csvDownload($event)"
 				></app-student-barchart>
 			</div>
-
+			<!-- <div
+				class="col-span-2 xmd:col-span-2 div-shadow"
+				*ngIf="checkReport('student_trendchart', 'barChart')"
+				id="bar"
+			>
+				<app-student-trendline
+					#studentTrendchart
+					(exportReportData)="csvDownload($event)"
+				></app-student-trendline>
+			</div> -->
 			<div
 				class="col-span-2 xmd:col-span-2 div-shadow"
 				*ngIf="checkReport('student_average_school', 'table')"

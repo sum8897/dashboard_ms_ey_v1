@@ -1,7 +1,7 @@
 <div class="metric-card-wrapper">
 	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
 		<div class="col-span-12">
-			<p class="program-title">Teacher Attendance</p>
+			<p class="program-title">Staff Attendance</p>
 			<p class="program-desc">
 				This program entails indicators to monitor reporting of attendance and
 				presence of teachers in the jurisdiction.
@@ -38,11 +38,11 @@
 				*ngIf="selectedTabLabel === 'Average Teachers Present'"
 			></app-teacher-summary-tab>
 		</mat-tab>
-		<!-- <mat-tab label="Map View of Teacher Attendance">
-			<app-teacher-attendance-map
-				*ngIf="selectedTabLabel === 'Map View of Teacher Attendance'"
-			></app-teacher-attendance-map>
-		</mat-tab> -->
+		<mat-tab label="Average Non Teaching Staff Present">
+			<app-non-teaching-summary-tab
+				*ngIf="selectedTabLabel === 'Average Non Teaching Staff Present'"
+			></app-non-teaching-summary-tab>
+		</mat-tab>
 		<mat-tab label="Map View of Teacher Attendance">
 			<app-teaching-attendance-tab
 				*ngIf="selectedTabLabel === 'Map View of Teacher Attendance'"
@@ -52,11 +52,6 @@
 			<app-non-teaching-attendance-tab
 				*ngIf="selectedTabLabel === 'Map View of Non Teaching Staff Attendance'"
 			></app-non-teaching-attendance-tab>
-		</mat-tab>
-		<mat-tab label="Average Non Teaching Staff Present">
-			<app-non-teaching-summary-tab
-				*ngIf="selectedTabLabel === 'Average Non Teaching Staff Present'"
-			></app-non-teaching-summary-tab>
 		</mat-tab>
 	</mat-tab-group>
 </div>
