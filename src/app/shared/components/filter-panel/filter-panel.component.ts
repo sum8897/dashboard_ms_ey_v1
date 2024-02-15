@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { WrapperService } from 'src/app/core/services/wrapper.service';
 
 @Component({
   selector: 'app-filter-panel',
@@ -17,7 +18,7 @@ export class FilterPanelComponent implements OnInit, OnChanges {
   @Output() filtersUpdated = new EventEmitter<any>();
   @Output() filterIndexUpdated = new EventEmitter<number>();
 
-  constructor() { }
+  constructor(private _wrapperService: WrapperService) { }
 
   ngOnInit(): void {
   
@@ -40,9 +41,16 @@ export class FilterPanelComponent implements OnInit, OnChanges {
         this.filters[i].value = null;
       }
     }
+    if(this.filters[ind].child)
+    {
+      this.filters = this._wrapperService.runChildQuery(this.filters,ind);
+    }
+   // this._wrapperService.runChildQuery(filters);
 
     this.filtersUpdated.emit(this.filters);
     this.filterIndexUpdated.emit(ind);
+
+
 
     // Close the dropdown after selecting an option
     if (selectRef.isOpen) {

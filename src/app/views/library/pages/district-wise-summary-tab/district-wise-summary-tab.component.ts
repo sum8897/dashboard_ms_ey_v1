@@ -95,6 +95,7 @@ hasCommonFilters: boolean = true;
        this.endDate = moment(endDate).format('YYYY-MM-DD');
      
     }
+    this.updateReportsData()
   }
 
 

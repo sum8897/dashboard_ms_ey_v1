@@ -22,11 +22,11 @@ export class SchoolTableComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "School Wise Library"
+    reportName: "Overall Summary"
   };
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;

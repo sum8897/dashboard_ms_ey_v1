@@ -1,0 +1,34 @@
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				STUDENT ATTENDANCE<em><small>(STUDENT-ATTENDANCE)</small></em>
+			</p>
+			<p class="program-desc"></p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab
+			label="Map View OF Student Attendance"
+			*ngIf="tabs.includes('Map View OF Student Attendance')"
+		>
+			<app-map-view-tab
+				*ngIf="selectedTabLabel === 'Map View OF Student Attendance'"
+			></app-map-view-tab>
+		</mat-tab>
+		<mat-tab label="Average Student Present">
+			<app-student-average-tab
+				*ngIf="selectedTabLabel === 'Average Student Present'"
+			></app-student-average-tab>
+		</mat-tab>
+	</mat-tab-group>
+</div>

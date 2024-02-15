@@ -30,11 +30,11 @@ export class QuesWisePerformanceComponent implements OnInit {
   };
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = '% Average Score';
+  title = '% Average Question';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

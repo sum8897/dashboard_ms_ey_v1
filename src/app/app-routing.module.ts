@@ -80,6 +80,22 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'student-ai-attendance',
+        loadChildren: () =>
+          import('./views/student-ai-attendance/student-ai-attendance.module').then(
+            (module) => module.StudentAiAttendanceModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
+        path: 'school-library',
+        loadChildren: () =>
+          import('./views/school-library/school-library.module').then(
+            (module) => module.SchoolLibraryModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'udise-schoolinfra',
         loadChildren: () =>
             import('./views/udise-schoolinfra/udise-schoolinfra.module').then(

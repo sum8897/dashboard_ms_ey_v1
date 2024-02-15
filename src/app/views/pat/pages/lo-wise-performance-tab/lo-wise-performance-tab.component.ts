@@ -73,6 +73,7 @@ export class LoWisePerformanceTabComponent implements OnInit, OnDestroy {
    
   
     ngOnInit(): void {
+      
       // this._reportDrilldownService.emit()
     }
   
@@ -88,7 +89,7 @@ export class LoWisePerformanceTabComponent implements OnInit, OnDestroy {
             this.loWisePerformance?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
             // this.averageBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
             this.AverageBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-            this.LoTrendlineChartComponent?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+            // this.LoTrendlineChartComponent?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
             }
         else if(this.hasCommonFilters===false){
             // this.loWisePerformance?.getReportData({filterneed: this.hasCommonFilters});
@@ -102,6 +103,7 @@ export class LoWisePerformanceTabComponent implements OnInit, OnDestroy {
         startDate.setDate(days)
          this.startDate = moment(startDate).format('YYYY-MM-DD');
          this.endDate = moment(endDate).format('YYYY-MM-DD');
+         console.log('datess',startDate,endDate)
         // this.AverageBigNumber?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0]);
         // this.loWisePerformance?.getReportData(startDate?.toISOString().split('T')[0], endDate?.toISOString().split('T')[0],);
     
@@ -112,6 +114,7 @@ export class LoWisePerformanceTabComponent implements OnInit, OnDestroy {
   
   
         // this.getSchoolReportData()
+        this.updateReportsData()
       }
     }
   
@@ -159,7 +162,7 @@ export class LoWisePerformanceTabComponent implements OnInit, OnDestroy {
 
     updateReportsData( ): void {
      
-      console.log(this.filters,this.startDate,this.endDate)
+      console.log('dttttttt',this.filters,this.startDate,this.endDate)
 
       this.loWisePerformance?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 

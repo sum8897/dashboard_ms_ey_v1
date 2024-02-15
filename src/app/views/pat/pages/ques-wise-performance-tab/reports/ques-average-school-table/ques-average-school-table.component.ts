@@ -25,11 +25,11 @@ export class QuesAverageSchoolTableComponent implements OnInit, OnDestroy {
   };
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = ' School Wise % Average Score';
+  title = ' School Wise % Average Question';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;

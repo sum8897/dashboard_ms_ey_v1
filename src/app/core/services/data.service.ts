@@ -111,8 +111,11 @@ export class DataService {
       this.spinner.hide()
     });
   }
+ 
 
-  getBarChartReportData(query, options, filters, currentLevel): Promise<any> {
+
+  //created new func by himanshu
+  getLineChartReportData(query, options, filters, currentLevel): Promise<any> {
     return new Promise((resolve, reject) => {
   
       this.spinner.show();
@@ -131,26 +134,31 @@ export class DataService {
         let reportData = {
           values: rows
         }
+        
         let config = getChartJSConfig({
           labelExpr: xAxis.value,
           datasets: this.getDatasets(options.barChart, filters),
 
           options: {
-            height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+          
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 6).toString(),
+            height: '250',
+
             tooltips: {
               callbacks: {
                 label: (tooltipItem, data) => {
                   let multistringText = [];
-                  if (isMultibar) {
+                  // if (isMultibar) {
                     data.datasets.forEach((dataset: any, index: any) => {
                       if (index === tooltipItem.datasetIndex) {
                         multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
                       }
                     })
-                  }
-                  else {
-                    multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
-                  }
+                  // }
+                  // else {
+                  //   multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                  // }
                   return multistringText;
                 }
               }
@@ -194,15 +202,175 @@ export class DataService {
                   }
                 }
               }]
+            },
+           // Set tension to 0 for pinpoint appearance
+           elements: {
+            line: {
+                tension: 0 // Set tension to 0 for pinpoint appearance
             }
+        }
           }
         });
+         // Change bar color to green
+         config.datasets.forEach((dataset: any) => {
+          dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+      });
         this.spinner.hide();
         resolve({ reportData: reportData, config: config })
       });
     });
   }
 
+  getBarChartReportData(query, options, filters, currentLevel): Promise<any> {
+    return new Promise((resolve, reject) => {
+  
+      this.spinner.show();
+      let {
+         barChart: { 
+          yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp 
+        } 
+      } = options;
+      
+      this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        let rows = res;
+  
+        if (MultibarGroupByNeeded) {
+          rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
+        }
+        let reportData = {
+          values: rows
+        }
+        
+        let config = getChartJSConfig({
+          labelExpr: xAxis.value,
+          datasets: this.getDatasets(options.barChart, filters),
+
+          options: {
+          
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+            // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 6).toString(),
+            height: '150',
+
+            tooltips: {
+              callbacks: {
+                label: (tooltipItem, data) => {
+                  let multistringText = [];
+                  // if (isMultibar) {
+                    data.datasets.forEach((dataset: any, index: any) => {
+                      if (index === tooltipItem.datasetIndex) {
+                        multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                      }
+                    })
+                  // }
+                  // else {
+                  //   multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                  // }
+                  return multistringText;
+                }
+              }
+            },
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: Array.isArray(yAxis.title) ? yAxis.title[currentLevel] : yAxis.title
+                },
+                ticks: {
+                  callback: function (value, index, values) {
+                    if (yAxis?.limitCharacters && value.length > Number(yAxis?.limitCharacters)) {
+                      let newValue = value?.substring(0, Number(yAxis?.limitCharacters)) + '...'
+                      return newValue
+                    }
+                    else {
+                      return value
+                    }
+                  }
+                }
+              }],
+              xAxes: [{
+                scaleLabel: {
+                  display: true,
+                  labelString: xAxis.title
+                },
+                ticks: {
+                  callback: function (value, index, values) {
+                    if (type !== 'horizontal') {
+                      let newValue = value?.split('_').map((word: any) => word[0] + word.substring(1)).join(' ')
+                      if (screen.width <= 768) {
+                        return newValue.substr(0, 8) + '...';
+                      } else {
+                        return newValue;
+                      }
+                    }
+                    else {
+                      return value
+                    }
+                  }
+                }
+              }]
+            },
+            
+          
+          }
+        });
+         // Change bar color to green
+      //    config.datasets.forEach((dataset: any) => {
+      //     dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+      // });
+        this.spinner.hide();
+        resolve({ reportData: reportData, config: config })
+      });
+    });
+  }
+  extraLine(data:any,config:any,param:any)
+  {
+    console.log("extraLine ===== ", data);
+    const minValue = Math.min(...data.values.map((reportData:any) => reportData[param]));
+    const minObject = {
+            type: 'line',
+            metricLabelProp: 'Min',
+            label: 'Min',
+            data: Array(data.values.length).fill(minValue),
+            borderColor: 'rgba(255, 0, 0, 1)',
+            borderWidth: 2,
+            fill: false
+    }
+          // To get the maximum value
+    const maxValue = Math.max(...data.values.map((reportData:any) => reportData[param]));
+    const maxObject = {
+      type: 'line',
+      metricLabelProp: 'Max',
+      label: 'Max',
+      data: Array(data.values.length).fill(maxValue),
+      borderColor: 'rgba(0, 225, 0, 1)',
+      borderWidth: 2,
+      fill: false
+    }
+          // Calculate the average value
+          let total = 0;
+    data.values.forEach(( reportData:any) => total = total + parseFloat(reportData[param]));
+    console.log('total',total)
+    console.log('length',data.values.length)
+    // const averageValue = total / data.values.length;
+    const averageValue = (total / data.values.length).toFixed(2);
+    const avgObject = {
+      type: 'line',
+      metricLabelProp: "Average",
+      label: 'Average',
+      data: Array(data.values.length).fill(averageValue),
+      borderColor: 'rgba(0, 0, 255, 1)',
+      borderWidth: 2,
+      fill: false
+    }
+    config.datasets.push(avgObject);
+    config.datasets.push(maxObject);
+    config.datasets.push(minObject);
+    console.log("extraLine ===== config ", config);
+    console.log("extraLine ===== minValue ", minValue);
+    console.log("extraLine ===== maxValue ", maxValue);
+    console.log("extraLine ===== averageValue ", averageValue);
+
+  }
   getStackedBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();

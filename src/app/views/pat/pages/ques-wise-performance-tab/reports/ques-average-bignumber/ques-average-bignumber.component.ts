@@ -8,6 +8,7 @@ import { QuesWisePerformanceTabComponent } from '../../ques-wise-performance-tab
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 import { DataService } from 'src/app/core/services/data.service';
+import { CriteriaService } from 'src/app/core/services/criteria.service';
 @Component({
   selector: 'app-ques-average-bignumber',
   templateUrl: './ques-average-bignumber.component.html',
@@ -20,12 +21,12 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Average % Score"
+    reportName: "Average % Question"
   };
-  currentReportName: string = "Average % Score";
+  currentReportName: string = "Average % Question";
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
   title = 'Score Summary %';
@@ -49,6 +50,7 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
     private readonly _wrapperService: WrapperService, 
     private _rbacService: RbacService, 
     private readonly _reportDrilldownService: ReportDrilldownService,
+    private readonly _criteriaService: CriteriaService,
     private readonly _dataService: DataService,
     private readonly _benchmarkService: BarchartBenchmarkService
     ) {
@@ -67,6 +69,7 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
    
     
   }
+  
 
   
 
@@ -344,6 +347,9 @@ export class QuesAverageBignumberComponent implements OnInit, OnDestroy {
         onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, undefined);
+      this.filterValues.forEach((filterParams: any) => {
+        query = parseFilterToQuery(query, filterParams)
+      });
 
       if (query && key === 'bigNumber') {
         this.getBigNumberReportData(query, options, 'averagePercentage');

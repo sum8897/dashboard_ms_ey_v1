@@ -27,7 +27,7 @@ export class PerformanceComponent implements OnInit {
   // endDate: any;
   tableReportData: any;
   config: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
   drillDownSubscription: any;
@@ -174,13 +174,7 @@ export class PerformanceComponent implements OnInit {
             this.exportReportData.emit(reportsData)
           }
         }
-        // else if (query && key=== 'map_without_filter' && !filterneed) {
-        //   this.reportData = await await this._dataService.getMapReportData(query, options, metricFilter)
-        //   if (this.reportData?.data?.length > 0) {
-        //     let reportsData = { reportData: this.reportData.data, reportType: 'map_without_filter', reportName: this.title }
-        //     this.exportReportData.emit(reportsData)
-        //   }
-        // }
+        
         
       })
     }

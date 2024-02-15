@@ -57,6 +57,8 @@ import { CriteriaComponent } from './components/criteria/criteria.component';
 import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { NewBarChartComponent } from './components/charts/new-bar-chart/new-bar-chart.component';
+import { NewLineChartComponent } from './components/charts/new-line-chart/new-line-chart.component';
+
 
 const IMPORTS: any[] = [
   ReactiveFormsModule,
@@ -117,6 +119,7 @@ const DECLARATIONS = [
   PopupOptionsComponent,
   BreadcrumbComponentComponent,
   SbBarChartComponent,
+  NewLineChartComponent,
   CriteriaComponent,
   MaterialHeatChartDrilldownTableComponent,
   SearchFilterPipe,
@@ -128,6 +131,8 @@ const DECLARATIONS = [
     DECLARATIONS,
     BreadcrumbComponentComponent,
     NewBarChartComponent,
+    LineChartComponent,
+    
   ],
   imports: [
     CommonModule,

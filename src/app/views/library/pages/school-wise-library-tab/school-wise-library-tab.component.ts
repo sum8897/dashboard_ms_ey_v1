@@ -77,11 +77,7 @@ hasCommonFilters: boolean = true;
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
           this.schoolTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-          console.log('line103- filters',this.filters)
           
-          this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-          console.log('line103- filters',this.filters)
           this.summaryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
@@ -99,6 +95,7 @@ hasCommonFilters: boolean = true;
        this.endDate = moment(endDate).format('YYYY-MM-DD');
      
     }
+    this.updateReportsData();
   }
 
 

@@ -22,10 +22,10 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
   bigNumberReportData: any = {
     reportName: "Average % Score"
   };
-  currentReportName: string = "Average % Score";
+  currentReportName: string = "Average % LO";
   minDate: any;
   maxDate: any;
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   filterIndex: any;
   rbacDetails: any;
   title = 'Score Summary %';
@@ -58,27 +58,16 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
     this.drillDownSubscription = this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
     })
+    console.log('subscription',this.drillDownSubscription)
     this._reportDrilldownService.drilldownData.subscribe(data => {
+      console.log('data',data)
       if(data && data?.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
         this.drilldownData(data);
+        // data.values ?? {}
       }
     })
-    // this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(async (data) => {
-    //   if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
-    //     this.drillDownLevel = data.hierarchyLevel
-    //     // this._criteriaService.emit('reset')
-    //     // this.criteriaApplied = false;
-    //     // this.drilldownData(data);
-    //     let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
-    //     this.drillDownDetails = result?.drillDownDetails
-    //     this.tableReportData = result?.reportData
-    //     if (this.tableReportData?.data?.length > 0) {
-    //       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-    //       this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
-    //     }
-    //   }
-    // })
+    
     
   }
 
@@ -152,6 +141,7 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
         }
 
         let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+        console.log('outside query',query)
 
         let metricFilter = [...filterValues].filter((filter: any) => {
           return filter.filterType === 'metric'
@@ -280,7 +270,18 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
   }
 
   async drilldownData(event: any) {
-   
+    // let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
+    // if (filterValues === undefined) {
+    //   filterValues = []
+    // }
+    // this.metricFilter = [...filterValues].filter((filter: any) => {
+    //   return filter.filterType === 'metric'
+    // })
+    // this.filterValues = [...filterValues].filter((filter: any) => {
+    //   return filter.filterType !== 'metric'
+    // })
+
+
     let { hierarchyLevel, id } = event ?? {}
     let drillDownDetails;
 
@@ -358,6 +359,18 @@ export class LoAverageBignumberComponent implements OnInit, OnDestroy {
         onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, undefined);
+      // let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+      // let metricFilter = [...filterValues].filter((filter: any) => {
+      //   return filter.filterType === 'metric'
+      // })
+     
+
+      this.filterValues.forEach((filterParams: any) => {
+        query = parseFilterToQuery(query, filterParams)
+      });
+     
+      console.log('inside drilldown',query)
 
       if (query && key === 'bigNumber') {
         this.getBigNumberReportData(query, options, 'averagePercentage');
