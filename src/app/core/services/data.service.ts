@@ -111,7 +111,63 @@ export class DataService {
       this.spinner.hide()
     });
   }
- 
+  //pie chart func
+  // getPieChartReportData(query, options, filters, currentLevel): Promise<any> {
+  //   return new Promise((resolve, reject) => {
+  
+  //     this.spinner.show();
+  //     let {
+  //       barChart: { 
+  //         yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp 
+  //       } 
+  //     } = options;
+      
+  //     this._commonService.getReportDataNew(query).subscribe((res: any) => {
+  //       let rows = res;
+  
+  //       if (MultibarGroupByNeeded) {
+  //         rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
+  //       }
+  //       let reportData = {
+  //         values: rows
+  //       }
+        
+  //       let config = getChartJSConfig({
+  //         labelExpr: xAxis.value,
+  //         datasets: this.getDatasets(options.barChart, filters), // Adjust to pieChart
+
+  //         options: {
+  //           height: '150',
+  //           tooltips: {
+  //             callbacks: {
+  //               label: (tooltipItem, data) => {
+  //                 let multistringText = [];
+  //                 data.datasets.forEach((dataset: any, index: any) => {
+  //                   if (index === tooltipItem.datasetIndex) {
+  //                     multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+  //                   }
+  //                 })
+  //                 return multistringText;
+  //               }
+  //             }
+  //           },
+  //           // scales: { // No scales for a pie chart
+              
+  //           // },
+          
+  //         }
+  //       });
+        
+  //       // Change bar color to green
+  //       config.datasets.forEach((dataset: any) => {
+  //         dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+  //       });
+        
+  //       this.spinner.hide();
+  //       resolve({ reportData: reportData, config: config })
+  //     });
+  //   });
+  // }
 
 
   //created new func by himanshu
@@ -143,7 +199,7 @@ export class DataService {
           
             // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
             // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 6).toString(),
-            height: '250',
+            height: '200',
 
             tooltips: {
               callbacks: {

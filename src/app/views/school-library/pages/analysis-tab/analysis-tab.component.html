@@ -1,0 +1,37 @@
+<div class="col-span-full tab-wrapper">
+	<p class="tab-desc"></p>
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+
+	<div class="filter-row grid grid-cols-10">
+		<div
+			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
+		>
+			<app-time-series-filter-panel
+				(timeSeriesUpdated)="timeSeriesUpdated($event)"
+				[minDate]="minDate"
+				[maxDate]="maxDate"
+				[defaultSelectedDays]="defaultSelectedDays"
+			></app-time-series-filter-panel>
+		</div>
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+	</div>
+
+	<div
+		class="col-span-2 xmd:col-span-2 div-shadow"
+		*ngIf="checkReport('district_table_library', 'table')"
+		id="table3"
+	>
+		<app-district-table
+			#districtTable
+			(exportReportData)="csvDownload($event)"
+		></app-district-table>
+	</div>
+</div>

@@ -368,7 +368,7 @@ export class StudentTrendlineComponent implements OnInit, OnDestroy {
             });
           }
         },
-        height: '250',
+        height: '200',
         tooltips: {
           // callbacks: {
           //   label: (tooltipItem, data) => {
