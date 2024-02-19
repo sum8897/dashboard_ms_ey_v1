@@ -32,6 +32,8 @@ import { StaffAverageTableComponent } from './pages/non-teaching-summary-tab/rep
 import { StaffBarchartComponent } from './pages/non-teaching-summary-tab/reports/staff-barchart/staff-barchart.component';
 import { StaffBignumberComponent } from './pages/non-teaching-summary-tab/reports/staff-bignumber/staff-bignumber.component';
 import { StaffSchoolTableComponent } from './pages/non-teaching-summary-tab/reports/staff-school-table/staff-school-table.component';
+import { TeacherTrendlineComponent } from './pages/teacher-summary-tab/reports/teacher-trendline/teacher-trendline.component';
+import { StaffTrendlineComponent } from './pages/non-teaching-summary-tab/reports/staff-trendline/staff-trendline.component';
 
 
 
@@ -64,6 +66,8 @@ import { StaffSchoolTableComponent } from './pages/non-teaching-summary-tab/repo
     StaffBarchartComponent,
     StaffBignumberComponent,
     StaffSchoolTableComponent,
+    TeacherTrendlineComponent,
+    StaffTrendlineComponent,
    
   ],
   imports: [
