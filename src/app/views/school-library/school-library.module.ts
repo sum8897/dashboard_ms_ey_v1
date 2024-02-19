@@ -9,6 +9,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { OverallSummaryTabComponent } from './pages/overall-summary-tab/overall-summary-tab.component';
 import { SummaryTableComponent } from './pages/overall-summary-tab/reports/summary-table/summary-table.component';
+import { AnalysisTabComponent } from './pages/analysis-tab/analysis-tab.component';
+import { DistrictTableComponent } from './pages/analysis-tab/reports/district-table/district-table.component';
 
 
 
@@ -16,7 +18,9 @@ import { SummaryTableComponent } from './pages/overall-summary-tab/reports/summa
   declarations: [
     SchoolLibraryComponent,
     OverallSummaryTabComponent,
-    SummaryTableComponent
+    SummaryTableComponent,
+    AnalysisTabComponent,
+    DistrictTableComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

@@ -1,7 +1,7 @@
 <div class="container">
 	<sb-dashlet [type]="type" [data]="filterData" [config]="config"></sb-dashlet>
 	<mat-paginator
-		[pageSizeOptions]="[5, 10, 15, 20, 30]"
+		[pageSizeOptions]="[5, 10, 15, 20]"
 		(page)="onPageChange($event)"
 		[length]="data?.values?.length"
 		[pageSize]="config.pageSize"

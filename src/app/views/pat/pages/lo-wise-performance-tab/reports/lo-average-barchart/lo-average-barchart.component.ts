@@ -19,7 +19,7 @@ import { LoWisePerformanceTabComponent } from '../../lo-wise-performance-tab.com
   styleUrls: ['./lo-average-barchart.component.scss']
 })
 export class LoAverageBarchartComponent implements OnInit, OnDestroy {
-  compareDateRange: any = 30;
+  compareDateRange: any = 7;
   title: any;
   chartHeight: any;
   marginTop: any;
@@ -213,6 +213,7 @@ export class LoAverageBarchartComponent implements OnInit, OnDestroy {
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+          this._dataService.extraLine(reportData,config,"perc_students");
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
@@ -262,6 +263,7 @@ export class LoAverageBarchartComponent implements OnInit, OnDestroy {
       }
       console.log('tablereprtdata 261',this.tableReportData)
       this.config = this.getConfig()
+      this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
       console.log('configgg', this.config)
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
         if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
@@ -362,18 +364,18 @@ export class LoAverageBarchartComponent implements OnInit, OnDestroy {
               const meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {
                 const data = dataset.data[index];
-                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                // ctx.fillText(data, bar._model.x, bar._model.y - 5);
               });
             });
           }
         },
         height: '120',
         tooltips: {
-          callbacks: {
-            label: (tooltipItem, data) => {
-              return tooltipObject[tooltipItem.label.trim()]
-            }
-          }
+          // callbacks: {
+          //   label: (tooltipItem, data) => {
+          //     return tooltipObject[tooltipItem.label.trim()]
+          //   }
+          // }
         },
         scales: {
           yAxes: [{
@@ -473,6 +475,10 @@ export class LoAverageBarchartComponent implements OnInit, OnDestroy {
         onLoadQuery = queries[key]
       }
       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, undefined);
+
+      this.filterValues.forEach((filterParams: any) => {
+        query = parseFilterToQuery(query, filterParams)
+      });
 
       if (query && key === 'barChart') {
         this.getBarChartReportData(query, options, filters, defaultLevel);
