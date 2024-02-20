@@ -417,7 +417,7 @@ export class TeacherTrendlineComponent implements OnInit, OnDestroy {
     });
     // Change bar color to green
     barChartConfig.datasets.forEach((dataset: any) => {
-      dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+      dataset.backgroundColor = '#008ac5';
     });
 
     return barChartConfig
