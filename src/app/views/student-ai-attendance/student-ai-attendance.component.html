@@ -30,5 +30,10 @@
 				*ngIf="selectedTabLabel === 'Average Student Present'"
 			></app-student-average-tab>
 		</mat-tab>
+		<mat-tab label="Average Student Absent">
+			<app-student-average-absent-tab
+				*ngIf="selectedTabLabel === 'Average Student Absent'"
+			></app-student-average-absent-tab>
+		</mat-tab>
 	</mat-tab-group>
 </div>
