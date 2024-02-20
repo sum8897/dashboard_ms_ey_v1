@@ -51,6 +51,11 @@
 				*ngIf="checkReport('teacher_bignumber', 'bigNumber')"
 			>
 				<app-teacher-bignumber #teacherBigNumber></app-teacher-bignumber>
+				<hr />
+				<app-teacher-trendline
+					#teacherTrendchart
+					(exportReportData)="csvDownload($event)"
+				></app-teacher-trendline>
 			</div>
 
 			<div

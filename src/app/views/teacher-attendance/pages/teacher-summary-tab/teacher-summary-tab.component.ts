@@ -9,6 +9,8 @@ import { TeacherSchoolTableComponent } from './reports/teacher-school-table/teac
 import { TeacherBignumberComponent } from './reports/teacher-bignumber/teacher-bignumber.component';
 import { TeacherBarchartComponent } from './reports/teacher-barchart/teacher-barchart.component';
 import moment from 'moment';
+import { TeacherTrendlineComponent } from './reports/teacher-trendline/teacher-trendline.component';
+
 
 @Component({
   selector: 'app-teacher-summary-tab',
@@ -49,6 +51,7 @@ hasCommonFilters: boolean = true;
   @ViewChild('teacherAverageTable') teacherAverageTable: TeacherAverageTableComponent;
   @ViewChild('teacherAverageSchool') teacherAverageSchool: TeacherSchoolTableComponent;
   @ViewChild('teacherBarchart') teacherBarchart: TeacherBarchartComponent;
+  @ViewChild('teacherTrendchart') teacherTrendchart: TeacherTrendlineComponent;
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -83,6 +86,7 @@ hasCommonFilters: boolean = true;
           this.teacherAverageTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.teacherBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.teacherBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.teacherTrendchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
          
           }
       else if(this.hasCommonFilters===false){
@@ -134,6 +138,8 @@ hasCommonFilters: boolean = true;
     this.teacherBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
     this.teacherBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+    this.teacherTrendchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
   
 

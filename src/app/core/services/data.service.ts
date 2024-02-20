@@ -262,15 +262,19 @@ export class DataService {
            // Set tension to 0 for pinpoint appearance
            elements: {
             line: {
-                tension: 0 // Set tension to 0 for pinpoint appearance
+                tension: 0, // Set tension to 0 for pinpoint appearance
+                // borderColor: '#0b1d78' 
             }
         }
           }
         });
          // Change bar color to green
-         config.datasets.forEach((dataset: any) => {
-          dataset.backgroundColor = 'rgba(0,0,0,0.1)';
-      });
+      //    config.datasets.forEach((dataset: any) => {
+      //     dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+      // });
+      config.datasets.forEach((dataset: any) => {
+        dataset.backgroundColor = '#008ac5';
+    });
         this.spinner.hide();
         resolve({ reportData: reportData, config: config })
       });

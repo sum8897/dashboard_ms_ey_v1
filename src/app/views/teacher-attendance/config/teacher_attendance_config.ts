@@ -1816,7 +1816,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart","teacher_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1834,7 +1834,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart","teacher_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1852,7 +1852,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart","teacher_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -1870,7 +1870,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart"]
+                                linkedReports: ["teacher_bignumber", "teacher_average_school","teacher_barchart","teacher_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
 
@@ -3830,6 +3830,324 @@ export const config = {
             }
         }
     },
+    teacher_trendchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `select 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as staff_present
+                    from
+                    teacher_attendance.teaching_staff ts  
+                    left join
+                    dimensions.district d on ts.district_id  = d.district_id 
+                    where 
+                    ts.date between startDate and endDate 
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                    ORDER BY
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as staff_present
+                        from
+                        teacher_attendance.teaching_staff ts  
+                        left join
+                        dimensions.district d on ts.district_id  = d.district_id 
+                        where 
+                        ts.date between startDate and endDate 
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                        ORDER BY
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as staff_present
+                    from
+                    teacher_attendance.teaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    where 
+                    ts.date between startDate and endDate and  ts.district_id = {district_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                    b.block_name,
+                    d.district_name
+                    ORDER BY
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as staff_present
+                        from
+                        teacher_attendance.teaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        where 
+                        ts.date between startDate and endDate and  ts.district_id = {district_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                        b.block_name,
+                        d.district_name
+                        ORDER BY
+                        TO_CHAR(ts.date, 'YYYY-MM-DD')`,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    ts.cluster_id,
+                    c.cluster_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as staff_present
+                    from
+                    teacher_attendance.teaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                    where 
+                    ts.date between startDate and endDate and ts.block_id = {block_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                    b.block_name,ts.cluster_id ,c.cluster_name,
+                    d.district_name
+                    ORDER BY
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        ts.cluster_id,
+                        c.cluster_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as staff_present
+                        from
+                        teacher_attendance.teaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                        where 
+                        ts.date between startDate and endDate and ts.block_id = {block_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                        b.block_name,ts.cluster_id ,c.cluster_name,
+                        d.district_name
+                        ORDER BY
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                        `
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    ts.cluster_id,
+                    c.cluster_name,
+                    ts.school_id ,
+                    sch.school_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as staff_present
+                    from
+                    teacher_attendance.teaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                    left join 
+                    dimensions.school sch on ts.school_id = sch.school_id 
+                    where 
+                    ts.date between startDate and endDate and ts.cluster_id = {cluster_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                    b.block_name,ts.cluster_id ,c.cluster_name,
+                    d.district_name,ts.school_id ,
+                    sch.school_name
+                    ORDER BY
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        ts.cluster_id,
+                        c.cluster_name,
+                        ts.school_id ,
+                        sch.school_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as staff_present
+                        from
+                        teacher_attendance.teaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                        left join 
+                        dimensions.school sch on ts.school_id = sch.school_id 
+                        where 
+                        ts.date between startDate and endDate and ts.cluster_id = {cluster_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                        b.block_name,ts.cluster_id ,c.cluster_name,
+                        d.district_name,ts.school_id ,
+                        sch.school_name
+                        ORDER BY
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') 
+                        `
+                    },
+                    "level": "school"
+                }
+            },
+
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Staff Present",
+                "metricValueProp": "staff_present",
+                "yAxis": {
+                    "title": "Staff Present"
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "Date",
+                    "label": "level",
+                    "value": "level",
+
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Teacher: ",
+                        "value": "perc_teachers",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
+        }
+    },
+   
     staff_barchart:{
         "label": "Overall Summary",
         "defaultLevel": "state",
@@ -4058,6 +4376,309 @@ export const config = {
                 },
                 "xAxis": {
                     "title": "District",
+                    "label": "level",
+                    "value": "level",
+
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Teacher: ",
+                        "value": "perc_teachers",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
+        }
+    },
+    staff_trendchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `select 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as non_staff_present
+                    from
+                    teacher_attendance.nonteaching_staff ts  
+                    left join
+                    dimensions.district d on ts.district_id  = d.district_id 
+                    where 
+                    ts.date between startDate and endDate 
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD')
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as non_staff_present
+                        from
+                        teacher_attendance.nonteaching_staff ts  
+                        left join
+                        dimensions.district d on ts.district_id  = d.district_id 
+                        where 
+                        ts.date between startDate and endDate 
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD')
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as non_staff_present
+                    from
+                    teacher_attendance.nonteaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    where 
+                    ts.date between startDate and endDate and  ts.district_id = {district_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                    b.block_name,
+                    d.district_name`,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as non_staff_present
+                        from
+                        teacher_attendance.nonteaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        where 
+                        ts.date between startDate and endDate and  ts.district_id = {district_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                        b.block_name,
+                        d.district_name`,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    ts.cluster_id,
+                    c.cluster_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as non_staff_present
+                    from
+                    teacher_attendance.nonteaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                    where 
+                    ts.date between startDate and endDate and ts.block_id = {block_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                    b.block_name,ts.cluster_id ,c.cluster_name,
+                    d.district_name
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        ts.cluster_id,
+                        c.cluster_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as non_staff_present
+                        from
+                        teacher_attendance.nonteaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                        where 
+                        ts.date between startDate and endDate and ts.block_id = {block_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD')  ,ts.district_id ,ts.block_id ,
+                        b.block_name,ts.cluster_id ,c.cluster_name,
+                        d.district_name
+                        `
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `select
+                    ts.district_id ,
+                    d.district_name,
+                    ts.block_id ,
+                    b.block_name,
+                    ts.cluster_id,
+                    c.cluster_name,
+                    ts.school_id ,
+                    sch.school_name,
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                    coalesce(sum(ts.attendance_status),0) as non_staff_present
+                    from
+                    teacher_attendance.nonteaching_staff ts 
+                    left join 
+                    dimensions.district d on ts.district_id = d.district_id 
+                    left join 
+                    dimensions.block b on ts.block_id = b.block_id 
+                    left join 
+                    dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                    left join 
+                    dimensions.school sch on ts.school_id = sch.school_id 
+                    where 
+                    ts.date between startDate and endDate and ts.cluster_id = {cluster_id}
+                    group by 
+                    TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                    b.block_name,ts.cluster_id ,c.cluster_name,
+                    d.district_name,ts.school_id ,
+                    sch.school_name
+                    
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`select
+                        ts.district_id ,
+                        d.district_name,
+                        ts.block_id ,
+                        b.block_name,
+                        ts.cluster_id,
+                        c.cluster_name,
+                        ts.school_id ,
+                        sch.school_name,
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') AS level,
+                        coalesce(sum(ts.attendance_status),0) as non_staff_present
+                        from
+                        teacher_attendance.nonteaching_staff ts 
+                        left join 
+                        dimensions.district d on ts.district_id = d.district_id 
+                        left join 
+                        dimensions.block b on ts.block_id = b.block_id 
+                        left join 
+                        dimensions.cluster c on ts.cluster_id  = c.cluster_id  
+                        left join 
+                        dimensions.school sch on ts.school_id = sch.school_id 
+                        where 
+                        ts.date between startDate and endDate and ts.cluster_id = {cluster_id}
+                        group by 
+                        TO_CHAR(ts.date, 'YYYY-MM-DD') ,ts.district_id ,ts.block_id ,
+                        b.block_name,ts.cluster_id ,c.cluster_name,
+                        d.district_name,ts.school_id ,
+                        sch.school_name
+                        
+                        `
+                    },
+                    "level": "school"
+                }
+            },
+
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Non Staff Present",
+                "metricValueProp": "non_staff_present",
+                "yAxis": {
+                    "title": "Non Staff Present"
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "Date",
                     "label": "level",
                     "value": "level",
 
@@ -4360,7 +4981,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart","staff_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4378,7 +4999,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart","staff_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4396,7 +5017,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart","staff_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -4414,7 +5035,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart"]
+                                linkedReports: ["staff_bignumber", "staff_average_school","staff_barchart","staff_trendchart"]
                             },
                             allowedLevels: [1, 2, 3]
 

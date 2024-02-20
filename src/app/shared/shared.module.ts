@@ -58,6 +58,7 @@ import { SearchFilterPipe } from './pipes/searchFilter/search-filter.pipe';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { NewBarChartComponent } from './components/charts/new-bar-chart/new-bar-chart.component';
 import { NewLineChartComponent } from './components/charts/new-line-chart/new-line-chart.component';
+import { DatePickerComponent } from './components/date-picker/date-picker.component';
 
 
 const IMPORTS: any[] = [
@@ -132,6 +133,7 @@ const DECLARATIONS = [
     BreadcrumbComponentComponent,
     NewBarChartComponent,
     LineChartComponent,
+    DatePickerComponent,
     
   ],
   imports: [
