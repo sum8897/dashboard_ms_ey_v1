@@ -29,7 +29,7 @@ import { BarchartBenchmarkService } from "src/app/core/services/barchart-benchma
 export class StudentAverageAbsentBignumberComponent
   implements OnInit, OnDestroy
 {
-  reportName: string = "student_average_bignumber";
+  reportName: string = "student_average_absent_bignumber";
   filters: any = [];
   levels: any;
   tableReportData: any;

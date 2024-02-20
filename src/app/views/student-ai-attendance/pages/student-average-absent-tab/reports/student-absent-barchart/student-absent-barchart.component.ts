@@ -40,7 +40,7 @@ export class StudentAbsentBarchartComponent implements OnInit, OnDestroy {
   config;
   data;
   fileName: string = "";
-  reportName: string = "student_barchart";
+  reportName: string = "student_absent_barchart";
   filters: any = [];
   levels: any;
   tableReportData: any;

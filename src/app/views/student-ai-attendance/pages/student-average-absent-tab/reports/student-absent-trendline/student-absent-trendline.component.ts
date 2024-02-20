@@ -40,7 +40,7 @@ export class StudentAbsentTrendlineComponent implements OnInit, OnDestroy {
   config;
   data;
   fileName: string = "";
-  reportName: string = "student_trendchart";
+  reportName: string = "student_absent_trendchart";
   filters: any = [];
   levels: any;
   tableReportData: any;

@@ -30,7 +30,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class StudentAverageAbsentSchoolTableComponent
   implements OnInit, OnDestroy
 {
-  reportName: string = "student_average_school";
+  reportName: string = "student_average_absent_school";
   filters: any = [];
   levels: any;
   tableReportData: any;
