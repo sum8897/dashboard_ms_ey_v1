@@ -2,7 +2,7 @@
 	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
 		<div class="col-span-12">
 			<p class="program-title">
-				STUDENT Enrollment<em><small>(STUDENT-Enrollment)</small></em>
+				STUDENT Enrollment<em><small></small></em>
 			</p>
 			<p class="program-desc"></p>
 		</div>
@@ -17,15 +17,12 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<!-- <mat-tab
-			label="Map View OF Student Attendance"
-			*ngIf="tabs.includes('Map View OF Student Attendance')"
-		>
-			<app-map-view-tab
-				*ngIf="selectedTabLabel === 'Map View OF Student Attendance'"
-			></app-map-view-tab>
+		<mat-tab label="Comparitive Data" *ngIf="tabs.includes('Comparitive Data')">
+			<app-student-enroll-summary-tab
+				*ngIf="selectedTabLabel === 'Comparitive Data'"
+			></app-student-enroll-summary-tab>
 		</mat-tab>
-		<mat-tab label="Average Student Present">
+		<!-- <mat-tab label="Average Student Present">
 			<app-student-average-tab
 				*ngIf="selectedTabLabel === 'Average Student Present'"
 			></app-student-average-tab>

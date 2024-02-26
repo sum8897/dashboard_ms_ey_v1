@@ -13,39 +13,13 @@ export const config = {
 	filters: [
         //student-availability
 		
-		{
-			label: 'Map View OF Student Attendance',
-
-			name: 'class',
-
-			labelProp: 'class_name',
-
-			valueProp: 'class_id',
-
-			id: 'class',
-
-			tableAlias: 'cc',
-
-			query:
-				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
-		},
 		
-		{
-
-            label: 'Map View OF Student Attendance',
-
-            name: 'Metric',
-
-            id: 'metric',
-
-            values: ['percentage_of_student_present', 'percentage_of_student_absent'],
-
-        },
+		
 		//lo-wise
        
 
         {
-			label: 'Average Student Present',
+			label: 'Comparitive Data',
 
             // displayLabel:'Class',
 
@@ -65,498 +39,18 @@ export const config = {
         
 	
 	],
-    //student-availability query
-	student_map: {
-
-            label: 'Map View OF Student Attendance',
-            filters: [
    
-		
-
-        {
-			"name": "State",
-			"hierarchyLevel": "1",
-			"timeSeriesQueries": {"map": `SELECT 
-            ts.district_id,
-            d.district_name,
-            d.latitude,
-            d.longitude,
-         (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-        FROM
-            student_attendance.student_attendance_master ts
-        LEFT JOIN
-            dimensions.district d ON ts.district_id = d.district_id
-        LEFT JOIN
-            dimensions.class cc ON ts.class_id = cc.class_id
-        JOIN
-         (
-          select ts.school_id,
-          COUNT(DISTINCT ts.date) AS total_days
-          FROM
-           student_attendance.student_attendance_master ts
-           join dimensions.class cc on cc.class_id = ts.class_id
-           where 
-           ts.date BETWEEN startDate AND endDate
-           GROUP BY
-           ts.school_id
-            ) AS days_count ON ts.school_id = days_count.school_id
-        WHERE
-            ts.date BETWEEN startDate AND endDate
-        GROUP BY
-            ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`,},
-			"actions": {
-				"queries":	
-				{
-					"map": `SELECT 
-                    ts.district_id,
-                    d.district_name,
-                    d.latitude,
-                    d.longitude,
-                 (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-                (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-                ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-                ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-                FROM
-                    student_attendance.student_attendance_master ts
-                LEFT JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                LEFT JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                JOIN
-                 (
-                  select ts.school_id,
-                  COUNT(DISTINCT ts.date) AS total_days
-                  FROM
-                   student_attendance.student_attendance_master ts
-                   join dimensions.class cc on cc.class_id = ts.class_id
-                   where 
-                   ts.date BETWEEN startDate AND endDate
-                   GROUP BY
-                   ts.school_id
-                    ) AS days_count ON ts.school_id = days_count.school_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate
-                GROUP BY
-                    ts.district_id, d.district_name, d.latitude, d.longitude,days_count.total_days;`,
-
-			
-				},
-				"level": "district",
-				"nextLevel": "block"
-			}
-		},
-		{
-            "name": "District",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries":  {
-                    "map": `
-                    SELECT 
-	ts.block_id,
-	b.block_name,
-    ts.district_id,
-    d.district_name,
-    b.latitude,
-    b.longitude,
-   (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-FROM
-    student_attendance.student_attendance_master ts
-LEFT JOIN
-	dimensions.block b on ts.block_id = b.block_id
-LEFT JOIN
-    dimensions.district d ON ts.district_id = d.district_id
-LEFT JOIN
-    dimensions.class cc ON ts.class_id = cc.class_id
-JOIN
- (
-  select ts.school_id,
-  COUNT(DISTINCT ts.date) AS total_days
-  FROM
-   student_attendance.student_attendance_master ts
-  join dimensions.class cc on cc.class_id = ts.class_id
-   where 
- ts.date BETWEEN startDate AND endDate
-   GROUP BY
-   ts.school_id
-    ) AS days_count ON ts.school_id = days_count.school_id
-WHERE
-    ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
-GROUP BY
-   ts.block_id,
-	b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
-`,
-
-                    
-                },
-            "actions": {
-                "queries":
-                {
-                    "map": `
-                    SELECT 
-	ts.block_id,
-	b.block_name,
-    ts.district_id,
-    d.district_name,
-    b.latitude,
-    b.longitude,
-   (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-(COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-FROM
-    student_attendance.student_attendance_master ts
-LEFT JOIN
-	dimensions.block b on ts.block_id = b.block_id
-LEFT JOIN
-    dimensions.district d ON ts.district_id = d.district_id
-LEFT JOIN
-    dimensions.class cc ON ts.class_id = cc.class_id
-JOIN
- (
-  select ts.school_id,
-  COUNT(DISTINCT ts.date) AS total_days
-  FROM
-   student_attendance.student_attendance_master ts
-  join dimensions.class cc on cc.class_id = ts.class_id
-   where 
- ts.date BETWEEN startDate AND endDate
-   GROUP BY
-   ts.school_id
-    ) AS days_count ON ts.school_id = days_count.school_id
-WHERE
-    ts.date BETWEEN startDate AND endDate AND ts.district_id = {district_id}
-GROUP BY
-   ts.block_id,
-	b.block_name, ts.district_id, d.district_name, b.latitude, b.longitude,days_count.total_days;
-`,
-
-                    
-                },
-                "level": "block",
-                "nextLevel": "cluster"
-            }
-        },
-        {
-            "name": "Block",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries":  {
-                "map": `
-                SELECT 
-                ts.cluster_id,
-                c.cluster_name,
-                ts.block_id,
-                b.block_name,
-                ts.district_id,
-                d.district_name,
-                c.latitude,
-                c.longitude,
-               (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-            (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-            ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-            ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-            ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-            FROM
-                student_attendance.student_attendance_master ts
-            LEFT JOIN
-                dimensions.cluster c on ts.cluster_id = c.cluster_id
-            LEFT JOIN
-                dimensions.block b on ts.block_id = b.block_id
-            LEFT JOIN
-                dimensions.district d ON ts.district_id = d.district_id
-            JOIN
-                dimensions.class cc ON ts.class_id = cc.class_id
-                JOIN
-             (
-              select ts.school_id,
-              COUNT(DISTINCT ts.date) AS total_days
-              FROM
-               student_attendance.student_attendance_master ts
-               join dimensions.class cc on cc.class_id = ts.class_id
-               where 
-            
-            ts.date BETWEEN startDate AND endDate
-               GROUP BY
-               ts.school_id
-                ) AS days_count ON ts.school_id = days_count.school_id
-            WHERE
-                ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
-            GROUP BY
-               ts.cluster_id,
-                c.cluster_name,
-                ts.block_id,
-                b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;
-            
-`,
-
-            },
-            "actions": {
-                "queries":
-                {
-                    "map": `
-                    SELECT 
-                    ts.cluster_id,
-                    c.cluster_name,
-                    ts.block_id,
-                    b.block_name,
-                    ts.district_id,
-                    d.district_name,
-                    c.latitude,
-                    c.longitude,
-                   (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-                (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-                ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-                ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-                FROM
-                    student_attendance.student_attendance_master ts
-                LEFT JOIN
-                    dimensions.cluster c on ts.cluster_id = c.cluster_id
-                LEFT JOIN
-                    dimensions.block b on ts.block_id = b.block_id
-                LEFT JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                    JOIN
-                 (
-                  select ts.school_id,
-                  COUNT(DISTINCT ts.date) AS total_days
-                  FROM
-                   student_attendance.student_attendance_master ts
-                   join dimensions.class cc on cc.class_id = ts.class_id
-                   where 
-                
-                ts.date BETWEEN startDate AND endDate
-                   GROUP BY
-                   ts.school_id
-                    ) AS days_count ON ts.school_id = days_count.school_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
-                GROUP BY
-                   ts.cluster_id,
-                    c.cluster_name,
-                    ts.block_id,
-                    b.block_name, ts.district_id, d.district_name, c.latitude, c.longitude,days_count.total_days;
-                
-`,
-
-                },
-                "level": "cluster",
-                "nextLevel": "school"
-            }
-        },
-         {
-                    "name": "Cluster",
-                    "hierarchyLevel": "4",
-                    "timeSeriesQueries": {
-                        "map": `SELECT 
-                        ts.school_id,
-                        sch.school_name,
-                        ts.cluster_id,
-                        c.cluster_name,
-                        ts.block_id,
-                        b.block_name,
-                        ts.district_id,
-                        d.district_name,
-                        sch.latitude,
-                        sch.longitude,
-                       (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                    ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-                    ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-                    FROM
-                        student_attendance.student_attendance_master ts
-                    LEFT JOIN
-                        dimensions.school sch on ts.school_id = sch.school_id
-                    LEFT JOIN
-                        dimensions.cluster c on ts.cluster_id = c.cluster_id
-                    LEFT JOIN
-                        dimensions.block b on ts.block_id = b.block_id
-                    LEFT JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                    LEFT JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    JOIN
-                     (
-                      select ts.school_id,
-                      COUNT(DISTINCT ts.date) AS total_days
-                      FROM
-                       student_attendance.student_attendance_master ts
-                       join dimensions.class cc on cc.class_id = ts.class_id
-                       where 
-                    ts.date BETWEEN startDate AND endDate
-                       GROUP BY
-                       ts.school_id
-                        ) AS days_count ON ts.school_id = days_count.school_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
-                    GROUP BY
-                       ts.school_id,
-                        sch.school_name,
-                        ts.cluster_id,
-                        c.cluster_name,
-                        ts.block_id,
-                        b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
-                    },
-                    "actions": {
-                        "queries": {
-                            "map": `SELECT 
-                            ts.school_id,
-                            sch.school_name,
-                            ts.cluster_id,
-                            c.cluster_name,
-                            ts.block_id,
-                            b.block_name,
-                            ts.district_id,
-                            d.district_name,
-                            sch.latitude,
-                            sch.longitude,
-                           (SUM(ts.attendance_status)/days_count.total_days) as percentage_of_student_present,
-                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                        ((COUNT(ts.attendance_status) - SUM(ts.attendance_status))/days_count.total_days) AS percentage_of_student_absent,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students,
-                        ROUND((COUNT(ts.attendance_status) - SUM(ts.attendance_status)) * 100 /COUNT(ts.attendance_status),2 ) AS absent_students_percentage
-                        FROM
-                            student_attendance.student_attendance_master ts
-                        LEFT JOIN
-                            dimensions.school sch on ts.school_id = sch.school_id
-                        LEFT JOIN
-                            dimensions.cluster c on ts.cluster_id = c.cluster_id
-                        LEFT JOIN
-                            dimensions.block b on ts.block_id = b.block_id
-                        LEFT JOIN
-                            dimensions.district d ON ts.district_id = d.district_id
-                        LEFT JOIN
-                            dimensions.class cc ON ts.class_id = cc.class_id
-                        JOIN
-                         (
-                          select ts.school_id,
-                          COUNT(DISTINCT ts.date) AS total_days
-                          FROM
-                           student_attendance.student_attendance_master ts
-                           join dimensions.class cc on cc.class_id = ts.class_id
-                           where 
-                        ts.date BETWEEN startDate AND endDate
-                           GROUP BY
-                           ts.school_id
-                            ) AS days_count ON ts.school_id = days_count.school_id
-                        WHERE
-                            ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
-                        GROUP BY
-                           ts.school_id,
-                            sch.school_name,
-                            ts.cluster_id,
-                            c.cluster_name,
-                            ts.block_id,
-                            b.block_name, ts.district_id, d.district_name, sch.latitude, sch.longitude,days_count.total_days;`,
-                        },
-                        "level": "school"
-                    }
-                }
-            
-	],
-    
-		options: {
-
-			map: {
-
-				metricFilterNeeded: true,
-
-				indicator: 'metric',
-                totalOfPercentage:"total_students",
-                indicatorType: "percent",
-
-				legend: {
-
-					title: 'Student Attendance',
-
-				},
-
-				tooltipMetrics: [
-					{
-						valuePrefix: 'District ID: ',
-						value: 'district_id',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'District Name: ',
-						value: 'district_name',
-						valueSuffix: '\n',
-					},
-					{
-                        valuePrefix: 'Block ID: ',
-                        value: 'block_id',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Block Name: ',
-                        value: 'block_name',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Cluster ID: ',
-                        value: 'cluster_id',
-                        valueSuffix: '\n',
-                    },
-                    {
-                        valuePrefix: 'Cluster Name: ',
-                        value: 'cluster_name',
-                        valueSuffix: '\n',
-                    },
-					{
-						valuePrefix: 'Student Present: ',
-						value: 'percentage_of_student_present',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'Student Absent: ',
-						value: 'percentage_of_student_absent',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'Total Students: ',
-						value: 'total_students',
-						valueSuffix: '\n',
-					},
-					{
-						valuePrefix: 'Average Students Present: ',
-						value: 'perc_students',
-						valueSuffix: '%\n',
-					},
-					{
-						valuePrefix: 'Average Students Absent:',
-						value: 'absent_students_percentage',
-						valueSuffix: '%\n',
-					},
-					
-				]
-
-			}
-
-		}
-
-	},
 	
 
  
 
 
 
-    //lo-wise-query
+   
 
-    ///right table for lo
-    student_average_table: {
-        "label": "Average Student Present",
+    ///right table for comparative
+    student_comparative_table: {
+        "label": "Comparitive Data",
         "defaultLevel": "state",
         "filters": [
             {
@@ -565,41 +59,41 @@ GROUP BY
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT 
-                    ts.district_id,
+                    "table": `SELECT
+                    sam.district_id,
                     d.district_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate 
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                where
+                  sam.date in ( startDate,endDate)  
                 GROUP BY
-                    ts.district_id, d.district_name;`,
+                    sam.district_id, d.district_name`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT 
-                        ts.district_id,
+                        "table": `SELECT
+                        sam.district_id,
                         d.district_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate 
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    where
+                      sam.date in ( startDate,endDate)  
                     GROUP BY
-                        ts.district_id, d.district_name;`,
+                        sam.district_id, d.district_name`,
                     },
                     "level": "district"
                 }
@@ -611,50 +105,48 @@ GROUP BY
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "table": `SELECT
-                    ts.block_id,
+ 
+                    sam.block_id ,
                     b.block_name,
-                    b.district_id,
-                   
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.district_id = {district_id}
                 GROUP BY
-                    ts.block_id,
-                    b.block_name,b.district_id;`,
+                    sam.block_id , b.block_name`,
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
-                        ts.block_id,
+ 
+                        sam.block_id ,
                         b.block_name,
-                        b.district_id,
-                       
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.district_id = {district_id}
                     GROUP BY
-                        ts.block_id,
-                        b.block_name,b.district_id;`,
+                        sam.block_id , b.block_name`,
                     },
                     "level": "block"
                 }
@@ -666,62 +158,54 @@ GROUP BY
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "table": `SELECT
-                    ts.cluster_id,
+    
+                    sam.cluster_id ,
                     c.cluster_name,
-                    c.block_id,
-                    
-                    b.district_id,
-                   
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.block_id  = {block_id}
                 GROUP BY
-                    ts.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.district_id;`,
+                    
+                    sam.cluster_id, c.cluster_name `,
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
-                        ts.cluster_id,
+    
+                        sam.cluster_id ,
                         c.cluster_name,
-                        c.block_id,
-                        
-                        b.district_id,
-                       
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.block_id  = {block_id}
                     GROUP BY
-                        ts.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.district_id;`,
+                        
+                        sam.cluster_id, c.cluster_name `,
                     },
                     "level": "cluster"
                 }
@@ -733,76 +217,58 @@ GROUP BY
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "table": `SELECT
-                    ts.school_id,
+   
+                    sam.school_id,
                     sch.school_name,
-                    sch.cluster_id,
-                    
-                    c.block_id,
-                    
-                    b.district_id,
-                    
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.school sch ON sch.school_id = ts.school_id
-                JOIN
-                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                left join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.cluster_id  = {cluster_id}
                 GROUP BY
-                   ts.school_id,
-                    sch.school_name,
-                    sch.cluster_id,
-                    
-                    c.block_id,
-                    b.district_id;
+                   sam.school_id , sch.school_name 
                 
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
-                        ts.school_id,
+   
+                        sam.school_id,
                         sch.school_name,
-                        sch.cluster_id,
-                        
-                        c.block_id,
-                        
-                        b.district_id,
-                        
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.school sch ON sch.school_id = ts.school_id
-                    JOIN
-                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.cluster_id  = {cluster_id}
                     GROUP BY
-                       ts.school_id,
-                        sch.school_name,
-                        sch.cluster_id,
-                        
-                        c.block_id,
-                        b.district_id;
+                       sam.school_id , sch.school_name 
                     
                         `,
                     },
@@ -841,7 +307,7 @@ GROUP BY
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["student_average_bignumber", "student_average_school","student_barchart","student_trendchart"]
+                                linkedReports: ["student_comparative_bignumber", "student_comparative_school","student_comparative_barchart","student_percentage_change_bignumber"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -859,7 +325,7 @@ GROUP BY
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["student_average_bignumber", "student_average_school","student_barchart","student_trendchart"]                            },
+                                linkedReports: ["student_comparative_bignumber", "student_comparative_school","student_comparative_barchart","student_percentage_change_bignumber"]                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -876,7 +342,7 @@ GROUP BY
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["student_average_bignumber", "student_average_school","student_barchart","student_trendchart"]                            },
+                                linkedReports: ["student_comparative_bignumber", "student_comparative_school","student_comparative_barchart","student_percentage_change_bignumber"]                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -893,7 +359,7 @@ GROUP BY
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["student_average_bignumber", "student_average_school","student_barchart","student_trendchart"]                            },
+                                linkedReports: ["student_comparative_bignumber", "student_comparative_school","student_comparative_barchart","student_percentage_change_bignumber"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -909,10 +375,21 @@ GROUP BY
                         class: "text-center"
                     },
                     {
-                        name: "% Average Present",
-                        property: "perc_students",
+                        name: "No. of Students enrolled on Date 1",
+                        property: "date1_count",
+                        class: "text-center"
+                    },
+                    {
+                        name: "No. of Students enrolled on Date 2",
+                        property: "date2_count",
+                        class: "text-center"
+                    },
+                    
+                    {
+                        name: "change",
+                        property: "student_count_change",
                         class: "text-center",
-                        valueSuffix: '%',
+                        valueSuffix: '',
                         isHeatMapRequired: true,
                         type: "number",
                         color: {
@@ -920,15 +397,15 @@ GROUP BY
                             values: [
                                 {
                                     color: "#007000",
-                                    breakPoint: 70
+                                    breakPoint: 50
                                 },
                                 {
                                     color: "#FFBF00",
-                                    breakPoint: 40
+                                    breakPoint: 1
                                 },
                                 {
                                     color: "#D2222D",
-                                    breakPoint: 0
+                                    breakPoint: -100
                                 }
                             ]
                         },
@@ -942,7 +419,7 @@ GROUP BY
         }
     },
 //left table for bignumber
-student_average_bignumber: {
+student_comparative_bignumber: {
         "label": "Average Student Present",
         "filters": [
             {
@@ -951,46 +428,46 @@ student_average_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT 
-                    ts.district_id,
-                    d.district_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate 
-                GROUP BY
-                    ts.district_id, d.district_name) AS avg_query;`
+                    "bigNumber": `SELECT sum(student_count_change) AS total_change
+                    FROM ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                    GROUP BY
+                        sam.district_id, d.district_name) AS sum_change
+                    `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_students)) AS percentage_students
-                        from (SELECT 
-                        ts.district_id,
-                        d.district_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate 
-                    GROUP BY
-                        ts.district_id, d.district_name) AS avg_query;`
+                        "bigNumber": `SELECT sum(student_count_change) AS total_change
+                        FROM ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                        GROUP BY
+                            sam.district_id, d.district_name) AS sum_change
+                        `
                     },
                     "level": "district"
                 }
@@ -1001,45 +478,55 @@ student_average_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT 
-                    ts.district_id,
-                    d.district_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
-                GROUP BY
-                    ts.district_id, d.district_name) AS avg_query;`
+                    "bigNumber": `SELECT sum(student_count_change) AS total_change
+                    FROM ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ) AS sum_change
+                        `
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_students)) AS percentage_students
-                        from (SELECT 
-                        ts.district_id,
-                        d.district_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND ts.district_id ={district_id}
-                    GROUP BY
-                        ts.district_id, d.district_name) AS avg_query;`
+                        "bigNumber": `SELECT sum(student_count_change) AS total_change
+                        FROM ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            sam.block_id ,
+                            b.block_name,
+                            COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        LEFT join
+                            dimensions.block b on sam.block_id = b.block_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                          and sam.district_id = {district_id}
+                        GROUP BY
+                            sam.district_id, d.district_name, sam.block_id , b.block_name ) AS sum_change
+                            `
                     },
                     "level": "block"
                 }
@@ -1051,57 +538,65 @@ student_average_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT
-                    ts.block_id,
-                    b.block_name,
-                    b.district_id,
-                    d.district_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
-                GROUP BY
-                    ts.block_id,
-                    b.block_name,b.district_id, d.district_name) AS avg_query;
+                    "bigNumber": `SELECT sum(student_count_change) AS total_change
+                    FROM ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.block_id  = {block_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name ) AS sum_change
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_students)) AS percentage_students
-                        from (SELECT
-                        ts.block_id,
-                        b.block_name,
-                        b.district_id,
-                        d.district_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND ts.block_id = {block_id}
-                    GROUP BY
-                        ts.block_id,
-                        b.block_name,b.district_id, d.district_name) AS avg_query;
+                        "bigNumber": `SELECT sum(student_count_change) AS total_change
+                        FROM ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            sam.block_id ,
+                            b.block_name,
+                            sam.cluster_id ,
+                            c.cluster_name,
+                            COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        LEFT join
+                            dimensions.block b on sam.block_id = b.block_id 
+                        left join 
+                            dimensions.cluster c on sam.cluster_id = c.cluster_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                          and sam.block_id  = {block_id}
+                        GROUP BY
+                            sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                            sam.cluster_id, c.cluster_name ) AS sum_change
                         `,
                        
                     },
@@ -1114,68 +609,74 @@ student_average_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT
-                    ts.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.block_name,
-                    b.district_id,
-                    d.district_name,
-                    SUM(ts.attendance_status) AS present_students,
-                    COUNT(ts.attendance_status) AS total_students,
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.block b ON c.block_id = b.block_id
-                JOIN
-                    dimensions.district d ON b.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON ts.class_id = cc.class_id
-                WHERE
-                    ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
-                GROUP BY
-                    ts.cluster_id,
-                    c.cluster_name,
-                    c.block_id,
-                    b.block_name,b.district_id, d.district_name) AS avg_query;	`,
+                    "bigNumber": `SELECT sum(student_count_change) AS total_change
+                    FROM ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.cluster_id = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name ) AS sum_change
+                        `,
                    
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        ROUND(AVG(perc_students)) AS percentage_students
-                        from (SELECT
-                        ts.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.block_name,
-                        b.district_id,
-                        d.district_name,
-                        SUM(ts.attendance_status) AS present_students,
-                        COUNT(ts.attendance_status) AS total_students,
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    FROM
-                        student_attendance.student_attendance_master ts
-                    JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.block b ON c.block_id = b.block_id
-                    JOIN
-                        dimensions.district d ON b.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                    WHERE
-                        ts.date BETWEEN startDate AND endDate AND ts.cluster_id = {cluster_id}
-                    GROUP BY
-                        ts.cluster_id,
-                        c.cluster_name,
-                        c.block_id,
-                        b.block_name,b.district_id, d.district_name) AS avg_query;`,
+                        "bigNumber": `SELECT sum(student_count_change) AS total_change
+FROM ( SELECT
+    sam.district_id,
+    d.district_name,
+    sam.block_id ,
+    b.block_name,
+    sam.cluster_id ,
+    c.cluster_name,
+    sam.school_id,
+    sch.school_name,
+    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+FROM
+   student_attendance.student_attendance_master sam 
+LEFT join
+dimensions.district d on sam.district_id = d.district_id 
+LEFT JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id 
+LEFT join
+    dimensions.block b on sam.block_id = b.block_id 
+left join 
+    dimensions.cluster c on sam.cluster_id = c.cluster_id
+left join 
+    dimensions.school sch on sam.school_id = sch.school_id 
+where
+  sam.date in ( startDate,endDate)  
+  and sam.cluster_id = {cluster_id}
+GROUP BY
+    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name ) AS sum_change
+    `,
                         
                     },
                     "level": "school"
@@ -1184,15 +685,272 @@ student_average_bignumber: {
         ],
         "options": {
             "bigNumber": {
-                "title": "Average Present",
+                "title": "students in the period",
+                "valueSuffix": '',
+                "property": 'total_change'
+            }
+        }
+    },
+
+    //percentage change big number
+    student_percentage_change_bignumber: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    from ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                       ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))* 100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                    GROUP BY
+                        sam.district_id, d.district_name) as perc_sum
+                    `
+
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        from ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                           ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))* 100, 4) AS student_count_change_perc
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                        GROUP BY
+                            sam.district_id, d.district_name) as perc_sum
+                        `
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    from ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name) as perc_sum `
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        from ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            sam.block_id ,
+                            b.block_name,
+                        ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        LEFT join
+                            dimensions.block b on sam.block_id = b.block_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                          and sam.district_id = {district_id}
+                        GROUP BY
+                            sam.district_id, d.district_name, sam.block_id , b.block_name) as perc_sum `
+                    },
+                    "level": "block"
+                }
+            },
+           
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    from ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.block_id  = {block_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name ) as perc_sum
+                    `,
+                    
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        from ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            sam.block_id ,
+                            b.block_name,
+                            sam.cluster_id ,
+                            c.cluster_name,
+                        ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                        FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        LEFT join
+                            dimensions.block b on sam.block_id = b.block_id 
+                        left join 
+                            dimensions.cluster c on sam.cluster_id = c.cluster_id
+                        where
+                          sam.date in ( startDate,endDate)  
+                          and sam.block_id  = {block_id}
+                        GROUP BY
+                            sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                            sam.cluster_id, c.cluster_name ) as perc_sum
+                        `,
+                       
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    from ( SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                     ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                     FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.cluster_id  = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name) as perc_sum 
+                    `,
+                   
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        from ( SELECT
+                            sam.district_id,
+                            d.district_name,
+                            sam.block_id ,
+                            b.block_name,
+                            sam.cluster_id ,
+                            c.cluster_name,
+                            sam.school_id,
+                            sch.school_name,
+                         ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                         FROM
+                           student_attendance.student_attendance_master sam 
+                        LEFT join
+                        dimensions.district d on sam.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.class cc ON sam.class_id = cc.class_id 
+                        LEFT join
+                            dimensions.block b on sam.block_id = b.block_id 
+                        left join 
+                            dimensions.cluster c on sam.cluster_id = c.cluster_id
+                        left join 
+                            dimensions.school sch on sam.school_id = sch.school_id 
+                        where
+                          sam.date in ( startDate,endDate)  
+                          and sam.cluster_id  = {cluster_id}
+                        GROUP BY
+                            sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                            sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name) as perc_sum 
+                        
+    `,
+                        
+                    },
+                    "level": "school"
+                }
+            }
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "students in the period",
                 "valueSuffix": '%',
-                "property": 'percentage_students'
+                "property": 'sum_perc'
             }
         }
     },
 
     //bottom table for all data
-    student_average_school: {
+    student_comparative_school: {
         "label": "Average Student Present",
         "defaultLevel": "state",
         "filters": [
@@ -1203,82 +961,50 @@ student_average_bignumber: {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "table": `
-                    select
-                    ts.district_id,d.district_name,
-                    ts.school_id,sch.school_name,
-                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    from
-                    student_attendance.student_attendance_master ts
-                    LEFT JOIN
-                    dimensions.school sch ON ts.school_id = sch.school_id
-                    LEFT JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    LEFT JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                    LEFT JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                    LEFT JOIN
-                        dimensions.class cc ON cc.class_id = ts.class_id
-                    JOIN
-                    (
-                      select ts.school_id,
-                      COUNT(DISTINCT ts.date) AS total_days
-                      FROM
-                       student_attendance.student_attendance_master ts
-                       join dimensions.class cc on cc.class_id = ts.class_id
-                       where
-                       
-                       ts.date BETWEEN startDate AND endDate
-                       GROUP BY
-                       ts.school_id
-                        ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date between startDate AND endDate
-                    GROUP BY
-                    ts.district_id,d.district_name,
-                    ts.school_id,sch.school_name,days_count.total_days
-                     `
+                    SELECT
+    sam.district_id,
+    d.district_name,
+    sam.school_id ,
+    sch.school_name,
+    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+FROM
+   student_attendance.student_attendance_master sam 
+LEFT join
+dimensions.district d on sam.district_id = d.district_id 
+LEFT JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id 
+LEFT join
+    dimensions.school sch ON sch.school_id  = sch.school_id 
+where
+  sam.date in ( startDate,endDate) 
+GROUP BY
+    sam.district_id, d.district_name, sam.school_id ,sch.school_name  `
                 },
                 "actions": {
                     "queries": {
                         "table": `
-                        select
-                        ts.district_id,d.district_name,
-                        ts.school_id,sch.school_name,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                        from
-                        student_attendance.student_attendance_master ts
-                        LEFT JOIN
-                        dimensions.school sch ON ts.school_id = sch.school_id
-                        LEFT JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                        LEFT JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                        LEFT JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                        LEFT JOIN
-                            dimensions.class cc ON cc.class_id = ts.class_id
-                        JOIN
-                        (
-                          select ts.school_id,
-                          COUNT(DISTINCT ts.date) AS total_days
-                          FROM
-                           student_attendance.student_attendance_master ts
-                           join dimensions.class cc on cc.class_id = ts.class_id
-                           where
-                           
-                           ts.date BETWEEN startDate AND endDate
-                           GROUP BY
-                           ts.school_id
-                            ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date between startDate AND endDate
-                        GROUP BY
-                        ts.district_id,d.district_name,
-                        ts.school_id,sch.school_name,days_count.total_days
-                         `,
+                        SELECT
+    sam.district_id,
+    d.district_name,
+    sam.school_id ,
+    sch.school_name,
+    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+FROM
+   student_attendance.student_attendance_master sam 
+LEFT join
+dimensions.district d on sam.district_id = d.district_id 
+LEFT JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id 
+LEFT join
+    dimensions.school sch ON sch.school_id  = sch.school_id 
+where
+  sam.date in ( startDate,endDate) 
+GROUP BY
+    sam.district_id, d.district_name, sam.school_id ,sch.school_name  `,
                     },
                     "level": "school"
                 }
@@ -1289,82 +1015,59 @@ student_average_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select
-                    b.district_id,d.district_name,
-                    
-                    ts.school_id,sch.school_name,
-                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    from
-                    student_attendance.student_attendance_master ts
-                    LEFT JOIN
-                    dimensions.school sch ON ts.school_id = sch.school_id
-                    LEFT JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    LEFT JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                    LEFT JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                    LEFT JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                        JOIN
-                     (
-                      select ts.school_id,
-                      COUNT(DISTINCT ts.date) AS total_days
-                      FROM
-                       student_attendance.student_attendance_master ts
-                       join dimensions.class cc on cc.class_id = ts.class_id
-                       where 
-                      
-                       ts.date BETWEEN startDate AND endDate
-                       GROUP BY
-                       ts.school_id
-                        ) AS days_count ON ts.school_id = days_count.school_id
-                    where ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
-                    GROUP BY
-                    b.district_id,d.district_name,
-                    ts.school_id,sch.school_name,days_count.total_days
-`
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.school_id ,
+                    sch.school_name,
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                LEFT join
+                    dimensions.school sch ON sch.school_id  = sch.school_id
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.district_id = {district_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,sam.school_id ,sch.school_name`
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,d.district_name,
-                        
-                        ts.school_id,sch.school_name,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                        from
-                        student_attendance.student_attendance_master ts
-                        LEFT JOIN
-                        dimensions.school sch ON ts.school_id = sch.school_id
-                        LEFT JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                        LEFT JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                        LEFT JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                        LEFT JOIN
-                            dimensions.class cc ON ts.class_id = cc.class_id
-                            JOIN
-                         (
-                          select ts.school_id,
-                          COUNT(DISTINCT ts.date) AS total_days
-                          FROM
-                           student_attendance.student_attendance_master ts
-                           join dimensions.class cc on cc.class_id = ts.class_id
-                           where 
-                          
-                        ts.date BETWEEN startDate AND endDate
-                           GROUP BY
-                           ts.school_id
-                            ) AS days_count ON ts.school_id = days_count.school_id
-                        where ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
-                        GROUP BY
-                        b.district_id,d.district_name,
-                        ts.school_id,sch.school_name,days_count.total_days
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.school_id ,
+                        sch.school_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    LEFT join
+                        dimensions.school sch ON sch.school_id  = sch.school_id
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,sam.school_id ,sch.school_name
     `,
                     },
                     "level": "school"
@@ -1376,85 +1079,72 @@ student_average_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select
-                    b.district_id,d.district_name,
-                    c.block_id,b.block_name,
-                    ts.school_id,sch.school_name,
-                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    from
-                    student_attendance.student_attendance_master ts
-                    left JOIN
-                    dimensions.school sch ON ts.school_id = sch.school_id
-                    left JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    left JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                    left JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                    left JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                        JOIN
-                     (
-                      select ts.school_id,
-                      COUNT(DISTINCT ts.date) AS total_days
-                      FROM
-                       student_attendance.student_attendance_master ts
-                       join dimensions.class cc on cc.class_id = ts.class_id
-                       where 
-                        
-                       ts.date BETWEEN startDate AND endDate
-                       GROUP BY
-                       ts.school_id
-                        ) AS days_count ON ts.school_id = days_count.school_id
-                    Where ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
-                    GROUP BY
-                    b.district_id,d.district_name,
-                    c.block_id,b.block_name,
-                    ts.school_id,sch.school_name,days_count.total_days
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id ,
+                    sch.school_name,
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                LEFT join
+                    dimensions.school sch ON sch.school_id  = sch.school_id  
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.block_id  = {block_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id ,sch.school_name
+                
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,d.district_name,
-                        c.block_id,b.block_name,
-                        ts.school_id,sch.school_name,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                        from
-                        student_attendance.student_attendance_master ts
-                        left JOIN
-                        dimensions.school sch ON ts.school_id = sch.school_id
-                        left JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                        left JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                        left JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                        left JOIN
-                            dimensions.class cc ON ts.class_id = cc.class_id
-                            JOIN
-                         (
-                          select ts.school_id,
-                          COUNT(DISTINCT ts.date) AS total_days
-                          FROM
-                           student_attendance.student_attendance_master ts
-                           join dimensions.class cc on cc.class_id = ts.class_id
-                           where 
-                            
-                           ts.date BETWEEN startDate AND endDate
-                           GROUP BY
-                           ts.school_id
-                            ) AS days_count ON ts.school_id = days_count.school_id
-                        Where ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
-                        GROUP BY
-                        b.district_id,d.district_name,
-                        c.block_id,b.block_name,
-                        ts.school_id,sch.school_name,days_count.total_days
-                        
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id ,
+                        sch.school_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    LEFT join
+                        dimensions.school sch ON sch.school_id  = sch.school_id  
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.block_id  = {block_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id ,sch.school_name
+                    
     `,
                     },
                     "level": "school"
@@ -1466,88 +1156,71 @@ student_average_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table":`select
-                    b.district_id,d.district_name,
-                    c.block_id,b.block_name,
-                    sch.cluster_id, c.cluster_name,
-                    ts.school_id,sch.school_name,
-                    (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                    (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                    from
-                    student_attendance.student_attendance_master ts
-                    left JOIN
-                    dimensions.school sch ON ts.school_id = sch.school_id
-                    left JOIN
-                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                    left JOIN
-                    dimensions.block b ON ts.block_id = b.block_id
-                    left JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                    left JOIN
-                        dimensions.class cc ON ts.class_id = cc.class_id
-                        JOIN
-                     (
-                      select ts.school_id,
-                      COUNT(DISTINCT ts.date) AS total_days
-                      FROM
-                       student_attendance.student_attendance_master ts
-                       join dimensions.class cc on cc.class_id = ts.class_id
-                       where 
-                        
-                       ts.date BETWEEN startDate AND endDate
-                       GROUP BY
-                       ts.school_id
-                        ) AS days_count ON ts.school_id = days_count.school_id
-                    Where  ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
-                    GROUP BY
-                    b.district_id,d.district_name,
-                    c.block_id,b.block_name,
-                    sch.cluster_id, c.cluster_name,
-                    ts.school_id,sch.school_name,days_count.total_days
-`
+                    "table":`SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name,
+                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                left join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.cluster_id  = {cluster_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select
-                        b.district_id,d.district_name,
-                        c.block_id,b.block_name,
-                        sch.cluster_id, c.cluster_name,
-                        ts.school_id,sch.school_name,
-                        (SUM(ts.attendance_status)/days_count.total_days) as present_students,
-                        (COUNT(ts.attendance_status)/ days_count.total_days) AS total_students,          
-                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                        from
-                        student_attendance.student_attendance_master ts
-                        left JOIN
-                        dimensions.school sch ON ts.school_id = sch.school_id
-                        left JOIN
-                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
-                        left JOIN
-                        dimensions.block b ON ts.block_id = b.block_id
-                        left JOIN
-                        dimensions.district d ON ts.district_id = d.district_id
-                        left JOIN
-                            dimensions.class cc ON ts.class_id = cc.class_id
-                            JOIN
-                         (
-                          select ts.school_id,
-                          COUNT(DISTINCT ts.date) AS total_days
-                          FROM
-                           student_attendance.student_attendance_master ts
-                           join dimensions.class cc on cc.class_id = ts.class_id
-                           where 
-                            
-                           ts.date BETWEEN startDate AND endDate
-                           GROUP BY
-                           ts.school_id
-                            ) AS days_count ON ts.school_id = days_count.school_id
-                        Where  ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
-                        GROUP BY
-                        b.district_id,d.district_name,
-                        c.block_id,b.block_name,
-                        sch.cluster_id, c.cluster_name,
-                        ts.school_id,sch.school_name,days_count.total_days`,
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.cluster_id  = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    `,
                     },
                     "level": "school"
                 }
@@ -1593,18 +1266,18 @@ student_average_bignumber: {
                         class: "text-center"
                     },
                     {
-                        name: "Total Students",
-                        property: "total_students",
+                        name: "No. of Students enrolled on Date 1",
+                        property: "date1_count",
                         class: "text-center"
                     },
                     {
-                        name: "Total Students Present",
-                        property: "present_students",
+                        name: "No. of Students enrolled on Date 2",
+                        property: "date2_count",
                         class: "text-center"
                     },
                     {
-                        name: "% Present Student",
-                        property: "perc_students",
+                        name: "change",
+                        property: "student_count_change",
                         class: "text-center",
                         valueSuffix: '%',
                         isHeatMapRequired: true,
@@ -1638,6 +1311,326 @@ student_average_bignumber: {
         }
     },
 
+    //barchart
+    student_comparative_barchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name as level,
+                   ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                GROUP BY
+                    sam.district_id, d.district_name
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name as level,
+                       ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                    GROUP BY
+                        sam.district_id, d.district_name
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name as level,
+                ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.district_id = {district_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name as level,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name `,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name as level,
+                ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.block_id  = {block_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name as level,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.block_id  = {block_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name `
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name as level,
+                 ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                left join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.cluster_id  = {cluster_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                
+                `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name as level,
+                     ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.cluster_id  = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    
+                    `
+                    },
+                    "level": "school"
+                }
+            },
+    
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Percentage of change",
+                "metricValueProp": "student_count_change_perc",
+                "yAxis": {
+                    "title": ""
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "Percentage of change",
+                    "label": "level",
+                    "value": "level",
+    
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "present_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "total_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Student: ",
+                        "value": "perc_students",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
+        }
+    },
 
     //
    
@@ -1693,37 +1686,7 @@ student_attendance_bignumber1: {
     }
 },
 
-//pat bignumber2
 
-// pat_bignumber2: {
-//     "label": "Average Teachers Present",
-//     "filters": [
-//         {
-//             "name": "State",
-//             "labelProp": "state_name",
-//             "valueProp": "state_id",
-//             "hierarchyLevel": "1",
-//             "timeSeriesQueries": {
-//                 "bigNumber": "select 5000 as total_count",
-//                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "bigNumber": "select 5000 as total_count",
-//                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//                 },
-//                 "level": "district"
-//             }
-//         }
-//     ],
-//     "options": {
-//         "bigNumber": {
-//             "title": "Total Present ",
-//             "valueSuffix": '',
-//             "property": 'total_count'
-//         }
-//     }
-// },
 student_barchart:{
     "label": "Overall Summary",
     "defaultLevel": "state",
