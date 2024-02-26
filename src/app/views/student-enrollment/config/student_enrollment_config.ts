@@ -11,13 +11,7 @@ export const config = {
         linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
     },
 	filters: [
-        //student-availability
-		
-		
-		
-		//lo-wise
        
-
         {
 			label: 'Comparative Data',
 
@@ -1573,7 +1567,7 @@ GROUP BY
                     {
                         "valuePrefix": "District Name: ",
                         "value": "district_name",
-                        "valueSuffix": ""
+                        "valueSuffix": "%"
                     },
                    
                     {
@@ -1638,7 +1632,7 @@ GROUP BY
 //pat bignumber1
 
 student_attendance_bignumber1: {
-    "label": "Average Teachers Present",
+    "label": "Total Enrolled Students",
     "filters": [
         {
             "name": "State",
@@ -1646,30 +1640,16 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND(AVG(perc_students)) AS percentage_students
-                from (SELECT
-                ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-            FROM
-                student_attendance.student_attendance_master ts
-            JOIN
-                dimensions.district d ON ts.district_id = d.district_id
-            GROUP BY
-                ts.district_id, d.district_name) AS avg_query;`,
+                "bigNumber":`SELECT count(sam.attendance_status) AS enrolled_count
+                FROM student_attendance.student_attendance_master sam
+                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                GROUP BY
-                    ts.district_id, d.district_name) AS avg_query;`,
+                    "bigNumber": `SELECT count(sam.attendance_status) AS enrolled_count
+                    FROM student_attendance.student_attendance_master sam
+                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1679,9 +1659,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Average Total Students Present",
-            "valueSuffix": '%',
-            "property": 'percentage_students'
+            "title": "Total Enrolled Students",
+            "valueSuffix": '',
+            "property": 'enrolled_count'
         }
     }
 },
@@ -2028,350 +2008,7 @@ student_barchart:{
         }
     }
 },
-student_trendchart:{
-    "label": "Overall Summary",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "barChart": ` select 
-                TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                coalesce(sum(sam.attendance_status),0) as student_present
-                from
-                student_attendance.student_attendance_master sam 
-                left join
-                dimensions.class cc  on sam.class_id = cc.class_id 
-                where 
-                sam.date between startDate and endDate  
-                GROUP BY
-                TO_CHAR(sam.date, 'YYYY-MM-DD')
-                order by
-                TO_CHAR(sam.date, 'YYYY-MM-DD');
-            
-             
-                `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":` select 
-                    TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                    coalesce(sum(sam.attendance_status),0) as student_present
-                    from
-                    student_attendance.student_attendance_master sam 
-                    left join
-                    dimensions.class cc  on sam.class_id = cc.class_id 
-                    where 
-                    sam.date between startDate and endDate  
-                    GROUP BY
-                    TO_CHAR(sam.date, 'YYYY-MM-DD')
-                    order by
-                    TO_CHAR(sam.date, 'YYYY-MM-DD');
-                
-                 
-                    `
-                
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "barChart": `select
-                sam.district_id ,
-                d.district_name,
-                sam.block_id ,
-                b.block_name,
-                TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                coalesce(sum(sam.attendance_status),0) as student_present
-                from
-                student_attendance.student_attendance_master sam 
-                left join
-                dimensions.class cc  on sam.class_id = cc.class_id 
-                left join 
-                dimensions.district d on sam.district_id = d.district_id 
-                left join 
-                dimensions.block b on sam.block_id = b.block_id 
-                where 
-                sam.date between startDate and endDate   and sam.district_id = {district_id}
-                group by 
-                TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                b.block_name,
-                d.district_name
-                order by
-                TO_CHAR(sam.date, 'YYYY-MM-DD');`,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":
-                    `select
-                    sam.district_id ,
-                    d.district_name,
-                    sam.block_id ,
-                    b.block_name,
-                    TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                    coalesce(sum(sam.attendance_status),0) as student_present
-                    from
-                    student_attendance.student_attendance_master sam 
-                    left join
-                    dimensions.class cc  on sam.class_id = cc.class_id 
-                    left join 
-                    dimensions.district d on sam.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sam.block_id = b.block_id 
-                    where 
-                    sam.date between startDate and endDate   and sam.district_id = {district_id}
-                    group by 
-                    TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                    b.block_name,
-                    d.district_name
-                    order by
-                    TO_CHAR(sam.date, 'YYYY-MM-DD'); `,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "barChart": `select
-                sam.district_id ,
-                d.district_name,
-                sam.block_id ,
-                b.block_name,
-                sam.cluster_id,
-                c.cluster_name,
-                TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                coalesce(sum(sam.attendance_status),0) as student_present
-                from
-                student_attendance.student_attendance_master sam 
-                left join
-                dimensions.class cc  on sam.class_id = cc.class_id 
-                left join 
-                dimensions.district d on sam.district_id = d.district_id 
-                left join 
-                dimensions.block b on sam.block_id = b.block_id 
-                left join 
-                dimensions.cluster c on sam.cluster_id  = c.cluster_id  
-                where 
-                sam.date between startDate and endDate   and sam.block_id = {block_id}
-                group by 
-                TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                b.block_name,sam.cluster_id ,c.cluster_name,
-                d.district_name
-                ORDER BY
-                TO_CHAR(sam.date, 'YYYY-MM-DD')`,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select
-                    sam.district_id ,
-                    d.district_name,
-                    sam.block_id ,
-                    b.block_name,
-                    sam.cluster_id,
-                    c.cluster_name,
-                    TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                    coalesce(sum(sam.attendance_status),0) as student_present
-                    from
-                    student_attendance.student_attendance_master sam 
-                    left join
-                    dimensions.class cc  on sam.class_id = cc.class_id 
-                    left join 
-                    dimensions.district d on sam.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sam.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on sam.cluster_id  = c.cluster_id  
-                    where 
-                    sam.date between startDate and endDate   and sam.block_id = {block_id}
-                    group by 
-                    TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                    b.block_name,sam.cluster_id ,c.cluster_name,
-                    d.district_name
-                    ORDER BY
-                    TO_CHAR(sam.date, 'YYYY-MM-DD')`
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "barChart": `select
-                sam.district_id ,
-                d.district_name,
-                sam.block_id ,
-                b.block_name,
-                sam.cluster_id,
-                c.cluster_name,
-                sam.school_id ,
-                sch.school_name,
-                TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                coalesce(sum(sam.attendance_status),0) as student_present
-                from
-                student_attendance.student_attendance_master sam 
-                left join
-                dimensions.class cc  on sam.class_id = cc.class_id 
-                left join 
-                dimensions.district d on sam.district_id = d.district_id 
-                left join 
-                dimensions.block b on sam.block_id = b.block_id 
-                left join 
-                dimensions.cluster c on sam.cluster_id  = c.cluster_id  
-                left join 
-                dimensions.school sch on sam.school_id = sch.school_id 
-                where 
-                sam.date between startDate and endDate   and sam.cluster_id = {cluster_id}
-                group by 
-                TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                b.block_name,sam.cluster_id ,c.cluster_name,
-                d.district_name,sam.school_id ,
-                sch.school_name
-                ORDER BY
-                TO_CHAR(sam.date, 'YYYY-MM-DD')
-                
-                
-            `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select
-                    sam.district_id ,
-                    d.district_name,
-                    sam.block_id ,
-                    b.block_name,
-                    sam.cluster_id,
-                    c.cluster_name,
-                    sam.school_id ,
-                    sch.school_name,
-                    TO_CHAR(sam.date, 'YYYY-MM-DD') AS level,
-                    coalesce(sum(sam.attendance_status),0) as student_present
-                    from
-                    student_attendance.student_attendance_master sam 
-                    left join
-                    dimensions.class cc  on sam.class_id = cc.class_id 
-                    left join 
-                    dimensions.district d on sam.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sam.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on sam.cluster_id  = c.cluster_id  
-                    left join 
-                    dimensions.school sch on sam.school_id = sch.school_id 
-                    where 
-                    sam.date between startDate and endDate   and sam.cluster_id = {cluster_id}
-                    group by 
-                    TO_CHAR(sam.date, 'YYYY-MM-DD'),sam.district_id ,sam.block_id ,
-                    b.block_name,sam.cluster_id ,c.cluster_name,
-                    d.district_name,sam.school_id ,
-                    sch.school_name
-                    ORDER BY
-                    TO_CHAR(sam.date, 'YYYY-MM-DD')
-                    
-                `
-                },
-                "level": "school"
-            }
-        },
 
-    ],
-    "options": {
-        "barChart": {
-            "metricLabelProp": "Student Present",
-            "metricValueProp": "student_present",
-            "yAxis": {
-                "title": "Student Present"
-            },
-            "benchmarkConfig": {
-                "linkedReport": "tas_average_attendance_bignumber"
-            },
-            "xAxis": {
-                "title": "Date",
-                "label": "level",
-                "value": "level",
-
-            },
-            "tooltipMetrics": [
-                {
-                    "valuePrefix": "District Id: ",
-                    "value": "district_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "District Name: ",
-                    "value": "district_name",
-                    "valueSuffix": ""
-                },
-               
-                {
-                    "valuePrefix": "Block Id: ",
-                    "value": "block_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Block Name: ",
-                    "value": "block_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Id: ",
-                    "value": "cluster_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Name: ",
-                    "value": "cluster_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Id: ",
-                    "value": "school_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Present Students ",
-                    "value": "present_students",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Present Students ",
-                    "value": "total_students",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Name: ",
-                    "value": "school_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Average Percentage Student: ",
-                    "value": "student_present",
-                    "valueSuffix": ""
-                },
-                
-                // {
-                //     "valuePrefix": "Average percentage of LO: ",
-                //     "value": "perc_lo",
-                //     "valueSuffix": "%"
-                // },
-            ]
-        }
-    }
-},
 
 
 }

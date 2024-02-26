@@ -38,7 +38,7 @@ hasCommonFilters: boolean = true;
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='Comparitive Data';
+  tabLabel:any='Comparative Data';
 
   //added for full school report download
   // title = "Download School Report"
