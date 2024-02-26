@@ -2,7 +2,7 @@
 	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
 		<div class="col-span-12">
 			<p class="program-title">
-				STUDENT Enrollment<em><small></small></em>
+				STUDENT ENROLLMENT<em><small></small></em>
 			</p>
 			<p class="program-desc"></p>
 		</div>
@@ -17,9 +17,9 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<mat-tab label="Comparitive Data" *ngIf="tabs.includes('Comparitive Data')">
+		<mat-tab label="Comparative Data" *ngIf="tabs.includes('Comparative Data')">
 			<app-student-enroll-summary-tab
-				*ngIf="selectedTabLabel === 'Comparitive Data'"
+				*ngIf="selectedTabLabel === 'Comparative Data'"
 			></app-student-enroll-summary-tab>
 		</mat-tab>
 		<!-- <mat-tab label="Average Student Present">

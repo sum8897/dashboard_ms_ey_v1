@@ -19,7 +19,7 @@ export const config = {
        
 
         {
-			label: 'Comparitive Data',
+			label: 'Comparative Data',
 
             // displayLabel:'Class',
 
@@ -50,7 +50,7 @@ export const config = {
 
     ///right table for comparative
     student_comparative_table: {
-        "label": "Comparitive Data",
+        "label": "Comparative Data",
         "defaultLevel": "state",
         "filters": [
             {
