@@ -29,6 +29,25 @@ export const config = {
 		// 	query:
 		// 		'SELECT tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY tele_class_name ASC ',
 		// },
+        // {
+		// 	label: 'Session',
+
+        //     // displayLabel:'Class',
+
+		// 	name: 'class',
+
+		// 	labelProp: 'class_name',
+
+		// 	valueProp: 'class_id',
+
+		// 	id: 'class',
+
+		// 	tableAlias: 'tcdd',
+
+		// 	query:
+		// 		'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
+		// },
+        
        
         {
 			label: 'Tele Education',
@@ -69,6 +88,23 @@ export const config = {
         
        
         
+        
+        {
+			label: 'Session',
+
+			name: 'class',
+
+			labelProp: 'tele_class_name',
+
+			valueProp: 'tele_class_name',
+
+			id: 'class',
+
+			tableAlias: 'tcdd',
+
+			query:
+				'SELECT  tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY tele_class_name ASC ',
+		},
         {
 			label: 'Session',
 
@@ -84,25 +120,7 @@ export const config = {
 
 			query:
 				'SELECT tele_medium_name FROM dimensions.tele_medium_dimension_data ORDER BY tele_medium_name ASC ',
-		},
-        {
-			label: 'Session',
-
-            // displayLabel:'Class',
-
-			name: 'class',
-
-			labelProp: 'tele_class_name',
-
-			valueProp: 'tele_class_id',
-
-			id: 'class',
-
-			tableAlias: 'tcdd',
-
-			query:
-				'SELECT tele_class_id, tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY tele_class_name ASC ',
-		},
+		}
         
 	
 	],
@@ -1083,67 +1101,69 @@ tele_complete_bignumber: {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "table": `
-                    WITH subject_counts AS (
-                        SELECT
-                            ss.subjectname,  
-                            COUNT(ss.subjectname) AS count_of_subject  
-                        FROM                         
-                            teleeducation.studio_sessions ss          
-                        LEFT JOIN                  
-                            dimensions.tele_medium_dimension_data tmdd ON ss.tele_medium_name = tmdd.tele_medium_name  
-                        LEFT JOIN                    
-                            dimensions.tele_class_dimension_data tcdd ON ss.tele_class_name = tcdd.tele_class_name   
-                        WHERE
-                                  
-                            ss.date BETWEEN startDate AND endDate               
-                        GROUP BY                        
-                            ss.subjectname
-                    )
-                    SELECT
-                        subjectname,
-                        count_of_subject
-                    FROM
-                        subject_counts
-                    UNION ALL
-                    SELECT
-                        'Grand Total' AS subjectname,
-                        SUM(count_of_subject) AS count_of_subject
-                    FROM
-                        subject_counts;
-                                       
+                    
+WITH subject_counts AS (
+    SELECT
+        ss.subjectname,  
+        COUNT(ss.subjectname) AS count_of_subject  
+    FROM                         
+        teleeducation.studio_sessions ss          
+    LEFT JOIN                  
+        dimensions.tele_medium_dimension_data tmdd ON ss.tele_medium_name = tmdd.tele_medium_name  
+    LEFT JOIN                    
+        dimensions.tele_class_dimension_data tcdd ON ss.tele_class_name = tcdd.tele_class_name   
+    WHERE
+               
+        ss.date BETWEEN startDate AND endDate               
+    GROUP BY                        
+        ss.subjectname
+)
+SELECT
+    subjectname,
+    count_of_subject
+FROM
+    subject_counts
+UNION ALL
+SELECT
+    'Grand Total' AS subjectname,
+    coalesce(SUM(count_of_subject),0) AS count_of_subject
+FROM
+    subject_counts;
+                   
                  `,
                 },
                 "actions": {
                     "queries": {
                         "table": `
-                        WITH subject_counts AS (
-                            SELECT
-                                ss.subjectname,  
-                                COUNT(ss.subjectname) AS count_of_subject  
-                            FROM                         
-                                teleeducation.studio_sessions ss          
-                            LEFT JOIN                  
-                                dimensions.tele_medium_dimension_data tmdd ON ss.tele_medium_name = tmdd.tele_medium_name  
-                            LEFT JOIN                    
-                                dimensions.tele_class_dimension_data tcdd ON ss.tele_class_name = tcdd.tele_class_name   
-                            WHERE
-                                      
-                                ss.date BETWEEN startDate AND endDate               
-                            GROUP BY                        
-                                ss.subjectname
-                        )
-                        SELECT
-                            subjectname,
-                            count_of_subject
-                        FROM
-                            subject_counts
-                        UNION ALL
-                        SELECT
-                            'Grand Total' AS subjectname,
-                            SUM(count_of_subject) AS count_of_subject
-                        FROM
-                            subject_counts;
-                                          
+                        
+WITH subject_counts AS (
+    SELECT
+        ss.subjectname,  
+        COUNT(ss.subjectname) AS count_of_subject  
+    FROM                         
+        teleeducation.studio_sessions ss          
+    LEFT JOIN                  
+        dimensions.tele_medium_dimension_data tmdd ON ss.tele_medium_name = tmdd.tele_medium_name  
+    LEFT JOIN                    
+        dimensions.tele_class_dimension_data tcdd ON ss.tele_class_name = tcdd.tele_class_name   
+    WHERE
+               
+        ss.date BETWEEN startDate AND endDate               
+    GROUP BY                        
+        ss.subjectname
+)
+SELECT
+    subjectname,
+    count_of_subject
+FROM
+    subject_counts
+UNION ALL
+SELECT
+    'Grand Total' AS subjectname,
+    coalesce(SUM(count_of_subject),0) AS count_of_subject
+FROM
+    subject_counts;
+                   
                      `,
                     },
                     "level": "district"
@@ -1475,6 +1495,342 @@ tele_complete_bignumber: {
         }
     },
 
+
+    session_barchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    ss.subjectname as level,  
+                    COUNT(ss.subjectname) AS count_of_subject  
+                    FROM                         
+                    teleeducation.studio_sessions ss          
+                    left join                  
+                    dimensions.tele_medium_dimension_data tmdd on ss.tele_medium_name = tmdd.tele_medium_name  
+                    left join                    
+                    dimensions.tele_class_dimension_data tcdd  on ss.tele_class_name = tcdd.tele_class_name   
+                    WHERE       
+                    date BETWEEN startDate AND endDate               
+                    GROUP BY                        
+                    ss.subjectname  
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        ss.subjectname as level,  
+                        COUNT(ss.subjectname) AS count_of_subject  
+                        FROM                         
+                        teleeducation.studio_sessions ss          
+                        left join                  
+                        dimensions.tele_medium_dimension_data tmdd on ss.tele_medium_name = tmdd.tele_medium_name  
+                        left join                    
+                        dimensions.tele_class_dimension_data tcdd  on ss.tele_class_name = tcdd.tele_class_name   
+                        WHERE       
+                        date BETWEEN startDate AND endDate               
+                        GROUP BY                        
+                        ss.subjectname  
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    ts.block_id,
+                    b.block_name as level,
+                    b.district_id,
+                   
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.block b ON ts.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                GROUP BY
+                    ts.block_id,
+                    b.block_name,b.district_id; `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `SELECT
+                        ts.block_id,
+                        b.block_name as level,
+                        b.district_id,
+                       
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.block b ON ts.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
+                    GROUP BY
+                        ts.block_id,
+                        b.block_name,b.district_id; `,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    ts.cluster_id,
+                    c.cluster_name as level,
+                    c.block_id,
+                    
+                    b.district_id,
+                   
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                GROUP BY
+                    ts.cluster_id,
+                    c.cluster_name,
+                    c.block_id,
+                    b.district_id;`,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        ts.cluster_id,
+                        c.cluster_name as level,
+                        c.block_id,
+                        
+                        b.district_id,
+                       
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.cluster c ON ts.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
+                    GROUP BY
+                        ts.cluster_id,
+                        c.cluster_name,
+                        c.block_id,
+                        b.district_id;`
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    ts.school_id,
+                    sch.school_name as level,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    
+                    b.district_id,
+                    
+                    SUM(ts.attendance_status) AS present_students,
+                    COUNT(ts.attendance_status) AS total_students,
+                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                FROM
+                    student_attendance.student_attendance_master ts
+                JOIN
+                    dimensions.school sch ON sch.school_id = ts.school_id
+                JOIN
+                    dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.block b ON c.block_id = b.block_id
+                JOIN
+                    dimensions.district d ON b.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON ts.class_id = cc.class_id
+                WHERE
+                    ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                GROUP BY
+                   ts.school_id,
+                    sch.school_name,
+                    sch.cluster_id,
+                    
+                    c.block_id,
+                    b.district_id;
+                `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        ts.school_id,
+                        sch.school_name as level,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        
+                        b.district_id,
+                        
+                        SUM(ts.attendance_status) AS present_students,
+                        COUNT(ts.attendance_status) AS total_students,
+                        ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
+                    FROM
+                        student_attendance.student_attendance_master ts
+                    JOIN
+                        dimensions.school sch ON sch.school_id = ts.school_id
+                    JOIN
+                        dimensions.cluster c ON sch.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.block b ON c.block_id = b.block_id
+                    JOIN
+                        dimensions.district d ON b.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON ts.class_id = cc.class_id
+                    WHERE
+                        ts.date BETWEEN startDate AND endDate AND sch.cluster_id = {cluster_id}
+                    GROUP BY
+                       ts.school_id,
+                        sch.school_name,
+                        sch.cluster_id,
+                        
+                        c.block_id,
+                        b.district_id;
+                    `
+                    },
+                    "level": "school"
+                }
+            },
+    
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Count",
+                "metricValueProp": "count_of_subject",
+                "yAxis": {
+                    "title": "Count"
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "District",
+                    "label": "level",
+                    "value": "level",
+    
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": ""
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "present_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "total_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Student: ",
+                        "value": "perc_students",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
+        }
+    },
     
    
 
@@ -1489,16 +1845,32 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT count(sam.attendance_status) AS enrolled_count
-                FROM student_attendance.student_attendance_master sam
-                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
+                "bigNumber":`select ROUND(AVG(connected_perc),2) as avg_connected
+                from (select 
+                ROUND((SUM(te.status)*100/count(te.status)),2) as connected_perc
+                from 
+                teleeducation.tele_education te
+                left join
+                dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
+                left join
+                dimensions.district d on te.district_id = d.district_id 
+                group by
+                te.district_id)connec_perc`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT count(sam.attendance_status) AS enrolled_count
-                    FROM student_attendance.student_attendance_master sam
-                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
+                    "bigNumber": `select ROUND(AVG(connected_perc),2) as avg_connected
+                    from (select 
+                    ROUND((SUM(te.status)*100/count(te.status)),2) as connected_perc
+                    from 
+                    teleeducation.tele_education te
+                    left join
+                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
+                    left join
+                    dimensions.district d on te.district_id = d.district_id 
+                    group by
+                    te.district_id)connec_perc`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1508,9 +1880,59 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Total Enrolled Students",
-            "valueSuffix": '',
-            "property": 'enrolled_count'
+            "title": "Average Connected",
+            "valueSuffix": '%',
+            "property": 'avg_connected'
+        }
+    }
+},
+student_attendance_bignumber2: {
+    "label": "Total Enrolled Students",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber":`select ROUND(AVG(not_connected),2) as avg_notconnected
+                from (select 
+                ROUND((count(te.status)-sum(te.status))*100/ count(te.status),2) as not_connected
+                from 
+                teleeducation.tele_education te
+                left join
+                dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
+                left join
+                dimensions.district d on te.district_id = d.district_id 
+                group by
+                te.district_id)connec_perc`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select ROUND(AVG(not_connected),2) as avg_notconnected
+                    from (select 
+                    ROUND((count(te.status)-sum(te.status))*100/ count(te.status),2) as not_connected
+                    from 
+                    teleeducation.tele_education te
+                    left join
+                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
+                    left join
+                    dimensions.district d on te.district_id = d.district_id 
+                    group by
+                    te.district_id)connec_perc`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+        
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Average Not Connected",
+            "valueSuffix": '%',
+            "property": 'avg_notconnected'
         }
     }
 },

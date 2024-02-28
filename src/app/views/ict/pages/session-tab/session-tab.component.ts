@@ -7,6 +7,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { config } from 'src/app/views/ict/config/ict_config';
 
 import { SessionTableComponent } from './reports/session-table/session-table.component';
+import { SessionBarchrtComponent } from './reports/session-barchrt/session-barchrt.component';
 import moment from 'moment';
 @Component({
   selector: 'app-session-tab',
@@ -44,6 +45,7 @@ hasCommonFilters: boolean = true;
   pagereportName = "teachers_present"
   //
   @ViewChild('sessionTable') sessionTable: SessionTableComponent;
+  @ViewChild('sessionBarchart') sessionBarchart: SessionBarchrtComponent;
   
   
 
@@ -78,6 +80,7 @@ hasCommonFilters: boolean = true;
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
           this.sessionTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.sessionBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         
         
           }
@@ -126,6 +129,7 @@ hasCommonFilters: boolean = true;
     console.log('dttttttt',this.filters,this.startDate,this.endDate)
 
     this.sessionTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.sessionBarchart?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
   
    

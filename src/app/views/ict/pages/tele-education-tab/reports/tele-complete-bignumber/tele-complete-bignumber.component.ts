@@ -9,20 +9,20 @@ import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchma
 import { TeleEducationTabComponent } from 'src/app/views/ict/pages/tele-education-tab/tele-education-tab.component';
 import { config } from 'src/app/views/ict/config/ict_config';
 @Component({
-  selector: 'app-tele-noncomplete-bignumber',
-  templateUrl: './tele-noncomplete-bignumber.component.html',
-  styleUrls: ['./tele-noncomplete-bignumber.component.scss']
+  selector: 'app-tele-complete-bignumber',
+  templateUrl: './tele-complete-bignumber.component.html',
+  styleUrls: ['./tele-complete-bignumber.component.scss']
 })
-export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
+export class TeleCompleteBignumberComponent implements OnInit, OnDestroy {
 
-  reportName: string = 'tele_noncomplete_bignumber';
+  reportName: string = 'tele_complete_bignumber';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Not Connected"
+    reportName: "Total Connected"
   };
-  currentReportName: string = "Not Connected";
+  currentReportName: string = "Total Connected";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

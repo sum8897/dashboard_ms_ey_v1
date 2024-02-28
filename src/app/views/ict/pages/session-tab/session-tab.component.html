@@ -54,6 +54,16 @@
 					(exportReportData)="csvDownload($event)"
 				></app-session-table>
 			</div>
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('session_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-session-barchrt
+					#sessionBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-session-barchrt>
+			</div>
 		</div>
 	</div>
 </div>

@@ -4,10 +4,10 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { config } from 'src/app/views/ict/config/ict_config';
-import { TeleEducationTableComponent } from 'src/app/views/ict/pages/reports/tele-education-table/tele-education-table.component';
+import { TeleEducationTableComponent } from 'src/app/views/ict/pages/tele-education-tab/reports/tele-education-table/tele-education-table.component';
 
-import { TeleCompleteBignumberComponent } from 'src/app/views/ict/pages/reports/tele-complete-bignumber/tele-complete-bignumber.component';
-import { TeleNoncompleteBignumberComponent } from 'src/app/views/ict/pages/reports/tele-noncomplete-bignumber/tele-noncomplete-bignumber.component';
+import { TeleCompleteBignumberComponent } from 'src/app/views/ict/pages/tele-education-tab/reports/tele-complete-bignumber/tele-complete-bignumber.component';
+import { TeleNoncompleteBignumberComponent } from 'src/app/views/ict/pages/tele-education-tab/reports/tele-noncomplete-bignumber/tele-noncomplete-bignumber.component';
 import moment from 'moment';
 
 @Component({
