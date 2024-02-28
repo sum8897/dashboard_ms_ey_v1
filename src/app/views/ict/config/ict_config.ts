@@ -1759,7 +1759,7 @@ FROM
                     "linkedReport": "tas_average_attendance_bignumber"
                 },
                 "xAxis": {
-                    "title": "District",
+                    "title": "Subject",
                     "label": "level",
                     "value": "level",
     
