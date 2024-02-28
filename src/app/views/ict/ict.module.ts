@@ -12,8 +12,7 @@ import { TeleCompleteBignumberComponent } from './pages/tele-education-tab/repor
 import { TeleNoncompleteBignumberComponent } from './pages/tele-education-tab/reports/tele-noncomplete-bignumber/tele-noncomplete-bignumber.component';
 import { SessionTabComponent } from './pages/session-tab/session-tab.component';
 import { SessionTableComponent } from './pages/session-tab/reports/session-table/session-table.component';
-import { TeleSessionTabComponent } from './pages/tele-session-tab/tele-session-tab.component';
-import { TeleSessionTableComponent } from './pages/tele-session-tab/reports/tele-session-table/tele-session-table.component';
+
 import { SessionBarchrtComponent } from './pages/session-tab/reports/session-barchrt/session-barchrt.component';
 
 
@@ -27,8 +26,7 @@ import { SessionBarchrtComponent } from './pages/session-tab/reports/session-bar
     TeleNoncompleteBignumberComponent,
     SessionTabComponent,
     SessionTableComponent,
-    TeleSessionTabComponent,
-    TeleSessionTableComponent,
+
     SessionBarchrtComponent
   ],
   imports: [DashletModule.forRoot({
