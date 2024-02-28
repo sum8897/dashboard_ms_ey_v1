@@ -1,0 +1,58 @@
+<div class="col-span-full tab-wrapper">
+	<p class="tab-desc">
+		This tab shows the status of Tele Eduaction across all districts
+	</p>
+
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+
+	<div class="filter-row grid grid-cols-10">
+		<div
+			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
+		>
+			<app-time-series-filter-panel
+				(timeSeriesUpdated)="timeSeriesUpdated($event)"
+				[minDate]="minDate"
+				[maxDate]="maxDate"
+				[defaultSelectedDays]="defaultSelectedDays"
+			></app-time-series-filter-panel>
+		</div>
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+	</div>
+
+	<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				id="bignumber"
+				*ngIf="checkReport('tele_complete_bignumber', 'bigNumber')"
+			>
+				<app-tele-complete-bignumber
+					#teleCompleteBigNumber
+				></app-tele-complete-bignumber>
+				<hr />
+				<app-tele-noncomplete-bignumber
+					#teleNonCompleteBigNumber
+				></app-tele-noncomplete-bignumber>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('tele_education_table', 'table')"
+				id="table1"
+			>
+				<app-tele-education-table
+					#teleEducationTable
+					(exportReportData)="csvDownload($event)"
+				></app-tele-education-table>
+			</div>
+		</div>
+	</div>
+</div>

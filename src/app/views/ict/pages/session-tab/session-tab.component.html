@@ -1,0 +1,59 @@
+<div class="col-span-full tab-wrapper">
+	<p class="tab-desc">
+		This tab shows sessions of Tele Education in all regional studios
+	</p>
+
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+
+	<div class="filter-row grid grid-cols-10">
+		<div
+			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
+		>
+			<app-time-series-filter-panel
+				(timeSeriesUpdated)="timeSeriesUpdated($event)"
+				[minDate]="minDate"
+				[maxDate]="maxDate"
+				[defaultSelectedDays]="defaultSelectedDays"
+			></app-time-series-filter-panel>
+		</div>
+		<!-- <div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div> -->
+	</div>
+
+	<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<!-- <div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				id="bignumber"
+				*ngIf="checkReport('student_comparative_bignumber', 'bigNumber')"
+			>
+				<app-student-comparative-bignumber
+					#studentComparativeBigNumber
+				></app-student-comparative-bignumber>
+				<hr />
+				<app-student-percentage-change-bignumber
+					#studentPercentageChangeBigNumber
+				></app-student-percentage-change-bignumber>
+				
+			</div> -->
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('session_table', 'table')"
+				id="table1"
+			>
+				<app-session-table
+					#sessionTable
+					(exportReportData)="csvDownload($event)"
+				></app-session-table>
+			</div>
+		</div>
+	</div>
+</div>

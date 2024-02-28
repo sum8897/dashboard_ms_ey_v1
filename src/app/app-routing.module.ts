@@ -80,6 +80,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'ict',
+        loadChildren: () =>
+          import('./views/ict/ict.module').then(
+            (module) => module.IctModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'student-ai-attendance',
         loadChildren: () =>
           import('./views/student-ai-attendance/student-ai-attendance.module').then(
