@@ -20,9 +20,9 @@ export class StudentComparativeBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "students in the period"
+    reportName: "students change in the period"
   };
-  currentReportName: string = "students in the period";
+  currentReportName: string = "students change in the period";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

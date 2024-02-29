@@ -28,7 +28,7 @@ export const config = {
 			tableAlias: 'cc',
 
 			query:
-				'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
+				'SELECT class_id, class_name FROM dimensions.class ORDER BY CAST(class_id AS INT) ASC;',
 		},
         
 	
@@ -399,7 +399,7 @@ export const config = {
                                 },
                                 {
                                     color: "#D2222D",
-                                    breakPoint: -100
+                                    breakPoint: -10000
                                 }
                             ]
                         },
@@ -958,23 +958,23 @@ GROUP BY
                     SELECT
     sam.district_id,
     d.district_name,
-    sam.school_id ,
+    sam.school_id,
     sch.school_name,
-    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
 FROM
-   student_attendance.student_attendance_master sam 
-LEFT join
-dimensions.district d on sam.district_id = d.district_id 
-LEFT JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id 
-LEFT join
-    dimensions.school sch ON sch.school_id  = sch.school_id 
-where
-  sam.date in ( startDate,endDate) 
+    student_attendance.student_attendance_master sam
+JOIN
+    dimensions.district d ON sam.district_id = d.district_id
+JOIN
+    dimensions.school sch ON sam.school_id = sch.school_id
+    JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id
+WHERE
+    sam.date IN (startDate, endDate)
 GROUP BY
-    sam.district_id, d.district_name, sam.school_id ,sch.school_name  `
+    sam.district_id, d.district_name, sam.school_id, sch.school_name; `
                 },
                 "actions": {
                     "queries": {
@@ -982,23 +982,23 @@ GROUP BY
                         SELECT
     sam.district_id,
     d.district_name,
-    sam.school_id ,
+    sam.school_id,
     sch.school_name,
-    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
 FROM
-   student_attendance.student_attendance_master sam 
-LEFT join
-dimensions.district d on sam.district_id = d.district_id 
-LEFT JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id 
-LEFT join
-    dimensions.school sch ON sch.school_id  = sch.school_id 
-where
-  sam.date in ( startDate,endDate) 
+    student_attendance.student_attendance_master sam
+JOIN
+    dimensions.district d ON sam.district_id = d.district_id
+JOIN
+    dimensions.school sch ON sam.school_id = sch.school_id
+    JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id
+WHERE
+    sam.date IN (startDate, endDate)
 GROUP BY
-    sam.district_id, d.district_name, sam.school_id ,sch.school_name  `,
+    sam.district_id, d.district_name, sam.school_id, sch.school_name; `,
                     },
                     "level": "school"
                 }
@@ -1012,56 +1012,68 @@ GROUP BY
                     "table": `SELECT
                     sam.district_id,
                     d.district_name,
-                    sam.block_id ,
+                    sam.block_id,
                     b.block_name,
-                    sam.school_id ,
+                    sam.school_id,
                     sch.school_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                   student_attendance.student_attendance_master sam 
-                LEFT join
-                dimensions.district d on sam.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                LEFT join
-                    dimensions.block b on sam.block_id = b.block_id 
-                LEFT join
-                    dimensions.school sch ON sch.school_id  = sch.school_id
-                where
-                  sam.date in ( startDate,endDate) 
-                  and sam.district_id = {district_id}
+                    student_attendance.student_attendance_master sam
+                JOIN
+                    dimensions.district d ON sam.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id
+                JOIN
+                    dimensions.block b ON sam.block_id = b.block_id
+                JOIN
+                    dimensions.school sch ON sam.school_id = sch.school_id
+                WHERE
+                    
+                    sam.date IN (startDate, endDate)
+                    AND sam.district_id = {district_id}
                 GROUP BY
-                    sam.district_id, d.district_name, sam.block_id , b.block_name ,sam.school_id ,sch.school_name`
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.school_id,
+                    sch.school_name;`
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT
                         sam.district_id,
                         d.district_name,
-                        sam.block_id ,
+                        sam.block_id,
                         b.block_name,
-                        sam.school_id ,
+                        sam.school_id,
                         sch.school_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                       student_attendance.student_attendance_master sam 
-                    LEFT join
-                    dimensions.district d on sam.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                    LEFT join
-                        dimensions.block b on sam.block_id = b.block_id 
-                    LEFT join
-                        dimensions.school sch ON sch.school_id  = sch.school_id
-                    where
-                      sam.date in ( startDate,endDate) 
-                      and sam.district_id = {district_id}
+                        student_attendance.student_attendance_master sam
+                    JOIN
+                        dimensions.district d ON sam.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id
+                    JOIN
+                        dimensions.block b ON sam.block_id = b.block_id
+                    JOIN
+                        dimensions.school sch ON sam.school_id = sch.school_id
+                    WHERE
+                        
+                        sam.date IN (startDate, endDate)
+                        AND sam.district_id = {district_id}
                     GROUP BY
-                        sam.district_id, d.district_name, sam.block_id , b.block_name ,sam.school_id ,sch.school_name
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.school_id,
+                        sch.school_name;
     `,
                     },
                     "level": "school"
@@ -1076,34 +1088,39 @@ GROUP BY
                     "table": `SELECT
                     sam.district_id,
                     d.district_name,
-                    sam.block_id ,
+                    sam.block_id,
                     b.block_name,
-                    sam.cluster_id ,
+                    sam.cluster_id,
                     c.cluster_name,
-                    sam.school_id ,
+                    sam.school_id,
                     sch.school_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
-                   student_attendance.student_attendance_master sam 
-                LEFT join
-                dimensions.district d on sam.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                LEFT join
-                    dimensions.block b on sam.block_id = b.block_id 
-                left join 
-                    dimensions.cluster c on sam.cluster_id = c.cluster_id
-                LEFT join
-                    dimensions.school sch ON sch.school_id  = sch.school_id  
-                where
-                  sam.date in ( startDate,endDate) 
-                  and sam.block_id  = {block_id}
+                    student_attendance.student_attendance_master sam
+                JOIN
+                    dimensions.district d ON sam.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id
+                JOIN
+                    dimensions.block b ON sam.block_id = b.block_id
+                JOIN
+                    dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.school sch ON sch.school_id = sam.school_id
+                WHERE
+                 sam.date IN (startDate, endDate)
+                    AND sam.block_id = {block_id}
                 GROUP BY
-                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                    sam.cluster_id, c.cluster_name , sam.school_id ,sch.school_name
-                
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.cluster_id,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name;
                     `
                 },
                 "actions": {
@@ -1111,34 +1128,39 @@ GROUP BY
                         "table": `SELECT
                         sam.district_id,
                         d.district_name,
-                        sam.block_id ,
+                        sam.block_id,
                         b.block_name,
-                        sam.cluster_id ,
+                        sam.cluster_id,
                         c.cluster_name,
-                        sam.school_id ,
+                        sam.school_id,
                         sch.school_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
-                       student_attendance.student_attendance_master sam 
-                    LEFT join
-                    dimensions.district d on sam.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                    LEFT join
-                        dimensions.block b on sam.block_id = b.block_id 
-                    left join 
-                        dimensions.cluster c on sam.cluster_id = c.cluster_id
-                    LEFT join
-                        dimensions.school sch ON sch.school_id  = sch.school_id  
-                    where
-                      sam.date in ( startDate,endDate) 
-                      and sam.block_id  = {block_id}
+                        student_attendance.student_attendance_master sam
+                    JOIN
+                        dimensions.district d ON sam.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id
+                    JOIN
+                        dimensions.block b ON sam.block_id = b.block_id
+                    JOIN
+                        dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.school sch ON sch.school_id = sam.school_id
+                    WHERE
+                     sam.date IN (startDate, endDate)
+                        AND sam.block_id = {block_id}
                     GROUP BY
-                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                        sam.cluster_id, c.cluster_name , sam.school_id ,sch.school_name
-                    
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.cluster_id,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name;
     `,
                     },
                     "level": "school"
@@ -1159,20 +1181,20 @@ GROUP BY
                     c.cluster_name,
                     sam.school_id,
                     sch.school_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                 FROM
                    student_attendance.student_attendance_master sam 
-                LEFT join
+                 join
                 dimensions.district d on sam.district_id = d.district_id 
-                LEFT JOIN
+                 JOIN
                     dimensions.class cc ON sam.class_id = cc.class_id 
-                LEFT join
+                 join
                     dimensions.block b on sam.block_id = b.block_id 
-                left join 
+                 join 
                     dimensions.cluster c on sam.cluster_id = c.cluster_id
-                left join 
+                 join 
                     dimensions.school sch on sam.school_id = sch.school_id 
                 where
                   sam.date in ( startDate,endDate) 
@@ -1193,20 +1215,20 @@ GROUP BY
                         c.cluster_name,
                         sam.school_id,
                         sch.school_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
                     FROM
                        student_attendance.student_attendance_master sam 
-                    LEFT join
+                     join
                     dimensions.district d on sam.district_id = d.district_id 
-                    LEFT JOIN
+                     JOIN
                         dimensions.class cc ON sam.class_id = cc.class_id 
-                    LEFT join
+                     join
                         dimensions.block b on sam.block_id = b.block_id 
-                    left join 
+                     join 
                         dimensions.cluster c on sam.cluster_id = c.cluster_id
-                    left join 
+                     join 
                         dimensions.school sch on sam.school_id = sch.school_id 
                     where
                       sam.date in ( startDate,endDate) 
@@ -1273,7 +1295,7 @@ GROUP BY
                         name: "change",
                         property: "student_count_change",
                         class: "text-center",
-                        valueSuffix: '%',
+                        valueSuffix: '',
                         isHeatMapRequired: true,
                         type: "number",
                         color: {

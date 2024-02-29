@@ -96,14 +96,14 @@ export const config = {
 
 			labelProp: 'tele_class_name',
 
-			valueProp: 'tele_class_name',
+			valueProp: 'tele_class_id',
 
 			id: 'class',
 
 			tableAlias: 'tcdd',
 
 			query:
-				'SELECT  tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY tele_class_name ASC ',
+				'SELECT  tele_class_id, tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY CAST(tele_class_id AS INT) ASC ',
 		},
         {
 			label: 'Session',

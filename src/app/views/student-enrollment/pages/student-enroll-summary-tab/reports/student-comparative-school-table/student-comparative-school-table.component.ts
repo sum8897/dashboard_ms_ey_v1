@@ -20,7 +20,7 @@ export class StudentComparativeSchoolTableComponent implements OnInit, OnDestroy
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "School Wise Average Score"
+    reportName: " School Change in Enrollment from Date 1 to Date 2"
   };
   minDate: any;
   maxDate: any;
@@ -28,7 +28,7 @@ export class StudentComparativeSchoolTableComponent implements OnInit, OnDestroy
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = ' School Wise % Average Present';
+  title = 'School Change in Enrollment from Date 1 to Date 2';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
