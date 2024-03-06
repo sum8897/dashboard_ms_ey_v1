@@ -281,6 +281,7 @@ export class DataService {
     });
   }
 
+  //vertical bar
   getBarChartReportData(query, options, filters, currentLevel): Promise<any> {
     return new Promise((resolve, reject) => {
   
@@ -382,6 +383,113 @@ export class DataService {
       });
     });
   }
+ 
+
+
+  //horizontal bar
+  getHorizintalBarChartReportData(query, options, filters, currentLevel): Promise<any> {
+  return new Promise((resolve, reject) => {
+
+    this.spinner.show();
+    let {
+      barChart: { 
+        yAxis, xAxis, defaultPageSize, isCorrelation, type, isMultibar, MultibarGroupByNeeded, valueSuffix, metricLabelProp, metricValueProp 
+      } 
+    } = options;
+    
+    this._commonService.getReportDataNew(query).subscribe((res: any) => {
+      let rows = res;
+
+      if (MultibarGroupByNeeded) {
+        rows = this.multibarGroupBy(rows, xAxis.label, metricLabelProp, metricValueProp);
+      }
+      let reportData = {
+        values: rows
+      }
+      
+      let config = getChartJSConfig({
+        labelExpr: xAxis.value,
+        datasets: this.getDatasets(options.barChart, filters),
+
+        options: {
+        
+          // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 15 + 150).toString(),
+          // height: ((rows.length > defaultPageSize ? defaultPageSize : rows.length) * 6).toString(),
+          height: '150',
+
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, data) => {
+                let multistringText = [];
+                // if (isMultibar) {
+                  data.datasets.forEach((dataset: any, index: any) => {
+                    if (index === tooltipItem.datasetIndex) {
+                      multistringText.push(`${dataset.label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                    }
+                  })
+                // }
+                // else {
+                //   multistringText.push(`${data.datasets[0].label} : ${tooltipItem.value} ${valueSuffix !== undefined ? valueSuffix : ''}`)
+                // }
+                return multistringText;
+              }
+            }
+          },
+          scales: {
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: Array.isArray(xAxis.title) ? xAxis.title[currentLevel] : xAxis.title
+              },
+              ticks: {
+                callback: function (value, index, values) {
+                  if (xAxis?.limitCharacters && value.length > Number(xAxis?.limitCharacters)) {
+                    let newValue = value?.substring(0, Number(xAxis?.limitCharacters)) + '...'
+                    return newValue
+                  }
+                  else {
+                    return value
+                  }
+                }
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: yAxis.title
+              },
+              ticks: {
+                callback: function (value, index, values) {
+                  if (type !== 'horizontal') {
+                    let newValue = value?.split('_').map((word: any) => word[0] + word.substring(1)).join(' ')
+                    if (screen.width <= 768) {
+                      return newValue.substr(0, 8) + '...';
+                    } else {
+                      return newValue;
+                    }
+                  }
+                  else {
+                    return value
+                  }
+                }
+              }
+            }]
+          },
+          
+        
+        }
+      });
+
+      // Change bar color to green
+      // config.datasets.forEach((dataset: any) => {
+      //   dataset.backgroundColor = 'rgba(0,0,0,0.1)';
+      // });
+      this.spinner.hide();
+      resolve({ reportData: reportData, config: config })
+    });
+  });
+}
+
   extraLine(data:any,config:any,param:any)
   {
     console.log("extraLine ===== ", data);

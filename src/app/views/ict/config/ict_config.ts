@@ -11,64 +11,10 @@ export const config = {
         linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
     },
 	filters: [
-        // {
-		// 	label: 'Tele Session',
-
-        //     // displayLabel:'Class',
-
-		// 	name: 'class',
-
-		// 	labelProp: 'tele_class_name',
-
-		// 	valueProp: 'tele_class_name',
-
-		// 	id: 'class',
-
-		// 	tableAlias: 'tcdd',
-
-		// 	query:
-		// 		'SELECT tele_class_name FROM dimensions.tele_class_dimension_data ORDER BY tele_class_name ASC ',
-		// },
-        // {
-		// 	label: 'Session',
-
-        //     // displayLabel:'Class',
-
-		// 	name: 'class',
-
-		// 	labelProp: 'class_name',
-
-		// 	valueProp: 'class_id',
-
-		// 	id: 'class',
-
-		// 	tableAlias: 'tcdd',
-
-		// 	query:
-		// 		'SELECT class_id,class_name FROM dimensions.class ORDER BY class_name ASC ',
-		// },
-        
        
-        {
-			label: 'Tele Education',
-
-            // displayLabel:'Class',
-
-			name: 'project',
-
-			labelProp: 'project_name',
-
-			valueProp: 'project_name',
-
-			id: 'project',
-
-			tableAlias: 'pdd',
-
-			query:
-				'SELECT project_name FROM dimensions.project_dimension_data ORDER BY project_name ASC ',
-		},
+       
         // {
-		// 	label: 'Session',
+		// 	label: 'Tele Education',
 
         //     // displayLabel:'Class',
 
@@ -85,6 +31,7 @@ export const config = {
 		// 	query:
 		// 		'SELECT project_name FROM dimensions.project_dimension_data ORDER BY project_name ASC ',
 		// },
+       
         
        
         
@@ -126,12 +73,6 @@ export const config = {
 	],
    
 	
-
- 
-
-
-
-   
 
     ///right table for comparative
     tele_education_table: {

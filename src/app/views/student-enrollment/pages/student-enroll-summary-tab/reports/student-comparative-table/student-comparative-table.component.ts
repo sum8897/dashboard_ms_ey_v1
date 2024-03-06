@@ -117,65 +117,7 @@ export class StudentComparativeTableComponent implements OnInit, OnDestroy {
   }
 
  
-  //   this.startDate = startDate;
-  //   this.endDate = endDate;
-  //   this._criteriaService.emit('reset')
-  //   this.criteriaApplied = false
-  //   if (this.drillDownDetails !== undefined) {
-  //     let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
-  //     this.drillDownDetails = result?.drillDownDetails
-  //     this.tableReportData = result?.reportData
-  //     if (this.tableReportData?.data?.length > 0) {
-  //       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-  //       this.csv.csvDownload(reportsData)
-  //     }
-  //   }
-  //   else {
-  //     let reportConfig = config;
-
-  //     let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
-  //     let onLoadQuery;
-  //     if (this.rbacDetails?.role) {
-  //       filters.every((filter: any) => {
-  //         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
-  //           queries = { ...filter?.actions?.queries }
-  //           timeSeriesQueries = { ...filter?.timeSeriesQueries }
-  //           Object.keys(queries).forEach((key) => {
-  //             queries[key] = this.parseRbacFilter(queries[key])
-  //             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
-  //           });
-  //           return false
-  //         }
-  //         return true
-  //       })
-  //     } else {
-  //       this._wrapperService.constructFilters(this.filters, filters);
-  //     }
-
-  //     Object.keys(queries).forEach((key: any) => {
-  //       if (key.toLowerCase().includes('comparison')) {
-  //         let endDate = new Date();
-  //         let days = endDate.getDate() - this.compareDateRange;
-  //         let startDate = new Date();
-  //         startDate.setDate(days)
-  //         onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-  //       }
-  //       else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
-  //         onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
-  //       }
-  //       else {
-  //         onLoadQuery = queries[key]
-  //       }
-  //       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
-
-  //       console.log('query:',query)
-  //       if (query && key === 'table') {
-  //         this.getTableReportData(query, options);
-  //       }
-  //     })
-  //   }
-  // }
-
+ 
   //function for filters
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
 

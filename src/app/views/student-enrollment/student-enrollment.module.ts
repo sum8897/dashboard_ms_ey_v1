@@ -12,6 +12,7 @@ import { StudentComparativeBignumberComponent } from './pages/student-enroll-sum
 import { StudentComparativeSchoolTableComponent } from './pages/student-enroll-summary-tab/reports/student-comparative-school-table/student-comparative-school-table.component';
 import { StudentComparativeBarchartComponent } from './pages/student-enroll-summary-tab/reports/student-comparative-barchart/student-comparative-barchart.component';
 import { StudentPercentageChangeBignumberComponent } from './pages/student-enroll-summary-tab/reports/student-percentage-change-bignumber/student-percentage-change-bignumber.component';
+import { StudentDenrollBignumberComponent } from './pages/student-enroll-summary-tab/reports/student-denroll-bignumber/student-denroll-bignumber.component';
 
 
 
@@ -23,7 +24,8 @@ import { StudentPercentageChangeBignumberComponent } from './pages/student-enrol
     StudentComparativeBignumberComponent,
     StudentComparativeSchoolTableComponent,
     StudentComparativeBarchartComponent,
-    StudentPercentageChangeBignumberComponent
+    StudentPercentageChangeBignumberComponent,
+    StudentDenrollBignumberComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

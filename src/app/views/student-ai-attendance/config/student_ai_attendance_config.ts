@@ -1672,29 +1672,17 @@ student_attendance_bignumber1: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":`SELECT
-                ROUND(AVG(perc_students)) AS percentage_students
-                from (SELECT
-                ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-            FROM
-                student_attendance.student_attendance_master ts
-            JOIN
-                dimensions.district d ON ts.district_id = d.district_id
-            GROUP BY
-                ts.district_id, d.district_name) AS avg_query;`,
+                ROUND(sum(sam.attendance_status) * 100 / count(sam.attendance_status),2) AS present_students
+                FROM student_attendance.student_attendance_master sam
+                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": `SELECT
-                    ROUND(AVG(perc_students)) AS percentage_students
-                    from (SELECT
-                    ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
-                FROM
-                    student_attendance.student_attendance_master ts
-                JOIN
-                    dimensions.district d ON ts.district_id = d.district_id
-                GROUP BY
-                    ts.district_id, d.district_name) AS avg_query;`,
+                    ROUND(sum(sam.attendance_status) * 100 / count(sam.attendance_status),2) AS present_students
+                    FROM student_attendance.student_attendance_master sam
+                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1704,16 +1692,49 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Average Total Students Present",
+            "title": "Percentage of Students Present",
             "valueSuffix": '%',
-            "property": 'percentage_students'
+            "property": 'present_students'
         }
     }
 },
-
-//pat bignumber2
-
-// pat_bignumber2: {
+student_attendance_bignumber2: {
+    "label": "Average Teachers Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber":`SELECT
+                ROUND((count(sam.attendance_status) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status),2) AS absent_students
+                FROM student_attendance.student_attendance_master sam
+                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `SELECT
+                    ROUND((count(sam.attendance_status) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status),2) AS absent_students
+                    FROM student_attendance.student_attendance_master sam
+                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+        
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Percentage of Students Absent",
+            "valueSuffix": '%',
+            "property": 'absent_students'
+        }
+    }
+},
+// student_attendance_bignumber2: {
 //     "label": "Average Teachers Present",
 //     "filters": [
 //         {
@@ -1722,26 +1743,41 @@ student_attendance_bignumber1: {
 //             "valueProp": "state_id",
 //             "hierarchyLevel": "1",
 //             "timeSeriesQueries": {
-//                 "bigNumber": "select 5000 as total_count",
+//                 "bigNumber":`select
+//                 max
+//                 (
+//                 date
+//                 ) as date
+//                 from
+//                 student_attendance.student_attendance_master sam`,
 //                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
 //             },
 //             "actions": {
 //                 "queries": {
-//                     "bigNumber": "select 5000 as total_count",
+//                     "bigNumber": `select
+//                     max
+//                     (
+//                     date
+//                     ) as date
+//                     from
+//                     student_attendance.student_attendance_master sam`,
 //                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
 //                 },
 //                 "level": "district"
 //             }
 //         }
+        
 //     ],
 //     "options": {
 //         "bigNumber": {
-//             "title": "Total Present ",
+//             "title": "Latest Date",
 //             "valueSuffix": '',
-//             "property": 'total_count'
+//             "property": 'date'
 //         }
 //     }
 // },
+
+
 student_barchart:{
     "label": "Overall Summary",
     "defaultLevel": "state",

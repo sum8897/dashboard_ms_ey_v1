@@ -6,6 +6,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { config } from 'src/app/views/student-enrollment/config/student_enrollment_config';
 import { StudentComparativeTableComponent } from './reports/student-comparative-table/student-comparative-table.component';
 import { StudentComparativeBignumberComponent } from './reports/student-comparative-bignumber/student-comparative-bignumber.component';
+import { StudentDenrollBignumberComponent } from './reports/student-denroll-bignumber/student-denroll-bignumber.component';
 import { StudentPercentageChangeBignumberComponent } from './reports/student-percentage-change-bignumber/student-percentage-change-bignumber.component';
 import { StudentComparativeBarchartComponent } from './reports/student-comparative-barchart/student-comparative-barchart.component';
 import { StudentComparativeSchoolTableComponent } from './reports/student-comparative-school-table/student-comparative-school-table.component';
@@ -47,6 +48,7 @@ hasCommonFilters: boolean = true;
   //
   @ViewChild('studentcomparativeTable') studentcomparativeTable: StudentComparativeTableComponent;
   @ViewChild('studentComparativeBigNumber') studentComparativeBigNumber: StudentComparativeBignumberComponent;
+  @ViewChild('studentDenrollBigNumber') studentDenrollBigNumber: StudentDenrollBignumberComponent;
   @ViewChild('studentPercentageChangeBigNumber') studentPercentageChangeBigNumber: StudentPercentageChangeBignumberComponent;
   @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
   @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
@@ -86,6 +88,7 @@ hasCommonFilters: boolean = true;
           this.studentcomparativeTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         
           this.studentComparativeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.studentDenrollBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.studentPercentageChangeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.studentComparativeBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           // this.studentTrendchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -140,6 +143,7 @@ hasCommonFilters: boolean = true;
     this.comparativeSchool?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
     this.studentComparativeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.studentDenrollBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.studentPercentageChangeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
     this.studentComparativeBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);

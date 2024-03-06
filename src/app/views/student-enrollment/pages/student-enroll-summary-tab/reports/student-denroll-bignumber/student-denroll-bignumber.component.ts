@@ -9,20 +9,20 @@ import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchma
 import { StudentEnrollSummaryTabComponent } from '../../student-enroll-summary-tab.component';
 import { config } from 'src/app/views/student-enrollment/config/student_enrollment_config';
 @Component({
-  selector: 'app-student-comparative-bignumber',
-  templateUrl: './student-comparative-bignumber.component.html',
-  styleUrls: ['./student-comparative-bignumber.component.scss']
+  selector: 'app-student-denroll-bignumber',
+  templateUrl: './student-denroll-bignumber.component.html',
+  styleUrls: ['./student-denroll-bignumber.component.scss']
 })
-export class StudentComparativeBignumberComponent implements OnInit, OnDestroy {
+export class StudentDenrollBignumberComponent implements OnInit, OnDestroy {
 
-  reportName: string = 'student_comparative_bignumber';
+  reportName: string = 'student_denroll_bignumber';
   filters: any = [];
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "students enrolled in the period"
+    reportName: "students de-enrolled in the period"
   };
-  currentReportName: string = "students enrolled in the period";
+  currentReportName: string = "students de-enrolled in the period";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;
