@@ -1786,32 +1786,18 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`select ROUND(AVG(connected_perc),2) as avg_connected
-                from (select 
-                ROUND((SUM(te.status)*100/count(te.status)),2) as connected_perc
-                from 
-                teleeducation.tele_education te
-                left join
-                dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                left join
-                dimensions.district d on te.district_id = d.district_id 
-                group by
-                te.district_id)connec_perc`,
+                "bigNumber":`SELECT
+                ROUND(sum(te.status) * 100 / count(te.status),2) AS tele_perc
+                FROM teleeducation.tele_education te
+                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `select ROUND(AVG(connected_perc),2) as avg_connected
-                    from (select 
-                    ROUND((SUM(te.status)*100/count(te.status)),2) as connected_perc
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    group by
-                    te.district_id)connec_perc`,
+                    "bigNumber": `SELECT
+                    ROUND(sum(te.status) * 100 / count(te.status),2) AS tele_perc
+                    FROM teleeducation.tele_education te
+                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1821,9 +1807,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Average Connected",
+            "title": "Connected",
             "valueSuffix": '%',
-            "property": 'avg_connected'
+            "property": 'tele_perc'
         }
     }
 },
@@ -1836,32 +1822,18 @@ student_attendance_bignumber2: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`select ROUND(AVG(not_connected),2) as avg_notconnected
-                from (select 
-                ROUND((count(te.status)-sum(te.status))*100/ count(te.status),2) as not_connected
-                from 
-                teleeducation.tele_education te
-                left join
-                dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                left join
-                dimensions.district d on te.district_id = d.district_id 
-                group by
-                te.district_id)connec_perc`,
+                "bigNumber":`SELECT
+                ROUND((count(te.status)-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+                FROM teleeducation.tele_education te
+                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `select ROUND(AVG(not_connected),2) as avg_notconnected
-                    from (select 
-                    ROUND((count(te.status)-sum(te.status))*100/ count(te.status),2) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    group by
-                    te.district_id)connec_perc`,
+                    "bigNumber": `SELECT
+                    ROUND((count(te.status)-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+                    FROM teleeducation.tele_education te
+                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1871,12 +1843,54 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Average Not Connected",
+            "title": "Not Connected",
             "valueSuffix": '%',
-            "property": 'avg_notconnected'
+            "property": 'not_connected_perc'
         }
     }
 },
+// student_attendance_bignumber3: {
+//     "label": "Total Enrolled Students",
+//     "filters": [
+//         {
+//             "name": "State",
+//             "labelProp": "state_name",
+//             "valueProp": "state_id",
+//             "hierarchyLevel": "1",
+//             "timeSeriesQueries": {
+//                 "bigNumber":`select
+//                 max
+//                 (
+//                 date
+//                 ) as date
+//                 from
+//                 teleeducation.tele_education te  `,
+//                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+//             },
+//             "actions": {
+//                 "queries": {
+//                     "bigNumber": `select
+//                     max
+//                     (
+//                     date
+//                     ) as date
+//                     from
+//                     teleeducation.tele_education te  `,
+//                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+//                 },
+//                 "level": "district"
+//             }
+//         }
+        
+//     ],
+//     "options": {
+//         "bigNumber": {
+//             "title": "Date",
+//             "valueSuffix": '',
+//             "property": 'date'
+//         }
+//     }
+// },
 
 
 

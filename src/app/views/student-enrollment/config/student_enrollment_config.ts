@@ -32,6 +32,47 @@ export const config = {
 		},
         
 	
+        // {
+		// 	label: 'Comparative Data',
+
+        //     // displayLabel:'Class',
+
+		// 	name: 'district',
+
+		// 	labelProp: 'district_name',
+
+		// 	valueProp: 'district_id',
+
+		// 	id: 'district',
+
+		// 	tableAlias: 'd',
+        //     // child : [2],
+
+		// 	query:
+		// 		'SELECT district_id, district_name FROM dimensions.district ',
+		// },
+        // {
+		// 	label: 'Comparative Data',
+
+        //     // displayLabel:'Class',
+
+		// 	name: 'block',
+
+		// 	labelProp: 'block_name',
+
+		// 	valueProp: 'block_id',
+
+		// 	id: 'block',
+
+		// 	tableAlias: 'b',
+        //     parent: 'Y',
+        //     // parents: [0,1],
+
+		// 	query:
+		// 		`SELECT block_id, block_name FROM dimensions.block where district_id=':district:'  ORDER BY block_name ASC `,
+		// },
+        
+	
 	],
    
 	

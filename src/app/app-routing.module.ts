@@ -104,6 +104,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'school-general',
+        loadChildren: () =>
+          import('./views/school-general/school-general.module').then(
+            (module) => module.SchoolGeneralModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'school-library',
         loadChildren: () =>
           import('./views/school-library/school-library.module').then(
