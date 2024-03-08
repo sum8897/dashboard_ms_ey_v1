@@ -12,6 +12,7 @@ import { SchoolBignumberComponent } from './pages/school-details-tab/reports/sch
 import { DistrictWiseTableComponent } from './pages/school-details-tab/reports/district-wise-table/district-wise-table.component';
 import { ManagementBarchartComponent } from './pages/school-details-tab/reports/management-barchart/management-barchart.component';
 import { CategoryBarchartComponent } from './pages/school-details-tab/reports/category-barchart/category-barchart.component';
+import { ClassroomRatioTableComponent } from './pages/school-details-tab/reports/classroom-ratio-table/classroom-ratio-table.component';
 
 
 
@@ -23,7 +24,8 @@ import { CategoryBarchartComponent } from './pages/school-details-tab/reports/ca
     SchoolBignumberComponent,
     DistrictWiseTableComponent,
     ManagementBarchartComponent,
-    CategoryBarchartComponent
+    CategoryBarchartComponent,
+    ClassroomRatioTableComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

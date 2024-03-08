@@ -317,52 +317,59 @@ export const config = {
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
                     "table": `SELECT
-                    sam.student_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                   student_attendance.student_attendance_master sam
-                LEFT join
-                dimensions.district d on sam.district_id = d.district_id
+                    COALESCE(NULL, 'NA') AS principal_name,
+                    COALESCE(NULL, 'NA') AS principal_no,
+                    COALESCE(NULL, 'NA') AS parent_name,
+                    COALESCE(NULL, 'NA') AS parent_mobileno,
+                    sam.student_name
+                   
+                FROM    
+                    student_attendance.student_attendance_master sam 
                 LEFT JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id
-                LEFT join
-                    dimensions.block b on sam.block_id = b.block_id
-                left join
-                    dimensions.cluster c on sam.cluster_id = c.cluster_id
-                left join
-                    dimensions.school sch on sam.school_id = sch.school_id
-                where
-                  sam.date in ( startDate,endDate) 
-                  and sam.school_id = {school_id}
+                    dimensions.district d ON sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT JOIN
+                    dimensions.block b ON sam.block_id = b.block_id 
+                LEFT JOIN 
+                    dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                LEFT JOIN 
+                    dimensions.school sch ON sam.school_id = sch.school_id 
+                WHERE
+                    sam.date IN (startDate, endDate) 
+                    AND sam.school_id = {school_id}
                 GROUP BY
-                     sam.student_name`,
+                    sam.student_name;
+                
+                `,
                 },
                 "actions": {
                     "queries": {
                         "table":`SELECT
-                        sam.student_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                       student_attendance.student_attendance_master sam
-                    LEFT join
-                    dimensions.district d on sam.district_id = d.district_id
+                        COALESCE(NULL, 'NA') AS principal_name,
+                        COALESCE(NULL, 'NA') AS principal_no,
+                        COALESCE(NULL, 'NA') AS parent_name,
+                        COALESCE(NULL, 'NA') AS parent_mobileno,
+                        sam.student_name
+                        
+                    FROM    
+                        student_attendance.student_attendance_master sam 
                     LEFT JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id
-                    LEFT join
-                        dimensions.block b on sam.block_id = b.block_id
-                    left join
-                        dimensions.cluster c on sam.cluster_id = c.cluster_id
-                    left join
-                        dimensions.school sch on sam.school_id = sch.school_id
-                    where
-                      sam.date in ( startDate,endDate) 
-                      and sam.school_id = {school_id}
+                        dimensions.district d ON sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.classes cc ON sam.class_id = cc.class_id 
+                    LEFT JOIN
+                        dimensions.block b ON sam.block_id = b.block_id 
+                    LEFT JOIN 
+                        dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                    LEFT JOIN 
+                        dimensions.school sch ON sam.school_id = sch.school_id 
+                    WHERE
+                        sam.date IN (startDate, endDate) 
+                        AND sam.school_id = {school_id}
                     GROUP BY
-                         sam.student_name`,
+                        sam.student_name;
+                                       `,
                     },
                     "level": "school"
                 }
@@ -465,13 +472,29 @@ export const config = {
                     //     class: "text-left"
                     // },
                     {
-                        name: "Grade",
-                        property: "grade_number",
+                        name: "Student Name",
+                        property: "student_name",
+                        class: "text-center"
+                    },
+                                                        
+                    {
+                        name: "Parent Name",
+                        property: "parent_name",
                         class: "text-center"
                     },
                     {
-                        name: "Student Name",
-                        property: "student_name",
+                        name: "Parent No",
+                        property: "parent_mobileno",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Principal Name",
+                        property: "principal_name", 
+                        class: "text-center"
+                    },
+                    {
+                        name: "Principal Number",
+                        property: "principal_no",
                         class: "text-center"
                     },
                     {
@@ -484,6 +507,8 @@ export const config = {
                         property: "date2_count",
                         class: "text-center"
                     },
+                    
+                    
                     
                     {
                         name: "change",
@@ -2379,6 +2404,77 @@ GROUP BY
                     "level": "school"
                 }
             },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name as level,
+                 ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                left join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.school_id  = {school_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                `,
+                },
+                "actions": {
+                    "queries": {
+                        "table":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name as level,
+                     ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.school_id  = {school_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    `,
+                    },
+                    "level": "school"
+                }
+            }
     
         ],
         "options": {
@@ -2806,7 +2902,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Total Enrolled Students",
+            "title": "Total Enrolled Students on 07/03/2024",
             "valueSuffix": '',
             "property": 'enrolled_count'
         }

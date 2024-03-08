@@ -3453,7 +3453,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Percentage Of Teacher Present ",
+                "title": "Percentage Of Teacher Present on 20/02/2024 ",
                 "valueSuffix": '%',
                 "property": 'teaching_present'
             }
@@ -3488,7 +3488,7 @@ export const config = {
         ],
         "options": {
             "bigNumber": {
-                "title": "Percentage of Non Teaching Staff Present ",
+                "title": "Percentage of Non Teaching Staff Present on 20/02/2024",
                 "valueSuffix": '%',
                 "property": 'nonteaching_present'
             }

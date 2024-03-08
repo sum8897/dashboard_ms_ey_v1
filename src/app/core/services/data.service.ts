@@ -383,7 +383,6 @@ export class DataService {
       });
     });
   }
- 
 
 
   //horizontal bar

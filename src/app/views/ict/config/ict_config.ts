@@ -1787,7 +1787,7 @@ student_attendance_bignumber1: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":`SELECT
-                ROUND(sum(te.status) * 100 / count(te.status),2) AS tele_perc
+                ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
                 FROM teleeducation.tele_education te
                 WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
@@ -1795,7 +1795,7 @@ student_attendance_bignumber1: {
             "actions": {
                 "queries": {
                     "bigNumber": `SELECT
-                    ROUND(sum(te.status) * 100 / count(te.status),2) AS tele_perc
+                    ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
                     FROM teleeducation.tele_education te
                     WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
@@ -1807,9 +1807,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Connected",
+            "title": "Connected on 21/02/2024",
             "valueSuffix": '%',
-            "property": 'tele_perc'
+            "property": 'connected_perc'
         }
     }
 },
@@ -1822,16 +1822,18 @@ student_attendance_bignumber2: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND((count(te.status)-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+                "bigNumber":` 
+                SELECT
+                ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
                 FROM teleeducation.tele_education te
                 WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND((count(te.status)-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+                    "bigNumber": ` 
+                    SELECT
+                    ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
                     FROM teleeducation.tele_education te
                     WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
@@ -1843,7 +1845,7 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Not Connected",
+            "title": "Not Connected on 21/02/2024",
             "valueSuffix": '%',
             "property": 'not_connected_perc'
         }

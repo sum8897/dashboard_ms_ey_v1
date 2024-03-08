@@ -79,6 +79,7 @@ export class StudentComparativeBarchartComponent implements OnInit, OnDestroy {
         this.drilldownData(data);
         this._criteriaService.emit('reset')
         this.criteriaApplied = false;
+        
       }
     })
     // this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(async (data) => {
@@ -440,6 +441,12 @@ export class StudentComparativeBarchartComponent implements OnInit, OnDestroy {
         drillDownDetails = {
           ...this.rbacDetails,
           cluster: id ? id : this.drillDownDetails.cluster
+        }
+        break;
+      case 4:
+        drillDownDetails = {
+          ...this.rbacDetails,
+          school: id ? id : this.drillDownDetails.school
         }
         break;
     }

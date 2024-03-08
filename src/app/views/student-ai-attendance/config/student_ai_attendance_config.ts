@@ -1671,16 +1671,14 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND(sum(sam.attendance_status) * 100 / count(sam.attendance_status),2) AS present_students
+                "bigNumber":`SELECT ROUND((CAST(sum(sam.attendance_status) AS DECIMAL(10,2)) * 100)/ count(sam.attendance_status) ,2) AS present_students
                 FROM student_attendance.student_attendance_master sam
                 WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND(sum(sam.attendance_status) * 100 / count(sam.attendance_status),2) AS present_students
+                    "bigNumber": `SELECT ROUND((CAST(sum(sam.attendance_status) AS DECIMAL(10,2)) * 100)/ count(sam.attendance_status) ,2) AS present_students
                     FROM student_attendance.student_attendance_master sam
                     WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
@@ -1692,7 +1690,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Percentage of Students Present",
+            "title": "Percentage of Students Present on 07/03/2024",
             "valueSuffix": '%',
             "property": 'present_students'
         }
@@ -1707,18 +1705,16 @@ student_attendance_bignumber2: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND((count(sam.attendance_status) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status),2) AS absent_students
+                "bigNumber":`SELECT ROUND((CAST(count(sam.attendance_status) AS DECIMAL(10,2)) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status), 2) AS absent_students
                 FROM student_attendance.student_attendance_master sam
-                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
+                WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND((count(sam.attendance_status) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status),2) AS absent_students
+                    "bigNumber": `SELECT ROUND((CAST(count(sam.attendance_status) AS DECIMAL(10,2)) - sum(sam.attendance_status)) * 100 / count(sam.attendance_status), 2) AS absent_students
                     FROM student_attendance.student_attendance_master sam
-                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master)`,
+                    WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1728,7 +1724,7 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Percentage of Students Absent",
+            "title": "Percentage of Students Absent on 07/03/2024",
             "valueSuffix": '%',
             "property": 'absent_students'
         }

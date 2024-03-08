@@ -52,26 +52,27 @@ export const config = {
 			query:
 				'SELECT district_id, district_name FROM dimensions.district ',
 		},
-        // {
-		// 	label: 'School Details',
+        {
+			label: 'School Details',
 
-        //     // displayLabel:'Class',
+            // displayLabel:'Class',
 
-		// 	name: 'block',
+			name: 'block',
 
-		// 	labelProp: 'block_name',
+			labelProp: 'block_name',
 
-		// 	valueProp: 'block_id',
+			valueProp: 'block_id',
 
-		// 	id: 'block',
+			id: 'block',
 
-		// 	tableAlias: 'b',
-        //     parent: 'Y',
-        //     parents: [0,1],
+			tableAlias: 'b',
+            // child : [2],
+            parent: 'Y',
+            parents: [0,1],
 
-		// 	query:
-		// 		`SELECT block_id, block_name FROM dimensions.block where district_id=':district:'  ORDER BY block_name ASC `,
-		// },
+			query:
+				`SELECT block_id, block_name FROM dimensions.block where district_id=':district:'  ORDER BY block_name ASC `,
+		},
         {
 			label: 'School Details',
 
@@ -91,7 +92,7 @@ export const config = {
             parents: [0,1],
 
 			query:
-				`SELECT cluster_id, cluster_name FROM dimensions.cluster where district_id=':district:' ORDER BY cluster_name ASC `,
+				`SELECT cluster_id, cluster_name FROM dimensions.cluster where block_id=':block:' ORDER BY cluster_name ASC `,
 		},
         
 	
@@ -106,7 +107,7 @@ export const config = {
    
 
     ///right table for comparative
-    student_comparative_table: {
+    district_wise_table: {
         "label": "School Details",
         "defaultLevel": "state",
         "filters": [
@@ -543,7 +544,7 @@ export const config = {
 
 
     //bottom table for all data
-    student_comparative_school: {
+    classroom_ratio_table: {
         "label": "Average Student Present",
         "defaultLevel": "state",
         "filters": [
@@ -1001,7 +1002,326 @@ GROUP BY
     },
 
     //barchart
-    student_comparative_barchart:{
+    management_barchart:{
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name as level,
+                   ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                GROUP BY
+                    sam.district_id, d.district_name
+                    `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name as level,
+                       ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                    GROUP BY
+                        sam.district_id, d.district_name
+                        `
+                    
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name as level,
+                ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.district_id = {district_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                        `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name as level,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100, 4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name `,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name as level,
+                ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.block_id  = {block_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name as level,
+                    ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.block_id  = {block_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name `
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name as level,
+                 ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                FROM
+                   student_attendance.student_attendance_master sam 
+                LEFT join
+                dimensions.district d on sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT join
+                    dimensions.block b on sam.block_id = b.block_id 
+                left join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                left join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate)  
+                  and sam.cluster_id  = {cluster_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                
+                `,
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name as level,
+                     ROUND((COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END))::numeric / (COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END)) *100,4) AS student_count_change_perc
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                    LEFT join
+                    dimensions.district d on sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT join
+                        dimensions.block b on sam.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate)  
+                      and sam.cluster_id  = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    
+                    `
+                    },
+                    "level": "school"
+                }
+            },
+    
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Percentage of change",
+                "metricValueProp": "student_count_change_perc",
+                "yAxis": {
+                    "title": ""
+                },
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
+                },
+                "xAxis": {
+                    "title": "Percentage of change",
+                    "label": "level",
+                    "value": "level",
+    
+                },
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "%"
+                    },
+                   
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "present_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Present Students ",
+                        "value": "total_students",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Student: ",
+                        "value": "perc_students",
+                        "valueSuffix": ""
+                    },
+                    
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
+        }
+    },
+    category_barchart:{
         "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [

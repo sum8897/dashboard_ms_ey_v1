@@ -12,7 +12,7 @@
 		></app-filter-panel>
 	</div>
 
-	<!-- <div class="filter-row grid grid-cols-10">
+	<div class="filter-row grid grid-cols-10">
 		<div
 			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
 		>
@@ -23,10 +23,10 @@
 				[defaultSelectedDays]="defaultSelectedDays"
 			></app-time-series-filter-panel>
 		</div>
-		<div class="md:col-span-2 col-span-4">
+		<!-- <div class="md:col-span-2 col-span-4">
 			<app-breadcrumb-component></app-breadcrumb-component>
-		</div>
-	</div> -->
+		</div> -->
+	</div>
 
 	<div class="reports-row">
 		<div *ngIf="checkReport('diksha_metrics', 'bigNumber1')" id="bignumber1">
@@ -51,59 +51,48 @@
 			<app-breadcrumb-component></app-breadcrumb-component>
 		</div>
 		<div class="row-wrapper grid grid-cols-2 gap-4">
-			<div
+			<!-- <div
 				class="col-span-2 xmd:col-span-1 div-shadow"
-				id="bignumber"
-				*ngIf="checkReport('student_comparative_bignumber', 'bigNumber')"
+				id="table1"
+				*ngIf="checkReport('district_wise_table', 'table')"
 			>
-				<!-- <app-student-comparative-bignumber
-					#studentComparativeBigNumber
-				></app-student-comparative-bignumber>
-				<hr /> -->
-				<!-- <app-student-denroll-bignumber
-					#studentDenrollBigNumber
-				></app-student-denroll-bignumber>
-				<hr /> -->
-				<!-- <app-student-percentage-change-bignumber
-					#studentPercentageChangeBigNumber
-				></app-student-percentage-change-bignumber> -->
-				<!-- <hr />
-				<app-student-trendline
-					#studentTrendchart
+				<app-district-wise-table
+					#districtWiseTable
 					(exportReportData)="csvDownload($event)"
-				></app-student-trendline> -->
-			</div>
+				></app-district-wise-table>
+			</div> -->
 
 			<!-- <div
 				class="col-span-2 xmd:col-span-1 div-shadow"
-				*ngIf="checkReport('student_comparative_table', 'table')"
-				id="table1"
-			>
-				<app-student-comparative-table
-					#studentcomparativeTable
-					(exportReportData)="csvDownload($event)"
-				></app-student-comparative-table>
-			</div> -->
-			<!-- <div
-				class="col-span-2 xmd:col-span-2 div-shadow"
-				*ngIf="checkReport('student_comparative_barchart', 'barChart')"
+				*ngIf="checkReport('management_barchart', 'barChart')"
 				id="bar"
 			>
-				<app-student-comparative-barchart
-					#studentComparativeBarchart
+				<app-management-barchart
+					#managementBarchart
 					(exportReportData)="csvDownload($event)"
-				></app-student-comparative-barchart>
+				></app-management-barchart>
 			</div> -->
+			<!-- <div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('category_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-category-barchart
+					#categoryBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-category-barchart>
+			</div>
+			 -->
 
 			<!-- <div
 				class="col-span-2 xmd:col-span-2 div-shadow"
-				*ngIf="checkReport('student_comparative_school', 'table')"
+				*ngIf="checkReport('classroom_ratio_table', 'table')"
 				id="table3"
 			>
-				<app-student-comparative-school-table
-					#comparativeSchool
+				<app-classroom-ratio-table
+					#classroomRatioTable
 					(exportReportData)="csvDownload($event)"
-				></app-student-comparative-school-table>
+				></app-classroom-ratio-table>
 			</div> -->
 		</div>
 	</div>
