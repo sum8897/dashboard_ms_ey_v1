@@ -90,8 +90,8 @@ export const config = {
                     d.district_name,
                     sum(te.status) as connected,
                     count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
-                    from 
+                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected                    from 
                     teleeducation.tele_education te
                     left join
                     dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
@@ -110,8 +110,8 @@ export const config = {
                         d.district_name,
                         sum(te.status) as connected,
                         count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
-                        from 
+                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected                        from 
                         teleeducation.tele_education te
                         left join
                         dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
@@ -138,7 +138,8 @@ export const config = {
                     b.block_name,
                     sum(te.status) as connected,
                     count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                     from 
                     teleeducation.tele_education te
                     left join
@@ -162,7 +163,8 @@ export const config = {
                         b.block_name,
                         sum(te.status) as connected,
                         count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                         from 
                         teleeducation.tele_education te
                         left join
@@ -193,7 +195,8 @@ export const config = {
                     c.cluster_name,
                     sum(te.status) as connected,
                     count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                     from 
                     teleeducation.tele_education te
                     left join
@@ -219,7 +222,8 @@ export const config = {
                         c.cluster_name,
                         sum(te.status) as connected,
                         count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                         from 
                         teleeducation.tele_education te
                         left join
@@ -252,7 +256,8 @@ export const config = {
                     sch.school_name,
                     sum(te.status) as connected,
                     count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                     from 
                     teleeducation.tele_education te
                     left join
@@ -283,7 +288,8 @@ export const config = {
                         sch.school_name,
                         sum(te.status) as connected,
                         count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total
+                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
+                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
                         from 
                         teleeducation.tele_education te
                         left join
@@ -420,17 +426,17 @@ export const config = {
                         property: "not_connected",
                         class: "text-center"
                     },
-                    // {
-                    //     name: "Total",
-                    //     property: "total",
-                    //     class: "text-center"
-                    // },
-                    
                     {
                         name: "Total",
                         property: "total",
+                        class: "text-center"
+                    },
+                    
+                    {
+                        name: "Percentage of Connected",
+                        property: "perc_connected",
                         class: "text-center",
-                        valueSuffix: '',
+                        valueSuffix: '%',
                         isHeatMapRequired: true,
                         type: "number",
                         color: {
@@ -438,11 +444,11 @@ export const config = {
                             values: [
                                 {
                                     color: "#007000",
-                                    breakPoint: 100
+                                    breakPoint: 70
                                 },
                                 {
                                     color: "#FFBF00",
-                                    breakPoint: 70
+                                    breakPoint: 40
                                 },
                                 {
                                     color: "#D2222D",
