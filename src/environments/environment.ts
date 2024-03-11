@@ -8,9 +8,9 @@ export const environment = {
   // apiURL: 'http://localhost:3008',
   // apiURL: 'http://192.168.1.159:3008',
   // apiURL: 'https://cqubedemo.gpsdemo.live/api/queryBuilder',
-  // apiURL: 'https://vsk-py.in/api/queryBuilder',
-  apiURL: 'https://vsk-ssa.assam.gov.in/api/queryBuilder',
-  stateCode: "AS",
+  apiURL: 'https://vsk-py.in/api/queryBuilder',
+  // apiURL: 'https://vsk-ssa.assam.gov.in/api/queryBuilder',
+  stateCode: "PY",
   numberFormat: {
     reports: {
       locale: 'en-IN',
