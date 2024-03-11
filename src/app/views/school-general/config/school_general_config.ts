@@ -33,67 +33,67 @@ export const config = {
        
         
 	
-        {
-			label: 'School Details',
+        // {
+		// 	label: 'School Details',
 
-            // displayLabel:'Class',
+        //     // displayLabel:'Class',
 
-			name: 'district',
+		// 	name: 'district',
 
-			labelProp: 'district_name',
+		// 	labelProp: 'district_name',
 
-			valueProp: 'district_id',
+		// 	valueProp: 'district_id',
 
-			id: 'district',
+		// 	id: 'district',
 
-			tableAlias: 'd',
-            child : [2],
+		// 	tableAlias: 'd',
+        //     child : [2],
 
-			query:
-				'SELECT district_id, district_name FROM dimensions.district ',
-		},
-        {
-			label: 'School Details',
+		// 	query:
+		// 		'SELECT district_id, district_name FROM dimensions.district ',
+		// },
+        // {
+		// 	label: 'School Details',
 
-            // displayLabel:'Class',
+        //     // displayLabel:'Class',
 
-			name: 'block',
+		// 	name: 'block',
 
-			labelProp: 'block_name',
+		// 	labelProp: 'block_name',
 
-			valueProp: 'block_id',
+		// 	valueProp: 'block_id',
 
-			id: 'block',
+		// 	id: 'block',
 
-			tableAlias: 'b',
-            // child : [2],
-            parent: 'Y',
-            parents: [0,1],
+		// 	tableAlias: 'b',
+        //     // child : [2],
+        //     parent: 'Y',
+        //     parents: [0,1],
 
-			query:
-				`SELECT block_id, block_name FROM dimensions.block where district_id=':district:'  ORDER BY block_name ASC `,
-		},
-        {
-			label: 'School Details',
+		// 	query:
+		// 		`SELECT block_id, block_name FROM dimensions.block where district_id=':district:'  ORDER BY block_name ASC `,
+		// },
+        // {
+		// 	label: 'School Details',
 
-            // displayLabel:'Class',
+        //     // displayLabel:'Class',
 
-			name: 'cluster',
+		// 	name: 'cluster',
 
-			labelProp: 'cluster_name',
+		// 	labelProp: 'cluster_name',
 
-			valueProp: 'cluster_id',
+		// 	valueProp: 'cluster_id',
 
-			id: 'cluster',
+		// 	id: 'cluster',
 
-			tableAlias: 'c',
+		// 	tableAlias: 'c',
            
-            parent: 'Y',
-            parents: [0,1],
+        //     parent: 'Y',
+        //     parents: [0,1],
 
-			query:
-				`SELECT cluster_id, cluster_name FROM dimensions.cluster where block_id=':block:' ORDER BY cluster_name ASC `,
-		},
+		// 	query:
+		// 		`SELECT cluster_id, cluster_name FROM dimensions.cluster where block_id=':block:' ORDER BY cluster_name ASC `,
+		// },
         
 	
 	],

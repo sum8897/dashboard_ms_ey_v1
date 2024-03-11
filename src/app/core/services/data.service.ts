@@ -538,6 +538,49 @@ export class DataService {
     console.log("extraLine ===== averageValue ", averageValue);
 
   }
+  //trendline
+  trendLine(data: any, config: any, param: string) {
+    console.log("trendline extra ===== ", data);
+    
+    const lineData = data.values.map((reportData: any) => reportData[param]);
+
+    const lineObject = {
+        type: 'line',
+        metricLabelProp: 'Line', // Customize the label as needed
+        label: 'Line', // Customize the label as needed
+        data: lineData,
+        borderColor: 'rgba(255, 0, 0, 1)', // Customize the border color as needed
+        borderWidth: 2, // Customize the border width as needed
+        fill: false
+    };
+
+    config.datasets.push(lineObject);
+
+    console.log("trendline extra c=====config ", config);
+}
+
+//stackbar
+stackBar(data: any, config: any, param: string) {
+  console.log("trendLine ===== ", data);
+  
+  const barData = data.values.map((reportData: any) => reportData[param]);
+
+  const barObject = {
+      type: 'bar',
+      metricLabelProp: 'Stacked Bar', // Customize the label as needed
+      label: 'Stacked Bar', // Customize the label as needed
+      data: barData,
+      backgroundColor: 'rgba(0, 0, 255, 0.5)', // Customize the bar color as needed
+      borderWidth: 1, // Customize the border width as needed
+      borderColor: 'rgba(0, 0, 255, 1)', // Customize the border color as needed
+      stack: 'Stack 1' // Specify the stack name
+  };
+
+  config.datasets.push(barObject);
+
+  console.log("trendLine ===== config ", config);
+}
+
   getStackedBarChartReportData(query, options, filters, defaultLevel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.spinner.show();

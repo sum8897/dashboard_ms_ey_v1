@@ -301,8 +301,8 @@ export class StudentAbsentTrendlineComponent implements OnInit, OnDestroy {
               filters,
               defaultLevel
             );
-          // this._dataService.extraLine(reportData,config,"perc_students");
-          this.tableReportData = reportData;
+            // this._dataService.trendLine(this.tableReportData,this.config,"absent_students");
+            this.tableReportData = reportData;
           this.config = config;
           console.log("tablereport", this.tableReportData, this.config);
 
@@ -372,7 +372,7 @@ export class StudentAbsentTrendlineComponent implements OnInit, OnDestroy {
       };
       console.log("tablereprtdata 261", this.tableReportData);
       this.config = this.getConfig();
-      // this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
+      // this._dataService.trendLine(this.tableReportData,this.config,"absent_students");
       console.log("configgg", this.config);
       let subscription = this._benchmarkService.benchmarkValues.subscribe(
         (values) => {
