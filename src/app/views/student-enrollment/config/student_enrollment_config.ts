@@ -500,16 +500,68 @@ export const config = {
                 "valueProp": "school_id",
                 "hierarchyLevel": "5",
                 "timeSeriesQueries": {
-                    "table": `SELECT                     COALESCE(NULL, 'NA') AS principal_name,                     COALESCE(NULL, 'NA') AS principal_no,                     COALESCE(NULL, 'NA') AS parent_name,                     COALESCE(NULL, 'NA') AS parent_mobileno,                     sam.student_name                                     FROM                         student_attendance.student_attendance_master sam                  LEFT JOIN                     dimensions.district d ON sam.district_id = d.district_id                  LEFT JOIN                     dimensions.class cc ON sam.class_id = cc.class_id                  LEFT JOIN                     dimensions.block b ON sam.block_id = b.block_id                  LEFT JOIN                      dimensions.cluster c ON sam.cluster_id = c.cluster_id                 LEFT JOIN                      dimensions.school sch ON sam.school_id = sch.school_id                   WHERE                      sam.date IN (startDate, endDate)                      AND sam.school_id = {school_id}                GROUP BY                     sam.student_name
-                    HAVING
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
+                    "table": `SELECT
+                    htddd.head_teacher_name AS principal_name,    
+                    htddd.head_teacher_contact_no AS principal_no,            
+                    COALESCE(NULL, 'NA') AS parent_name,
+                    COALESCE(NULL, 'NA') AS parent_mobileno,
+                    sam.student_name
+                    FROM    
+                    student_attendance.student_attendance_master sam 
+                LEFT JOIN
+                    dimensions.district d ON sam.district_id = d.district_id 
+                LEFT JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                LEFT JOIN
+                    dimensions.block b ON sam.block_id = b.block_id 
+                LEFT JOIN 
+                    dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                LEFT JOIN 
+                    dimensions.school sch ON sam.school_id = sch.school_id
+                LEFT JOIN
+                    dimensions.head_teacher_details_dimension_data htddd ON sam.school_id = htddd.school_id 
+                WHERE
+                    sam.date IN (startDate,endDate) 
+                    AND sam.school_id = {school_id}
+                GROUP BY
+                htddd.head_teacher_name ,    
+                    htddd.head_teacher_contact_no ,            
+                    sam.student_name
+                HAVING
+                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
                 `,
                 },
                 "actions": {
                     "queries": {
-                        "table":`SELECT                     COALESCE(NULL, 'NA') AS principal_name,                     COALESCE(NULL, 'NA') AS principal_no,                     COALESCE(NULL, 'NA') AS parent_name,                     COALESCE(NULL, 'NA') AS parent_mobileno,                     sam.student_name                                     FROM                         student_attendance.student_attendance_master sam                  LEFT JOIN                     dimensions.district d ON sam.district_id = d.district_id                  LEFT JOIN                     dimensions.class cc ON sam.class_id = cc.class_id                  LEFT JOIN                     dimensions.block b ON sam.block_id = b.block_id                  LEFT JOIN                      dimensions.cluster c ON sam.cluster_id = c.cluster_id                 LEFT JOIN                      dimensions.school sch ON sam.school_id = sch.school_id                   WHERE                      sam.date IN (startDate, endDate)                      AND sam.school_id = {school_id}                GROUP BY                     sam.student_name
-                        HAVING
-                            COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
+                        "table":`SELECT
+                        htddd.head_teacher_name AS principal_name,    
+                        htddd.head_teacher_contact_no AS principal_no,            
+                        COALESCE(NULL, 'NA') AS parent_name,
+                        COALESCE(NULL, 'NA') AS parent_mobileno,
+                        sam.student_name
+                        FROM    
+                        student_attendance.student_attendance_master sam 
+                    LEFT JOIN
+                        dimensions.district d ON sam.district_id = d.district_id 
+                    LEFT JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                    LEFT JOIN
+                        dimensions.block b ON sam.block_id = b.block_id 
+                    LEFT JOIN 
+                        dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                    LEFT JOIN 
+                        dimensions.school sch ON sam.school_id = sch.school_id
+                    LEFT JOIN
+                        dimensions.head_teacher_details_dimension_data htddd ON sam.school_id = htddd.school_id 
+                    WHERE
+                        sam.date IN (startDate,endDate) 
+                        AND sam.school_id = {school_id}
+                    GROUP BY
+                    htddd.head_teacher_name ,    
+                        htddd.head_teacher_contact_no ,            
+                        sam.student_name
+                    HAVING
+                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
                                        `,
                     },
                     "level": "school"
