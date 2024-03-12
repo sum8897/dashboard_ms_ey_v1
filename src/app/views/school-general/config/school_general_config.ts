@@ -17,18 +17,18 @@ export const config = {
 
             // displayLabel:'Class',
 
-			name: 'class',
+			name: 'acdemic_year',
 
-			labelProp: 'class_name',
+			labelProp: 'ac_year',
 
-			valueProp: 'class_id',
+			valueProp: 'ac_year',
 
-			id: 'class',
+			id: 'acdemic_year',
 
-			tableAlias: 'cc',
+			tableAlias: 'ay',
 
 			query:
-				'SELECT class_id, class_name FROM dimensions.class ORDER BY CAST(class_id AS INT) ASC;',
+				'select id, ac_year from dimensions.academic_year',
 		},
        
         
@@ -117,41 +117,39 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    sam.district_id,
+                    "table": `select 
+                    d.district_id,
                     d.district_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                   student_attendance.student_attendance_master sam 
-                LEFT join
-                dimensions.district d on sam.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                where
-                  sam.date in ( startDate,endDate)  
-                GROUP BY
-                    sam.district_id, d.district_name`,
+                    count(distinct case when sd.sch_loc_r_u = 1 then sd.udise_sch_code end) as rural,
+                    count(distinct case when sd.sch_loc_r_u = 2 then sd.udise_sch_code end) as urban,
+                    count(distinct udise_sch_code) as total
+                    from
+                    school_general.schooldetails sd 
+                    left join
+                    dimensions.district d on sd.district_cd = d.district_id 
+                    left join 
+                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
+                     
+                    group by 
+                    d.district_id , d.district_name`,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        sam.district_id,
+                        "table": `select 
+                        d.district_id,
                         d.district_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                       student_attendance.student_attendance_master sam 
-                    LEFT join
-                    dimensions.district d on sam.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                    where
-                      sam.date in ( startDate,endDate)  
-                    GROUP BY
-                        sam.district_id, d.district_name`,
+                        count(distinct case when sd.sch_loc_r_u = 1 then sd.udise_sch_code end) as rural,
+                        count(distinct case when sd.sch_loc_r_u = 2 then sd.udise_sch_code end) as urban,
+                        count(distinct udise_sch_code) as total
+                        from
+                        school_general.schooldetails sd 
+                        left join
+                        dimensions.district d on sd.district_cd = d.district_id 
+                        left join 
+                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
+                         
+                        group by 
+                        d.district_id , d.district_name`,
                     },
                     "level": "district"
                 }
@@ -162,49 +160,45 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `SELECT
- 
-                    sam.block_id ,
+                    "table": `select 
                     b.block_name,
-                    COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                   student_attendance.student_attendance_master sam 
-                LEFT join
-                dimensions.district d on sam.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                LEFT join
-                    dimensions.block b on sam.block_id = b.block_id 
-                where
-                  sam.date in ( startDate,endDate)  
-                  and sam.district_id = {district_id}
-                GROUP BY
-                    sam.block_id , b.block_name`,
+                    sd.block_cd ,
+                    count(distinct case when sd.sch_loc_r_u = 1 then sd.udise_sch_code end) as rural,
+                    count(distinct case when sd.sch_loc_r_u = 2 then sd.udise_sch_code end) as urban,
+                    count(distinct sd.udise_sch_code) as total
+                    from
+                    school_general.schooldetails sd 
+                    left join
+                    dimensions.district d on sd.district_cd = d.district_id 
+                    left join 
+                    dimensions.block b on sd.block_cd = b.block_id 
+                    left join 
+                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
+                    where 
+                      d.district_id = {district_id}
+                    group by 
+                    sd.block_cd  , b.block_name `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
- 
-                        sam.block_id ,
+                        "table": `select 
                         b.block_name,
-                        COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                       student_attendance.student_attendance_master sam 
-                    LEFT join
-                    dimensions.district d on sam.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                    LEFT join
-                        dimensions.block b on sam.block_id = b.block_id 
-                    where
-                      sam.date in ( startDate,endDate)  
-                      and sam.district_id = {district_id}
-                    GROUP BY
-                        sam.block_id , b.block_name`,
+                        sd.block_cd ,
+                        count(distinct case when sd.sch_loc_r_u = 1 then sd.udise_sch_code end) as rural,
+                        count(distinct case when sd.sch_loc_r_u = 2 then sd.udise_sch_code end) as urban,
+                        count(distinct sd.udise_sch_code) as total
+                        from
+                        school_general.schooldetails sd 
+                        left join
+                        dimensions.district d on sd.district_cd = d.district_id 
+                        left join 
+                        dimensions.block b on sd.block_cd = b.block_id 
+                        left join 
+                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
+                        where 
+                          d.district_id = {district_id}
+                        group by 
+                        sd.block_cd  , b.block_name `,
                     },
                     "level": "block"
                 }
@@ -482,35 +476,22 @@ export const config = {
 
                         }
                     },
-                    // {
-                    //     name: "School",
-                    //     property: "school_name",
-                    //     class: "text-left"
-                    // },
+                   
+                   
                     {
-                        name: "Grade",
-                        property: "grade_number",
+                        name: "Rural",
+                        property: "rural",
                         class: "text-center"
                     },
                     {
-                        name: "Student Name",
-                        property: "student_name",
+                        name: "Urban",
+                        property: "urban",
                         class: "text-center"
                     },
+                   
                     {
-                        name: "No. of Students enrolled on Date 1",
-                        property: "date1_count",
-                        class: "text-center"
-                    },
-                    {
-                        name: "No. of Students enrolled on Date 2",
-                        property: "date2_count",
-                        class: "text-center"
-                    },
-                    
-                    {
-                        name: "change",
-                        property: "student_count_change",
+                        name: "Total",
+                        property: "total",
                         class: "text-center",
                         valueSuffix: '',
                         isHeatMapRequired: true,

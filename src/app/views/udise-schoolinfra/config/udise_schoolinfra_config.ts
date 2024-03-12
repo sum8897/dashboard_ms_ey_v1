@@ -27,9 +27,9 @@ export const config = {
 
             name: 'Category',
 
-            labelProp: 'schoolcategory_name',
+            labelProp: 'category_name',
 
-            valueProp: 'schoolcategory_id',
+            valueProp: 'new_category_id',
 
             id: 'category',
 
@@ -37,7 +37,7 @@ export const config = {
 
             query:
 
-            'SELECT schoolcategory_id,schoolcategory_name FROM dimensions.schoolcategory ORDER BY schoolcategory_name ASC ',
+            'SELECT distinct new_category_id,category_name FROM dimensions.school_category_relation ORDER BY category_name ASC ',
 
         },
 
@@ -99,9 +99,9 @@ export const config = {
 
             name: 'Category',
 
-            labelProp: 'schoolcategory_name',
+            labelProp: 'category_name',
 
-            valueProp: 'schoolcategory_id',
+            valueProp: 'new_category_id',
 
             id: 'category',
 
@@ -109,7 +109,7 @@ export const config = {
 
             query:
 
-            'SELECT schoolcategory_id,schoolcategory_name FROM dimensions.schoolcategory ORDER BY schoolcategory_name ASC ',
+            'SELECT distinct new_category_id,category_name FROM dimensions.school_category_relation ORDER BY category_name ASC ',
 
         },
 
@@ -171,9 +171,9 @@ export const config = {
 
             name: 'Category',
 
-            labelProp: 'schoolcategory_name',
+            labelProp: 'category_name',
 
-            valueProp: 'schoolcategory_id',
+            valueProp: 'new_category_id',
 
             id: 'category',
 
@@ -181,7 +181,7 @@ export const config = {
 
             query:
 
-            'SELECT schoolcategory_id,schoolcategory_name FROM dimensions.schoolcategory ORDER BY schoolcategory_name ASC ',
+            'SELECT distinct new_category_id,category_name FROM dimensions.school_category_relation ORDER BY category_name ASC ',
 
         },
 
@@ -229,7 +229,7 @@ export const config = {
 
             id: 'management',
 
-            tableAlias: 't',
+            tableAlias: 'sm',
 
             query:
 
@@ -243,17 +243,17 @@ export const config = {
 
             name: 'Category',
 
-            labelProp: 'schoolcategory_name',
+            labelProp: 'category_name',
 
-            valueProp: 'schoolcategory_id',
+            valueProp: 'new_category_id',
 
             id: 'category',
 
-            tableAlias: 't',
+            tableAlias: 'sc',
 
             query:
 
-            'SELECT schoolcategory_id,schoolcategory_name FROM dimensions.schoolcategory ORDER BY schoolcategory_name ASC ',
+            'SELECT distinct new_category_id,category_name FROM dimensions.school_category_relation ORDER BY category_name ASC ',
 
         },
 
@@ -285,7 +285,7 @@ export const config = {
 
             id: 'metric',
 
-            values: ['toilet_dustbin','kitchen_dustbin','handwashfac_after_meal','no_of_washpnts','inceravail_gtoilet'],
+            values: ['total_school_toilet_dustbin','total_school_kitchen_dustbin','total_school_handwash_after_meal','total_school_no_of_washpoints','total_school_inceravail_gtoilet'],
 
         },
 //building
@@ -315,9 +315,9 @@ export const config = {
 
             name: 'Category',
 
-            labelProp: 'schoolcategory_name',
+            labelProp: 'category_name',
 
-            valueProp: 'schoolcategory_id',
+            valueProp: 'new_category_id',
 
             id: 'category',
 
@@ -325,7 +325,7 @@ export const config = {
 
             query:
 
-            'SELECT schoolcategory_id,schoolcategory_name FROM dimensions.schoolcategory ORDER BY schoolcategory_name ASC ',
+            'SELECT distinct new_category_id,category_name FROM dimensions.school_category_relation ORDER BY category_name ASC ',
 
         },
 
@@ -376,33 +376,34 @@ export const config = {
                     {
                         "map": `
                         select
-	e.district_id ,
-	d.district_name,
-	d.latitude,
-	d.longitude,
-    SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
-    COUNT(e.electricity) AS total_schools,
-    SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
-    COUNT(s.solar_panel) as total_schools
-FROM
-    school_infrastructure.elec_event_data  e
-LEFT JOIN
-    school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
-    and e.district_id = s.district_id and e.schoolmanagement_id = s.schoolmanagement_id 
-left join 
-	dimensions.district d on e.district_id = d.district_id
-left join 
-	dimensions.school sch on e.school_id = sch.school_id
-left join
-	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
-left join 
-	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
-group by 
-	 e.district_id ,
-	d.district_name,
-	d.latitude,
-	d.longitude
-order by district_id;`,
+                        e.district_id ,
+                        d.district_name,
+                        d.latitude,
+                        d.longitude,
+                        SUM(CASE WHEN e.electricity = 1 OR e.electricity = 3 THEN 1 ELSE 0 END) AS schools_with_electricity,
+                        COUNT(e.electricity) AS total_schools,
+                        SUM(CASE WHEN s.solar_panel = 1 OR s.solar_panel = 3 THEN 1 ELSE 0 END) AS schools_with_solar,
+                        COUNT(s.solar_panel) as total_schools
+                    FROM
+                        school_infrastructure.elec_event_data  e
+                    LEFT JOIN
+                        school_infrastructure.solarpanel_event_data s ON e.school_id = s.school_id and e.schoolcategory_id = s.schoolcategory_id 
+                        and e.district_id = s.district_id and e.schoolmanagement_id = s.schoolmanagement_id 
+                    left join 
+                        dimensions.district d on e.district_id = d.district_id
+                    left join 
+                        dimensions.school sch on e.school_id = sch.school_id
+                    left join
+                        dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
+                    left join 
+                        dimensions.school_category_relation sc on e.schoolcategory_id = sc.new_category_id 
+                        
+                    group by 
+                         e.district_id ,
+                        d.district_name,
+                        d.latitude,
+                        d.longitude
+                    order by district_id;`,
 
                     "map_without_filter": `
                     select
@@ -466,8 +467,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
-    where e.district_id = {district_id}
+	dimensions.school_category_relation sc on e.schoolcategory_id = sc.new_category_id 
+    where  e.district_id = {district_id}
 group by 
 	 e.district_id ,
 	d.district_name,
@@ -551,8 +552,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
-    where e.block_id = {block_id}
+	dimensions.school_category_relation sc on e.schoolcategory_id = sc.new_category_id 
+    where  e.block_id = {block_id}
 group by 
 	 e.district_id ,
 	d.district_name,
@@ -562,7 +563,8 @@ group by
 	c.cluster_name,
 	c.latitude,
 	c.longitude
-order by district_id;`,
+order by district_id;
+`,
 
                         "map_without_filter": `
                         select
@@ -646,7 +648,7 @@ left join
 left join
 	dimensions.schoolmanagement sm on e.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on e.schoolcategory_id = sc.schoolcategory_id 
+	dimensions.school_category_relation sc on e.schoolcategory_id = sc.new_category_id 
     where e.cluster_id = {cluster_id}
 group by 
 	 e.district_id ,
@@ -826,7 +828,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on w.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on w.schoolcategory_id = sc.schoolcategory_id 
+	dimensions.school_category_relation sc on w.schoolcategory_id = sc.new_category_id 
+  
 group by 
 	 w.district_id ,
 	d.district_name,
@@ -893,8 +896,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on w.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on w.schoolcategory_id = sc.schoolcategory_id 
-    where w.district_id = {district_id}
+	dimensions.school_category_relation sc on w.schoolcategory_id = sc.new_category_id 
+    where  w.district_id = {district_id}
 group by 
 	 w.district_id ,
 	d.district_name,
@@ -903,6 +906,7 @@ group by
 	b.latitude,
 	b.longitude
 order by district_id;
+
 `,
 
                         "map_without_filter": `
@@ -948,45 +952,46 @@ order by district_id;`
                     {
                         "map": `
                         select
-	w.district_id ,
-	d.district_name,
-	w.block_id,
-	b.block_name,
-	w.cluster_id,
-	c.cluster_name,
-	c.latitude,
-	c.longitude,
-    SUM(w.water_ro) AS schools_with_water_purifier,
-    COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
-    COUNT(w.water_ro) AS total_schools
-FROM
-    school_infrastructure.waterro_event_data w 
-left join
-	school_infrastructure.drnkwater_event_data ded on w.cluster_id = ded.cluster_id and w.school_id = ded.school_id 
-and w.schoolcategory_id = ded.schoolmanagement_id and w.schoolmanagement_id = ded.schoolmanagement_id
-left join 
-	dimensions.district d on w.district_id = d.district_id
-left join 
-	dimensions.block b on w.block_id = b.block_id 
-left join 
-	dimensions.cluster c on w.cluster_id = c.cluster_id
-left join 
-	dimensions.school sch on w.school_id = sch.school_id
-left join
-	dimensions.schoolmanagement sm on w.schoolmanagement_id = sm.schoolmanagement_id 
-left join 
-	dimensions.schoolcategory sc on w.schoolcategory_id = sc.schoolcategory_id 
-    where w.block_id = {block_id}
-group by 
-	 w.district_id ,
-	d.district_name,
-	w.block_id,
-	b.block_name,
-	w.cluster_id,
-	c.cluster_name,
-	c.latitude,
-	c.longitude
-order by district_id;`,
+                        w.district_id ,
+                        d.district_name,
+                        w.block_id,
+                        b.block_name,
+                        w.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude,
+                        SUM(w.water_ro) AS schools_with_water_purifier,
+                        COALESCE(SUM(ded.drinking_water),0) as no_of_schools_having_drinking_water,
+                        COUNT(w.water_ro) AS total_schools
+                    FROM
+                        school_infrastructure.waterro_event_data w 
+                    left join
+                        school_infrastructure.drnkwater_event_data ded on w.cluster_id = ded.cluster_id and w.school_id = ded.school_id 
+                    and w.schoolcategory_id = ded.schoolmanagement_id and w.schoolmanagement_id = ded.schoolmanagement_id
+                    left join 
+                        dimensions.district d on w.district_id = d.district_id
+                    left join 
+                        dimensions.block b on w.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on w.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on w.school_id = sch.school_id
+                    left join
+                        dimensions.schoolmanagement sm on w.schoolmanagement_id = sm.schoolmanagement_id 
+                    left join 
+                        dimensions.school_category_relation sc on w.schoolcategory_id = sc.new_category_id 
+                        where  w.block_id = {block_id}
+                    group by 
+                         w.district_id ,
+                        d.district_name,
+                        w.block_id,
+                        b.block_name,
+                        w.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude
+                    order by district_id;
+                    `,
 
                         "map_without_filter": `
                         select
@@ -1067,8 +1072,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on w.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on w.schoolcategory_id = sc.schoolcategory_id 
-    where w.cluster_id = {cluster_id}
+	dimensions.school_category_relation sc on w.schoolcategory_id = sc.new_category_id 
+    where  w.cluster_id = {cluster_id}
 group by 
 	 w.district_id ,
 	d.district_name,
@@ -1081,6 +1086,7 @@ group by
 	sch.latitude,
 	sch.longitude
 order by district_id;
+
 
 
 
@@ -1234,93 +1240,83 @@ order by district_id;`
                     "queries":
                     {
                         "map": `
-                        SELECT 
-                        t.schoolcategory_id, sc.schoolcategory_name, 
-                        
-                        t.schoolmanagement_id, sm.schoolmanagement_name, 
-                        d.latitude, d.longitude, 
-                        t.district_id, d.district_name, 
-                        CAST(SUM(t.sum) AS NUMERIC) AS toilet_dustbin, 
-                        CAST(SUM(t.count) AS NUMERIC) AS total_school_toilet_dustbin,
-                        CAST(SUM(sp.sum) AS NUMERIC) AS kitchen_dustbin,
-                        CAST(SUM(sp.count) AS NUMERIC) AS total_school_kitchen_dustbin,
-                        CAST(SUM(shw.sum) AS NUMERIC) AS handwashfac_after_meal,
-                        CAST(SUM(shw.count) AS NUMERIC) AS total_school_handwashfac_after_meal,
-                        CAST(SUM(wnp.sum) AS NUMERIC) AS no_of_washpnts,
-                        CAST(SUM(wnp.count) AS NUMERIC) AS total_school_no_of_washpnts,
-                        CAST(SUM(ia.sum) AS NUMERIC) AS inceravail_gtoilet,
-                        CAST(SUM(ia.count) AS NUMERIC) AS total_school_inceravail_gtoilet
-                    FROM datasets.school_infra_schnftoiletdustbin_CTo5CmF3X3VFaG57W2Np AS t 
-                    JOIN datasets.school_infra_schnfkitchendustbin_ER85Mxd5Tm1yV3x9RXdz AS sp 
-                        ON  sp.district_id = t.district_id
-                        AND sp.schoolcategory_id = t.schoolcategory_id
-                       
-                        AND sp.schoolmanagement_id = t.schoolmanagement_id
-                    JOIN datasets.school_infra_schnfhandwashfacaftermeal_IhMCHBMVOQ44IgtmTHx7 AS shw 
-                        ON shw.district_id = t.district_id
-                        AND shw.schoolcategory_id = t.schoolcategory_id
-                        
-                        AND shw.schoolmanagement_id = t.schoolmanagement_id
-                        
-                    JOIN datasets.school_infra_schnfnoofwashpnts_LDofYHJvQEFlfHNhQ2Rs AS wnp
-                        ON wnp.district_id = t.district_id
-                        AND wnp.schoolcategory_id = t.schoolcategory_id
-                     
-                        AND wnp.schoolmanagement_id = t.schoolmanagement_id
-                       
-                    JOIN datasets.school_infra_schnfinceravailgtoilet_HRQQAAk4DQpuYn9xbH5__ AS ia
-                        ON ia.district_id = t.district_id
-                        AND ia.schoolcategory_id = t.schoolcategory_id
-                      
-                        AND ia.schoolmanagement_id = t.schoolmanagement_id
-                        
-                    JOIN dimensions.district AS d 
-                        ON t.district_id = d.district_id 
-                    JOIN dimensions.schoolcategory AS sc 
-                        ON t.schoolcategory_id = sc.schoolcategory_id
-                   
-                    JOIN dimensions.schoolmanagement AS sm 
-                        ON t.schoolmanagement_id = sm.schoolmanagement_id
-                    GROUP BY 
-                        t.schoolcategory_id, sc.schoolcategory_name, 
-                        
-                        t.schoolmanagement_id, sm.schoolmanagement_name,
-                        d.latitude, d.longitude, 
-                        t.district_id, d.district_name;`
+                        select
+	ted.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude,
+	Count(ted.toilet_dustbin) as no_of_schools,
+	COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+	COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+	COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+	COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+	COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+FROM
+    school_infrastructure.toiletdustbin_event_data ted  
+LEFT JOIN
+    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.schoolcategory_id = ked.schoolcategory_id 
+    and ted.district_id = ked.district_id and ted.schoolmanagement_id = ked.schoolmanagement_id 
+left join 
+	school_infrastructure.handwashfacaftermeal_event_data hed  ON ted.school_id = hed.school_id and ted.schoolcategory_id = hed.schoolcategory_id 
+    and ted.district_id = hed.district_id and ted.schoolmanagement_id = hed.schoolmanagement_id 
+left join 
+	school_infrastructure.noofwashpnts_event_data ned  ON ted.school_id = ned.school_id and ted.schoolcategory_id = ned.schoolcategory_id 
+    and ted.district_id = ned.district_id and ted.schoolmanagement_id = ned.schoolmanagement_id 
+left join 
+	school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id and ted.schoolcategory_id = ied.schoolcategory_id 
+    and ted.district_id = ied.district_id and ted.schoolmanagement_id = ied.schoolmanagement_id
+left join 
+	dimensions.district d on ted.district_id = d.district_id
+left join 
+	dimensions.school sch on ted.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on ted.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.school_category_relation sc on ted.schoolcategory_id = sc.new_category_id 
+
+group by 
+	 ted.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude
+order by district_id;`
                     ,
 
                     "map_without_filter": `
-                    SELECT 
-                    d.latitude, 
-                    d.longitude, 
-                    t.district_id, 
-                    d.district_name, 
-                    CAST(SUM(t.sum) AS NUMERIC) AS toilet_dustbin, 
-                    CAST(SUM(t.count) AS NUMERIC) AS total_school,
-                    CAST(SUM(sp.sum) AS NUMERIC) AS kitchen_dustbin,
-                    CAST(SUM(sp.count) AS NUMERIC) AS total_school_kitchen_dustbin,
-                    CAST(SUM(shw.sum) AS NUMERIC) AS handwashfac_after_meal,
-                    CAST(SUM(shw.count) AS NUMERIC) AS total_school_handwashfac_after_meal,
-                    CAST(SUM(wnp.sum) AS NUMERIC) AS no_of_washpnts,
-                    CAST(SUM(wnp.count) AS NUMERIC) AS total_school_no_of_washpnts,
-                    CAST(SUM(ia.sum) AS NUMERIC) AS inceravail_gtoilet,
-                    CAST(SUM(ia.Count) AS NUMERIC) AS total_school_inceravail_gtoilet
-                FROM datasets.school_infra_toilet_dustbin_Yearly_district AS t  
-                JOIN datasets.school_infra_kitchen_dustbin_Yearly_district AS sp 
-                    ON sp.district_id = t.district_id
-                JOIN datasets.school_infra_handwashfac_after_meal_Yearly_district AS shw
-                    ON shw.district_id = t.district_id
-                JOIN datasets.school_infra_no_of_washpnts_Yearly_district AS wnp
-                    ON wnp.district_id = t.district_id
-                JOIN datasets.school_infra_inceravail_gtoilet_Yearly_district AS ia
-                    ON ia.district_id = t.district_id
-                JOIN dimensions.district AS d 
-                    ON t.district_id = d.district_id
-                GROUP BY 
-                    d.latitude, 
-                    d.longitude, 
-                    t.district_id, 
-                    d.district_name;`
+                    select
+                    ted.district_id ,
+                    d.district_name,
+                    d.latitude,
+                    d.longitude,
+                    Count(ted.toilet_dustbin) as no_of_schools,
+                    COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+                    COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+                    COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+                    COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+                    COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+                FROM
+                    school_infrastructure.toiletdustbin_event_data ted 
+                LEFT JOIN
+                    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.district_id = ked.district_id  
+                left join 
+                    school_infrastructure.handwashfacaftermeal_event_data hed ON ted.school_id = hed.school_id  
+                    and ted.district_id = hed.district_id  
+                left join 
+                    school_infrastructure.noofwashpnts_event_data ned ON ted.school_id = ned.school_id  
+                    and ted.district_id = ned.district_id  
+                left join 
+                    school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id  
+                    and ted.district_id = ied.district_id  
+                left join 
+                    dimensions.district d on ted.district_id = d.district_id
+                left join 
+                    dimensions.school sch on ted.school_id = sch.school_id
+                group by 
+                     ted.district_id ,
+                    d.district_name,
+                    d.latitude,
+                    d.longitude
+                order by district_id;`
                     },
                     "level": "district",
                     "nextLevel": "block"
@@ -1333,82 +1329,96 @@ order by district_id;`
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
-                           t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
-                        COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                        COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                        COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                        COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                        COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                        COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                        COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                        COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                        COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                        COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                        FROM datasets.school_infra_schnftoiletdustbin_AVJXfmF3UXVfZGt3V2Zk AS t 
-                    LEFT JOIN datasets.school_infra_schnfkitchendustbin_HBdRXWN5TmNyTXB4SXt2 AS sp
-							ON  sp.block_id=t.block_id
-                            and sp.schoolcategory_id = t.schoolcategory_id                            
-                            and sp.schoolmanagement_id = t.schoolmanagement_id
-                            LEFT JOIN datasets.school_infra_schnfhandwashfacaftermeal_OB8HEB8QNAZQTH9mTHJ7 AS shw 
-                        ON shw.block_id = t.block_id
-                        and shw.schoolcategory_id = t.schoolcategory_id
-                             and shw.schoolmanagement_id = t.schoolmanagement_id
-                       
-                            LEFT JOIN datasets.school_infra_schnfnoofwashpnts_RFRrYHJhQFtpeX9tRmlk AS wnp
-                        ON wnp.block_id = t.block_id
-                        and wnp.schoolcategory_id = t.schoolcategory_id
-                           
-                            and wnp.schoolmanagement_id = t.schoolmanagement_id
-                        
-                            LEFT JOIN datasets.school_infra_schnfinceravailgtoilet_ERgVDQFQY35uYnFxdnJ7 AS ia
-                        ON ia.block_id = t.block_id
-                        and ia.schoolcategory_id = t.schoolcategory_id
-                           
-                            and ia.schoolmanagement_id = t.schoolmanagement_id
-                        
-                            JOIN dimensions.block AS b ON t.block_id = b.block_id 
-                            JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                           
-                            JOIN dimensions.schoolmanagement AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id  
-                        where b.district_id = {district_id}
-                        GROUP BY t.schoolcategory_id,sc.schoolcategory_name,
-                             t.schoolmanagement_id,
-                            b.latitude, b.longitude,b.district_id,b.district_name, 
-                            t.block_id,b.block_name,sm.schoolmanagement_name, 
-                            sc.schoolcategory_name`,
+                        select
+	ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude,
+	Count(ted.toilet_dustbin) as no_of_schools,
+	COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+	COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+	COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+	COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+	COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+FROM
+    school_infrastructure.toiletdustbin_event_data ted  
+LEFT JOIN
+    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.schoolcategory_id = ked.schoolcategory_id 
+    and ted.block_id = ked.block_id and ted.schoolmanagement_id = ked.schoolmanagement_id 
+left join 
+	school_infrastructure.handwashfacaftermeal_event_data hed  ON ted.school_id = hed.school_id and ted.schoolcategory_id = hed.schoolcategory_id 
+    and ted.block_id = hed.block_id and ted.schoolmanagement_id = hed.schoolmanagement_id 
+left join 
+	school_infrastructure.noofwashpnts_event_data ned  ON ted.school_id = ned.school_id and ted.schoolcategory_id = ned.schoolcategory_id 
+    and ted.block_id = ned.block_id and ted.schoolmanagement_id = ned.schoolmanagement_id 
+left join 
+	school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id and ted.schoolcategory_id = ied.schoolcategory_id 
+    and ted.block_id = ied.block_id and ted.schoolmanagement_id = ied.schoolmanagement_id
+left join 
+	dimensions.district d on ted.district_id = d.district_id
+left join 
+	dimensions.block b on ted.block_id = b.block_id 
+left join 
+	dimensions.school sch on ted.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on ted.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+dimensions.school_category_relation sc on ted.schoolcategory_id = sc.new_category_id 
+where 
+   ted.district_id = {district_id}
+group by 
+	 ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	b.latitude,
+	b.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT 
-                            b.latitude,b.longitude,t.block_id,b.block_name,b.district_id,b.district_name, 
-                            COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                            COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                            COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                            COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                            COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                            COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                            COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                            COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                            COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                            COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                        FROM datasets.school_infra_toilet_dustbin_Yearly_block AS t 
-                        LEFT JOIN datasets.school_infra_kitchen_dustbin_Yearly_block AS sp 
-                        ON sp.block_id = t.block_id
-                        
-                        LEFT JOIN datasets.school_infra_handwashfac_after_meal_Yearly_block AS shw
-                        ON shw.block_id = t.block_id
-                        
-                        LEFT JOIN datasets.school_infra_no_of_washpnts_Yearly_block AS wnp
-                        ON wnp.block_id = t.block_id
-                        
-                        LEFT JOIN datasets.school_infra_inceravail_gtoilet_Yearly_block AS ia
-                        ON ia.block_id = t.block_id
-							JOIN dimensions.block AS b ON sp.block_id = b.block_id
-                        where (b.district_id = {district_id}) 
-                        GROUP BY 
-                            b.latitude, b.longitude,b.district_id,b.district_name, 
-                            t.block_id,b.block_name`
+                        select
+                        ted.district_id ,
+                        d.district_name,
+                        ted.block_id,
+                        b.block_name,
+                        b.latitude,
+                        b.longitude,
+                        Count(ted.toilet_dustbin) as no_of_schools,
+                        COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+                        COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+                        COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+                        COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+                        COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+                    FROM
+                        school_infrastructure.toiletdustbin_event_data ted 
+                    LEFT JOIN
+                        school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.block_id = ked.block_id  
+                    left join 
+                        school_infrastructure.handwashfacaftermeal_event_data hed ON ted.school_id = hed.school_id  
+                        and ted.block_id = hed.block_id  
+                    left join 
+                        school_infrastructure.noofwashpnts_event_data ned ON ted.school_id = ned.school_id  
+                        and ted.block_id = ned.block_id  
+                    left join 
+                        school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id  
+                        and ted.block_id = ied.block_id  
+                    left join 
+                        dimensions.district d on ted.district_id = d.district_id
+                    left join 
+                        dimensions.block b on ted.block_id = b.block_id 
+                    left join 
+                        dimensions.school sch on ted.school_id = sch.school_id
+                        where ted.district_id = {district_id}
+                    group by 
+                         ted.district_id ,
+                        d.district_name,
+                        ted.block_id,
+                        b.block_name,
+                        b.latitude,
+                        b.longitude
+                    order by district_id;`
                     },
                     "level": "block",
                     "nextLevel": "cluster"
@@ -1421,82 +1431,109 @@ order by district_id;`
                     "queries":
                     {
                         "map": `
-                        SELECT t.schoolcategory_id, sc.schoolcategory_name, 
-                           t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name,
-                            COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                            COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                            COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                            COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                            COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                            COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                            COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                            COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                            COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                            COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                            FROM datasets.school_infra_schnftoiletdustbin_GzwjfmF3X3VLYXFjWG9w AS t 
-                            LEFT JOIN datasets.school_infra_schnfkitchendustbin_CA0_KWN5Tm1yWXViXXR_ AS sp 
-								ON  t.cluster_id = sp.cluster_id 
-								and sp.schoolcategory_id = t.schoolcategory_id
-                            	
-                            	and sp.schoolmanagement_id = t.schoolmanagement_id
-                                LEFT JOIN datasets.school_infra_schnfhandwashfacaftermeal_LBodBBAZIBw__OH9mTHx7 AS shw 
-                        ON shw.cluster_id = t.cluster_id
-                        and shw.schoolcategory_id = t.schoolcategory_id
-                            	
-                            	and shw.schoolmanagement_id = t.schoolmanagement_id
-                        
-                                LEFT JOIN datasets.school_infra_schnfnoofwashpnts_KiBrYHJvQE9sY2tiT31__ AS wnp
-                        ON wnp.cluster_id = t.cluster_id
-                        and wnp.schoolcategory_id = t.schoolcategory_id
-                        
-                        and wnp.schoolmanagement_id = t.schoolmanagement_id
-                        
-                        LEFT JOIN datasets.school_infra_schnfinceravailgtoilet_BRccGRs__F35uYn9xYndh AS ia
-                        ON ia.cluster_id = t.cluster_id
-                        and ia.schoolcategory_id = t.schoolcategory_id
-                        
-                        and ia.schoolmanagement_id = t.schoolmanagement_id
-                        
-                            JOIN dimensions.cluster AS c ON t.cluster_id = c.cluster_id 
-                            JOIN dimensions.schoolcategory AS sc ON t.schoolcategory_id = sc.schoolcategory_id 
-                           
-                            JOIN dimensions.schoolmanagement AS sm ON t.schoolmanagement_id = sm.schoolmanagement_id
-						where (c.block_id = {block_id}) 
-                        GROUP BY t.schoolcategory_id, sc.schoolcategory_name,
-                            t.schoolmanagement_id,sm.schoolmanagement_name, 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name`,
+                        select
+	ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	c.latitude,
+	c.longitude,
+	Count(ted.toilet_dustbin) as no_of_schools,
+	COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+	COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+	COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+	COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+	COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+FROM
+    school_infrastructure.toiletdustbin_event_data ted  
+LEFT JOIN
+    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.schoolcategory_id = ked.schoolcategory_id 
+    and ted.cluster_id = ked.cluster_id and ted.schoolmanagement_id = ked.schoolmanagement_id 
+left join 
+	school_infrastructure.handwashfacaftermeal_event_data hed  ON ted.school_id = hed.school_id and ted.schoolcategory_id = hed.schoolcategory_id 
+    and ted.cluster_id = hed.cluster_id and ted.schoolmanagement_id = hed.schoolmanagement_id 
+left join 
+	school_infrastructure.noofwashpnts_event_data ned  ON ted.school_id = ned.school_id and ted.schoolcategory_id = ned.schoolcategory_id 
+    and ted.cluster_id = ned.cluster_id and ted.schoolmanagement_id = ned.schoolmanagement_id 
+left join 
+	school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id and ted.schoolcategory_id = ied.schoolcategory_id 
+    and ted.cluster_id = ied.cluster_id and ted.schoolmanagement_id = ied.schoolmanagement_id
+left join 
+	dimensions.district d on ted.district_id = d.district_id
+left join 
+	dimensions.block b on ted.block_id = b.block_id 
+left join
+	dimensions.cluster c on ted.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on ted.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on ted.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+dimensions.school_category_relation sc on ted.schoolcategory_id = sc.new_category_id 
+where 
+   ted.block_id = {block_id}
+group by 
+	 ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	c.latitude,
+	c.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name,
-                            COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                            COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                            COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                            COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                            COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                            COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                            COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                            COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                            COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                            COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                        FROM datasets.school_infra_toilet_dustbin_Yearly_cluster AS t 
-                        LEFT JOIN datasets.school_infra_kitchen_dustbin_Yearly_cluster AS sp 
-                ON t.cluster_id = sp.cluster_id
-                LEFT JOIN datasets.school_infra_handwashfac_after_meal_Yearly_cluster AS shw
-                ON shw.cluster_id = t.cluster_id
-                LEFT JOIN datasets.school_infra_no_of_washpnts_Yearly_cluster AS wnp
-                ON wnp.cluster_id = t.cluster_id
-                LEFT JOIN datasets.school_infra_inceravail_gtoilet_Yearly_cluster AS ia
-                ON ia.cluster_id = t.cluster_id
-                            JOIN dimensions.cluster AS c ON sp.cluster_id = c.cluster_id 
-                        where (c.block_id = {block_id}) 
-                        GROUP BY 
-                            c.latitude,c.longitude,t.cluster_id,c.cluster_name,
-                            c.block_id,c.block_name,c.district_id, c.district_name`
+                        select
+                        ted.district_id ,
+                        d.district_name,
+                        ted.block_id,
+                        b.block_name,
+                        ted.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude,
+                        Count(ted.toilet_dustbin) as no_of_schools,
+                        COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+                        COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+                        COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+                        COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+                        COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+                    FROM
+                        school_infrastructure.toiletdustbin_event_data ted 
+                    LEFT JOIN
+                        school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.block_id = ked.block_id  
+                    left join 
+                        school_infrastructure.handwashfacaftermeal_event_data hed ON ted.school_id = hed.school_id  
+                        and ted.cluster_id = hed.cluster_id  
+                    left join 
+                        school_infrastructure.noofwashpnts_event_data ned ON ted.school_id = ned.school_id  
+                        and ted.cluster_id = ned.cluster_id  
+                    left join 
+                        school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id  
+                        and ted.cluster_id = ied.cluster_id  
+                    left join 
+                        dimensions.district d on ted.district_id = d.district_id
+                    left join 
+                        dimensions.block b on ted.block_id = b.block_id 
+                    left join
+                        dimensions.cluster c on ted.cluster_id = c.cluster_id
+                    left join 
+                        dimensions.school sch on ted.school_id = sch.school_id
+                        where ted.block_id = {block_id}
+                    group by 
+                         ted.district_id ,
+                        d.district_name,
+                        ted.block_id,
+                        b.block_name,
+                        ted.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude
+                    order by district_id;
+                    `
                     },
                     "level": "cluster",
                     "nextLevel": "school"
@@ -1509,70 +1546,118 @@ order by district_id;`
                     "queries":
                     {
                         "map": `
-                        SELECT
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name,
-                            COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                            COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                            COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                            COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                            COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                            COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                            COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                            COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                            COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                            COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                            FROM datasets.school_infra_toilet_dustbin_Yearly_school AS t 
-                            LEFT JOIN datasets.school_infra_kitchen_dustbin_Yearly_school AS sp
-								ON t.school_id = sp.school_id
-                                LEFT JOIN datasets.school_infra_handwashfac_after_meal_Yearly_school AS shw
-                                ON shw.school_id = t.school_id
-                                
-                                LEFT JOIN datasets.school_infra_no_of_washpnts_Yearly_school AS wnp
-                                ON wnp.school_id = t.school_id
-                                
-                                LEFT JOIN datasets.school_infra_inceravail_gtoilet_Yearly_school AS ia
-                                ON ia.school_id = t.school_id
-                                JOIN dimensions.school AS sch ON t.school_id = sch.school_id
-                        WHERE (sch.cluster_id = {cluster_id}) 
-                        GROUP BY
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name`,
+                        select
+	ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	ted.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude,
+	Count(ted.toilet_dustbin) as no_of_schools,
+	COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+	COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+	COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+	COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+	COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+FROM
+    school_infrastructure.toiletdustbin_event_data ted  
+LEFT JOIN
+    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.schoolcategory_id = ked.schoolcategory_id 
+    and ted.cluster_id = ked.cluster_id and ted.schoolmanagement_id = ked.schoolmanagement_id 
+left join 
+	school_infrastructure.handwashfacaftermeal_event_data hed  ON ted.school_id = hed.school_id and ted.schoolcategory_id = hed.schoolcategory_id 
+    and ted.cluster_id = hed.cluster_id and ted.schoolmanagement_id = hed.schoolmanagement_id 
+left join 
+	school_infrastructure.noofwashpnts_event_data ned  ON ted.school_id = ned.school_id and ted.schoolcategory_id = ned.schoolcategory_id 
+    and ted.cluster_id = ned.cluster_id and ted.schoolmanagement_id = ned.schoolmanagement_id 
+left join 
+	school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id and ted.schoolcategory_id = ied.schoolcategory_id 
+    and ted.cluster_id = ied.cluster_id and ted.schoolmanagement_id = ied.schoolmanagement_id
+left join 
+	dimensions.district d on ted.district_id = d.district_id
+left join 
+	dimensions.block b on ted.block_id = b.block_id 
+left join
+	dimensions.cluster c on ted.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on ted.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on ted.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+dimensions.school_category_relation sc on ted.schoolcategory_id = sc.new_category_id 
+where 
+   ted.cluster_id = {cluster_id}
+group by 
+	 ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	ted.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude
+order by district_id;`,
 
                         "map_without_filter": `
-                        SELECT
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name,
-                            COALESCE(CAST(SUM(t.sum) AS NUMERIC), 0) AS toilet_dustbin,
-                            COALESCE(CAST(SUM(t.count) AS  NUMERIC), 0) AS total_school,
-                            COALESCE(CAST(SUM(sp.sum) AS  NUMERIC), 0) AS kitchen_dustbin,
-                            COALESCE(CAST(SUM(sp.count) AS  NUMERIC), 0) AS total_school_kitchen_dustbin,
-                            COALESCE(CAST(SUM(shw.sum) AS  NUMERIC), 0) AS handwashfac_after_meal,
-                            COALESCE(CAST(SUM(shw.count) AS  NUMERIC), 0) AS total_school_handwashfac_after_meal,
-                            COALESCE(CAST(SUM(wnp.sum) AS  NUMERIC), 0) AS no_of_washpnts,
-                            COALESCE(CAST(SUM(wnp.count) AS  NUMERIC), 0) AS total_school_no_of_washpnts,
-                            COALESCE(CAST(SUM(ia.sum) AS  NUMERIC), 0) AS inceravail_gtoilet,
-                            COALESCE(CAST(SUM(ia.count) AS  NUMERIC), 0) AS total_school_inceravail_gtoilet
-                            FROM datasets.school_infra_toilet_dustbin_Yearly_school AS t 
-                            LEFT JOIN datasets.school_infra_kitchen_dustbin_Yearly_school AS sp
-								ON t.school_id = sp.school_id
-                                LEFT JOIN datasets.school_infra_handwashfac_after_meal_Yearly_school AS shw
-                                ON shw.school_id = t.school_id
-                                
-                                LEFT JOIN datasets.school_infra_no_of_washpnts_Yearly_school AS wnp
-                                ON wnp.school_id = t.school_id
-                                
-                                LEFT JOIN datasets.school_infra_inceravail_gtoilet_Yearly_school AS ia
-                                ON ia.school_id = t.school_id
-                                JOIN dimensions.school AS sch ON t.school_id = sch.school_id
-                       WHERE (sch.cluster_id = {cluster_id}) 
-                        GROUP BY
-                            sch.latitude,sch.longitude,
-                            sch.school_id,sch.school_name,sch.cluster_id,sch.cluster_name,
-                            sch.block_id,sch.block_name,sch.district_id, sch.district_name`
+                        select
+	ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	ted.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude,
+    Count(ted.toilet_dustbin) as no_of_schools,
+	COALESCE(SUM(ted.toilet_dustbin), 0) as total_school_toilet_dustbin,
+	COALESCE(SUM(ked.kitchen_dustbin), 0) as total_school_kitchen_dustbin,
+	COALESCE(SUM(hed.handwashfac_after_meal), 0) as total_school_handwash_after_meal,
+	COALESCE(SUM(ned.no_of_washpnts), 0) as total_school_no_of_washpoints,
+	COALESCE(SUM(ied.inceravail_gtoilet), 0) as total_school_inceravail_gtoilet
+FROM
+    school_infrastructure.toiletdustbin_event_data ted 
+LEFT JOIN
+    school_infrastructure.kitchendustbin_event_data ked ON ted.school_id = ked.school_id and ted.block_id = ked.block_id  
+left join 
+	school_infrastructure.handwashfacaftermeal_event_data hed ON ted.school_id = hed.school_id  
+    and ted.cluster_id = hed.cluster_id  
+left join 
+	school_infrastructure.noofwashpnts_event_data ned ON ted.school_id = ned.school_id  
+    and ted.cluster_id = ned.cluster_id  
+left join 
+	school_infrastructure.inceravailgtoilet_event_data ied ON ted.school_id = ied.school_id  
+    and ted.cluster_id = ied.cluster_id  
+left join 
+	dimensions.district d on ted.district_id = d.district_id
+left join 
+	dimensions.block b on ted.block_id = b.block_id 
+left join
+	dimensions.cluster c on ted.cluster_id = c.cluster_id
+left join 
+	dimensions.school sch on ted.school_id = sch.school_id
+	where  
+	ted.cluster_id = {cluster_id}
+group by 
+	 ted.district_id ,
+	d.district_name,
+	ted.block_id,
+	b.block_name,
+	ted.cluster_id,
+	c.cluster_name,
+	ted.school_id,
+	sch.school_name,
+	sch.latitude,
+	sch.longitude
+order by district_id;
+`
                     },
                     "level": "school"
                 }
@@ -1586,11 +1671,11 @@ order by district_id;`
 
                 metricFilterNeeded: true,
 
-                indicator: 'toilet_dustbin',
+                indicator: 'total_school_toilet_dustbin',
 
                 legend: {
 
-                    title: 'toilet_dustbin',
+                    title: 'total_school_toilet_dustbin',
 
                 },
 
@@ -1637,32 +1722,32 @@ order by district_id;`
                     },
                     {
                         valuePrefix: 'No. of Schools: ',
-                        value: 'total_school',
+                        value: 'no_of_schools',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'Total School Toilet Dustbin: ',
-                        value: 'toilet_dustbin',
+                        value: 'total_school_toilet_dustbin',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'Total School Kitchen Dustbin: ',
-                        value: 'kitchen_dustbin',
+                        value: 'total_school_kitchen_dustbin',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'Total School Handwashfac After Meal: ',
-                        value: 'handwashfac_after_meal',
+                        value: 'total_school_handwash_after_meal',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'Total School No Of Washpnts: ',
-                        value: 'no_of_washpnts',
+                        value: 'total_school_no_of_washpoints',
                         valueSuffix: '\n',
                     },
                     {
                         valuePrefix: 'Total School Inceravail Gtoilet: ',
-                        value: 'inceravail_gtoilet',
+                        value: 'total_school_inceravail_gtoilet',
                         valueSuffix: '\n',
                     },
                 ],
@@ -1686,76 +1771,76 @@ order by district_id;`
                     {
                         "map": `
                         select
-                        sed.district_id ,
-                        d.district_name,
-                        d.latitude,
-                        d.longitude,
-                        COUNT(sed.schtoilet) AS total_schools,
-                        SUM(ted.toilet_cwsn_b_func) as tot_cwsn_boys_toilet_func,
-                        SUM(ted2.toilet_cwsn_b_tot) as tot_cwsn_boys_toilet,
-                        SUM(ted3.toilet_cwsn_g_func) as tot_cwsn_girls_toilet_func,
-                        SUM(ted4.toilet_cwsn_g_tot) as tot_cwsn_girls_toilet,
-                        SUM(fed2.urnl_b_tot) as tot_school_urnl_boys,
-                        SUM(fed.urnl_b_func) as tot_school_urnl_boys_func,
-                        SUM(fed3.urnl_g_tot) as tot_school_urnl_girls,
-                        SUM(fed4.urnl_g_func) as tot_school_urnl_girls_func, 
-                        SUM(ted5.toilet_runwat_b) as tot_school_toilet_runwater_boys,
-                        SUM(ted6.toilet_runwat_g) as tot_school_toilet_runwater_girls,
-                        SUM(fed5.urnl_runwater_b) as tot_school_urnl_runwater_b,
-                        SUM(hed.handwashfac_toilet_urnl) as tot_school_handwashfac_toilet_urnl
-                        FROM
-                        school_infrastructure.schtoilet_event_data sed 
-                    LEFT JOIN
-                        school_infrastructure.toiletcwsnbfunc_event_data ted  ON sed.school_id = ted.school_id and sed.schoolcategory_id = ted.schoolcategory_id 
-                        and sed.district_id = ted.district_id and sed.schoolmanagement_id = ted.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.toiletcwsnbtot_event_data ted2 on sed.school_id = ted2.school_id and sed.schoolcategory_id = ted2.schoolcategory_id 
-                        and sed.district_id = ted2.district_id and sed.schoolmanagement_id = ted2.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.toiletcwsngfunc_event_data ted3 on sed.school_id = ted3.school_id and sed.schoolcategory_id = ted3.schoolcategory_id 
-                        and sed.district_id = ted3.district_id and sed.schoolmanagement_id = ted3.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.toiletcwsngtot_event_data ted4 on sed.school_id = ted4.school_id and sed.schoolcategory_id = ted4.schoolcategory_id 
-                        and sed.district_id = ted4.district_id and sed.schoolmanagement_id = ted4.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.furnlbfunc_event_data fed on sed.school_id = fed.school_id and sed.schoolcategory_id = fed.schoolcategory_id 
-                        and sed.district_id = fed.district_id and sed.schoolmanagement_id = fed.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.furnlbtot_event_data fed2 on sed.school_id = fed2.school_id and sed.schoolcategory_id = fed2.schoolcategory_id 
-                        and sed.district_id = fed2.district_id and sed.schoolmanagement_id = fed2.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.furnlgtot_event_data fed3  on sed.school_id = fed3.school_id and sed.schoolcategory_id = fed3.schoolcategory_id 
-                        and sed.district_id = fed3.district_id and sed.schoolmanagement_id = fed3.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.furnlgfunc_event_data fed4  on sed.school_id = fed4.school_id and sed.schoolcategory_id = fed4.schoolcategory_id 
-                        and sed.district_id = fed4.district_id and sed.schoolmanagement_id = fed4.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.toiletrunwatb_event_data ted5 on sed.school_id = ted5.school_id and sed.schoolcategory_id = ted5.schoolcategory_id 
-                        and sed.district_id = ted5.district_id and sed.schoolmanagement_id = ted5.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.toiletrunwatg_event_data ted6 on sed.school_id = ted6.school_id and sed.schoolcategory_id = ted6.schoolcategory_id 
-                        and sed.district_id = ted6.district_id and sed.schoolmanagement_id = ted6.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.furnlrunwaterb_event_data fed5  on sed.school_id = fed5.school_id and sed.schoolcategory_id = fed5.schoolcategory_id 
-                        and sed.district_id = fed5.district_id and sed.schoolmanagement_id = fed5.schoolmanagement_id 
-                    left join 
-                        school_infrastructure.handwashfactoileturnl_event_data hed on sed.school_id = hed.school_id and sed.schoolcategory_id = hed.schoolcategory_id 
-                        and sed.district_id = hed.district_id and sed.schoolmanagement_id = hed.schoolmanagement_id 
-                    left join	
-                        dimensions.district d on sed.district_id = d.district_id
-                    left join 
-                        dimensions.school sch on sed.school_id = sch.school_id
-                    left join
-                        dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
-                    left join 
-                        dimensions.schoolcategory sc on sed.schoolcategory_id = sc.schoolcategory_id 
-                       
-                    group by 
-                         sed.district_id ,
-                        d.district_name,
-                        d.latitude,
-                        d.longitude
-                    order by district_id;`,
+	sed.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude,
+    COUNT(sed.schtoilet) AS total_schools,
+    SUM(ted.toilet_cwsn_b_func) as tot_cwsn_boys_toilet_func,
+    SUM(ted2.toilet_cwsn_b_tot) as tot_cwsn_boys_toilet,
+    SUM(ted3.toilet_cwsn_g_func) as tot_cwsn_girls_toilet_func,
+    SUM(ted4.toilet_cwsn_g_tot) as tot_cwsn_girls_toilet,
+    SUM(fed2.urnl_b_tot) as tot_school_urnl_boys,
+    SUM(fed.urnl_b_func) as tot_school_urnl_boys_func,
+    SUM(fed3.urnl_g_tot) as tot_school_urnl_girls,
+    SUM(fed4.urnl_g_func) as tot_school_urnl_girls_func, 
+    SUM(ted5.toilet_runwat_b) as tot_school_toilet_runwater_boys,
+    SUM(ted6.toilet_runwat_g) as tot_school_toilet_runwater_girls,
+    SUM(fed5.urnl_runwater_b) as tot_school_urnl_runwater_b,
+    SUM(hed.handwashfac_toilet_urnl) as tot_school_handwashfac_toilet_urnl
+    FROM
+    school_infrastructure.schtoilet_event_data sed 
+LEFT JOIN
+    school_infrastructure.toiletcwsnbfunc_event_data ted  ON sed.school_id = ted.school_id and sed.schoolcategory_id = ted.schoolcategory_id 
+    and sed.district_id = ted.district_id and sed.schoolmanagement_id = ted.schoolmanagement_id 
+left join 
+	school_infrastructure.toiletcwsnbtot_event_data ted2 on sed.school_id = ted2.school_id and sed.schoolcategory_id = ted2.schoolcategory_id 
+    and sed.district_id = ted2.district_id and sed.schoolmanagement_id = ted2.schoolmanagement_id 
+left join 
+	school_infrastructure.toiletcwsngfunc_event_data ted3 on sed.school_id = ted3.school_id and sed.schoolcategory_id = ted3.schoolcategory_id 
+    and sed.district_id = ted3.district_id and sed.schoolmanagement_id = ted3.schoolmanagement_id 
+left join 
+	school_infrastructure.toiletcwsngtot_event_data ted4 on sed.school_id = ted4.school_id and sed.schoolcategory_id = ted4.schoolcategory_id 
+    and sed.district_id = ted4.district_id and sed.schoolmanagement_id = ted4.schoolmanagement_id 
+left join 
+	school_infrastructure.furnlbfunc_event_data fed on sed.school_id = fed.school_id and sed.schoolcategory_id = fed.schoolcategory_id 
+    and sed.district_id = fed.district_id and sed.schoolmanagement_id = fed.schoolmanagement_id 
+left join 
+	school_infrastructure.furnlbtot_event_data fed2 on sed.school_id = fed2.school_id and sed.schoolcategory_id = fed2.schoolcategory_id 
+    and sed.district_id = fed2.district_id and sed.schoolmanagement_id = fed2.schoolmanagement_id 
+left join 
+	school_infrastructure.furnlgtot_event_data fed3  on sed.school_id = fed3.school_id and sed.schoolcategory_id = fed3.schoolcategory_id 
+    and sed.district_id = fed3.district_id and sed.schoolmanagement_id = fed3.schoolmanagement_id 
+left join 
+	school_infrastructure.furnlgfunc_event_data fed4  on sed.school_id = fed4.school_id and sed.schoolcategory_id = fed4.schoolcategory_id 
+    and sed.district_id = fed4.district_id and sed.schoolmanagement_id = fed4.schoolmanagement_id 
+left join 
+	school_infrastructure.toiletrunwatb_event_data ted5 on sed.school_id = ted5.school_id and sed.schoolcategory_id = ted5.schoolcategory_id 
+    and sed.district_id = ted5.district_id and sed.schoolmanagement_id = ted5.schoolmanagement_id 
+left join 
+	school_infrastructure.toiletrunwatg_event_data ted6 on sed.school_id = ted6.school_id and sed.schoolcategory_id = ted6.schoolcategory_id 
+    and sed.district_id = ted6.district_id and sed.schoolmanagement_id = ted6.schoolmanagement_id 
+left join 
+	school_infrastructure.furnlrunwaterb_event_data fed5  on sed.school_id = fed5.school_id and sed.schoolcategory_id = fed5.schoolcategory_id 
+    and sed.district_id = fed5.district_id and sed.schoolmanagement_id = fed5.schoolmanagement_id 
+left join 
+	school_infrastructure.handwashfactoileturnl_event_data hed on sed.school_id = hed.school_id and sed.schoolcategory_id = hed.schoolcategory_id 
+    and sed.district_id = hed.district_id and sed.schoolmanagement_id = hed.schoolmanagement_id 
+left join	
+	dimensions.district d on sed.district_id = d.district_id
+left join 
+	dimensions.school sch on sed.school_id = sch.school_id
+left join
+	dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
+left join 
+	dimensions.school_category_relation sc on sed.schoolcategory_id = sc.new_category_id 
+
+group by 
+	 sed.district_id ,
+	d.district_name,
+	d.latitude,
+	d.longitude
+order by district_id;`,
 
                     "map_without_filter": `
                     select
@@ -1905,8 +1990,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on sed.schoolcategory_id = sc.schoolcategory_id 
-    where sed.district_id = {district_id}
+	dimensions.school_category_relation sc on sed.schoolcategory_id = sc.new_category_id 
+    where  sed.district_id = {district_id}
 group by 
 	 sed.district_id ,
 	d.district_name,
@@ -2006,88 +2091,88 @@ order by district_id;
                     {
                         "map": `
                         select
-	sed.district_id ,
-	d.district_name,
-	sed.block_id,
-	b.block_name,
-	sed.cluster_id,
-	c.cluster_name,
-	c.latitude,
-	c.longitude,
-    COUNT(sed.schtoilet) AS total_schools,
-    SUM(ted.toilet_cwsn_b_func) as tot_cwsn_boys_toilet_func,
-    SUM(ted2.toilet_cwsn_b_tot) as tot_cwsn_boys_toilet,
-    SUM(ted3.toilet_cwsn_g_func) as tot_cwsn_girls_toilet_func,
-    SUM(ted4.toilet_cwsn_g_tot) as tot_cwsn_girls_toilet,
-    SUM(fed2.urnl_b_tot) as tot_school_urnl_boys,
-    SUM(fed.urnl_b_func) as tot_school_urnl_boys_func,
-    SUM(fed3.urnl_g_tot) as tot_school_urnl_girls,
-    SUM(fed4.urnl_g_func) as tot_school_urnl_girls_func, 
-     SUM(ted5.toilet_runwat_b) as tot_school_toilet_runwater_boys,
-    SUM(ted6.toilet_runwat_g) as tot_school_toilet_runwater_girls,
-    SUM(fed5.urnl_runwater_b) as tot_school_urnl_runwater_b,
-    SUM(hed.handwashfac_toilet_urnl) as tot_school_handwashfac_toilet_urnl
-    FROM
-    school_infrastructure.schtoilet_event_data sed 
-LEFT JOIN
-    school_infrastructure.toiletcwsnbfunc_event_data ted  ON sed.school_id = ted.school_id and sed.schoolcategory_id = ted.schoolcategory_id 
-    and sed.cluster_id  = ted.cluster_id and sed.schoolmanagement_id = ted.schoolmanagement_id 
-left join 
-	school_infrastructure.toiletcwsnbtot_event_data ted2 on sed.school_id = ted2.school_id and sed.schoolcategory_id = ted2.schoolcategory_id 
-    and sed.cluster_id = ted2.cluster_id and sed.schoolmanagement_id = ted2.schoolmanagement_id 
-left join 
-	school_infrastructure.toiletcwsngfunc_event_data ted3 on sed.school_id = ted3.school_id and sed.schoolcategory_id = ted3.schoolcategory_id 
-    and sed.cluster_id = ted3.cluster_id and sed.schoolmanagement_id = ted3.schoolmanagement_id 
-left join 
-	school_infrastructure.toiletcwsngtot_event_data ted4 on sed.school_id = ted4.school_id and sed.schoolcategory_id = ted4.schoolcategory_id 
-    and sed.cluster_id = ted4.cluster_id and sed.schoolmanagement_id = ted4.schoolmanagement_id 
-left join 
-	school_infrastructure.furnlbfunc_event_data fed on sed.school_id = fed.school_id and sed.schoolcategory_id = fed.schoolcategory_id 
-    and sed.cluster_id = fed.cluster_id and sed.schoolmanagement_id = fed.schoolmanagement_id 
-left join 
-	school_infrastructure.furnlbtot_event_data fed2 on sed.school_id = fed2.school_id and sed.schoolcategory_id = fed2.schoolcategory_id 
-    and sed.cluster_id = fed2.cluster_id and sed.schoolmanagement_id = fed2.schoolmanagement_id 
-left join 
-	school_infrastructure.furnlgtot_event_data fed3  on sed.school_id = fed3.school_id and sed.schoolcategory_id = fed3.schoolcategory_id 
-    and sed.cluster_id = fed3.cluster_id and sed.schoolmanagement_id = fed3.schoolmanagement_id 
-left join 
-	school_infrastructure.furnlgfunc_event_data fed4  on sed.school_id = fed4.school_id and sed.schoolcategory_id = fed4.schoolcategory_id 
-    and sed.cluster_id = fed4.cluster_id and sed.schoolmanagement_id = fed4.schoolmanagement_id 
-left join 
-	school_infrastructure.toiletrunwatb_event_data ted5 on sed.school_id = ted5.school_id and sed.schoolcategory_id = ted5.schoolcategory_id 
-    and sed.cluster_id = ted5.cluster_id and sed.schoolmanagement_id = ted5.schoolmanagement_id 
-left join 
-	school_infrastructure.toiletrunwatg_event_data ted6 on sed.school_id = ted6.school_id and sed.schoolcategory_id = ted6.schoolcategory_id 
-    and sed.cluster_id = ted6.cluster_id and sed.schoolmanagement_id = ted6.schoolmanagement_id 
-left join 
-	school_infrastructure.furnlrunwaterb_event_data fed5  on sed.school_id = fed5.school_id and sed.schoolcategory_id = fed5.schoolcategory_id 
-    and sed.cluster_id = fed5.cluster_id and sed.schoolmanagement_id = fed5.schoolmanagement_id 
-left join 
-	school_infrastructure.handwashfactoileturnl_event_data hed on sed.school_id = hed.school_id and sed.schoolcategory_id = hed.schoolcategory_id 
-    and sed.cluster_id = hed.cluster_id and sed.schoolmanagement_id = hed.schoolmanagement_id 
-left join	
-	dimensions.district d on sed.district_id = d.district_id
-left join 
-	dimensions.block b on sed.block_id = b.block_id 
-left join 
-	dimensions.cluster c on sed.cluster_id = c.cluster_id 
-left join 
-	dimensions.school sch on sed.school_id = sch.school_id
-left join
-	dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
-left join 
-	dimensions.schoolcategory sc on sed.schoolcategory_id = sc.schoolcategory_id 
-    where sed.block_id = {block_id}
-group by 
-	 sed.district_id ,
-	d.district_name,
-	sed.block_id,
-	b.block_name,
-	sed.cluster_id,
-	c.cluster_name,
-	c.latitude,
-	c.longitude
-order by district_id;
+                        sed.district_id ,
+                        d.district_name,
+                        sed.block_id,
+                        b.block_name,
+                        sed.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude,
+                        COUNT(sed.schtoilet) AS total_schools,
+                        SUM(ted.toilet_cwsn_b_func) as tot_cwsn_boys_toilet_func,
+                        SUM(ted2.toilet_cwsn_b_tot) as tot_cwsn_boys_toilet,
+                        SUM(ted3.toilet_cwsn_g_func) as tot_cwsn_girls_toilet_func,
+                        SUM(ted4.toilet_cwsn_g_tot) as tot_cwsn_girls_toilet,
+                        SUM(fed2.urnl_b_tot) as tot_school_urnl_boys,
+                        SUM(fed.urnl_b_func) as tot_school_urnl_boys_func,
+                        SUM(fed3.urnl_g_tot) as tot_school_urnl_girls,
+                        SUM(fed4.urnl_g_func) as tot_school_urnl_girls_func, 
+                         SUM(ted5.toilet_runwat_b) as tot_school_toilet_runwater_boys,
+                        SUM(ted6.toilet_runwat_g) as tot_school_toilet_runwater_girls,
+                        SUM(fed5.urnl_runwater_b) as tot_school_urnl_runwater_b,
+                        SUM(hed.handwashfac_toilet_urnl) as tot_school_handwashfac_toilet_urnl
+                        FROM
+                        school_infrastructure.schtoilet_event_data sed 
+                    LEFT JOIN
+                        school_infrastructure.toiletcwsnbfunc_event_data ted  ON sed.school_id = ted.school_id and sed.schoolcategory_id = ted.schoolcategory_id 
+                        and sed.cluster_id  = ted.cluster_id and sed.schoolmanagement_id = ted.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.toiletcwsnbtot_event_data ted2 on sed.school_id = ted2.school_id and sed.schoolcategory_id = ted2.schoolcategory_id 
+                        and sed.cluster_id = ted2.cluster_id and sed.schoolmanagement_id = ted2.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.toiletcwsngfunc_event_data ted3 on sed.school_id = ted3.school_id and sed.schoolcategory_id = ted3.schoolcategory_id 
+                        and sed.cluster_id = ted3.cluster_id and sed.schoolmanagement_id = ted3.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.toiletcwsngtot_event_data ted4 on sed.school_id = ted4.school_id and sed.schoolcategory_id = ted4.schoolcategory_id 
+                        and sed.cluster_id = ted4.cluster_id and sed.schoolmanagement_id = ted4.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.furnlbfunc_event_data fed on sed.school_id = fed.school_id and sed.schoolcategory_id = fed.schoolcategory_id 
+                        and sed.cluster_id = fed.cluster_id and sed.schoolmanagement_id = fed.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.furnlbtot_event_data fed2 on sed.school_id = fed2.school_id and sed.schoolcategory_id = fed2.schoolcategory_id 
+                        and sed.cluster_id = fed2.cluster_id and sed.schoolmanagement_id = fed2.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.furnlgtot_event_data fed3  on sed.school_id = fed3.school_id and sed.schoolcategory_id = fed3.schoolcategory_id 
+                        and sed.cluster_id = fed3.cluster_id and sed.schoolmanagement_id = fed3.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.furnlgfunc_event_data fed4  on sed.school_id = fed4.school_id and sed.schoolcategory_id = fed4.schoolcategory_id 
+                        and sed.cluster_id = fed4.cluster_id and sed.schoolmanagement_id = fed4.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.toiletrunwatb_event_data ted5 on sed.school_id = ted5.school_id and sed.schoolcategory_id = ted5.schoolcategory_id 
+                        and sed.cluster_id = ted5.cluster_id and sed.schoolmanagement_id = ted5.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.toiletrunwatg_event_data ted6 on sed.school_id = ted6.school_id and sed.schoolcategory_id = ted6.schoolcategory_id 
+                        and sed.cluster_id = ted6.cluster_id and sed.schoolmanagement_id = ted6.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.furnlrunwaterb_event_data fed5  on sed.school_id = fed5.school_id and sed.schoolcategory_id = fed5.schoolcategory_id 
+                        and sed.cluster_id = fed5.cluster_id and sed.schoolmanagement_id = fed5.schoolmanagement_id 
+                    left join 
+                        school_infrastructure.handwashfactoileturnl_event_data hed on sed.school_id = hed.school_id and sed.schoolcategory_id = hed.schoolcategory_id 
+                        and sed.cluster_id = hed.cluster_id and sed.schoolmanagement_id = hed.schoolmanagement_id 
+                    left join	
+                        dimensions.district d on sed.district_id = d.district_id
+                    left join 
+                        dimensions.block b on sed.block_id = b.block_id 
+                    left join 
+                        dimensions.cluster c on sed.cluster_id = c.cluster_id 
+                    left join 
+                        dimensions.school sch on sed.school_id = sch.school_id
+                    left join
+                        dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
+                    left join 
+                        dimensions.school_category_relation sc on sed.schoolcategory_id = sc.new_category_id 
+                        where sed.block_id = {block_id}
+                    group by 
+                         sed.district_id ,
+                        d.district_name,
+                        sed.block_id,
+                        b.block_name,
+                        sed.cluster_id,
+                        c.cluster_name,
+                        c.latitude,
+                        c.longitude
+                    order by district_id;
 `,
 
                         "map_without_filter": `
@@ -2256,8 +2341,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on sed.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on sed.schoolcategory_id = sc.schoolcategory_id 
-    where sed.cluster_id = {cluster_id}
+	dimensions.school_category_relation sc on sed.schoolcategory_id = sc.new_category_id 
+where sed.cluster_id = {cluster_id}
 group by 
 	 sed.district_id ,
 	d.district_name,
@@ -2521,11 +2606,11 @@ order by district_id;
                         d.district_name,
                         d.latitude,
                         d.longitude,
-                        SUM(led.landavail_exp_schfacl) AS total_school_landavail_exp_schfacl,
-                        SUM(led2.library) AS total_school_library,
-                        SUM(ped.playgrnd_fac) as total_school_playground_fac,
-                        SUM(fed.furniture_avail) as total_school_no_of_furniture_avail,
-                        SUM(red.rampavail) as total_school_avail_handrail_ramps,
+                        coalesce(SUM(led.landavail_exp_schfacl),0) AS total_school_landavail_exp_schfacl,
+                        coalesce(SUM(led2.library),0) AS total_school_library,
+                        coalesce(SUM(ped.playgrnd_fac),0) as total_school_playground_fac,
+                        coalesce(SUM(fed.furniture_avail),0) as total_school_no_of_furniture_avail,
+                        coalesce(SUM(red.rampavail),0) as total_school_avail_handrail_ramps,
                         COUNT(red.rampavail) as total_schools_rampavail
                     FROM
                         school_infrastructure.landavailexpschfacl_event_data led 
@@ -2548,8 +2633,8 @@ order by district_id;
                     left join
                         dimensions.schoolmanagement sm on led.schoolmanagement_id = sm.schoolmanagement_id 
                     left join 
-                        dimensions.schoolcategory sc on led.schoolcategory_id = sc.schoolcategory_id 
-                        
+                        dimensions.school_category_relation sc on led.schoolcategory_id = sc.new_category_id 
+                    
                     group by 
                          led.district_id ,
                         d.district_name,
@@ -2611,11 +2696,11 @@ order by district_id;`
 	b.block_name,
 	b.latitude,
 	b.longitude,
-    SUM(led.landavail_exp_schfacl) AS total_school_landavail_exp_schfacl,
-    SUM(led2.library) AS total_school_library,
-    SUM(ped.playgrnd_fac) as total_school_playground_fac,
-    SUM(fed.furniture_avail) as total_school_no_of_furniture_avail,
-    SUM(red.rampavail) as total_school_avail_handrail_ramps,
+    coalesce(SUM(led.landavail_exp_schfacl),0) AS total_school_landavail_exp_schfacl,
+    coalesce(SUM(led2.library), 0) AS total_school_library,
+    coalesce(SUM(ped.playgrnd_fac), 0) as total_school_playground_fac,
+    coalesce(SUM(fed.furniture_avail),0) as total_school_no_of_furniture_avail,
+    coalesce(SUM(red.rampavail), 0) as total_school_avail_handrail_ramps,
     COUNT(red.rampavail) as total_schools_rampavail
 FROM
     school_infrastructure.landavailexpschfacl_event_data led 
@@ -2624,10 +2709,10 @@ LEFT JOIN
     and led.block_id = led2.block_id and led.schoolmanagement_id = led2.schoolmanagement_id 
 left join 
 	school_infrastructure.playgrndfac_event_data ped ON led.school_id = ped.school_id and led.schoolcategory_id = ped.schoolcategory_id 
-    and led.block_id = ped.block_id and led.schoolmanagement_id = ped.schoolmanagement_id 
+    and led.block_id = ped.district_id and led.schoolmanagement_id = ped.schoolmanagement_id 
 left join 
 	school_infrastructure.furnitureavail_event_data fed ON led.school_id = fed.school_id and led.schoolcategory_id = fed.schoolcategory_id 
-    and led.block_id = fed.block_id and led.schoolmanagement_id = fed.schoolmanagement_id 
+    and led.district_id = fed.block_id and led.schoolmanagement_id = fed.schoolmanagement_id 
 left join 
 	school_infrastructure.rampavail_event_data red ON led.school_id = red.school_id and led.schoolcategory_id = red.schoolcategory_id 
     and led.block_id = red.block_id and led.schoolmanagement_id = red.schoolmanagement_id 
@@ -2640,8 +2725,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on led.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on led.schoolcategory_id = sc.schoolcategory_id 
-    where led.district_id = {district_id}
+	dimensions.school_category_relation sc on led.schoolcategory_id = sc.new_category_id 
+    where  led.district_id = {district_id}
 group by 
 	 led.district_id ,
 	d.district_name,
@@ -2650,6 +2735,7 @@ group by
 	b.latitude,
 	b.longitude
 order by district_id;
+
  
 `,
 
@@ -2719,11 +2805,11 @@ order by district_id;
                         c.cluster_name,
                         c.latitude,
                         c.longitude,
-                        SUM(led.landavail_exp_schfacl) AS total_school_landavail_exp_schfacl,
-                        SUM(led2.library) AS total_school_library,
-                        SUM(ped.playgrnd_fac) as total_school_playground_fac,
-                        SUM(fed.furniture_avail) as total_school_no_of_furniture_avail,
-                        SUM(red.rampavail) as total_school_avail_handrail_ramps,
+                        coalesce(SUM(led.landavail_exp_schfacl),0) AS total_school_landavail_exp_schfacl,
+                        coalesce(SUM(led2.library), 0) AS total_school_library,
+                        coalesce(SUM(ped.playgrnd_fac), 0) as total_school_playground_fac,
+                        coalesce(SUM(fed.furniture_avail),0) as total_school_no_of_furniture_avail,
+                        coalesce(SUM(red.rampavail), 0) as total_school_avail_handrail_ramps,
                         COUNT(red.rampavail) as total_schools_rampavail
                     FROM
                         school_infrastructure.landavailexpschfacl_event_data led 
@@ -2750,8 +2836,8 @@ order by district_id;
                     left join
                         dimensions.schoolmanagement sm on led.schoolmanagement_id = sm.schoolmanagement_id 
                     left join 
-                        dimensions.schoolcategory sc on led.schoolcategory_id = sc.schoolcategory_id 
-                        where led.block_id = {block_id}
+                        dimensions.school_category_relation sc on led.schoolcategory_id = sc.new_category_id 
+                        where  led.block_id = {block_id}
                     group by 
                          led.district_id ,
                         d.district_name,
@@ -2762,7 +2848,6 @@ order by district_id;
                         c.latitude,
                         c.longitude
                     order by district_id;
-                     
 `,
 
                         "map_without_filter": `
@@ -2836,11 +2921,11 @@ order by district_id;`
 	sch.school_name,
 	sch.latitude,
 	sch.longitude,
-    SUM(led.landavail_exp_schfacl) AS total_school_landavail_exp_schfacl,
-    SUM(led2.library) AS total_school_library,
-    SUM(ped.playgrnd_fac) as total_school_playground_fac,
-    SUM(fed.furniture_avail) as total_school_no_of_furniture_avail,
-    SUM(red.rampavail) as total_school_avail_handrail_ramps,
+ coalesce(SUM(led.landavail_exp_schfacl),0) AS total_school_landavail_exp_schfacl,
+    coalesce(SUM(led2.library), 0) AS total_school_library,
+    coalesce(SUM(ped.playgrnd_fac), 0) as total_school_playground_fac,
+    coalesce(SUM(fed.furniture_avail),0) as total_school_no_of_furniture_avail,
+    coalesce(SUM(red.rampavail), 0) as total_school_avail_handrail_ramps,
     COUNT(red.rampavail) as total_schools_rampavail
 FROM
     school_infrastructure.landavailexpschfacl_event_data led 
@@ -2867,8 +2952,8 @@ left join
 left join
 	dimensions.schoolmanagement sm on led.schoolmanagement_id = sm.schoolmanagement_id 
 left join 
-	dimensions.schoolcategory sc on led.schoolcategory_id = sc.schoolcategory_id 
-    where led.cluster_id = {cluster_id}
+	dimensions.school_category_relation sc on led.schoolcategory_id = sc.new_category_id 
+    where  led.cluster_id = {cluster_id}
 group by 
 	 led.district_id ,
 	d.district_name,
@@ -3051,15 +3136,132 @@ infra_bignumber: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber": "select 3800 as total_count",
+                "bigNumber": `select
+                count
+                (eed.school_id)
+                as
+                total_no_of_schools
+                from
+                school_infrastructure.elec_event_data eed`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": "select 3800 as total_count",
+                    "bigNumber": `select
+                    count
+                    (eed.school_id)
+                    as
+                    total_no_of_schools
+                    from
+                    school_infrastructure.elec_event_data eed`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
+            }
+        },
+        {
+            "name": "District",
+            "labelProp": "district_name",
+            "valueProp": "district_id",
+            "hierarchyLevel": "2",
+            "timeSeriesQueries": {
+                "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                from school_infrastructure.elec_event_data eed
+                left join
+                dimensions.district d on eed.district_id = d.district_id
+                where
+                eed.district_id = {district_id}
+                group by
+                eed.district_id`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                    from school_infrastructure.elec_event_data eed
+                    left join
+                    dimensions.district d on eed.district_id = d.district_id
+                    where
+                    eed.district_id = {district_id}
+                    group by
+                    eed.district_id`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "block"
+            }
+        },
+        {
+            "name": "Block",
+            "labelProp": "block_name",
+            "valueProp": "block_id",
+            "hierarchyLevel": "3",
+            "timeSeriesQueries": {
+                "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                from school_infrastructure.elec_event_data eed
+                left join
+                dimensions.district d on eed.district_id = d.district_id
+                left join
+                dimensions.block b on eed.block_id = b.block_id
+                where
+                eed.block_id  = {block_id}
+                group by
+                eed.block_id`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                    from school_infrastructure.elec_event_data eed
+                    left join
+                    dimensions.district d on eed.district_id = d.district_id
+                    left join
+                    dimensions.block b on eed.block_id = b.block_id
+                    where
+                    eed.block_id  = {block_id}
+                    group by
+                    eed.block_id`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "cluster"
+            }
+        },
+        {
+            "name": "Cluster",
+            "labelProp": "cluster_name",
+            "valueProp": "cluster_id",
+            "hierarchyLevel": "4",
+            "timeSeriesQueries": {
+                "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                from school_infrastructure.elec_event_data eed
+                left join
+                dimensions.district d on eed.district_id = d.district_id
+                left join
+                dimensions.block b on eed.block_id = b.block_id
+                left join
+                dimensions.cluster c on eed.cluster_id = c.cluster_id
+                where
+                eed.cluster_id  = {cluster_id}
+                group by
+                eed.cluster_id  `,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select count (eed.school_id) as total_no_of_schools
+                    from school_infrastructure.elec_event_data eed
+                    left join
+                    dimensions.district d on eed.district_id = d.district_id
+                    left join
+                    dimensions.block b on eed.block_id = b.block_id
+                    left join
+                    dimensions.cluster c on eed.cluster_id = c.cluster_id
+                    where
+                    eed.cluster_id  = {cluster_id}
+                    group by
+                    eed.cluster_id  `,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "school"
             }
         }
         
@@ -3068,7 +3270,7 @@ infra_bignumber: {
         "bigNumber": {
             "title": "Total No Of Schools",
             "valueSuffix": '',
-            "property": 'total_count'
+            "property": 'total_no_of_schools'
         }
     }
 },
@@ -3084,15 +3286,132 @@ infra_bignumber2: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber": "select 3500 as total_count",
+                "bigNumber": `select
+                sum
+                (eed.electricity)
+                as
+                schools_having_electricity
+                from
+                school_infrastructure.elec_event_data eed`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": "select 3500 as total_count",
+                    "bigNumber": `select
+                    sum
+                    (eed.electricity)
+                    as
+                    schools_having_electricity
+                    from
+                    school_infrastructure.elec_event_data eed`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
+            }
+        },
+        {
+            "name": "District",
+            "labelProp": "district_name",
+            "valueProp": "district_id",
+            "hierarchyLevel": "2",
+            "timeSeriesQueries": {
+                "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                from school_infrastructure.elec_event_data eed
+                left join
+                   dimensions.district d on eed.district_id = d.district_id
+                   where
+                   eed.district_id = {district_id}
+                   group by
+                   eed.district_id`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                    from school_infrastructure.elec_event_data eed
+                    left join
+                       dimensions.district d on eed.district_id = d.district_id
+                       where
+                       eed.district_id = {district_id}
+                       group by
+                       eed.district_id`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "block"
+            }
+        },
+        {
+            "name": "Block",
+            "labelProp": "block_name",
+            "valueProp": "block_id",
+            "hierarchyLevel": "3",
+            "timeSeriesQueries": {
+                "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                from school_infrastructure.elec_event_data eed
+                   left join
+                   dimensions.district d on eed.district_id = d.district_id
+                   left join
+                   dimensions.block b on eed.block_id = b.block_id
+                   where
+                   eed.block_id  = {block_id}
+                   group by
+                   eed.block_id`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                    from school_infrastructure.elec_event_data eed
+                       left join
+                       dimensions.district d on eed.district_id = d.district_id
+                       left join
+                       dimensions.block b on eed.block_id = b.block_id
+                       where
+                       eed.block_id  = {block_id}
+                       group by
+                       eed.block_id`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "cluster"
+            }
+        },
+        {
+            "name": "Cluster",
+            "labelProp": "cluster_name",
+            "valueProp": "cluster_id",
+            "hierarchyLevel": "4",
+            "timeSeriesQueries": {
+                "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                from school_infrastructure.elec_event_data eed
+                left join
+                   dimensions.district d on eed.district_id = d.district_id
+                   left join
+                   dimensions.block b on eed.block_id = b.block_id
+                   left join
+                   dimensions.cluster c on eed.cluster_id = c.cluster_id
+                   where
+                   eed.cluster_id  = {cluster_id}
+                   group by
+                   eed.cluster_id   `,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select sum(eed.electricity) as schools_having_electricity
+                    from school_infrastructure.elec_event_data eed
+                    left join
+                       dimensions.district d on eed.district_id = d.district_id
+                       left join
+                       dimensions.block b on eed.block_id = b.block_id
+                       left join
+                       dimensions.cluster c on eed.cluster_id = c.cluster_id
+                       where
+                       eed.cluster_id  = {cluster_id}
+                       group by
+                       eed.cluster_id  `,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "school"
             }
         }
     ],
@@ -3100,7 +3419,7 @@ infra_bignumber2: {
         "bigNumber": {
             "title": "School having Electricity ",
             "valueSuffix": '',
-            "property": 'total_count'
+            "property": 'schools_having_electricity'
         }
     }
 },

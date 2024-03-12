@@ -12,7 +12,7 @@
 		></app-filter-panel>
 	</div>
 
-	<div class="filter-row grid grid-cols-10">
+	<!-- <div class="filter-row grid grid-cols-10">
 		<div
 			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
 		>
@@ -23,10 +23,10 @@
 				[defaultSelectedDays]="defaultSelectedDays"
 			></app-time-series-filter-panel>
 		</div>
-		<!-- <div class="md:col-span-2 col-span-4">
+		<div class="md:col-span-2 col-span-4">
 			<app-breadcrumb-component></app-breadcrumb-component>
-		</div> -->
-	</div>
+		</div>
+	</div> -->
 
 	<div class="reports-row">
 		<div *ngIf="checkReport('diksha_metrics', 'bigNumber1')" id="bignumber1">
@@ -81,8 +81,7 @@
 					#categoryBarchart
 					(exportReportData)="csvDownload($event)"
 				></app-category-barchart>
-			</div>
-			 -->
+			</div> -->
 
 			<!-- <div
 				class="col-span-2 xmd:col-span-2 div-shadow"
