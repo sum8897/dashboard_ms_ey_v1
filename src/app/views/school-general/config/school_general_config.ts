@@ -973,6 +973,462 @@ GROUP BY
             
         }
     },
+    teacher_ratio_table: {
+        "label": "Average Student Present",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `
+                    SELECT
+    sam.district_id,
+    d.district_name,
+    sam.school_id,
+    sch.school_name,
+    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
+FROM
+    student_attendance.student_attendance_master sam
+JOIN
+    dimensions.district d ON sam.district_id = d.district_id
+JOIN
+    dimensions.school sch ON sam.school_id = sch.school_id
+    JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id
+WHERE
+    sam.date IN (startDate, endDate)
+GROUP BY
+    sam.district_id, d.district_name, sam.school_id, sch.school_name; `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `
+                        SELECT
+    sam.district_id,
+    d.district_name,
+    sam.school_id,
+    sch.school_name,
+    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
+    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
+FROM
+    student_attendance.student_attendance_master sam
+JOIN
+    dimensions.district d ON sam.district_id = d.district_id
+JOIN
+    dimensions.school sch ON sam.school_id = sch.school_id
+    JOIN
+    dimensions.class cc ON sam.class_id = cc.class_id
+WHERE
+    sam.date IN (startDate, endDate)
+GROUP BY
+    sam.district_id, d.district_name, sam.school_id, sch.school_name; `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.school_id,
+                    sch.school_name,
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                    student_attendance.student_attendance_master sam
+                JOIN
+                    dimensions.district d ON sam.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id
+                JOIN
+                    dimensions.block b ON sam.block_id = b.block_id
+                JOIN
+                    dimensions.school sch ON sam.school_id = sch.school_id
+                WHERE
+                    
+                    sam.date IN (startDate, endDate)
+                    AND sam.district_id = {district_id}
+                GROUP BY
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.school_id,
+                    sch.school_name;`
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.school_id,
+                        sch.school_name,
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                        student_attendance.student_attendance_master sam
+                    JOIN
+                        dimensions.district d ON sam.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id
+                    JOIN
+                        dimensions.block b ON sam.block_id = b.block_id
+                    JOIN
+                        dimensions.school sch ON sam.school_id = sch.school_id
+                    WHERE
+                        
+                        sam.date IN (startDate, endDate)
+                        AND sam.district_id = {district_id}
+                    GROUP BY
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.school_id,
+                        sch.school_name;
+    `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.cluster_id,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name,
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                    student_attendance.student_attendance_master sam
+                JOIN
+                    dimensions.district d ON sam.district_id = d.district_id
+                JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id
+                JOIN
+                    dimensions.block b ON sam.block_id = b.block_id
+                JOIN
+                    dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                JOIN
+                    dimensions.school sch ON sch.school_id = sam.school_id
+                WHERE
+                 sam.date IN (startDate, endDate)
+                    AND sam.block_id = {block_id}
+                GROUP BY
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id,
+                    b.block_name,
+                    sam.cluster_id,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name;
+                    `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.cluster_id,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                        student_attendance.student_attendance_master sam
+                    JOIN
+                        dimensions.district d ON sam.district_id = d.district_id
+                    JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id
+                    JOIN
+                        dimensions.block b ON sam.block_id = b.block_id
+                    JOIN
+                        dimensions.cluster c ON sam.cluster_id = c.cluster_id
+                    JOIN
+                        dimensions.school sch ON sch.school_id = sam.school_id
+                    WHERE
+                     sam.date IN (startDate, endDate)
+                        AND sam.block_id = {block_id}
+                    GROUP BY
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id,
+                        b.block_name,
+                        sam.cluster_id,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name;
+    `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table":`SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name,
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                 join
+                dimensions.district d on sam.district_id = d.district_id 
+                 JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                 join
+                    dimensions.block b on sam.block_id = b.block_id 
+                 join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                 join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.cluster_id  = {cluster_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                     join
+                    dimensions.district d on sam.district_id = d.district_id 
+                     JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                     join
+                        dimensions.block b on sam.block_id = b.block_id 
+                     join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                     join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.cluster_id  = {cluster_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name,
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                 join
+                dimensions.district d on sam.district_id = d.district_id 
+                 JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                 join
+                    dimensions.block b on sam.block_id = b.block_id 
+                 join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                 join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.school_id  = {school_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "table":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                     join
+                    dimensions.district d on sam.district_id = d.district_id 
+                     JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                     join
+                        dimensions.block b on sam.block_id = b.block_id 
+                     join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                     join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.school_id  = {school_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+                    },
+                    "level": "school"
+                }
+            }
+            
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    // {
+                    //     name: "UDISE Code",
+                    //     property: "udise_code",
+                    //     class: "text-left"
+                    // },
+                    {
+                        name: "SCHOOL Code",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "No. of Students enrolled on Date 1",
+                        property: "date1_count",
+                        class: "text-center"
+                    },
+                    {
+                        name: "No. of Students enrolled on Date 2",
+                        property: "date2_count",
+                        class: "text-center"
+                    },
+                    {
+                        name: "change",
+                        property: "student_count_change",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            "searchBar_config": {
+                "title": "School Code",
+                "searchProps": ['school_id'],
+                "searchType": "number"
+            },
+            
+        }
+    },
 
     //barchart
     management_barchart:{

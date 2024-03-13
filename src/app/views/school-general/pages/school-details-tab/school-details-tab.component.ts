@@ -6,6 +6,7 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import { config } from 'src/app/views/school-general/config/school_general_config';
 import { DistrictWiseTableComponent } from './reports/district-wise-table/district-wise-table.component';
 import { ClassroomRatioTableComponent } from './reports/classroom-ratio-table/classroom-ratio-table.component';
+import { TeacherRatioTableComponent } from './reports/teacher-ratio-table/teacher-ratio-table.component';
 import { ManagementBarchartComponent } from './reports/management-barchart/management-barchart.component';
 import { CategoryBarchartComponent } from './reports/category-barchart/category-barchart.component';
 import { ReceiptsBarchartComponent } from './reports/receipts-barchart/receipts-barchart.component';
@@ -51,6 +52,7 @@ bigNumberMetrics: any = [];
   @ViewChild('categoryBarchart') categoryBarchart: CategoryBarchartComponent;
   @ViewChild('receiptsBarchart') receiptsBarchart: ReceiptsBarchartComponent;
   @ViewChild('classroomRatioTable') classroomRatioTable: ClassroomRatioTableComponent;
+  @ViewChild('teacherRatioTable') teacherRatioTable: TeacherRatioTableComponent;
   // @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
   // @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
   // @ViewChild('studentTrendchart') studentTrendchart: StudentTrendlineComponent;
@@ -88,10 +90,9 @@ bigNumberMetrics: any = [];
           console.log('line103- filters',this.filters)
           this.districtWiseTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.classroomRatioTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.teacherRatioTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
         
-          // this.studentComparativeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          // this.studentDenrollBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          // this.studentPercentageChangeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+         
           this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -144,13 +145,9 @@ bigNumberMetrics: any = [];
 
     this.districtWiseTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.classroomRatioTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.teacherRatioTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
-    // this.comparativeSchool?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-
-    // this.studentComparativeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    // this.studentDenrollBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    // this.studentPercentageChangeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-
+   
     this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
    
     this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);

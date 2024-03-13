@@ -14,6 +14,7 @@ import { ManagementBarchartComponent } from './pages/school-details-tab/reports/
 import { CategoryBarchartComponent } from './pages/school-details-tab/reports/category-barchart/category-barchart.component';
 import { ClassroomRatioTableComponent } from './pages/school-details-tab/reports/classroom-ratio-table/classroom-ratio-table.component';
 import { ReceiptsBarchartComponent } from './pages/school-details-tab/reports/receipts-barchart/receipts-barchart.component';
+import { TeacherRatioTableComponent } from './pages/school-details-tab/reports/teacher-ratio-table/teacher-ratio-table.component';
 
 
 
@@ -27,7 +28,8 @@ import { ReceiptsBarchartComponent } from './pages/school-details-tab/reports/re
     ManagementBarchartComponent,
     CategoryBarchartComponent,
     ClassroomRatioTableComponent,
-    ReceiptsBarchartComponent
+    ReceiptsBarchartComponent,
+    TeacherRatioTableComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService
