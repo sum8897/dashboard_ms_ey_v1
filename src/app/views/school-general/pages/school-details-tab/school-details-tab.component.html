@@ -62,7 +62,7 @@
 				></app-district-wise-table>
 			</div>
 
-			<!-- <div
+			<div
 				class="col-span-2 xmd:col-span-1 div-shadow"
 				*ngIf="checkReport('management_barchart', 'barChart')"
 				id="bar"
@@ -71,8 +71,8 @@
 					#managementBarchart
 					(exportReportData)="csvDownload($event)"
 				></app-management-barchart>
-			</div> -->
-			<!-- <div
+			</div>
+			<div
 				class="col-span-2 xmd:col-span-1 div-shadow"
 				*ngIf="checkReport('category_barchart', 'barChart')"
 				id="bar"
@@ -81,7 +81,17 @@
 					#categoryBarchart
 					(exportReportData)="csvDownload($event)"
 				></app-category-barchart>
-			</div> -->
+			</div>
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('receipts_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-receipts-barchart
+					#receiptsBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-receipts-barchart>
+			</div>
 
 			<!-- <div
 				class="col-span-2 xmd:col-span-2 div-shadow"

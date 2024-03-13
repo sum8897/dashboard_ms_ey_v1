@@ -8,6 +8,7 @@ import { DistrictWiseTableComponent } from './reports/district-wise-table/distri
 import { ClassroomRatioTableComponent } from './reports/classroom-ratio-table/classroom-ratio-table.component';
 import { ManagementBarchartComponent } from './reports/management-barchart/management-barchart.component';
 import { CategoryBarchartComponent } from './reports/category-barchart/category-barchart.component';
+import { ReceiptsBarchartComponent } from './reports/receipts-barchart/receipts-barchart.component';
 import moment from 'moment';
 @Component({
   selector: 'app-school-details-tab',
@@ -48,6 +49,7 @@ bigNumberMetrics: any = [];
   @ViewChild('districtWiseTable') districtWiseTable: DistrictWiseTableComponent;
   @ViewChild('managementBarchart') managementBarchart: ManagementBarchartComponent;
   @ViewChild('categoryBarchart') categoryBarchart: CategoryBarchartComponent;
+  @ViewChild('receiptsBarchart') receiptsBarchart: ReceiptsBarchartComponent;
   @ViewChild('classroomRatioTable') classroomRatioTable: ClassroomRatioTableComponent;
   // @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
   // @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
@@ -92,6 +94,7 @@ bigNumberMetrics: any = [];
           // this.studentPercentageChangeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           
          
           }
@@ -151,6 +154,7 @@ bigNumberMetrics: any = [];
     this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
    
     this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
    
    
   

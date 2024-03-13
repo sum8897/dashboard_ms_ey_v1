@@ -13,6 +13,7 @@ import { DistrictWiseTableComponent } from './pages/school-details-tab/reports/d
 import { ManagementBarchartComponent } from './pages/school-details-tab/reports/management-barchart/management-barchart.component';
 import { CategoryBarchartComponent } from './pages/school-details-tab/reports/category-barchart/category-barchart.component';
 import { ClassroomRatioTableComponent } from './pages/school-details-tab/reports/classroom-ratio-table/classroom-ratio-table.component';
+import { ReceiptsBarchartComponent } from './pages/school-details-tab/reports/receipts-barchart/receipts-barchart.component';
 
 
 
@@ -25,7 +26,8 @@ import { ClassroomRatioTableComponent } from './pages/school-details-tab/reports
     DistrictWiseTableComponent,
     ManagementBarchartComponent,
     CategoryBarchartComponent,
-    ClassroomRatioTableComponent
+    ClassroomRatioTableComponent,
+    ReceiptsBarchartComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService
