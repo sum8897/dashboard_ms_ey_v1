@@ -88,6 +88,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'smart-classroom',
+        loadChildren: () =>
+          import('./views/smart-classroom/smart-classroom.module').then(
+            (module) => module.SmartClassroomModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'student-ai-attendance',
         loadChildren: () =>
           import('./views/student-ai-attendance/student-ai-attendance.module').then(
