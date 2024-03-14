@@ -43,6 +43,7 @@ export const config = {
 	
 
     ///right table for comparative
+    
     smart_table: {
         "label": "ICT Smart Classroom",
         "defaultLevel": "state",
@@ -53,43 +54,50 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `select 
-                    te.district_id,
+                    "table": `SELECT
+                    sm.district_id,
                     d.district_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    where 
-                    te.date between startDate and endDate  
-                    group by
-                    te.district_id,
-                    d.district_name `,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                GROUP BY
+                    sm.district_id, d.district_name
+                ORDER BY
+                    sm.district_id;
+                    
+                `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-                        te.district_id,
+                        "table": `SELECT
+                        sm.district_id,
                         d.district_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        where 
-                        te.date between startDate and endDate  
-                        group by
-                        te.district_id,
-                        d.district_name `,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    GROUP BY
+                        sm.district_id, d.district_name
+                    ORDER BY
+                        sm.district_id;
+                    `,
                     },
                     "level": "district"
                 }
@@ -100,53 +108,57 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.block_id ,
+                    "table": `SELECT
+                    sm.block_id, 
                     b.block_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate   and te.district_id = {district_id}
-                    group by
-                    
-                    te.block_id ,
-                    b.block_name `,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                 where sm.district_id = {district_id}
+                    GROUP BY
+                    sm.block_id, b.block_name
+                ORDER BY
+                    sm.block_id;
+                
+                 `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.block_id ,
+                        "table": `SELECT
+                        sm.block_id, 
                         b.block_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate   and te.district_id = {district_id}
-                        group by
-                        
-                        te.block_id ,
-                        b.block_name `,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                     where sm.district_id = {district_id}
+                        GROUP BY
+                        sm.block_id, b.block_name
+                    ORDER BY
+                        sm.block_id;
+                    
+                     `,
                     },
                     "level": "block"
                 }
@@ -157,57 +169,59 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.cluster_id ,
+                    "table": ` SELECT
+                    sm.cluster_id ,
                     c.cluster_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate   and te.block_id  = {block_id}
-                    group by
-                    
-                    te.cluster_id ,
-                    c.cluster_name  `,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                 where sm.block_id = {block_id}
+                    GROUP BY
+                    sm.cluster_id , c.cluster_name 
+                ORDER BY
+                    sm.cluster_id ;
+                  `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.cluster_id ,
+                        "table": ` SELECT
+                        sm.cluster_id ,
                         c.cluster_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate   and te.block_id  = {block_id}
-                        group by
-                        
-                        te.cluster_id ,
-                        c.cluster_name  `,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                     where sm.block_id = {block_id}
+                        GROUP BY
+                        sm.cluster_id , c.cluster_name 
+                    ORDER BY
+                        sm.cluster_id ;
+                       `,
                     },
                     "level": "cluster"
                 }
@@ -218,65 +232,63 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.school_id ,
+                    "table": ` SELECT
+                    sm.school_id ,
                     sch.school_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                    group by
-                    
-                    te.school_id ,
-                    sch.school_name
-                     
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                    COUNT(CASE WHEN sm.last_power_on_date >=  CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                left join 
+                    dimensions.school sch on sm.school_id = sch.school_id 
+                 where sm.cluster_id = {cluster_id}
+                    GROUP BY
+                    sm.school_id , sch.school_name  
+                ORDER BY
+                    sm.school_id  ;
                 
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.school_id ,
+                        "table": ` SELECT
+                        sm.school_id ,
                         sch.school_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                        group by
-                        
-                        te.school_id ,
-                        sch.school_name
-                        
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) AS not_used_15_30days,
+                        COUNT(CASE WHEN sm.last_power_on_date >=  CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) AS not_used_7_15days,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                    left join 
+                        dimensions.school sch on sm.school_id = sch.school_id 
+                     where sm.cluster_id = {cluster_id}
+                        GROUP BY
+                        sm.school_id , sch.school_name  
+                    ORDER BY
+                        sm.school_id  ;
                     
                         `,
                     },
@@ -289,11 +301,69 @@ export const config = {
             //     "valueProp": "school_id",
             //     "hierarchyLevel": "5",
             //     "timeSeriesQueries": {
-            //         "table": "select grade_number, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as perc_teachers from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number order by perc_teachers asc",
+            //         "table": `SELECT
+            //         htddd.head_teacher_name AS principal_name,    
+            //         htddd.head_teacher_contact_no AS principal_no,            
+            //         COALESCE(NULL, 'NA') AS parent_name,
+            //         COALESCE(NULL, 'NA') AS parent_mobileno,
+            //         sam.student_name
+            //         FROM    
+            //         student_attendance.student_attendance_master sam 
+            //     LEFT JOIN
+            //         dimensions.district d ON sam.district_id = d.district_id 
+            //     LEFT JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //     LEFT JOIN
+            //         dimensions.block b ON sam.block_id = b.block_id 
+            //     LEFT JOIN 
+            //         dimensions.cluster c ON sam.cluster_id = c.cluster_id
+            //     LEFT JOIN 
+            //         dimensions.school sch ON sam.school_id = sch.school_id
+            //     LEFT JOIN
+            //         dimensions.head_teacher_details_dimension_data htddd ON sam.school_id = htddd.school_id 
+            //     WHERE
+            //         sam.date IN (startDate,endDate) 
+            //         AND sam.school_id = {school_id}
+            //     GROUP BY
+            //     htddd.head_teacher_name ,    
+            //         htddd.head_teacher_contact_no ,            
+            //         sam.student_name
+            //     HAVING
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
+            //     `,
             //     },
             //     "actions": {
             //         "queries": {
-            //             "table": "select min(date) as min_date, max(date) as max_date, t.grade, school_name, round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t left join ingestion.dimension_master as m on t.school_id = m.school_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on c.cluster_id = m.cluster_id left join ingestion.dimension_school as s on s.school_id = t.school_id where t.school_id={school_id} group by t.grade, school_name,cluster_name,block_name,district_name",
+            //             "table":`SELECT
+            //             htddd.head_teacher_name AS principal_name,    
+            //             htddd.head_teacher_contact_no AS principal_no,            
+            //             COALESCE(NULL, 'NA') AS parent_name,
+            //             COALESCE(NULL, 'NA') AS parent_mobileno,
+            //             sam.student_name
+            //             FROM    
+            //             student_attendance.student_attendance_master sam 
+            //         LEFT JOIN
+            //             dimensions.district d ON sam.district_id = d.district_id 
+            //         LEFT JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //         LEFT JOIN
+            //             dimensions.block b ON sam.block_id = b.block_id 
+            //         LEFT JOIN 
+            //             dimensions.cluster c ON sam.cluster_id = c.cluster_id
+            //         LEFT JOIN 
+            //             dimensions.school sch ON sam.school_id = sch.school_id
+            //         LEFT JOIN
+            //             dimensions.head_teacher_details_dimension_data htddd ON sam.school_id = htddd.school_id 
+            //         WHERE
+            //             sam.date IN (startDate,endDate) 
+            //             AND sam.school_id = {school_id}
+            //         GROUP BY
+            //         htddd.head_teacher_name ,    
+            //             htddd.head_teacher_contact_no ,            
+            //             sam.student_name
+            //         HAVING
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) < 0;
+            //                            `,
             //         },
             //         "level": "school"
             //     }
@@ -315,8 +385,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
-
+                                linkedReports: ["smart_complete_bignumber", "smart_noncomplete_bignumber"] },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -333,8 +402,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
-
+                                linkedReports: ["smart_complete_bignumber", "smart_noncomplete_bignumber"] },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -351,7 +419,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
+                                linkedReports: ["smart_complete_bignumber", "smart_noncomplete_bignumber"] },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -368,8 +436,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
-
+                                linkedReports: ["smart_complete_bignumber", "smart_noncomplete_bignumber"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -377,21 +444,45 @@ export const config = {
                     {
                         name: "School",
                         property: "school_name",
-                        class: "text-left"
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "school_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "school_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 5,
+                                linkedReports: ["smart_complete_bignumber", "smart_noncomplete_bignumber"] },
+                            allowedLevels: [1, 2, 3]
+
+                        }
                     },
+                    // {
+                    //     name: "School",
+                    //     property: "school_name",
+                    //     class: "text-left"
+                    // },
                     {
-                        name: "Grade",
-                        property: "grade_number",
+                        name: "Not Used Last 30 Days",
+                        property: "not_used_30days",
+                        class: "text-center"
+                    },
+                                                        
+                    {
+                        name: "Not Used Last 15-30 Days",
+                        property: "not_used_15_30days",
                         class: "text-center"
                     },
                     {
-                        name: "Connected",
-                        property: "connected",
+                        name: "Not Used Last 7-15 Days",
+                        property: "not_used_7_15days",
                         class: "text-center"
                     },
                     {
-                        name: "Not Connected",
-                        property: "not_connected",
+                        name: "Used Last 7 Days",
+                        property: "used_last_7days", 
                         class: "text-center"
                     },
                     {
@@ -399,29 +490,106 @@ export const config = {
                         property: "total",
                         class: "text-center"
                     },
+                  
                     
+                    
+                    
+                    // {
+                    //     name: "change",
+                    //     property: "student_count_change",
+                    //     class: "text-center",
+                    //     valueSuffix: '',
+                    //     isHeatMapRequired: true,
+                    //     type: "number",
+                    //     color: {
+                    //         type: "percentage",
+                    //         values: [
+                    //             {
+                    //                 color: "#007000",
+                    //                 breakPoint: 50
+                    //             },
+                    //             {
+                    //                 color: "#FFBF00",
+                    //                 breakPoint: 1
+                    //             },
+                    //             {
+                    //                 color: "#D2222D",
+                    //                 breakPoint: -10000
+                    //             }
+                    //         ]
+                    //     },
+                    // },
                     {
-                        name: "Percentage of Connected",
-                        property: "perc_connected",
+                        name: "Enrolled",
+                        property: "enrolled",
                         class: "text-center",
-                        valueSuffix: '%',
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                // {
+                                //     color: "#007000",
+                                //     breakPoint: 50
+                                // },
+                                // {
+                                //     color: "#FFBF00",
+                                //     breakPoint: 1
+                                // },
+                                // {
+                                //     color: "#D2222D",
+                                //     breakPoint: -10000
+                                // }
+                                {
+                                    color: "#007000",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#007000",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#FFFFFF",
+                                    breakPoint: -10000
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "De-Enrolled",
+                        property: "total_deenrolled",
+                        class: "text-center",
+                        valueSuffix: '',
                         isHeatMapRequired: true,
                         type: "number",
                         color: {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
+                                    color: "#D2222D",
+                                    breakPoint: 50
                                 },
                                 {
                                     color: "#D2222D",
-                                    breakPoint: 0
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#FFFFFF",
+                                    breakPoint: -10000
                                 }
+                                // {
+                                //     color: "#D2222D",
+                                //     breakPoint: 10000
+                                // },
+                                // {
+                                //     color: "#FFFFFF",
+                                //     breakPoint: 20
+                                // },
+                                // {
+                                //     color: "#FFFFFF",
+                                //     breakPoint: 0
+                                // }
                             ]
                         },
                     }
@@ -443,43 +611,45 @@ smart_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    where 
-                    te.date between startDate and endDate  
-                    group by
-                    te.district_id,
-                    d.district_name ) as sum_query
+                    "bigNumber": `SELECT
+                    ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                FROM (
+                    SELECT
+                        d.district_name,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    GROUP BY
+                        sm.district_id, d.district_name
+                ) AS subquery
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        where 
-                        te.date between startDate and endDate  
-                        group by
-                        te.district_id,
-                        d.district_name ) as sum_query
+                        "bigNumber": `SELECT
+                        ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                    FROM (
+                        SELECT
+                            d.district_name,
+                            COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                            (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                        FROM
+                            smart_classroom.smartclassroom sm
+                        LEFT JOIN
+                            dimensions.district d ON sm.district_id = d.district_id
+                        GROUP BY
+                            sm.district_id, d.district_name
+                    ) AS subquery
                         `
                     },
                     "level": "district"
@@ -491,54 +661,54 @@ smart_complete_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                FROM (
+                    SELECT
                     b.block_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate   and te.district_id = {district_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ) as sum_query
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                 where sm.district_id = {district_id}
+                    GROUP BY
+                    sm.block_id, b.block_name
+                ORDER BY
+                    sm.block_id
+                ) AS subquery
                         `
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                    FROM (
+                        SELECT
                         b.block_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate   and te.district_id = {district_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ) as sum_query
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                     where sm.district_id = {district_id}
+                        GROUP BY
+                        sm.block_id, b.block_name
+                    ORDER BY
+                        sm.block_id
+                    ) AS subquery
                             `
                     },
                     "level": "block"
@@ -551,67 +721,61 @@ smart_complete_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                FROM (
+                    SELECT
                     c.cluster_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate   and te.block_id  = {block_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ) as sum_query
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                 where sm.block_id = {block_id}
+                    GROUP BY
+                    sm.cluster_id , c.cluster_name 
+                ORDER BY
+                    sm.cluster_id 
+                ) AS subquery
+                
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                    FROM (
+                        SELECT
                         c.cluster_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate   and te.block_id  = {block_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ) as sum_query
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                     where sm.block_id = {block_id}
+                        GROUP BY
+                        sm.cluster_id , c.cluster_name 
+                    ORDER BY
+                        sm.cluster_id 
+                    ) AS subquery
+                    
                         `,
                        
                     },
@@ -624,41 +788,34 @@ smart_complete_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    te.school_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                FROM (
+                    SELECT
                     sch.school_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ,
-                    te.school_id ,
-                    sch.school_name) as sum_query
-                    
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                left join 
+                    dimensions.school sch on sm.school_id = sch.school_id 
+                 where sm.cluster_id = {cluster_id}
+                    GROUP BY
+                    sm.school_id , sch.school_name  
+                ORDER BY
+                    sm.school_id  
+                ) AS subquery
+                
+                
                     
                     
                     
@@ -669,40 +826,34 @@ smart_complete_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        te.school_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(used_last_7days)::numeric  * 100/ SUM(total)) , 2) AS percentage_used_last_7days
+                    FROM (
+                        SELECT
                         sch.school_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ,
-                        te.school_id ,
-                        sch.school_name) as sum_query
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                    left join 
+                        dimensions.school sch on sm.school_id = sch.school_id 
+                     where sm.cluster_id = {cluster_id}
+                        GROUP BY
+                        sm.school_id , sch.school_name  
+                    ORDER BY
+                        sm.school_id  
+                    ) AS subquery
+                    
+                    
                         
                         
                         
@@ -718,9 +869,9 @@ smart_complete_bignumber: {
         ],
         "options": {
             "bigNumber": {
-                "title": "connected",
-                "valueSuffix": '',
-                "property": 'connected'
+                "title": " Average Percentage used last 7 Days",
+                "valueSuffix": '%',
+                "property": 'percentage_used_last_7days'
             }
         }
     },
@@ -735,43 +886,45 @@ smart_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    where 
-                    te.date between startDate and endDate 
-                    group by
-                    te.district_id,
-                    d.district_name ) as sum_query
+                    "bigNumber": `   SELECT 
+                    ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                FROM (
+                    SELECT 
+                        d.district_name,
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    GROUP BY 
+                        sm.district_id, d.district_name
+                ) AS subquery
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        where 
-                        te.date between startDate and endDate 
-                        group by
-                        te.district_id,
-                        d.district_name ) as sum_query
+                        "bigNumber": `   SELECT 
+                        ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                    FROM (
+                        SELECT 
+                            d.district_name,
+                            COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                            (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                             COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                        FROM
+                            smart_classroom.smartclassroom sm
+                        LEFT JOIN
+                            dimensions.district d ON sm.district_id = d.district_id
+                        GROUP BY 
+                            sm.district_id, d.district_name
+                    ) AS subquery
                         `
                     },
                     "level": "district"
@@ -783,53 +936,53 @@ smart_complete_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                FROM (
+                    SELECT
                     b.block_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate  and te.district_id = {district_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ) as sum_query `
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                 where sm.district_id = {district_id}
+                    GROUP BY
+                    sm.block_id, b.block_name
+                ORDER BY
+                    sm.block_id
+                ) AS subquery `
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                    FROM (
+                        SELECT
                         b.block_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate  and te.district_id = {district_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ) as sum_query`
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                     where sm.district_id = {district_id}
+                        GROUP BY
+                        sm.block_id, b.block_name
+                    ORDER BY
+                        sm.block_id
+                    ) AS subquery`
                     },
                     "level": "block"
                 }
@@ -841,67 +994,61 @@ smart_complete_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                FROM (
+                    SELECT
                     c.cluster_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate  and te.block_id  = {block_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ) as sum_query
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                 where sm.block_id = {block_id}
+                    GROUP BY
+                    sm.cluster_id , c.cluster_name 
+                ORDER BY
+                    sm.cluster_id 
+                ) AS subquery
+                
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                    FROM (
+                        SELECT
                         c.cluster_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate  and te.block_id  = {block_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ) as sum_query
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                     where sm.block_id = {block_id}
+                        GROUP BY
+                        sm.cluster_id , c.cluster_name 
+                    ORDER BY
+                        sm.cluster_id 
+                    ) AS subquery
+                    
                         `,
                        
                     },
@@ -914,79 +1061,67 @@ smart_complete_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    te.school_id ,
+                    "bigNumber": `SELECT 
+                    ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                FROM (
+                    SELECT
                     sch.school_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate  and te.cluster_id  = {cluster_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ,
-                    te.school_id ,
-                    sch.school_name) as sum_query
+                    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                LEFT JOIN
+                    dimensions.block b ON sm.block_id  = b.block_id
+                left join 
+                    dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                left join 
+                    dimensions.school sch on sm.school_id = sch.school_id 
+                 where sm.cluster_id = {cluster_id}
+                    GROUP BY
+                    sm.school_id , sch.school_name  
+                ORDER BY
+                    sm.school_id  
+                ) AS subquery
+                
+                
                     `,
                    
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        te.school_id ,
+                        "bigNumber": `SELECT 
+                        ROUND((SUM(not_used_30days)::numeric  * 100/ SUM(total)) , 2) AS percentage_not_used_30days
+                    FROM (
+                        SELECT
                         sch.school_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate  and te.cluster_id  = {cluster_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ,
-                        te.school_id ,
-                        sch.school_name) as sum_query
+                        COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) AS not_used_30days,
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    LEFT JOIN
+                        dimensions.block b ON sm.block_id  = b.block_id
+                    left join 
+                        dimensions.cluster c on sm.cluster_id = c.cluster_id 
+                    left join 
+                        dimensions.school sch on sm.school_id = sch.school_id 
+                     where sm.cluster_id = {cluster_id}
+                        GROUP BY
+                        sm.school_id , sch.school_name  
+                    ORDER BY
+                        sm.school_id  
+                    ) AS subquery
+                    
+                    
                         
     `,
                         
@@ -997,9 +1132,9 @@ smart_complete_bignumber: {
         ],
         "options": {
             "bigNumber": {
-                "title": "Not Connected",
-                "valueSuffix": '',
-                "property": 'notconnected'
+                "title": "Average Percentage Not used for 30 days",
+                "valueSuffix": '%',
+                "property": 'percentage_not_used_30days'
             }
         }
     },
@@ -1019,18 +1154,38 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
-                FROM teleeducation.tele_education te
-                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                "bigNumber":`select sum (total) as total
+                from( select
+                    (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                FROM
+                    smart_classroom.smartclassroom sm
+                LEFT JOIN
+                    dimensions.district d ON sm.district_id = d.district_id
+                GROUP BY
+                    sm.district_id, d.district_name
+                ORDER BY
+                    sm.district_id) as sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
-                    FROM teleeducation.tele_education te
-                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                    "bigNumber": `select sum (total) as total
+                    from( select
+                        (COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '30 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '15 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '15 days' AND sm.last_power_on_date < CURRENT_DATE - INTERVAL '7 days' THEN NULL ELSE sm.device_no END) +
+                         COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END)) AS total
+                    FROM
+                        smart_classroom.smartclassroom sm
+                    LEFT JOIN
+                        dimensions.district d ON sm.district_id = d.district_id
+                    GROUP BY
+                        sm.district_id, d.district_name
+                    ORDER BY
+                        sm.district_id) as sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1040,9 +1195,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Connected on 21/02/2024",
-            "valueSuffix": '%',
-            "property": 'connected_perc'
+            "title": "Total",
+            "valueSuffix": '',
+            "property": 'total'
         }
     }
 },
@@ -1056,19 +1211,39 @@ student_attendance_bignumber2: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":` 
-                SELECT
-                ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-                FROM teleeducation.tele_education te
-                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                select sum(used_last_7days) as used_last_7days
+   from (
+   select
+    d.district_name,
+    COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days
+    FROM
+    smart_classroom.smartclassroom sm
+LEFT JOIN
+    dimensions.district d ON sm.district_id = d.district_id
+GROUP BY
+    sm.district_id, d.district_name
+ORDER BY
+    sm.district_id) as sub;
+ `,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": ` 
-                    SELECT
-                    ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-                    FROM teleeducation.tele_education te
-                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                    select sum(used_last_7days) as used_last_7days
+                    from (
+                    select
+                     d.district_name,
+                     COUNT(CASE WHEN sm.last_power_on_date >= CURRENT_DATE - INTERVAL '7 days' THEN sm.device_no ELSE NULL END) AS used_last_7days
+                     FROM
+                     smart_classroom.smartclassroom sm
+                 LEFT JOIN
+                     dimensions.district d ON sm.district_id = d.district_id
+                 GROUP BY
+                     sm.district_id, d.district_name
+                 ORDER BY
+                     sm.district_id) as sub;
+                  `,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1078,9 +1253,9 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Not Connected on 21/02/2024",
-            "valueSuffix": '%',
-            "property": 'not_connected_perc'
+            "title": "Used Last 7 Days",
+            "valueSuffix": '',
+            "property": 'used_last_7days'
         }
     }
 },

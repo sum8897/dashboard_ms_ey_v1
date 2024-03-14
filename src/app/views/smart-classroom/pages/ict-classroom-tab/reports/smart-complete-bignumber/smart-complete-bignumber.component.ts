@@ -20,9 +20,9 @@ export class SmartCompleteBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total Connected"
+    reportName: "Average Percentage used in last 7 Days"
   };
-  currentReportName: string = "Total Connected";
+  currentReportName: string = "Average Percentage used in last 7 Days";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

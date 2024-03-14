@@ -21,9 +21,9 @@ export class SmartIncompleteBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total Not Connected"
+    reportName: "Average Percentage Not used for 30 days"
   };
-  currentReportName: string = "Total Not Connected";
+  currentReportName: string = "Average Percentage Not used for 30 days";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

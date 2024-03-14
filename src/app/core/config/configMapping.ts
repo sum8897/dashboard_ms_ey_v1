@@ -19,6 +19,7 @@ import{ config as studentAiAttendanceConfig} from '../../views/student-ai-attend
 import{ config as studentEnrollmentConfig} from '../../views/student-enrollment/config/student_enrollment_config';
 import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 import{ config as ictConfig} from '../../views/ict/config/ict_config';
+import{ config as smartClassroomConfig} from '../../views/smart-classroom/config/smart_classroom_config';
 
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
@@ -29,6 +30,7 @@ import {config as libraryConfig} from '../../views/library/config.ts';
 export const configFiles = {
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
+  smartClassroom:smartClassroomConfig,
   studentAiAttendance:studentAiAttendanceConfig,
   studentEnrollment:studentEnrollmentConfig,
   studentAttendance: studentAttendaceConfig,
@@ -72,7 +74,8 @@ export const programFolderNames = {
   studentAiAttendance:'studentattendance',
   studentEnrollment:'studentattendance',
   schoolLibrary:'schoollibrary',
-  ict:'ict'
+  ict:'ict',
+  smartClassroom:'smartClassroom'
   // udiseSchoolInfra:'udiseSchoolInfra'
 }
 
@@ -96,6 +99,7 @@ export const stateProgramsFolderNames = {
   pat:'',
   library:'',
   ict:'',
+  smartClassroom:'',
   // udiseSchoolInfra:'',
   udiseschoolinfra:'',
 }
