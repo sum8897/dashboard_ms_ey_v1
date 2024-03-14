@@ -1007,49 +1007,117 @@ from(SELECT
                 "timeSeriesQueries": {
                     "table": `
                     SELECT
-    sam.district_id,
-    d.district_name,
-    sam.school_id,
-    sch.school_name,
-    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
-FROM
-    student_attendance.student_attendance_master sam
-JOIN
-    dimensions.district d ON sam.district_id = d.district_id
-JOIN
-    dimensions.school sch ON sam.school_id = sch.school_id
-    JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id
-WHERE
-    sam.date IN (startDate, endDate)
-GROUP BY
-    sam.district_id, d.district_name, sam.school_id, sch.school_name; `
+                    district_name,
+                    COALESCE(ROUND(SUM(primary_students) / NULLIF(SUM(primary_teachers), 0), 0), 0) AS total_primary_students,
+                    COALESCE(ROUND(SUM(upper_students) / NULLIF(SUM(upper_teachers), 0), 0), 0) AS total_upper_students,
+                    COALESCE(ROUND(SUM(secondary_students) / NULLIF(SUM(secondary_teachers), 0), 0), 0) AS total_secondary_students,
+                    COALESCE(ROUND(SUM(higher_secondary_students) / NULLIF(SUM(higher_secondary_teachers), 0), 0), 0) AS total_higher_secondary_students
+                FROM (
+                    SELECT
+                        d.district_name AS district_name,
+                        sc.primary_students AS primary_students,
+                        sc.upper_students AS upper_students,
+                        sc.secondary_students AS secondary_students,
+                        sc.higher_secondary_students AS higher_secondary_students,
+                        tc.primary_teachers AS primary_teachers,
+                        tc.upper_teachers AS upper_teachers,
+                        tc.secondary_teachers AS secondary_teachers,
+                        tc.higher_secondary_teachers AS higher_secondary_teachers
+                    FROM
+                        dimensions.district d
+                    LEFT JOIN (
+                        SELECT
+                            sef.district_id AS district_id,
+                            sef.school_id AS school_id,
+                            SUM(sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS primary_students,
+                            SUM(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) AS upper_students,
+                            SUM(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) AS secondary_students,
+                            SUM(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) AS higher_secondary_students
+                        FROM
+                            school_general.sch_enr_fresh sef
+                        LEFT JOIN
+                            dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        
+                        GROUP BY
+                            sef.district_id, sef.school_id
+                    ) sc ON d.district_id = sc.district_id
+                    LEFT JOIN (
+                        SELECT
+                            sd.district_id AS district_id,
+                            sd.school_id AS school_id,
+                            COUNT(DISTINCT CASE WHEN sd.class_taught IN (1, 3, 11) THEN sd.tch_name END) AS primary_teachers,
+                            COUNT(DISTINCT CASE WHEN sd.class_taught IN (2, 3, 7) THEN sd.tch_name END) AS upper_teachers,
+                            COUNT(DISTINCT CASE WHEN sd.class_taught IN (5, 8) THEN sd.tch_name END) AS secondary_teachers,
+                            COUNT(DISTINCT CASE WHEN sd.class_taught IN (6, 8) THEN sd.tch_name END) AS higher_secondary_teachers
+                        FROM
+                            school_general.tch_profile sd
+                        LEFT JOIN
+                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+                        
+                        GROUP BY
+                            sd.district_id, sd.school_id
+                    ) tc ON d.district_id = tc.district_id AND sc.school_id = tc.school_id
+                ) AS district_data
+                GROUP BY
+                    district_data.district_name; `
                 },
                 "actions": {
                     "queries": {
                         "table": `
                         SELECT
-    sam.district_id,
-    d.district_name,
-    sam.school_id,
-    sch.school_name,
-    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
-FROM
-    student_attendance.student_attendance_master sam
-JOIN
-    dimensions.district d ON sam.district_id = d.district_id
-JOIN
-    dimensions.school sch ON sam.school_id = sch.school_id
-    JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id
-WHERE
-    sam.date IN (startDate, endDate)
+    district_name,
+    COALESCE(ROUND(SUM(primary_students) / NULLIF(SUM(primary_teachers), 0), 0), 0) AS total_primary_students,
+    COALESCE(ROUND(SUM(upper_students) / NULLIF(SUM(upper_teachers), 0), 0), 0) AS total_upper_students,
+    COALESCE(ROUND(SUM(secondary_students) / NULLIF(SUM(secondary_teachers), 0), 0), 0) AS total_secondary_students,
+    COALESCE(ROUND(SUM(higher_secondary_students) / NULLIF(SUM(higher_secondary_teachers), 0), 0), 0) AS total_higher_secondary_students
+FROM (
+    SELECT
+        d.district_name AS district_name,
+        sc.primary_students AS primary_students,
+        sc.upper_students AS upper_students,
+        sc.secondary_students AS secondary_students,
+        sc.higher_secondary_students AS higher_secondary_students,
+        tc.primary_teachers AS primary_teachers,
+        tc.upper_teachers AS upper_teachers,
+        tc.secondary_teachers AS secondary_teachers,
+        tc.higher_secondary_teachers AS higher_secondary_teachers
+    FROM
+        dimensions.district d
+    LEFT JOIN (
+        SELECT
+            sef.district_id AS district_id,
+            sef.school_id AS school_id,
+            SUM(sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS primary_students,
+            SUM(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) AS upper_students,
+            SUM(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) AS secondary_students,
+            SUM(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) AS higher_secondary_students
+        FROM
+            school_general.sch_enr_fresh sef
+        LEFT JOIN
+            dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+        
+        GROUP BY
+            sef.district_id, sef.school_id
+    ) sc ON d.district_id = sc.district_id
+    LEFT JOIN (
+        SELECT
+            sd.district_id AS district_id,
+            sd.school_id AS school_id,
+            COUNT(DISTINCT CASE WHEN sd.class_taught IN (1, 3, 11) THEN sd.tch_name END) AS primary_teachers,
+            COUNT(DISTINCT CASE WHEN sd.class_taught IN (2, 3, 7) THEN sd.tch_name END) AS upper_teachers,
+            COUNT(DISTINCT CASE WHEN sd.class_taught IN (5, 8) THEN sd.tch_name END) AS secondary_teachers,
+            COUNT(DISTINCT CASE WHEN sd.class_taught IN (6, 8) THEN sd.tch_name END) AS higher_secondary_teachers
+        FROM
+            school_general.tch_profile sd
+        LEFT JOIN
+            dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+        
+        GROUP BY
+            sd.district_id, sd.school_id
+    ) tc ON d.district_id = tc.district_id AND sc.school_id = tc.school_id
+) AS district_data
 GROUP BY
-    sam.district_id, d.district_name, sam.school_id, sch.school_name; `,
+    district_data.district_name; `,
                     },
                     "level": "school"
                 }
@@ -1407,13 +1475,23 @@ GROUP BY
                         class: "text-center"
                     },
                     {
-                        name: "No. of Students enrolled on Date 1",
-                        property: "date1_count",
+                        name: "Total Primary Students",
+                        property: "total_primary_students",
                         class: "text-center"
                     },
                     {
-                        name: "No. of Students enrolled on Date 2",
-                        property: "date2_count",
+                        name: "Total Upper Students",
+                        property: "total_upper_students",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Secondary Students",
+                        property: "total_secondary_students",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Total Higher Secondary Students",
+                        property: "total_higher_secondary_students",
                         class: "text-center"
                     },
                     {

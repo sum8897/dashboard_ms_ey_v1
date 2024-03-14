@@ -94,7 +94,7 @@
 			</div>
 
 			<div
-				class="col-span-2 xmd:col-span-2 div-shadow"
+				class="col-span-2 xmd:col-span-1 div-shadow"
 				*ngIf="checkReport('classroom_ratio_table', 'table')"
 				id="table3"
 			>
@@ -103,8 +103,8 @@
 					(exportReportData)="csvDownload($event)"
 				></app-classroom-ratio-table>
 			</div>
-			<!-- <div
-				class="col-span-2 xmd:col-span-2 div-shadow"
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
 				*ngIf="checkReport('teacher_ratio_table', 'table')"
 				id="table3"
 			>
@@ -112,7 +112,7 @@
 					#teacherRatioTable
 					(exportReportData)="csvDownload($event)"
 				></app-teacher-ratio-table>
-			</div> -->
+			</div>
 		</div>
 	</div>
 </div>
