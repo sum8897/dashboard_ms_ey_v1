@@ -754,16 +754,28 @@ export const config = {
                         color: {
                             type: "percentage",
                             values: [
+                                // {
+                                //     color: "#007000",
+                                //     breakPoint: 50
+                                // },
+                                // {
+                                //     color: "#FFBF00",
+                                //     breakPoint: 1
+                                // },
+                                // {
+                                //     color: "#D2222D",
+                                //     breakPoint: -10000
+                                // }
                                 {
                                     color: "#007000",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#FFBF00",
+                                    color: "#007000",
                                     breakPoint: 1
                                 },
                                 {
-                                    color: "#D2222D",
+                                    color: "#FFFFFF",
                                     breakPoint: -10000
                                 }
                             ]
@@ -780,17 +792,29 @@ export const config = {
                             type: "percentage",
                             values: [
                                 {
-                                    color: "#007000",
+                                    color: "#D2222D",
                                     breakPoint: 50
                                 },
                                 {
-                                    color: "#FFBF00",
+                                    color: "#D2222D",
                                     breakPoint: 1
                                 },
                                 {
-                                    color: "#D2222D",
+                                    color: "#FFFFFF",
                                     breakPoint: -10000
                                 }
+                                // {
+                                //     color: "#D2222D",
+                                //     breakPoint: 10000
+                                // },
+                                // {
+                                //     color: "#FFFFFF",
+                                //     breakPoint: 20
+                                // },
+                                // {
+                                //     color: "#FFFFFF",
+                                //     breakPoint: 0
+                                // }
                             ]
                         },
                     }
