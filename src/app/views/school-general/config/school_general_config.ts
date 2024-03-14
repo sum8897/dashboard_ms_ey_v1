@@ -393,7 +393,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","student_percentage_change_bignumber","student_denroll_bignumber"]
+                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","classroom_ratio_table","student_denroll_bignumber"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -411,7 +411,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","student_percentage_change_bignumber","student_denroll_bignumber"]                          },
+                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","classroom_ratio_table","student_denroll_bignumber"]                          },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -428,7 +428,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","student_percentage_change_bignumber","student_denroll_bignumber"]                           },
+                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","classroom_ratio_table","student_denroll_bignumber"]                           },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -445,7 +445,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","student_percentage_change_bignumber","student_denroll_bignumber"] },
+                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","classroom_ratio_table","student_denroll_bignumber"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -463,7 +463,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 5,
-                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","student_percentage_change_bignumber","student_denroll_bignumber"] },
+                                linkedReports: ["management_barchart", "category_barchart","student_comparative_barchart","classroom_ratio_table","student_denroll_bignumber"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -528,50 +528,64 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "table": `
-                    SELECT
-    sam.district_id,
-    d.district_name,
-    sam.school_id,
-    sch.school_name,
-    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
-FROM
-    student_attendance.student_attendance_master sam
-JOIN
-    dimensions.district d ON sam.district_id = d.district_id
-JOIN
-    dimensions.school sch ON sam.school_id = sch.school_id
-    JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id
-WHERE
-    sam.date IN (startDate, endDate)
-GROUP BY
-    sam.district_id, d.district_name, sam.school_id, sch.school_name; `
+                    select 
+district_name,
+coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+from(SELECT 
+        d.district_name,
+        SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+        sum(distinct clsrms_pri) as pri_cls,
+        sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+        sum (distinct clsrms_upr) as upr_cls,
+        sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+        sum (distinct clsrms_sec) as sec_cls,
+        sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+        sum (distinct clsrms_hsec) as hsec_cls
+    FROM 
+        school_general.sch_enr_fresh sef
+       left join
+       dimensions.district d on sef.district_id = d.district_id 
+	LEFT JOIN
+	dimensions.academic_year ay on sef.ac_year = ay.ac_year
+        
+     GROUP BY
+       d.district_name,sef.school_id) 
+       as sub
+       group by sub.district_name `
                 },
                 "actions": {
                     "queries": {
                         "table": `
-                        SELECT
-    sam.district_id,
-    d.district_name,
-    sam.school_id,
-    sch.school_name,
-    SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS date1_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) AS date2_count,
-    SUM(CASE WHEN sam.date = endDate THEN 1 ELSE 0 END) - SUM(CASE WHEN sam.date = startDate THEN 1 ELSE 0 END) AS student_count_change
-FROM
-    student_attendance.student_attendance_master sam
-JOIN
-    dimensions.district d ON sam.district_id = d.district_id
-JOIN
-    dimensions.school sch ON sam.school_id = sch.school_id
-    JOIN
-    dimensions.class cc ON sam.class_id = cc.class_id
-WHERE
-    sam.date IN (startDate, endDate)
-GROUP BY
-    sam.district_id, d.district_name, sam.school_id, sch.school_name; `,
+                        select 
+district_name,
+coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+from(SELECT 
+        d.district_name,
+        SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+        sum(distinct clsrms_pri) as pri_cls,
+        sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+        sum (distinct clsrms_upr) as upr_cls,
+        sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+        sum (distinct clsrms_sec) as sec_cls,
+        sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+        sum (distinct clsrms_hsec) as hsec_cls
+    FROM 
+        school_general.sch_enr_fresh sef
+       left join
+       dimensions.district d on sef.district_id = d.district_id 
+	LEFT JOIN
+	dimensions.academic_year ay on sef.ac_year = ay.ac_year
+        
+     GROUP BY
+       d.district_name,sef.school_id) 
+       as sub
+       group by sub.district_name`,
                     },
                     "level": "school"
                 }
@@ -582,71 +596,69 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id,
-                    b.block_name,
-                    sam.school_id,
-                    sch.school_name,
-                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                    student_attendance.student_attendance_master sam
-                JOIN
-                    dimensions.district d ON sam.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id
-                JOIN
-                    dimensions.block b ON sam.block_id = b.block_id
-                JOIN
-                    dimensions.school sch ON sam.school_id = sch.school_id
-                WHERE
-                    
-                    sam.date IN (startDate, endDate)
-                    AND sam.district_id = {district_id}
-                GROUP BY
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id,
-                    b.block_name,
-                    sam.school_id,
-                    sch.school_name;`
+                    "table": `select 
+                    block_name,
+                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    from(SELECT 
+                            b.block_name,
+                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                            sum(distinct clsrms_pri) as pri_cls,
+                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                            sum (distinct clsrms_hsec) as hsec_cls
+                        FROM 
+                            school_general.sch_enr_fresh sef
+                           left join
+                           dimensions.district d on sef.district_id = d.district_id 
+                           left join 
+                           dimensions.block b on sef.block_id = b.block_id
+                    LEFT JOIN
+                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                    WHERE 
+                             sef.district_id = {district_id}
+                         GROUP BY
+                           b.block_name,sef.school_id) 
+                           as sub
+                           group by sub.block_name`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id,
-                        b.block_name,
-                        sam.school_id,
-                        sch.school_name,
-                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                        student_attendance.student_attendance_master sam
-                    JOIN
-                        dimensions.district d ON sam.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id
-                    JOIN
-                        dimensions.block b ON sam.block_id = b.block_id
-                    JOIN
-                        dimensions.school sch ON sam.school_id = sch.school_id
-                    WHERE
-                        
-                        sam.date IN (startDate, endDate)
-                        AND sam.district_id = {district_id}
-                    GROUP BY
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id,
-                        b.block_name,
-                        sam.school_id,
-                        sch.school_name;
+                        "table": `select 
+                        block_name,
+                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        from(SELECT 
+                                b.block_name,
+                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                                sum(distinct clsrms_pri) as pri_cls,
+                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                                sum (distinct clsrms_upr) as upr_cls,
+                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                                sum (distinct clsrms_sec) as sec_cls,
+                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                                sum (distinct clsrms_hsec) as hsec_cls
+                            FROM 
+                                school_general.sch_enr_fresh sef
+                               left join
+                               dimensions.district d on sef.district_id = d.district_id 
+                               left join 
+                               dimensions.block b on sef.block_id = b.block_id
+                        LEFT JOIN
+                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                        WHERE 
+                                 sef.district_id = {district_id}
+                             GROUP BY
+                               b.block_name,sef.school_id) 
+                               as sub
+                               group by sub.block_name
     `,
                     },
                     "level": "school"
@@ -658,82 +670,74 @@ GROUP BY
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `SELECT
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id,
-                    b.block_name,
-                    sam.cluster_id,
-                    c.cluster_name,
-                    sam.school_id,
-                    sch.school_name,
-                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                    student_attendance.student_attendance_master sam
-                JOIN
-                    dimensions.district d ON sam.district_id = d.district_id
-                JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id
-                JOIN
-                    dimensions.block b ON sam.block_id = b.block_id
-                JOIN
-                    dimensions.cluster c ON sam.cluster_id = c.cluster_id
-                JOIN
-                    dimensions.school sch ON sch.school_id = sam.school_id
-                WHERE
-                 sam.date IN (startDate, endDate)
-                    AND sam.block_id = {block_id}
-                GROUP BY
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id,
-                    b.block_name,
-                    sam.cluster_id,
-                    c.cluster_name,
-                    sam.school_id,
-                    sch.school_name;
+                    "table": `select 
+                    cluster_name,
+                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    from(SELECT 
+                            c.cluster_name,
+                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                            sum(distinct clsrms_pri) as pri_cls,
+                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                            sum (distinct clsrms_hsec) as hsec_cls
+                        FROM 
+                            school_general.sch_enr_fresh sef
+                           left join
+                           dimensions.district d on sef.district_id = d.district_id 
+                           left join 
+                           dimensions.block b on sef.block_id = b.block_id
+                           left join
+                           dimensions.cluster c on sef.cluster_id = c.cluster_id
+                        LEFT JOIN
+                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                    WHERE 
+                             sef.block_id = {block_id}
+                         GROUP BY
+                          c.cluster_name,sef.school_id) 
+                           as sub
+                           group by sub.cluster_name
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id,
-                        b.block_name,
-                        sam.cluster_id,
-                        c.cluster_name,
-                        sam.school_id,
-                        sch.school_name,
-                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                        student_attendance.student_attendance_master sam
-                    JOIN
-                        dimensions.district d ON sam.district_id = d.district_id
-                    JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id
-                    JOIN
-                        dimensions.block b ON sam.block_id = b.block_id
-                    JOIN
-                        dimensions.cluster c ON sam.cluster_id = c.cluster_id
-                    JOIN
-                        dimensions.school sch ON sch.school_id = sam.school_id
-                    WHERE
-                     sam.date IN (startDate, endDate)
-                        AND sam.block_id = {block_id}
-                    GROUP BY
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id,
-                        b.block_name,
-                        sam.cluster_id,
-                        c.cluster_name,
-                        sam.school_id,
-                        sch.school_name;
+                        "table": `select 
+                        cluster_name,
+                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        from(SELECT 
+                                c.cluster_name,
+                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                                sum(distinct clsrms_pri) as pri_cls,
+                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                                sum (distinct clsrms_upr) as upr_cls,
+                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                                sum (distinct clsrms_sec) as sec_cls,
+                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                                sum (distinct clsrms_hsec) as hsec_cls
+                            FROM 
+                                school_general.sch_enr_fresh sef
+                               left join
+                               dimensions.district d on sef.district_id = d.district_id 
+                               left join 
+                               dimensions.block b on sef.block_id = b.block_id
+                               left join
+                               dimensions.cluster c on sef.cluster_id = c.cluster_id
+                            LEFT JOIN
+                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                        WHERE 
+                                 sef.block_id = {block_id}
+                             GROUP BY
+                              c.cluster_name,sef.school_id) 
+                               as sub
+                               group by sub.cluster_name
     `,
                     },
                     "level": "school"
@@ -745,148 +749,156 @@ GROUP BY
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table":`SELECT
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id ,
-                    b.block_name,
-                    sam.cluster_id ,
-                    c.cluster_name,
-                    sam.school_id,
-                    sch.school_name,
-                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                   student_attendance.student_attendance_master sam 
-                 join
-                dimensions.district d on sam.district_id = d.district_id 
-                 JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                 join
-                    dimensions.block b on sam.block_id = b.block_id 
-                 join 
-                    dimensions.cluster c on sam.cluster_id = c.cluster_id
-                 join 
-                    dimensions.school sch on sam.school_id = sch.school_id 
-                where
-                  sam.date in ( startDate,endDate) 
-                  and sam.cluster_id  = {cluster_id}
-                GROUP BY
-                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                    "table":`select 
+                    school_name,
+                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    from(SELECT 
+                            sch.school_name,
+                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                            sum(distinct clsrms_pri) as pri_cls,
+                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                            sum (distinct clsrms_hsec) as hsec_cls
+                        FROM 
+                            school_general.sch_enr_fresh sef
+                           left join
+                           dimensions.district d on sef.district_id = d.district_id 
+                           left join 
+                           dimensions.block b on sef.block_id = b.block_id
+                           left join
+                           dimensions.cluster c on sef.cluster_id = c.cluster_id
+                           left join 
+                           dimensions.school sch on sef.school_id = sch.school_id
+                        LEFT JOIN
+                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                    WHERE 
+                            sef.cluster_id = {cluster_id}
+                         GROUP BY
+                          sch.school_name,sef.school_id) 
+                           as sub
+                           group by sub.school_name
                 `
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id ,
-                        b.block_name,
-                        sam.cluster_id ,
-                        c.cluster_name,
-                        sam.school_id,
-                        sch.school_name,
-                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                       student_attendance.student_attendance_master sam 
-                     join
-                    dimensions.district d on sam.district_id = d.district_id 
-                     JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                     join
-                        dimensions.block b on sam.block_id = b.block_id 
-                     join 
-                        dimensions.cluster c on sam.cluster_id = c.cluster_id
-                     join 
-                        dimensions.school sch on sam.school_id = sch.school_id 
-                    where
-                      sam.date in ( startDate,endDate) 
-                      and sam.cluster_id  = {cluster_id}
-                    GROUP BY
-                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name 
+                        "table": `select 
+                        school_name,
+                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        from(SELECT 
+                                sch.school_name,
+                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+                                sum(distinct clsrms_pri) as pri_cls,
+                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+                                sum (distinct clsrms_upr) as upr_cls,
+                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+                                sum (distinct clsrms_sec) as sec_cls,
+                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
+                                sum (distinct clsrms_hsec) as hsec_cls
+                            FROM 
+                                school_general.sch_enr_fresh sef
+                               left join
+                               dimensions.district d on sef.district_id = d.district_id 
+                               left join 
+                               dimensions.block b on sef.block_id = b.block_id
+                               left join
+                               dimensions.cluster c on sef.cluster_id = c.cluster_id
+                               left join 
+                               dimensions.school sch on sef.school_id = sch.school_id
+                            LEFT JOIN
+                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                                        WHERE 
+                                sef.cluster_id = {cluster_id}
+                             GROUP BY
+                              sch.school_name,sef.school_id) 
+                               as sub
+                               group by sub.school_name 
                     `,
                     },
                     "level": "school"
                 }
             },
-            {
-                "name": "School",
-                "labelProp": "school_name",
-                "valueProp": "school_id",
-                "hierarchyLevel": "5",
-                "timeSeriesQueries": {
-                    "table": `SELECT
-                    sam.district_id,
-                    d.district_name,
-                    sam.block_id ,
-                    b.block_name,
-                    sam.cluster_id ,
-                    c.cluster_name,
-                    sam.school_id,
-                    sch.school_name,
-                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                FROM
-                   student_attendance.student_attendance_master sam 
-                 join
-                dimensions.district d on sam.district_id = d.district_id 
-                 JOIN
-                    dimensions.class cc ON sam.class_id = cc.class_id 
-                 join
-                    dimensions.block b on sam.block_id = b.block_id 
-                 join 
-                    dimensions.cluster c on sam.cluster_id = c.cluster_id
-                 join 
-                    dimensions.school sch on sam.school_id = sch.school_id 
-                where
-                  sam.date in ( startDate,endDate) 
-                  and sam.school_id  = {school_id}
-                GROUP BY
-                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
-                },
-                "actions": {
-                    "queries": {
-                        "table":`SELECT
-                        sam.district_id,
-                        d.district_name,
-                        sam.block_id ,
-                        b.block_name,
-                        sam.cluster_id ,
-                        c.cluster_name,
-                        sam.school_id,
-                        sch.school_name,
-                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-                    FROM
-                       student_attendance.student_attendance_master sam 
-                     join
-                    dimensions.district d on sam.district_id = d.district_id 
-                     JOIN
-                        dimensions.class cc ON sam.class_id = cc.class_id 
-                     join
-                        dimensions.block b on sam.block_id = b.block_id 
-                     join 
-                        dimensions.cluster c on sam.cluster_id = c.cluster_id
-                     join 
-                        dimensions.school sch on sam.school_id = sch.school_id 
-                    where
-                      sam.date in ( startDate,endDate) 
-                      and sam.school_id  = {school_id}
-                    GROUP BY
-                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
-                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
-                    },
-                    "level": "school"
-                }
-            }
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.district_id,
+            //         d.district_name,
+            //         sam.block_id ,
+            //         b.block_name,
+            //         sam.cluster_id ,
+            //         c.cluster_name,
+            //         sam.school_id,
+            //         sch.school_name,
+            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam 
+            //      join
+            //     dimensions.district d on sam.district_id = d.district_id 
+            //      JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //      join
+            //         dimensions.block b on sam.block_id = b.block_id 
+            //      join 
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //      join 
+            //         dimensions.school sch on sam.school_id = sch.school_id 
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id  = {school_id}
+            //     GROUP BY
+            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.district_id,
+            //             d.district_name,
+            //             sam.block_id ,
+            //             b.block_name,
+            //             sam.cluster_id ,
+            //             c.cluster_name,
+            //             sam.school_id,
+            //             sch.school_name,
+            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam 
+            //          join
+            //         dimensions.district d on sam.district_id = d.district_id 
+            //          JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //          join
+            //             dimensions.block b on sam.block_id = b.block_id 
+            //          join 
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //          join 
+            //             dimensions.school sch on sam.school_id = sch.school_id 
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id  = {school_id}
+            //         GROUP BY
+            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
             
         ],
         "options": {
@@ -929,47 +941,57 @@ GROUP BY
                         class: "text-center"
                     },
                     {
-                        name: "No. of Students enrolled on Date 1",
-                        property: "date1_count",
+                        name: "Primary School",
+                        property: "primaryschool",
                         class: "text-center"
                     },
                     {
-                        name: "No. of Students enrolled on Date 2",
-                        property: "date2_count",
+                        name: "Upper",
+                        property: "upper",
                         class: "text-center"
                     },
                     {
-                        name: "change",
-                        property: "student_count_change",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
-                    }
+                        name: "Secondary",
+                        property: "secondary",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Higher Secondary",
+                        property: "higher_secondary",
+                        class: "text-center"
+                    },
+                    // {
+                    //     name: "Secondary",
+                    //     property: "secondary",
+                    //     class: "text-center",
+                    //     valueSuffix: '',
+                    //     isHeatMapRequired: true,
+                    //     type: "number",
+                    //     color: {
+                    //         type: "percentage",
+                    //         values: [
+                    //             {
+                    //                 color: "#007000",
+                    //                 breakPoint: 70
+                    //             },
+                    //             {
+                    //                 color: "#FFBF00",
+                    //                 breakPoint: 40
+                    //             },
+                    //             {
+                    //                 color: "#D2222D",
+                    //                 breakPoint: 0
+                    //             }
+                    //         ]
+                    //     },
+                    // }
                 ],
             },
-            "searchBar_config": {
-                "title": "School Code",
-                "searchProps": ['school_id'],
-                "searchType": "number"
-            },
+            // "searchBar_config": {
+            //     "title": "School Code",
+            //     "searchProps": ['school_id'],
+            //     "searchType": "number"
+            // },
             
         }
     },

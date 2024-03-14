@@ -21,7 +21,7 @@ export class ClassroomRatioTableComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: " School Change in Enrollment from Date 1 to Date 2"
+    reportName: "Classroom Ratio"
   };
   minDate: any;
   maxDate: any;
@@ -29,7 +29,7 @@ export class ClassroomRatioTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'School Change in Enrollment from Date 1 to Date 2';
+  title = 'Classroom Ratio';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
