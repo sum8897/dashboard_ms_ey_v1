@@ -3305,7 +3305,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Total Enrolled Students on 07/03/2024",
+            "title": "Total Enrolled Students on 14/03/2024",
             "valueSuffix": '',
             "property": 'enrolled_count'
         }

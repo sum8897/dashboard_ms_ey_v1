@@ -1690,7 +1690,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Percentage of Students Present on 07/03/2024",
+            "title": "Percentage of Students Present on 14/03/2024",
             "valueSuffix": '%',
             "property": 'present_students'
         }
@@ -1724,7 +1724,7 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Percentage of Students Absent on 07/03/2024",
+            "title": "Percentage of Students Absent on 14/03/2024",
             "valueSuffix": '%',
             "property": 'absent_students'
         }
