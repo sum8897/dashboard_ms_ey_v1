@@ -1,0 +1,28 @@
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				Tablets
+				<em><small></small></em>
+			</p>
+			<p class="program-desc"></p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab label="Tablet" *ngIf="tabs.includes('Tablet')">
+			<app-tablet-tab *ngIf="selectedTabLabel === 'Tablet'"></app-tablet-tab>
+		</mat-tab>
+		<!-- <mat-tab label="Session">
+			<app-session-tab *ngIf="selectedTabLabel === 'Session'"></app-session-tab>
+		</mat-tab> -->
+	</mat-tab-group>
+</div>
