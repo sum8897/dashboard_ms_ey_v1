@@ -10,14 +10,14 @@ import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { filter, isNull, omitBy } from 'lodash';
 import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 import { DataService } from 'src/app/core/services/data.service';
-import { SchoolDetailsTabComponent } from '../../school-details-tab.component';
+import { EnrollmentInfoTabComponent } from '../../enrollment-info-tab.component';
 import { config } from 'src/app/views/school-general/config/school_general_config';
 @Component({
-  selector: 'app-receipts-barchart',
-  templateUrl: './receipts-barchart.component.html',
-  styleUrls: ['./receipts-barchart.component.scss']
+  selector: 'app-enrollment-by-education-barchart',
+  templateUrl: './enrollment-by-education-barchart.component.html',
+  styleUrls: ['./enrollment-by-education-barchart.component.scss']
 })
-export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
+export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy {
   compareDateRange: any = 7;
   title: any;
   chartHeight: any;
@@ -25,7 +25,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
   config;
   data;
   fileName: string = "";
-  reportName: string = 'receipts_barchart';
+  reportName: string = 'enrollment_barchart';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -64,7 +64,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
     private readonly _criteriaService: CriteriaService,
     private readonly _benchmarkService: BarchartBenchmarkService,
     private readonly _dataService: DataService,
-    private csv: SchoolDetailsTabComponent
+    private csv: EnrollmentInfoTabComponent
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -212,7 +212,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-          this._dataService.trendLine(reportData,config,"expenditure");
+          // this._dataService.extraLine(reportData,config,"perc_students");
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
@@ -262,7 +262,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
       }
       console.log('tablereprtdata 261',this.tableReportData)
       this.config = this.getConfig()
-      this._dataService.trendLine(this.tableReportData,this.config,"expenditure");
+      // this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
       console.log('configgg', this.config)
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
         if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
@@ -494,4 +494,5 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
 
 
 }
+
 

@@ -15,6 +15,10 @@ import { CategoryBarchartComponent } from './pages/school-details-tab/reports/ca
 import { ClassroomRatioTableComponent } from './pages/school-details-tab/reports/classroom-ratio-table/classroom-ratio-table.component';
 import { ReceiptsBarchartComponent } from './pages/school-details-tab/reports/receipts-barchart/receipts-barchart.component';
 import { TeacherRatioTableComponent } from './pages/school-details-tab/reports/teacher-ratio-table/teacher-ratio-table.component';
+import { EnrollmentInfoTabComponent } from './pages/enrollment-info-tab/enrollment-info-tab.component';
+import { EnrollmentByEducationBarchartComponent } from './pages/enrollment-info-tab/reports/enrollment-by-education-barchart/enrollment-by-education-barchart.component';
+import { EnrollmentByGenderTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-gender-table/enrollment-by-gender-table.component';
+import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-category-table/enrollment-by-category-table.component';
 
 
 
@@ -29,7 +33,11 @@ import { TeacherRatioTableComponent } from './pages/school-details-tab/reports/t
     CategoryBarchartComponent,
     ClassroomRatioTableComponent,
     ReceiptsBarchartComponent,
-    TeacherRatioTableComponent
+    TeacherRatioTableComponent,
+    EnrollmentInfoTabComponent,
+    EnrollmentByEducationBarchartComponent,
+    EnrollmentByGenderTableComponent,
+    EnrollmentByCategoryTableComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

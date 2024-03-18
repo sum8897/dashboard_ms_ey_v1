@@ -1,0 +1,88 @@
+<div class="col-span-full tab-wrapper">
+	<!-- <p class="tab-desc">
+		This report shows the % change of enrolled students in the school within the
+		selected dates on average
+	</p> -->
+
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+
+	<!-- <div class="filter-row grid grid-cols-10">
+		<div
+			class="time-series-filter xmd:col-span-5 md:col-span-4 lg:col-span-3 col-span-10"
+		>
+			<app-time-series-filter-panel
+				(timeSeriesUpdated)="timeSeriesUpdated($event)"
+				[minDate]="minDate"
+				[maxDate]="maxDate"
+				[defaultSelectedDays]="defaultSelectedDays"
+			></app-time-series-filter-panel>
+		</div>
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+	</div> -->
+
+	<div class="reports-row">
+		<!-- <div *ngIf="checkReport('diksha_metrics', 'bigNumber1')" id="bignumber1">
+			<app-school-bignumber
+				(exportReportData)="importBigNumberMetrics($event)"
+			></app-school-bignumber>
+		</div> -->
+		<!-- <div class="row-wrapper grid grid-cols-5 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 bignumber-container"
+				id="bignumber2"
+				*ngFor="let bigNumberData of bigNumberMetrics; let index = index"
+			>
+				<div *ngIf="checkReport('diksha_metrics', 'bigNumber' + (index + 1))">
+					<app-big-number
+						[bigNumberReportData]="bigNumberData"
+					></app-big-number>
+				</div>
+			</div>
+		</div> -->
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				id="table1"
+				*ngIf="checkReport('category_table', 'table')"
+			>
+				<app-enrollment-by-category-table
+					#categoryTable
+					(exportReportData)="csvDownload($event)"
+				></app-enrollment-by-category-table>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('enrollment_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-enrollment-by-education-barchart
+					#educationBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-enrollment-by-education-barchart>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('gender_table', 'table')"
+				id="table3"
+			>
+				<app-enrollment-by-gender-table
+					#genderTable
+					(exportReportData)="csvDownload($event)"
+				></app-enrollment-by-gender-table>
+			</div>
+		</div>
+	</div>
+</div>
