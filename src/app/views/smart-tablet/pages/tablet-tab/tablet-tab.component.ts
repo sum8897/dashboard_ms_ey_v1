@@ -8,6 +8,7 @@ import { TabletTableComponent } from 'src/app/views/smart-tablet/pages/tablet-ta
 
 import { TabletCompleteBignumberComponent } from 'src/app/views/smart-tablet/pages/tablet-tab/reports/tablet-complete-bignumber/tablet-complete-bignumber.component';
 import { TabletNoncompleteBignumberComponent } from 'src/app/views/smart-tablet/pages/tablet-tab/reports/tablet-noncomplete-bignumber/tablet-noncomplete-bignumber.component';
+import { NoncompleteBarchartComponent } from 'src/app/views/smart-tablet/pages/tablet-tab/reports/noncomplete-barchart/noncomplete-barchart.component';
 import moment from 'moment';
 
 @Component({
@@ -48,6 +49,7 @@ hasCommonFilters: boolean = true;
   @ViewChild('tabletTable') tabletTable: TabletTableComponent;
   @ViewChild('tabletCompleteBigNumber') tabletCompleteBigNumber: TabletCompleteBignumberComponent;
   @ViewChild('tabletNonCompleteBigNumber') tabletNonCompleteBigNumber: TabletNoncompleteBignumberComponent;
+  @ViewChild('noncompleteBarchart') noncompleteBarchart: NoncompleteBarchartComponent;
  
   
 
@@ -86,6 +88,7 @@ hasCommonFilters: boolean = true;
           this.tabletCompleteBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
           this.tabletNonCompleteBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.noncompleteBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
        
          
           }
@@ -140,6 +143,7 @@ hasCommonFilters: boolean = true;
     this.tabletCompleteBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
     this.tabletNonCompleteBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.noncompleteBarchart?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
    

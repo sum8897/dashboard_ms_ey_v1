@@ -11,6 +11,7 @@ import { TabletTabComponent } from './pages/tablet-tab/tablet-tab.component';
 import { TabletTableComponent } from './pages/tablet-tab/reports/tablet-table/tablet-table.component';
 import { TabletCompleteBignumberComponent } from './pages/tablet-tab/reports/tablet-complete-bignumber/tablet-complete-bignumber.component';
 import { TabletNoncompleteBignumberComponent } from './pages/tablet-tab/reports/tablet-noncomplete-bignumber/tablet-noncomplete-bignumber.component';
+import { NoncompleteBarchartComponent } from './pages/tablet-tab/reports/noncomplete-barchart/noncomplete-barchart.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TabletNoncompleteBignumberComponent } from './pages/tablet-tab/reports/
     TabletTabComponent,
     TabletTableComponent,
     TabletCompleteBignumberComponent,
-    TabletNoncompleteBignumberComponent
+    TabletNoncompleteBignumberComponent,
+    NoncompleteBarchartComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService
