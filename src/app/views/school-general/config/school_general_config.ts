@@ -2990,7 +2990,7 @@ group by sub.district_name `,
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Schools By Category",
+                "metricLabelProp": "Received",
                 "metricValueProp": "received",
                 "yAxis": {
                     "title": " Number Of Schools"

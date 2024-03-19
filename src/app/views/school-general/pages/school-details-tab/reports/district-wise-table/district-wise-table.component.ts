@@ -23,7 +23,7 @@ export class DistrictWiseTableComponent implements OnInit, OnDestroy {
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: "Average Student Present"
+    reportName: "Schools By Location"
   };
   minDate: any;
   maxDate: any;
@@ -31,7 +31,7 @@ export class DistrictWiseTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Change in Enrollment from Date 1 to Date 2 ';
+  title = 'Schools By Location';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

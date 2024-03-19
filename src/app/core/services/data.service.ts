@@ -642,17 +642,17 @@ export class DataService {
 
   }
   //trendline
-  trendLine(data: any, config: any, param: string) {
+  trendLine(data: any, config: any, param: string, label:string) {
     console.log("trendline extra ===== ", data);
     
     const lineData = data.values.map((reportData: any) => reportData[param]);
 
     const lineObject = {
         type: 'line',
-        metricLabelProp: 'Line', // Customize the label as needed
-        label: 'Line', // Customize the label as needed
+        metricLabelProp: label, // Customize the label as needed
+        label: label, // Customize the label as needed
         data: lineData,
-        borderColor: 'rgba(255, 0, 0, 1)', // Customize the border color as needed
+        borderColor: 'rgba(0, 204, 0, 1)', // Customize the border color as needed
         borderWidth: 2, // Customize the border width as needed
         fill: false
     };
