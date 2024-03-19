@@ -17,6 +17,7 @@ import{ config as patConfig} from '../../views/pat/config/pat_config.ts';
 
 import{ config as studentAiAttendanceConfig} from '../../views/student-ai-attendance/config/student_ai_attendance_config';
 import{ config as studentEnrollmentConfig} from '../../views/student-enrollment/config/student_enrollment_config';
+import{ config as schoolGeneralConfig} from '../../views/school-general/config/school_general_config';
 import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 import{ config as ictConfig} from '../../views/ict/config/ict_config';
 
@@ -27,6 +28,7 @@ import {config as libraryConfig} from '../../views/library/config.ts';
 
 
 export const configFiles = {
+  schoolGeneral:schoolGeneralConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
   studentAiAttendance:studentAiAttendanceConfig,
@@ -54,6 +56,7 @@ export const configFiles = {
 };
 
 export const programFolderNames = {
+  schoolGeneral:'schoolGeneral',
   studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
   teacherAttendance: 'sch_att',
@@ -77,6 +80,7 @@ export const programFolderNames = {
 }
 
 export const stateProgramsFolderNames = {
+  schoolGeneral:'',
   studentAiAttendance:'',
   studentEnrollment:'',
   schoolLibrary:'',
