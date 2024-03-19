@@ -161,6 +161,21 @@ bigNumberMetrics: any = [];
       this.filters = filters
       this.updateReportsData()
           }
+    // filtersUpdated(filters: any) {
+    //   this.reportsData = [];
+    //   this.filters = filters;
+      
+    //   // Find the filter with name 'acdemic_year'
+    //   const academicYearFilter = this.filters.find((filter: any) => filter.name === 'acdemic_year');
+      
+    //   // If the filter is found and it has a value, assign it to startDate
+    //   if (academicYearFilter && academicYearFilter.value) {
+    //     this.startDate = academicYearFilter.value;
+    //   }
+    
+    //   // Update the reports data
+    //   this.updateReportsData();
+    // }
 
   timeSeriesUpdated(event: any): void {
     if (event?.startDate !== null && event?.endDate !== null) {

@@ -535,24 +535,40 @@ coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
 coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
 coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
 from(SELECT 
-        d.district_name,
-        SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-        sum(distinct clsrms_pri) as pri_cls,
-        sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-        sum (distinct clsrms_upr) as upr_cls,
-        sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-        sum (distinct clsrms_sec) as sec_cls,
-        sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-        sum (distinct clsrms_hsec) as hsec_cls
-    FROM 
-        school_general.sch_enr_fresh sef
-       left join
-       dimensions.district d on sef.district_id = d.district_id 
-	LEFT JOIN
-	dimensions.academic_year ay on sef.ac_year = ay.ac_year
-        
-     GROUP BY
-       d.district_name,sef.school_id) 
+    d.district_name,
+   SUM(
+        CASE WHEN sef.item_group = '1' THEN
+            sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+        ELSE 0 END
+    ) AS pri_students,
+     sum(distinct clsrms_pri) as pri_cls,
+    SUM(
+        CASE WHEN sef.item_group = '1' THEN
+            sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+        ELSE 0 END
+    ) AS upr_students,
+    sum (distinct clsrms_upr) as upr_cls,
+    SUM(
+        CASE WHEN sef.item_group = '1' THEN
+            sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+        ELSE 0 END
+    ) AS sec_students,
+    sum (distinct clsrms_sec) as sec_cls,
+    SUM(
+        CASE WHEN sef.item_group = '1' THEN
+            sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+        ELSE 0 END
+    ) AS hsec_students,
+   sum (distinct clsrms_hsec) as hsec_cls
+FROM 
+    school_general.sch_enr_fresh sef
+LEFT JOIN
+    dimensions.district d ON sef.district_id = d.district_id 
+LEFT JOIN
+    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+
+GROUP BY
+    d.district_name, sef.school_id) 
        as sub
        group by sub.district_name `
                 },
@@ -560,32 +576,48 @@ from(SELECT
                     "queries": {
                         "table": `
                         select 
-district_name,
-coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-from(SELECT 
-        d.district_name,
-        SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-        sum(distinct clsrms_pri) as pri_cls,
-        sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-        sum (distinct clsrms_upr) as upr_cls,
-        sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-        sum (distinct clsrms_sec) as sec_cls,
-        sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-        sum (distinct clsrms_hsec) as hsec_cls
-    FROM 
-        school_general.sch_enr_fresh sef
-       left join
-       dimensions.district d on sef.district_id = d.district_id 
-	LEFT JOIN
-	dimensions.academic_year ay on sef.ac_year = ay.ac_year
-        
-     GROUP BY
-       d.district_name,sef.school_id) 
-       as sub
-       group by sub.district_name`,
+                        district_name,
+                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
+                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
+                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        from(SELECT 
+                            d.district_name,
+                           SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                                ELSE 0 END
+                            ) AS pri_students,
+                             sum(distinct clsrms_pri) as pri_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                                ELSE 0 END
+                            ) AS upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                                ELSE 0 END
+                            ) AS sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                                ELSE 0 END
+                            ) AS hsec_students,
+                           sum (distinct clsrms_hsec) as hsec_cls
+                        FROM 
+                            school_general.sch_enr_fresh sef
+                        LEFT JOIN
+                            dimensions.district d ON sef.district_id = d.district_id 
+                        LEFT JOIN
+                            dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        
+                        GROUP BY
+                            d.district_name, sef.school_id) 
+                               as sub
+                               group by sub.district_name`,
                     },
                     "level": "school"
                 }
@@ -604,15 +636,31 @@ from(SELECT
                     coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                     from(SELECT 
                             b.block_name,
-                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                            sum(distinct clsrms_pri) as pri_cls,
-                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                            sum (distinct clsrms_hsec) as hsec_cls
-                        FROM 
+                            SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                            ELSE 0 end
+                        ) AS pri_students,
+                         sum(distinct clsrms_pri) as pri_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                            ELSE 0 END
+                        ) AS upr_students,
+                        sum (distinct clsrms_upr) as upr_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                            ELSE 0 END
+                        ) AS sec_students,
+                        sum (distinct clsrms_sec) as sec_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                            ELSE 0 END
+                        ) AS hsec_students,
+                       sum (distinct clsrms_hsec) as hsec_cls
+                       FROM 
                             school_general.sch_enr_fresh sef
                            left join
                            dimensions.district d on sef.district_id = d.district_id 
@@ -621,7 +669,7 @@ from(SELECT
                     LEFT JOIN
                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                     WHERE 
-                             sef.district_id = {district_id}
+                           sef.district_id = {district_id}
                          GROUP BY
                            b.block_name,sef.school_id) 
                            as sub
@@ -637,15 +685,31 @@ from(SELECT
                         coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                         from(SELECT 
                                 b.block_name,
-                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                                sum(distinct clsrms_pri) as pri_cls,
-                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                                sum (distinct clsrms_upr) as upr_cls,
-                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                                sum (distinct clsrms_sec) as sec_cls,
-                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                                sum (distinct clsrms_hsec) as hsec_cls
-                            FROM 
+                                SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                                ELSE 0 end
+                            ) AS pri_students,
+                             sum(distinct clsrms_pri) as pri_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                                ELSE 0 END
+                            ) AS upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                                ELSE 0 END
+                            ) AS sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                                ELSE 0 END
+                            ) AS hsec_students,
+                           sum (distinct clsrms_hsec) as hsec_cls
+                           FROM 
                                 school_general.sch_enr_fresh sef
                                left join
                                dimensions.district d on sef.district_id = d.district_id 
@@ -654,7 +718,7 @@ from(SELECT
                         LEFT JOIN
                             dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                         WHERE 
-                                 sef.district_id = {district_id}
+                               sef.district_id = {district_id}
                              GROUP BY
                                b.block_name,sef.school_id) 
                                as sub
@@ -678,15 +742,31 @@ from(SELECT
                     coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                     from(SELECT 
                             c.cluster_name,
-                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                            sum(distinct clsrms_pri) as pri_cls,
-                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                            sum (distinct clsrms_hsec) as hsec_cls
-                        FROM 
+                            SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                            ELSE 0 END
+                        ) AS pri_students,
+                         sum(distinct clsrms_pri) as pri_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                            ELSE 0 END
+                        ) AS upr_students,
+                        sum (distinct clsrms_upr) as upr_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                            ELSE 0 END
+                        ) AS sec_students,
+                        sum (distinct clsrms_sec) as sec_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                            ELSE 0 END
+                        ) AS hsec_students,
+                       sum (distinct clsrms_hsec) as hsec_cls
+                       FROM 
                             school_general.sch_enr_fresh sef
                            left join
                            dimensions.district d on sef.district_id = d.district_id 
@@ -697,7 +777,7 @@ from(SELECT
                         LEFT JOIN
                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                     WHERE 
-                             sef.block_id = {block_id}
+                            sef.block_id = {block_id}
                          GROUP BY
                           c.cluster_name,sef.school_id) 
                            as sub
@@ -714,15 +794,31 @@ from(SELECT
                         coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                         from(SELECT 
                                 c.cluster_name,
-                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                                sum(distinct clsrms_pri) as pri_cls,
-                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                                sum (distinct clsrms_upr) as upr_cls,
-                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                                sum (distinct clsrms_sec) as sec_cls,
-                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                                sum (distinct clsrms_hsec) as hsec_cls
-                            FROM 
+                                SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                                ELSE 0 END
+                            ) AS pri_students,
+                             sum(distinct clsrms_pri) as pri_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                                ELSE 0 END
+                            ) AS upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                                ELSE 0 END
+                            ) AS sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                                ELSE 0 END
+                            ) AS hsec_students,
+                           sum (distinct clsrms_hsec) as hsec_cls
+                           FROM 
                                 school_general.sch_enr_fresh sef
                                left join
                                dimensions.district d on sef.district_id = d.district_id 
@@ -733,7 +829,7 @@ from(SELECT
                             LEFT JOIN
                             dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                         WHERE 
-                                 sef.block_id = {block_id}
+                                sef.block_id = {block_id}
                              GROUP BY
                               c.cluster_name,sef.school_id) 
                                as sub
@@ -757,15 +853,31 @@ from(SELECT
                     coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                     from(SELECT 
                             sch.school_name,
-                            SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                            sum(distinct clsrms_pri) as pri_cls,
-                            sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                            sum (distinct clsrms_hsec) as hsec_cls
-                        FROM 
+                            SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                            ELSE 0 END
+                        ) AS pri_students,
+                         sum(distinct clsrms_pri) as pri_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                            ELSE 0 END
+                        ) AS upr_students,
+                        sum (distinct clsrms_upr) as upr_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                            ELSE 0 END
+                        ) AS sec_students,
+                        sum (distinct clsrms_sec) as sec_cls,
+                        SUM(
+                            CASE WHEN sef.item_group = '1' THEN
+                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                            ELSE 0 END
+                        ) AS hsec_students,
+                       sum (distinct clsrms_hsec) as hsec_cls
+                       FROM 
                             school_general.sch_enr_fresh sef
                            left join
                            dimensions.district d on sef.district_id = d.district_id 
@@ -778,7 +890,7 @@ from(SELECT
                         LEFT JOIN
                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                     WHERE 
-                            sef.cluster_id = {cluster_id}
+                             sef.cluster_id = {cluster_id}
                          GROUP BY
                           sch.school_name,sef.school_id) 
                            as sub
@@ -795,15 +907,31 @@ from(SELECT
                         coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
                         from(SELECT 
                                 sch.school_name,
-                                SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-                                sum(distinct clsrms_pri) as pri_cls,
-                                sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-                                sum (distinct clsrms_upr) as upr_cls,
-                                sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-                                sum (distinct clsrms_sec) as sec_cls,
-                                sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students,
-                                sum (distinct clsrms_hsec) as hsec_cls
-                            FROM 
+                                SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
+                                ELSE 0 END
+                            ) AS pri_students,
+                             sum(distinct clsrms_pri) as pri_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
+                                ELSE 0 END
+                            ) AS upr_students,
+                            sum (distinct clsrms_upr) as upr_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
+                                ELSE 0 END
+                            ) AS sec_students,
+                            sum (distinct clsrms_sec) as sec_cls,
+                            SUM(
+                                CASE WHEN sef.item_group = '1' THEN
+                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+                                ELSE 0 END
+                            ) AS hsec_students,
+                           sum (distinct clsrms_hsec) as hsec_cls
+                           FROM 
                                 school_general.sch_enr_fresh sef
                                left join
                                dimensions.district d on sef.district_id = d.district_id 
@@ -816,11 +944,11 @@ from(SELECT
                             LEFT JOIN
                             dimensions.academic_year ay on sef.ac_year = ay.ac_year
                                         WHERE 
-                                sef.cluster_id = {cluster_id}
+                                 sef.cluster_id = {cluster_id}
                              GROUP BY
                               sch.school_name,sef.school_id) 
                                as sub
-                               group by sub.school_name 
+                               group by sub.school_name
                     `,
                     },
                     "level": "school"
@@ -4414,6 +4542,7 @@ group by sub.district_name `,
         
     }
 },
+
 
 //pat bignumber1
 

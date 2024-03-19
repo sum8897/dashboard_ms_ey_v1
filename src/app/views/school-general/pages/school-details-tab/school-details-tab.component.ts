@@ -162,6 +162,8 @@ bigNumberMetrics: any = [];
       this.filters = filters
       this.updateReportsData()
           }
+   
+    
 
   timeSeriesUpdated(event: any): void {
     if (event?.startDate !== null && event?.endDate !== null) {

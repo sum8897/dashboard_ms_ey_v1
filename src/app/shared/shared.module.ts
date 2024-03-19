@@ -49,7 +49,8 @@ import { BreadcrumbComponentComponent } from './components/breadcrumb-component/
 import { SbBarChartComponent } from './components/charts/sb-bar-chart/sb-bar-chart.component';
 import { DashletModule, DataService } from '@project-sunbird/sb-dashlet';
 import { MaterialHeatChartDrilldownTableComponent } from './components/tables/material-heat-chart-drilldown-table/material-heat-chart-drilldown-table.component';
-import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule, } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core'; // Add this line
 import { MatIconModule } from '@angular/material/icon';
@@ -66,6 +67,7 @@ const IMPORTS: any[] = [
   MatDialogModule,
   MatFormFieldModule,
   MatTableModule,
+  MatSelectModule,
   MatSortModule,
   MatTooltipModule,
   NgSelectModule,

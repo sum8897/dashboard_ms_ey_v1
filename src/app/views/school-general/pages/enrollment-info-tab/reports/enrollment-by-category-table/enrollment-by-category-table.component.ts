@@ -177,6 +177,8 @@ export class EnrollmentByCategoryTableComponent implements OnInit, OnDestroy {
           let days = endDate.getDate() - this.compareDateRange;
           let startDate = new Date();
           startDate.setDate(days)
+          // let startDate = "2022-23";
+
           
           onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
           console.log('237',this.startDate,this.endDate)
