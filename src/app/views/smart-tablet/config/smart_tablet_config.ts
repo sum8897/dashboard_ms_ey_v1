@@ -418,43 +418,55 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    where 
-                    te.date between startDate and endDate  
-                    group by
-                    te.district_id,
-                    d.district_name ) as sum_query
+                    "bigNumber": `  SELECT
+                    SUM(device_count) AS connected
+                FROM (
+                    SELECT
+                        time_interval,
+                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                    FROM
+                        smart_classroom.smartclassroom sc
+                    JOIN
+                        dimensions.district d ON sc.district_id = d.district_id
+                    CROSS JOIN LATERAL
+                        (VALUES
+                            ('last_1hr', current_date - interval '1 hour', current_date),
+                            ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                            ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                            ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                            ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                            ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                        ) AS intervals(time_interval, interval_start, interval_end)
+                    GROUP BY
+                        time_interval
+                ) AS subquery;
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        where 
-                        te.date between startDate and endDate  
-                        group by
-                        te.district_id,
-                        d.district_name ) as sum_query
+                        "bigNumber": `  SELECT
+                        SUM(device_count) AS connected
+                    FROM (
+                        SELECT
+                            time_interval,
+                            COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                        FROM
+                            smart_classroom.smartclassroom sc
+                        JOIN
+                            dimensions.district d ON sc.district_id = d.district_id
+                        CROSS JOIN LATERAL
+                            (VALUES
+                                ('last_1hr', current_date - interval '1 hour', current_date),
+                                ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                                ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                                ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                                ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                                ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                            ) AS intervals(time_interval, interval_start, interval_end)
+                        GROUP BY
+                            time_interval
+                    ) AS subquery;
                         `
                     },
                     "level": "district"
@@ -993,35 +1005,63 @@ tablet_complete_bignumber: {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "barChart": `SELECT
-                    ss.subjectname as level,  
-                    COUNT(ss.subjectname) AS count_of_subject  
-                    FROM                         
-                    teleeducation.studio_sessions ss          
-                    left join                  
-                    dimensions.tele_medium_dimension_data tmdd on ss.tele_medium_name = tmdd.tele_medium_name  
-                    left join                    
-                    dimensions.tele_class_dimension_data tcdd  on ss.tele_class_name = tcdd.tele_class_name   
-                    WHERE       
-                    date BETWEEN startDate AND endDate               
-                    GROUP BY                        
-                    ss.subjectname  
+                    time_interval as level,
+                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                FROM
+                    smart_classroom.smartclassroom sc
+                JOIN
+                    dimensions.district d ON sc.district_id = d.district_id
+                CROSS JOIN LATERAL
+                    (VALUES
+                        ('last_1hr', current_date - interval '1 hour', current_date),
+                        ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                        ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
+                        ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
+                        ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
+                        ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
+                    ) AS intervals(time_interval, interval_start, interval_end)
+                GROUP BY
+                    time_interval
+                ORDER BY
+                    CASE time_interval
+                        WHEN 'last_1hr' THEN 1
+                        WHEN '1hr_1day' THEN 2
+                        WHEN '1day_1wk' THEN 3
+                        WHEN '1wk_1month' THEN 4
+                        WHEN '1month_2month' THEN 5
+                        WHEN '2month_3month' THEN 6
+                    END; 
                     `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT
-                        ss.subjectname as level,  
-                        COUNT(ss.subjectname) AS count_of_subject  
-                        FROM                         
-                        teleeducation.studio_sessions ss          
-                        left join                  
-                        dimensions.tele_medium_dimension_data tmdd on ss.tele_medium_name = tmdd.tele_medium_name  
-                        left join                    
-                        dimensions.tele_class_dimension_data tcdd  on ss.tele_class_name = tcdd.tele_class_name   
-                        WHERE       
-                        date BETWEEN startDate AND endDate               
-                        GROUP BY                        
-                        ss.subjectname  
+                        time_interval as level,
+                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                    FROM
+                        smart_classroom.smartclassroom sc
+                    JOIN
+                        dimensions.district d ON sc.district_id = d.district_id
+                    CROSS JOIN LATERAL
+                        (VALUES
+                            ('last_1hr', current_date - interval '1 hour', current_date),
+                            ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                            ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
+                            ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
+                            ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
+                            ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
+                        ) AS intervals(time_interval, interval_start, interval_end)
+                    GROUP BY
+                        time_interval
+                    ORDER BY
+                        CASE time_interval
+                            WHEN 'last_1hr' THEN 1
+                            WHEN '1hr_1day' THEN 2
+                            WHEN '1day_1wk' THEN 3
+                            WHEN '1wk_1month' THEN 4
+                            WHEN '1month_2month' THEN 5
+                            WHEN '2month_3month' THEN 6
+                        END;
                         `
                     
                     },
@@ -1236,8 +1276,8 @@ tablet_complete_bignumber: {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Count",
-                "metricValueProp": "count_of_subject",
+                "metricLabelProp": "Connected",
+                "metricValueProp": "device_count",
                 "yAxis": {
                     "title": "Count"
                 },
