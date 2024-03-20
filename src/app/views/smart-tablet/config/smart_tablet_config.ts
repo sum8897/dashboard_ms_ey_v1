@@ -1285,30 +1285,32 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":` select
-                ROUND((connected *100/total_count),2) as connected_perc
-                from(
+                "bigNumber":` SELECT
+                ROUND((connected * 100.0 / total_count), 2) AS connected_perc
+            FROM (
                 SELECT
-                 COUNT(*) AS total_count,
-                 count(CASE WHEN "Event" = 'on' THEN "Device Name" end) as connected
-             FROM
-                 smart_tablet.tablet_on_off
-             WHERE
-                 "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                    COUNT(*) AS total_count,
+                    COUNT(CASE WHEN "Event" = 'on' THEN "Device Name" END) AS connected
+                FROM
+                    smart_tablet.tablet_on_off
+                WHERE
+                    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)
+            ) AS sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `select
-                    ROUND((connected *100/total_count),2) as connected_perc
-                    from(
+                    "bigNumber": `SELECT
+                    ROUND((connected * 100.0 / total_count), 2) AS connected_perc
+                FROM (
                     SELECT
-                     COUNT(*) AS total_count,
-                     count(CASE WHEN "Event" = 'on' THEN "Device Name" end) as connected
-                 FROM
-                     smart_tablet.tablet_on_off
-                 WHERE
-                     "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                        COUNT(*) AS total_count,
+                        COUNT(CASE WHEN "Event" = 'on' THEN "Device Name" END) AS connected
+                    FROM
+                        smart_tablet.tablet_on_off
+                    WHERE
+                        "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)
+                ) AS sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1335,30 +1337,30 @@ student_attendance_bignumber2: {
             "timeSeriesQueries": {
                 "bigNumber":` 
                 select
-                ROUND((not_connected *100/total_count), 2) as not_connected_perc
-                from(
-                SELECT
-                 COUNT(*) AS total_count,
-                 count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
-             FROM
-                 smart_tablet.tablet_on_off
-             WHERE
-                 "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+  ROUND((not_connected * 100.0 / total_count), 2) AS not_connected_perc
+   from(
+   SELECT
+    COUNT(*) AS total_count,
+    count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
+FROM
+    smart_tablet.tablet_on_off
+WHERE
+    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": ` 
                     select
-                    ROUND((not_connected *100/total_count), 2) as not_connected_perc
-                    from(
-                    SELECT
-                     COUNT(*) AS total_count,
-                     count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
-                 FROM
-                     smart_tablet.tablet_on_off
-                 WHERE
-                     "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+  ROUND((not_connected * 100.0 / total_count), 2) AS not_connected_perc
+   from(
+   SELECT
+    COUNT(*) AS total_count,
+    count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
+FROM
+    smart_tablet.tablet_on_off
+WHERE
+    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
