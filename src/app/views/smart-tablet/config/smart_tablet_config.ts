@@ -418,59 +418,15 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `  SELECT
-                    SUM(device_count) AS connected
-                    FROM (
-                    SELECT
-                    time_interval,
-                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                    FROM
-                    smart_classroom.smartclassroom sc
-                    JOIN
-                    dimensions.district d ON sc.district_id = d.district_id
-                    CROSS JOIN LATERAL
-                    (VALUES
-                    ('last_1hr', current_date - interval '1 hour', current_date),
-                    ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                    ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                    ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                    ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                    ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                    ) AS intervals(time_interval, interval_start, interval_end)
-                    WHERE
-                        sc.last_power_on_date between startDate AND endDate
-                    GROUP BY
-                    time_interval
-                    ) AS subquery;
+                    "bigNumber": `  select count(*) as connected from smart_tablet.tablet_on_off too where "Event" = 'on'
+                    and "Date" between startDate and endDate
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `  SELECT
-                        SUM(device_count) AS connected
-                        FROM (
-                        SELECT
-                        time_interval,
-                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                        FROM
-                        smart_classroom.smartclassroom sc
-                        JOIN
-                        dimensions.district d ON sc.district_id = d.district_id
-                        CROSS JOIN LATERAL
-                        (VALUES
-                        ('last_1hr', current_date - interval '1 hour', current_date),
-                        ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                        ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                        ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                        ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                        ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                        ) AS intervals(time_interval, interval_start, interval_end)
-                        WHERE
-                            sc.last_power_on_date between startDate AND endDate
-                        GROUP BY
-                        time_interval
-                        ) AS subquery;
+                        "bigNumber": `  select count(*) as connected from smart_tablet.tablet_on_off too where "Event" = 'on'
+                        and "Date" between startDate and endDate
                         `
                     },
                     "level": "district"
@@ -726,43 +682,15 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    where 
-                    te.date between startDate and endDate 
-                    group by
-                    te.district_id,
-                    d.district_name ) as sum_query
+                    "bigNumber": `select count(*) as not_connected from smart_tablet.tablet_on_off too where "Event" = 'off'
+                    and "Date" between startDate and endDate
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        where 
-                        te.date between startDate and endDate 
-                        group by
-                        te.district_id,
-                        d.district_name ) as sum_query
+                        "bigNumber": `select count(*) as not_connected from smart_tablet.tablet_on_off too where "Event" = 'off'
+                        and "Date" between startDate and endDate
                         `
                     },
                     "level": "district"
@@ -990,7 +918,7 @@ tablet_complete_bignumber: {
             "bigNumber": {
                 "title": "Not Connected",
                 "valueSuffix": '',
-                "property": 'notconnected'
+                "property": 'not_connected'
             }
         }
     },
@@ -1008,69 +936,46 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT
-                    time_interval as level,
-                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                    FROM
-                    smart_classroom.smartclassroom sc
-                    JOIN
-                    dimensions.district d ON sc.district_id = d.district_id
-                    CROSS JOIN LATERAL
-                    (VALUES
-                    ('last_1hr', current_date - interval '1 hour', current_date),
-                    ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                    ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
-                    ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
-                    ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
-                    ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
-                    ) AS intervals(time_interval, interval_start, interval_end)
-                    WHERE
-                        sc.last_power_on_date between startDate AND endDate
+                    "barChart": `
+                    SELECT
+                        status as level,
+                        COUNT("Device Name") AS count
+                    FROM (
+                        SELECT
+                            CASE WHEN "Event" = 'on' THEN 'connected'
+                                 WHEN "Event" = 'off' THEN 'not_connected'
+                            END AS status,
+                            "Device Name"
+                        FROM
+                            smart_tablet.tablet_on_off
+                        WHERE
+                            "Date" BETWEEN startDate AND endDate
+                    ) AS subquery
                     GROUP BY
-                    time_interval
-                    ORDER BY
-                    CASE time_interval
-                    WHEN 'last_1hr' THEN 1
-                    WHEN '1hr_1day' THEN 2
-                    WHEN '1day_1wk' THEN 3
-                    WHEN '1wk_1month' THEN 4
-                    WHEN '1month_2month' THEN 5
-                    WHEN '2month_3month' THEN 6
-                    END
-                    
+                        status;
+                     
                     `,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT
-                        time_interval as level,
-                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                        FROM
-                        smart_classroom.smartclassroom sc
-                        JOIN
-                        dimensions.district d ON sc.district_id = d.district_id
-                        CROSS JOIN LATERAL
-                        (VALUES
-                        ('last_1hr', current_date - interval '1 hour', current_date),
-                        ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                        ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
-                        ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
-                        ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
-                        ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
-                        ) AS intervals(time_interval, interval_start, interval_end)
-                        WHERE
-                            sc.last_power_on_date between startDate AND endDate
+                        "barChart":`
+                        SELECT
+                            status as level,
+                            COUNT("Device Name") AS count
+                        FROM (
+                            SELECT
+                                CASE WHEN "Event" = 'on' THEN 'connected'
+                                     WHEN "Event" = 'off' THEN 'not_connected'
+                                END AS status,
+                                "Device Name"
+                            FROM
+                                smart_tablet.tablet_on_off
+                            WHERE
+                                "Date" BETWEEN startDate AND endDate
+                        ) AS subquery
                         GROUP BY
-                        time_interval
-                        ORDER BY
-                        CASE time_interval
-                        WHEN 'last_1hr' THEN 1
-                        WHEN '1hr_1day' THEN 2
-                        WHEN '1day_1wk' THEN 3
-                        WHEN '1wk_1month' THEN 4
-                        WHEN '1month_2month' THEN 5
-                        WHEN '2month_3month' THEN 6
-                        END                        
+                            status;
+                                             
                         `
                     
                     },
@@ -1285,8 +1190,8 @@ tablet_complete_bignumber: {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": " Not Connected",
-                "metricValueProp": "device_count",
+                "metricLabelProp": " Status",
+                "metricValueProp": "count",
                 "yAxis": {
                     "title": "Device Count"
                 },
@@ -1380,54 +1285,30 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":` SELECT
-                SUM(device_count) AS connected
-            FROM (
+                "bigNumber":` select
+                ROUND((connected *100/total_count),2) as connected_perc
+                from(
                 SELECT
-                    time_interval,
-                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                FROM
-                    smart_classroom.smartclassroom sc
-                JOIN
-                    dimensions.district d ON sc.district_id = d.district_id
-                CROSS JOIN LATERAL
-                    (VALUES
-                        ('last_1hr', current_date - interval '1 hour', current_date),
-                        ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                        ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                        ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                        ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                        ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                    ) AS intervals(time_interval, interval_start, interval_end)
-                GROUP BY
-                    time_interval
-            ) AS subquery;`,
+                 COUNT(*) AS total_count,
+                 count(CASE WHEN "Event" = 'on' THEN "Device Name" end) as connected
+             FROM
+                 smart_tablet.tablet_on_off
+             WHERE
+                 "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": ` SELECT
-                    SUM(device_count) AS connected
-                FROM (
+                    "bigNumber": `select
+                    ROUND((connected *100/total_count),2) as connected_perc
+                    from(
                     SELECT
-                        time_interval,
-                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                    FROM
-                        smart_classroom.smartclassroom sc
-                    JOIN
-                        dimensions.district d ON sc.district_id = d.district_id
-                    CROSS JOIN LATERAL
-                        (VALUES
-                            ('last_1hr', current_date - interval '1 hour', current_date),
-                            ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                            ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                            ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                            ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                            ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                        ) AS intervals(time_interval, interval_start, interval_end)
-                    GROUP BY
-                        time_interval
-                ) AS subquery;`,
+                     COUNT(*) AS total_count,
+                     count(CASE WHEN "Event" = 'on' THEN "Device Name" end) as connected
+                 FROM
+                     smart_tablet.tablet_on_off
+                 WHERE
+                     "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1437,50 +1318,62 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": " Not Connected on 19/03/2024",
-            "valueSuffix": '',
-            "property": 'connected'
+            "title": "Connected % on 19/03/2024",
+            "valueSuffix": '%',
+            "property": 'connected_perc'
         }
     }
 },
-// student_attendance_bignumber2: {
-//     "label": "Total Enrolled Students",
-//     "filters": [
-//         {
-//             "name": "State",
-//             "labelProp": "state_name",
-//             "valueProp": "state_id",
-//             "hierarchyLevel": "1",
-//             "timeSeriesQueries": {
-//                 "bigNumber":` 
-//                 SELECT
-//                 ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-//                 FROM teleeducation.tele_education te
-//                 WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
-//                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "bigNumber": ` 
-//                     SELECT
-//                     ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-//                     FROM teleeducation.tele_education te
-//                     WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
-//                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//                 },
-//                 "level": "district"
-//             }
-//         }
+student_attendance_bignumber2: {
+    "label": "Total Enrolled Students",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber":` 
+                select
+                ROUND((not_connected *100/total_count), 2) as not_connected_perc
+                from(
+                SELECT
+                 COUNT(*) AS total_count,
+                 count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
+             FROM
+                 smart_tablet.tablet_on_off
+             WHERE
+                 "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": ` 
+                    select
+                    ROUND((not_connected *100/total_count), 2) as not_connected_perc
+                    from(
+                    SELECT
+                     COUNT(*) AS total_count,
+                     count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
+                 FROM
+                     smart_tablet.tablet_on_off
+                 WHERE
+                     "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
         
-//     ],
-//     "options": {
-//         "bigNumber": {
-//             "title": "Not Connected on 21/02/2024",
-//             "valueSuffix": '%',
-//             "property": 'not_connected_perc'
-//         }
-//     }
-// },
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Not Connected % on 19/03/2024",
+            "valueSuffix": '%',
+            "property": 'not_connected_perc'
+        }
+    }
+},
 
 
 
