@@ -418,15 +418,27 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `  select count(*) as connected from smart_tablet.tablet_on_off too where "Event" = 'on'
-                    and "Date" between startDate and endDate
+                    "bigNumber": ` SELECT ROUND(AVG(Active_Devices), 2) AS Average_Active_Devices
+                    FROM (
+                        SELECT COUNT(*) AS Active_Devices
+                        FROM smart_tablet.tablet_on_off
+                        WHERE ("Event" = 'off' OR "Event" = 'on')
+                        AND "Date" BETWEEN startDate AND endDate
+                        GROUP BY "Date"
+                    ) AS Active_Devices_Count;
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `  select count(*) as connected from smart_tablet.tablet_on_off too where "Event" = 'on'
-                        and "Date" between startDate and endDate
+                        "bigNumber": `  SELECT ROUND(AVG(Active_Devices), 2) AS Average_Active_Devices
+                        FROM (
+                            SELECT COUNT(*) AS Active_Devices
+                            FROM smart_tablet.tablet_on_off
+                            WHERE ("Event" = 'off' OR "Event" = 'on')
+                            AND "Date" BETWEEN startDate AND endDate
+                            GROUP BY "Date"
+                        ) AS Active_Devices_Count;
                         `
                     },
                     "level": "district"
@@ -667,7 +679,7 @@ tablet_complete_bignumber: {
             "bigNumber": {
                 "title": "connected",
                 "valueSuffix": '',
-                "property": 'connected'
+                "property": 'average_active_devices'
             }
         }
     },
@@ -682,15 +694,29 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `select count(*) as not_connected from smart_tablet.tablet_on_off too where "Event" = 'off'
-                    and "Date" between startDate and endDate
+                    "bigNumber": `SELECT 
+                    51899 - ROUND(AVG(Active_Devices), 2) AS Average_Non_Active_Devices
+                FROM (
+                    SELECT COUNT(*) AS Active_Devices
+                    FROM smart_tablet.tablet_on_off
+                    WHERE ("Event" = 'off' OR "Event" = 'on')
+                    AND "Date" BETWEEN startDate AND endDate
+                    GROUP BY "Date"
+                ) AS Active_Devices_Count;
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select count(*) as not_connected from smart_tablet.tablet_on_off too where "Event" = 'off'
-                        and "Date" between startDate and endDate
+                        "bigNumber": `SELECT 
+                        51899 - ROUND(AVG(Active_Devices), 2) AS Average_Non_Active_Devices
+                    FROM (
+                        SELECT COUNT(*) AS Active_Devices
+                        FROM smart_tablet.tablet_on_off
+                        WHERE ("Event" = 'off' OR "Event" = 'on')
+                        AND "Date" BETWEEN startDate AND endDate
+                        GROUP BY "Date"
+                    ) AS Active_Devices_Count;
                         `
                     },
                     "level": "district"
@@ -918,7 +944,7 @@ tablet_complete_bignumber: {
             "bigNumber": {
                 "title": "Not Connected",
                 "valueSuffix": '',
-                "property": 'not_connected'
+                "property": 'average_non_active_devices'
             }
         }
     },
@@ -937,44 +963,50 @@ tablet_complete_bignumber: {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "barChart": `
-                    SELECT
-                        status as level,
-                        COUNT("Device Name") AS count
+                    SELECT 'Avg Active' AS level, ROUND(AVG(Active_Devices), 0) AS Count
                     FROM (
-                        SELECT
-                            CASE WHEN "Event" = 'on' THEN 'connected'
-                                 WHEN "Event" = 'off' THEN 'not_connected'
-                            END AS status,
-                            "Device Name"
-                        FROM
-                            smart_tablet.tablet_on_off
-                        WHERE
-                            "Date" BETWEEN startDate AND endDate
-                    ) AS subquery
-                    GROUP BY
-                        status;
+                        SELECT COUNT(*) AS Active_Devices
+                        FROM smart_tablet.tablet_on_off
+                        WHERE ("Event" = 'off' OR "Event" = 'on')
+                        AND "Date" BETWEEN startDate AND endDate
+                        GROUP BY "Date"
+                    ) AS Active_Devices_Count
+                     
+                    UNION ALL
+                     
+                    SELECT 'Avg Non Active' AS Status, (51899 - ROUND(AVG(Active_Devices), 0)) AS Count
+                    FROM (
+                        SELECT COUNT(*) AS Active_Devices
+                        FROM smart_tablet.tablet_on_off
+                        WHERE ("Event" = 'off' OR "Event" = 'on')
+                        AND "Date" BETWEEN startDate AND endDate
+                        GROUP BY "Date"
+                    ) AS Active_Devices_Count;
                      
                     `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`
-                        SELECT
-                            status as level,
-                            COUNT("Device Name") AS count
-                        FROM (
-                            SELECT
-                                CASE WHEN "Event" = 'on' THEN 'connected'
-                                     WHEN "Event" = 'off' THEN 'not_connected'
-                                END AS status,
-                                "Device Name"
-                            FROM
-                                smart_tablet.tablet_on_off
-                            WHERE
-                                "Date" BETWEEN startDate AND endDate
-                        ) AS subquery
-                        GROUP BY
-                            status;
+                        SELECT 'Avg Active' AS level, ROUND(AVG(Active_Devices), 0) AS Count
+FROM (
+    SELECT COUNT(*) AS Active_Devices
+    FROM smart_tablet.tablet_on_off
+    WHERE ("Event" = 'off' OR "Event" = 'on')
+    AND "Date" BETWEEN startDate AND endDate
+    GROUP BY "Date"
+) AS Active_Devices_Count
+ 
+UNION ALL
+ 
+SELECT 'Avg Non Active' AS Status, (51899 - ROUND(AVG(Active_Devices), 0)) AS Count
+FROM (
+    SELECT COUNT(*) AS Active_Devices
+    FROM smart_tablet.tablet_on_off
+    WHERE ("Event" = 'off' OR "Event" = 'on')
+    AND "Date" BETWEEN startDate AND endDate
+    GROUP BY "Date"
+) AS Active_Devices_Count;
                                              
                         `
                     
@@ -1190,7 +1222,7 @@ tablet_complete_bignumber: {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": " Status",
+                "metricLabelProp": " Status (Total available device-51899)",
                 "metricValueProp": "count",
                 "yAxis": {
                     "title": "Device Count"
@@ -1199,7 +1231,7 @@ tablet_complete_bignumber: {
                     "linkedReport": "tas_average_attendance_bignumber"
                 },
                 "xAxis": {
-                    "title": "Duration",
+                    "title": "Status",
                     "label": "level",
                     "value": "level",
     
@@ -1285,32 +1317,28 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":` SELECT
-                ROUND((connected * 100.0 / total_count), 2) AS connected_perc
+                "bigNumber":` SELECT 
+                ROUND((AVG(Active_Devices) / 51899) * 100, 2) AS Percentage_Active_Devices
             FROM (
-                SELECT
-                    COUNT(*) AS total_count,
-                    COUNT(CASE WHEN "Event" = 'on' THEN "Device Name" END) AS connected
-                FROM
-                    smart_tablet.tablet_on_off
-                WHERE
-                    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)
-            ) AS sub;`,
+                SELECT COUNT(*) AS Active_Devices
+                FROM smart_tablet.tablet_on_off
+                WHERE ("Event" = 'off' OR "Event" = 'on')
+                AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
+                GROUP BY "Date"
+            ) AS Active_Devices_Count;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
-                    ROUND((connected * 100.0 / total_count), 2) AS connected_perc
+                    "bigNumber": `SELECT 
+                    ROUND((AVG(Active_Devices) / 51899) * 100, 2) AS Percentage_Active_Devices
                 FROM (
-                    SELECT
-                        COUNT(*) AS total_count,
-                        COUNT(CASE WHEN "Event" = 'on' THEN "Device Name" END) AS connected
-                    FROM
-                        smart_tablet.tablet_on_off
-                    WHERE
-                        "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)
-                ) AS sub;`,
+                    SELECT COUNT(*) AS Active_Devices
+                    FROM smart_tablet.tablet_on_off
+                    WHERE ("Event" = 'off' OR "Event" = 'on')
+                    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
+                    GROUP BY "Date"
+                ) AS Active_Devices_Count;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1320,9 +1348,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Connected % on 19/03/2024",
+            "title": "Active Devices % on 19/03/2024",
             "valueSuffix": '%',
-            "property": 'connected_perc'
+            "property": 'percentage_active_devices'
         }
     }
 },
@@ -1336,31 +1364,29 @@ student_attendance_bignumber2: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":` 
-                select
-  ROUND((not_connected * 100.0 / total_count), 2) AS not_connected_perc
-   from(
-   SELECT
-    COUNT(*) AS total_count,
-    count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
-FROM
-    smart_tablet.tablet_on_off
-WHERE
-    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                SELECT 
+    ROUND(((51899 - AVG(Active_Devices)) / 51899) * 100, 2) AS Percentage_Non_Active_Devices
+FROM (
+    SELECT COUNT(*) AS Active_Devices
+    FROM smart_tablet.tablet_on_off
+    WHERE ("Event" = 'off' OR "Event" = 'on')
+    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
+    GROUP BY "Date"
+) AS Active_Devices_Count;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": ` 
-                    select
-  ROUND((not_connected * 100.0 / total_count), 2) AS not_connected_perc
-   from(
-   SELECT
-    COUNT(*) AS total_count,
-    count(CASE WHEN "Event" = 'off' THEN "Device Name" end) as not_connected
-FROM
-    smart_tablet.tablet_on_off
-WHERE
-    "Date" = (SELECT MAX("Date") FROM smart_tablet.tablet_on_off)) as sub;`,
+                    SELECT 
+    ROUND(((51899 - AVG(Active_Devices)) / 51899) * 100, 2) AS Percentage_Non_Active_Devices
+FROM (
+    SELECT COUNT(*) AS Active_Devices
+    FROM smart_tablet.tablet_on_off
+    WHERE ("Event" = 'off' OR "Event" = 'on')
+    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
+    GROUP BY "Date"
+) AS Active_Devices_Count;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1370,9 +1396,9 @@ WHERE
     ],
     "options": {
         "bigNumber": {
-            "title": "Not Connected % on 19/03/2024",
+            "title": "Non Active Devices % on 19/03/2024",
             "valueSuffix": '%',
-            "property": 'not_connected_perc'
+            "property": 'percentage_non_active_devices'
         }
     }
 },

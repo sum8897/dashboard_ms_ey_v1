@@ -20,9 +20,9 @@ export class TabletCompleteBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total Connected"
+    reportName: "Average Active Devices"
   };
-  currentReportName: string = "Total Connected";
+  currentReportName: string = "Average Active Devices";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;

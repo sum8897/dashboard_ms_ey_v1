@@ -21,9 +21,9 @@ export class TabletNoncompleteBignumberComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Total Not Connected"
+    reportName: "Average Non Active Devices"
   };
-  currentReportName: string = "Total Not Connected";
+  currentReportName: string = "Average Non Active Devices";
   minDate: any;
   maxDate: any;
   compareDateRange: any = 7;
