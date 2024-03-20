@@ -1285,16 +1285,16 @@ tablet_complete_bignumber: {
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Connected",
+                "metricLabelProp": " Not Connected",
                 "metricValueProp": "device_count",
                 "yAxis": {
-                    "title": "Count"
+                    "title": "Device Count"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
                 },
                 "xAxis": {
-                    "title": "Subject",
+                    "title": "Duration",
                     "label": "level",
                     "value": "level",
     
@@ -1380,56 +1380,54 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
-                ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
-                FROM teleeducation.tele_education te
-                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
-                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-            },
-            "actions": {
-                "queries": {
-                    "bigNumber": `SELECT
-                    ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
-                    FROM teleeducation.tele_education te
-                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
-                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-                },
-                "level": "district"
-            }
-        }
-        
-    ],
-    "options": {
-        "bigNumber": {
-            "title": "Connected on 19/03/2024",
-            "valueSuffix": '%',
-            "property": 'connected_perc'
-        }
-    }
-},
-student_attendance_bignumber2: {
-    "label": "Total Enrolled Students",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "bigNumber":` 
+                "bigNumber":` SELECT
+                SUM(device_count) AS connected
+            FROM (
                 SELECT
-                ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-                FROM teleeducation.tele_education te
-                WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                    time_interval,
+                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                FROM
+                    smart_classroom.smartclassroom sc
+                JOIN
+                    dimensions.district d ON sc.district_id = d.district_id
+                CROSS JOIN LATERAL
+                    (VALUES
+                        ('last_1hr', current_date - interval '1 hour', current_date),
+                        ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                        ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                        ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                        ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                        ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                    ) AS intervals(time_interval, interval_start, interval_end)
+                GROUP BY
+                    time_interval
+            ) AS subquery;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": ` 
+                    "bigNumber": ` SELECT
+                    SUM(device_count) AS connected
+                FROM (
                     SELECT
-                    ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
-                    FROM teleeducation.tele_education te
-                    WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                        time_interval,
+                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                    FROM
+                        smart_classroom.smartclassroom sc
+                    JOIN
+                        dimensions.district d ON sc.district_id = d.district_id
+                    CROSS JOIN LATERAL
+                        (VALUES
+                            ('last_1hr', current_date - interval '1 hour', current_date),
+                            ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                            ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                            ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                            ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                            ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                        ) AS intervals(time_interval, interval_start, interval_end)
+                    GROUP BY
+                        time_interval
+                ) AS subquery;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1439,13 +1437,13 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Not Connected on 21/02/2024",
-            "valueSuffix": '%',
-            "property": 'not_connected_perc'
+            "title": " Not Connected on 19/03/2024",
+            "valueSuffix": '',
+            "property": 'connected'
         }
     }
 },
-// student_attendance_bignumber3: {
+// student_attendance_bignumber2: {
 //     "label": "Total Enrolled Students",
 //     "filters": [
 //         {
@@ -1454,24 +1452,20 @@ student_attendance_bignumber2: {
 //             "valueProp": "state_id",
 //             "hierarchyLevel": "1",
 //             "timeSeriesQueries": {
-//                 "bigNumber":`select
-//                 max
-//                 (
-//                 date
-//                 ) as date
-//                 from
-//                 teleeducation.tele_education te  `,
+//                 "bigNumber":` 
+//                 SELECT
+//                 ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+//                 FROM teleeducation.tele_education te
+//                 WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
 //                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
 //             },
 //             "actions": {
 //                 "queries": {
-//                     "bigNumber": `select
-//                     max
-//                     (
-//                     date
-//                     ) as date
-//                     from
-//                     teleeducation.tele_education te  `,
+//                     "bigNumber": ` 
+//                     SELECT
+//                     ROUND((cast(count(te.status) as DECIMAL(10,2))-sum(te.status)) * 100 / count(te.status),2) as not_connected_perc
+//                     FROM teleeducation.tele_education te
+//                     WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
 //                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
 //                 },
 //                 "level": "district"
@@ -1481,9 +1475,9 @@ student_attendance_bignumber2: {
 //     ],
 //     "options": {
 //         "bigNumber": {
-//             "title": "Date",
-//             "valueSuffix": '',
-//             "property": 'date'
+//             "title": "Not Connected on 21/02/2024",
+//             "valueSuffix": '%',
+//             "property": 'not_connected_perc'
 //         }
 //     }
 // },
