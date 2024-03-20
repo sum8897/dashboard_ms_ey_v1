@@ -420,26 +420,28 @@ tablet_complete_bignumber: {
                 "timeSeriesQueries": {
                     "bigNumber": `  SELECT
                     SUM(device_count) AS connected
-                FROM (
+                    FROM (
                     SELECT
-                        time_interval,
-                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                    time_interval,
+                    COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
                     FROM
-                        smart_classroom.smartclassroom sc
+                    smart_classroom.smartclassroom sc
                     JOIN
-                        dimensions.district d ON sc.district_id = d.district_id
+                    dimensions.district d ON sc.district_id = d.district_id
                     CROSS JOIN LATERAL
-                        (VALUES
-                            ('last_1hr', current_date - interval '1 hour', current_date),
-                            ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                            ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                            ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                            ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                            ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                        ) AS intervals(time_interval, interval_start, interval_end)
+                    (VALUES
+                    ('last_1hr', current_date - interval '1 hour', current_date),
+                    ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                    ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                    ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                    ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                    ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                    ) AS intervals(time_interval, interval_start, interval_end)
+                    WHERE
+                        sc.last_power_on_date between startDate AND endDate
                     GROUP BY
-                        time_interval
-                ) AS subquery;
+                    time_interval
+                    ) AS subquery;
                     `
 
                 },
@@ -447,26 +449,28 @@ tablet_complete_bignumber: {
                     "queries": {
                         "bigNumber": `  SELECT
                         SUM(device_count) AS connected
-                    FROM (
+                        FROM (
                         SELECT
-                            time_interval,
-                            COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
+                        time_interval,
+                        COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
                         FROM
-                            smart_classroom.smartclassroom sc
+                        smart_classroom.smartclassroom sc
                         JOIN
-                            dimensions.district d ON sc.district_id = d.district_id
+                        dimensions.district d ON sc.district_id = d.district_id
                         CROSS JOIN LATERAL
-                            (VALUES
-                                ('last_1hr', current_date - interval '1 hour', current_date),
-                                ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                                ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
-                                ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
-                                ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
-                                ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
-                            ) AS intervals(time_interval, interval_start, interval_end)
+                        (VALUES
+                        ('last_1hr', current_date - interval '1 hour', current_date),
+                        ('onehr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                        ('onedy_onewk', current_date - interval '1 week', current_date - interval '1 day'),
+                        ('onewk_onemnth', current_date - interval '1 month', current_date - interval '1 week'),
+                        ('onemnth_2m', current_date - interval '2 months', current_date - interval '1 month'),
+                        ('twomnth_threemnth', current_date - interval '3 months', current_date - interval '2 months')
+                        ) AS intervals(time_interval, interval_start, interval_end)
+                        WHERE
+                            sc.last_power_on_date between startDate AND endDate
                         GROUP BY
-                            time_interval
-                    ) AS subquery;
+                        time_interval
+                        ) AS subquery;
                         `
                     },
                     "level": "district"
@@ -1007,30 +1011,33 @@ tablet_complete_bignumber: {
                     "barChart": `SELECT
                     time_interval as level,
                     COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                FROM
+                    FROM
                     smart_classroom.smartclassroom sc
-                JOIN
+                    JOIN
                     dimensions.district d ON sc.district_id = d.district_id
-                CROSS JOIN LATERAL
+                    CROSS JOIN LATERAL
                     (VALUES
-                        ('last_1hr', current_date - interval '1 hour', current_date),
-                        ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                        ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
-                        ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
-                        ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
-                        ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
+                    ('last_1hr', current_date - interval '1 hour', current_date),
+                    ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                    ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
+                    ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
+                    ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
+                    ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
                     ) AS intervals(time_interval, interval_start, interval_end)
-                GROUP BY
+                    WHERE
+                        sc.last_power_on_date between startDate AND endDate
+                    GROUP BY
                     time_interval
-                ORDER BY
+                    ORDER BY
                     CASE time_interval
-                        WHEN 'last_1hr' THEN 1
-                        WHEN '1hr_1day' THEN 2
-                        WHEN '1day_1wk' THEN 3
-                        WHEN '1wk_1month' THEN 4
-                        WHEN '1month_2month' THEN 5
-                        WHEN '2month_3month' THEN 6
-                    END; 
+                    WHEN 'last_1hr' THEN 1
+                    WHEN '1hr_1day' THEN 2
+                    WHEN '1day_1wk' THEN 3
+                    WHEN '1wk_1month' THEN 4
+                    WHEN '1month_2month' THEN 5
+                    WHEN '2month_3month' THEN 6
+                    END
+                    
                     `,
                 },
                 "actions": {
@@ -1038,30 +1045,32 @@ tablet_complete_bignumber: {
                         "barChart":`SELECT
                         time_interval as level,
                         COUNT(DISTINCT CASE WHEN sc.last_power_on_date >= interval_start AND sc.last_power_on_date < interval_end THEN sc.device_no END) AS device_count
-                    FROM
+                        FROM
                         smart_classroom.smartclassroom sc
-                    JOIN
+                        JOIN
                         dimensions.district d ON sc.district_id = d.district_id
-                    CROSS JOIN LATERAL
+                        CROSS JOIN LATERAL
                         (VALUES
-                            ('last_1hr', current_date - interval '1 hour', current_date),
-                            ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
-                            ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
-                            ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
-                            ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
-                            ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
+                        ('last_1hr', current_date - interval '1 hour', current_date),
+                        ('1hr_1day', current_date - interval '1 day', current_date - interval '1 hour'),
+                        ('1day_1wk', current_date - interval '1 week', current_date - interval '1 day'),
+                        ('1wk_1month', current_date - interval '1 month', current_date - interval '1 week'),
+                        ('1month_2month', current_date - interval '2 months', current_date - interval '1 month'),
+                        ('2month_3month', current_date - interval '3 months', current_date - interval '2 months')
                         ) AS intervals(time_interval, interval_start, interval_end)
-                    GROUP BY
+                        WHERE
+                            sc.last_power_on_date between startDate AND endDate
+                        GROUP BY
                         time_interval
-                    ORDER BY
+                        ORDER BY
                         CASE time_interval
-                            WHEN 'last_1hr' THEN 1
-                            WHEN '1hr_1day' THEN 2
-                            WHEN '1day_1wk' THEN 3
-                            WHEN '1wk_1month' THEN 4
-                            WHEN '1month_2month' THEN 5
-                            WHEN '2month_3month' THEN 6
-                        END;
+                        WHEN 'last_1hr' THEN 1
+                        WHEN '1hr_1day' THEN 2
+                        WHEN '1day_1wk' THEN 3
+                        WHEN '1wk_1month' THEN 4
+                        WHEN '1month_2month' THEN 5
+                        WHEN '2month_3month' THEN 6
+                        END                        
                         `
                     
                     },
