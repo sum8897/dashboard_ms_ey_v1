@@ -3647,7 +3647,6 @@ category_table: {
         }
     }
 },
-    
 enrollment_barchart:{
     "label": "Overall Summary",
     "defaultLevel": "state",
@@ -3658,52 +3657,46 @@ enrollment_barchart:{
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "barChart": `SELECT 
-                schoolmanagement_name as level,
-                SUM(no_of_schools) AS total_schools
-                from (
-            SELECT 
-                d.district_name,
-                sm.schoolmanagement_name,
-                COUNT(DISTINCT sd.school_id) AS no_of_schools
-            FROM 
-                school_general.schooldetails sd
-            LEFT JOIN
-                dimensions.district d ON sd.district_id = d.district_id 
-            LEFT JOIN 
-                dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-            LEFT JOIN 
-                dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-            
-            GROUP BY 
-                d.district_name,sm.schoolmanagement_name) as sub
-               group by 
-              schoolmanagement_name; 
+                "barChart": `select d.district_name as level,
+                sef.district_id,
+                SUM( CASE WHEN item_id = 1 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
+                SUM( CASE WHEN item_id = 2 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
+                SUM( CASE WHEN item_id = 3 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                SUM( CASE WHEN item_id = 4 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                FROM school_general.sch_enr_fresh sef 
+                left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
+                left join 
+                dimensions.district d on sef.district_id = d.district_id 
+                where item_group = 1 
+                group by 
+                sef.district_id,
+                d.district_name
                 `,
             },
             "actions": {
                 "queries": {
-                    "barChart":`SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
-                    from (
-                SELECT 
-                    d.district_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                
-                GROUP BY 
-                    d.district_name,sm.schoolmanagement_name) as sub
-                   group by 
-                  schoolmanagement_name; 
+                    "barChart":`select d.district_name as level,
+                    sef.district_id,
+                    SUM( CASE WHEN item_id = 1 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
+                    SUM( CASE WHEN item_id = 2 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
+                    SUM( CASE WHEN item_id = 3 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                    SUM( CASE WHEN item_id = 4 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                    FROM school_general.sch_enr_fresh sef 
+                    left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
+                    left join 
+                    dimensions.district d on sef.district_id = d.district_id 
+                    where item_group = 1 
+                    group by 
+                    sef.district_id,
+                    d.district_name
                     `
                 
                 },
@@ -3921,7 +3914,7 @@ enrollment_barchart:{
     "options": {
         "barChart": {
             "metricLabelProp": "Schools by Management",
-            "metricValueProp": "total_schools",
+            "metricValueProp": "general",
             "yAxis": {
                 "title": " Number of Schools"
             },
@@ -4001,6 +3994,359 @@ enrollment_barchart:{
         }
     }
 },
+// enrollment_barchart:{
+//     "label": "Overall Summary",
+//     "defaultLevel": "state",
+//     "filters": [
+//         {
+//             "name": "State",
+//             "labelProp": "state_name",
+//             "valueProp": "state_id",
+//             "hierarchyLevel": "1",
+//             "timeSeriesQueries": {
+//                 "barChart": `SELECT 
+//                 schoolmanagement_name as level,
+//                 SUM(no_of_schools) AS total_schools
+//                 from (
+//             SELECT 
+//                 d.district_name,
+//                 sm.schoolmanagement_name,
+//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+//             FROM 
+//                 school_general.schooldetails sd
+//             LEFT JOIN
+//                 dimensions.district d ON sd.district_id = d.district_id 
+//             LEFT JOIN 
+//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//             LEFT JOIN 
+//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+            
+//             GROUP BY 
+//                 d.district_name,sm.schoolmanagement_name) as sub
+//                group by 
+//               schoolmanagement_name; 
+//                 `,
+//             },
+//             "actions": {
+//                 "queries": {
+//                     "barChart":`SELECT 
+//                     schoolmanagement_name as level,
+//                     SUM(no_of_schools) AS total_schools
+//                     from (
+//                 SELECT 
+//                     d.district_name,
+//                     sm.schoolmanagement_name,
+//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+//                 FROM 
+//                     school_general.schooldetails sd
+//                 LEFT JOIN
+//                     dimensions.district d ON sd.district_id = d.district_id 
+//                 LEFT JOIN 
+//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//                 LEFT JOIN 
+//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+                
+//                 GROUP BY 
+//                     d.district_name,sm.schoolmanagement_name) as sub
+//                    group by 
+//                   schoolmanagement_name; 
+//                     `
+                
+//                 },
+//                 "level": "district"
+//             }
+//         },
+//         {
+//             "name": "District",
+//             "labelProp": "district_name",
+//             "valueProp": "district_id",
+//             "hierarchyLevel": "2",
+//             "timeSeriesQueries": {
+//                 "barChart": `SELECT 
+//                 schoolmanagement_name as level,
+//                 SUM(no_of_schools) AS total_schools
+//                 from (
+//              SELECT 
+//                  b.block_name,
+//                 sm.schoolmanagement_name,
+//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+//             FROM 
+//                 school_general.schooldetails sd
+//             LEFT JOIN
+//                 dimensions.district d ON sd.district_id = d.district_id 
+//             LEFT JOIN
+//                 dimensions.block b ON sd.block_id = b.block_id 
+//             LEFT JOIN 
+//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//             LEFT JOIN 
+//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//             WHERE 
+//                   sd.district_id = {district_id}
+//             GROUP BY 
+//                 b.block_name,sd.block_id,sm.schoolmanagement_name
+//                ) as sub
+//                group by 
+//               schoolmanagement_name; `,
+//             },
+//             "actions": {
+//                 "queries": {
+//                     "barChart":
+//                     `SELECT 
+//                     schoolmanagement_name as level,
+//                     SUM(no_of_schools) AS total_schools
+//                     from (
+//                  SELECT 
+//                      b.block_name,
+//                     sm.schoolmanagement_name,
+//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+//                 FROM 
+//                     school_general.schooldetails sd
+//                 LEFT JOIN
+//                     dimensions.district d ON sd.district_id = d.district_id 
+//                 LEFT JOIN
+//                     dimensions.block b ON sd.block_id = b.block_id 
+//                 LEFT JOIN 
+//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//                 LEFT JOIN 
+//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//                 WHERE 
+//                       sd.district_id = {district_id}
+//                 GROUP BY 
+//                     b.block_name,sd.block_id,sm.schoolmanagement_name
+//                    ) as sub
+//                    group by 
+//                   schoolmanagement_name;`,
+//                 },
+//                 "level": "block"
+//             }
+//         },
+//         {
+//             "name": "Block",
+//             "labelProp": "block_name",
+//             "valueProp": "block_id",
+//             "hierarchyLevel": "3",
+//             "timeSeriesQueries": {
+//                 "barChart": `SELECT 
+//                 schoolmanagement_name as level,
+//                 SUM(no_of_schools) AS total_schools
+//                 from (
+//              SELECT 
+//                  c.cluster_name,
+//                 sm.schoolmanagement_name,
+//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+//             FROM 
+//                 school_general.schooldetails sd
+//             LEFT JOIN
+//                 dimensions.district d ON sd.district_id = d.district_id 
+//             LEFT JOIN
+//                 dimensions.block b ON sd.block_id = b.block_id 
+//             LEFT JOIN
+//                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+//             LEFT JOIN 
+//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//             LEFT JOIN 
+//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//             WHERE 
+//                   sd.block_id = {block_id}
+//             GROUP BY 
+//                 c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
+//                ) as sub
+//                group by 
+//               schoolmanagement_name ;`,
+//             },
+//             "actions": {
+//                 "queries": {
+//                     "barChart":`SELECT 
+//                     schoolmanagement_name as level,
+//                     SUM(no_of_schools) AS total_schools
+//                     from (
+//                  SELECT 
+//                      c.cluster_name,
+//                     sm.schoolmanagement_name,
+//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+//                 FROM 
+//                     school_general.schooldetails sd
+//                 LEFT JOIN
+//                     dimensions.district d ON sd.district_id = d.district_id 
+//                 LEFT JOIN
+//                     dimensions.block b ON sd.block_id = b.block_id 
+//                 LEFT JOIN
+//                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+//                 LEFT JOIN 
+//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//                 LEFT JOIN 
+//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//                 WHERE 
+//                       sd.block_id = {block_id}
+//                 GROUP BY 
+//                     c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
+//                    ) as sub
+//                    group by 
+//                   schoolmanagement_name ;`
+//                 },
+//                 "level": "cluster"
+//             }
+//         },
+//         {
+//             "name": "Cluster",
+//             "labelProp": "cluster_name",
+//             "valueProp": "cluster_id",
+//             "hierarchyLevel": "4",
+//             "timeSeriesQueries": {
+//                 "barChart": `SELECT 
+//                 schoolmanagement_name as level,
+//                 SUM(no_of_schools) AS total_schools
+//                 from (
+//              SELECT 
+//                  sch.school_name,
+//                 sm.schoolmanagement_name,
+//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+//             FROM 
+//                 school_general.schooldetails sd
+//             LEFT JOIN
+//                 dimensions.district d ON sd.district_id = d.district_id 
+//             LEFT JOIN
+//                 dimensions.block b ON sd.block_id = b.block_id 
+//             LEFT JOIN
+//                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+//             LEFT JOIN
+//                 dimensions.school sch ON sd.school_id  = sch.school_id 
+//                 LEFT JOIN 
+//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//             LEFT JOIN 
+//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//             WHERE 
+//                   sd.cluster_id = {cluster_id}
+//             GROUP BY 
+//                 sch.school_name,sd.school_id ,sm.schoolmanagement_name
+//                ) as sub
+//                group by 
+//               schoolmanagement_name ; 
+            
+//             `,
+//             },
+//             "actions": {
+//                 "queries": {
+//                     "barChart":`SELECT 
+//                     schoolmanagement_name as level,
+//                     SUM(no_of_schools) AS total_schools
+//                     from (
+//                  SELECT 
+//                      sch.school_name,
+//                     sm.schoolmanagement_name,
+//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+//                 FROM 
+//                     school_general.schooldetails sd
+//                 LEFT JOIN
+//                     dimensions.district d ON sd.district_id = d.district_id 
+//                 LEFT JOIN
+//                     dimensions.block b ON sd.block_id = b.block_id 
+//                 LEFT JOIN
+//                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+//                 LEFT JOIN
+//                     dimensions.school sch ON sd.school_id  = sch.school_id 
+//                     LEFT JOIN 
+//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+//                 LEFT JOIN 
+//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+//                 WHERE 
+//                       sd.cluster_id = {cluster_id}
+//                 GROUP BY 
+//                     sch.school_name,sd.school_id ,sm.schoolmanagement_name
+//                    ) as sub
+//                    group by 
+//                   schoolmanagement_name ;
+                
+//                 `
+//                 },
+//                 "level": "school"
+//             }
+//         },
+
+//     ],
+//     "options": {
+//         "barChart": {
+//             "metricLabelProp": "Schools by Management",
+//             "metricValueProp": "total_schools",
+//             "yAxis": {
+//                 "title": " Number of Schools"
+//             },
+//             "benchmarkConfig": {
+//                 "linkedReport": "tas_average_attendance_bignumber"
+//             },
+//             "xAxis": {
+//                 "title": "",
+//                 "label": "level",
+//                 "value": "level",
+
+//             },
+//             "tooltipMetrics": [
+//                 {
+//                     "valuePrefix": "District Id: ",
+//                     "value": "district_id",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "District Name: ",
+//                     "value": "district_name",
+//                     "valueSuffix": "%"
+//                 },
+               
+//                 {
+//                     "valuePrefix": "Block Id: ",
+//                     "value": "block_id",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "Block Name: ",
+//                     "value": "block_name",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "Cluster Id: ",
+//                     "value": "cluster_id",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "Cluster Name: ",
+//                     "value": "cluster_name",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "School Id: ",
+//                     "value": "school_id",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "level ",
+//                     "value": "level",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "No of schools ",
+//                     "value": "no_of_schools",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "School Name: ",
+//                     "value": "school_name",
+//                     "valueSuffix": ""
+//                 },
+//                 {
+//                     "valuePrefix": "Average Percentage Student: ",
+//                     "value": "perc_students",
+//                     "valueSuffix": ""
+//                 },
+                
+//                 // {
+//                 //     "valuePrefix": "Average percentage of LO: ",
+//                 //     "value": "perc_lo",
+//                 //     "valueSuffix": "%"
+//                 // },
+//             ]
+//         }
+//     }
+// },
 gender_table: {
     "label": "Average Student Present",
     "defaultLevel": "state",

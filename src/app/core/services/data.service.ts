@@ -663,17 +663,17 @@ export class DataService {
 }
 
 //stackbar
-stackBar(data: any, config: any, param: string) {
+stackBar(data: any, config: any, param: string,label:string,backgroundColor:any) {
   console.log("trendLine ===== ", data);
   
   const barData = data.values.map((reportData: any) => reportData[param]);
 
   const barObject = {
       type: 'bar',
-      metricLabelProp: 'Stacked Bar', // Customize the label as needed
-      label: 'Stacked Bar', // Customize the label as needed
+      metricLabelProp: label, // Customize the label as needed
+      label: label, // Customize the label as needed
       data: barData,
-      backgroundColor: 'rgba(0, 0, 255, 0.5)', // Customize the bar color as needed
+      backgroundColor: backgroundColor, // Customize the bar color as needed
       borderWidth: 1, // Customize the border width as needed
       borderColor: 'rgba(0, 0, 255, 1)', // Customize the border color as needed
       stack: 'Stack 1' // Specify the stack name

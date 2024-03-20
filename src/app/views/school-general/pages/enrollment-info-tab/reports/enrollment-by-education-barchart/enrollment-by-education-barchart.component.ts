@@ -212,7 +212,8 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-          // this._dataService.extraLine(reportData,config,"perc_students");
+          this._dataService.stackBar(reportData,config,"bc","backward",'rgba(0, 0, 255, 0.5)');
+          this._dataService.stackBar(reportData,config,"sc","secdule",'rgba(255, 0, 0, 0.5)');
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
