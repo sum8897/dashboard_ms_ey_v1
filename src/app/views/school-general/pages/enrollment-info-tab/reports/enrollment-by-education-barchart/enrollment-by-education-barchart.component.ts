@@ -212,8 +212,10 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-          this._dataService.stackBar(reportData,config,"bc","backward",'rgba(0, 0, 255, 0.5)');
-          this._dataService.stackBar(reportData,config,"sc","secdule",'rgba(255, 0, 0, 0.5)');
+          this._dataService.stackBar(reportData,config,"primary_school","Primary",'rgba(0, 0, 255, 0.5)');
+          this._dataService.stackBar(reportData,config,"upper_primary","Upper Primary",'rgba(255, 0, 0, 0.5)');
+          this._dataService.stackBar(reportData,config,"secondary_school","Secondary",'rgba(0, 255, 0, 0.5)');
+          this._dataService.stackBar(reportData,config,"higher_secondary_school","Higher Secondary",'rgba(255, 255, 0, 0.5)');
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
@@ -264,6 +266,10 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
       console.log('tablereprtdata 261',this.tableReportData)
       this.config = this.getConfig()
       // this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
+      this._dataService.stackBar(this.tableReportData,this.config,"primary_school","Primary",'rgba(0, 0, 255, 0.5)');
+          this._dataService.stackBar(this.tableReportData,this.config,"upper_primary","Upper Primary",'rgba(255, 0, 0, 0.5)');
+          this._dataService.stackBar(this.tableReportData,this.config,"secondary_school","Secondary",'rgba(0, 255, 0, 0.5)');
+          this._dataService.stackBar(this.tableReportData,this.config,"higher_secondary_school","Higher Secondary",'rgba(255, 255, 0, 0.5)');
       console.log('configgg', this.config)
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
         if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {

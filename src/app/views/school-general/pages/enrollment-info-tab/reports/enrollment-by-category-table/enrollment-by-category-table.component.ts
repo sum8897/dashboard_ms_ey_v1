@@ -23,7 +23,7 @@ export class EnrollmentByCategoryTableComponent implements OnInit, OnDestroy {
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: "Average Student Present"
+    reportName: "Enrollment By Education Level"
   };
   minDate: any;
   maxDate: any;
@@ -31,7 +31,7 @@ export class EnrollmentByCategoryTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Change in Enrollment from Date 1 to Date 2 ';
+  title = 'Enrollment By Education Level';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

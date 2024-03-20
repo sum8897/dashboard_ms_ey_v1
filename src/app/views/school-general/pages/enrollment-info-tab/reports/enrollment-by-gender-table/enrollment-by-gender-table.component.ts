@@ -20,7 +20,7 @@ export class EnrollmentByGenderTableComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Number of Schools by Pupil Teacher Ratio"
+    reportName: "Enrollment By Gender"
   };
   minDate: any;
   maxDate: any;
@@ -28,7 +28,7 @@ export class EnrollmentByGenderTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Number of Schools by Pupil Teacher Ratio';
+  title = 'Enrollment By Gender';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
