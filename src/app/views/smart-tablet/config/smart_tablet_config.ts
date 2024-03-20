@@ -1392,7 +1392,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Connected on 21/02/2024",
+            "title": "Connected on 19/03/2024",
             "valueSuffix": '%',
             "property": 'connected_perc'
         }
