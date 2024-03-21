@@ -3247,45 +3247,45 @@ category_table: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "table": `  select
-                sef.district_id ,
-                d.district_name,
-                SUM( CASE when item_group = 1 and item_id = 1 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
-                SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
-                SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
-                FROM school_general.sch_enr_fresh sef 
-                left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
-                left join 
-                dimensions.district d on sef.district_id = d.district_id 
-                group by 
+                "table": ` select
                 sef.district_id,
-                d.district_name `,
+                 d.district_name,
+                 SUM( CASE when item_group = 1 and item_id = 1 THEN 
+                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
+                 SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
+                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                 SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
+                 SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
+                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
+                 FROM school_general.sch_enr_fresh sef 
+                 left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
+                 left join 
+                 dimensions.district d on sef.district_id = d.district_id 
+                 group by 
+                 sef.district_id,
+                 d.district_name  `,
             },
             "actions": {
                 "queries": {
-                    "table": ` select
-                    sef.district_id ,
-                    d.district_name,
-                    SUM( CASE when item_group = 1 and item_id = 1 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
-                    SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
-                    SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
-                    FROM school_general.sch_enr_fresh sef 
-                    left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
-                    left join 
-                    dimensions.district d on sef.district_id = d.district_id 
-                    group by 
-                    sef.district_id ,
-                    d.district_name `,
+                    "table": `  select
+                    sef.district_id,
+                     d.district_name,
+                     SUM( CASE when item_group = 1 and item_id = 1 THEN 
+                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
+                     SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
+                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                     SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
+                     SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
+                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
+                     FROM school_general.sch_enr_fresh sef 
+                     left join dimensions.academic_year ay on sef.ac_year = ay.ac_year 
+                     left join 
+                     dimensions.district d on sef.district_id = d.district_id 
+                     group by 
+                     sef.district_id,
+                     d.district_name  `,
                 },
                 "level": "district"
             }
@@ -3296,17 +3296,17 @@ category_table: {
             "valueProp": "district_id",
             "hierarchyLevel": "2",
             "timeSeriesQueries": {
-                "table": ` select
-                sef.block_id ,
+                "table": `  select
+                sef.block_id,
                 b.block_name,
                 SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                 SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                 SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                 FROM school_general.sch_enr_fresh sef 
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3314,24 +3314,24 @@ category_table: {
                 dimensions.district d on sef.district_id = d.district_id 
                 left join 
                 dimensions.block b on sef.block_id = b.block_id 
-                where  sef.district_id = {district_id}
+                where   sef.district_id = {district_id}
                 group by 
-                sef.block_id ,
+                sef.block_id,
                 b.block_name`,
             },
             "actions": {
                 "queries": {
-                    "table": ` select
-                    sef.block_id ,
+                    "table": `  select
+                    sef.block_id,
                     b.block_name,
                     SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                     SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                     SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                     FROM school_general.sch_enr_fresh sef 
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3339,9 +3339,9 @@ category_table: {
                     dimensions.district d on sef.district_id = d.district_id 
                     left join 
                     dimensions.block b on sef.block_id = b.block_id 
-                    where  sef.district_id = {district_id}
+                    where   sef.district_id = {district_id}
                     group by 
-                    sef.block_id ,
+                    sef.block_id,
                     b.block_name`,
                 },
                 "level": "block"
@@ -3353,17 +3353,17 @@ category_table: {
             "valueProp": "block_id",
             "hierarchyLevel": "3",
             "timeSeriesQueries": {
-                "table": ` select
+                "table": `select
                 sef.cluster_id,
                 c.cluster_name ,
                 SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                 SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                 SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                 FROM school_general.sch_enr_fresh sef 
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3373,10 +3373,11 @@ category_table: {
                 dimensions.block b on sef.block_id = b.block_id 
                 left join 
                 dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                where sef.block_id  = {block_id}
+                where   sef.block_id  = {block_id}
                 group by 
                 sef.cluster_id,
-                c.cluster_name `,
+                c.cluster_name 
+             `,
             },
             "actions": {
                 "queries": {
@@ -3386,11 +3387,11 @@ category_table: {
                     SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                     SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                     SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                     FROM school_general.sch_enr_fresh sef 
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3400,10 +3401,11 @@ category_table: {
                     dimensions.block b on sef.block_id = b.block_id 
                     left join 
                     dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                    where sef.block_id  = {block_id}
+                    where   sef.block_id  = {block_id}
                     group by 
                     sef.cluster_id,
-                    c.cluster_name  `,
+                    c.cluster_name 
+                 `,
                 },
                 "level": "cluster"
             }
@@ -3414,17 +3416,17 @@ category_table: {
             "valueProp": "cluster_id",
             "hierarchyLevel": "4",
             "timeSeriesQueries": {
-                "table": ` select
+                "table": `  select
                 sef.school_id,
                 sch.school_name,
                 SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                 SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                 c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                 SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                 FROM school_general.sch_enr_fresh sef 
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3436,25 +3438,25 @@ category_table: {
                 dimensions.cluster c on sef.cluster_id = c.cluster_id 
                 left join 
                 dimensions.school sch on sef.school_id = sch.school_id 
-                where sef.cluster_id  = {cluster_id}
-                group by sef.school_id, sch.school_name
+                where   sef.cluster_id  = {cluster_id}
+                group by  sef.school_id, sch.school_name
                 
             
                 `
             },
             "actions": {
                 "queries": {
-                    "table": ` select
+                    "table": `  select
                     sef.school_id,
                     sch.school_name,
                     SUM( CASE WHEN item_group = 1 and item_id = 1 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                     SUM( CASE WHEN item_group = 1 and item_id = 2 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS BC,
-                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
                     c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
+                    SUM( CASE WHEN item_group = 1 and item_id = 3 THEN 
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST,
                     SUM( CASE WHEN item_group = 1 and item_id = 4 THEN 
-                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS ST
+                    c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS OBC
                     FROM school_general.sch_enr_fresh sef 
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
@@ -3466,8 +3468,8 @@ category_table: {
                     dimensions.cluster c on sef.cluster_id = c.cluster_id 
                     left join 
                     dimensions.school sch on sef.school_id = sch.school_id 
-                    where sef.cluster_id  = {cluster_id}
-                    group by  sef.school_id, sch.school_name 
+                    where   sef.cluster_id  = {cluster_id}
+                    group by  sef.school_id, sch.school_name
                     
                 
                     `,
@@ -3539,7 +3541,7 @@ category_table: {
                 {
                     name: "State",
                     property: "state_name",
-                    class: "text-left",
+                    class: "text-center",
                     action: {
                         dataProps: [{
                             "prop": "state_id",
@@ -3557,7 +3559,7 @@ category_table: {
                 {
                     name: "District",
                     property: "district_name",
-                    class: "text-left",
+                    class: "text-center",
                     action: {
                         dataProps: [{
                             "prop": "district_id",
@@ -3574,7 +3576,7 @@ category_table: {
                 {
                     name: "Block",
                     property: "block_name",
-                    class: "text-left",
+                    class: "text-center",
                     action: {
                         dataProps: [{
                             "prop": "block_id",
@@ -3591,7 +3593,7 @@ category_table: {
                 {
                     name: "Cluster",
                     property: "cluster_name",
-                    class: "text-left",
+                    class: "text-center",
                     action: {
                         dataProps: [{
                             "prop": "cluster_id",
@@ -3609,7 +3611,7 @@ category_table: {
                 {
                     name: "School",
                     property: "school_name",
-                    class: "text-left",
+                    class: "text-center",
                     action: {
                         dataProps: [{
                             "prop": "school_id",
@@ -3631,19 +3633,20 @@ category_table: {
                     property: "general",
                     class: "text-center"
                 },
+                
                 {
-                    name: "Backward",
-                    property: "bc",
-                    class: "text-center"
-                },
-                {
-                    name: "Sc",
+                    name: "Scheduled Caste (SC)",
                     property: "sc",
                     class: "text-center"
                 },
                 {
-                    name: "st",
+                    name: "Scheduled Tribes (ST) ",
                     property: "st",
+                    class: "text-center"
+                },
+                {
+                    name: " Other Backward Classes",
+                    property: "obc",
                     class: "text-center"
                 },
                
@@ -6650,72 +6653,84 @@ gender_parity_barchart:{
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "barChart": `select
-                state_name as level,
-                ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                from(
-                select
-                s.state_name,
-                sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                from
-                school_general.sch_enr_fresh sef
-                join
-                school_general.student_total st on sef.state_id = st.state_id
-                join
-                dimensions.state s on sef.state_id = s.state_id
-                join
-                dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                "barChart": `SELECT
+                levels.level,
+                CASE
+                    WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                    WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                    WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                    WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                END AS gpi
+            FROM
+                (SELECT 'primary_level' AS level
+                 UNION ALL SELECT 'upper_primary_level'
+                 UNION ALL SELECT 'secondary_level'
+                 UNION ALL SELECT 'higher_secondary_level') AS levels
+            JOIN
+                (select
+                    sef.ac_year,
+                    sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                    sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                    sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                    sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                    sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                    sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                    sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                    sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                FROM
+                    school_general.sch_enr_fresh sef
+                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                    group by
+                    sef.ac_year
+                ) AS sub
+            ON
+                true
+                JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                 
-                group by
-                s.state_name
-                ) as sub
-                group by
-                state_name 
+            GROUP BY
+                levels.level;
                 `,
             },
             "actions": {
                 "queries": {
-                    "barChart":`select
-                    state_name as level,
-                    ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                    ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                    ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                    ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                    from(
-                    select
-                    s.state_name,
-                    sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                    sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                    sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                    sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                    sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                    sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                    sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                    sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                    from
-                    school_general.sch_enr_fresh sef
-                    join
-                    school_general.student_total st on sef.state_id = st.state_id
-                    join
-                    dimensions.state s on sef.state_id = s.state_id
-                    join
-                    dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                    "barChart":`SELECT
+                    levels.level,
+                    CASE
+                        WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                        WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                        WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                        WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                    END AS gpi
+                FROM
+                    (SELECT 'primary_level' AS level
+                     UNION ALL SELECT 'upper_primary_level'
+                     UNION ALL SELECT 'secondary_level'
+                     UNION ALL SELECT 'higher_secondary_level') AS levels
+                JOIN
+                    (select
+                        sef.ac_year,
+                        sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                        sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                        sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                        sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                        sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                        sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                        sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                        sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                    FROM
+                        school_general.sch_enr_fresh sef
+                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        group by
+                        sef.ac_year
+                    ) AS sub
+                ON
+                    true
+                    JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                     
-                    group by
-                    s.state_name
-                    ) as sub
-                    group by
-                    state_name
+                GROUP BY
+                    levels.level;
                     `
                 
                 },
@@ -6728,72 +6743,84 @@ gender_parity_barchart:{
             "valueProp": "district_id",
             "hierarchyLevel": "2",
             "timeSeriesQueries": {
-                "barChart": `select
-                state_name as level,
-                ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                from(
-                select
-                s.state_name,
-                sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                from
-                school_general.sch_enr_fresh sef
-                join
-                school_general.student_total st on sef.state_id = st.state_id
-                join
-                dimensions.state s on sef.state_id = s.state_id
-                join
-                dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                "barChart": `SELECT
+                levels.level,
+                CASE
+                    WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                    WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                    WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                    WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                END AS gpi
+            FROM
+                (SELECT 'primary_level' AS level
+                 UNION ALL SELECT 'upper_primary_level'
+                 UNION ALL SELECT 'secondary_level'
+                 UNION ALL SELECT 'higher_secondary_level') AS levels
+            JOIN
+                (select
+                    sef.ac_year,
+                    sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                    sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                    sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                    sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                    sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                    sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                    sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                    sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                FROM
+                    school_general.sch_enr_fresh sef
+                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                    group by
+                    sef.ac_year
+                ) AS sub
+            ON
+                true
+                JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                 
-                group by
-                s.state_name
-                ) as sub
-                group by
-                state_name `,
+            GROUP BY
+                levels.level; `,
             },
             "actions": {
                 "queries": {
                     "barChart":
-                    `select
-                    state_name as level,
-                    ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                    ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                    ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                    ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                    from(
-                    select
-                    s.state_name,
-                    sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                    sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                    sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                    sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                    sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                    sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                    sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                    sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                    from
-                    school_general.sch_enr_fresh sef
-                    join
-                    school_general.student_total st on sef.state_id = st.state_id
-                    join
-                    dimensions.state s on sef.state_id = s.state_id
-                    join
-                    dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                    `SELECT
+                    levels.level,
+                    CASE
+                        WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                        WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                        WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                        WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                    END AS gpi
+                FROM
+                    (SELECT 'primary_level' AS level
+                     UNION ALL SELECT 'upper_primary_level'
+                     UNION ALL SELECT 'secondary_level'
+                     UNION ALL SELECT 'higher_secondary_level') AS levels
+                JOIN
+                    (select
+                        sef.ac_year,
+                        sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                        sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                        sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                        sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                        sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                        sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                        sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                        sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                    FROM
+                        school_general.sch_enr_fresh sef
+                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        group by
+                        sef.ac_year
+                    ) AS sub
+                ON
+                    true
+                    JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                     
-                    group by
-                    s.state_name
-                    ) as sub
-                    group by
-                    state_name`,
+                GROUP BY
+                    levels.level;`,
                 },
                 "level": "block"
             }
@@ -6804,71 +6831,83 @@ gender_parity_barchart:{
             "valueProp": "block_id",
             "hierarchyLevel": "3",
             "timeSeriesQueries": {
-                "barChart": `select
-                state_name as level,
-                ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                from(
-                select
-                s.state_name,
-                sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                from
-                school_general.sch_enr_fresh sef
-                join
-                school_general.student_total st on sef.state_id = st.state_id
-                join
-                dimensions.state s on sef.state_id = s.state_id
-                join
-                dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                "barChart": `SELECT
+                levels.level,
+                CASE
+                    WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                    WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                    WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                    WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                END AS gpi
+            FROM
+                (SELECT 'primary_level' AS level
+                 UNION ALL SELECT 'upper_primary_level'
+                 UNION ALL SELECT 'secondary_level'
+                 UNION ALL SELECT 'higher_secondary_level') AS levels
+            JOIN
+                (select
+                    sef.ac_year,
+                    sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                    sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                    sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                    sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                    sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                    sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                    sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                    sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                FROM
+                    school_general.sch_enr_fresh sef
+                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                    group by
+                    sef.ac_year
+                ) AS sub
+            ON
+                true
+                JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                 
-                group by
-                s.state_name
-                ) as sub
-                group by
-                state_name`,
+            GROUP BY
+                levels.level;`,
             },
             "actions": {
                 "queries": {
-                    "barChart":`select
-                    state_name as level,
-                    ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                    ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                    ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                    ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                    from(
-                    select
-                    s.state_name,
-                    sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                    sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                    sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                    sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                    sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                    sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                    sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                    sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                    from
-                    school_general.sch_enr_fresh sef
-                    join
-                    school_general.student_total st on sef.state_id = st.state_id
-                    join
-                    dimensions.state s on sef.state_id = s.state_id
-                    join
-                    dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                    "barChart":`SELECT
+                    levels.level,
+                    CASE
+                        WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                        WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                        WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                        WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                    END AS gpi
+                FROM
+                    (SELECT 'primary_level' AS level
+                     UNION ALL SELECT 'upper_primary_level'
+                     UNION ALL SELECT 'secondary_level'
+                     UNION ALL SELECT 'higher_secondary_level') AS levels
+                JOIN
+                    (select
+                        sef.ac_year,
+                        sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                        sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                        sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                        sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                        sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                        sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                        sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                        sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                    FROM
+                        school_general.sch_enr_fresh sef
+                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        group by
+                        sef.ac_year
+                    ) AS sub
+                ON
+                    true
+                    JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                     
-                    group by
-                    s.state_name
-                    ) as sub
-                    group by
-                    state_name`
+                GROUP BY
+                    levels.level;`
                 },
                 "level": "cluster"
             }
@@ -6879,74 +6918,85 @@ gender_parity_barchart:{
             "valueProp": "cluster_id",
             "hierarchyLevel": "4",
             "timeSeriesQueries": {
-                "barChart": `select
-                state_name as level,
-                ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                from(
-                select
-                s.state_name,
-                sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                from
-                school_general.sch_enr_fresh sef
-                join
-                school_general.student_total st on sef.state_id = st.state_id
-                join
-                dimensions.state s on sef.state_id = s.state_id
-                join
-                dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                "barChart": `SELECT
+                levels.level,
+                CASE
+                    WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                    WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                    WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                    WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                END AS gpi
+            FROM
+                (SELECT 'primary_level' AS level
+                 UNION ALL SELECT 'upper_primary_level'
+                 UNION ALL SELECT 'secondary_level'
+                 UNION ALL SELECT 'higher_secondary_level') AS levels
+            JOIN
+                (select
+                    sef.ac_year,
+                    sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                    sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                    sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                    sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                    sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                    sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                    sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                    sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                FROM
+                    school_general.sch_enr_fresh sef
+                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                    group by
+                    sef.ac_year
+                ) AS sub
+            ON
+                true
+                JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                 
-                group by
-                s.state_name
-                ) as sub
-                group by
-                state_name 
+            GROUP BY
+                levels.level;
             
             `,
             },
             "actions": {
                 "queries": {
-                    "barChart":`select
-                    state_name as level,
-                    ROUND((sum(pri_g)/sum(pri_b)),2) as primary_level,
-                    ROUND((sum(upr_g)/sum(upr_b)),2) as upper_primary_level,
-                    ROUND((sum(sec_g)/sum(sec_b)),2) as secondary_level,
-                    ROUND((sum(hsec_g)/sum(hsec_b)),2) as higher_secondary_level
-                    from(
-                    select
-                    s.state_name,
-                    sum(case when item_group= '1' then c1_b+c2_b+c3_b+c4_b+c5_b else 0 end) as pri_b,
-                    sum(case when item_group= '1' then c6_b+c7_b+c8_b else 0 end) as upr_b,
-                    sum(case when item_group= '1' then c9_b+c10_b else 0 end) as sec_b,
-                    sum(case when item_group= '1' then c11_b+c12_b else 0 end) as hsec_b,
-                    sum(case when item_group= '1' then c1_g+c2_g+c3_g+c4_g+c5_g else 0 end) as pri_g,
-                    sum(case when item_group= '1' then c6_g+c7_g+c8_g else 0 end) as upr_g,
-                    sum(case when item_group= '1' then c9_g+c10_g else 0 end) as sec_g,
-                    sum(case when item_group= '1' then c11_g+c12_g else 0 end) as hsec_g
-                    from
-                    school_general.sch_enr_fresh sef
-                    join
-                    school_general.student_total st on sef.state_id = st.state_id
-                    join
-                    dimensions.state s on sef.state_id = s.state_id
-                    join
-                    dimensions.academic_year ay on sef.ac_year = ay.ac_year
+                    "barChart":`SELECT
+                    levels.level,
+                    CASE
+                        WHEN levels.level = 'primary_level' THEN ROUND((sum(pri_g) / NULLIF(sum(pri_b), 0)), 2)
+                        WHEN levels.level = 'upper_primary_level' THEN ROUND((sum(upr_g) / NULLIF(sum(upr_b), 0)), 2)
+                        WHEN levels.level = 'secondary_level' THEN ROUND((sum(sec_g) / NULLIF(sum(sec_b), 0)), 2)
+                        WHEN levels.level = 'higher_secondary_level' THEN ROUND((sum(hsec_g) / NULLIF(sum(hsec_b), 0)), 2)
+                    END AS gpi
+                FROM
+                    (SELECT 'primary_level' AS level
+                     UNION ALL SELECT 'upper_primary_level'
+                     UNION ALL SELECT 'secondary_level'
+                     UNION ALL SELECT 'higher_secondary_level') AS levels
+                JOIN
+                    (select
+                        sef.ac_year,
+                        sum(CASE WHEN item_group = '1' THEN c1_b + c2_b + c3_b + c4_b + c5_b ELSE 0 END) AS pri_b,
+                        sum(CASE WHEN item_group = '1' THEN c1_g + c2_g + c3_g + c4_g + c5_g ELSE 0 END) AS pri_g,
+                        sum(CASE WHEN item_group = '1' THEN c6_b + c7_b + c8_b ELSE 0 END) AS upr_b,
+                        sum(CASE WHEN item_group = '1' THEN c6_g + c7_g + c8_g ELSE 0 END) AS upr_g,
+                        sum(CASE WHEN item_group = '1' THEN c9_b + c10_b ELSE 0 END) AS sec_b,
+                        sum(CASE WHEN item_group = '1' THEN c9_g + c10_g ELSE 0 END) AS sec_g,
+                        sum(CASE WHEN item_group = '1' THEN c11_b + c12_b ELSE 0 END) AS hsec_b,
+                        sum(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
+                    FROM
+                        school_general.sch_enr_fresh sef
+                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
+                        group by
+                        sef.ac_year
+                    ) AS sub
+                ON
+                    true
+                    JOIN dimensions.academic_year ay ON sub.ac_year = ay.ac_year
                     
-                    group by
-                    s.state_name
-                    ) as sub
-                    group by
-                    state_name
-                
+                GROUP BY
+                    levels.level;
                 `
                 },
                 "level": "school"
@@ -6956,8 +7006,8 @@ gender_parity_barchart:{
     ],
     "options": {
         "barChart": {
-            "metricLabelProp": "Primary",
-            "metricValueProp": "primary_level",
+            "metricLabelProp": "Gender Parity Index by Education Level",
+            "metricValueProp": "gpi",
             "yAxis": {
                 "title": "Gender Parity Index"
             },
