@@ -7086,26 +7086,27 @@ diksha_metrics: {
             "hierarchyLevel": "1",
             "actions": {
                 "queries": {
-                    "bigNumber1": "select count(distinct school_id) as active_schools from school_general.schooldetails",
-                    "bigNumber2": `SELECT
-                    COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
-                FROM
-                    school_general.schooldetails sd`,
-                    "bigNumber3": `select sum(state_teacher_count) as teaching_staff
+                   
+                    "bigNumber1": `select sum(state_teacher_count) as teaching_staff
                     from (SELECT
                         COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
                     FROM
                         school_general.schooldetails
                     GROUP BY
                         school_id) as sub_query;`,
-                    "bigNumber4": `select
+                    "bigNumber2": `select
                     SUM(CASE WHEN sef.item_group = '1' THEN
                 sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g+
                 sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
                 sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
                 ELSE 0 END) AS total_students
                 FROM
-                    school_general.sch_enr_fresh sef`
+                    school_general.sch_enr_fresh sef`,
+                    "bigNumber3": "select count(distinct school_id) as active_schools from school_general.schooldetails",
+                    "bigNumber4": `SELECT
+                    COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
+                FROM
+                    school_general.schooldetails sd`
                 },
                 "level": "district"
             }
@@ -7113,9 +7114,12 @@ diksha_metrics: {
     ],
     "options": {
         "bigNumber": {
-            "title": ['Active Schools', 'RTE Compliant Schools (Private Unaided)', 'Teaching Staff', 'Student Enrollment'],
+            // "title": ['Active Schools', 'RTE Compliant Schools (Private Unaided)', 'Teaching Staff', 'Student Enrollment'],
+            // "valueSuffix": ['', '', '', ''],
+            // "property": ['active_schools', 'rte_compliant_schools', 'teaching_staff', 'total_students']
+            "title": ['Teaching Staff', 'Student Enrollment', 'Active Schools', 'RTE Compliant Schools (Private Unaided)'],
             "valueSuffix": ['', '', '', ''],
-            "property": ['active_schools', 'rte_compliant_schools', 'teaching_staff', 'total_students']
+            "property": ['teaching_staff', 'total_students', 'active_schools', 'rte_compliant_schools']
         }
     }
 }
