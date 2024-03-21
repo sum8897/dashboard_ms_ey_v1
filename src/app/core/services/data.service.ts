@@ -776,6 +776,52 @@ stackBar(data: any, config: any, param: string,label:string,backgroundColor:any)
       }])
     }
   }
+  getOldMapReportData(query: any, options: any, filters: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let reportData;
+      this.spinner.show();
+      this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        let rows = res;
+        let { map: { indicator, indicatorType, drillDownConfig, legend, metricFilterNeeded, tooltipMetrics, metricLabelProp, metricValueProp, groupByColumn } } = options ?? {};
+        let metricFilter;
+        if (metricFilterNeeded) {
+          metricFilter = filters.filter((filter: any) => {
+            return filter.filterType === 'metric'
+          })[0]
+          rows = this.mapGroupBy(rows, groupByColumn, metricLabelProp, metricValueProp, tooltipMetrics, metricFilter.value)
+        }
+
+        reportData = {
+          data: rows.map(row => {
+            row = {
+              ...row,
+              Latitude: row['latitude'],
+              Longitude: row['longitude'],
+              indicator: metricFilter ? isNaN(row[metricFilter.value]) ? row[metricFilter.value] : Number(row[metricFilter.value]) : isNaN(row[indicator]) ? row[indicator] : Number(row[indicator]),
+              tooltip: row.tooltip ? row.tooltip : this._wrapperService.constructTooltip(tooltipMetrics, row, metricFilter ? metricFilter.value : indicator)
+            };
+
+            return row;
+          }),
+          options: {
+            drillDownConfig: drillDownConfig,
+            reportIndicatorType: indicatorType,
+            legend,
+            selectedMetric: metricFilter ? metricFilter.options?.filter(option => option.value === metricFilter.value)[0]?.label : undefined
+          }
+        }
+        this.spinner.hide();
+        resolve(reportData)
+      },
+        (error) => {
+          reportData = undefined
+          this.spinner.hide();
+          resolve(reportData)
+        }
+      );
+    })
+  }
+  
   getMapReportData(query: any, options: any, filters: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let reportData;
