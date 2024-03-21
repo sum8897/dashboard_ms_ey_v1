@@ -111,7 +111,7 @@ export class ImplementationStatusComponent implements OnInit {
         }
       } else if (query && key === 'map') {
         this.spinner.show();
-        this.reportData = await this._dataService.getMapReportData(query, options, metricFilter);
+        this.reportData = await this._dataService.getOldMapReportData(query, options, metricFilter);
         console.log(this.reportData)
         this.spinner.hide();
         if (this.reportData?.data?.length > 0) {
