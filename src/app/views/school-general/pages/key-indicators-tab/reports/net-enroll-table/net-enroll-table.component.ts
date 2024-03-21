@@ -21,7 +21,7 @@ export class NetEnrollTableComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Number of Schools by Student Classroom Ratio"
+    reportName: "Net Enrollment Ratio by Stage of Education Level"
   };
   minDate: any;
   maxDate: any;
@@ -29,7 +29,7 @@ export class NetEnrollTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Number of Schools by Student Classroom Ratio';
+  title = 'Net Enrollment Ratio by Stage of Education Level';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;

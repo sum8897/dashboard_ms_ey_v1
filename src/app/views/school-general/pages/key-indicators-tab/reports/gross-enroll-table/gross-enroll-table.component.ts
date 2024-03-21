@@ -23,7 +23,7 @@ export class GrossEnrollTableComponent implements OnInit, OnDestroy {
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: "Schools By Location"
+    reportName: "Gross Enrollment Ratio by Stage of Education Level"
   };
   minDate: any;
   maxDate: any;
@@ -31,7 +31,7 @@ export class GrossEnrollTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Schools By Location';
+  title = 'Gross Enrollment Ratio by Stage of Education Level';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

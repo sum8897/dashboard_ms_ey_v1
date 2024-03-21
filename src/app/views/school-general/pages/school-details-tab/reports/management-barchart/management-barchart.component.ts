@@ -368,7 +368,7 @@ export class ManagementBarchartComponent implements OnInit, OnDestroy {
             });
           }
         },
-        height: '120',
+        height: '150',
         tooltips: {
           // callbacks: {
           //   label: (tooltipItem, data) => {

@@ -213,6 +213,10 @@ export class GenderParityBarchartComponent implements OnInit, OnDestroy {
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
           // this._dataService.extraLine(reportData,config,"perc_students");
+          this._dataService.stackBar(reportData,config,"upper_primary_level","Upper Primary",'rgba(0, 255, 255, 0.5)');
+          this._dataService.stackBar(reportData,config,"secondary_level","Secondary",'rgba(255, 0, 0, 0.5)');
+          this._dataService.stackBar(reportData,config,"higher_secondary_level","Higher Secondary",'rgba(0, 255, 0, 0.5)');
+
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
@@ -368,7 +372,7 @@ export class GenderParityBarchartComponent implements OnInit, OnDestroy {
             });
           }
         },
-        height: '120',
+        height: '150',
         tooltips: {
           // callbacks: {
           //   label: (tooltipItem, data) => {
