@@ -1,1 +1,54 @@
-<p>key-indicators-tab works!</p>
+<div class="col-span-full tab-wrapper">
+	<!-- <p class="tab-desc">
+		This report shows the % change of enrolled students in the school within the
+		selected dates on average
+	</p> -->
+
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+
+	<div class="reports-row">
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				id="table1"
+				*ngIf="checkReport('gross_enroll_table', 'table')"
+			>
+				<app-gross-enroll-table
+					#grossEnrollTable
+					(exportReportData)="csvDownload($event)"
+				></app-gross-enroll-table>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('net_enroll_table', 'table')"
+				id="table3"
+			>
+				<app-net-enroll-table
+					#netEnrollTable
+					(exportReportData)="csvDownload($event)"
+				></app-net-enroll-table>
+			</div>
+
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				*ngIf="checkReport('gender_parity_barchart', 'barChart')"
+				id="bar"
+			>
+				<app-gender-parity-barchart
+					#genderParityBarchart
+					(exportReportData)="csvDownload($event)"
+				></app-gender-parity-barchart>
+			</div>
+		</div>
+	</div>
+</div>

@@ -19,6 +19,9 @@ import { EnrollmentInfoTabComponent } from './pages/enrollment-info-tab/enrollme
 import { EnrollmentByEducationBarchartComponent } from './pages/enrollment-info-tab/reports/enrollment-by-education-barchart/enrollment-by-education-barchart.component';
 import { EnrollmentByGenderTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-gender-table/enrollment-by-gender-table.component';
 import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-category-table/enrollment-by-category-table.component';
+import { GrossEnrollTableComponent } from './pages/key-indicators-tab/reports/gross-enroll-table/gross-enroll-table.component';
+import { NetEnrollTableComponent } from './pages/key-indicators-tab/reports/net-enroll-table/net-enroll-table.component';
+import { GenderParityBarchartComponent } from './pages/key-indicators-tab/reports/gender-parity-barchart/gender-parity-barchart.component';
 
 
 
@@ -37,7 +40,10 @@ import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/
     EnrollmentInfoTabComponent,
     EnrollmentByEducationBarchartComponent,
     EnrollmentByGenderTableComponent,
-    EnrollmentByCategoryTableComponent
+    EnrollmentByCategoryTableComponent,
+    GrossEnrollTableComponent,
+    NetEnrollTableComponent,
+    GenderParityBarchartComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

@@ -38,7 +38,7 @@ bigNumberMetrics: any = [];
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='School Details';
+  tabLabel:any='Enrollment Info';
 
   //added for full school report download
   // title = "Download School Report"
