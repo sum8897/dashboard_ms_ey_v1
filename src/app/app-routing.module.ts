@@ -112,6 +112,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'pas',
+        loadChildren: () =>
+          import('./views/pas/pas.module').then(
+            (module) => module.PasModule
+          ),
+        canLoad: [AuthGuard]
+      },
+      {
         path: 'school-library',
         loadChildren: () =>
           import('./views/school-library/school-library.module').then(

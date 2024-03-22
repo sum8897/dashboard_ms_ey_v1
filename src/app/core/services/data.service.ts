@@ -663,7 +663,7 @@ export class DataService {
 }
 
 //stackbar
-stackBar(data: any, config: any, param: string,label:string,backgroundColor:any) {
+stackBar(data: any, config: any, param: string,label:string,backgroundColor:any,barPercentage:any) {
   console.log("trendLine ===== ", data);
   
   const barData = data.values.map((reportData: any) => reportData[param]);
@@ -676,7 +676,10 @@ stackBar(data: any, config: any, param: string,label:string,backgroundColor:any)
       backgroundColor: backgroundColor, // Customize the bar color as needed
       borderWidth: 1, // Customize the border width as needed
       borderColor: 'rgba(0, 0, 255, 1)', // Customize the border color as needed
-      stack: 'Stack 1' // Specify the stack name
+      // stack: 'Stack 1' // Specify the stack name
+      barPercentage: 0.8, // Adjust the width of individual bars (optional, default is 0.9)
+      // barPercentage: barPercentage, // Adjust the width of individual bars (optional, default is 0.9)
+      categoryPercentage: barPercentage,
   };
 
   config.datasets.push(barObject);

@@ -1,1 +1,31 @@
-<p>pas works!</p>
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				PAS<em><small></small></em>
+			</p>
+			<p class="program-desc"></p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab label="School Details" *ngIf="tabs.includes('School Details')">
+			<app-participation-tab
+				*ngIf="selectedTabLabel === 'School Details'"
+			></app-participation-tab>
+		</mat-tab>
+		<!-- <mat-tab label="Key Indicators">
+			<app-key-indicators-tab
+				*ngIf="selectedTabLabel === 'Key Indicators'"
+			></app-key-indicators-tab>
+		</mat-tab> -->
+	</mat-tab-group>
+</div>

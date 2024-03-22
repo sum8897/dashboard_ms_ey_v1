@@ -20,7 +20,7 @@ export class TeacherRatioTableComponent implements OnInit, OnDestroy {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "Number of Schools by Pupil Teacher Ratio"
+    reportName: "Pupil Teacher Ratio"
   };
   minDate: any;
   maxDate: any;
@@ -28,7 +28,7 @@ export class TeacherRatioTableComponent implements OnInit, OnDestroy {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Number of Schools by Pupil Teacher Ratio';
+  title = 'Pupil Teacher Ratio';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;
