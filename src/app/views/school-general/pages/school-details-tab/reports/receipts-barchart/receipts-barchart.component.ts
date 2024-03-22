@@ -24,7 +24,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
   marginTop: any;
   config;
   data;
-  fileName: string = "";
+  fileName: string = " Receipts & Expenditure(INR)";
   reportName: string = 'receipts_barchart';
   filters: any = [];
   levels: any;

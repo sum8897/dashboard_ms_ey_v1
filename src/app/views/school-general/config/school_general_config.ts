@@ -569,7 +569,9 @@ district_name,
 coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
 coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
 coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+        nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
 from(SELECT 
     d.district_name,
    SUM(CASE WHEN sef.item_group = '1' THEN
@@ -608,7 +610,9 @@ district_name,
 coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
 coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
 coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+        nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
 from(SELECT 
     d.district_name,
    SUM(CASE WHEN sef.item_group = '1' THEN
@@ -653,7 +657,9 @@ GROUP BY
                     coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                     coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                     coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                    coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                            nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                     from(SELECT 
                             b.block_name,
                             SUM(
@@ -693,7 +699,8 @@ GROUP BY
                          GROUP BY
                            b.block_name,sef.school_id) 
                            as sub
-                           group by sub.block_name`
+                           group by sub.block_name
+                      `
                 },
                 "actions": {
                     "queries": {
@@ -702,7 +709,9 @@ GROUP BY
                         coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                         coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                         coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                        coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                                nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                         from(SELECT 
                                 b.block_name,
                                 SUM(
@@ -743,6 +752,7 @@ GROUP BY
                                b.block_name,sef.school_id) 
                                as sub
                                group by sub.block_name
+                          
     `,
                     },
                     "level": "school"
@@ -759,7 +769,9 @@ GROUP BY
                     coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                     coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                     coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                    coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                            nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                     from(SELECT 
                             c.cluster_name,
                             SUM(
@@ -811,7 +823,9 @@ GROUP BY
                         coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                         coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                         coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                        coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                                nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                         from(SELECT 
                                 c.cluster_name,
                                 SUM(
@@ -870,7 +884,9 @@ GROUP BY
                     coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                     coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                     coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                    coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                            nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                     from(SELECT 
                             sch.school_name,
                             SUM(
@@ -924,7 +940,9 @@ GROUP BY
                         coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                         coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
                         coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
+                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary,
+                        coalesce(round((sum(pri_students)+sum(upr_students)+SUM(sec_students)+SUM(hsec_students)) /
+                                nullif ((sum(pri_cls)+sum(upr_cls)+sum(sec_cls)+sum(hsec_cls)),0),0),0) as average
                         from(SELECT 
                                 sch.school_name,
                                 SUM(
@@ -1106,6 +1124,11 @@ GROUP BY
                     {
                         name: "Higher Secondary School",
                         property: "higher_secondary",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Average",
+                        property: "average",
                         class: "text-center"
                     },
                     // {
@@ -3298,7 +3321,7 @@ category_table: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "table": `SELECT 
-                sef.district_id,d
+                sef.district_id,
                 d.district_name,
                 SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
                 SUM(CASE WHEN item_group = 1 AND item_id = 2 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS SC,
@@ -7266,7 +7289,7 @@ gender_parity_barchart:{
     ],
     "options": {
         "barChart": {
-            "metricLabelProp": "Gender Parity Index by Education Level",
+            "metricLabelProp": "Gender Parity Index(GPI)",
             "metricValueProp": "gpi",
             "yAxis": {
                 "title": "Gender Parity Index"

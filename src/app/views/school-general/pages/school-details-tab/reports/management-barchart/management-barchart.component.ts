@@ -24,7 +24,7 @@ export class ManagementBarchartComponent implements OnInit, OnDestroy {
   marginTop: any;
   config;
   data;
-  fileName: string = "";
+  fileName: string = "Schools by Management";
   reportName: string = 'management_barchart';
   filters: any = [];
   levels: any;

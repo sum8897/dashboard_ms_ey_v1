@@ -24,7 +24,7 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
   marginTop: any;
   config;
   data;
-  fileName: string = "";
+  fileName: string = "Enrollment by Education Level";
   reportName: string = 'enrollment_barchart';
   filters: any = [];
   levels: any;

@@ -24,7 +24,7 @@ export class GenderParityBarchartComponent implements OnInit, OnDestroy {
   marginTop: any;
   config;
   data;
-  fileName: string = "";
+  fileName: string = " Gender Parity Index by Education Level";
   reportName: string = 'gender_parity_barchart';
   filters: any = [];
   levels: any;
