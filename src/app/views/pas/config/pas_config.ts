@@ -13,7 +13,7 @@ export const config = {
 	filters: [
        
         {
-			label: 'School Details',
+			label: 'Participation',
 
             // displayLabel:'Class',
 
@@ -31,41 +31,61 @@ export const config = {
 				'select id, ac_year from dimensions.academic_year',
 		},
         {
-			label: 'Key Indicators',
+			label: 'Participation',
 
             // displayLabel:'Class',
 
-			name: 'acdemic_year',
+			name: 'class',
 
-			labelProp: 'ac_year',
+			labelProp: 'class',
 
-			valueProp: 'ac_year',
+			valueProp: 'class',
 
-			id: 'acdemic_year',
+			id: 'class',
 
-			tableAlias: 'ay',
+			tableAlias: 'pc',
 
 			query:
-				'select id, ac_year from dimensions.academic_year',
+				'select id, class from dimensions.pas_class',
+		},
+       
+        {
+			label: 'Participation',
+
+            // displayLabel:'Class',
+
+			name: 'subject',
+
+			labelProp: 'subject',
+
+			valueProp: 'subject',
+
+			id: 'subject',
+
+			tableAlias: 'ps',
+
+			query:
+				'select subject_id,subject from dimensions.pas_subject',
 		},
         {
-			label: 'Enrollment Info',
+			label: 'Participation',
 
             // displayLabel:'Class',
 
-			name: 'acdemic_year',
+			name: 'atten',
 
-			labelProp: 'ac_year',
+			labelProp: 'atten',
 
-			valueProp: 'ac_year',
+			valueProp: 'atten',
 
-			id: 'acdemic_year',
+			id: 'atten',
 
-			tableAlias: 'ay',
+			tableAlias: 'a',
 
 			query:
-				'select id, ac_year from dimensions.academic_year',
+				'select attendance,atten from dimensions.attendance',
 		},
+       
        
         
 	
@@ -83,8 +103,8 @@ export const config = {
    
 
     ///left table 
-    district_wise_table: {
-        "label": "School Details",
+    school_participation_table: {
+        "label": "Participation",
         "defaultLevel": "state",
         "filters": [
             {
@@ -94,38 +114,70 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "table": `select 
-                   sd.district_id,
-                    d.district_name,
-                    count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                    count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                    count(distinct school_id) as total
+                    district_id,
+                    district_name,
+                    schools_eligible,
+                    schools_surveyed,
+                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    students_surveyed
                     from
-                    school_general.schooldetails sd 
-                    left join
-                    dimensions.district d on sd.district_id = d.district_id 
-                    left join 
-                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                    
-                    group by 
-                    sd.district_id , d.district_name`,
+                    (select 
+                    d.district_name,
+                    pd.district_id ,
+                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                    count(distinct pd.school_id) as schools_surveyed,
+                    count(distinct pd.student_name) as students_surveyed
+                    from
+                    pas.pas_data pd 
+                    join
+                    pas.schoolmaster sm on pd.school_id = sm.school_id 
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     
+                    GROUP BY 
+                       pd.district_id, d.district_name, pd.district_id ) as sub;`,
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
-                        sd.district_id,
-                        d.district_name,
-                        count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                        count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                        count(distinct school_id) as total
+                        district_id,
+                        district_name,
+                        schools_eligible,
+                        schools_surveyed,
+                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        students_surveyed
                         from
-                        school_general.schooldetails sd 
-                        left join
-                        dimensions.district d on sd.district_id = d.district_id 
-                        left join 
-                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                        
-                        group by 
-                        sd.district_id , d.district_name`,
+                        (select 
+                        d.district_name,
+                        pd.district_id ,
+                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                        count(distinct pd.school_id) as schools_surveyed,
+                        count(distinct pd.student_name) as students_surveyed
+                        from
+                        pas.pas_data pd 
+                        join
+                        pas.schoolmaster sm on pd.school_id = sm.school_id 
+                        join
+                           dimensions.district d on pd.district_id = d.district_id 
+                         join 
+                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                         join 
+                         dimensions.pas_class pc on pd.class = pc.class
+                         join 
+                         dimensions.pas_subject ps on pd.subject = ps.subject
+                         join 
+                         dimensions.attendance a on pd.attendance = a.attendance
+                         
+                        GROUP BY 
+                           pd.district_id, d.district_name, pd.district_id ) as sub;`,
                     },
                     "level": "district"
                 }
@@ -137,44 +189,76 @@ export const config = {
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "table": `select 
-                    b.block_name,
-                    sd.block_id ,
-                    count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                    count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                    count(distinct sd.school_id) as total
+                    block_id,
+                    block_name,
+                    schools_eligible,
+                    schools_surveyed,
+                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    students_surveyed
                     from
-                    school_general.schooldetails sd 
-                    left join
-                    dimensions.district d on sd.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sd.block_id = b.block_id 
-                    left join 
-                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                    where 
-                      sd.district_id = {district_id}
-                    group by 
-                    sd.block_id  , b.block_name `,
+                    (select 
+                    b.block_name,
+                    pd.block_id ,
+                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                    count(distinct pd.school_id) as schools_surveyed,
+                    count(distinct pd.student_name) as students_surveyed
+                    from
+                    pas.pas_data pd 
+                    join
+                    pas.schoolmaster sm on pd.school_id = sm.school_id 
+                    join
+                    dimensions.district d on pd.district_id = d.district_id 
+                    join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                      join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.district_id = {district_id} 
+                     
+                    GROUP BY 
+                        pd.block_id,b.block_name, pd.block_id ) as sub; `,
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
-                        b.block_name,
-                        sd.block_id ,
-                        count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                        count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                        count(distinct sd.school_id) as total
+                        block_id,
+                        block_name,
+                        schools_eligible,
+                        schools_surveyed,
+                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        students_surveyed
                         from
-                        school_general.schooldetails sd 
-                        left join
-                        dimensions.district d on sd.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on sd.block_id = b.block_id 
-                        left join 
-                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                        where 
-                          sd.district_id = {district_id}
-                        group by 
-                        sd.block_id  , b.block_name `,
+                        (select 
+                        b.block_name,
+                        pd.block_id ,
+                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                        count(distinct pd.school_id) as schools_surveyed,
+                        count(distinct pd.student_name) as students_surveyed
+                        from
+                        pas.pas_data pd 
+                        join
+                        pas.schoolmaster sm on pd.school_id = sm.school_id 
+                        join
+                        dimensions.district d on pd.district_id = d.district_id 
+                        join 
+                           dimensions.block b on pd.block_id = b.block_id 
+                          join 
+                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                         join 
+                         dimensions.pas_class pc on pd.class = pc.class
+                         join 
+                         dimensions.pas_subject ps on pd.subject = ps.subject
+                         join 
+                         dimensions.attendance a on pd.attendance = a.attendance
+                         where  pd.district_id = {district_id} 
+                         
+                        GROUP BY 
+                            pd.block_id,b.block_name, pd.block_id ) as sub; `,
                     },
                     "level": "block"
                 }
@@ -186,48 +270,80 @@ export const config = {
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "table": `select 
-                    c.cluster_name,
-                    sd.cluster_id ,
-                    count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                    count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                    count(distinct sd.school_id) as total
+                    cluster_id,
+                    cluster_name,
+                    schools_eligible,
+                    schools_surveyed,
+                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    students_surveyed
                     from
-                    school_general.schooldetails sd 
-                    left join
-                    dimensions.district d on sd.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sd.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on sd.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                    where 
-                      sd.block_id  = {block_id}
-                    group by 
-                    sd.cluster_id  , c.cluster_name `,
+                    (select 
+                    c.cluster_name,
+                    pd.cluster_id ,
+                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                    count(distinct pd.school_id) as schools_surveyed,
+                    count(distinct pd.student_name) as students_surveyed
+                    from
+                    pas.pas_data pd 
+                    join
+                    pas.schoolmaster sm on pd.school_id = sm.school_id 
+                    join
+                    dimensions.district d on pd.district_id = d.district_id 
+                    join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                      join 
+                       dimensions.cluster c on pd.cluster_id = c.cluster_id
+                       join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.block_id = {block_id}  
+                    
+                    GROUP BY 
+                        pd.cluster_id,c.cluster_name, pd.cluster_id ) as sub; `,
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
-                        c.cluster_name,
-                        sd.cluster_id ,
-                        count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                        count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                        count(distinct sd.school_id) as total
+                        cluster_id,
+                        cluster_name,
+                        schools_eligible,
+                        schools_surveyed,
+                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        students_surveyed
                         from
-                        school_general.schooldetails sd 
-                        left join
-                        dimensions.district d on sd.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on sd.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on sd.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                        where 
-                          sd.block_id  = {block_id}
-                        group by 
-                        sd.cluster_id  , c.cluster_name`,
+                        (select 
+                        c.cluster_name,
+                        pd.cluster_id ,
+                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                        count(distinct pd.school_id) as schools_surveyed,
+                        count(distinct pd.student_name) as students_surveyed
+                        from
+                        pas.pas_data pd 
+                        join
+                        pas.schoolmaster sm on pd.school_id = sm.school_id 
+                        join
+                        dimensions.district d on pd.district_id = d.district_id 
+                        join 
+                           dimensions.block b on pd.block_id = b.block_id 
+                          join 
+                           dimensions.cluster c on pd.cluster_id = c.cluster_id
+                           join 
+                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                         join 
+                         dimensions.pas_class pc on pd.class = pc.class
+                         join 
+                         dimensions.pas_subject ps on pd.subject = ps.subject
+                         join 
+                         dimensions.attendance a on pd.attendance = a.attendance
+                         where  pd.block_id = {block_id}  
+                        
+                        GROUP BY 
+                            pd.cluster_id,c.cluster_name, pd.cluster_id ) as sub;`,
                     },
                     "level": "cluster"
                 }
@@ -239,57 +355,85 @@ export const config = {
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "table": `select 
-                    sch.school_name,
-                    sd.school_id  ,
-                    count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                    count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                    count(distinct sd.school_id) as total
-                    from
-                    school_general.schooldetails sd 
-                    left join
-                    dimensions.district d on sd.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on sd.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on sd.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on sd.school_id = sch.school_id 
-                    left join 
-                    dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                    where 
-                      sd.cluster_id  = {cluster_id}
-                    group by 
-                    sd.school_id  , sch.school_name  
+                    school_id,
+                   school_name,
+                   schools_eligible,
+                   schools_surveyed,
+                   ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                   students_surveyed
+                   from
+                   (select 
+                   sch.school_name,
+                   pd.school_id ,
+                   count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                   count(distinct pd.school_id) as schools_surveyed,
+                   count(distinct pd.student_name) as students_surveyed
+                   from
+                   pas.pas_data pd 
+                   join
+                   pas.schoolmaster sm on pd.school_id = sm.school_id 
+                   join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                      dimensions.block b on pd.block_id = b.block_id 
+                     join 
+                      dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      join 
+                      dimensions.school sch on pd.school_id = sch.school_id 
+                       join 
+                    dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                    join 
+                    dimensions.pas_class pc on pd.class = pc.class
+                    join 
+                    dimensions.pas_subject ps on pd.subject = ps.subject
+                    join 
+                    dimensions.attendance a on pd.attendance = a.attendance
+                    where  pd.cluster_id = {cluster_id}   
                     
-                
+                   GROUP BY 
+                      pd.school_id, sch.school_name, pd.school_id ) as sub;
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
-                        sch.school_name,
-                        sd.school_id  ,
-                        count(distinct case when sd.sch_loc_r_u = 1 then sd.school_id end) as rural,
-                        count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
-                        count(distinct sd.school_id) as total
-                        from
-                        school_general.schooldetails sd 
-                        left join
-                        dimensions.district d on sd.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on sd.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on sd.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on sd.school_id = sch.school_id 
-                        left join 
-                        dimensions.academic_year ay on sd.ac_year = ay.ac_year
-                        where 
-                          sd.cluster_id  = {cluster_id}
-                        group by 
-                        sd.school_id  , sch.school_name  
+                        school_id,
+                       school_name,
+                       schools_eligible,
+                       schools_surveyed,
+                       ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                       students_surveyed
+                       from
+                       (select 
+                       sch.school_name,
+                       pd.school_id ,
+                       count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
+                       count(distinct pd.school_id) as schools_surveyed,
+                       count(distinct pd.student_name) as students_surveyed
+                       from
+                       pas.pas_data pd 
+                       join
+                       pas.schoolmaster sm on pd.school_id = sm.school_id 
+                       join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                          dimensions.block b on pd.block_id = b.block_id 
+                         join 
+                          dimensions.cluster c on pd.cluster_id = c.cluster_id
+                          join 
+                          dimensions.school sch on pd.school_id = sch.school_id 
+                           join 
+                        dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                        join 
+                        dimensions.pas_class pc on pd.class = pc.class
+                        join 
+                        dimensions.pas_subject ps on pd.subject = ps.subject
+                        join 
+                        dimensions.attendance a on pd.attendance = a.attendance
+                        where  pd.cluster_id = {cluster_id}   
                         
-                    
+                       GROUP BY 
+                          pd.school_id, sch.school_name, pd.school_id ) as sub;
                         `,
                     },
                     "level": "school"
@@ -369,7 +513,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]
+                                linkedReports: ["student_participation_table", "question_wise_barchart"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -387,7 +531,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                          },
+                                linkedReports: ["student_participation_table", "question_wise_barchart"]                        },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -404,7 +548,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                           },
+                                linkedReports: ["student_participation_table", "question_wise_barchart"]                         },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -421,7 +565,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
+                                linkedReports: ["student_participation_table", "question_wise_barchart"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -439,7 +583,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 5,
-                                linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
+                                linkedReports: ["student_participation_table", "question_wise_barchart"] },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -447,13 +591,23 @@ export const config = {
                    
                    
                     {
-                        name: "Rural",
-                        property: "rural",
+                        name: "Schools Eligible",
+                        property: "schools_eligible",
                         class: "text-center"
                     },
                     {
-                        name: "Urban",
-                        property: "urban",
+                        name: "Schools Surveyed",
+                        property: "schools_surveyed",
+                        class: "text-center"
+                    },
+                    {
+                        name: "% Schools Surveyed",
+                        property: "perc_schools_surveyed",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Students surveyed",
+                        property: "students_surveyed",
                         class: "text-center"
                     },
                    
@@ -493,7 +647,7 @@ export const config = {
 
 
     
-    classroom_ratio_table: {
+    student_participation_table: {
         "label": "Average Student Present",
         "defaultLevel": "state",
         "filters": [
@@ -504,96 +658,54 @@ export const config = {
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "table": `
-                    select 
-district_name,
-coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-from(SELECT 
+                    SELECT 
     d.district_name,
-   SUM(
-        CASE WHEN sef.item_group = '1' THEN
-            sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-        ELSE 0 END
-    ) AS pri_students,
-     sum(distinct clsrms_pri) as pri_cls,
-    SUM(
-        CASE WHEN sef.item_group = '1' THEN
-            sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-        ELSE 0 END
-    ) AS upr_students,
-    sum (distinct clsrms_upr) as upr_cls,
-    SUM(
-        CASE WHEN sef.item_group = '1' THEN
-            sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-        ELSE 0 END
-    ) AS sec_students,
-    sum (distinct clsrms_sec) as sec_cls,
-    SUM(
-        CASE WHEN sef.item_group = '1' THEN
-            sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-        ELSE 0 END
-    ) AS hsec_students,
-   sum (distinct clsrms_hsec) as hsec_cls
-FROM 
-    school_general.sch_enr_fresh sef
-LEFT JOIN
-    dimensions.district d ON sef.district_id = d.district_id 
-LEFT JOIN
-    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-
-GROUP BY
-    d.district_name, sef.school_id) 
-       as sub
-       group by sub.district_name `
+    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+    count(*) as overall_enrollment
+    FROM 
+    pas.pas_data pd 
+join
+   dimensions.district d on pd.district_id = d.district_id 
+ join 
+ dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+ join 
+ dimensions.pas_class pc on pd.class = pc.class
+ join 
+ dimensions.pas_subject ps on pd.subject = ps.subject
+ join 
+ dimensions.attendance a on pd.attendance = a.attendance
+ 
+GROUP BY 
+    d.district_name, pd.district_id ; `
                 },
                 "actions": {
                     "queries": {
                         "table": `
-                        select 
-                        district_name,
-                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                        from(SELECT 
-                            d.district_name,
-                           SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                                ELSE 0 END
-                            ) AS pri_students,
-                             sum(distinct clsrms_pri) as pri_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                                ELSE 0 END
-                            ) AS upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                                ELSE 0 END
-                            ) AS sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                                ELSE 0 END
-                            ) AS hsec_students,
-                           sum (distinct clsrms_hsec) as hsec_cls
-                        FROM 
-                            school_general.sch_enr_fresh sef
-                        LEFT JOIN
-                            dimensions.district d ON sef.district_id = d.district_id 
-                        LEFT JOIN
-                            dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-                        
-                        GROUP BY
-                            d.district_name, sef.school_id) 
-                               as sub
-                               group by sub.district_name`,
+                        SELECT 
+    d.district_name,
+    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+    count(*) as overall_enrollment
+    FROM 
+    pas.pas_data pd 
+join
+   dimensions.district d on pd.district_id = d.district_id 
+ join 
+ dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+ join 
+ dimensions.pas_class pc on pd.class = pc.class
+ join 
+ dimensions.pas_subject ps on pd.subject = ps.subject
+ join 
+ dimensions.attendance a on pd.attendance = a.attendance
+ 
+GROUP BY 
+    d.district_name, pd.district_id ;`,
                     },
                     "level": "school"
                 }
@@ -604,101 +716,59 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select 
-                    block_name,
-                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                    from(SELECT 
-                            b.block_name,
-                            SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                            ELSE 0 end
-                        ) AS pri_students,
-                         sum(distinct clsrms_pri) as pri_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                            ELSE 0 END
-                        ) AS upr_students,
-                        sum (distinct clsrms_upr) as upr_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                            ELSE 0 END
-                        ) AS sec_students,
-                        sum (distinct clsrms_sec) as sec_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                            ELSE 0 END
-                        ) AS hsec_students,
-                       sum (distinct clsrms_hsec) as hsec_cls
-                       FROM 
-                            school_general.sch_enr_fresh sef
-                           left join
-                           dimensions.district d on sef.district_id = d.district_id 
-                           left join 
-                           dimensions.block b on sef.block_id = b.block_id
-                    LEFT JOIN
-                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                    WHERE 
-                           sef.district_id = {district_id}
-                         GROUP BY
-                           b.block_name,sef.school_id) 
-                           as sub
-                           group by sub.block_name`
+                    "table": `SELECT 
+                    b.block_name,
+                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(*) as overall_enrollment
+                    FROM 
+                    pas.pas_data pd 
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                 join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where pd.district_id = {district_id} 
+                 
+                GROUP BY 
+                    b.block_name, pd.block_id ;`
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-                        block_name,
-                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                        from(SELECT 
-                                b.block_name,
-                                SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                                ELSE 0 end
-                            ) AS pri_students,
-                             sum(distinct clsrms_pri) as pri_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                                ELSE 0 END
-                            ) AS upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                                ELSE 0 END
-                            ) AS sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                                ELSE 0 END
-                            ) AS hsec_students,
-                           sum (distinct clsrms_hsec) as hsec_cls
-                           FROM 
-                                school_general.sch_enr_fresh sef
-                               left join
-                               dimensions.district d on sef.district_id = d.district_id 
-                               left join 
-                               dimensions.block b on sef.block_id = b.block_id
-                        LEFT JOIN
-                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                        WHERE 
-                               sef.district_id = {district_id}
-                             GROUP BY
-                               b.block_name,sef.school_id) 
-                               as sub
-                               group by sub.block_name
+                        "table": `SELECT 
+                        b.block_name,
+                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(*) as overall_enrollment
+                        FROM 
+                        pas.pas_data pd 
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where pd.district_id = {district_id} 
+                     
+                    GROUP BY 
+                        b.block_name, pd.block_id ;
     `,
                     },
                     "level": "school"
@@ -710,106 +780,66 @@ GROUP BY
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select 
-                    cluster_name,
-                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                    from(SELECT 
-                            c.cluster_name,
-                            SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                            ELSE 0 END
-                        ) AS pri_students,
-                         sum(distinct clsrms_pri) as pri_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                            ELSE 0 END
-                        ) AS upr_students,
-                        sum (distinct clsrms_upr) as upr_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                            ELSE 0 END
-                        ) AS sec_students,
-                        sum (distinct clsrms_sec) as sec_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                            ELSE 0 END
-                        ) AS hsec_students,
-                       sum (distinct clsrms_hsec) as hsec_cls
-                       FROM 
-                            school_general.sch_enr_fresh sef
-                           left join
-                           dimensions.district d on sef.district_id = d.district_id 
-                           left join 
-                           dimensions.block b on sef.block_id = b.block_id
-                           left join
-                           dimensions.cluster c on sef.cluster_id = c.cluster_id
-                        LEFT JOIN
-                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                    WHERE 
-                            sef.block_id = {block_id}
-                         GROUP BY
-                          c.cluster_name,sef.school_id) 
-                           as sub
-                           group by sub.cluster_name
+                    "table": `SELECT 
+                    c.cluster_name,
+                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(*) as overall_enrollment
+                    FROM 
+                    pas.pas_data pd 
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                   dimensions.cluster c on pd.cluster_id = c.cluster_id
+                 join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where pd.block_id = {block_id} 
+                 
+                GROUP BY 
+                    c.cluster_name, pd.cluster_id ;
+                
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-                        cluster_name,
-                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                        from(SELECT 
-                                c.cluster_name,
-                                SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                                ELSE 0 END
-                            ) AS pri_students,
-                             sum(distinct clsrms_pri) as pri_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                                ELSE 0 END
-                            ) AS upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                                ELSE 0 END
-                            ) AS sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                                ELSE 0 END
-                            ) AS hsec_students,
-                           sum (distinct clsrms_hsec) as hsec_cls
-                           FROM 
-                                school_general.sch_enr_fresh sef
-                               left join
-                               dimensions.district d on sef.district_id = d.district_id 
-                               left join 
-                               dimensions.block b on sef.block_id = b.block_id
-                               left join
-                               dimensions.cluster c on sef.cluster_id = c.cluster_id
-                            LEFT JOIN
-                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                        WHERE 
-                                sef.block_id = {block_id}
-                             GROUP BY
-                              c.cluster_name,sef.school_id) 
-                               as sub
-                               group by sub.cluster_name
+                        "table": `SELECT 
+                        c.cluster_name,
+                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(*) as overall_enrollment
+                        FROM 
+                        pas.pas_data pd 
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                       dimensions.cluster c on pd.cluster_id = c.cluster_id
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where pd.block_id = {block_id} 
+                     
+                    GROUP BY 
+                        c.cluster_name, pd.cluster_id ;
+                    
     `,
                     },
                     "level": "school"
@@ -821,110 +851,68 @@ GROUP BY
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table":`select 
-                    school_name,
-                    coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                    coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                    coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                    coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                    from(SELECT 
-                            sch.school_name,
-                            SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                            ELSE 0 END
-                        ) AS pri_students,
-                         sum(distinct clsrms_pri) as pri_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                            ELSE 0 END
-                        ) AS upr_students,
-                        sum (distinct clsrms_upr) as upr_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                            ELSE 0 END
-                        ) AS sec_students,
-                        sum (distinct clsrms_sec) as sec_cls,
-                        SUM(
-                            CASE WHEN sef.item_group = '1' THEN
-                                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                            ELSE 0 END
-                        ) AS hsec_students,
-                       sum (distinct clsrms_hsec) as hsec_cls
-                       FROM 
-                            school_general.sch_enr_fresh sef
-                           left join
-                           dimensions.district d on sef.district_id = d.district_id 
-                           left join 
-                           dimensions.block b on sef.block_id = b.block_id
-                           left join
-                           dimensions.cluster c on sef.cluster_id = c.cluster_id
-                           left join 
-                           dimensions.school sch on sef.school_id = sch.school_id
-                        LEFT JOIN
-                        dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                    WHERE 
-                             sef.cluster_id = {cluster_id}
-                         GROUP BY
-                          sch.school_name,sef.school_id) 
-                           as sub
-                           group by sub.school_name
+                    "table":`SELECT 
+                    sch.school_name,
+                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(*) as overall_enrollment
+                    FROM 
+                    pas.pas_data pd 
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                   dimensions.cluster c on pd.cluster_id = c.cluster_id
+                   join 
+                   dimensions.school sch on pd.school_id = sch.school_id 
+                 join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where  pd.cluster_id = {cluster_id} 
+                 
+                GROUP BY 
+                    sch.school_name, pd.school_id ;
                 `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-                        school_name,
-                        coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
-                        coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
-                        coalesce(ROUND(SUM(sec_students) / nullif (sum (sec_cls), 0),0),0) as secondary,
-                        coalesce(ROUND(SUM(hsec_students) / nullif (sum(hsec_cls), 0),0),0) as higher_secondary
-                        from(SELECT 
-                                sch.school_name,
-                                SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                                ELSE 0 END
-                            ) AS pri_students,
-                             sum(distinct clsrms_pri) as pri_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                                ELSE 0 END
-                            ) AS upr_students,
-                            sum (distinct clsrms_upr) as upr_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                                ELSE 0 END
-                            ) AS sec_students,
-                            sum (distinct clsrms_sec) as sec_cls,
-                            SUM(
-                                CASE WHEN sef.item_group = '1' THEN
-                                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                                ELSE 0 END
-                            ) AS hsec_students,
-                           sum (distinct clsrms_hsec) as hsec_cls
-                           FROM 
-                                school_general.sch_enr_fresh sef
-                               left join
-                               dimensions.district d on sef.district_id = d.district_id 
-                               left join 
-                               dimensions.block b on sef.block_id = b.block_id
-                               left join
-                               dimensions.cluster c on sef.cluster_id = c.cluster_id
-                               left join 
-                               dimensions.school sch on sef.school_id = sch.school_id
-                            LEFT JOIN
-                            dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                                        WHERE 
-                                 sef.cluster_id = {cluster_id}
-                             GROUP BY
-                              sch.school_name,sef.school_id) 
-                               as sub
-                               group by sub.school_name
+                        "table": `SELECT 
+                        sch.school_name,
+                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(*) as overall_enrollment
+                        FROM 
+                        pas.pas_data pd 
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                       dimensions.cluster c on pd.cluster_id = c.cluster_id
+                       join 
+                       dimensions.school sch on pd.school_id = sch.school_id 
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.cluster_id = {cluster_id} 
+                     
+                    GROUP BY 
+                        sch.school_name, pd.school_id ;
                     `,
                     },
                     "level": "school"
@@ -1029,39 +1017,35 @@ GROUP BY
                         property: "cluster_name",
                         class: "text-center"
                     },
-                    // {
-                    //     name: "UDISE Code",
-                    //     property: "udise_code",
-                    //     class: "text-left"
-                    // },
-                    {
-                        name: "SCHOOL Code",
-                        property: "school_id",
-                        class: "text-center"
-                    },
                     {
                         name: "School",
                         property: "school_name",
                         class: "text-center"
                     },
+                    
                     {
-                        name: "Primary School",
-                        property: "primaryschool",
+                        name: "General",
+                        property: "gen",
                         class: "text-center"
                     },
                     {
-                        name: "Upper Primary School",
-                        property: "upper",
+                        name: "OBC",
+                        property: "obc",
                         class: "text-center"
                     },
                     {
-                        name: "Secondary School",
-                        property: "secondary",
+                        name: "SC",
+                        property: "sc",
                         class: "text-center"
                     },
                     {
-                        name: "Higher Secondary School",
-                        property: "higher_secondary",
+                        name: "ST",
+                        property: "st",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Overall Enrollment",
+                        property: "overall_enrollment",
                         class: "text-center"
                     },
                     // {
@@ -1102,7 +1086,7 @@ GROUP BY
    
 
     //barchart
-    management_barchart:{
+    question_wise_barchart:{
         "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
@@ -1113,51 +1097,51 @@ GROUP BY
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
-                    from (
-                SELECT 
-                    d.district_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+                    question_id as level,
+                    SUM(no_of_students) AS total_count
+                FROM (select 
+                pd.question_id,
+                count(pd.question_id) as no_of_students
+                from pas.pas_data pd
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
                 
                 GROUP BY 
-                    d.district_name,sm.schoolmanagement_name) as sub
-                   group by 
-                  schoolmanagement_name; 
+                    pd.question_id, pd.school_id) as sub_query
+                   group by question_id; 
                     `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
-                        from (
-                    SELECT 
-                        d.district_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+                        question_id as level,
+                        SUM(no_of_students) AS total_count
+                    FROM (select 
+                    pd.question_id,
+                    count(pd.question_id) as no_of_students
+                    from pas.pas_data pd
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                    join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
                     
                     GROUP BY 
-                        d.district_name,sm.schoolmanagement_name) as sub
-                       group by 
-                      schoolmanagement_name; 
+                        pd.question_id, pd.school_id) as sub_query
+                       group by question_id;
                         `
                     
                     },
@@ -1171,59 +1155,57 @@ GROUP BY
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
-                    from (
-                 SELECT 
-                     b.block_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.district_id = {district_id}
+                    question_id as level,
+                    SUM(no_of_students) AS total_count
+                FROM (select 
+                pd.question_id,
+                count(pd.question_id) as no_of_students
+                from pas.pas_data pd
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where  pd.district_id = {district_id}
                 GROUP BY 
-                    b.block_name,sd.block_id,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name; `,
+                    pd.question_id, pd.school_id) as sub_query
+                   group by question_id;
+                 `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":
                         `SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
-                        from (
-                     SELECT 
-                         b.block_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.district_id = {district_id}
+                        question_id as level,
+                        SUM(no_of_students) AS total_count
+                    FROM (select 
+                    pd.question_id,
+                    count(pd.question_id) as no_of_students
+                    from pas.pas_data pd
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.district_id = {district_id}
                     GROUP BY 
-                        b.block_name,sd.block_id,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name;`,
+                        pd.question_id, pd.school_id) as sub_query
+                       group by question_id;
+                    `,
                     },
                     "level": "block"
                 }
@@ -1235,62 +1217,58 @@ GROUP BY
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
-                    from (
-                 SELECT 
-                     c.cluster_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN
-                    dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.block_id = {block_id}
+                    question_id as level,
+                    SUM(no_of_students) AS total_count
+                FROM (select 
+                pd.question_id,
+                count(pd.question_id) as no_of_students
+                from pas.pas_data pd
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                   dimensions.cluster c on pd.cluster_id = c.cluster_id
+                  join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where  pd.block_id  = {block_id}
                 GROUP BY 
-                    c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name ;`,
+                    pd.question_id, pd.school_id) as sub_query
+                   group by question_id;`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
-                        from (
-                     SELECT 
-                         c.cluster_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.block_id = {block_id}
+                        question_id as level,
+                        SUM(no_of_students) AS total_count
+                    FROM (select 
+                    pd.question_id,
+                    count(pd.question_id) as no_of_students
+                    from pas.pas_data pd
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                       dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.block_id  = {block_id}
                     GROUP BY 
-                        c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name ;`
+                        pd.question_id, pd.school_id) as sub_query
+                       group by question_id;`
                     },
                     "level": "cluster"
                 }
@@ -1302,68 +1280,64 @@ GROUP BY
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
-                    from (
-                 SELECT 
-                     sch.school_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN
-                    dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                LEFT JOIN
-                    dimensions.school sch ON sd.school_id  = sch.school_id 
-                    LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.cluster_id = {cluster_id}
+                    question_id as level,
+                    SUM(no_of_students) AS total_count
+                FROM (select 
+                pd.question_id,
+                count(pd.question_id) as no_of_students
+                from pas.pas_data pd
+                join
+                   dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                   dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                   dimensions.cluster c on pd.cluster_id = c.cluster_id
+                   join 
+                   dimensions.school sch on pd.school_id = sch.school_id 
+                 join 
+                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                 join 
+                 dimensions.pas_class pc on pd.class = pc.class
+                 join 
+                 dimensions.pas_subject ps on pd.subject = ps.subject
+                 join 
+                 dimensions.attendance a on pd.attendance = a.attendance
+                 where  pd.cluster_id  = {cluster_id}
                 GROUP BY 
-                    sch.school_name,sd.school_id ,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name ; 
+                    pd.question_id, pd.school_id) as sub_query
+                   group by question_id; 
                 
                 `,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
-                        from (
-                     SELECT 
-                         sch.school_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN
-                        dimensions.school sch ON sd.school_id  = sch.school_id 
-                        LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.cluster_id = {cluster_id}
+                        question_id as level,
+                        SUM(no_of_students) AS total_count
+                    FROM (select 
+                    pd.question_id,
+                    count(pd.question_id) as no_of_students
+                    from pas.pas_data pd
+                    join
+                       dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                       dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                       dimensions.cluster c on pd.cluster_id = c.cluster_id
+                       join 
+                       dimensions.school sch on pd.school_id = sch.school_id 
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.attendance a on pd.attendance = a.attendance
+                     where  pd.cluster_id  = {cluster_id}
                     GROUP BY 
-                        sch.school_name,sd.school_id ,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name ;
+                        pd.question_id, pd.school_id) as sub_query
+                       group by question_id;
                     
                     `
                     },
@@ -1374,10 +1348,10 @@ GROUP BY
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Schools by Management",
-                "metricValueProp": "total_schools",
+                "metricLabelProp": "Question wise student participation",
+                "metricValueProp": "total_count",
                 "yAxis": {
-                    "title": " Number of Schools"
+                    "title": " Number of Students"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"

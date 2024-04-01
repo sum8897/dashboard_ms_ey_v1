@@ -17,9 +17,9 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-		<mat-tab label="School Details" *ngIf="tabs.includes('School Details')">
+		<mat-tab label="Participation" *ngIf="tabs.includes('Participation')">
 			<app-participation-tab
-				*ngIf="selectedTabLabel === 'School Details'"
+				*ngIf="selectedTabLabel === 'Participation'"
 			></app-participation-tab>
 		</mat-tab>
 		<!-- <mat-tab label="Key Indicators">
