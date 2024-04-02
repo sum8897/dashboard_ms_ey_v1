@@ -20,6 +20,7 @@ import{ config as studentEnrollmentConfig} from '../../views/student-enrollment/
 import{ config as schoolGeneralConfig} from '../../views/school-general/config/school_general_config';
 import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 import{ config as ictConfig} from '../../views/ict/config/ict_config';
+import{ config as pasConfig} from '../../views/pas/config/pas_config';
 
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
@@ -31,6 +32,7 @@ export const configFiles = {
   schoolGeneral:schoolGeneralConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
+  pas:pasConfig,
   studentAiAttendance:studentAiAttendanceConfig,
   studentEnrollment:studentEnrollmentConfig,
   studentAttendance: studentAttendaceConfig,
@@ -75,7 +77,8 @@ export const programFolderNames = {
   studentAiAttendance:'studentattendance',
   studentEnrollment:'studentattendance',
   schoolLibrary:'schoollibrary',
-  ict:'ict'
+  ict:'ict',
+  pas:'pas'
   // udiseSchoolInfra:'udiseSchoolInfra'
 }
 
@@ -100,6 +103,7 @@ export const stateProgramsFolderNames = {
   pat:'',
   library:'',
   ict:'',
+  pas:'',
   // udiseSchoolInfra:'',
   udiseschoolinfra:'',
 }
