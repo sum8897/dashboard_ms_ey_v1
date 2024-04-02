@@ -118,7 +118,8 @@ export const config = {
                     district_name,
                     schools_eligible,
                     schools_surveyed,
-                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                     students_surveyed
                     from
                     (select 
@@ -152,7 +153,8 @@ export const config = {
                         district_name,
                         schools_eligible,
                         schools_surveyed,
-                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                         students_surveyed
                         from
                         (select 
@@ -193,7 +195,8 @@ export const config = {
                     block_name,
                     schools_eligible,
                     schools_surveyed,
-                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                     students_surveyed
                     from
                     (select 
@@ -230,7 +233,8 @@ export const config = {
                         block_name,
                         schools_eligible,
                         schools_surveyed,
-                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                         students_surveyed
                         from
                         (select 
@@ -274,7 +278,8 @@ export const config = {
                     cluster_name,
                     schools_eligible,
                     schools_surveyed,
-                    ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                     students_surveyed
                     from
                     (select 
@@ -313,7 +318,8 @@ export const config = {
                         cluster_name,
                         schools_eligible,
                         schools_surveyed,
-                        ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                         students_surveyed
                         from
                         (select 
@@ -359,7 +365,8 @@ export const config = {
                    school_name,
                    schools_eligible,
                    schools_surveyed,
-                   ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                   COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                    students_surveyed
                    from
                    (select 
@@ -401,7 +408,8 @@ export const config = {
                        school_name,
                        schools_eligible,
                        schools_surveyed,
-                       ROUND((schools_surveyed * 100.0) / schools_eligible, 2) as perc_schools_surveyed,
+                       COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
+
                        students_surveyed
                        from
                        (select 
@@ -660,11 +668,11 @@ export const config = {
                     "table": `
                     SELECT 
     d.district_name,
-    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-    count(*) as overall_enrollment
+    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+    count(distinct student_name) as overall_enrollment
     FROM 
     pas.pas_data pd 
 join
@@ -686,11 +694,11 @@ GROUP BY
                         "table": `
                         SELECT 
     d.district_name,
-    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-    count(*) as overall_enrollment
+    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+    count(distinct student_name) as overall_enrollment
     FROM 
     pas.pas_data pd 
 join
@@ -716,13 +724,13 @@ GROUP BY
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `SELECT 
+                    "table": ` SELECT 
                     b.block_name,
-                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(*) as overall_enrollment
+                    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(distinct student_name) as overall_enrollment
                     FROM 
                     pas.pas_data pd 
                 join
@@ -737,20 +745,20 @@ GROUP BY
                  dimensions.pas_subject ps on pd.subject = ps.subject
                  join 
                  dimensions.attendance a on pd.attendance = a.attendance
-                 where pd.district_id = {district_id} 
-                 
+                 where  pd.district_id = {district_id}
+                
                 GROUP BY 
                     b.block_name, pd.block_id ;`
                 },
                 "actions": {
                     "queries": {
-                        "table": `SELECT 
+                        "table": ` SELECT 
                         b.block_name,
-                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(*) as overall_enrollment
+                        COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(distinct student_name) as overall_enrollment
                         FROM 
                         pas.pas_data pd 
                     join
@@ -765,8 +773,8 @@ GROUP BY
                      dimensions.pas_subject ps on pd.subject = ps.subject
                      join 
                      dimensions.attendance a on pd.attendance = a.attendance
-                     where pd.district_id = {district_id} 
-                     
+                     where  pd.district_id = {district_id}
+                    
                     GROUP BY 
                         b.block_name, pd.block_id ;
     `,
@@ -782,11 +790,11 @@ GROUP BY
                 "timeSeriesQueries": {
                     "table": `SELECT 
                     c.cluster_name,
-                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(*) as overall_enrollment
+                    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(distinct student_name) as overall_enrollment
                     FROM 
                     pas.pas_data pd 
                 join
@@ -803,7 +811,7 @@ GROUP BY
                  dimensions.pas_subject ps on pd.subject = ps.subject
                  join 
                  dimensions.attendance a on pd.attendance = a.attendance
-                 where pd.block_id = {block_id} 
+                 where  pd.block_id = {block_id} 
                  
                 GROUP BY 
                     c.cluster_name, pd.cluster_id ;
@@ -814,11 +822,11 @@ GROUP BY
                     "queries": {
                         "table": `SELECT 
                         c.cluster_name,
-                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(*) as overall_enrollment
+                        COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(distinct student_name) as overall_enrollment
                         FROM 
                         pas.pas_data pd 
                     join
@@ -835,7 +843,7 @@ GROUP BY
                      dimensions.pas_subject ps on pd.subject = ps.subject
                      join 
                      dimensions.attendance a on pd.attendance = a.attendance
-                     where pd.block_id = {block_id} 
+                     where  pd.block_id = {block_id} 
                      
                     GROUP BY 
                         c.cluster_name, pd.cluster_id ;
@@ -853,11 +861,11 @@ GROUP BY
                 "timeSeriesQueries": {
                     "table":`SELECT 
                     sch.school_name,
-                    COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                    COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                    COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(*) as overall_enrollment
+                    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                    count(distinct student_name) as overall_enrollment
                     FROM 
                     pas.pas_data pd 
                 join
@@ -876,7 +884,7 @@ GROUP BY
                  dimensions.pas_subject ps on pd.subject = ps.subject
                  join 
                  dimensions.attendance a on pd.attendance = a.attendance
-                 where  pd.cluster_id = {cluster_id} 
+                 where pd.cluster_id = {cluster_id} 
                  
                 GROUP BY 
                     sch.school_name, pd.school_id ;
@@ -886,11 +894,11 @@ GROUP BY
                     "queries": {
                         "table": `SELECT 
                         sch.school_name,
-                        COUNT(CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                        COUNT(CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                        COUNT(CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(*) as overall_enrollment
+                        COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                        COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                        COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
+                        count(distinct student_name) as overall_enrollment
                         FROM 
                         pas.pas_data pd 
                     join
@@ -909,7 +917,7 @@ GROUP BY
                      dimensions.pas_subject ps on pd.subject = ps.subject
                      join 
                      dimensions.attendance a on pd.attendance = a.attendance
-                     where  pd.cluster_id = {cluster_id} 
+                     where pd.cluster_id = {cluster_id} 
                      
                     GROUP BY 
                         sch.school_name, pd.school_id ;
