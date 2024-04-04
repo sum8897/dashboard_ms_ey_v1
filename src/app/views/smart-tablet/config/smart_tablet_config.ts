@@ -53,18 +53,36 @@ export const config = {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `select          district_name as district, 
-                    COALESCE(NULL, 'NA') AS connected,
-                                        COALESCE(NULL, 'NA') AS not_connected 
-                    from dimensions.district
+                    "table": `SELECT 
+                    t.district_id,
+                     d.district_name,
+                     COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                     COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                 FROM 
+                     smart_tablet.tablet t 
+                 JOIN
+                     dimensions.district d ON t.district_id = d.district_id 
+                 WHERE 
+                     t.date BETWEENstartDate AND endDate
+                 GROUP BY 
+                     d.district_name,t.district_id;
 					 `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select          district_name as district, 
-                        COALESCE(NULL, 'NA') AS connected,
-                                            COALESCE(NULL, 'NA') AS not_connected 
-                        from dimensions.district`,
+                        "table": `SELECT 
+                        t.district_id,
+                         d.district_name,
+                         COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                         COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                     FROM 
+                         smart_tablet.tablet t 
+                     JOIN
+                         dimensions.district d ON t.district_id = d.district_id 
+                     WHERE 
+                         t.date BETWEENstartDate AND endDate
+                     GROUP BY 
+                         d.district_name,t.district_id;`,
                     },
                     "level": "district"
                 }
@@ -75,53 +93,39 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.block_id ,
-                    b.block_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate   and te.district_id = {district_id}
-                    group by
-                    
-                    te.block_id ,
-                    b.block_name `,
+                    "table": `SELECT 
+                    t.block_id,
+                      b.block_name,
+                      COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                      COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                  FROM 
+                      smart_tablet.tablet t 
+                  JOIN
+                      dimensions.district d ON t.district_id = d.district_id 
+                  join 
+                      dimensions.block b on t.block_id = b.block_id
+                  WHERE 
+                      t.date BETWEENstartDate AND endDate and t.district_id = {district_id}
+                  GROUP BY 
+                      b.block_name,t.block_id; `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.block_id ,
-                        b.block_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate   and te.district_id = {district_id}
-                        group by
-                        
-                        te.block_id ,
-                        b.block_name `,
+                        "table": `SELECT 
+                        t.block_id,
+                          b.block_name,
+                          COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                          COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                      FROM 
+                          smart_tablet.tablet t 
+                      JOIN
+                          dimensions.district d ON t.district_id = d.district_id 
+                      join 
+                          dimensions.block b on t.block_id = b.block_id
+                      WHERE 
+                          t.date BETWEENstartDate AND endDate and t.district_id = {district_id}
+                      GROUP BY 
+                          b.block_name,t.block_id; `,
                     },
                     "level": "block"
                 }
@@ -132,57 +136,43 @@ export const config = {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.cluster_id ,
-                    c.cluster_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate   and te.block_id  = {block_id}
-                    group by
-                    
-                    te.cluster_id ,
-                    c.cluster_name  `,
+                    "table": `SELECT
+                    t.cluster_id,   
+                        c.cluster_name,
+                        COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                        COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                    FROM 
+                        smart_tablet.tablet t 
+                    JOIN
+                        dimensions.district d ON t.district_id = d.district_id 
+                    join 
+                        dimensions.block b on t.block_id = b.block_id
+                    join
+                        dimensions.cluster c on t.cluster_id = c.cluster_id
+                    WHERE 
+                        t.date BETWEENstartDate AND endDate and t.block_id = {block_id}
+                    GROUP BY 
+                        c.cluster_name,t.cluster_id; `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.cluster_id ,
-                        c.cluster_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate   and te.block_id  = {block_id}
-                        group by
-                        
-                        te.cluster_id ,
-                        c.cluster_name  `,
+                        "table": `SELECT
+                        t.cluster_id,   
+                            c.cluster_name,
+                            COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                            COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                        FROM 
+                            smart_tablet.tablet t 
+                        JOIN
+                            dimensions.district d ON t.district_id = d.district_id 
+                        join 
+                            dimensions.block b on t.block_id = b.block_id
+                        join
+                            dimensions.cluster c on t.cluster_id = c.cluster_id
+                        WHERE 
+                            t.date BETWEENstartDate AND endDate and t.block_id = {block_id}
+                        GROUP BY 
+                            c.cluster_name,t.cluster_id;`,
                     },
                     "level": "cluster"
                 }
@@ -193,64 +183,50 @@ export const config = {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table": `select 
-
-                    te.school_id ,
-                    sch.school_name,
-                    sum(te.status) as connected,
-                    count(te.status)-sum(te.status) as not_connected,
-                    ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                    ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                    group by
-                    
-                    te.school_id ,
-                    sch.school_name
+                    "table": `SELECT 
+                    t.school_id,
+                     sch.school_name,
+                     COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                     COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                 FROM 
+                     smart_tablet.tablet t 
+                 JOIN
+                     dimensions.district d ON t.district_id = d.district_id 
+                 join 
+                     dimensions.block b on t.block_id = b.block_id
+                 join
+                     dimensions.cluster c on t.cluster_id = c.cluster_id
+                 join
+                     dimensions.school sch on t.school_id = sch.school_id
+                 WHERE 
+                     t.date BETWEENstartDate AND endDate and t.cluster_id = {cluster_id}
+                 GROUP BY 
+                     sch.school_name,t.school_id;
                      
                 
                     `
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-
-                        te.school_id ,
-                        sch.school_name,
-                        sum(te.status) as connected,
-                        count(te.status)-sum(te.status) as not_connected,
-                        ROUND(sum(te.status) + ((count(te.status)-sum(te.status))),0) as total,
-                        ROUND(cast(sum(te.status) as decimal (10,2)) * 100 / (sum(te.status) + (count(te.status)-sum(te.status))),2) as perc_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                        group by
-                        
-                        te.school_id ,
-                        sch.school_name
+                        "table": `SELECT 
+                        t.school_id,
+                         sch.school_name,
+                         COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                         COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                     FROM 
+                         smart_tablet.tablet t 
+                     JOIN
+                         dimensions.district d ON t.district_id = d.district_id 
+                     join 
+                         dimensions.block b on t.block_id = b.block_id
+                     join
+                         dimensions.cluster c on t.cluster_id = c.cluster_id
+                     join
+                         dimensions.school sch on t.school_id = sch.school_id
+                     WHERE 
+                         t.date BETWEENstartDate AND endDate and t.cluster_id = {cluster_id}
+                     GROUP BY 
+                         sch.school_name,t.school_id;
                         
                     
                         `,
@@ -258,21 +234,57 @@ export const config = {
                     "level": "school"
                 }
             },
-            // {
-            //     "name": "School",
-            //     "labelProp": "school_name",
-            //     "valueProp": "school_id",
-            //     "hierarchyLevel": "5",
-            //     "timeSeriesQueries": {
-            //         "table": "select grade_number, ceil(round(CAST(COALESCE(avg(a.teachers_present/NULLIF(a.teachers_marked, 0))*100) as numeric),2)) as perc_teachers from  (select present_table.grade_state, present_table.school_id,present_table.date as att_date,present_table.sum as teachers_present,marked_table.sum as teachers_marked from datasets.sch_att_teacherspresent_daily_gender0school0grade as present_table join datasets.sch_att_teachersmarked_daily_gender0school0grade as marked_table on present_table.date = marked_table.date and present_table.school_id = marked_table.school_id and present_table.grade_state = marked_table.grade_state) as a join dimensions.grade as grade_wise_table on grade_wise_table.grade_id = a.grade_state where school_id = {school_id} and a.att_date between startDate and endDate group by a.grade_state, grade_number order by perc_teachers asc",
-            //     },
-            //     "actions": {
-            //         "queries": {
-            //             "table": "select min(date) as min_date, max(date) as max_date, t.grade, school_name, round(avg(percentage),0) as percentage from ingestion.sac_stds_avg_atd_by_grade as t left join ingestion.dimension_master as m on t.school_id = m.school_id left join ingestion.dimension_district as d on d.district_id = m.district_id left join ingestion.dimension_block as b on b.block_id = m.block_id left join ingestion.dimension_cluster as c on c.cluster_id = m.cluster_id left join ingestion.dimension_school as s on s.school_id = t.school_id where t.school_id={school_id} group by t.grade, school_name,cluster_name,block_name,district_name",
-            //         },
-            //         "level": "school"
-            //     }
-            // }
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
+                    t.school_id,
+                     sch.school_name,
+                     COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                     COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                 FROM 
+                     smart_tablet.tablet t 
+                 JOIN
+                     dimensions.district d ON t.district_id = d.district_id 
+                 join 
+                     dimensions.block b on t.block_id = b.block_id
+                 join
+                     dimensions.cluster c on t.cluster_id = c.cluster_id
+                 join
+                     dimensions.school sch on t.school_id = sch.school_id
+                 WHERE 
+                     t.date BETWEENstartDate AND endDate and t.school_id = {school_id}
+                 GROUP BY 
+                     sch.school_name,t.school_id;`,
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
+                        t.school_id,
+                         sch.school_name,
+                         COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices,
+                         COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                     FROM 
+                         smart_tablet.tablet t 
+                     JOIN
+                         dimensions.district d ON t.district_id = d.district_id 
+                     join 
+                         dimensions.block b on t.block_id = b.block_id
+                     join
+                         dimensions.cluster c on t.cluster_id = c.cluster_id
+                     join
+                         dimensions.school sch on t.school_id = sch.school_id
+                     WHERE 
+                         t.date BETWEENstartDate AND endDate and t.school_id = {school_id}
+                     GROUP BY 
+                         sch.school_name,t.school_id;`,
+                    },
+                    "level": "school"
+                }
+            }
         ],
         "options": {
             "table": {
@@ -290,7 +302,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
+                                linkedReports: ["tablet_complete_bignumber", "tablet_noncomplete_bignumber"]    },
 
                             allowedLevels: [1, 2, 3]
                         }
@@ -308,7 +320,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
+                                linkedReports: ["tablet_complete_bignumber", "tablet_noncomplete_bignumber"]    },
 
                             allowedLevels: [1, 2, 3]
                         }
@@ -326,7 +338,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
+                                linkedReports: ["tablet_complete_bignumber", "tablet_noncomplete_bignumber"]    },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -343,37 +355,47 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["tele_complete_bignumber", "tele_noncomplete_bignumber"]    },
+                                linkedReports: ["tablet_complete_bignumber", "tablet_noncomplete_bignumber"]    },
 
                             allowedLevels: [1, 2, 3]
 
                         }
                     },
+                    // {
+                    //     name: "School",
+                    //     property: "school_name",
+                    //     class: "text-left",
+                    //     action: {
+                    //         dataProps: [{
+                    //             "prop": "school_id",
+                    //             "alias": "id"
+                    //         }, {
+                    //             "prop": "school_name"
+                    //         }],
+                    //         extraInfo: {
+                    //             hierarchyLevel: 5,
+                    //             linkedReports: ["tablet_complete_bignumber", "tablet_noncomplete_bignumber"]    },
+                    //         allowedLevels: [1, 2, 3]
+
+                    //     }
+                    // },
                     {
                         name: "School",
                         property: "school_name",
                         class: "text-left"
                     },
+                   
                     {
-                        name: "Grade",
-                        property: "grade_number",
+                        name: "Active Devices",
+                        property: "active_devices",
                         class: "text-center"
                     },
                     {
-                        name: "Connected",
-                        property: "connected",
+                        name: "Non Active Devices",
+                        property: "non_active_devices",
                         class: "text-center"
                     },
-                    {
-                        name: "Not Connected",
-                        property: "not_connected",
-                        class: "text-center"
-                    },
-                    {
-                        name: "Total",
-                        property: "total",
-                        class: "text-center"
-                    },
+                    
                     
                     {
                         name: "Percentage of Connected",
@@ -418,27 +440,35 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": ` SELECT ROUND(AVG(Active_Devices), 2) AS Average_Active_Devices
-                    FROM (
-                        SELECT COUNT(*) AS Active_Devices
-                        FROM smart_tablet.tablet_on_off
-                        WHERE ("Event" = 'off' OR "Event" = 'on')
-                        AND "Date" BETWEEN startDate AND endDate
-                        GROUP BY "Date"
-                    ) AS Active_Devices_Count;
+                    "bigNumber": ` select sum(active_devices) as active_devices
+                    from (SELECT 
+                       d.district_name,
+                       COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate
+                   GROUP BY 
+                       d.district_name,t.district_id) as sub;
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `  SELECT ROUND(AVG(Active_Devices), 2) AS Average_Active_Devices
-                        FROM (
-                            SELECT COUNT(*) AS Active_Devices
-                            FROM smart_tablet.tablet_on_off
-                            WHERE ("Event" = 'off' OR "Event" = 'on')
-                            AND "Date" BETWEEN startDate AND endDate
-                            GROUP BY "Date"
-                        ) AS Active_Devices_Count;
+                        "bigNumber": `  select sum(active_devices) as active_devices
+                        from (SELECT 
+                           d.district_name,
+                           COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate
+                       GROUP BY 
+                           d.district_name,t.district_id) as sub;
                         `
                     },
                     "level": "district"
@@ -450,54 +480,38 @@ tablet_complete_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate   and te.district_id = {district_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ) as sum_query
+                    "bigNumber": `select sum(active_devices) as active_devices
+                    from ( SELECT 
+                       b.block_name,
+                       COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.district_id = {district_id}
+                   GROUP BY 
+                       b.block_name,t.block_id) as sub;
                         `
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate   and te.district_id = {district_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ) as sum_query
+                        "bigNumber": `select sum(active_devices) as active_devices
+                        from ( SELECT 
+                           b.block_name,
+                           COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.district_id = {district_id}
+                       GROUP BY 
+                           b.block_name,t.block_id) as sub;
                             `
                     },
                     "level": "block"
@@ -510,67 +524,43 @@ tablet_complete_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate   and te.block_id  = {block_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ) as sum_query
+                    "bigNumber": `select sum(active_devices) as active_devices
+                    from (  SELECT 
+                       c.cluster_name,
+                       COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   join
+                       dimensions.cluster c on t.cluster_id = c.cluster_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.block_id = {block_id}
+                   GROUP BY 
+                       c.cluster_name,t.cluster_id) as sub;
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate   and te.block_id  = {block_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ) as sum_query
+                        "bigNumber": `select sum(active_devices) as active_devices
+                        from (  SELECT 
+                           c.cluster_name,
+                           COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       join
+                           dimensions.cluster c on t.cluster_id = c.cluster_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.block_id = {block_id}
+                       GROUP BY 
+                           c.cluster_name,t.cluster_id) as sub;
                         `,
                        
                     },
@@ -583,40 +573,24 @@ tablet_complete_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(connected) as connected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    te.school_id ,
-                    sch.school_name,
-                    sum(te.status) as connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ,
-                    te.school_id ,
-                    sch.school_name) as sum_query
+                    "bigNumber": `select sum(active_devices) as active_devices
+                    from (  SELECT 
+                       sch.school_name,
+                       COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   join
+                       dimensions.cluster c on t.cluster_id = c.cluster_id
+                   join
+                       dimensions.school sch on t.school_id = sch.school_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.cluster_id = {cluster_id}
+                   GROUP BY 
+                       sch.school_name,t.school_id) as sub;
                     
                     
                     
@@ -628,40 +602,24 @@ tablet_complete_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(connected) as connected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        te.school_id ,
-                        sch.school_name,
-                        sum(te.status) as connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate   and te.cluster_id  = {cluster_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ,
-                        te.school_id ,
-                        sch.school_name) as sum_query
+                        "bigNumber": `select sum(active_devices) as active_devices
+                        from (  SELECT 
+                           sch.school_name,
+                           COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       join
+                           dimensions.cluster c on t.cluster_id = c.cluster_id
+                       join
+                           dimensions.school sch on t.school_id = sch.school_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.cluster_id = {cluster_id}
+                       GROUP BY 
+                           sch.school_name,t.school_id) as sub;
                         
                         
                         
@@ -679,7 +637,7 @@ tablet_complete_bignumber: {
             "bigNumber": {
                 "title": "connected",
                 "valueSuffix": '',
-                "property": 'average_active_devices'
+                "property": 'active_devices'
             }
         }
     },
@@ -694,29 +652,35 @@ tablet_complete_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT 
-                    51899 - ROUND(AVG(Active_Devices), 2) AS Average_Non_Active_Devices
-                FROM (
-                    SELECT COUNT(*) AS Active_Devices
-                    FROM smart_tablet.tablet_on_off
-                    WHERE ("Event" = 'off' OR "Event" = 'on')
-                    AND "Date" BETWEEN startDate AND endDate
-                    GROUP BY "Date"
-                ) AS Active_Devices_Count;
+                    "bigNumber": `select sum(non_active_devices) as non_active_devices
+                    from (SELECT 
+                       d.district_name,
+                       COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate
+                   GROUP BY 
+                       d.district_name,t.district_id) as sub;
                     `
 
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT 
-                        51899 - ROUND(AVG(Active_Devices), 2) AS Average_Non_Active_Devices
-                    FROM (
-                        SELECT COUNT(*) AS Active_Devices
-                        FROM smart_tablet.tablet_on_off
-                        WHERE ("Event" = 'off' OR "Event" = 'on')
-                        AND "Date" BETWEEN startDate AND endDate
-                        GROUP BY "Date"
-                    ) AS Active_Devices_Count;
+                        "bigNumber": `select sum(non_active_devices) as non_active_devices
+                        from (SELECT 
+                           d.district_name,
+                           COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate
+                       GROUP BY 
+                           d.district_name,t.district_id) as sub;
                         `
                     },
                     "level": "district"
@@ -728,53 +692,37 @@ tablet_complete_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    where 
-                    te.date between startDate and endDate  and te.district_id = {district_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ) as sum_query `
+                    "bigNumber": ` select sum(non_active_devices) as non_active_devices
+                    from ( SELECT 
+                       b.block_name,
+                       COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.district_id = {district_id}
+                   GROUP BY 
+                       b.block_name,t.block_id) as sub; `
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        where 
-                        te.date between startDate and endDate  and te.district_id = {district_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ) as sum_query`
+                        "bigNumber": ` select sum(non_active_devices) as non_active_devices
+                        from ( SELECT 
+                           b.block_name,
+                           COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.district_id = {district_id}
+                       GROUP BY 
+                           b.block_name,t.block_id) as sub;`
                     },
                     "level": "block"
                 }
@@ -786,67 +734,43 @@ tablet_complete_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    where 
-                    te.date between startDate and endDate  and te.block_id  = {block_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ) as sum_query
+                    "bigNumber": `select sum(non_active_devices) as non_active_devices
+                    from (  SELECT 
+                       c.cluster_name,
+                       COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   join
+                       dimensions.cluster c on t.cluster_id = c.cluster_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.block_id = {block_id}
+                   GROUP BY 
+                       c.cluster_name,t.cluster_id) as sub;
                     `,
                     
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        where 
-                        te.date between startDate and endDate  and te.block_id  = {block_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ) as sum_query
+                        "bigNumber": `select sum(non_active_devices) as non_active_devices
+                        from (  SELECT 
+                           c.cluster_name,
+                           COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       join
+                           dimensions.cluster c on t.cluster_id = c.cluster_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.block_id = {block_id}
+                       GROUP BY 
+                           c.cluster_name,t.cluster_id) as sub;
                         `,
                        
                     },
@@ -859,79 +783,47 @@ tablet_complete_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `select sum(not_connected) as notconnected
-                    from (select 
-                    te.district_id,
-                    d.district_name,
-                    te.block_id ,
-                    b.block_name,
-                    te.cluster_id ,
-                    c.cluster_name,
-                    te.school_id ,
-                    sch.school_name,
-                    count(te.status)-sum(te.status) as not_connected
-                    from 
-                    teleeducation.tele_education te
-                    left join
-                    dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                    left join
-                    dimensions.district d on te.district_id = d.district_id 
-                    left join 
-                    dimensions.block b on te.block_id = b.block_id 
-                    left join 
-                    dimensions.cluster c on te.cluster_id = c.cluster_id 
-                    left join 
-                    dimensions.school sch on te.school_id = sch.school_id 
-                    where 
-                    te.date between startDate and endDate  and te.cluster_id  = {cluster_id}
-                    group by
-                    te.district_id,
-                    d.district_name ,
-                    te.block_id ,
-                    b.block_name ,
-                    te.cluster_id ,
-                    c.cluster_name ,
-                    te.school_id ,
-                    sch.school_name) as sum_query
+                    "bigNumber": ` select sum(non_active_devices) as non_active_devices
+                    from (  SELECT 
+                       sch.school_name,
+                       COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                   FROM 
+                       smart_tablet.tablet t 
+                   JOIN
+                       dimensions.district d ON t.district_id = d.district_id 
+                   join 
+                       dimensions.block b on t.block_id = b.block_id
+                   join
+                       dimensions.cluster c on t.cluster_id = c.cluster_id
+                   join
+                       dimensions.school sch on t.school_id = sch.school_id
+                   WHERE 
+                       t.date BETWEEN startDate AND endDate and t.cluster_id = {cluster_id}
+                   GROUP BY 
+                       sch.school_name,t.school_id) as sub;
                     `,
                    
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `select sum(not_connected) as notconnected
-                        from (select 
-                        te.district_id,
-                        d.district_name,
-                        te.block_id ,
-                        b.block_name,
-                        te.cluster_id ,
-                        c.cluster_name,
-                        te.school_id ,
-                        sch.school_name,
-                        count(te.status)-sum(te.status) as not_connected
-                        from 
-                        teleeducation.tele_education te
-                        left join
-                        dimensions.project_dimension_data pdd on te.project_name = pdd.project_name 
-                        left join
-                        dimensions.district d on te.district_id = d.district_id 
-                        left join 
-                        dimensions.block b on te.block_id = b.block_id 
-                        left join 
-                        dimensions.cluster c on te.cluster_id = c.cluster_id 
-                        left join 
-                        dimensions.school sch on te.school_id = sch.school_id 
-                        where 
-                        te.date between startDate and endDate  and te.cluster_id  = {cluster_id}
-                        group by
-                        te.district_id,
-                        d.district_name ,
-                        te.block_id ,
-                        b.block_name ,
-                        te.cluster_id ,
-                        c.cluster_name ,
-                        te.school_id ,
-                        sch.school_name) as sum_query
+                        "bigNumber": ` select sum(non_active_devices) as non_active_devices
+                        from (  SELECT 
+                           sch.school_name,
+                           COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+                       FROM 
+                           smart_tablet.tablet t 
+                       JOIN
+                           dimensions.district d ON t.district_id = d.district_id 
+                       join 
+                           dimensions.block b on t.block_id = b.block_id
+                       join
+                           dimensions.cluster c on t.cluster_id = c.cluster_id
+                       join
+                           dimensions.school sch on t.school_id = sch.school_id
+                       WHERE 
+                           t.date BETWEEN startDate AND endDate and t.cluster_id = {cluster_id}
+                       GROUP BY 
+                           sch.school_name,t.school_id) as sub;
                         
     `,
                         
@@ -944,7 +836,7 @@ tablet_complete_bignumber: {
             "bigNumber": {
                 "title": "Not Connected",
                 "valueSuffix": '',
-                "property": 'average_non_active_devices'
+                "property": 'non_active_devices'
             }
         }
     },
@@ -1317,28 +1209,34 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":` SELECT 
-                ROUND((AVG(Active_Devices) / 51899) * 100, 2) AS Percentage_Active_Devices
-            FROM (
-                SELECT COUNT(*) AS Active_Devices
-                FROM smart_tablet.tablet_on_off
-                WHERE ("Event" = 'off' OR "Event" = 'on')
-                AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
-                GROUP BY "Date"
-            ) AS Active_Devices_Count;`,
+                "bigNumber":` select ROUND(sum(active_devices)*100.0 / 51899 , 2) as avg_active_devices
+                from (SELECT
+                    d.district_name,
+                    COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                FROM
+                    smart_tablet.tablet t
+                JOIN
+                    dimensions.district d ON t.district_id = d.district_id
+                WHERE
+                   t.date = (SELECT MAX(date) FROM smart_tablet.tablet)
+                GROUP BY
+                    d.district_name,t.district_id) as sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT 
-                    ROUND((AVG(Active_Devices) / 51899) * 100, 2) AS Percentage_Active_Devices
-                FROM (
-                    SELECT COUNT(*) AS Active_Devices
-                    FROM smart_tablet.tablet_on_off
-                    WHERE ("Event" = 'off' OR "Event" = 'on')
-                    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
-                    GROUP BY "Date"
-                ) AS Active_Devices_Count;`,
+                    "bigNumber": `select ROUND(sum(active_devices)*100.0 / 51899 , 2) as avg_active_devices
+                    from (SELECT
+                        d.district_name,
+                        COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
+                    FROM
+                        smart_tablet.tablet t
+                    JOIN
+                        dimensions.district d ON t.district_id = d.district_id
+                    WHERE
+                       t.date = (SELECT MAX(date) FROM smart_tablet.tablet)
+                    GROUP BY
+                        d.district_name,t.district_id) as sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1348,9 +1246,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Active Devices % on 19/03/2024",
+            "title": "Active Devices % on 31/03/2024",
             "valueSuffix": '%',
-            "property": 'percentage_active_devices'
+            "property": 'avg_active_devices'
         }
     }
 },
@@ -1364,29 +1262,35 @@ student_attendance_bignumber2: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":` 
-                SELECT 
-    ROUND(((51899 - AVG(Active_Devices)) / 51899) * 100, 2) AS Percentage_Non_Active_Devices
-FROM (
-    SELECT COUNT(*) AS Active_Devices
-    FROM smart_tablet.tablet_on_off
-    WHERE ("Event" = 'off' OR "Event" = 'on')
-    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
-    GROUP BY "Date"
-) AS Active_Devices_Count;`,
+                select ROUND(sum(non_active_devices)*100.0 / 51899 , 2) as avg_non_active_devices
+from (SELECT
+    d.district_name,
+    COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+FROM
+    smart_tablet.tablet t
+JOIN
+    dimensions.district d ON t.district_id = d.district_id
+WHERE
+    t.date = (SELECT MAX(date) FROM smart_tablet.tablet)
+GROUP BY
+    d.district_name,t.district_id) as sub;`,
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
                     "bigNumber": ` 
-                    SELECT 
-    ROUND(((51899 - AVG(Active_Devices)) / 51899) * 100, 2) AS Percentage_Non_Active_Devices
-FROM (
-    SELECT COUNT(*) AS Active_Devices
-    FROM smart_tablet.tablet_on_off
-    WHERE ("Event" = 'off' OR "Event" = 'on')
-    AND "Date" BETWEEN '2024-03-19' AND '2024-03-19'
-    GROUP BY "Date"
-) AS Active_Devices_Count;`,
+                    select ROUND(sum(non_active_devices)*100.0 / 51899 , 2) as avg_non_active_devices
+from (SELECT
+    d.district_name,
+    COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
+FROM
+    smart_tablet.tablet t
+JOIN
+    dimensions.district d ON t.district_id = d.district_id
+WHERE
+    t.date = (SELECT MAX(date) FROM smart_tablet.tablet)
+GROUP BY
+    d.district_name,t.district_id) as sub;`,
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1396,9 +1300,9 @@ FROM (
     ],
     "options": {
         "bigNumber": {
-            "title": "Non Active Devices % on 19/03/2024",
+            "title": " Non Active Devices % on 31/03/2024",
             "valueSuffix": '%',
-            "property": 'percentage_non_active_devices'
+            "property": 'avg_non_active_devices'
         }
     }
 },
