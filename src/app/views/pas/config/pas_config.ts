@@ -118,33 +118,35 @@ export const config = {
                     district_name,
                     schools_eligible,
                     schools_surveyed,
-                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
+                    Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
                     students_surveyed
-                    from
-                    (select 
-                    d.district_name,
-                    pd.district_id ,
-                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                    count(distinct pd.school_id) as schools_surveyed,
-                    count(distinct pd.student_name) as students_surveyed
-                    from
-                    pas.pas_data pd 
-                    join
-                    pas.schoolmaster sm on pd.school_id = sm.school_id 
-                    join
-                       dimensions.district d on pd.district_id = d.district_id 
-                     join 
-                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                     join 
-                     dimensions.pas_class pc on pd.class = pc.class
-                     join 
-                     dimensions.pas_subject ps on pd.subject = ps.subject
-                     join 
-                     dimensions.attendance a on pd.attendance = a.attendance
-                     
-                    GROUP BY 
-                       pd.district_id, d.district_name, pd.district_id ) as sub;`,
+                    from (SELECT
+                        d.district_name,
+                          pd.district_id,
+                        COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                        COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                        COUNT(DISTINCT pd.student_name) AS students_surveyed
+                    FROM
+                        pas.pas_data pd
+                    JOIN
+                        pas.schoolmaster sm ON pd.district_id = sm.district_id
+                    JOIN
+                        dimensions.district d ON pd.district_id = d.district_id
+                    JOIN
+                        dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                    JOIN
+                        dimensions.pas_class pc ON pd.class = pc.class
+                    JOIN
+                        dimensions.pas_subject ps ON pd.subject = ps.subject
+                    JOIN
+                        dimensions.attendance a ON pd.attendance = a.attendance
+                    WHERE
+                        sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                       
+                        GROUP BY
+                        d.district_name,pd.district_id) as sub
+                       group by 
+                      district_id,district_name,schools_eligible,schools_surveyed,students_surveyed;`,
                 },
                 "actions": {
                     "queries": {
@@ -153,33 +155,35 @@ export const config = {
                         district_name,
                         schools_eligible,
                         schools_surveyed,
-                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
+                        Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
                         students_surveyed
-                        from
-                        (select 
-                        d.district_name,
-                        pd.district_id ,
-                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                        count(distinct pd.school_id) as schools_surveyed,
-                        count(distinct pd.student_name) as students_surveyed
-                        from
-                        pas.pas_data pd 
-                        join
-                        pas.schoolmaster sm on pd.school_id = sm.school_id 
-                        join
-                           dimensions.district d on pd.district_id = d.district_id 
-                         join 
-                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                         join 
-                         dimensions.pas_class pc on pd.class = pc.class
-                         join 
-                         dimensions.pas_subject ps on pd.subject = ps.subject
-                         join 
-                         dimensions.attendance a on pd.attendance = a.attendance
-                         
-                        GROUP BY 
-                           pd.district_id, d.district_name, pd.district_id ) as sub;`,
+                        from (SELECT
+                            d.district_name,
+                              pd.district_id,
+                            COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                            COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                            COUNT(DISTINCT pd.student_name) AS students_surveyed
+                        FROM
+                            pas.pas_data pd
+                        JOIN
+                            pas.schoolmaster sm ON pd.district_id = sm.district_id
+                        JOIN
+                            dimensions.district d ON pd.district_id = d.district_id
+                        JOIN
+                            dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                        JOIN
+                            dimensions.pas_class pc ON pd.class = pc.class
+                        JOIN
+                            dimensions.pas_subject ps ON pd.subject = ps.subject
+                        JOIN
+                            dimensions.attendance a ON pd.attendance = a.attendance
+                        WHERE
+                            sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                           
+                            GROUP BY
+                            d.district_name,pd.district_id) as sub
+                           group by 
+                          district_id,district_name,schools_eligible,schools_surveyed,students_surveyed;`,
                     },
                     "level": "district"
                 }
@@ -190,79 +194,77 @@ export const config = {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "table": `select 
-                    block_id,
+                    "table": ` select block_id,
                     block_name,
                     schools_eligible,
                     schools_surveyed,
-                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
+                    Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
                     students_surveyed
-                    from
-                    (select 
-                    b.block_name,
-                    pd.block_id ,
-                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                    count(distinct pd.school_id) as schools_surveyed,
-                    count(distinct pd.student_name) as students_surveyed
-                    from
-                    pas.pas_data pd 
-                    join
-                    pas.schoolmaster sm on pd.school_id = sm.school_id 
-                    join
-                    dimensions.district d on pd.district_id = d.district_id 
+                    from (SELECT
+                        b.block_name,sm.block_id,
+                        COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                        COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                        COUNT(DISTINCT pd.student_name) AS students_surveyed
+                    FROM
+                        pas.pas_data pd
+                    JOIN
+                        pas.schoolmaster sm ON pd.block_id = sm.block_id
+                    JOIN
+                        dimensions.district d ON pd.district_id = d.district_id
                     join 
-                       dimensions.block b on pd.block_id = b.block_id 
-                      join 
-                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                     join 
-                     dimensions.pas_class pc on pd.class = pc.class
-                     join 
-                     dimensions.pas_subject ps on pd.subject = ps.subject
-                     join 
-                     dimensions.attendance a on pd.attendance = a.attendance
-                     where  pd.district_id = {district_id} 
-                     
-                    GROUP BY 
-                        pd.block_id,b.block_name, pd.block_id ) as sub; `,
+                        dimensions.block b on pd.block_id = b.block_id
+                    JOIN
+                        dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                    JOIN
+                        dimensions.pas_class pc ON pd.class = pc.class
+                    JOIN
+                        dimensions.pas_subject ps ON pd.subject = ps.subject
+                    JOIN
+                        dimensions.attendance a ON pd.attendance = a.attendance
+                    WHERE
+                        sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                         and pd.district_id = {district_id}
+                        GROUP BY
+                        b.block_name,sm.block_id) as sub
+                       group by 
+                      block_name,block_id,schools_eligible,schools_surveyed,students_surveyed; `,
                 },
                 "actions": {
                     "queries": {
-                        "table": `select 
-                        block_id,
+                        "table": `select block_id,
                         block_name,
                         schools_eligible,
                         schools_surveyed,
-                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
+                        Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
                         students_surveyed
-                        from
-                        (select 
-                        b.block_name,
-                        pd.block_id ,
-                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                        count(distinct pd.school_id) as schools_surveyed,
-                        count(distinct pd.student_name) as students_surveyed
-                        from
-                        pas.pas_data pd 
-                        join
-                        pas.schoolmaster sm on pd.school_id = sm.school_id 
-                        join
-                        dimensions.district d on pd.district_id = d.district_id 
+                        from (SELECT
+                            b.block_name,sm.block_id,
+                            COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                            COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                            COUNT(DISTINCT pd.student_name) AS students_surveyed
+                        FROM
+                            pas.pas_data pd
+                        JOIN
+                            pas.schoolmaster sm ON pd.block_id = sm.block_id
+                        JOIN
+                            dimensions.district d ON pd.district_id = d.district_id
                         join 
-                           dimensions.block b on pd.block_id = b.block_id 
-                          join 
-                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                         join 
-                         dimensions.pas_class pc on pd.class = pc.class
-                         join 
-                         dimensions.pas_subject ps on pd.subject = ps.subject
-                         join 
-                         dimensions.attendance a on pd.attendance = a.attendance
-                         where  pd.district_id = {district_id} 
-                         
-                        GROUP BY 
-                            pd.block_id,b.block_name, pd.block_id ) as sub; `,
+                            dimensions.block b on pd.block_id = b.block_id
+                        JOIN
+                            dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                        JOIN
+                            dimensions.pas_class pc ON pd.class = pc.class
+                        JOIN
+                            dimensions.pas_subject ps ON pd.subject = ps.subject
+                        JOIN
+                            dimensions.attendance a ON pd.attendance = a.attendance
+                        WHERE
+                            sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                             and pd.district_id = {district_id}
+                            GROUP BY
+                            b.block_name,sm.block_id) as sub
+                           group by 
+                          block_name,block_id,schools_eligible,schools_surveyed,students_surveyed; `,
                     },
                     "level": "block"
                 }
@@ -275,81 +277,85 @@ export const config = {
                 "timeSeriesQueries": {
                     "table": `select 
                     cluster_id,
-                    cluster_name,
-                    schools_eligible,
-                    schools_surveyed,
-                    COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
-                    students_surveyed
-                    from
-                    (select 
-                    c.cluster_name,
-                    pd.cluster_id ,
-                    count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                    count(distinct pd.school_id) as schools_surveyed,
-                    count(distinct pd.student_name) as students_surveyed
-                    from
-                    pas.pas_data pd 
-                    join
-                    pas.schoolmaster sm on pd.school_id = sm.school_id 
-                    join
-                    dimensions.district d on pd.district_id = d.district_id 
-                    join 
-                       dimensions.block b on pd.block_id = b.block_id 
-                      join 
-                       dimensions.cluster c on pd.cluster_id = c.cluster_id
-                       join 
-                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                     join 
-                     dimensions.pas_class pc on pd.class = pc.class
-                     join 
-                     dimensions.pas_subject ps on pd.subject = ps.subject
-                     join 
-                     dimensions.attendance a on pd.attendance = a.attendance
-                     where  pd.block_id = {block_id}  
-                    
-                    GROUP BY 
-                        pd.cluster_id,c.cluster_name, pd.cluster_id ) as sub; `,
+                  cluster_name,
+                  schools_eligible,
+                  schools_surveyed,
+                  Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
+                  students_surveyed
+                  from (SELECT
+                      c.cluster_name,
+                      sm.cluster_id,
+                      COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                      COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                      COUNT(DISTINCT pd.student_name) AS students_surveyed
+                  FROM
+                      pas.pas_data pd
+                  JOIN
+                      pas.schoolmaster sm ON pd.cluster_id = sm.cluster_id
+                  JOIN
+                      dimensions.district d ON pd.district_id = d.district_id
+                  join 
+                      dimensions.block b on pd.block_id = b.block_id
+                  join 
+                      dimensions.cluster c on pd.cluster_id = c.cluster_id
+                  JOIN
+                      dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                  JOIN
+                      dimensions.pas_class pc ON pd.class = pc.class
+                  JOIN
+                      dimensions.pas_subject ps ON pd.subject = ps.subject
+                  JOIN
+                      dimensions.attendance a ON pd.attendance = a.attendance
+                  WHERE
+                      sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                       and pd.block_id = {block_id}
+                      GROUP BY sm.cluster_id,
+                      c.cluster_name) as sub
+                     group by cluster_id, 
+                    cluster_name,schools_eligible,schools_surveyed,students_surveyed;
+                   `,
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
                         cluster_id,
-                        cluster_name,
-                        schools_eligible,
-                        schools_surveyed,
-                        COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
-                        students_surveyed
-                        from
-                        (select 
-                        c.cluster_name,
-                        pd.cluster_id ,
-                        count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                        count(distinct pd.school_id) as schools_surveyed,
-                        count(distinct pd.student_name) as students_surveyed
-                        from
-                        pas.pas_data pd 
-                        join
-                        pas.schoolmaster sm on pd.school_id = sm.school_id 
-                        join
-                        dimensions.district d on pd.district_id = d.district_id 
-                        join 
-                           dimensions.block b on pd.block_id = b.block_id 
-                          join 
-                           dimensions.cluster c on pd.cluster_id = c.cluster_id
-                           join 
-                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                         join 
-                         dimensions.pas_class pc on pd.class = pc.class
-                         join 
-                         dimensions.pas_subject ps on pd.subject = ps.subject
-                         join 
-                         dimensions.attendance a on pd.attendance = a.attendance
-                         where  pd.block_id = {block_id}  
-                        
-                        GROUP BY 
-                            pd.cluster_id,c.cluster_name, pd.cluster_id ) as sub;`,
+                      cluster_name,
+                      schools_eligible,
+                      schools_surveyed,
+                      Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
+                      students_surveyed
+                      from (SELECT
+                          c.cluster_name,
+                          sm.cluster_id,
+                          COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                          COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                          COUNT(DISTINCT pd.student_name) AS students_surveyed
+                      FROM
+                          pas.pas_data pd
+                      JOIN
+                          pas.schoolmaster sm ON pd.cluster_id = sm.cluster_id
+                      JOIN
+                          dimensions.district d ON pd.district_id = d.district_id
+                      join 
+                          dimensions.block b on pd.block_id = b.block_id
+                      join 
+                          dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      JOIN
+                          dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                      JOIN
+                          dimensions.pas_class pc ON pd.class = pc.class
+                      JOIN
+                          dimensions.pas_subject ps ON pd.subject = ps.subject
+                      JOIN
+                          dimensions.attendance a ON pd.attendance = a.attendance
+                      WHERE
+                          sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                           and pd.block_id = {block_id}
+                          GROUP BY sm.cluster_id,
+                          c.cluster_name) as sub
+                         group by cluster_id, 
+                        cluster_name,schools_eligible,schools_surveyed,students_surveyed;
+                      `,
                     },
                     "level": "cluster"
                 }
@@ -362,86 +368,92 @@ export const config = {
                 "timeSeriesQueries": {
                     "table": `select 
                     school_id,
-                   school_name,
-                   schools_eligible,
-                   schools_surveyed,
-                   COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
-                   students_surveyed
-                   from
-                   (select 
-                   sch.school_name,
-                   pd.school_id ,
-                   count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                   count(distinct pd.school_id) as schools_surveyed,
-                   count(distinct pd.student_name) as students_surveyed
-                   from
-                   pas.pas_data pd 
-                   join
-                   pas.schoolmaster sm on pd.school_id = sm.school_id 
-                   join
-                   dimensions.district d on pd.district_id = d.district_id 
-                   join 
-                      dimensions.block b on pd.block_id = b.block_id 
-                     join 
-                      dimensions.cluster c on pd.cluster_id = c.cluster_id
-                      join 
-                      dimensions.school sch on pd.school_id = sch.school_id 
-                       join 
-                    dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                    join 
-                    dimensions.pas_class pc on pd.class = pc.class
-                    join 
-                    dimensions.pas_subject ps on pd.subject = ps.subject
-                    join 
-                    dimensions.attendance a on pd.attendance = a.attendance
-                    where  pd.cluster_id = {cluster_id}   
-                    
-                   GROUP BY 
-                      pd.school_id, sch.school_name, pd.school_id ) as sub;
+                 school_name,
+                 schools_eligible,
+                 schools_surveyed,
+                 Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
+                 students_surveyed
+                 from (SELECT
+                     sch.school_name,
+                     sm.school_id,
+                     COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                     COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                     COUNT(DISTINCT pd.student_name) AS students_surveyed
+                 FROM
+                     pas.pas_data pd
+                 JOIN
+                     pas.schoolmaster sm ON pd.school_id = sm.school_id
+                 JOIN
+                     dimensions.district d ON pd.district_id = d.district_id
+                 join 
+                     dimensions.block b on pd.block_id = b.block_id
+                 join 
+                     dimensions.cluster c on pd.cluster_id = c.cluster_id
+                 join 
+                     dimensions.school sch on pd.school_id = sch.school_id
+                 JOIN
+                     dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                 JOIN
+                     dimensions.pas_class pc ON pd.class = pc.class
+                 JOIN
+                     dimensions.pas_subject ps ON pd.subject = ps.subject
+                 JOIN
+                     dimensions.attendance a ON pd.attendance = a.attendance
+                 WHERE
+                     sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                      and pd.cluster_id = {cluster_id}
+                     GROUP BY
+                     sch.school_name,sm.school_id) as sub
+                    group by school_id,
+                   school_name,schools_eligible,schools_surveyed,students_surveyed;
+                 
+                 
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `select 
                         school_id,
-                       school_name,
-                       schools_eligible,
-                       schools_surveyed,
-                       COALESCE(ROUND((schools_surveyed * 100.0) / schools_eligible, 0),0) as perc_schools_surveyed,
-
-                       students_surveyed
-                       from
-                       (select 
-                       sch.school_name,
-                       pd.school_id ,
-                       count(distinct case when sm.class_frm = 1 then sm.school_id else 0::text end) as schools_eligible,
-                       count(distinct pd.school_id) as schools_surveyed,
-                       count(distinct pd.student_name) as students_surveyed
-                       from
-                       pas.pas_data pd 
-                       join
-                       pas.schoolmaster sm on pd.school_id = sm.school_id 
-                       join
-                       dimensions.district d on pd.district_id = d.district_id 
-                       join 
-                          dimensions.block b on pd.block_id = b.block_id 
-                         join 
-                          dimensions.cluster c on pd.cluster_id = c.cluster_id
-                          join 
-                          dimensions.school sch on pd.school_id = sch.school_id 
-                           join 
-                        dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                        join 
-                        dimensions.pas_class pc on pd.class = pc.class
-                        join 
-                        dimensions.pas_subject ps on pd.subject = ps.subject
-                        join 
-                        dimensions.attendance a on pd.attendance = a.attendance
-                        where  pd.cluster_id = {cluster_id}   
-                        
-                       GROUP BY 
-                          pd.school_id, sch.school_name, pd.school_id ) as sub;
+                     school_name,
+                     schools_eligible,
+                     schools_surveyed,
+                     Round((schools_surveyed * 100.0 / schools_eligible),0) as perc_schools_surveyed,
+                     students_surveyed
+                     from (SELECT
+                         sch.school_name,
+                         sm.school_id,
+                         COUNT(DISTINCT sm.school_id) AS schools_eligible,
+                         COUNT(DISTINCT pd.school_id) AS schools_surveyed,
+                         COUNT(DISTINCT pd.student_name) AS students_surveyed
+                     FROM
+                         pas.pas_data pd
+                     JOIN
+                         pas.schoolmaster sm ON pd.school_id = sm.school_id
+                     JOIN
+                         dimensions.district d ON pd.district_id = d.district_id
+                     join 
+                         dimensions.block b on pd.block_id = b.block_id
+                     join 
+                         dimensions.cluster c on pd.cluster_id = c.cluster_id
+                     join 
+                         dimensions.school sch on pd.school_id = sch.school_id
+                     JOIN
+                         dimensions.academic_year ay ON pd.ac_year = ay.ac_year
+                     JOIN
+                         dimensions.pas_class pc ON pd.class = pc.class
+                     JOIN
+                         dimensions.pas_subject ps ON pd.subject = ps.subject
+                     JOIN
+                         dimensions.attendance a ON pd.attendance = a.attendance
+                     WHERE
+                         sm.class_frm = 1 AND sm.sch_mgmt_id = '1'
+                          and pd.cluster_id = {cluster_id}
+                         GROUP BY
+                         sch.school_name,sm.school_id) as sub
+                        group by school_id,
+                       school_name,schools_eligible,schools_surveyed,students_surveyed;
+                     
+                     
                         `,
                     },
                     "level": "school"
