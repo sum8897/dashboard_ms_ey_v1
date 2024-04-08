@@ -10,6 +10,9 @@ import { ParticipationTabComponent } from './pages/participation-tab/participati
 import { SchoolParticipationTableComponent } from './pages/participation-tab/reports/school-participation-table/school-participation-table.component';
 import { StudentParticipationTableComponent } from './pages/participation-tab/reports/student-participation-table/student-participation-table.component';
 import { QuestionWiseBarchartComponent } from './pages/participation-tab/reports/question-wise-barchart/question-wise-barchart.component';
+import { PerformanceEvaluationTabComponent } from './pages/performance-evaluation-tab/performance-evaluation-tab.component';
+import { PerformanceTableComponent } from './pages/performance-evaluation-tab/reports/performance-table/performance-table.component';
+import { GradewiseTableComponent } from './pages/performance-evaluation-tab/reports/gradewise-table/gradewise-table.component';
 
 
 
@@ -20,7 +23,10 @@ import { QuestionWiseBarchartComponent } from './pages/participation-tab/reports
     ParticipationTabComponent,
     SchoolParticipationTableComponent,
     StudentParticipationTableComponent,
-    QuestionWiseBarchartComponent
+    QuestionWiseBarchartComponent,
+    PerformanceEvaluationTabComponent,
+    PerformanceTableComponent,
+    GradewiseTableComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

@@ -86,6 +86,80 @@ export const config = {
 				'select attendance,atten from dimensions.attendance',
 		},
        
+        {
+			label: 'Performance Evaluation',
+
+            // displayLabel:'Class',
+
+			name: 'acdemic_year',
+
+			labelProp: 'ac_year',
+
+			valueProp: 'ac_year',
+
+			id: 'acdemic_year',
+
+			tableAlias: 'ay',
+
+			query:
+				'select id, ac_year from dimensions.academic_year',
+		},
+        {
+			label: 'Performance Evaluation',
+
+            // displayLabel:'Class',
+
+			name: 'class',
+
+			labelProp: 'class',
+
+			valueProp: 'class',
+
+			id: 'class',
+
+			tableAlias: 'pc',
+
+			query:
+				'select id, class from dimensions.pas_class',
+		},
+       
+        {
+			label: 'Performance Evaluation',
+
+            // displayLabel:'Class',
+
+			name: 'subject',
+
+			labelProp: 'subject',
+
+			valueProp: 'subject',
+
+			id: 'subject',
+
+			tableAlias: 'ps',
+
+			query:
+				'select subject_id,subject from dimensions.pas_subject',
+		},
+        {
+			label: 'Performance Evaluation',
+
+            // displayLabel:'Class',
+
+			name: 'question',
+
+			labelProp: 'question_id',
+
+			valueProp: 'question_id',
+
+			id: 'question',
+
+			tableAlias: 'pq',
+
+			query:
+				'select question_id,subject_id from dimensions.pas_question',
+		},
+       
        
         
 	
@@ -1450,7 +1524,1197 @@ GROUP BY
         }
     },
    
+    //second tab
+    performance_table: {
+        "label": "Participation",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `select 
+                    district_id,
+                       district_name,
+                       overall_avg_score,
+                       ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                       ROUND(low_score * 100.0 / student_total) as stud_low_score
+                       from
+                       (SELECT 
+                        d.district_name,
+                        pd.district_id,
+                      ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                                WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                       count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                       count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                       count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                        FROM
+                        pas.pas_data pd
+                        join
+                       dimensions.district d on pd.district_id = d.district_id 
+                     join 
+                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                     join 
+                     dimensions.pas_class pc on pd.class = pc.class
+                     join 
+                     dimensions.pas_subject ps on pd.subject = ps.subject
+                     join 
+                     dimensions.pas_question pq on pd.question_id = pq.question_id 
+                       
+                    GROUP BY
+                        pd.district_id,d.district_name) as sub
+                       group by district_id,
+                      district_name, overall_avg_score, high_score, low_score, student_total;`,
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
+                        district_id,
+                           district_name,
+                           overall_avg_score,
+                           ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                           ROUND(low_score * 100.0 / student_total) as stud_low_score
+                           from
+                           (SELECT 
+                            d.district_name,
+                            pd.district_id,
+                          ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                                    WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                           count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                           count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                           count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                            FROM
+                            pas.pas_data pd
+                            join
+                           dimensions.district d on pd.district_id = d.district_id 
+                         join 
+                         dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                         join 
+                         dimensions.pas_class pc on pd.class = pc.class
+                         join 
+                         dimensions.pas_subject ps on pd.subject = ps.subject
+                         join 
+                         dimensions.pas_question pq on pd.question_id = pq.question_id 
+                           
+                        GROUP BY
+                            pd.district_id,d.district_name) as sub
+                           group by district_id,
+                          district_name, overall_avg_score, high_score, low_score, student_total;`,
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `  select 
+                    block_id,
+                    block_name,
+                    overall_avg_score,
+                    ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                    ROUND(low_score * 100.0 / student_total) as stud_low_score
+                    from
+                    (SELECT 
+                    pd.block_id,
+                     b.block_name,
+                    ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                             WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                      count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                    count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                     FROM
+                     pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                  join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                      pd.district_id = {district_id}
+                 GROUP BY
+                     pd.block_id,b.block_name) as sub
+                    group by block_id,
+                   block_name, overall_avg_score, high_score, low_score, student_total;`,
+                },
+                "actions": {
+                    "queries": {
+                        "table": ` select 
+                        block_id,
+                        block_name,
+                        overall_avg_score,
+                        ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                        ROUND(low_score * 100.0 / student_total) as stud_low_score
+                        from
+                        (SELECT 
+                        pd.block_id,
+                         b.block_name,
+                        ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                                 WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                          count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                        count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                         FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                          pd.district_id = {district_id}
+                     GROUP BY
+                         pd.block_id,b.block_name) as sub
+                        group by block_id,
+                       block_name, overall_avg_score, high_score, low_score, student_total;`,
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `select 
+                    cluster_id,
+                    cluster_name,
+                    overall_avg_score,
+                    ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                    ROUND(low_score * 100.0 / student_total) as stud_low_score
+                    from
+                    (SELECT 
+                    pd.cluster_id,
+                     c.cluster_name,
+                   ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                             WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                      count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                    count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                     FROM
+                     pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                    dimensions.cluster c on pd.cluster_id = c.cluster_id
+                  join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                    pd.block_id = {block_id}
+                 GROUP BY
+                     pd.cluster_id,c.cluster_name) as sub
+                    group by cluster_id,
+                   cluster_name, overall_avg_score, high_score, low_score, student_total;
+                   `,
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
+                        cluster_id,
+                        cluster_name,
+                        overall_avg_score,
+                        ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                        ROUND(low_score * 100.0 / student_total) as stud_low_score
+                        from
+                        (SELECT 
+                        pd.cluster_id,
+                         c.cluster_name,
+                       ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                                 WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                          count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                        count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                         FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                        dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                        pd.block_id = {block_id}
+                     GROUP BY
+                         pd.cluster_id,c.cluster_name) as sub
+                        group by cluster_id,
+                       cluster_name, overall_avg_score, high_score, low_score, student_total;
+                      `,
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": `select 
+                    school_id,
+                    school_name,
+                    overall_avg_score,
+                    ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                    ROUND(low_score * 100.0 / student_total) as stud_low_score
+                    from
+                    (SELECT 
+                    pd.school_id,
+                     sch.school_name,
+                    ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                             WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                      count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                    count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                     FROM
+                     pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                    dimensions.cluster c on pd.cluster_id = c.cluster_id
+                  join 
+                    dimensions.school sch on pd.school_id = sch.school_id 
+                  join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                     pd.cluster_id = {cluster_id}
+                 GROUP BY
+                     pd.school_id,sch.school_name) as sub
+                    group by school_id,
+                   school_name, overall_avg_score, high_score, low_score, student_total;
+                 
+                 
+                 
+                    `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
+                        school_id,
+                        school_name,
+                        overall_avg_score,
+                        ROUND(high_score * 100.0 / student_total) as stud_high_score,
+                        ROUND(low_score * 100.0 / student_total) as stud_low_score
+                        from
+                        (SELECT 
+                        pd.school_id,
+                         sch.school_name,
+                        ROUND(AVG(CASE WHEN pd.grade IN ('4','3','2','1') THEN CAST(grade AS numeric)
+                                 WHEN pd.grade = 'A' THEN 0 END), 2) AS overall_avg_score,
+                          count(case when pd.grade = '4' then pd.student_name end) as high_score,
+                        count(case when pd.grade = '1' then pd.student_name end) as low_score,
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                         FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                        dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      join 
+                        dimensions.school sch on pd.school_id = sch.school_id 
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                         pd.cluster_id = {cluster_id}
+                     GROUP BY
+                         pd.school_id,sch.school_name) as sub
+                        group by school_id,
+                       school_name, overall_avg_score, high_score, low_score, student_total;
+                     
+                     
+                     
+                        `,
+                    },
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.student_name,
+            //         COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam
+            //     LEFT join
+            //     dimensions.district d on sam.district_id = d.district_id
+            //     LEFT JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id
+            //     LEFT join
+            //         dimensions.block b on sam.block_id = b.block_id
+            //     left join
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //     left join
+            //         dimensions.school sch on sam.school_id = sch.school_id
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id = {school_id}
+            //     GROUP BY
+            //          sam.student_name`,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.student_name,
+            //             COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam
+            //         LEFT join
+            //         dimensions.district d on sam.district_id = d.district_id
+            //         LEFT JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id
+            //         LEFT join
+            //             dimensions.block b on sam.block_id = b.block_id
+            //         left join
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //         left join
+            //             dimensions.school sch on sam.school_id = sch.school_id
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id = {school_id}
+            //         GROUP BY
+            //              sam.student_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "state_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "state_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 1,
+                                linkedReports: ["gradewise_table" ]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "district_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "district_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 2,
+                                linkedReports: ["gradewise_table" ]                       },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "block_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "block_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 3,
+                                linkedReports: ["gradewise_table" ]                         },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "cluster_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "cluster_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 4,
+                                linkedReports: ["gradewise_table" ] },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "school_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "school_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 5,
+                                linkedReports: ["gradewise_table" ] },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+                   
+                   
+                    {
+                        name: "Overall Average Score",
+                        property: "overall_avg_score",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Student High Score",
+                        property: "stud_high_score",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Student Low Score",
+                        property: "stud_low_score",
+                        class: "text-center"
+                    },
+                   
+                   
+                    {
+                        name: "Total",
+                        property: "total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: -10000
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            "bigNumber": {
+                "valueSuffix": '%',
+                "property": 'perc_teachers'
+            }
+        }
+    },
+
+    gradewise_table: {
+        "label": "Average Student Present",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `
+                    select 
+   school_id,
+   school_name,
+   ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+   ROUND(basic * 100.0 / student_total) as perc_basic,
+   ROUND(proficient * 100.0 / student_total) as perc_proficient,
+   ROUND(advanced * 100.0 / student_total) as perc_advanced,
+   ROUND(absent * 100.0 / student_total) as perc_absent
+   from
+   (SELECT 
+    pd.school_id,
+    sch.school_name,
+   count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+   count(case when pd.grade = '2' then pd.student_name end) as basic,
+   count(case when pd.grade = '3' then pd.student_name end) as proficient,
+   count(case when pd.grade = '4' then pd.student_name end) as advanced,
+   count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+   count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+    FROM
+    pas.pas_data pd
+    join
+   dimensions.district d on pd.district_id = d.district_id 
+   join 
+   dimensions.school sch on pd.school_id = sch.school_id 
+ join 
+ dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+ join 
+ dimensions.pas_class pc on pd.class = pc.class
+ join 
+ dimensions.pas_subject ps on pd.subject = ps.subject
+ join 
+ dimensions.pas_question pq on pd.question_id = pq.question_id 
     
+GROUP BY
+    pd.district_id,pd.school_id,sch.school_name) as sub
+   group by 
+  school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total; `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `
+                        select 
+                        school_id,
+                        school_name,
+                        ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                        ROUND(basic * 100.0 / student_total) as perc_basic,
+                        ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                        ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                        ROUND(absent * 100.0 / student_total) as perc_absent
+                        from
+                        (SELECT 
+                         pd.school_id,
+                         sch.school_name,
+                        count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                        count(case when pd.grade = '2' then pd.student_name end) as basic,
+                        count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                        count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                        count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                         FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                        join 
+                        dimensions.school sch on pd.school_id = sch.school_id 
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         
+                     GROUP BY
+                         pd.district_id,pd.school_id,sch.school_name) as sub
+                        group by 
+                       school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;`,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": ` select 
+                    school_id,
+                    school_name,
+                    ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                    ROUND(basic * 100.0 / student_total) as perc_basic,
+                    ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                    ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                    ROUND(absent * 100.0 / student_total) as perc_absent
+                   from
+                   (SELECT 
+                     pd.school_id,
+                     sch.school_name,
+                    count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                    count(case when pd.grade = '2' then pd.student_name end) as basic,
+                    count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                    count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                    count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                      FROM
+                     pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                  join 
+                    dimensions.school sch on pd.school_id = sch.school_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                  join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                     pd.district_id = {district_id}
+                 GROUP BY
+                     pd.block_id,pd.school_id, sch.school_name) as sub
+                    group by 
+                  school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;`
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
+                        school_id,
+                        school_name,
+                        ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                        ROUND(basic * 100.0 / student_total) as perc_basic,
+                        ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                        ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                        ROUND(absent * 100.0 / student_total) as perc_absent
+                       from
+                       (SELECT 
+                         pd.school_id,
+                         sch.school_name,
+                        count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                        count(case when pd.grade = '2' then pd.student_name end) as basic,
+                        count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                        count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                        count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                          FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                      join 
+                        dimensions.school sch on pd.school_id = sch.school_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                         pd.district_id = {district_id}
+                     GROUP BY
+                         pd.block_id,pd.school_id, sch.school_name) as sub
+                        group by 
+                      school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;
+    `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": ` select 
+                    school_id,
+                    school_name,
+                    ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                    ROUND(basic * 100.0 / student_total) as perc_basic,
+                    ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                    ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                    ROUND(absent * 100.0 / student_total) as perc_absent
+                   from
+                   (SELECT 
+                     pd.school_id,
+                     sch.school_name,
+                    count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                    count(case when pd.grade = '2' then pd.student_name end) as basic,
+                    count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                    count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                    count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                      FROM
+                    pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                    dimensions.cluster c on pd.cluster_id = c.cluster_id
+                 join 
+                    dimensions.school sch on pd.school_id = sch.school_id 
+                   join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                      pd.block_id ={block_id}
+                 GROUP BY
+                     pd.cluster_id,pd.school_id, sch.school_name) as sub
+                    group by 
+                  school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;
+                
+                    `
+                },
+                "actions": {
+                    "queries": {
+                        "table": ` select 
+                        school_id,
+                        school_name,
+                        ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                        ROUND(basic * 100.0 / student_total) as perc_basic,
+                        ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                        ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                        ROUND(absent * 100.0 / student_total) as perc_absent
+                       from
+                       (SELECT 
+                         pd.school_id,
+                         sch.school_name,
+                        count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                        count(case when pd.grade = '2' then pd.student_name end) as basic,
+                        count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                        count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                        count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                          FROM
+                        pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                        dimensions.cluster c on pd.cluster_id = c.cluster_id
+                     join 
+                        dimensions.school sch on pd.school_id = sch.school_id 
+                       join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                          pd.block_id ={block_id}
+                     GROUP BY
+                         pd.cluster_id,pd.school_id, sch.school_name) as sub
+                        group by 
+                      school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;
+                    
+    `,
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table":`select 
+                    school_id,
+                    school_name,
+                    ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                    ROUND(basic * 100.0 / student_total) as perc_basic,
+                    ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                    ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                    ROUND(absent * 100.0 / student_total) as perc_absent
+                   from
+                   (SELECT 
+                     pd.school_id,
+                     sch.school_name,
+                    count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                    count(case when pd.grade = '2' then pd.student_name end) as basic,
+                    count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                    count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                    count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                    count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                      FROM
+                     pas.pas_data pd
+                     join
+                    dimensions.district d on pd.district_id = d.district_id 
+                   join 
+                    dimensions.block b on pd.block_id = b.block_id 
+                   join 
+                    dimensions.cluster c on pd.cluster_id = c.cluster_id
+                  join 
+                    dimensions.school sch on pd.school_id = sch.school_id 
+                  join 
+                  dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                  join 
+                  dimensions.pas_class pc on pd.class = pc.class
+                  join 
+                  dimensions.pas_subject ps on pd.subject = ps.subject
+                  join 
+                  dimensions.pas_question pq on pd.question_id = pq.question_id 
+                     where 
+                      pd.cluster_id = {cluster_id}
+                 GROUP BY
+                     pd.school_id,sch.school_name) as sub
+                    group by 
+                   school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;
+                `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
+                        school_id,
+                        school_name,
+                        ROUND(below_basic * 100.0 / student_total) as perc_below_basic,
+                        ROUND(basic * 100.0 / student_total) as perc_basic,
+                        ROUND(proficient * 100.0 / student_total) as perc_proficient,
+                        ROUND(advanced * 100.0 / student_total) as perc_advanced,
+                        ROUND(absent * 100.0 / student_total) as perc_absent
+                       from
+                       (SELECT 
+                         pd.school_id,
+                         sch.school_name,
+                        count(case when pd.grade = '1' then pd.student_name end) as below_basic,
+                        count(case when pd.grade = '2' then pd.student_name end) as basic,
+                        count(case when pd.grade = '3' then pd.student_name end) as proficient,
+                        count(case when pd.grade = '4' then pd.student_name end) as advanced,
+                        count(case when pd.grade = 'A' then pd.student_name end) as absent,   
+                        count(case when pd.grade in ('1','2','3','4','A') then pd.student_name end) as student_total
+                          FROM
+                         pas.pas_data pd
+                         join
+                        dimensions.district d on pd.district_id = d.district_id 
+                       join 
+                        dimensions.block b on pd.block_id = b.block_id 
+                       join 
+                        dimensions.cluster c on pd.cluster_id = c.cluster_id
+                      join 
+                        dimensions.school sch on pd.school_id = sch.school_id 
+                      join 
+                      dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                      join 
+                      dimensions.pas_class pc on pd.class = pc.class
+                      join 
+                      dimensions.pas_subject ps on pd.subject = ps.subject
+                      join 
+                      dimensions.pas_question pq on pd.question_id = pq.question_id 
+                         where 
+                          pd.cluster_id = {cluster_id}
+                     GROUP BY
+                         pd.school_id,sch.school_name) as sub
+                        group by 
+                       school_id,school_name, below_basic, basic,proficient,advanced,absent ,student_total;
+                    `,
+                    },
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.district_id,
+            //         d.district_name,
+            //         sam.block_id ,
+            //         b.block_name,
+            //         sam.cluster_id ,
+            //         c.cluster_name,
+            //         sam.school_id,
+            //         sch.school_name,
+            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam 
+            //      join
+            //     dimensions.district d on sam.district_id = d.district_id 
+            //      JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //      join
+            //         dimensions.block b on sam.block_id = b.block_id 
+            //      join 
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //      join 
+            //         dimensions.school sch on sam.school_id = sch.school_id 
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id  = {school_id}
+            //     GROUP BY
+            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.district_id,
+            //             d.district_name,
+            //             sam.block_id ,
+            //             b.block_name,
+            //             sam.cluster_id ,
+            //             c.cluster_name,
+            //             sam.school_id,
+            //             sch.school_name,
+            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam 
+            //          join
+            //         dimensions.district d on sam.district_id = d.district_id 
+            //          JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //          join
+            //             dimensions.block b on sam.block_id = b.block_id 
+            //          join 
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //          join 
+            //             dimensions.school sch on sam.school_id = sch.school_id 
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id  = {school_id}
+            //         GROUP BY
+            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+            
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School ID",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                   
+                    
+                    {
+                        name: "Percentage  Below Basic",
+                        property: "perc_below_basic",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Percentage Basic",
+                        property: "perc_basic",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                   
+                    {
+                        name: "Percentage Proficient",
+                        property: "perc_proficient",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+
+                    {
+                        name: "Percentage Advanced",
+                        property: "perc_advanced",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                  
+                    {
+                        name: "Percentage Absent",
+                        property: "perc_absent",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            "searchBar_config": {
+                "title": "School Code",
+                "searchProps": ['school_id'],
+                "searchType": "number"
+            },
+            
+        }
+    },
 
 
 
