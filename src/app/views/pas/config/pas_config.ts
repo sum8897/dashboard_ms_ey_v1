@@ -753,38 +753,36 @@ export const config = {
                 "timeSeriesQueries": {
                     "table": `
                     SELECT 
-    d.district_name,
-    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-    count(distinct student_name) as overall_enrollment
-    FROM 
-    pas.pas_data pd 
-join
-   dimensions.district d on pd.district_id = d.district_id 
- join 
- dimensions.academic_year ay on pd.ac_year = ay.ac_year 
- join 
- dimensions.pas_class pc on pd.class = pc.class
- join 
- dimensions.pas_subject ps on pd.subject = ps.subject
- join 
- dimensions.attendance a on pd.attendance = a.attendance
- 
-GROUP BY 
-    d.district_name, pd.district_id ; `
+                    d.district_name,
+                   COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                   COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                   COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                   COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
+                   FROM 
+                   pas.pas_data pd 
+               join
+                  dimensions.district d on pd.district_id = d.district_id 
+                join 
+                dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                join 
+                dimensions.pas_class pc on pd.class = pc.class
+                join 
+                dimensions.pas_subject ps on pd.subject = ps.subject
+                join 
+                dimensions.attendance a on pd.attendance = a.attendance
+                
+               GROUP BY 
+                   d.district_name, pd.district_id`
                 },
                 "actions": {
                     "queries": {
                         "table": `
                         SELECT 
-    d.district_name,
+     d.district_name,
     COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
     COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
     COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-    count(distinct student_name) as overall_enrollment
+    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
     FROM 
     pas.pas_data pd 
 join
@@ -799,7 +797,7 @@ join
  dimensions.attendance a on pd.attendance = a.attendance
  
 GROUP BY 
-    d.district_name, pd.district_id ;`,
+    d.district_name, pd.district_id`,
                     },
                     "level": "school"
                 }
@@ -812,57 +810,55 @@ GROUP BY
                 "timeSeriesQueries": {
                     "table": ` SELECT 
                     b.block_name,
-                    COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                    COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                    COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(distinct student_name) as overall_enrollment
-                    FROM 
-                    pas.pas_data pd 
-                join
-                   dimensions.district d on pd.district_id = d.district_id 
-                   join 
-                   dimensions.block b on pd.block_id = b.block_id 
-                 join 
-                 dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                 join 
-                 dimensions.pas_class pc on pd.class = pc.class
-                 join 
-                 dimensions.pas_subject ps on pd.subject = ps.subject
-                 join 
-                 dimensions.attendance a on pd.attendance = a.attendance
-                 where  pd.district_id = {district_id}
+                   COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                   COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                   COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                   COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
+                   FROM 
+                   pas.pas_data pd 
+               join
+                  dimensions.district d on pd.district_id = d.district_id 
+                  join 
+                  dimensions.block b on pd.block_id = b.block_id 
+                join 
+                dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                join 
+                dimensions.pas_class pc on pd.class = pc.class
+                join 
+                dimensions.pas_subject ps on pd.subject = ps.subject
+                join 
+                dimensions.attendance a on pd.attendance = a.attendance
+                where pd.district_id = {district_id} 
                 
-                GROUP BY 
-                    b.block_name, pd.block_id ;`
+               GROUP BY 
+                   b.block_name, pd.block_id`
                 },
                 "actions": {
                     "queries": {
-                        "table": ` SELECT 
+                        "table": `SELECT 
                         b.block_name,
-                        COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
-                        COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
-                        COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(distinct student_name) as overall_enrollment
-                        FROM 
-                        pas.pas_data pd 
-                    join
-                       dimensions.district d on pd.district_id = d.district_id 
-                       join 
-                       dimensions.block b on pd.block_id = b.block_id 
-                     join 
-                     dimensions.academic_year ay on pd.ac_year = ay.ac_year 
-                     join 
-                     dimensions.pas_class pc on pd.class = pc.class
-                     join 
-                     dimensions.pas_subject ps on pd.subject = ps.subject
-                     join 
-                     dimensions.attendance a on pd.attendance = a.attendance
-                     where  pd.district_id = {district_id}
+                       COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
+                       COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
+                       COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
+                       COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
+                       FROM 
+                       pas.pas_data pd 
+                   join
+                      dimensions.district d on pd.district_id = d.district_id 
+                      join 
+                      dimensions.block b on pd.block_id = b.block_id 
+                    join 
+                    dimensions.academic_year ay on pd.ac_year = ay.ac_year 
+                    join 
+                    dimensions.pas_class pc on pd.class = pc.class
+                    join 
+                    dimensions.pas_subject ps on pd.subject = ps.subject
+                    join 
+                    dimensions.attendance a on pd.attendance = a.attendance
+                    where pd.district_id = {district_id} 
                     
-                    GROUP BY 
-                        b.block_name, pd.block_id ;
+                   GROUP BY 
+                       b.block_name, pd.block_id
     `,
                     },
                     "level": "school"
@@ -875,12 +871,11 @@ GROUP BY
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "table": `SELECT 
-                    c.cluster_name,
+                    COALESCE(c.cluster_name, 'overall enrollment') AS cluster_name,
                     COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
                     COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
                     COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(distinct student_name) as overall_enrollment
+                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
                     FROM 
                     pas.pas_data pd 
                 join
@@ -900,19 +895,18 @@ GROUP BY
                  where  pd.block_id = {block_id} 
                  
                 GROUP BY 
-                    c.cluster_name, pd.cluster_id ;
+                    c.cluster_name, pd.cluster_id
                 
                     `
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT 
-                        c.cluster_name,
+                        COALESCE(c.cluster_name, 'overall enrollment') AS cluster_name,
                         COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
                         COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
                         COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(distinct student_name) as overall_enrollment
+                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
                         FROM 
                         pas.pas_data pd 
                     join
@@ -932,7 +926,7 @@ GROUP BY
                      where  pd.block_id = {block_id} 
                      
                     GROUP BY 
-                        c.cluster_name, pd.cluster_id ;
+                        c.cluster_name, pd.cluster_id
                     
     `,
                     },
@@ -946,12 +940,11 @@ GROUP BY
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "table":`SELECT 
-                    sch.school_name,
+                    COALESCE(sch.school_name, 'overall enrollment') AS school_name,
                     COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
                     COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
                     COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                    count(distinct student_name) as overall_enrollment
+                    COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
                     FROM 
                     pas.pas_data pd 
                 join
@@ -973,18 +966,17 @@ GROUP BY
                  where pd.cluster_id = {cluster_id} 
                  
                 GROUP BY 
-                    sch.school_name, pd.school_id ;
+                   sch.school_name, pd.school_id
                 `
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT 
-                        sch.school_name,
+                        COALESCE(sch.school_name, 'overall enrollment') AS school_name,
                         COUNT(Distinct CASE WHEN social_category = 'GEN' THEN student_name END) AS gen,    
                         COUNT(Distinct CASE WHEN social_category = 'OBC' THEN student_name END) AS obc,    
                         COUNT(Distinct CASE WHEN social_category = 'SC'  THEN student_name END) AS sc,    
-                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st,
-                        count(distinct student_name) as overall_enrollment
+                        COUNT(Distinct CASE WHEN social_category = 'ST'  THEN student_name END) AS st
                         FROM 
                         pas.pas_data pd 
                     join
@@ -1006,7 +998,7 @@ GROUP BY
                      where pd.cluster_id = {cluster_id} 
                      
                     GROUP BY 
-                        sch.school_name, pd.school_id ;
+                       sch.school_name, pd.school_id
                     `,
                     },
                     "level": "school"
@@ -1210,7 +1202,9 @@ GROUP BY
                 
                 GROUP BY 
                     pd.question_id, pd.school_id) as sub_query
-                   group by question_id; 
+                   group by question_id
+                   ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                     `,
                 },
                 "actions": {
@@ -1235,7 +1229,9 @@ GROUP BY
                     
                     GROUP BY 
                         pd.question_id, pd.school_id) as sub_query
-                       group by question_id;
+                       group by question_id
+                       ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                         `
                     
                     },
@@ -1270,7 +1266,9 @@ GROUP BY
                  where  pd.district_id = {district_id}
                 GROUP BY 
                     pd.question_id, pd.school_id) as sub_query
-                   group by question_id;
+                   group by question_id
+                   ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                  `,
                 },
                 "actions": {
@@ -1298,7 +1296,9 @@ GROUP BY
                      where  pd.district_id = {district_id}
                     GROUP BY 
                         pd.question_id, pd.school_id) as sub_query
-                       group by question_id;
+                       group by question_id
+                       ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                     `,
                     },
                     "level": "block"
@@ -1334,7 +1334,9 @@ GROUP BY
                  where  pd.block_id  = {block_id}
                 GROUP BY 
                     pd.question_id, pd.school_id) as sub_query
-                   group by question_id;`,
+                   group by question_id
+                   ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);`,
                 },
                 "actions": {
                     "queries": {
@@ -1362,7 +1364,9 @@ GROUP BY
                      where  pd.block_id  = {block_id}
                     GROUP BY 
                         pd.question_id, pd.school_id) as sub_query
-                       group by question_id;`
+                       group by question_id
+                       ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);`
                     },
                     "level": "cluster"
                 }
@@ -1399,7 +1403,9 @@ GROUP BY
                  where  pd.cluster_id  = {cluster_id}
                 GROUP BY 
                     pd.question_id, pd.school_id) as sub_query
-                   group by question_id; 
+                   group by question_id
+                   ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                 
                 `,
                 },
@@ -1431,7 +1437,9 @@ GROUP BY
                      where  pd.cluster_id  = {cluster_id}
                     GROUP BY 
                         pd.question_id, pd.school_id) as sub_query
-                       group by question_id;
+                       group by question_id
+                       ORDER BY 
+    CAST(SUBSTRING(question_id FROM 3) AS integer);
                     
                     `
                     },
@@ -2719,42 +2727,100 @@ GROUP BY
 
 
 
-//pat bignumber1
+// pat bignumber1
 
-// student_attendance_bignumber1: {
-//     "label": "Total Enrolled Students",
-//     "filters": [
-//         {
-//             "name": "State",
-//             "labelProp": "state_name",
-//             "valueProp": "state_id",
-//             "hierarchyLevel": "1",
-//             "timeSeriesQueries": {
-//                 "bigNumber":`SELECT count(sam.attendance_status) AS enrolled_count
-//                 FROM student_attendance.student_attendance_master sam
-//                 WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
-//                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "bigNumber": `SELECT count(sam.attendance_status) AS enrolled_count
-//                     FROM student_attendance.student_attendance_master sam
-//                     WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
-//                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//                 },
-//                 "level": "district"
-//             }
-//         }
+student_attendance_bignumber1: {
+    "label": "Total Enrolled Students",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber":`select
+                count
+                (
+                distinct
+                school_id)
+                as
+                schools_surveyed
+                from
+                pas.pas_data pd`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select
+                    count
+                    (
+                    distinct
+                    school_id)
+                    as
+                    schools_surveyed
+                    from
+                    pas.pas_data pd`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
         
-//     ],
-//     "options": {
-//         "bigNumber": {
-//             "title": "Total Enrolled Students",
-//             "valueSuffix": '',
-//             "property": 'enrolled_count'
-//         }
-//     }
-// },
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Schools Surveyed",
+            "valueSuffix": '',
+            "property": 'schools_surveyed'
+        }
+    }
+},
+student_attendance_bignumber2: {
+    "label": "Total Enrolled Students",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber":`select
+                count
+                (
+                distinct
+                student_name)
+                as
+                students_surveyed
+                from
+                pas.pas_data pd`,
+                // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select
+                    count
+                    (
+                    distinct
+                    student_name)
+                    as
+                    students_surveyed
+                    from
+                    pas.pas_data pd`,
+                    // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+                },
+                "level": "district"
+            }
+        }
+        
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Students Surveyed",
+            "valueSuffix": '',
+            "property": 'students_surveyed'
+        }
+    }
+},
 
 
 
