@@ -2042,12 +2042,12 @@ GROUP BY
                         class: "text-center"
                     },
                     {
-                        name: "Student High Score",
+                        name: "% Student High Score",
                         property: "stud_high_score",
                         class: "text-center"
                     },
                     {
-                        name: "Student Low Score",
+                        name: "% Student Low Score",
                         property: "stud_low_score",
                         class: "text-center"
                     },
@@ -2586,29 +2586,29 @@ GROUP BY
                    
                     
                     {
-                        name: "Percentage  Below Basic",
+                        name: "%  Below Basic",
                         property: "perc_below_basic",
                         class: "text-center"
                         
                     },
                     {
-                        name: "Percentage Basic",
+                        name: "% Basic",
                         property: "perc_basic",
                         class: "text-center"
                     },
                     {
-                        name: "Percentage Proficient",
+                        name: "% Proficient",
                         property: "perc_proficient",
                         class: "text-center"
                     },
                     {
-                        name: "Percentage Advanced",
+                        name: "% Advanced",
                         property: "perc_advanced",
                         class: "text-center"
                     },
                    
                     {
-                        name: "Percentage Absent",
+                        name: "% Absent",
                         property: "perc_absent",
                         class: "text-center"
                     },
