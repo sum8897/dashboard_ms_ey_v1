@@ -2588,131 +2588,33 @@ GROUP BY
                     {
                         name: "Percentage  Below Basic",
                         property: "perc_below_basic",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        class: "text-center"
+                        
                     },
                     {
                         name: "Percentage Basic",
                         property: "perc_basic",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        class: "text-center"
                     },
-                   
                     {
                         name: "Percentage Proficient",
                         property: "perc_proficient",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        class: "text-center"
                     },
-
                     {
                         name: "Percentage Advanced",
                         property: "perc_advanced",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
+                        class: "text-center"
                     },
-                  
+                   
                     {
                         name: "Percentage Absent",
                         property: "perc_absent",
-                        class: "text-center",
-                        valueSuffix: '',
-                        isHeatMapRequired: true,
-                        type: "number",
-                        color: {
-                            type: "percentage",
-                            values: [
-                                {
-                                    color: "#007000",
-                                    breakPoint: 70
-                                },
-                                {
-                                    color: "#FFBF00",
-                                    breakPoint: 40
-                                },
-                                {
-                                    color: "#D2222D",
-                                    breakPoint: 0
-                                }
-                            ]
-                        },
-                    }
+                        class: "text-center"
+                    },
+                   
+                  
+                    
                 ],
             },
             "searchBar_config": {
