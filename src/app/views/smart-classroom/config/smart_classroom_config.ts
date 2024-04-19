@@ -869,7 +869,7 @@ smart_complete_bignumber: {
         ],
         "options": {
             "bigNumber": {
-                "title": " Average Percentage used last 7 Days",
+                "title": " Average Percentage used",// last 7 Days
                 "valueSuffix": '%',
                 "property": 'percentage_used_last_7days'
             }
@@ -1132,7 +1132,7 @@ smart_complete_bignumber: {
         ],
         "options": {
             "bigNumber": {
-                "title": "Average Percentage Not used for 30 days",
+                "title": "Average Percentage Not used",// for 30 days
                 "valueSuffix": '%',
                 "property": 'percentage_not_used_30days'
             }

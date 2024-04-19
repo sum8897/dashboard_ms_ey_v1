@@ -1783,7 +1783,7 @@ FROM
 
 //pat bignumber1
 
-student_attendance_bignumber1: {
+ict_bignumber1: {
     "label": "Total Enrolled Students",
     "filters": [
         {
@@ -1792,18 +1792,24 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":`SELECT
+                "bigNumber":`select
+                max(date) as date,
                 ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
                 FROM teleeducation.tele_education te
                 WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                // "date": `SELECT EXTRACT(EPOCH FROM MAX(date)::date) * 1000 AS milliseconds
+                // FROM teleeducation.tele_education;`
                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `SELECT
+                    "bigNumber": `select
+                    max(date) as date,
                     ROUND(cast(sum(te.status) as DECIMAL (10,2))* 100 / count(te.status),2) AS connected_perc
                     FROM teleeducation.tele_education te
                     WHERE date = (SELECT MAX(date) FROM teleeducation.tele_education)`,
+                    // "date": `SELECT EXTRACT(EPOCH FROM MAX(date)::date) * 1000 AS milliseconds
+                    // FROM teleeducation.tele_education;`
                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
                 },
                 "level": "district"
@@ -1813,13 +1819,14 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Connected on 21/02/2024",
+            "title": "Connected",
             "valueSuffix": '%',
             "property": 'connected_perc'
-        }
+        },
+        
     }
 },
-student_attendance_bignumber2: {
+ict_bignumber2: {
     "label": "Total Enrolled Students",
     "filters": [
         {
@@ -1851,7 +1858,7 @@ student_attendance_bignumber2: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Not Connected on 21/02/2024",
+            "title": "Not Connected",
             "valueSuffix": '%',
             "property": 'not_connected_perc'
         }

@@ -69,6 +69,7 @@ export class DashboardComponent implements OnInit {
       this.dashboardMenu = [];
       let rbacDetails;
       let menuData = menuResult?.data
+      console.log(menuData);
       for (let i = 0; i < menuData?.length; i++) {
         if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
 
@@ -79,10 +80,11 @@ export class DashboardComponent implements OnInit {
           menuToDisplay.tooltip = menuData[i].tooltip;
            this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
                .then(d => {
+                console.log(d);
                  menuToDisplay.metrics = d;
                });
           this.dashboardMenu.push(menuToDisplay);
-
+          console.log(this.dashboardMenu)
         }
       }
     })
@@ -90,6 +92,8 @@ export class DashboardComponent implements OnInit {
   }
 
    getDashboardMetrics(programConfig: any, rbacDetails: any) {
+    console.log(programConfig);
+    console.log(rbacDetails)
     return new Promise(async (resolve, reject) => {
       try {
         let metrics: any = []
@@ -153,17 +157,24 @@ export class DashboardComponent implements OnInit {
                 else if (metricQueriesKeys[k].indexOf('bigNumber') > -1) {
                   let query = parseRbacFilter(metricQueries[metricQueriesKeys[k]], rbacDetails)
                   let res = await this._wrapperService.runQuery(query)
+                  console.log(res);
                   if (res && res.length > 0) {
+                    console.log(res);
                     let metricData = {
                       value: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k]] : String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
+                      
                       name: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.title) ? programConfig[reports[i]]?.options?.bigNumber?.title[k] : programConfig[reports[i]]?.options?.bigNumber?.title
+                      // name: 'abc'
+                      // name: Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k]] : String(formatNumberForReport(res[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property])) + [programConfig[reports[i]]?.options?.bigNumber?.valueSuffix],
+
                     }
+                    console.log("value:  "+JSON.stringify(metricData))
                     if((Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.property) ? res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property[k]] : res?.[0]?.[programConfig[reports[i]]?.options?.bigNumber?.property]) === null) {
                       metricData.value = Array.isArray(programConfig[reports[i]]?.options?.bigNumber?.valueSuffix) ? '0' + programConfig[reports[i]]?.options?.bigNumber?.valueSuffix[k] : '0' + programConfig[reports[i]]?.options?.bigNumber?.valueSuffix
                     }
                     if (metricData.value !== null && metricData !== undefined) {
                       metrics.push(metricData)
-                      // console.log(metricData.value)
+                      console.log(metricData)
                     }
                   }
                 }

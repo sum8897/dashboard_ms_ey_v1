@@ -4,7 +4,8 @@
     <ng-container *ngFor="let menuInfo of dashboardMenu; let i = index">
         <div id="dashboard-item-{{i}}">
             <sb-cqube-program-card [cardInfo]="menuInfo" id="dashboard-item-{{i}}"
-                                   (onProgramClick)="onClickOfDashboardItem($event)"></sb-cqube-program-card>
+                                   (onProgramClick)="onClickOfDashboardItem($event)">
+                                </sb-cqube-program-card>
         </div>
     </ng-container>
 </div>

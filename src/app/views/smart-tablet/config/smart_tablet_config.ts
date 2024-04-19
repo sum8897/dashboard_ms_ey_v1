@@ -1246,7 +1246,7 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Active Devices % on 31/03/2024",
+            "title": "Active Devices %",
             "valueSuffix": '%',
             "property": 'avg_active_devices'
         }
@@ -1300,7 +1300,7 @@ GROUP BY
     ],
     "options": {
         "bigNumber": {
-            "title": " Non Active Devices % on 31/03/2024",
+            "title": " Non Active Devices %",
             "valueSuffix": '%',
             "property": 'avg_non_active_devices'
         }
