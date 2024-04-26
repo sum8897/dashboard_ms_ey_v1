@@ -89,7 +89,7 @@ export class AppComponent {
         // username: this.LoginForm.controls.userId.value,
         // password: this.LoginForm.controls.password.value
         username: 'vsk_py',
-        password: 'Adminpy@123'
+        password: 'Admin@123'
       }
       this._authenticationService.login(data).subscribe((res: any) => {
         const token = res.access_token
