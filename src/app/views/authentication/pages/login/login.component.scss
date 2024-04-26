@@ -844,3 +844,15 @@ label[for="totp"]:after{
 .background{
     overflow-y: scroll !important;
 }
+.dashboard_route_div{
+    text-align: right;
+}
+.dashboard_route{
+    cursor: pointer;
+    text-transform: capitalize;
+    font-style: italic;
+    text-align: right;
+    text-decoration: underline;
+    margin-top: 10px;
+    font-weight: 600;
+}

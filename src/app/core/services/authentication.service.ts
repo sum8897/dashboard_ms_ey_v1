@@ -16,6 +16,7 @@ export class AuthenticationService {
   }
 
   logout(): void {
+    // alert('logged out');
     this.stopRefreshTokenTimer();
     localStorage.clear();
     this._router.navigate(['/login']);

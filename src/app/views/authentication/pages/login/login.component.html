@@ -12,7 +12,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-6 col-sm-12">
-			<div class="row">
+			<div class="row" (click)="onSubmit()">
 				<div class="col-sm-12">
 					<div class="logoText">
 						<p>{{ stateName }}</p>
@@ -35,7 +35,7 @@
 								<form
 									class="form"
 									[formGroup]="LoginForm"
-									(ngSubmit)="onSubmit()"
+									(ngSubmit)="onSubmitPrivate()"
 									id="kc-form-login1"
 									autocomplete="off"
 								>
@@ -75,6 +75,9 @@
 									</button>
 								</form>
 							</div>
+						</div>
+						<div class="dashboard_route_div">
+							<button (click)="onSubmit()" tabindex="4" class="dashboard_route">Go To Public Dashboard</button>
 						</div>
 					</div>
 				</div>

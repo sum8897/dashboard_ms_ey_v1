@@ -11,10 +11,11 @@ var routes: Routes = [];
 
 routes = [
   {
-    path: '', redirectTo: `home`, pathMatch: 'full'
+    path: '', redirectTo: 'summary-statistics', pathMatch: 'full'
   },
   {
     path: '',
+    // pathMatch: 'full',
     loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
   },
   {
@@ -45,7 +46,7 @@ routes = [
           import('./views/dashboard/dashboard.module').then(
             (module) => module.DashboardModule
           ),
-        canLoad: [AuthGuard]
+        // canLoad: [AuthGuard]
       },
       {
         path: 'student-attendance',

@@ -6,6 +6,7 @@ import { configFiles } from 'src/app/core/config/configMapping';
 
 import { IDashboardMenu } from 'src/app/core/models/IDashboardCard';
 import { IMenuItem } from 'src/app/core/models/IMenuItem';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
 import { ConfigService } from 'src/app/core/services/config/config.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
@@ -13,7 +14,7 @@ import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 import { parseRbacFilter } from 'src/app/utilities/QueryBuilder';
 import { environment } from 'src/environments/environment';
-
+import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -21,10 +22,22 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardComponent implements OnInit {
   dashboardMenu: IDashboardMenu[] | any;
+  roles:any;
   // isNvsk = environment.config.toLocaleLowerCase() === 'nvsk';
   isNvsk = false;
   rbacDetails: any;
-  constructor(private spinner: NgxSpinnerService,private readonly _commonService: CommonService, private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService) {
+  constructor(private spinner: NgxSpinnerService,private readonly _commonService: CommonService,
+     private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService,
+     private _rbacService: RbacService,private router: Router,
+     private readonly _authenticationService: AuthenticationService) {
+      if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
+      // alert('not loggedin');
+        this.onSubmit();
+      }else{
+
+      }
+    
+
     this.rbac.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails
     })
@@ -35,11 +48,56 @@ export class DashboardComponent implements OnInit {
   }
 
   onClickOfDashboardItem(cardInfo: IDashboardMenu | undefined): void {
+    // alert(cardInfo.title);
+    // alert(localStorage.getItem('login_access')=='login_public'); 
     if (cardInfo) {
-      this._router.navigate([cardInfo.navigationURL.trim()]);
+      if((cardInfo.title=='UDISE School Infrastructure' || cardInfo.title=='School General' || cardInfo.title=='PAS') && (localStorage.getItem('login_access')=='login_public')){
+        this.router.navigate(['/login']);
+      }else{
+        this._router.navigate([cardInfo.navigationURL.trim()]);
+      }
     }
   }
+  onSubmit() {
+    let role= {
+      id:"state",
+      imageUrl: "state.png",
+      name:"State Officer",
+      roleImageUrl: "principle_role.png",
+      value: 1
+  }
+  // if (this.LoginForm.valid) {
+    let data = {
+      // username: this.LoginForm.controls.userId.value,
+      // password: this.LoginForm.controls.password.value
+      username: 'vsk_py',
+      password: 'Adminpy@123'
+    }
+    this._authenticationService.login(data).subscribe((res: any) => {
+      const token = res.access_token
+      const refreshToken = res.refresh_token
+      localStorage.setItem('token', token)
+      localStorage.setItem('refresh_token', refreshToken);
+      localStorage.setItem('login_access', 'login_public')
+      // localStorage.setItem('userName', res.username)
+      // localStorage.setItem('user_id', res.userId)
+      this._authenticationService.startRefreshTokenTimer();
+      this._rbacService.setRbacDetails({ role: role.value, roleDetail: {} })
+      this.router.navigate(['/rbac']);
+      this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+        return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+      })
+      if(environment.config === 'VSK') {
+        this.roles = this.roles.filter((role: any, index: any) => {
+          return role.value !== 0
+        })
+      }
 
+    },
+      err => {
+       console.log(err);
+      })
+    }
   checkRbacLevel() {
     const programIds = Object.keys(configFiles);
     const hierarchyLevels = {};
@@ -82,7 +140,7 @@ export class DashboardComponent implements OnInit {
                  menuToDisplay.metrics = d;
                });
           this.dashboardMenu.push(menuToDisplay);
-
+          console.log(this.dashboardMenu);
         }
       }
     })

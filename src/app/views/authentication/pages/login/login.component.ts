@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { stateNames } from 'src/app/core/config/StateCodes';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import * as config from 'src/assets/config/ui_config.json'
+import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
+import { RbacService } from 'src/app/core/services/rbac-service.service';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +14,12 @@ import * as config from 'src/assets/config/ui_config.json'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  adminUrl;
+  adminDashUrl;
+  role;
+  storage
+  hideAdmin
+  roles: any;
 
   isLoggedIn: boolean = false;
   loginObj: any;
@@ -41,14 +49,26 @@ export class LoginComponent implements OnInit {
   })
   tempUserId: any;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private readonly _authenticationService: AuthenticationService) {
+  constructor(private router: Router, private formBuilder: FormBuilder, 
+    private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
+
+    
+    // this.onSubmit();
     // if (this._authenticationService.isUserLoggedIn()) {
+
     //   this.router.navigate(['/home']);
     // }
     // this.router.navigate(['/home']);
   }
 
   async ngOnInit(): Promise<void> {
+  
+    if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
+      this.router.navigate(['/rbac']);
+    }else{
+      
+    }
+    // this.onSubmit();
     let uiConfig = config;
     this.loginObj = uiConfig['loginObj'];
 
@@ -56,9 +76,9 @@ export class LoginComponent implements OnInit {
 
     type userRoles = Array<{ id: number, text: string }>
 
-    if (this.isLoggedIn) {
-      this.router.navigate(['/home'])
-    }
+    // if (this.isLoggedIn) {
+    //   this.router.navigate(['/summary-statistics'])
+    // }
 
     if (environment.config === 'VSK') {
       this.NVSK = false
@@ -86,34 +106,90 @@ export class LoginComponent implements OnInit {
     }
 
   }
+  onSubmitPrivate(){
+    let role= {
+      id:"state",
+      imageUrl: "state.png",
+      name:"State Officer",
+      roleImageUrl: "principle_role.png",
+      value: 1
+  }
+  if (this.LoginForm.valid) {
+    let data = {
+      username: this.LoginForm.controls.userId.value,
+      password: this.LoginForm.controls.password.value
+    }
+    this._authenticationService.login(data).subscribe((res: any) => {
+      const token = res.access_token
+      const refreshToken = res.refresh_token
+      localStorage.setItem('token', token)
+      localStorage.setItem('refresh_token', refreshToken);
+      localStorage.setItem('login_access', 'login_private')
+      // localStorage.setItem('userName', res.username)
+      // localStorage.setItem('user_id', res.userId)
+      this._authenticationService.startRefreshTokenTimer();
+      this._rbacService.setRbacDetails({ role: role.value, roleDetail: {} })
+      this.router.navigate(['/rbac']);
+      this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+        return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+      })
+      if(environment.config === 'VSK') {
+        this.roles = this.roles.filter((role: any, index: any) => {
+          return role.value !== 0
+        })
+      }
 
+    },
+      err => {
+        this.error = true;
+      })
+    }
+  }
   onSubmit() {
-    if (this.LoginForm.valid) {
+    let role= {
+        id:"state",
+        imageUrl: "state.png",
+        name:"State Officer",
+        roleImageUrl: "principle_role.png",
+        value: 1
+    }
+    // if (this.LoginForm.valid) {
       let data = {
-        username: this.LoginForm.controls.userId.value,
-        password: this.LoginForm.controls.password.value
+        // username: this.LoginForm.controls.userId.value,
+        // password: this.LoginForm.controls.password.value
+        username: 'vsk_py',
+        password: 'Adminpy@123'
       }
       this._authenticationService.login(data).subscribe((res: any) => {
         const token = res.access_token
         const refreshToken = res.refresh_token
         localStorage.setItem('token', token)
-        localStorage.setItem('refresh_token', refreshToken)
+        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('login_access', 'login_public')
         // localStorage.setItem('userName', res.username)
         // localStorage.setItem('user_id', res.userId)
         this._authenticationService.startRefreshTokenTimer();
-        this.router.navigate(['/home']);
+        this._rbacService.setRbacDetails({ role: role.value, roleDetail: {} })
+        this.router.navigate(['/rbac']);
+        this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+          return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+        })
+        if(environment.config === 'VSK') {
+          this.roles = this.roles.filter((role: any, index: any) => {
+            return role.value !== 0
+          })
+        }
+
       },
         err => {
           this.error = true;
         })
     }
-    else {
-      this.error = true
-    }
+    
     
 
   }
 
 
 
-}
+// }

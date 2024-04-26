@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { IMenuItem } from '../../models/IMenuItem';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
@@ -12,7 +13,7 @@ export class SideNavComponent implements OnInit, OnChanges {
   @Input() isHome: boolean;
   @Input() isSummary: boolean;
   ckBoxProp = false;
-  constructor() {
+  constructor(private router: Router) {
     if (this.isHome) {
       document.body.classList.add("sidebaractive");
       document.body.classList.add("sideBarHeightNone");
@@ -49,14 +50,23 @@ export class SideNavComponent implements OnInit, OnChanges {
 
 
   setMenuLinkActive(menuItemSelected: IMenuItem): void {
-    this.menu?.forEach(menuItem => {
-      if (menuItem.isSelected == true) {
-        menuItem.isSelected = false;
+    console.log(menuItemSelected);
+
+    if (menuItemSelected) {
+      if((menuItemSelected.label =='UDISE School Infrastructure' || menuItemSelected.label=='School General' || menuItemSelected.label=='PAS') && (localStorage.getItem('login_access')=='login_public')){
+        this.router.navigate(['/login']);
+      }else{
+        // this._router.navigate([cardInfo.navigationURL.trim()]);
+        this.menu?.forEach(menuItem => {
+          if (menuItem.isSelected == true) {
+            menuItem.isSelected = false;
+          }
+        });
+        menuItemSelected.isSelected = true;
+        // document.body.classList.add("sidebaractive");
+        this.toggleSideBar();
       }
-    });
-    menuItemSelected.isSelected = true;
-    // document.body.classList.add("sidebaractive");
-    this.toggleSideBar();
+    }    
   }
 
   toggleSideBar(menuIconclicked?: string): void {
