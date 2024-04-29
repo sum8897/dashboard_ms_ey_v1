@@ -19,6 +19,7 @@ export class AuthenticationService {
     // alert('logged out');
     this.stopRefreshTokenTimer();
     localStorage.clear();
+    localStorage.setItem('access_user','public_user');
     this._router.navigate(['/login']);
   }
 

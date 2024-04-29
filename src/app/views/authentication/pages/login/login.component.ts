@@ -51,7 +51,11 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, 
     private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
-
+      if(localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined){
+        this.router.navigate(['/summary-statistics']);
+      }else{
+        
+      }
     
     // this.onSubmit();
     // if (this._authenticationService.isUserLoggedIn()) {
@@ -63,11 +67,11 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
   
-    if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
-      this.router.navigate(['/rbac']);
-    }else{
+    // if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
+    //   this.router.navigate(['/summary-statistics']);
+    // }else{
       
-    }
+    // }
     // this.onSubmit();
     let uiConfig = config;
     this.loginObj = uiConfig['loginObj'];
@@ -166,6 +170,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', token)
         localStorage.setItem('refresh_token', refreshToken);
         localStorage.setItem('login_access', 'login_public')
+        localStorage.setItem('access_user','public_user');
         // localStorage.setItem('userName', res.username)
         // localStorage.setItem('user_id', res.userId)
         this._authenticationService.startRefreshTokenTimer();
