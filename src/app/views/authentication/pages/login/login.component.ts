@@ -51,12 +51,16 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, 
     private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
-      if(localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined){
-        this.router.navigate(['/summary-statistics']);
+      if(localStorage.getItem('access_user')=='public_user' || localStorage.getItem('access_user')==='public_user'){
+        // this.router.navigate(['/summary-statistics']);
+        // this.onSubmit();
+      }else if(localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined){
+          // this.router.navigate(['/summary-statistics']);
+          this.onSubmit();
       }else{
-        
+
       }
-    
+   
     // this.onSubmit();
     // if (this._authenticationService.isUserLoggedIn()) {
 
