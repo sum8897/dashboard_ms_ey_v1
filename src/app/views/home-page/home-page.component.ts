@@ -44,7 +44,7 @@ export class HomePageComponent implements OnInit {
       
         let data = {
           username: 'vsk_py',
-          password: 'Admin@123'
+          password: 'Adminpy@123'
         }
         this._authenticationService.login(data).subscribe((res: any) => {
           const token = res.access_token

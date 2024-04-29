@@ -28,11 +28,11 @@ export class AppComponent {
     private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
     translate.setDefaultLang('en');
     translate.use('en');
-    // if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
+    if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
     //  this.onSubmit();
-    // }else{
+    }else{
       
-    // }
+    }
     /** START : Code to Track Page View using gtag.js */
 
     // this.http.get('assets/config/globalconfig.json').pipe(
@@ -89,7 +89,7 @@ export class AppComponent {
         // username: this.LoginForm.controls.userId.value,
         // password: this.LoginForm.controls.password.value
         username: 'vsk_py',
-        password: 'Admin@123'
+        password: 'Adminpy@123'
       }
       this._authenticationService.login(data).subscribe((res: any) => {
         const token = res.access_token
