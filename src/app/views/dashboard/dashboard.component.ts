@@ -30,13 +30,44 @@ export class DashboardComponent implements OnInit {
      private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService,
      private _rbacService: RbacService,private router: Router,
      private readonly _authenticationService: AuthenticationService) {
-      alert(localStorage.getItem('token'));
-      alert(localStorage.getItem('access_user'));
+     
       if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined)){
-      // alert('not loggedin');
-        this.onSubmit();
+        console.log(localStorage.getItem('token'));
+        console.log(localStorage.getItem('access_user'));
+        let role= {
+          id:"state",
+          imageUrl: "state.png",
+          name:"State Officer",
+          roleImageUrl: "principle_role.png",
+          value: 1
+      }
+        let data = {
+          username: 'vsk_py',
+          password: 'Adminpy@123'
+        }
+        this._authenticationService.login(data).subscribe((res: any) => {
+          const token = res.access_token
+          const refreshToken = res.refresh_token
+          localStorage.setItem('token', token)
+          localStorage.setItem('refresh_token', refreshToken);
+          localStorage.setItem('login_access', 'login_public')
+          this._authenticationService.startRefreshTokenTimer();
+          this._rbacService.setRbacDetails({ role: role.value, roleDetail: {} })
+          this.router.navigate(['/rbac']);
+          this.roles = rbacConfig.roles.filter((role: any, index: any) => {
+            return rbacConfig.roles[index - 1]?.['skipNext'] !== true
+          })
+          if(environment.config === 'VSK') {
+            this.roles = this.roles.filter((role: any, index: any) => {
+              return role.value !== 0
+            })
+          }
+        },
+          err => {
+           console.log(err);
+          })
       }else{
-        this.router.navigate(['/rbac']);
+        // this.router.navigate(['/rbac']);
       }
     
 
@@ -68,10 +99,7 @@ export class DashboardComponent implements OnInit {
       roleImageUrl: "principle_role.png",
       value: 1
   }
-  // if (this.LoginForm.valid) {
     let data = {
-      // username: this.LoginForm.controls.userId.value,
-      // password: this.LoginForm.controls.password.value
       username: 'vsk_py',
       password: 'Adminpy@123'
     }
@@ -81,8 +109,6 @@ export class DashboardComponent implements OnInit {
       localStorage.setItem('token', token)
       localStorage.setItem('refresh_token', refreshToken);
       localStorage.setItem('login_access', 'login_public')
-      // localStorage.setItem('userName', res.username)
-      // localStorage.setItem('user_id', res.userId)
       this._authenticationService.startRefreshTokenTimer();
       this._rbacService.setRbacDetails({ role: role.value, roleDetail: {} })
       this.router.navigate(['/rbac']);
@@ -94,7 +120,6 @@ export class DashboardComponent implements OnInit {
           return role.value !== 0
         })
       }
-
     },
       err => {
        console.log(err);
