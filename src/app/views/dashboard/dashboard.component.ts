@@ -30,11 +30,13 @@ export class DashboardComponent implements OnInit {
      private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService,
      private _rbacService: RbacService,private router: Router,
      private readonly _authenticationService: AuthenticationService) {
-      if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
+      alert(localStorage.getItem('token'));
+      alert(localStorage.getItem('access_user'));
+      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined)){
       // alert('not loggedin');
         this.onSubmit();
       }else{
-
+        this.router.navigate(['/rbac']);
       }
     
 
