@@ -2,12 +2,13 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { formatNumberForReport } from 'src/app/utilities/NumberFomatter';
 
 @Component({
-  selector: 'app-big-number',
-  templateUrl: './big-number.component.html',
-  styleUrls: ['./big-number.component.scss']
+  selector: 'app-big-number-ict',
+  templateUrl: './big-number-ict.component.html',
+  styleUrls: ['./big-number-ict.component.scss']
 })
-export class BigNumberComponent implements OnInit, OnChanges {
+export class BigNumberIctComponent implements OnInit {
 
+  c
   @Input() bigNumberReportData: any;
   averagePercentage: any;
   differenceInPercentage: any;

@@ -59,6 +59,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { NewBarChartComponent } from './components/charts/new-bar-chart/new-bar-chart.component';
 import { NewLineChartComponent } from './components/charts/new-line-chart/new-line-chart.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
+import { BigNumberIctComponent } from './components/big-number-ict/big-number-ict.component';
 
 
 const IMPORTS: any[] = [
@@ -117,6 +118,7 @@ const DECLARATIONS = [
   DownloadButtonComponent,
   TimeSeriesFilterPanelComponent,
   BigNumberComponent,
+  BigNumberIctComponent,
   PopupOptionsComponent,
   BreadcrumbComponentComponent,
   SbBarChartComponent,
@@ -134,6 +136,7 @@ const DECLARATIONS = [
     NewBarChartComponent,
     LineChartComponent,
     DatePickerComponent,
+    
     
   ],
   imports: [

@@ -57,6 +57,7 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.drillDownSubscription = this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+      console.log(this.rbacDetails);
     })
     console.log('subscription',this.drillDownSubscription)
     this._reportDrilldownService.drilldownData.subscribe(data => {
@@ -74,6 +75,7 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
   
 
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
+    console.log(values);
 
     
     let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
@@ -157,7 +159,8 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
           this.tableReportData = await this._dataService.getTableReportData(query, options);
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-            this.exportReportData.emit(reportsData)
+            this.exportReportData.emit(reportsData);
+            console.log(this.exportReportData)
           }
         }
 
@@ -204,7 +207,7 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
   async getBigNumberReportData(query: string, options: any, indicator: string): Promise<void> {
     let { bigNumber } = options ?? {};
     let { valueSuffix, property } = bigNumber ?? {};
-  
+  console.log(options)
     if (indicator === 'averagePercentage') {
       this.bigNumberReportData = {
         ...this.bigNumberReportData,
@@ -213,7 +216,7 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
       }
       console.log('bigNumberreportdata line 222',this.bigNumberReportData)
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
-     
+     console.log(res);
         if (res) {
           let rows = res;
           this.bigNumberReportData = {
@@ -257,6 +260,7 @@ export class TeleNoncompleteBignumberComponent implements OnInit, OnDestroy {
     }
     else if (indicator === 'differencePercentage') {
       await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        console.log(res)
         if (res) {
           let rows = res;
           this.bigNumberReportData = {

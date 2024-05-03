@@ -1209,7 +1209,7 @@ student_attendance_bignumber1: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber":` select ROUND(sum(active_devices)*100.0 / 51899 , 2) as avg_active_devices
+                "bigNumber":` select ROUND(round(sum(active_devices)*100.0 / 51899 , 2)*100) as avg_active_devices
                 from (SELECT
                     d.district_name,
                     COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
@@ -1225,7 +1225,7 @@ student_attendance_bignumber1: {
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `select ROUND(sum(active_devices)*100.0 / 51899 , 2) as avg_active_devices
+                    "bigNumber": `select ROUND(round(sum(active_devices)*100.0 / 51899 , 2)*100) as avg_active_devices
                     from (SELECT
                         d.district_name,
                         COUNT( CASE WHEN t.event = 'on' THEN t.tablet_imei END) AS active_devices
@@ -1262,7 +1262,7 @@ student_attendance_bignumber2: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":` 
-                select ROUND(sum(non_active_devices)*100.0 / 51899 , 2) as avg_non_active_devices
+                select ROUND(ROUND(sum(non_active_devices)*100.0 / 51899 , 2)*100) as avg_non_active_devices
 from (SELECT
     d.district_name,
     COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
@@ -1279,11 +1279,11 @@ GROUP BY
             "actions": {
                 "queries": {
                     "bigNumber": ` 
-                    select ROUND(sum(non_active_devices)*100.0 / 51899 , 2) as avg_non_active_devices
+                    select ROUND(ROUND(sum(non_active_devices)*100.0 / 51899 , 2)*100) as avg_non_active_devices
 from (SELECT
     d.district_name,
     COUNT(CASE WHEN t.event = 'off' THEN t.tablet_imei END) AS non_active_devices
-FROM
+FROMy
     smart_tablet.tablet t
 JOIN
     dimensions.district d ON t.district_id = d.district_id
