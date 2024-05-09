@@ -1873,7 +1873,7 @@ student_comparative_bignumber: {
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                     from ( SELECT
                         sam.district_id,
                         d.district_name,
@@ -1893,7 +1893,7 @@ student_comparative_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                         from ( SELECT
                             sam.district_id,
                             d.district_name,
@@ -1919,7 +1919,7 @@ student_comparative_bignumber: {
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                     from ( SELECT
                         sam.district_id,
                         d.district_name,
@@ -1942,7 +1942,7 @@ student_comparative_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                         from ( SELECT
                             sam.district_id,
                             d.district_name,
@@ -1973,7 +1973,7 @@ student_comparative_bignumber: {
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                     from ( SELECT
                         sam.district_id,
                         d.district_name,
@@ -2003,7 +2003,7 @@ student_comparative_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                         from ( SELECT
                             sam.district_id,
                             d.district_name,
@@ -2040,7 +2040,7 @@ student_comparative_bignumber: {
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                    "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                     from ( SELECT
                         sam.district_id,
                         d.district_name,
@@ -2074,7 +2074,7 @@ student_comparative_bignumber: {
                 },
                 "actions": {
                     "queries": {
-                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),4) as sum_perc
+                        "bigNumber": `SELECT ROUND(AVG(student_count_change_perc),2) as sum_perc
                         from ( SELECT
                             sam.district_id,
                             d.district_name,
