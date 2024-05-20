@@ -16,7 +16,7 @@ export class StaffStudentsComponent implements OnInit {
   rbacDetails: any;
   selectedTabLabel;
   tabs: any = [];
-  programName : any = 'schoolGeneral'
+  programName : any = 'schoolGeneral';
  
   constructor(private route: ActivatedRoute, private _rbacService: RbacService, private _commonService: CommonService) { 
     this.route.queryParams.subscribe((param: any) => {
