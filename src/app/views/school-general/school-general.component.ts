@@ -24,11 +24,13 @@ export class SchoolGeneralComponent implements OnInit {
         this.rbacDetails = rbacDetails;
     })
     let allTabs = [...Object.keys(config)]
+    console.log(allTabs);
     allTabs.forEach((tab: any) => {
         config?.[tab]?.filters?.every((filter) => {
         if((Number(filter?.hierarchyLevel) === this.rbacDetails?.role) || this.rbacDetails?.role === 0){
             if(!(this.tabs.includes(config?.[tab]?.label))){
             this.tabs.push(config?.[tab]?.label)
+            console.log(this.tabs);
             }
             return false
         }

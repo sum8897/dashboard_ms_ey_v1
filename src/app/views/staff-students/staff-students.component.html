@@ -1,0 +1,80 @@
+<!-- <div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				Staff & Students<em><small></small></em>
+			</p>
+			<p class="program-desc"></p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+		<mat-tab label="Staff Details" *ngIf="tabs.includes('Staff Details')">
+			<app-staff-details-tab
+				*ngIf="selectedTabLabel === 'Staff Details'"
+			></app-staff-details-tab>
+		</mat-tab>
+		<mat-tab label="Students Details">
+			<app-students-details-tab
+				*ngIf="selectedTabLabel === 'Students Details'"
+			></app-students-details-tab>
+		</mat-tab>
+
+	</mat-tab-group>
+</div> -->
+
+<div class="metric-card-wrapper">
+	<div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+		<div class="col-span-12">
+			<p class="program-title">
+				Staffs & Students Details<em><small></small></em>
+			</p>
+			<p class="program-desc"></p>
+		</div>
+	</div>
+</div>
+
+<div class="custom-tab-group-wrapper">
+	<mat-tab-group
+		[selectedIndex]="tabIndex"
+		mat-align-tabs="start"
+		animationDuration="0ms"
+		(selectedTabChange)="onTabChanged($event)"
+		appFullScreen
+	>
+	<mat-tab label="Staff Details" *ngIf="tabs.includes('Staff Details')">
+		<app-staff-details-tab
+			*ngIf="selectedTabLabel === 'Staff Details'"
+		></app-staff-details-tab>
+	</mat-tab>
+	<mat-tab label="Students Details">
+		<app-students-details-tab
+			*ngIf="selectedTabLabel === 'Students Details'"
+		></app-students-details-tab>
+	</mat-tab>
+		<!-- <mat-tab label="School Details" *ngIf="tabs.includes('School Details')">
+			<app-staff-details-tab
+				*ngIf="selectedTabLabel === 'School Details'"
+			></app-staff-details-tab>
+		</mat-tab>
+		<mat-tab label="Key Indicators">
+			<app-students-details-tab
+				*ngIf="selectedTabLabel === 'Key Indicators'"
+			></app-students-details-tab>
+		</mat-tab> -->
+		<!-- <mat-tab label="Enrollment Info">
+			<app-enrollment-info-tab
+				*ngIf="selectedTabLabel === 'Enrollment Info'"
+			></app-enrollment-info-tab>
+		</mat-tab> -->
+	</mat-tab-group>
+</div>
+

@@ -5,6 +5,7 @@ import { RbacDialogComponent } from './shared/components/rbac-dialog/rbac-dialog
 import { HomePageComponent } from './views/home-page/home-page.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { NewChartComponent } from './views/new-chart/new-chart.component';
+import { LoginComponent } from './views/authentication/pages/login/login.component';
 
 var routes: Routes = [];
 
@@ -13,11 +14,7 @@ routes = [
   {
     path: '', redirectTo: 'summary-statistics', pathMatch: 'full'
   },
-  {
-    path: '',
-    // pathMatch: 'full',
-    loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
-  },
+ 
   {
     path: 'chart', component: NewChartComponent,
     // canActivate: [AuthGuard]
@@ -201,6 +198,14 @@ routes = [
         canLoad: [AuthGuard]
       },
       {
+        path: 'staff-students',
+        loadChildren: () =>
+          import('./views/staff-students/staff-students.module').then(
+            (module) => module.StaffStudentsModule
+          ),
+        // canLoad: [AuthGuard]
+      },
+      {
         path: 'student-assessment',
         loadChildren: () =>
             import('./views/student-assessment/student-assessment.module').then(
@@ -257,6 +262,10 @@ routes = [
         canLoad: [AuthGuard]
       },
     ],
+  },
+  {
+    path: '',
+    loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
   },
 ];
 

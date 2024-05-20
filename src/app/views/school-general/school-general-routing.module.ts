@@ -1,3 +1,4 @@
+
 import { RouterModule, Routes } from '@angular/router';
 import { SchoolGeneralComponent } from './school-general.component';
 import { NgModule } from '@angular/core';

@@ -217,7 +217,9 @@ bigNumberMetrics: any = [];
     // this.maxDate = (this.maxDate === undefined || (dates?.maxDate && this.maxDate > dates.maxDate)) ? dates.maxDate : this.maxDate
   }
   importBigNumberMetrics(bigNumberMetric: any) {
-    this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
+    console.log(bigNumberMetric)
+    this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data;
+    console.log(this.bigNumberMetrics);
 }
   
 

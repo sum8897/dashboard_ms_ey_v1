@@ -93,7 +93,8 @@ export class DistrictWiseTableComponent implements OnInit, OnDestroy {
 
         let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
         this.drillDownDetails = result?.drillDownDetails
-        this.tableReportData = result?.reportData
+        this.tableReportData = result?.reportData;
+        console.log(this.tableReportData);
         if (this.tableReportData?.data?.length > 0) {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
           this.csv.csvDownload(reportsData)
@@ -107,7 +108,8 @@ export class DistrictWiseTableComponent implements OnInit, OnDestroy {
           this.backUpData = this.tableReportData?.data
         }
         this.criteriaApplied = true
-        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData)
+        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData);
+        console.log(this.tableReportData);
         // await this.applyCriteria(data);
         // let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         // this.csv.csvDownload(reportsData)

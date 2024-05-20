@@ -49,6 +49,7 @@ export class ProgressStatusTabComponent implements OnInit, AfterViewInit {
     async ngAfterViewInit(): Promise<void> {
         if (this.hasCommonFilters) {
             this.filters = await this._wrapperService.constructCommonFilters(config.filters);
+            console.log(this.filters);
             this.progressStatus?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) });
         }
         if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {

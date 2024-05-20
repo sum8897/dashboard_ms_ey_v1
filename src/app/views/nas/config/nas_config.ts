@@ -185,7 +185,7 @@ export const config = {
                 }
             },
             {
-                "name": "State",
+                "name": "State",    
                 "hierarchyLevel": "1",
                 "actions":
                 {

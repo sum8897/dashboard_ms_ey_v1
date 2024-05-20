@@ -70,6 +70,7 @@ export class GradewiseTableComponent implements OnInit, OnDestroy {
         this.criteriaApplied = false;
         // this.drilldownData(data);
         let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
+        console.log(result);
         this.drillDownDetails = result?.drillDownDetails
         this.tableReportData = result?.reportData
         if (this.tableReportData?.data?.length > 0) {

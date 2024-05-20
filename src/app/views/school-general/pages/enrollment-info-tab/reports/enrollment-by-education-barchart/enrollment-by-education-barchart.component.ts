@@ -136,7 +136,7 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
       let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], startDate, endDate, this.drillDownDetails, this.filterValues,this.metricFilter,this.filterneed)
       this.drillDownDetails = result?.drillDownDetails
       this.tableReportData = result?.reportData
-      
+      console.log(this.tableReportData);
     }
     else {
       // console.log("hello click===================", this.drillDownDetails)
@@ -199,7 +199,8 @@ export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy
           this.tableReportData = await this._dataService.getTableReportData(query, options);
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-            this.exportReportData.emit(reportsData)
+            this.exportReportData.emit(reportsData);
+            console.log(this.tableReportData);
           }
         }
         else if (query && key === 'bigNumber') {

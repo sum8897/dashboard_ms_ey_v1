@@ -66,7 +66,6 @@ export class DataService {
           data: newRows,
           columns: newCols
         }
-
         this.spinner.hide()
         resolve(reportData);
       })

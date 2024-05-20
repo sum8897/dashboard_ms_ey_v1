@@ -3230,7 +3230,7 @@ group by sub.district_name`,
                 "metricLabelProp": "Received",
                 "metricValueProp": "received",
                 "yAxis": {
-                    "title": " Number Of Schools"
+                    "title": "Total Amount"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
@@ -7408,7 +7408,7 @@ gender_parity_barchart:{
 //     }
 // },
 
-//top bignumbers
+//top bignumbers---card display
 diksha_metrics: {
     "label": "ETB Coverage Status",
     "filters": [
