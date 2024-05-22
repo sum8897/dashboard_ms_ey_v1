@@ -1,31 +1,26 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonService } from 'src/app/core/services/common/common.service';
-import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
+import { buildQuery,parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CriteriaService } from 'src/app/core/services/criteria.service';
+import { DataService } from 'src/app/core/services/data.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { startCase } from 'lodash';
-import { config } from 'src/app/views/staff-students/config/staff-students_config';
-import { StudentsDetailsTabComponent } from '../../students-details-tab.component';
-
+import { EnrollmentInfoTabComponent } from '../../enrollment-info-tab.component';
+import { config } from 'src/app/views/school-general/config/school_general_config';
 @Component({
-  selector: 'app-bpl-beneficiaries-table',
-  templateUrl: './bpl-beneficiaries-table.component.html',
-  styleUrls: ['./bpl-beneficiaries-table.component.scss']
+  selector: 'app-enrollment-by-gender-table',
+  templateUrl: './enrollment-by-gender-table.component.html',
+  styleUrls: ['./enrollment-by-gender-table.component.scss']
 })
-export class BplBeneficiariesTableComponent implements OnInit {
-
-  reportName: string = 'performance_table';
+export class EnrollmentByGenderTableComponent implements OnInit, OnDestroy {
+  reportName: string = 'gender_table';
   filters: any = [];
   levels: any;
   tableReportData: any;
-  backUpData: any = [];
-  criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: ""
+    reportName: "Enrollment By Gender"
   };
   minDate: any;
   maxDate: any;
@@ -33,95 +28,138 @@ export class BplBeneficiariesTableComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'BPL Beneficiaries';
-  drillDownDetails: any;
+  title = 'Enrollment By Gender';
+  backUpData: any = [];
+  criteriaApplied: boolean = false;
+  searchText: any;
+  searchFilterConfig: any;
+  previousText: any;
   drillDownLevel: any;
+  drillDownDetails: any;
   drillDownSubscription: any;
+  hierarchy: any;
   filterValues:any;
   filterneed:any;
   metricFilter:any;
   selectedYear: any;
   selectedMonth: any;
   config: any;
-
-
-
   @Output() bigNumberReport = new EventEmitter<any>();
   @Output() exportDates = new EventEmitter<any>();
   @Input() startDate: any;
   @Input() endDate: any;
   @Output() exportReportData = new EventEmitter<any>();
 
-  constructor(
-    private readonly _commonService: CommonService,
-    private csv: StudentsDetailsTabComponent,
-    private readonly _wrapperService: WrapperService,
-    private _rbacService: RbacService,
-    private readonly _reportDrilldownService: ReportDrilldownService,
-    private readonly _criteriaService: CriteriaService,
-    private spinner: NgxSpinnerService,
-    private readonly _dataService: DataService,
-  ) {
+  constructor(private spinner: NgxSpinnerService, private readonly _commonService: CommonService, private csv: EnrollmentInfoTabComponent, private readonly _wrapperService: WrapperService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService, private readonly _criteriaService: CriteriaService, private readonly _dataService: DataService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
+      this.drillDownLevel = rbacDetails.role
     });
-
 
   }
 
   ngOnInit(): void {
-    // this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(async (data) => {
-    //   if (data && data.hierarchyLevel) {
-    //     this.drillDownLevel = data.hierarchyLevel
-    //     // this.drilldownData(data);
-    //     this._criteriaService.emit('reset')
-    //     this.criteriaApplied = false;
-
-    //     let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
-    //     this.drillDownDetails = result?.drillDownDetails
-    //     this.tableReportData = result?.reportData
-    //     if (this.tableReportData?.data?.length > 0) {
-    //       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-    //       this.csv.csvDownload(reportsData)
-    //     }
-    //   }
-    // })
+    let { options: { searchBar_config } } = config[this.reportName];
+    this.searchFilterConfig = {
+      ...searchBar_config
+    }
     this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(async (data) => {
-      if (data && data.hierarchyLevel) {
+      if (data && data.linkedReports?.includes(this.reportName) && data.hierarchyLevel) {
         this.drillDownLevel = data.hierarchyLevel
-        // this.drilldownData(data);
         this._criteriaService.emit('reset')
         this.criteriaApplied = false;
-
+        // this.drilldownData(data);
         let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
-        console.log(result);
         this.drillDownDetails = result?.drillDownDetails
         this.tableReportData = result?.reportData
         if (this.tableReportData?.data?.length > 0) {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-          this.csv.csvDownload(reportsData)
+          this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
         }
       }
     })
-
     this._criteriaService.criteriaObject.subscribe(async (data) => {
       if (data && data?.linkedReports?.includes(this.reportName)) {
+        //  await this.applyCriteria(data)
         if (!this.criteriaApplied) {
           this.backUpData = this.tableReportData?.data
         }
         this.criteriaApplied = true
         this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData)
-        // await this.applyCriteria(data);
-        // let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-        // this.csv.csvDownload(reportsData)
+        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+        this.csv.schoolCsvDownload(reportsData, this.hierarchy)
       }
     })
     // this.getReportData();
   }
 
- 
- 
-  //function for filters
+  searchTextUpdate(text: any) {
+    this.searchFilterConfig = {
+      ...this.searchFilterConfig,
+      searchText: text
+    }
+    // this.searchText = text
+  }
+
+  // async getReportData(startDate = undefined, endDate = undefined): Promise<void> {
+  //   this.startDate = startDate;
+  //   this.endDate = endDate;
+  //   this._criteriaService.emit('reset')
+  //   this.criteriaApplied = false;
+  //   if (this.drillDownDetails !== undefined) {
+  //     let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails)
+  //     this.drillDownDetails = result?.drillDownDetails
+  //     this.tableReportData = result?.reportData
+  //     if (this.tableReportData?.data?.length > 0) {
+  //       let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+  //       this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
+  //     }
+  //   }
+  //   else {
+  //     let reportConfig = config;
+
+  //     let { timeSeriesQueries, queries, levels, label, defaultLevel, filters, options } = reportConfig[this.reportName];
+  //     let onLoadQuery;
+  //     if (this.rbacDetails?.role) {
+  //       filters.every((filter: any) => {
+  //         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
+  //           queries = { ...filter?.actions?.queries }
+  //           timeSeriesQueries = { ...filter?.timeSeriesQueries }
+  //           Object.keys(queries).forEach((key) => {
+  //             queries[key] = this.parseRbacFilter(queries[key])
+  //             timeSeriesQueries[key] = this.parseRbacFilter(timeSeriesQueries[key])
+  //           });
+  //           return false
+  //         }
+  //         return true
+  //       })
+  //     } else {
+  //       this._wrapperService.constructFilters(this.filters, filters);
+  //     }
+
+  //     Object.keys(queries).forEach(async (key: any) => {
+  //       if (key.toLowerCase().includes('comparison')) {
+  //         let endDate = new Date();
+  //         let days = endDate.getDate() - this.compareDateRange;
+  //         let startDate = new Date();
+  //         startDate.setDate(days)
+  //         onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
+  //       }
+  //       else if (this.startDate !== undefined && this.endDate !== undefined && Object.keys(timeSeriesQueries).length > 0) {
+  //         onLoadQuery = parseTimeSeriesQuery(timeSeriesQueries[key], this.startDate, this.endDate)
+  //       }
+  //       else {
+  //         onLoadQuery = queries[key]
+  //       }
+  //       let query = buildQuery(onLoadQuery, defaultLevel, this.levels, this.filters, this.startDate, this.endDate, key, this.compareDateRange);
+
+  //       if (query && key === 'table') {
+  //         await this.getTableReportData(query, options, this.drillDownLevel);
+  //       }
+  //     })
+  //   }
+  // }
+
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
 
     
@@ -180,8 +218,6 @@ export class BplBeneficiariesTableComponent implements OnInit {
           let days = endDate.getDate() - this.compareDateRange;
           let startDate = new Date();
           startDate.setDate(days)
-          // let startDate = "2022-23";
-
           
           onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
           console.log('237',this.startDate,this.endDate)
@@ -247,7 +283,6 @@ export class BplBeneficiariesTableComponent implements OnInit {
     }
     }
 
-
   parseRbacFilter(query: string) {
     let newQuery = query;
     let startIndex = newQuery?.indexOf('{');
@@ -265,36 +300,64 @@ export class BplBeneficiariesTableComponent implements OnInit {
     return newQuery
   }
 
-  getTableReportData(query, options): void {
-    this._commonService.getReportDataNew(query).subscribe((res: any) => {
-      let rows = res;
-      let { table: { columns } } = options;
-      this.tableReportData = {
-        data: rows.map(row => {
-          columns.forEach((col: any) => {
-            if (row[col.property]) {
-              row = {
-                ...row,
-                [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+  async getTableReportData(query, options, hierarchyLevel?) {
+    this.hierarchy = hierarchyLevel;
+    this.spinner.show();
+
+    try {
+      await this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        // this.spinner.show();
+        if (this.drillDownLevel === hierarchyLevel) {
+          let rows = res;
+          let { table: { columns } } = options;
+          this.tableReportData = {
+            data: rows.map(row => {
+              if (this.minDate !== undefined && this.maxDate !== undefined) {
+                if (row['min_date'] < this.minDate) {
+                  this.minDate = row['min_date']
+                }
+                if (row['max_date'] > this.maxDate) {
+                  this.maxDate = row['max_date']
+                }
               }
-            }
-          });
-          return row
-        }),
-        columns: columns.filter(col => {
-          if (rows[0] && col.property in rows[0]) {
-            return col;
+              else {
+                this.minDate = row['min_date']
+                this.maxDate = row['max_date']
+              }
+              columns.forEach((col: any) => {
+                if (row[col.property]) {
+                  row = {
+                    ...row,
+                    [col.property]: { value: col.type === 'number' ? Number(row[col.property]) : row[col.property] }
+                  }
+                }
+              });
+              return row
+            }),
+            columns: columns.filter(col => {
+              if (rows[0] && col.property in rows[0]) {
+                return col;
+              }
+            })
+          };
+          if (this.tableReportData?.data?.length > 0) {
+            let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+            this.csv.schoolCsvDownload(reportsData, hierarchyLevel)
           }
-        })
-      };
-      if (this.tableReportData?.data?.length > 0) {
-        let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-        this.csv.csvDownload(reportsData)
-      }
-    });
+
+        }
+      });
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      this.spinner.hide();
+    }
+
   }
 
   ngOnDestroy(): void {
-    this.drillDownSubscription.unsubscribe()
+    this.drillDownSubscription.unsubscribe();
   }
 }

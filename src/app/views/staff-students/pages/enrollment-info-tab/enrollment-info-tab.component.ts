@@ -3,24 +3,19 @@ import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
 import { CommonService } from 'src/app/core/services/common/common.service';
-import moment from 'moment';
-import { config } from '../../config/staff-students_config';
-import { TeacherByAppointmentComponent } from './reports/teacher-by-appointment/teacher-by-appointment.component';
-import { TeacherByAppointmentTableComponent } from './reports/teacher-by-appointment-table/teacher-by-appointment-table.component';
-import { TeacherByGenderAndSocialCategoryComponent } from './reports/teacher-by-gender-and-social-category/teacher-by-gender-and-social-category.component';
-import { TeacherByHighestAcademicQualificationComponent } from './reports/teacher-by-highest-academic-qualification/teacher-by-highest-academic-qualification.component';
-import { TeacherByHighestProfessionalQualificationComponent } from './reports/teacher-by-highest-professional-qualification/teacher-by-highest-professional-qualification.component';
-import { TeacherEngagementByEducationLevelComponent } from './reports/teacher-engagement-by-education-level/teacher-engagement-by-education-level.component';
-import { StaffByManagementTableComponent } from './reports/staff-by-management-table/staff-by-management-table.component';
-import { TeacherByAppointmentChartComponent } from './reports/teacher-by-appointment-chart/teacher-by-appointment-chart.component';
+import { config } from 'src/app/views/school-general/config/school_general_config';
+import { EnrollmentByCategoryTableComponent } from './reports/enrollment-by-category-table/enrollment-by-category-table.component';
+import { EnrollmentByGenderTableComponent } from './reports/enrollment-by-gender-table/enrollment-by-gender-table.component';
+import { EnrollmentByEducationBarchartComponent } from './reports/enrollment-by-education-barchart/enrollment-by-education-barchart.component';
 
+import moment from 'moment';
 @Component({
-  selector: 'app-staff-details-tab',
-  templateUrl: './staff-details-tab.component.html',
-  styleUrls: ['./staff-details-tab.component.scss']
+  selector: 'app-enrollment-info-tab',
+  templateUrl: './enrollment-info-tab.component.html',
+  styleUrls: ['./enrollment-info-tab.component.scss']
 })
-export class StaffDetailsTabComponent implements OnInit, AfterViewInit {
- 
+export class EnrollmentInfoTabComponent implements OnInit, OnDestroy {
+
   bigNumberReports: any = {};
   filters: any;
   maxDate: any;
@@ -43,24 +38,20 @@ bigNumberMetrics: any = [];
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='Staff Details';
+  tabLabel:any='Enrollment Info';
 
   //added for full school report download
   // title = "Download School Report"
   schoolReportsData: any[] = [];
   pagereportName = "teachers_present"
-  //districtWiseTable
- 
-  @ViewChild('districtWiseTable') districtWiseTable: StaffByManagementTableComponent;
-  @ViewChild('managementBarchart') managementBarchart: TeacherByAppointmentChartComponent;
-  @ViewChild('educationBarchart') educationBarchart: TeacherByGenderAndSocialCategoryComponent;
-  @ViewChild('teacherRatioTable') teacherRatioTable: TeacherByHighestProfessionalQualificationComponent;
-  @ViewChild('classroomRatioTable') classroomRatioTable:   TeacherByHighestAcademicQualificationComponent;
-  @ViewChild('categoryBarchart') categoryBarchart: TeacherEngagementByEducationLevelComponent;
+  //
+  @ViewChild('categoryTable') categoryTable: EnrollmentByCategoryTableComponent;
 
-  // @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
-  // @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
-  // @ViewChild('studentTrendchart') studentTrendchart: StudentTrendlineComponent;
+  @ViewChild('educationBarchart') educationBarchart: EnrollmentByEducationBarchartComponent;
+ 
+  @ViewChild('genderTable') genderTable: EnrollmentByGenderTableComponent;
+ 
+  
   
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
@@ -93,16 +84,16 @@ bigNumberMetrics: any = [];
       if (this.hasCommonFilters) {
           this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
           console.log('line103- filters',this.filters)
-          this.districtWiseTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          this.classroomRatioTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          this.teacherRatioTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.categoryTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.genderTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+       
         
          
-          this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-          this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.educationBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-
-          // this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+         
           
          
           }
@@ -150,16 +141,16 @@ bigNumberMetrics: any = [];
    
     console.log('dttttttt',this.filters,this.startDate,this.endDate)
 
-    this.districtWiseTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    this.classroomRatioTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    this.teacherRatioTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.categoryTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+    this.genderTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    
 
    
-    this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-   
-    this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.educationBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    // this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+   
+   
+   
    
    
   
@@ -170,8 +161,21 @@ bigNumberMetrics: any = [];
       this.filters = filters
       this.updateReportsData()
           }
-   
+    // filtersUpdated(filters: any) {
+    //   this.reportsData = [];
+    //   this.filters = filters;
+      
+    //   // Find the filter with name 'acdemic_year'
+    //   const academicYearFilter = this.filters.find((filter: any) => filter.name === 'acdemic_year');
+      
+    //   // If the filter is found and it has a value, assign it to startDate
+    //   if (academicYearFilter && academicYearFilter.value) {
+    //     this.startDate = academicYearFilter.value;
+    //   }
     
+    //   // Update the reports data
+    //   this.updateReportsData();
+    // }
 
   timeSeriesUpdated(event: any): void {
     if (event?.startDate !== null && event?.endDate !== null) {
@@ -225,9 +229,7 @@ bigNumberMetrics: any = [];
     // this.maxDate = (this.maxDate === undefined || (dates?.maxDate && this.maxDate > dates.maxDate)) ? dates.maxDate : this.maxDate
   }
   importBigNumberMetrics(bigNumberMetric: any) {
-    console.log(bigNumberMetric)
-    this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data;
-    console.log(this.bigNumberMetrics);
+    this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
 }
   
 

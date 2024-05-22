@@ -14,19 +14,19 @@ import { config } from 'src/app/views/staff-students/config/staff-students_confi
 import { StaffDetailsTabComponent } from '../../staff-details-tab.component';
 
 @Component({
-  selector: 'app-teacher-by-appointment',
-  templateUrl: './teacher-by-appointment.component.html',
-  styleUrls: ['./teacher-by-appointment.component.scss']
+  selector: 'app-teacher-by-appointment-chart',
+  templateUrl: './teacher-by-appointment-chart.component.html',
+  styleUrls: ['./teacher-by-appointment-chart.component.scss']
 })
-export class TeacherByAppointmentComponent implements OnInit {
-// this component used for chart only
+export class TeacherByAppointmentChartComponent implements OnInit {
+
   compareDateRange: any = 7;
   title: any;
   chartHeight: any;
   marginTop: any;
   config;
   data;
-  fileName: string = "Teachers by Appointment";
+  fileName: string = "Schools by Management";
   reportName: string = 'management_barchart';
   filters: any = [];
   levels: any;
@@ -138,7 +138,7 @@ export class TeacherByAppointmentComponent implements OnInit {
       let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], startDate, endDate, this.drillDownDetails, this.filterValues,this.metricFilter,this.filterneed)
       this.drillDownDetails = result?.drillDownDetails
       this.tableReportData = result?.reportData
-      console.log(this.tableReportData);
+      
     }
     else {
       // console.log("hello click===================", this.drillDownDetails)
@@ -221,7 +221,6 @@ export class TeacherByAppointmentComponent implements OnInit {
           
           if (this.tableReportData?.values?.length > 0) {
             let reportsData = { reportData: this.tableReportData.values, reportType: 'dashletBar', reportName: this.title }
-            console.log(reportsData)
             this.exportReportData.emit(reportsData)
           }
         }
@@ -417,10 +416,9 @@ export class TeacherByAppointmentComponent implements OnInit {
   }
 
   async drilldownData(event: any) {
-    console.log(event);
     let { hierarchyLevel, id } = event ?? {}
     let drillDownDetails;
-    console.log(drillDownDetails)
+
     switch (Number(hierarchyLevel)) {
       case 1:
         drillDownDetails = {
@@ -498,5 +496,3 @@ export class TeacherByAppointmentComponent implements OnInit {
 
 
 }
-
-

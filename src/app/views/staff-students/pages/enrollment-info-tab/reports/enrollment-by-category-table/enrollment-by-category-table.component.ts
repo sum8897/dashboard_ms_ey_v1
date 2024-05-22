@@ -8,24 +8,22 @@ import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/r
 import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { startCase } from 'lodash';
-import { config } from 'src/app/views/staff-students/config/staff-students_config';
-import { StudentsDetailsTabComponent } from '../../students-details-tab.component';
-
+import { EnrollmentInfoTabComponent } from '../../enrollment-info-tab.component';
+import { config } from 'src/app/views/school-general/config/school_general_config';
 @Component({
-  selector: 'app-bpl-beneficiaries-table',
-  templateUrl: './bpl-beneficiaries-table.component.html',
-  styleUrls: ['./bpl-beneficiaries-table.component.scss']
+  selector: 'app-enrollment-by-category-table',
+  templateUrl: './enrollment-by-category-table.component.html',
+  styleUrls: ['./enrollment-by-category-table.component.scss']
 })
-export class BplBeneficiariesTableComponent implements OnInit {
-
-  reportName: string = 'performance_table';
+export class EnrollmentByCategoryTableComponent implements OnInit, OnDestroy {
+  reportName: string = 'category_table';
   filters: any = [];
   levels: any;
   tableReportData: any;
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: ""
+    reportName: "Enrollment By Social Category"
   };
   minDate: any;
   maxDate: any;
@@ -33,7 +31,7 @@ export class BplBeneficiariesTableComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'BPL Beneficiaries';
+  title = 'Enrollment By Social Category';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;
@@ -54,7 +52,7 @@ export class BplBeneficiariesTableComponent implements OnInit {
 
   constructor(
     private readonly _commonService: CommonService,
-    private csv: StudentsDetailsTabComponent,
+    private csv: EnrollmentInfoTabComponent,
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
@@ -94,7 +92,6 @@ export class BplBeneficiariesTableComponent implements OnInit {
         this.criteriaApplied = false;
 
         let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
-        console.log(result);
         this.drillDownDetails = result?.drillDownDetails
         this.tableReportData = result?.reportData
         if (this.tableReportData?.data?.length > 0) {

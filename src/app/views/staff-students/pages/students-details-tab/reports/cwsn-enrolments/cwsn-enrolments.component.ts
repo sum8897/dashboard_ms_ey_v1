@@ -30,7 +30,7 @@ export class CwsnEnrolmentsComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = '';
+  title = 'CWSN Enrolments';
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;

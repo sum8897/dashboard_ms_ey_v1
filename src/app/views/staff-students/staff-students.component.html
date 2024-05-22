@@ -60,6 +60,11 @@
 			*ngIf="selectedTabLabel === 'Students Details'"
 		></app-students-details-tab>
 	</mat-tab>
+	<mat-tab label="Enrollment Info">
+		<app-enrollment-info-tab
+			*ngIf="selectedTabLabel === 'Enrollment Info'"
+		></app-enrollment-info-tab>
+	</mat-tab>
 		<!-- <mat-tab label="School Details" *ngIf="tabs.includes('School Details')">
 			<app-staff-details-tab
 				*ngIf="selectedTabLabel === 'School Details'"

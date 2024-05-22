@@ -9,23 +9,23 @@ import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { startCase } from 'lodash';
 import { config } from 'src/app/views/staff-students/config/staff-students_config';
-import { StudentsDetailsTabComponent } from '../../students-details-tab.component';
+import { StaffDetailsTabComponent } from '../../staff-details-tab.component';
 
 @Component({
-  selector: 'app-bpl-beneficiaries-table',
-  templateUrl: './bpl-beneficiaries-table.component.html',
-  styleUrls: ['./bpl-beneficiaries-table.component.scss']
+  selector: 'app-staff-by-management-table',
+  templateUrl: './staff-by-management-table.component.html',
+  styleUrls: ['./staff-by-management-table.component.scss']
 })
-export class BplBeneficiariesTableComponent implements OnInit {
+export class StaffByManagementTableComponent implements OnInit {
 
-  reportName: string = 'performance_table';
+  reportName: string = 'district_wise_table';
   filters: any = [];
   levels: any;
   tableReportData: any;
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: ""
+    reportName: "Schools By Location"
   };
   minDate: any;
   maxDate: any;
@@ -33,7 +33,7 @@ export class BplBeneficiariesTableComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'BPL Beneficiaries';
+  title = 'Schools By Location';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;
@@ -54,7 +54,7 @@ export class BplBeneficiariesTableComponent implements OnInit {
 
   constructor(
     private readonly _commonService: CommonService,
-    private csv: StudentsDetailsTabComponent,
+    private csv: StaffDetailsTabComponent,
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
@@ -94,9 +94,9 @@ export class BplBeneficiariesTableComponent implements OnInit {
         this.criteriaApplied = false;
 
         let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
-        console.log(result);
         this.drillDownDetails = result?.drillDownDetails
-        this.tableReportData = result?.reportData
+        this.tableReportData = result?.reportData;
+        console.log(this.tableReportData);
         if (this.tableReportData?.data?.length > 0) {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
           this.csv.csvDownload(reportsData)
@@ -110,7 +110,8 @@ export class BplBeneficiariesTableComponent implements OnInit {
           this.backUpData = this.tableReportData?.data
         }
         this.criteriaApplied = true
-        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData)
+        this.tableReportData = this._criteriaService.applyCriteria(data, this.backUpData, this.tableReportData);
+        console.log(this.tableReportData);
         // await this.applyCriteria(data);
         // let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         // this.csv.csvDownload(reportsData)
@@ -180,8 +181,6 @@ export class BplBeneficiariesTableComponent implements OnInit {
           let days = endDate.getDate() - this.compareDateRange;
           let startDate = new Date();
           startDate.setDate(days)
-          // let startDate = "2022-23";
-
           
           onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
           console.log('237',this.startDate,this.endDate)

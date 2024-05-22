@@ -30,6 +30,12 @@ import { StaffDetailsBigNumberMetricsComponent } from './pages/staff-details-tab
 import { StudentsDetailsCardBigNumberComponent } from './pages/students-details-tab/reports/students-details-card-big-number/students-details-card-big-number.component';
 import { BplBeneficiariesTableComponent } from './pages/students-details-tab/reports/bpl-beneficiaries-table/bpl-beneficiaries-table.component';
 import { CwsnEnrolmentsComponent } from './pages/students-details-tab/reports/cwsn-enrolments/cwsn-enrolments.component';
+import { EnrollmentInfoTabComponent } from './pages/enrollment-info-tab/enrollment-info-tab.component';
+import { EnrollmentByEducationBarchartComponent } from './pages/enrollment-info-tab/reports/enrollment-by-education-barchart/enrollment-by-education-barchart.component';
+import { EnrollmentByGenderTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-gender-table/enrollment-by-gender-table.component';
+import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-category-table/enrollment-by-category-table.component';
+import { StaffByManagementTableComponent } from './pages/staff-details-tab/reports/staff-by-management-table/staff-by-management-table.component';
+import { TeacherByAppointmentChartComponent } from './pages/staff-details-tab/reports/teacher-by-appointment-chart/teacher-by-appointment-chart.component';
 
 
 @NgModule({
@@ -47,6 +53,12 @@ import { CwsnEnrolmentsComponent } from './pages/students-details-tab/reports/cw
     StudentsDetailsCardBigNumberComponent,
     BplBeneficiariesTableComponent,
     CwsnEnrolmentsComponent,
+    EnrollmentInfoTabComponent,
+    EnrollmentByEducationBarchartComponent,
+    EnrollmentByGenderTableComponent,
+    EnrollmentByCategoryTableComponent,
+    StaffByManagementTableComponent,
+    TeacherByAppointmentChartComponent,
     
   ],
   // imports: [

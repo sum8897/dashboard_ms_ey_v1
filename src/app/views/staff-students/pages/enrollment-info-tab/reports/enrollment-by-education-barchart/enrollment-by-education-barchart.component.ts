@@ -10,24 +10,22 @@ import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { filter, isNull, omitBy } from 'lodash';
 import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 import { DataService } from 'src/app/core/services/data.service';
-import { config } from 'src/app/views/staff-students/config/staff-students_config';
-import { StaffDetailsTabComponent } from '../../staff-details-tab.component';
-
+import { EnrollmentInfoTabComponent } from '../../enrollment-info-tab.component';
+import { config } from 'src/app/views/school-general/config/school_general_config';
 @Component({
-  selector: 'app-teacher-by-appointment',
-  templateUrl: './teacher-by-appointment.component.html',
-  styleUrls: ['./teacher-by-appointment.component.scss']
+  selector: 'app-enrollment-by-education-barchart',
+  templateUrl: './enrollment-by-education-barchart.component.html',
+  styleUrls: ['./enrollment-by-education-barchart.component.scss']
 })
-export class TeacherByAppointmentComponent implements OnInit {
-// this component used for chart only
+export class EnrollmentByEducationBarchartComponent implements OnInit, OnDestroy {
   compareDateRange: any = 7;
   title: any;
   chartHeight: any;
   marginTop: any;
   config;
   data;
-  fileName: string = "Teachers by Appointment";
-  reportName: string = 'management_barchart';
+  fileName: string = "Enrollment by Education Level";
+  reportName: string = 'enrollment_barchart';
   filters: any = [];
   levels: any;
   tableReportData: any;
@@ -66,7 +64,7 @@ export class TeacherByAppointmentComponent implements OnInit {
     private readonly _criteriaService: CriteriaService,
     private readonly _benchmarkService: BarchartBenchmarkService,
     private readonly _dataService: DataService,
-    private csv: StaffDetailsTabComponent
+    private csv: EnrollmentInfoTabComponent
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -201,7 +199,8 @@ export class TeacherByAppointmentComponent implements OnInit {
           this.tableReportData = await this._dataService.getTableReportData(query, options);
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
-            this.exportReportData.emit(reportsData)
+            this.exportReportData.emit(reportsData);
+            console.log(this.tableReportData);
           }
         }
         else if (query && key === 'bigNumber') {
@@ -214,14 +213,16 @@ export class TeacherByAppointmentComponent implements OnInit {
           console.log('ttttttttttttt',query, options, filters, defaultLevel)
           // this.getBarChartReportData(query, options, filters, defaultLevel);
           let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
-          // this._dataService.extraLine(reportData,config,"perc_students");
+          // this._dataService.stackBar(reportData,config,"primary_school","Primary",'rgba(0, 0, 255, 0.5)',0.6);
+          this._dataService.stackBar(reportData,config,"upper_primary","Upper Primary",'rgba(255, 0, 0, 0.5)',0.42);
+          this._dataService.stackBar(reportData,config,"secondary_school","Secondary",'rgba(0, 255, 0, 0.5)',0.4);
+          this._dataService.stackBar(reportData,config,"higher_secondary_school","Higher Secondary",'rgba(214,215,39, 0.6)',0.4);
           this.tableReportData = reportData
           this.config = config;
           console.log('tablereport',this.tableReportData,this.config)
           
           if (this.tableReportData?.values?.length > 0) {
             let reportsData = { reportData: this.tableReportData.values, reportType: 'dashletBar', reportName: this.title }
-            console.log(reportsData)
             this.exportReportData.emit(reportsData)
           }
         }
@@ -266,6 +267,10 @@ export class TeacherByAppointmentComponent implements OnInit {
       console.log('tablereprtdata 261',this.tableReportData)
       this.config = this.getConfig()
       // this._dataService.extraLine(this.tableReportData,this.config,"perc_students");
+      // this._dataService.stackBar(this.tableReportData,this.config,"primary_school","Primary",'rgba(0, 0, 255, 0.5)',0.6);
+          this._dataService.stackBar(this.tableReportData,this.config,"upper_primary","Upper Primary",'rgba(255, 0, 0, 0.5)',0.38);
+          this._dataService.stackBar(this.tableReportData,this.config,"secondary_school","Secondary",'rgba(0, 255, 0, 0.5)',0.4);
+          this._dataService.stackBar(this.tableReportData,this.config,"higher_secondary_school","Higher Secondary",'rgba(214,215,39, 0.6)',0.4);
       console.log('configgg', this.config)
       let subscription = this._benchmarkService.benchmarkValues.subscribe((values) => {
         if (values && Object.keys(values).includes(benchmarkConfig?.linkedReport) && this.benchmarkValues?.index && values.index == this.benchmarkValues.index) {
@@ -417,10 +422,9 @@ export class TeacherByAppointmentComponent implements OnInit {
   }
 
   async drilldownData(event: any) {
-    console.log(event);
     let { hierarchyLevel, id } = event ?? {}
     let drillDownDetails;
-    console.log(drillDownDetails)
+
     switch (Number(hierarchyLevel)) {
       case 1:
         drillDownDetails = {

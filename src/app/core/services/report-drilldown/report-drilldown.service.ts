@@ -17,7 +17,10 @@ export class ReportDrilldownService {
   }
 
   async drilldown(event: any, rbacDetails: any, reportConfig: any, startDate: any, endDate: any, prevDrillDownDetails: any, filterValues?: any, matric_filter?:any, filterneed?:false) {
-    // console.log('inside report',rbacDetails,prevDrillDownDetails)
+
+    console.log('event',event)
+    console.log('inside report',rbacDetails);
+    console.log('inside repo',prevDrillDownDetails);
       let { hierarchyLevel, id } = event ?? {}
       // console.log('hierachylelevel lin22',hierarchyLevel,id)
       
