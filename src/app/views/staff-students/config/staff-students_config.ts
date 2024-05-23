@@ -32,7 +32,7 @@ export const config = {
         },
 
         {
-            label: 'Students Details',
+            label: 'Student Details-Inclusivity',
 
             // displayLabel:'Class',
 
@@ -82,7 +82,7 @@ export const config = {
 
     ///left table --Teacher by Management table
     district_wise_table: {
-        "label": "School Details",
+        "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -1757,7 +1757,7 @@ GROUP BY
         }
     },
     classroom_ratio_table: {
-        "label": "Average Student Present",
+        "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -2295,7 +2295,7 @@ school_name`,
     },
     // teacher By Highest Professional Qualification
     teacher_ratio_table: {
-        "label": "Average Student Present",
+        "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -3614,7 +3614,7 @@ school_name`,
 
     // Teachers Engagement by Education Level
     category_barchart: {
-        "label": "Overall Summary",
+        "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -5234,7 +5234,7 @@ school_name`,
     },
     //stack bar
     enrollment_barchart: {
-        "label": "Overall Summary",
+        "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -8941,7 +8941,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
 
     //second tab (bpl table--- first table)
     performance_table: {
-        "label": "Students Details",
+        "label": "Student Details-Inclusivity",
         "defaultLevel": "state",
         "filters": [
             {
@@ -9335,7 +9335,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
     },
     // second tab (school table)
     gradewise_table: {
-        "label": "Average Student Present",
+        "label": "Student Details-Inclusivity",
         "defaultLevel": "state",
         "filters": [
             {

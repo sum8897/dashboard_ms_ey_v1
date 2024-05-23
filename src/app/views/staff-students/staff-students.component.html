@@ -17,16 +17,17 @@
 		(selectedTabChange)="onTabChanged($event)"
 		appFullScreen
 	>
-	<mat-tab label="Students Details" *ngIf="tabs.includes('Students Details')">
-		<app-students-details-tab
-			*ngIf="selectedTabLabel === 'Students Details'"
-		></app-students-details-tab>
-	</mat-tab>
-	<mat-tab label="Staff Details" >
+	<mat-tab label="Staff Details" *ngIf="tabs.includes('Staff Details')">
 		<app-staff-details-tab
 			*ngIf="selectedTabLabel === 'Staff Details'"
 		></app-staff-details-tab>
 	</mat-tab>
+	<mat-tab label="Student Details-Inclusivity">
+		<app-students-details-tab
+			*ngIf="selectedTabLabel === 'Student Details-Inclusivity'"
+		></app-students-details-tab>
+	</mat-tab>
+	
 	
 	<mat-tab label="Enrollment Info">
 		<app-enrollment-info-tab

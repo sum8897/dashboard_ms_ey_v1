@@ -13,23 +13,26 @@ import { config as studentAssessments } from '../../../app/views/student-assessm
 import {config as ncf } from '../../views/ncf/config/ncf_config';
 import {config as quiz} from '../../views/ncert-quiz/config/quiz_config';
 import{config as microImprovement} from '../../views/micro-improvements/config/microimprovements_config';
-import{ config as patConfig} from '../../views/pat/config/pat_config.ts';
+import{ config as patConfig} from '../../views/pat/config/pat_config';
 
 import{ config as studentAiAttendanceConfig} from '../../views/student-ai-attendance/config/student_ai_attendance_config';
 import{ config as studentEnrollmentConfig} from '../../views/student-enrollment/config/student_enrollment_config';
 import{ config as schoolGeneralConfig} from '../../views/school-general/config/school_general_config';
+import{ config as staffStudentsConfig} from '../../views/staff-students/config/staff-students_config';
+
 import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 import{ config as ictConfig} from '../../views/ict/config/ict_config';
 import{ config as pasConfig} from '../../views/pas/config/pas_config';
 
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
-import {config as libraryConfig} from '../../views/library/config.ts';
+import {config as libraryConfig} from '../../views/library/config';
 
 
 
 export const configFiles = {
   schoolGeneral:schoolGeneralConfig,
+  staffstudents:staffStudentsConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
   pas:pasConfig,
@@ -59,6 +62,7 @@ export const configFiles = {
 
 export const programFolderNames = {
   schoolGeneral:'schoolGeneral',
+  staffstudents:'staffStudents',
   studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
   teacherAttendance: 'sch_att',
@@ -84,6 +88,7 @@ export const programFolderNames = {
 
 export const stateProgramsFolderNames = {
   schoolGeneral:'',
+  staffstudents:'',
   studentAiAttendance:'',
   studentEnrollment:'',
   schoolLibrary:'',
