@@ -21,17 +21,18 @@
 			<app-breadcrumb-component></app-breadcrumb-component>
 		</div>
 		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('management_barchart', 'barChart')"
+				id="bar">
+				<app-teacher-by-appointment-chart #managementBarchart
+					(exportReportData)="csvDownload($event)"></app-teacher-by-appointment-chart>
+			</div>
 			<div class="col-span-2 xmd:col-span-1 div-shadow" id="table1"
 				*ngIf="checkReport('district_wise_table', 'table')">
 				<app-staff-by-management-table #districtWiseTable
 					(exportReportData)="csvDownload($event)"></app-staff-by-management-table>
 			</div>
 
-			<div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('management_barchart', 'barChart')"
-				id="bar">
-				<app-teacher-by-appointment-chart #managementBarchart
-					(exportReportData)="csvDownload($event)"></app-teacher-by-appointment-chart>
-			</div>
+			
 			<div class="col-span-2 xmd:col-span-2 div-shadow" *ngIf="checkReport('category_barchart', 'barChart')"
 				id="bar">
 				<app-teacher-engagement-by-education-level #categoryBarchart

@@ -25,7 +25,7 @@ export class StaffByManagementTableComponent implements OnInit {
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: "Schools By Location"
+    reportName: "Teachers by Management"
   };
   minDate: any;
   maxDate: any;
@@ -33,7 +33,7 @@ export class StaffByManagementTableComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'Schools By Location';
+  title = 'Teachers by Management';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

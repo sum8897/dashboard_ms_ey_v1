@@ -26,7 +26,7 @@ export class TeacherByAppointmentChartComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Schools by Management";
+  fileName: string = "Teachers By Appointment";
   reportName: string = 'management_barchart';
   filters: any = [];
   levels: any;

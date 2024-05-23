@@ -10,75 +10,75 @@ export const config = {
         unitKey: "perc_teachers",
         linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
     },
-	filters: [
-       
+    filters: [
+
         {
-			label: 'Staff Details',
+            label: 'Staff Details',
 
             // displayLabel:'Class',
 
-			name: '',
+            name: '',
 
-			labelProp: 'ac_year',
+            labelProp: 'ac_year',
 
-			valueProp: 'ac_year',
+            valueProp: 'ac_year',
 
-			id: 'acdemic_year',
+            id: 'acdemic_year',
 
-			tableAlias: 'ay',
+            tableAlias: 'ay',
 
-			query:
-				'select id, ac_year from dimensions.academic_year',
-		},
-   
+            query:
+                'select id, ac_year from dimensions.academic_year',
+        },
+
         {
-			label: 'Students Details',
+            label: 'Students Details',
 
             // displayLabel:'Class',
 
-			name: 'acdemic_year',
+            name: 'acdemic_year',
 
-			labelProp: 'ac_year',
+            labelProp: 'ac_year',
 
-			valueProp: 'ac_year',
+            valueProp: 'ac_year',
 
-			id: 'acdemic_year',
+            id: 'acdemic_year',
 
-			tableAlias: 'ay',
+            tableAlias: 'ay',
 
-			query:
-				'select id, ac_year from dimensions.academic_year',
-		},
+            query:
+                'select id, ac_year from dimensions.academic_year',
+        },
         {
-			label: 'Enrollment Info',
+            label: 'Enrollment Info',
 
             // displayLabel:'Class',
 
-			name: 'acdemic_year',
+            name: 'acdemic_year',
 
-			labelProp: 'ac_year',
+            labelProp: 'ac_year',
 
-			valueProp: 'ac_year',
+            valueProp: 'ac_year',
 
-			id: 'acdemic_year',
+            id: 'acdemic_year',
 
-			tableAlias: 'ay',
+            tableAlias: 'ay',
 
-			query:
-				'select id, ac_year from dimensions.academic_year',
-		},
-       
-        
-	
-	],
-   
-	
-
- 
+            query:
+                'select id, ac_year from dimensions.academic_year',
+        },
 
 
 
-   
+    ],
+
+
+
+
+
+
+
+
 
     ///left table --Teacher by Management table
     district_wise_table: {
@@ -454,7 +454,7 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 1,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
                             },
                             allowedLevels: [1, 2, 3]
                         }
@@ -472,7 +472,8 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]                         },
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -489,7 +490,8 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 3,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]                           },
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -506,7 +508,8 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 4,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"] },
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
                             allowedLevels: [1, 2, 3]
 
                         }
@@ -524,13 +527,14 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 5,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"] },
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
                             allowedLevels: [1, 2, 3]
 
                         }
                     },
-                   
-                   
+
+
                     {
                         name: "Department of Education",
                         property: "dept_of_education",
@@ -982,7 +986,7 @@ export const config = {
                             extraInfo: {
                                 hierarchyLevel: 1,
                                 // linkedReports: ["teacher_ratio_table"]
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
 
                             },
                             allowedLevels: [1, 2, 3]
@@ -1001,10 +1005,10 @@ export const config = {
                             }],
                             extraInfo: {
                                 hierarchyLevel: 2,
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]         
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
                                 // linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]                          },
-      
-                                     },
+
+                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -1022,9 +1026,9 @@ export const config = {
                             extraInfo: {
                                 hierarchyLevel: 3,
                                 // linkedReports: ["teacher_ratio_table"]     
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]
-                   
-                               },
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+
+                            },
                             allowedLevels: [1, 2, 3]
                         }
                     },
@@ -1042,7 +1046,7 @@ export const config = {
                             extraInfo: {
                                 hierarchyLevel: 4,
                                 // linkedReports: ["teacher_ratio_table"] 
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
 
                             },
                             allowedLevels: [1, 2, 3]
@@ -1063,15 +1067,15 @@ export const config = {
                             extraInfo: {
                                 hierarchyLevel: 5,
                                 // linkedReports: ["teacher_ratio_table"] 
-                                linkedReports: ["management_barchart", "category_barchart","enrollment_barchart","classroom_ratio_table","teacher_ratio_table"]
+                                linkedReports: ["management_barchart", "category_barchart", "enrollment_barchart", "classroom_ratio_table", "teacher_ratio_table"]
 
                             },
                             allowedLevels: [1, 2, 3]
 
                         }
                     },
-                   
-                   
+
+
                     {
                         name: "Dept Education",
                         property: "dept_of_education",
@@ -1086,7 +1090,7 @@ export const config = {
                         name: "Pvt Unaided",
                         property: "private_unaided",
                         class: "text-center"
-                    },                
+                    },
                     {
                         name: "Social Welfare",
                         property: "social_welfare_dept",
@@ -1465,7 +1469,7 @@ GROUP BY
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "table":`select 
+                    "table": `select 
                     school_name,
                     coalesce(ROUND(sum(pri_students) / nullif (sum(pri_cls), 0),0),0) as primaryschool,
                     coalesce(ROUND(sum(upr_students) / nullif (sum (upr_cls), 0),0),0) as upper,
@@ -1651,7 +1655,7 @@ GROUP BY
             //         "level": "school"
             //     }
             // }
-            
+
         ],
         "options": {
             "table": {
@@ -1749,7 +1753,7 @@ GROUP BY
             //     "searchProps": ['school_id'],
             //     "searchType": "number"
             // },
-            
+
         }
     },
     classroom_ratio_table: {
@@ -1762,8 +1766,7 @@ GROUP BY
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `
-                    select 
+                    "table": `select 
 school_name,
 sum(below_secondary) as below_secondary,
 sum(secondary) as secondary,
@@ -1800,8 +1803,7 @@ school_name`
                 },
                 "actions": {
                     "queries": {
-                        "table": `
-                        select 
+                        "table": `select 
 school_name,
 sum(below_secondary) as below_secondary,
 sum(secondary) as secondary,
@@ -1839,362 +1841,353 @@ school_name`,
                     "level": "school"
                 }
             },
-    //         {
-    //             "name": "District",
-    //             "labelProp": "district_name",
-    //             "valueProp": "district_id",
-    //             "hierarchyLevel": "2",
-    //             "timeSeriesQueries": {
-    //                 "table": `select
-    //                 block_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     b.block_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                       sef.district_id = {district_id}                   
-    //                 GROUP BY 
-    //                    b.block_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.block_name
-    //             `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     block_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         b.block_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                           sef.district_id = {district_id}                   
-    //                     GROUP BY 
-    //                        b.block_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.block_name
-                    
-    // `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
-    //         {
-    //             "name": "Block",
-    //             "labelProp": "block_name",
-    //             "valueProp": "block_id",
-    //             "hierarchyLevel": "3",
-    //             "timeSeriesQueries": {
-    //                 "table": `select
-    //                 cluster_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     c.cluster_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                    INNER JOIN 
-    //                    dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                     sef.block_id = {block_id}                    
-    //                 GROUP BY 
-    //                    c.cluster_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.cluster_name
-    //                 `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     cluster_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         c.cluster_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                        INNER JOIN 
-    //                        dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                         sef.block_id = {block_id}                    
-    //                     GROUP BY 
-    //                        c.cluster_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.cluster_name
-    // `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
-    //         {
-    //             "name": "Cluster",
-    //             "labelProp": "cluster_name",
-    //             "valueProp": "cluster_id",
-    //             "hierarchyLevel": "4",
-    //             "timeSeriesQueries": {
-    //                 "table":`select
-    //                 school_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     sch.school_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(DISTINCT CASE WHEN sef.item_group = '1' then sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                    INNER JOIN 
-    //                    dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                    INNER JOIN 
-    //                    dimensions.school sch ON sef.school_id  = sch.school_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                     sef.cluster_id  = {cluster_id}                    
-    //                 GROUP BY 
-    //                    sch.school_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.school_name
-                
-    //             `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     school_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         sch.school_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(DISTINCT CASE WHEN sef.item_group = '1' then sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                        INNER JOIN 
-    //                        dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                        INNER JOIN 
-    //                        dimensions.school sch ON sef.school_id  = sch.school_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                         sef.cluster_id  = {cluster_id}                    
-    //                     GROUP BY 
-    //                        sch.school_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.school_name
-                    
-    //                 `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
-            // {
-            //     "name": "School",
-            //     "labelProp": "school_name",
-            //     "valueProp": "school_id",
-            //     "hierarchyLevel": "5",
-            //     "timeSeriesQueries": {
-            //         "table": `SELECT
-            //         sam.district_id,
-            //         d.district_name,
-            //         sam.block_id ,
-            //         b.block_name,
-            //         sam.cluster_id ,
-            //         c.cluster_name,
-            //         sam.school_id,
-            //         sch.school_name,
-            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-            //     FROM
-            //        student_attendance.student_attendance_master sam 
-            //      join
-            //     dimensions.district d on sam.district_id = d.district_id 
-            //      JOIN
-            //         dimensions.class cc ON sam.class_id = cc.class_id 
-            //      join
-            //         dimensions.block b on sam.block_id = b.block_id 
-            //      join 
-            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-            //      join 
-            //         dimensions.school sch on sam.school_id = sch.school_id 
-            //     where
-            //       sam.date in ( startDate,endDate) 
-            //       and sam.school_id  = {school_id}
-            //     GROUP BY
-            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
-            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
-            //     },
-            //     "actions": {
-            //         "queries": {
-            //             "table":`SELECT
-            //             sam.district_id,
-            //             d.district_name,
-            //             sam.block_id ,
-            //             b.block_name,
-            //             sam.cluster_id ,
-            //             c.cluster_name,
-            //             sam.school_id,
-            //             sch.school_name,
-            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-            //         FROM
-            //            student_attendance.student_attendance_master sam 
-            //          join
-            //         dimensions.district d on sam.district_id = d.district_id 
-            //          JOIN
-            //             dimensions.class cc ON sam.class_id = cc.class_id 
-            //          join
-            //             dimensions.block b on sam.block_id = b.block_id 
-            //          join 
-            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-            //          join 
-            //             dimensions.school sch on sam.school_id = sch.school_id 
-            //         where
-            //           sam.date in ( startDate,endDate) 
-            //           and sam.school_id  = {school_id}
-            //         GROUP BY
-            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
-            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
-            //         },
-            //         "level": "school"
-            //     }
-            // }
-            
+                    {
+                        "name": "District",
+                        "labelProp": "district_name",
+                        "valueProp": "district_id",
+                        "hierarchyLevel": "2",
+                        "timeSeriesQueries": {
+                            "table": `select
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.district_id = {district_id}
+                            group by
+                            sch.school_name, tp.block_id ) as sub
+                            group by 
+                            school_name`
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.district_id = {district_id}
+                                group by
+                                sch.school_name, tp.block_id ) as sub
+                                group by 
+                                school_name`,
+                            },
+                            "level": "school"
+                        }
+                    },
+                    {
+                        "name": "Block",
+                        "labelProp": "block_name",
+                        "valueProp": "block_id",
+                        "hierarchyLevel": "3",
+                        "timeSeriesQueries": {
+                            "table": `select 
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join 
+                            dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.block_id = {block_id}
+                            group by
+                            sch.school_name, tp.cluster_id ) as sub
+                            group by 
+                            school_name`
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select 
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join 
+                                dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.block_id = {block_id}
+                                group by
+                                sch.school_name, tp.cluster_id ) as sub
+                                group by 
+                                school_name
+            `,
+                            },
+                            "level": "school"
+                        }
+                    },
+                    {
+                        "name": "Cluster",
+                        "labelProp": "cluster_name",
+                        "valueProp": "cluster_id",
+                        "hierarchyLevel": "4",
+                        "timeSeriesQueries": {
+                            "table":`select 
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join 
+                            dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.cluster_id = {cluster_id}
+                            group by
+                            sch.school_name, tp.school_id ) as sub
+                            group by 
+                            school_name
+
+                        `
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select 
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_acad = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_acad = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_acad = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_acad = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_acad = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_acad = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_acad = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_acad = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join 
+                                dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.cluster_id = {cluster_id}
+                                group by
+                                sch.school_name, tp.school_id ) as sub
+                                group by 
+                                school_name
+                            `,
+                            },
+                            "level": "school"
+                        }
+                    },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "table": `SELECT
+                    sam.district_id,
+                    d.district_name,
+                    sam.block_id ,
+                    b.block_name,
+                    sam.cluster_id ,
+                    c.cluster_name,
+                    sam.school_id,
+                    sch.school_name,
+                    SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                    SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                FROM
+                   student_attendance.student_attendance_master sam 
+                 join
+                dimensions.district d on sam.district_id = d.district_id 
+                 JOIN
+                    dimensions.class cc ON sam.class_id = cc.class_id 
+                 join
+                    dimensions.block b on sam.block_id = b.block_id 
+                 join 
+                    dimensions.cluster c on sam.cluster_id = c.cluster_id
+                 join 
+                    dimensions.school sch on sam.school_id = sch.school_id 
+                where
+                  sam.date in ( startDate,endDate) 
+                  and sam.school_id  = {school_id}
+                GROUP BY
+                    sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                    sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+                },
+                "actions": {
+                    "queries": {
+                        "table":`SELECT
+                        sam.district_id,
+                        d.district_name,
+                        sam.block_id ,
+                        b.block_name,
+                        sam.cluster_id ,
+                        c.cluster_name,
+                        sam.school_id,
+                        sch.school_name,
+                        SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+                        SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+                    FROM
+                       student_attendance.student_attendance_master sam 
+                     join
+                    dimensions.district d on sam.district_id = d.district_id 
+                     JOIN
+                        dimensions.class cc ON sam.class_id = cc.class_id 
+                     join
+                        dimensions.block b on sam.block_id = b.block_id 
+                     join 
+                        dimensions.cluster c on sam.cluster_id = c.cluster_id
+                     join 
+                        dimensions.school sch on sam.school_id = sch.school_id 
+                    where
+                      sam.date in ( startDate,endDate) 
+                      and sam.school_id  = {school_id}
+                    GROUP BY
+                        sam.district_id, d.district_name, sam.block_id , b.block_name ,
+                        sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+                    },
+                    "level": "school"
+                }
+            }
+
         ],
         "options": {
             "table": {
@@ -2263,7 +2256,7 @@ school_name`,
                     {
                         name: "Post Doctoral",
                         property: "post_doctoral",
-                        class:'text-center'
+                        class: 'text-center'
                     },
                     {
                         name: "change",
@@ -2297,7 +2290,7 @@ school_name`,
                 "searchProps": ['school_id'],
                 "searchType": "number"
             },
-            
+
         }
     },
     // teacher By Highest Professional Qualification
@@ -2386,288 +2379,320 @@ school_name`,
                     "level": "school"
                 }
             },
-    //         {
-    //             "name": "District",
-    //             "labelProp": "district_name",
-    //             "valueProp": "district_id",
-    //             "hierarchyLevel": "2",
-    //             "timeSeriesQueries": {
-    //                 "table": `select
-    //                 block_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     b.block_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                       sef.district_id = {district_id}                   
-    //                 GROUP BY 
-    //                    b.block_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.block_name
-    //             `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     block_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         b.block_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                           sef.district_id = {district_id}                   
-    //                     GROUP BY 
-    //                        b.block_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.block_name
-                    
-    // `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
-    //         {
-    //             "name": "Block",
-    //             "labelProp": "block_name",
-    //             "valueProp": "block_id",
-    //             "hierarchyLevel": "3",
-    //             "timeSeriesQueries": {
-    //                 "table": `select
-    //                 cluster_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     c.cluster_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                    INNER JOIN 
-    //                    dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                     sef.block_id = {block_id}                    
-    //                 GROUP BY 
-    //                    c.cluster_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.cluster_name
-    //                 `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     cluster_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         c.cluster_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                        INNER JOIN 
-    //                        dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                         sef.block_id = {block_id}                    
-    //                     GROUP BY 
-    //                        c.cluster_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.cluster_name
-    // `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
-    //         {
-    //             "name": "Cluster",
-    //             "labelProp": "cluster_name",
-    //             "valueProp": "cluster_id",
-    //             "hierarchyLevel": "4",
-    //             "timeSeriesQueries": {
-    //                 "table":`select
-    //                 school_name,
-    //                 COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                 COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                 COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                 COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                 COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //             FROM (
-    //                 SELECT 
-    //                     sch.school_name,
-    //                     sef.school_id AS distinct_schools_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                     COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                     COUNT(*) AS teacher_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                     SUM(DISTINCT CASE WHEN sef.item_group = '1' then sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                     SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                 FROM 
-    //                     school_general.sch_enr_fresh sef
-    //                 INNER JOIN 
-    //                    school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                     AND sef.district_id = tch.district_id
-    //                 INNER JOIN 
-    //                    dimensions.district d ON sef.district_id = d.district_id
-    //                 INNER JOIN 
-    //                    dimensions.block b ON sef.block_id  = b.block_id
-    //                    INNER JOIN 
-    //                    dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                    INNER JOIN 
-    //                    dimensions.school sch ON sef.school_id  = sch.school_id
-    //                     INNER JOIN 
-    //                    dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                 WHERE
-    //                     sef.cluster_id  = {cluster_id}                    
-    //                 GROUP BY 
-    //                    sch.school_name, sef.school_id
-    //             ) AS sub
-    //             group by sub.school_name
-                
-    //             `
-    //             },
-    //             "actions": {
-    //                 "queries": {
-    //                     "table": `select
-    //                     school_name,
-    //                     COALESCE(ROUND(SUM(primary_student_count) / nullif (SUM(primary_teacher_count),0),0),0) as pri_ptr,
-    //                     COALESCE(ROUND(SUM(upper_student_count) / nullif(SUM(upper_teacher_count),0),0),0) as upr_ptr,
-    //                     COALESCE(ROUND(SUM(sec_student_count) / nullif (SUM(sec_teacher_count),0),0),0) as sec_ptr,
-    //                     COALESCE(ROUND(SUM(hrsec_student_count) / nullif (SUM(hrsec_teacher_count),0),0),0) as hsec_ptr,
-    //                     COALESCE(ROUND((SUM(primary_student_count)+SUM(upper_student_count)+SUM(sec_student_count)+SUM(hrsec_student_count)) / (nullif (sum(primary_teacher_count)+SUM(upper_teacher_count)+SUM(sec_teacher_count)+SUM(hrsec_teacher_count),0)),0),0) as average_ptr
-    //                 FROM (
-    //                     SELECT 
-    //                         sch.school_name,
-    //                         sef.school_id AS distinct_schools_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (1, 3, 11) THEN tch_name END) AS primary_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (2, 3, 7) THEN tch_name END) AS upper_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (5, 8) THEN tch_name END) AS sec_teacher_count,
-    //                         COUNT(DISTINCT CASE WHEN class_taught IN (6, 8) THEN tch_name END) AS hrsec_teacher_count,
-    //                         COUNT(*) AS teacher_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN pp1_b+pp1_g+pp2_b+pp2_g+pp3_b+pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g else 0 end) AS primary_student_count,
-    //                         SUM(DISTINCT CASE WHEN sef.item_group = '1' then sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g else 0 end) AS upper_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g else 0 end) AS sec_student_count,
-    //                         SUM(distinct CASE WHEN sef.item_group = '1' THEN sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g else 0 end) AS hrsec_student_count
-    //                     FROM 
-    //                         school_general.sch_enr_fresh sef
-    //                     INNER JOIN 
-    //                        school_general.tch_profile tch ON sef.school_id = tch.school_id
-    //                                         AND sef.district_id = tch.district_id
-    //                     INNER JOIN 
-    //                        dimensions.district d ON sef.district_id = d.district_id
-    //                     INNER JOIN 
-    //                        dimensions.block b ON sef.block_id  = b.block_id
-    //                        INNER JOIN 
-    //                        dimensions.cluster c ON sef.cluster_id  = c.cluster_id
-    //                        INNER JOIN 
-    //                        dimensions.school sch ON sef.school_id  = sch.school_id
-    //                         INNER JOIN 
-    //                        dimensions.academic_year ay ON sef.ac_year = ay.ac_year
-    //                     WHERE
-    //                         sef.cluster_id  = {cluster_id}                    
-    //                     GROUP BY 
-    //                        sch.school_name, sef.school_id
-    //                 ) AS sub
-    //                 group by sub.school_name
-                    
-    //                 `,
-    //                 },
-    //                 "level": "school"
-    //             }
-    //         },
+                    {
+                        "name": "District",
+                        "labelProp": "district_name",
+                        "valueProp": "district_id",
+                        "hierarchyLevel": "2",
+                        "timeSeriesQueries": {
+                            "table": `select
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.district_id = '601'
+                            group by
+                            sch.school_name, tp.block_id ) as sub
+                            group by 
+                            school_nameselect
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.district_id = {district_id}
+                            group by
+                            sch.school_name, tp.block_id ) as sub
+                            group by 
+                            school_name
+                        `
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.district_id = {district_id}
+                                group by
+                                sch.school_name, tp.block_id ) as sub
+                                group by 
+                                school_name
+
+            `,
+                            },
+                            "level": "school"
+                        }
+                    },
+                    {
+                        "name": "Block",
+                        "labelProp": "block_name",
+                        "valueProp": "block_id",
+                        "hierarchyLevel": "3",
+                        "timeSeriesQueries": {
+                            "table": `select 
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join 
+                            dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.block_id = {block_id}
+                            group by
+                            sch.school_name, tp.cluster_id ) as sub
+                            group by 
+                            school_name
+                            `
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select 
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join 
+                                dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.block_id = {block_id}
+                                group by
+                                sch.school_name, tp.cluster_id ) as sub
+                                group by 
+                                school_name
+            `,
+                            },
+                            "level": "school"
+                        }
+                    },
+                    {
+                        "name": "Cluster",
+                        "labelProp": "cluster_name",
+                        "valueProp": "cluster_id",
+                        "hierarchyLevel": "4",
+                        "timeSeriesQueries": {
+                            "table":`select 
+                            school_name,
+                            sum(below_secondary) as below_secondary,
+                            sum(secondary) as secondary,
+                            sum(higher_secondary) as higher_secondary,
+                            sum(graduate) as graduate,
+                            sum(post_graduate) as post_graduate,
+                            sum(mphil) as mphil,
+                            sum(ph_d) as ph_d,
+                            sum(post_doctoral) as post_doctoral
+                            from (select 
+                            sch.school_name,
+                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.district d on tp.district_id = d.district_id 
+                            join 
+                            dimensions.block b on tp.block_id = b.block_id 
+                            join 
+                            dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                            join
+                            dimensions.school sch on tp.school_id = sch.school_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                            tp.cluster_id = {cluster_id}
+                            group by
+                            sch.school_name, tp.school_id ) as sub
+                            group by 
+                            school_name
+
+                        `
+                        },
+                        "actions": {
+                            "queries": {
+                                "table": `select 
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join 
+                                dimensions.cluster c on tp.cluster_id = c.cluster_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                 tp.ac_year = '2022-23' AND
+                                tp.cluster_id = {cluster_id}
+                                group by
+                                sch.school_name, tp.school_id ) as sub
+                                group by 
+                                school_name
+
+                            `,
+                            },
+                            "level": "school"
+                        }
+                    },
             // {
             //     "name": "School",
             //     "labelProp": "school_name",
@@ -2741,7 +2766,7 @@ school_name`,
             //         "level": "school"
             //     }
             // }
-            
+
         ],
         "options": {
             "table": {
@@ -2810,7 +2835,7 @@ school_name`,
                     {
                         name: "Post Doctoral",
                         property: "post_doctoral",
-                        class:'text-center'
+                        class: 'text-center'
                     },
                     {
                         name: "change",
@@ -2844,12 +2869,12 @@ school_name`,
                 "searchProps": ['school_id'],
                 "searchType": "number"
             },
-            
+
         }
     },
 
     //barchart ---teachers By appointment
-    management_barchart1:{
+    management_barchart1: {
         "label": "Staff Details",
         "defaultLevel": "state",
         "filters": [
@@ -2887,7 +2912,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         designation,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -2911,7 +2936,7 @@ school_name`,
                         designation, tch_type
                         order by 
                         tch_type;`
-                    
+
                     },
                     "level": "district"
                 }
@@ -2952,7 +2977,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         designation,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3021,7 +3046,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         designation,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3094,7 +3119,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         designation,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3129,7 +3154,7 @@ school_name`,
                     "level": "school"
                 }
             },
-    
+
         ],
         "options": {
             "barChart": {
@@ -3145,7 +3170,7 @@ school_name`,
                     "title": "",
                     "label": "designation",
                     "value": "designation",
-    
+
                 },
                 "tooltipMetrics": [
                     {
@@ -3158,7 +3183,7 @@ school_name`,
                         "value": "district_name",
                         "valueSuffix": "%"
                     },
-                   
+
                     {
                         "valuePrefix": "Block Id: ",
                         "value": "block_id",
@@ -3204,7 +3229,7 @@ school_name`,
                         "value": "perc_students",
                         "valueSuffix": ""
                     },
-                    
+
                     // {
                     //     "valuePrefix": "Average percentage of LO: ",
                     //     "value": "perc_lo",
@@ -3215,7 +3240,7 @@ school_name`,
         }
     },
 
-    management_barchart:{
+    management_barchart: {
         "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
@@ -3225,54 +3250,60 @@ school_name`,
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
+                    "barChart": `select 
+                    designation as level,
+                    sum(no_of_teachers) as no_of_teachers
                     from (
-                SELECT 
+                    select 
                     d.district_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                
-                GROUP BY 
-                    d.district_name,sm.schoolmanagement_name) as sub
-                   group by 
-                  schoolmanagement_name; 
+                    td.designation ,
+                    td.tch_type ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23'
+                    group by d.district_name,td.designation, td.tch_type) as sub
+                    group by 
+                    designation, tch_type
+                    order by 
+                    tch_type; 
                     `,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
+                        "barChart": `select 
+                        designation as level,
+                        sum(no_of_teachers) as no_of_teachers
                         from (
-                    SELECT 
+                        select 
                         d.district_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    
-                    GROUP BY 
-                        d.district_name,sm.schoolmanagement_name) as sub
-                       group by 
-                      schoolmanagement_name; 
+                        td.designation ,
+                        td.tch_type ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                         tp.ac_year = '2022-23'
+                        group by d.district_name,td.designation, td.tch_type) as sub
+                        group by 
+                        designation, tch_type
+                        order by 
+                        tch_type
                         `
-                    
+
                     },
                     "level": "district"
                 }
@@ -3283,60 +3314,63 @@ school_name`,
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
+                    "barChart": `select 
+                    designation as level,
+                    sum(no_of_teachers) as no_of_teachers
                     from (
-                 SELECT 
-                     b.block_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.district_id = {district_id}
-                GROUP BY 
-                    b.block_name,sd.block_id,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name; `,
+                    select 
+                    b.block_name,
+                    td.designation ,
+                    td.tch_type ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                     d.district_id = {district_id}
+                    group by b.block_name,td.designation, td.tch_type) as sub
+                    group by 
+                    designation, tch_type
+                    order by 
+                    tch_type`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":
-                        `SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
-                        from (
-                     SELECT 
-                         b.block_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.district_id = {district_id}
-                    GROUP BY 
-                        b.block_name,sd.block_id,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name;`,
+                        "barChart":`select 
+                            designation as level,
+                            sum(no_of_teachers) as no_of_teachers
+                            from (
+                            select 
+                            b.block_name,
+                            td.designation ,
+                            td.tch_type ,
+                            COUNT(tp.tch_name) AS no_of_teachers
+                            from
+                            staff_students.tch_profile tp 
+                            join
+                            dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                            JOIN 
+                                dimensions.district d ON tp.district_id = d.district_id 
+                            JOIN 
+                                dimensions.block b ON tp.block_id = b.block_id 
+                            JOIN
+                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                            WHERE
+                             tp.ac_year = '2022-23' AND
+                             d.district_id = {district_id}
+                            group by b.block_name,td.designation, td.tch_type) as sub
+                            group by 
+                            designation, tch_type
+                            order by 
+                            tch_type`,
                     },
                     "level": "block"
                 }
@@ -3347,63 +3381,67 @@ school_name`,
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
+                    "barChart": `select 
+                    designation as level,
+                    sum(no_of_teachers) as no_of_teachers
                     from (
-                 SELECT 
-                     c.cluster_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN
-                    dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.block_id = {block_id}
-                GROUP BY 
-                    c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name ;`,
+                    select 
+                    c.cluster_name,
+                    td.designation ,
+                    td.tch_type ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                      b.block_id = {block_id}
+                    group by c.cluster_name,td.designation, td.tch_type) as sub
+                    group by 
+                    designation, tch_type
+                    order by 
+                    tch_type`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
+                        "barChart": `select 
+                        designation as level,
+                        sum(no_of_teachers) as no_of_teachers
                         from (
-                     SELECT 
-                         c.cluster_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.block_id = {block_id}
-                    GROUP BY 
-                        c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name ;`
+                        select 
+                        c.cluster_name,
+                        td.designation ,
+                        td.tch_type ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN 
+                            dimensions.block b ON tp.block_id = b.block_id 
+                        JOIN 
+                            dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                         tp.ac_year = '2022-23' AND
+                          b.block_id = {block_id}
+                        group by c.cluster_name,td.designation, td.tch_type) as sub
+                        group by 
+                        designation, tch_type
+                        order by 
+                        tch_type`
                     },
                     "level": "cluster"
                 }
@@ -3414,83 +3452,87 @@ school_name`,
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    schoolmanagement_name as level,
-                    SUM(no_of_schools) AS total_schools
+                    "barChart": `select 
+                    designation as level,
+                    sum(no_of_teachers) as no_of_teachers
                     from (
-                 SELECT 
-                     sch.school_name,
-                    sm.schoolmanagement_name,
-                    COUNT(DISTINCT sd.school_id) AS no_of_schools
-                FROM 
-                    school_general.schooldetails sd
-                LEFT JOIN
-                    dimensions.district d ON sd.district_id = d.district_id 
-                LEFT JOIN
-                    dimensions.block b ON sd.block_id = b.block_id 
-                LEFT JOIN
-                    dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                LEFT JOIN
-                    dimensions.school sch ON sd.school_id  = sch.school_id 
-                    LEFT JOIN 
-                    dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                LEFT JOIN 
-                    dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                WHERE 
-                      sd.cluster_id = {cluster_id}
-                GROUP BY 
-                    sch.school_name,sd.school_id ,sm.schoolmanagement_name
-                   ) as sub
-                   group by 
-                  schoolmanagement_name ; 
+                    select 
+                    sch.school_name,
+                    td.designation ,
+                    td.tch_type ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN 
+                        dimensions.school sch ON tp.school_id = sch.school_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                     c.cluster_id = {cluster_id}
+                    group by sch.school_name,td.designation, td.tch_type) as sub
+                    group by 
+                    designation, tch_type
+                    order by 
+                    tch_type
                 
                 `,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
-                        schoolmanagement_name as level,
-                        SUM(no_of_schools) AS total_schools
+                        "barChart": `select 
+                        designation as level,
+                        sum(no_of_teachers) as no_of_teachers
                         from (
-                     SELECT 
-                         sch.school_name,
-                        sm.schoolmanagement_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN
-                        dimensions.school sch ON sd.school_id  = sch.school_id 
-                        LEFT JOIN 
-                        dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.cluster_id = {cluster_id}
-                    GROUP BY 
-                        sch.school_name,sd.school_id ,sm.schoolmanagement_name
-                       ) as sub
-                       group by 
-                      schoolmanagement_name ;
+                        select 
+                        sch.school_name,
+                        td.designation ,
+                        td.tch_type ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.teacher_designation td on tp.tch_type = td.tch_type 
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN 
+                            dimensions.block b ON tp.block_id = b.block_id 
+                        JOIN 
+                            dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                        JOIN 
+                            dimensions.school sch ON tp.school_id = sch.school_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                         tp.ac_year = '2022-23' AND
+                         c.cluster_id = {cluster_id}
+                        group by sch.school_name,td.designation, td.tch_type) as sub
+                        group by 
+                        designation, tch_type
+                        order by 
+                        tch_type;
                     
                     `
                     },
                     "level": "school"
                 }
             },
-    
+
         ],
         "options": {
             "barChart": {
-                "metricLabelProp": "Schools by Management",
-                "metricValueProp": "total_schools",
+                "metricLabelProp": "Teachers By Appointment",
+                "metricValueProp": "no_of_teachers",
                 "yAxis": {
-                    "title": " Number of Schools"
+                    "title": "Number of Schools"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
@@ -3499,7 +3541,7 @@ school_name`,
                     "title": "",
                     "label": "level",
                     "value": "level",
-    
+
                 },
                 "tooltipMetrics": [
                     {
@@ -3512,7 +3554,7 @@ school_name`,
                         "value": "district_name",
                         "valueSuffix": "%"
                     },
-                   
+
                     {
                         "valuePrefix": "Block Id: ",
                         "value": "block_id",
@@ -3544,8 +3586,8 @@ school_name`,
                         "valueSuffix": ""
                     },
                     {
-                        "valuePrefix": "No of schools ",
-                        "value": "no_of_schools",
+                        "valuePrefix": "No of Teachers ",
+                        "value": "no_of_teachers",
                         "valueSuffix": ""
                     },
                     {
@@ -3558,7 +3600,7 @@ school_name`,
                         "value": "perc_students",
                         "valueSuffix": ""
                     },
-                    
+
                     // {
                     //     "valuePrefix": "Average percentage of LO: ",
                     //     "value": "perc_lo",
@@ -3571,7 +3613,7 @@ school_name`,
 
 
     // Teachers Engagement by Education Level
-    category_barchart:{
+    category_barchart: {
         "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
@@ -3610,7 +3652,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         class_level as class_level,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3635,7 +3677,7 @@ school_name`,
                         order by 
                         class_taught;            
                         `
-                    
+
                     },
                     "level": "district"
                 }
@@ -3677,7 +3719,7 @@ school_name`,
                 "actions": {
                     "queries": {
                         "barChart":
-                        `select 
+                            `select 
                         class_level as class_level,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3744,7 +3786,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         class_level as class_level,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3815,7 +3857,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`select 
+                        "barChart": `select 
                         class_level as class_level,
                         sum(no_of_teachers) as no_of_teachers
                         from (
@@ -3849,7 +3891,7 @@ school_name`,
                     "level": "school"
                 }
             },
-    
+
         ],
         "options": {
             "barChart": {
@@ -3865,7 +3907,7 @@ school_name`,
                     "title": "",
                     "label": "class_level",
                     "value": "class_level",
-    
+
                 },
                 "tooltipMetrics": [
                     {
@@ -3878,7 +3920,7 @@ school_name`,
                         "value": "district_name",
                         "valueSuffix": "%"
                     },
-                   
+
                     {
                         "valuePrefix": "Block Id: ",
                         "value": "block_id",
@@ -3924,7 +3966,7 @@ school_name`,
                         "value": "perc_students",
                         "valueSuffix": ""
                     },
-                    
+
                     // {
                     //     "valuePrefix": "Average percentage of LO: ",
                     //     "value": "perc_lo",
@@ -3934,7 +3976,7 @@ school_name`,
             }
         }
     },
-    receipts_barchart:{
+    receipts_barchart: {
         "label": "Overall Summary",
         "defaultLevel": "state",
         "filters": [
@@ -4027,7 +4069,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
+                        "barChart": `SELECT 
                         receipt_exp AS level,  
                         SUM(received) AS received,     
                         SUM(expenditure) AS expenditure      
@@ -4107,7 +4149,7 @@ school_name`,
                     JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
                     GROUP BY receipt_exp;
                         `
-                    
+
                     },
                     "level": "district"
                 }
@@ -4208,7 +4250,7 @@ school_name`,
                 "actions": {
                     "queries": {
                         "barChart":
-                        `SELECT 
+                            `SELECT 
                         receipt_exp AS level,  
                         SUM(received) AS received,     
                         SUM(expenditure) AS expenditure      
@@ -4393,7 +4435,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
+                        "barChart": `SELECT 
                         receipt_exp AS level,  
                         SUM(received) AS received,     
                         SUM(expenditure) AS expenditure      
@@ -4581,7 +4623,7 @@ school_name`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
+                        "barChart": `SELECT 
                         receipt_exp AS level,  
                         SUM(received) AS received,     
                         SUM(expenditure) AS expenditure      
@@ -4674,7 +4716,7 @@ school_name`,
                     "level": "school"
                 }
             },
-    
+
         ],
         "options": {
             "barChart": {
@@ -4690,7 +4732,7 @@ school_name`,
                     "title": "",
                     "label": "level",
                     "value": "level",
-    
+
                 },
                 "tooltipMetrics": [
                     {
@@ -4703,7 +4745,7 @@ school_name`,
                         "value": "district_name",
                         "valueSuffix": "%"
                     },
-                   
+
                     {
                         "valuePrefix": "Block Id: ",
                         "value": "block_id",
@@ -4749,7 +4791,7 @@ school_name`,
                         "value": "perc_students",
                         "valueSuffix": ""
                     },
-                    
+
                     // {
                     //     "valuePrefix": "Average percentage of LO: ",
                     //     "value": "perc_lo",
@@ -4759,19 +4801,19 @@ school_name`,
             }
         }
     },
-    
-//third tab (first table)
-category_table: {
-    "label": "Staff Details",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `SELECT 
+
+    //third tab (first table)
+    category_table: {
+        "label": "Staff Details",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 sef.district_id,
                 d.district_name,
                 SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4788,10 +4830,10 @@ category_table: {
            
             GROUP BY 
              sef.district_id, d.district_name `,
-            },
-            "actions": {
-                "queries": {
-                    "table": ` SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": ` SELECT 
                     sef.district_id,
                     d.district_name,
                     SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4808,17 +4850,17 @@ category_table: {
                
                 GROUP BY 
                  sef.district_id, d.district_name `,
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": ` SELECT 
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": ` SELECT 
                 sef.block_id ,
                    b.block_name,
                 SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4836,10 +4878,10 @@ category_table: {
                 where   sef.district_id = {district_id}
                  GROUP BY 
                  b.block_name, sef.block_id `,
-            },
-            "actions": {
-                "queries": {
-                    "table": `   SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `   SELECT 
                     sef.block_id ,
                        b.block_name,
                     SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4857,17 +4899,17 @@ category_table: {
                     where   sef.district_id = {district_id}
                      GROUP BY 
                      b.block_name, sef.block_id `,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `SELECT 
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 sef.cluster_id ,
                    c.cluster_name,
                 SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4888,10 +4930,10 @@ category_table: {
                 GROUP BY 
                  c.cluster_name, sef.cluster_id   
              `,
-            },
-            "actions": {
-                "queries": {
-                    "table": ` SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": ` SELECT 
                     sef.cluster_id ,
                        c.cluster_name,
                     SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4912,17 +4954,17 @@ category_table: {
                     GROUP BY 
                      c.cluster_name, sef.cluster_id  
                  `,
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table": ` SELECT 
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": ` SELECT 
                 sef.school_id,
                     sch.school_name,
                 SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4947,10 +4989,10 @@ category_table: {
                 
             
                 `
-            },
-            "actions": {
-                "queries": {
-                    "table": `  SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `  SELECT 
                     sef.school_id,
                         sch.school_name,
                     SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -4975,229 +5017,233 @@ category_table: {
                     
                 
                     `,
-                },
-                "level": "school"
-            }
-        },
-        // {
-        //     "name": "School",
-        //     "labelProp": "school_name",
-        //     "valueProp": "school_id",
-        //     "hierarchyLevel": "5",
-        //     "timeSeriesQueries": {
-        //         "table": `SELECT
-        //         sam.student_name,
-        //         COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //     FROM
-        //        student_attendance.student_attendance_master sam
-        //     LEFT join
-        //     dimensions.district d on sam.district_id = d.district_id
-        //     LEFT JOIN
-        //         dimensions.class cc ON sam.class_id = cc.class_id
-        //     LEFT join
-        //         dimensions.block b on sam.block_id = b.block_id
-        //     left join
-        //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //     left join
-        //         dimensions.school sch on sam.school_id = sch.school_id
-        //     where
-        //       sam.date in ( startDate,endDate) 
-        //       and sam.school_id = {school_id}
-        //     GROUP BY
-        //          sam.student_name`,
-        //     },
-        //     "actions": {
-        //         "queries": {
-        //             "table":`SELECT
-        //             sam.student_name,
-        //             COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //         FROM
-        //            student_attendance.student_attendance_master sam
-        //         LEFT join
-        //         dimensions.district d on sam.district_id = d.district_id
-        //         LEFT JOIN
-        //             dimensions.class cc ON sam.class_id = cc.class_id
-        //         LEFT join
-        //             dimensions.block b on sam.block_id = b.block_id
-        //         left join
-        //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //         left join
-        //             dimensions.school sch on sam.school_id = sch.school_id
-        //         where
-        //           sam.date in ( startDate,endDate) 
-        //           and sam.school_id = {school_id}
-        //         GROUP BY
-        //              sam.student_name`,
-        //         },
-        //         "level": "school"
-        //     }
-        // }
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                {
-                    name: "State",
-                    property: "state_name",
-                    class: "text-center",
-                    action: {
-                        dataProps: [{
-                            "prop": "state_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "state_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 1,
-                            linkedReports: ["gender_table", "enrollment_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]
-                        },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "District",
-                    property: "district_name",
-                    class: "text-center",
-                    action: {
-                        dataProps: [{
-                            "prop": "district_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "district_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 2,
-                            linkedReports: ["gender_table", "enrollment_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                          },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-center",
-                    action: {
-                        dataProps: [{
-                            "prop": "block_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "block_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 3,
-                            linkedReports: ["gender_table", "enrollment_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                           },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-center",
-                    action: {
-                        dataProps: [{
-                            "prop": "cluster_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "cluster_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 4,
-                            linkedReports: ["gender_table", "enrollment_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
-                        allowedLevels: [1, 2, 3]
-
-                    }
-                },
-                {
-                    name: "School",
-                    property: "school_name",
-                    class: "text-center",
-                    action: {
-                        dataProps: [{
-                            "prop": "school_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "school_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 5,
-                            linkedReports: ["gender_table", "enrollment_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
-                        allowedLevels: [1, 2, 3]
-
-                    }
-                },
-               
-               
-                {
-                    name: "General",
-                    property: "general",
-                    class: "text-center"
-                },
-                
-                {
-                    name: "Scheduled Caste (SC)",
-                    property: "sc",
-                    class: "text-center"
-                },
-                {
-                    name: "Scheduled Tribes (ST) ",
-                    property: "st",
-                    class: "text-center"
-                },
-                {
-                    name: " Other Backward Classes",
-                    property: "obc",
-                    class: "text-center"
-                },
-            
-               
-                {
-                    name: "Total",
-                    property: "total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 50
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 1
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: -10000
-                            }
-                        ]
                     },
+                    "level": "school"
                 }
-            ],
-        },
-        "bigNumber": {
-            "valueSuffix": '%',
-            "property": 'perc_teachers'
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.student_name,
+            //         COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam
+            //     LEFT join
+            //     dimensions.district d on sam.district_id = d.district_id
+            //     LEFT JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id
+            //     LEFT join
+            //         dimensions.block b on sam.block_id = b.block_id
+            //     left join
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //     left join
+            //         dimensions.school sch on sam.school_id = sch.school_id
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id = {school_id}
+            //     GROUP BY
+            //          sam.student_name`,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.student_name,
+            //             COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam
+            //         LEFT join
+            //         dimensions.district d on sam.district_id = d.district_id
+            //         LEFT JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id
+            //         LEFT join
+            //             dimensions.block b on sam.block_id = b.block_id
+            //         left join
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //         left join
+            //             dimensions.school sch on sam.school_id = sch.school_id
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id = {school_id}
+            //         GROUP BY
+            //              sam.student_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "state_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "state_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 1,
+                                linkedReports: ["gender_table", "enrollment_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "district_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "district_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 2,
+                                linkedReports: ["gender_table", "enrollment_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "block_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "block_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 3,
+                                linkedReports: ["gender_table", "enrollment_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "cluster_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "cluster_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 4,
+                                linkedReports: ["gender_table", "enrollment_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center",
+                        action: {
+                            dataProps: [{
+                                "prop": "school_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "school_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 5,
+                                linkedReports: ["gender_table", "enrollment_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+
+
+                    {
+                        name: "General",
+                        property: "general",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: "Scheduled Caste (SC)",
+                        property: "sc",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Scheduled Tribes (ST) ",
+                        property: "st",
+                        class: "text-center"
+                    },
+                    {
+                        name: " Other Backward Classes",
+                        property: "obc",
+                        class: "text-center"
+                    },
+
+
+                    {
+                        name: "Total",
+                        property: "total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: -10000
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            "bigNumber": {
+                "valueSuffix": '%',
+                "property": 'perc_teachers'
+            }
         }
-    }
-},
-//stack bar
-enrollment_barchart:{
-    "label": "Overall Summary",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "barChart": `select 
+    },
+    //stack bar
+    enrollment_barchart: {
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `select 
                 category as level,
                 sum(male) as male,
                 sum(female) as female,
@@ -5227,10 +5273,10 @@ enrollment_barchart:{
                 order by 
                 social_cat
                 `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select 
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `select 
                     category as level,
                     sum(male) as male,
                     sum(female) as female,
@@ -5259,18 +5305,18 @@ enrollment_barchart:{
                     order by 
                     social_cat
                     `
-                
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "barChart": `select 
+
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `select 
                 category as level,
                 sum(male) as male,
                 sum(female) as female,
@@ -5302,10 +5348,10 @@ enrollment_barchart:{
                 category, social_cat
                 order by 
                 social_cat`,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select 
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `select 
                     category,
                     sum(male) as male,
                     sum(female) as female,
@@ -5337,17 +5383,17 @@ enrollment_barchart:{
                     category, social_cat
                     order by 
                     social_cat`,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "barChart": `select 
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `select 
                 category as level,
                 sum(male) as male,
                 sum(female) as female,
@@ -5381,10 +5427,10 @@ enrollment_barchart:{
                 category, social_cat
                 order by 
                 social_cat`,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select 
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `select 
                     category as level,
                     sum(male) as male,
                     sum(female) as female,
@@ -5418,17 +5464,17 @@ enrollment_barchart:{
                     category, social_cat
                     order by 
                     social_cat`
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "barChart": `select 
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `select 
                 category as level,
                 sum(male) as male,
                 sum(female) as female,
@@ -5464,10 +5510,10 @@ enrollment_barchart:{
                 category, social_cat
                 order by 
                 social_cat`,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`select 
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `select 
                     category as level,
                     sum(male) as male,
                     sum(female) as female,
@@ -5503,459 +5549,459 @@ enrollment_barchart:{
                     category, social_cat
                     order by 
                     social_cat`
-                },
-                "level": "school"
-            }
-        },
+                    },
+                    "level": "school"
+                }
+            },
 
-    ],
-    "options": {
-        "barChart": {
-            "metricLabelProp": "Male",
-            "metricValueProp": "male",
-            "yAxis": {
-                "title": "Social Category Gender"
-            },
-            "benchmarkConfig": {
-                "linkedReport": "tas_average_attendance_bignumber"
-            },
-            "xAxis": {
-                "title": "",
-                "label": "level",
-                "value": "level",
-
-            },
-            "tooltipMetrics": [
-                {
-                    "valuePrefix": "District Id: ",
-                    "value": "district_id",
-                    "valueSuffix": ""
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Male",
+                "metricValueProp": "male",
+                "yAxis": {
+                    "title": "Social Category Gender"
                 },
-                {
-                    "valuePrefix": "District Name: ",
-                    "value": "district_name",
-                    "valueSuffix": "%"
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
                 },
-               
-                {
-                    "valuePrefix": "Block Id: ",
-                    "value": "block_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Block Name: ",
-                    "value": "block_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Id: ",
-                    "value": "cluster_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Name: ",
-                    "value": "cluster_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Id: ",
-                    "value": "school_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "level ",
+                "xAxis": {
+                    "title": "",
+                    "label": "level",
                     "value": "level",
-                    "valueSuffix": ""
+
                 },
-                {
-                    "valuePrefix": "No of schools ",
-                    "value": "no_of_schools",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Name: ",
-                    "value": "school_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Average Percentage Student: ",
-                    "value": "perc_students",
-                    "valueSuffix": ""
-                },
-                
-                // {
-                //     "valuePrefix": "Average percentage of LO: ",
-                //     "value": "perc_lo",
-                //     "valueSuffix": "%"
-                // },
-            ]
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "%"
+                    },
+
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "level ",
+                        "value": "level",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "No of schools ",
+                        "value": "no_of_schools",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Student: ",
+                        "value": "perc_students",
+                        "valueSuffix": ""
+                    },
+
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
         }
-    }
-},
-// enrollment_barchart:{
-//     "label": "Overall Summary",
-//     "defaultLevel": "state",
-//     "filters": [
-//         {
-//             "name": "State",
-//             "labelProp": "state_name",
-//             "valueProp": "state_id",
-//             "hierarchyLevel": "1",
-//             "timeSeriesQueries": {
-//                 "barChart": `SELECT
-//     SUM(pri_students) AS primary_school,
-//     SUM(upr_students) AS upper_primary,
-//     SUM(sec_students) AS secondary_school,
-//     SUM(hsec_students) AS higher_secondary_school
-// FROM (
-//     SELECT
-//         SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
-//         sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
-//         sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
-//         sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students
-//     FROM
-//         school_general.sch_enr_fresh sef
-//      left join
-//      	dimensions.academic_year ay on sef.ac_year = ay.ac_year
-//      left join 
-//      	dimensions.district d on sef.district_id = d.district_id 
-     	
-//     GROUP by
-//     	sef.school_id
-// ) AS subquery
-//                 `,
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "barChart":`SELECT 
-//                     schoolmanagement_name as level,
-//                     SUM(no_of_schools) AS total_schools
-//                     from (
-//                 SELECT 
-//                     d.district_name,
-//                     sm.schoolmanagement_name,
-//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
-//                 FROM 
-//                     school_general.schooldetails sd
-//                 LEFT JOIN
-//                     dimensions.district d ON sd.district_id = d.district_id 
-//                 LEFT JOIN 
-//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//                 LEFT JOIN 
-//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                
-//                 GROUP BY 
-//                     d.district_name,sm.schoolmanagement_name) as sub
-//                    group by 
-//                   schoolmanagement_name; 
-//                     `
-                
-//                 },
-//                 "level": "district"
-//             }
-//         },
-//         {
-//             "name": "District",
-//             "labelProp": "district_name",
-//             "valueProp": "district_id",
-//             "hierarchyLevel": "2",
-//             "timeSeriesQueries": {
-//                 "barChart": `SELECT 
-//                 schoolmanagement_name as level,
-//                 SUM(no_of_schools) AS total_schools
-//                 from (
-//              SELECT 
-//                  b.block_name,
-//                 sm.schoolmanagement_name,
-//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
-//             FROM 
-//                 school_general.schooldetails sd
-//             LEFT JOIN
-//                 dimensions.district d ON sd.district_id = d.district_id 
-//             LEFT JOIN
-//                 dimensions.block b ON sd.block_id = b.block_id 
-//             LEFT JOIN 
-//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//             LEFT JOIN 
-//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//             WHERE 
-//                   sd.district_id = {district_id}
-//             GROUP BY 
-//                 b.block_name,sd.block_id,sm.schoolmanagement_name
-//                ) as sub
-//                group by 
-//               schoolmanagement_name; `,
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "barChart":
-//                     `SELECT 
-//                     schoolmanagement_name as level,
-//                     SUM(no_of_schools) AS total_schools
-//                     from (
-//                  SELECT 
-//                      b.block_name,
-//                     sm.schoolmanagement_name,
-//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
-//                 FROM 
-//                     school_general.schooldetails sd
-//                 LEFT JOIN
-//                     dimensions.district d ON sd.district_id = d.district_id 
-//                 LEFT JOIN
-//                     dimensions.block b ON sd.block_id = b.block_id 
-//                 LEFT JOIN 
-//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//                 LEFT JOIN 
-//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//                 WHERE 
-//                       sd.district_id = {district_id}
-//                 GROUP BY 
-//                     b.block_name,sd.block_id,sm.schoolmanagement_name
-//                    ) as sub
-//                    group by 
-//                   schoolmanagement_name;`,
-//                 },
-//                 "level": "block"
-//             }
-//         },
-//         {
-//             "name": "Block",
-//             "labelProp": "block_name",
-//             "valueProp": "block_id",
-//             "hierarchyLevel": "3",
-//             "timeSeriesQueries": {
-//                 "barChart": `SELECT 
-//                 schoolmanagement_name as level,
-//                 SUM(no_of_schools) AS total_schools
-//                 from (
-//              SELECT 
-//                  c.cluster_name,
-//                 sm.schoolmanagement_name,
-//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
-//             FROM 
-//                 school_general.schooldetails sd
-//             LEFT JOIN
-//                 dimensions.district d ON sd.district_id = d.district_id 
-//             LEFT JOIN
-//                 dimensions.block b ON sd.block_id = b.block_id 
-//             LEFT JOIN
-//                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-//             LEFT JOIN 
-//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//             LEFT JOIN 
-//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//             WHERE 
-//                   sd.block_id = {block_id}
-//             GROUP BY 
-//                 c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-//                ) as sub
-//                group by 
-//               schoolmanagement_name ;`,
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "barChart":`SELECT 
-//                     schoolmanagement_name as level,
-//                     SUM(no_of_schools) AS total_schools
-//                     from (
-//                  SELECT 
-//                      c.cluster_name,
-//                     sm.schoolmanagement_name,
-//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
-//                 FROM 
-//                     school_general.schooldetails sd
-//                 LEFT JOIN
-//                     dimensions.district d ON sd.district_id = d.district_id 
-//                 LEFT JOIN
-//                     dimensions.block b ON sd.block_id = b.block_id 
-//                 LEFT JOIN
-//                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-//                 LEFT JOIN 
-//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//                 LEFT JOIN 
-//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//                 WHERE 
-//                       sd.block_id = {block_id}
-//                 GROUP BY 
-//                     c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
-//                    ) as sub
-//                    group by 
-//                   schoolmanagement_name ;`
-//                 },
-//                 "level": "cluster"
-//             }
-//         },
-//         {
-//             "name": "Cluster",
-//             "labelProp": "cluster_name",
-//             "valueProp": "cluster_id",
-//             "hierarchyLevel": "4",
-//             "timeSeriesQueries": {
-//                 "barChart": `SELECT 
-//                 schoolmanagement_name as level,
-//                 SUM(no_of_schools) AS total_schools
-//                 from (
-//              SELECT 
-//                  sch.school_name,
-//                 sm.schoolmanagement_name,
-//                 COUNT(DISTINCT sd.school_id) AS no_of_schools
-//             FROM 
-//                 school_general.schooldetails sd
-//             LEFT JOIN
-//                 dimensions.district d ON sd.district_id = d.district_id 
-//             LEFT JOIN
-//                 dimensions.block b ON sd.block_id = b.block_id 
-//             LEFT JOIN
-//                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-//             LEFT JOIN
-//                 dimensions.school sch ON sd.school_id  = sch.school_id 
-//                 LEFT JOIN 
-//                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//             LEFT JOIN 
-//                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//             WHERE 
-//                   sd.cluster_id = {cluster_id}
-//             GROUP BY 
-//                 sch.school_name,sd.school_id ,sm.schoolmanagement_name
-//                ) as sub
-//                group by 
-//               schoolmanagement_name ; 
-            
-//             `,
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "barChart":`SELECT 
-//                     schoolmanagement_name as level,
-//                     SUM(no_of_schools) AS total_schools
-//                     from (
-//                  SELECT 
-//                      sch.school_name,
-//                     sm.schoolmanagement_name,
-//                     COUNT(DISTINCT sd.school_id) AS no_of_schools
-//                 FROM 
-//                     school_general.schooldetails sd
-//                 LEFT JOIN
-//                     dimensions.district d ON sd.district_id = d.district_id 
-//                 LEFT JOIN
-//                     dimensions.block b ON sd.block_id = b.block_id 
-//                 LEFT JOIN
-//                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-//                 LEFT JOIN
-//                     dimensions.school sch ON sd.school_id  = sch.school_id 
-//                     LEFT JOIN 
-//                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
-//                 LEFT JOIN 
-//                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-//                 WHERE 
-//                       sd.cluster_id = {cluster_id}
-//                 GROUP BY 
-//                     sch.school_name,sd.school_id ,sm.schoolmanagement_name
-//                    ) as sub
-//                    group by 
-//                   schoolmanagement_name ;
-                
-//                 `
-//                 },
-//                 "level": "school"
-//             }
-//         },
+    },
+    // enrollment_barchart:{
+    //     "label": "Overall Summary",
+    //     "defaultLevel": "state",
+    //     "filters": [
+    //         {
+    //             "name": "State",
+    //             "labelProp": "state_name",
+    //             "valueProp": "state_id",
+    //             "hierarchyLevel": "1",
+    //             "timeSeriesQueries": {
+    //                 "barChart": `SELECT
+    //     SUM(pri_students) AS primary_school,
+    //     SUM(upr_students) AS upper_primary,
+    //     SUM(sec_students) AS secondary_school,
+    //     SUM(hsec_students) AS higher_secondary_school
+    // FROM (
+    //     SELECT
+    //         SUM(sef.c1_b +sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g) AS pri_students,
+    //         sum(sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g) as upr_students,
+    //         sum(sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g) as sec_students,
+    //         sum(sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g) as hsec_students
+    //     FROM
+    //         school_general.sch_enr_fresh sef
+    //      left join
+    //      	dimensions.academic_year ay on sef.ac_year = ay.ac_year
+    //      left join 
+    //      	dimensions.district d on sef.district_id = d.district_id 
 
-//     ],
-//     "options": {
-//         "barChart": {
-//             "metricLabelProp": "Schools by Management",
-//             "metricValueProp": "total_schools",
-//             "yAxis": {
-//                 "title": " Number of Schools"
-//             },
-//             "benchmarkConfig": {
-//                 "linkedReport": "tas_average_attendance_bignumber"
-//             },
-//             "xAxis": {
-//                 "title": "",
-//                 "label": "level",
-//                 "value": "level",
+    //     GROUP by
+    //     	sef.school_id
+    // ) AS subquery
+    //                 `,
+    //             },
+    //             "actions": {
+    //                 "queries": {
+    //                     "barChart":`SELECT 
+    //                     schoolmanagement_name as level,
+    //                     SUM(no_of_schools) AS total_schools
+    //                     from (
+    //                 SELECT 
+    //                     d.district_name,
+    //                     sm.schoolmanagement_name,
+    //                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //                 FROM 
+    //                     school_general.schooldetails sd
+    //                 LEFT JOIN
+    //                     dimensions.district d ON sd.district_id = d.district_id 
+    //                 LEFT JOIN 
+    //                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //                 LEFT JOIN 
+    //                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
 
-//             },
-//             "tooltipMetrics": [
-//                 {
-//                     "valuePrefix": "District Id: ",
-//                     "value": "district_id",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "District Name: ",
-//                     "value": "district_name",
-//                     "valueSuffix": "%"
-//                 },
-               
-//                 {
-//                     "valuePrefix": "Block Id: ",
-//                     "value": "block_id",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "Block Name: ",
-//                     "value": "block_name",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "Cluster Id: ",
-//                     "value": "cluster_id",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "Cluster Name: ",
-//                     "value": "cluster_name",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "School Id: ",
-//                     "value": "school_id",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "level ",
-//                     "value": "level",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "No of schools ",
-//                     "value": "no_of_schools",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "School Name: ",
-//                     "value": "school_name",
-//                     "valueSuffix": ""
-//                 },
-//                 {
-//                     "valuePrefix": "Average Percentage Student: ",
-//                     "value": "perc_students",
-//                     "valueSuffix": ""
-//                 },
-                
-//                 // {
-//                 //     "valuePrefix": "Average percentage of LO: ",
-//                 //     "value": "perc_lo",
-//                 //     "valueSuffix": "%"
-//                 // },
-//             ]
-//         }
-//     }
-// },
-gender_table: {
-    "label": "Average Student Present",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `
+    //                 GROUP BY 
+    //                     d.district_name,sm.schoolmanagement_name) as sub
+    //                    group by 
+    //                   schoolmanagement_name; 
+    //                     `
+
+    //                 },
+    //                 "level": "district"
+    //             }
+    //         },
+    //         {
+    //             "name": "District",
+    //             "labelProp": "district_name",
+    //             "valueProp": "district_id",
+    //             "hierarchyLevel": "2",
+    //             "timeSeriesQueries": {
+    //                 "barChart": `SELECT 
+    //                 schoolmanagement_name as level,
+    //                 SUM(no_of_schools) AS total_schools
+    //                 from (
+    //              SELECT 
+    //                  b.block_name,
+    //                 sm.schoolmanagement_name,
+    //                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //             FROM 
+    //                 school_general.schooldetails sd
+    //             LEFT JOIN
+    //                 dimensions.district d ON sd.district_id = d.district_id 
+    //             LEFT JOIN
+    //                 dimensions.block b ON sd.block_id = b.block_id 
+    //             LEFT JOIN 
+    //                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //             LEFT JOIN 
+    //                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //             WHERE 
+    //                   sd.district_id = {district_id}
+    //             GROUP BY 
+    //                 b.block_name,sd.block_id,sm.schoolmanagement_name
+    //                ) as sub
+    //                group by 
+    //               schoolmanagement_name; `,
+    //             },
+    //             "actions": {
+    //                 "queries": {
+    //                     "barChart":
+    //                     `SELECT 
+    //                     schoolmanagement_name as level,
+    //                     SUM(no_of_schools) AS total_schools
+    //                     from (
+    //                  SELECT 
+    //                      b.block_name,
+    //                     sm.schoolmanagement_name,
+    //                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //                 FROM 
+    //                     school_general.schooldetails sd
+    //                 LEFT JOIN
+    //                     dimensions.district d ON sd.district_id = d.district_id 
+    //                 LEFT JOIN
+    //                     dimensions.block b ON sd.block_id = b.block_id 
+    //                 LEFT JOIN 
+    //                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //                 LEFT JOIN 
+    //                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //                 WHERE 
+    //                       sd.district_id = {district_id}
+    //                 GROUP BY 
+    //                     b.block_name,sd.block_id,sm.schoolmanagement_name
+    //                    ) as sub
+    //                    group by 
+    //                   schoolmanagement_name;`,
+    //                 },
+    //                 "level": "block"
+    //             }
+    //         },
+    //         {
+    //             "name": "Block",
+    //             "labelProp": "block_name",
+    //             "valueProp": "block_id",
+    //             "hierarchyLevel": "3",
+    //             "timeSeriesQueries": {
+    //                 "barChart": `SELECT 
+    //                 schoolmanagement_name as level,
+    //                 SUM(no_of_schools) AS total_schools
+    //                 from (
+    //              SELECT 
+    //                  c.cluster_name,
+    //                 sm.schoolmanagement_name,
+    //                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //             FROM 
+    //                 school_general.schooldetails sd
+    //             LEFT JOIN
+    //                 dimensions.district d ON sd.district_id = d.district_id 
+    //             LEFT JOIN
+    //                 dimensions.block b ON sd.block_id = b.block_id 
+    //             LEFT JOIN
+    //                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+    //             LEFT JOIN 
+    //                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //             LEFT JOIN 
+    //                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //             WHERE 
+    //                   sd.block_id = {block_id}
+    //             GROUP BY 
+    //                 c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
+    //                ) as sub
+    //                group by 
+    //               schoolmanagement_name ;`,
+    //             },
+    //             "actions": {
+    //                 "queries": {
+    //                     "barChart":`SELECT 
+    //                     schoolmanagement_name as level,
+    //                     SUM(no_of_schools) AS total_schools
+    //                     from (
+    //                  SELECT 
+    //                      c.cluster_name,
+    //                     sm.schoolmanagement_name,
+    //                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //                 FROM 
+    //                     school_general.schooldetails sd
+    //                 LEFT JOIN
+    //                     dimensions.district d ON sd.district_id = d.district_id 
+    //                 LEFT JOIN
+    //                     dimensions.block b ON sd.block_id = b.block_id 
+    //                 LEFT JOIN
+    //                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+    //                 LEFT JOIN 
+    //                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //                 LEFT JOIN 
+    //                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //                 WHERE 
+    //                       sd.block_id = {block_id}
+    //                 GROUP BY 
+    //                     c.cluster_name,sd.cluster_id ,sm.schoolmanagement_name
+    //                    ) as sub
+    //                    group by 
+    //                   schoolmanagement_name ;`
+    //                 },
+    //                 "level": "cluster"
+    //             }
+    //         },
+    //         {
+    //             "name": "Cluster",
+    //             "labelProp": "cluster_name",
+    //             "valueProp": "cluster_id",
+    //             "hierarchyLevel": "4",
+    //             "timeSeriesQueries": {
+    //                 "barChart": `SELECT 
+    //                 schoolmanagement_name as level,
+    //                 SUM(no_of_schools) AS total_schools
+    //                 from (
+    //              SELECT 
+    //                  sch.school_name,
+    //                 sm.schoolmanagement_name,
+    //                 COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //             FROM 
+    //                 school_general.schooldetails sd
+    //             LEFT JOIN
+    //                 dimensions.district d ON sd.district_id = d.district_id 
+    //             LEFT JOIN
+    //                 dimensions.block b ON sd.block_id = b.block_id 
+    //             LEFT JOIN
+    //                 dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+    //             LEFT JOIN
+    //                 dimensions.school sch ON sd.school_id  = sch.school_id 
+    //                 LEFT JOIN 
+    //                 dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //             LEFT JOIN 
+    //                 dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //             WHERE 
+    //                   sd.cluster_id = {cluster_id}
+    //             GROUP BY 
+    //                 sch.school_name,sd.school_id ,sm.schoolmanagement_name
+    //                ) as sub
+    //                group by 
+    //               schoolmanagement_name ; 
+
+    //             `,
+    //             },
+    //             "actions": {
+    //                 "queries": {
+    //                     "barChart":`SELECT 
+    //                     schoolmanagement_name as level,
+    //                     SUM(no_of_schools) AS total_schools
+    //                     from (
+    //                  SELECT 
+    //                      sch.school_name,
+    //                     sm.schoolmanagement_name,
+    //                     COUNT(DISTINCT sd.school_id) AS no_of_schools
+    //                 FROM 
+    //                     school_general.schooldetails sd
+    //                 LEFT JOIN
+    //                     dimensions.district d ON sd.district_id = d.district_id 
+    //                 LEFT JOIN
+    //                     dimensions.block b ON sd.block_id = b.block_id 
+    //                 LEFT JOIN
+    //                     dimensions.cluster c ON sd.cluster_id = c.cluster_id 
+    //                 LEFT JOIN
+    //                     dimensions.school sch ON sd.school_id  = sch.school_id 
+    //                     LEFT JOIN 
+    //                     dimensions.schoolmanagement sm ON sd.sch_mgmt_id = sm.schoolmanagement_id 
+    //                 LEFT JOIN 
+    //                     dimensions.academic_year ay ON sd.ac_year = ay.ac_year
+    //                 WHERE 
+    //                       sd.cluster_id = {cluster_id}
+    //                 GROUP BY 
+    //                     sch.school_name,sd.school_id ,sm.schoolmanagement_name
+    //                    ) as sub
+    //                    group by 
+    //                   schoolmanagement_name ;
+
+    //                 `
+    //                 },
+    //                 "level": "school"
+    //             }
+    //         },
+
+    //     ],
+    //     "options": {
+    //         "barChart": {
+    //             "metricLabelProp": "Schools by Management",
+    //             "metricValueProp": "total_schools",
+    //             "yAxis": {
+    //                 "title": " Number of Schools"
+    //             },
+    //             "benchmarkConfig": {
+    //                 "linkedReport": "tas_average_attendance_bignumber"
+    //             },
+    //             "xAxis": {
+    //                 "title": "",
+    //                 "label": "level",
+    //                 "value": "level",
+
+    //             },
+    //             "tooltipMetrics": [
+    //                 {
+    //                     "valuePrefix": "District Id: ",
+    //                     "value": "district_id",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "District Name: ",
+    //                     "value": "district_name",
+    //                     "valueSuffix": "%"
+    //                 },
+
+    //                 {
+    //                     "valuePrefix": "Block Id: ",
+    //                     "value": "block_id",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "Block Name: ",
+    //                     "value": "block_name",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "Cluster Id: ",
+    //                     "value": "cluster_id",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "Cluster Name: ",
+    //                     "value": "cluster_name",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "School Id: ",
+    //                     "value": "school_id",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "level ",
+    //                     "value": "level",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "No of schools ",
+    //                     "value": "no_of_schools",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "School Name: ",
+    //                     "value": "school_name",
+    //                     "valueSuffix": ""
+    //                 },
+    //                 {
+    //                     "valuePrefix": "Average Percentage Student: ",
+    //                     "value": "perc_students",
+    //                     "valueSuffix": ""
+    //                 },
+
+    //                 // {
+    //                 //     "valuePrefix": "Average percentage of LO: ",
+    //                 //     "value": "perc_lo",
+    //                 //     "valueSuffix": "%"
+    //                 // },
+    //             ]
+    //         }
+    //     }
+    // },
+    gender_table: {
+        "label": "Average Student Present",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `
                 SELECT 
                 district_name,
                 pry_male,
@@ -6017,10 +6063,10 @@ gender_table: {
                 CASE WHEN district_name = 'overall students' THEN 1 ELSE 0 END,
                 district_name;
        `
-            },
-            "actions": {
-                "queries": {
-                    "table": `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `
                     SELECT 
     district_name,
     pry_male,
@@ -6082,17 +6128,17 @@ ORDER BY
     CASE WHEN district_name = 'overall students' THEN 1 ELSE 0 END,
     district_name;
        `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": ` SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": ` SELECT 
                 block_name,
                 pry_male,
                 pry_female,
@@ -6155,10 +6201,10 @@ ORDER BY
             ORDER BY 
                 CASE WHEN block_name = 'overall students' THEN 1 ELSE 0 END,
                 block_name;`
-            },
-            "actions": {
-                "queries": {
-                    "table": ` SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": ` SELECT 
                     block_name,
                     pry_male,
                     pry_female,
@@ -6222,17 +6268,17 @@ ORDER BY
                     CASE WHEN block_name = 'overall students' THEN 1 ELSE 0 END,
                     block_name;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 cluster_name,
                 pry_male,
                 pry_female,
@@ -6298,10 +6344,10 @@ ORDER BY
                 CASE WHEN cluster_name = 'overall students' THEN 1 ELSE 0 END,
                 cluster_name;
                 `
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
                     cluster_name,
                     pry_male,
                     pry_female,
@@ -6367,17 +6413,17 @@ ORDER BY
                     CASE WHEN cluster_name = 'overall students' THEN 1 ELSE 0 END,
                     cluster_name;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table":` SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": ` SELECT 
                 school_name,
                 pry_male,
                 pry_female,
@@ -6446,10 +6492,10 @@ ORDER BY
                 school_name;
             
             `
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
                     school_name,
                     pry_male,
                     pry_female,
@@ -6518,296 +6564,296 @@ ORDER BY
                     school_name;
                 
                 `,
-                },
-                "level": "school"
-            }
-        },
-        // {
-        //     "name": "School",
-        //     "labelProp": "school_name",
-        //     "valueProp": "school_id",
-        //     "hierarchyLevel": "5",
-        //     "timeSeriesQueries": {
-        //         "table": `SELECT
-        //         sam.district_id,
-        //         d.district_name,
-        //         sam.block_id ,
-        //         b.block_name,
-        //         sam.cluster_id ,
-        //         c.cluster_name,
-        //         sam.school_id,
-        //         sch.school_name,
-        //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //     FROM
-        //        student_attendance.student_attendance_master sam 
-        //      join
-        //     dimensions.district d on sam.district_id = d.district_id 
-        //      JOIN
-        //         dimensions.class cc ON sam.class_id = cc.class_id 
-        //      join
-        //         dimensions.block b on sam.block_id = b.block_id 
-        //      join 
-        //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //      join 
-        //         dimensions.school sch on sam.school_id = sch.school_id 
-        //     where
-        //       sam.date in ( startDate,endDate) 
-        //       and sam.school_id  = {school_id}
-        //     GROUP BY
-        //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
-        //     },
-        //     "actions": {
-        //         "queries": {
-        //             "table":`SELECT
-        //             sam.district_id,
-        //             d.district_name,
-        //             sam.block_id ,
-        //             b.block_name,
-        //             sam.cluster_id ,
-        //             c.cluster_name,
-        //             sam.school_id,
-        //             sch.school_name,
-        //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //         FROM
-        //            student_attendance.student_attendance_master sam 
-        //          join
-        //         dimensions.district d on sam.district_id = d.district_id 
-        //          JOIN
-        //             dimensions.class cc ON sam.class_id = cc.class_id 
-        //          join
-        //             dimensions.block b on sam.block_id = b.block_id 
-        //          join 
-        //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //          join 
-        //             dimensions.school sch on sam.school_id = sch.school_id 
-        //         where
-        //           sam.date in ( startDate,endDate) 
-        //           and sam.school_id  = {school_id}
-        //         GROUP BY
-        //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
-        //         },
-        //         "level": "school"
-        //     }
-        // }
-        
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                // {
-                //     name: "Date",
-                //     property: "ex_date",
-                //     class: "text-left",
-                //     type: "date",
-                // },
-                {
-                    name: "District",
-                    property: "district_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-center"
-                },
-                // {
-                //     name: "UDISE Code",
-                //     property: "udise_code",
-                //     class: "text-left"
-                // },
-                {
-                    name: "SCHOOL Code",
-                    property: "school_id",
-                    class: "text-center"
-                },
-                {
-                    name: "School",
-                    property: "school_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Primary Boys",
-                    property: "pry_male",
-                    class: "text-center"
-                },
-               
-                {
-                    name: "Primary Girls",
-                    property: "pry_female",
-                    class: "text-center"
-                },
-               
-                {
-                    name: "Primary Total",
-                    property: "pry_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
                     },
-                },
-              
-                {
-                    name: "Upper Primary Boys",
-                    property: "upr_pry_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Upper Primary Girls",
-                    property: "upr_pry_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Upper Primary Total",
-                    property: "upr_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.district_id,
+            //         d.district_name,
+            //         sam.block_id ,
+            //         b.block_name,
+            //         sam.cluster_id ,
+            //         c.cluster_name,
+            //         sam.school_id,
+            //         sch.school_name,
+            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam 
+            //      join
+            //     dimensions.district d on sam.district_id = d.district_id 
+            //      JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //      join
+            //         dimensions.block b on sam.block_id = b.block_id 
+            //      join 
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //      join 
+            //         dimensions.school sch on sam.school_id = sch.school_id 
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id  = {school_id}
+            //     GROUP BY
+            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.district_id,
+            //             d.district_name,
+            //             sam.block_id ,
+            //             b.block_name,
+            //             sam.cluster_id ,
+            //             c.cluster_name,
+            //             sam.school_id,
+            //             sch.school_name,
+            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam 
+            //          join
+            //         dimensions.district d on sam.district_id = d.district_id 
+            //          JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //          join
+            //             dimensions.block b on sam.block_id = b.block_id 
+            //          join 
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //          join 
+            //             dimensions.school sch on sam.school_id = sch.school_id 
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id  = {school_id}
+            //         GROUP BY
+            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
                     },
-                },
-               
-                {
-                    name: "Secondary Boys",
-                    property: "sec_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Secondary Girls",
-                    property: "sec_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Secondary Total",
-                    property: "sec_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
                     },
-                },
-               
-                
-                {
-                    name: "Higher Secondary Boys",
-                    property: "hr_sec_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Higher Secondary Girls",
-                    property: "hr_sec_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Higher Secondary total",
-                    property: "hr_sec_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
                     },
-                },
-               
-                
-            ],
-        },
-        "searchBar_config": {
-            "title": "School Code",
-            "searchProps": ['school_id'],
-            "searchType": "number"
-        },
-        
-    }
-},
+                    // {
+                    //     name: "UDISE Code",
+                    //     property: "udise_code",
+                    //     class: "text-left"
+                    // },
+                    {
+                        name: "SCHOOL Code",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Primary Boys",
+                        property: "pry_male",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: "Primary Girls",
+                        property: "pry_female",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: "Primary Total",
+                        property: "pry_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+
+                    {
+                        name: "Upper Primary Boys",
+                        property: "upr_pry_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Upper Primary Girls",
+                        property: "upr_pry_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Upper Primary Total",
+                        property: "upr_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+
+                    {
+                        name: "Secondary Boys",
+                        property: "sec_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Secondary Girls",
+                        property: "sec_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Secondary Total",
+                        property: "sec_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
 
 
-//second-tab
-gross_enroll_table: {
-    "label": "Staff Details",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `SELECT
+                    {
+                        name: "Higher Secondary Boys",
+                        property: "hr_sec_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Higher Secondary Girls",
+                        property: "hr_sec_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Higher Secondary total",
+                        property: "hr_sec_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+
+
+                ],
+            },
+            "searchBar_config": {
+                "title": "School Code",
+                "searchProps": ['school_id'],
+                "searchType": "number"
+            },
+
+        }
+    },
+
+
+    //second-tab
+    gross_enroll_table: {
+        "label": "Staff Details",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `SELECT
                 ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                 ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                 ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -6855,10 +6901,10 @@ gross_enroll_table: {
             group by 
             pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t;
             `,
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
                     ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                     ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                     ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -6906,17 +6952,17 @@ gross_enroll_table: {
                 group by 
                 pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t;
                 `,
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": `SELECT
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `SELECT
                 ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                 ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                 ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -6963,10 +7009,10 @@ gross_enroll_table: {
             ) AS sub
             group by 
             pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t;`,
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
                     ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                     ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                     ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -7013,17 +7059,17 @@ gross_enroll_table: {
                 ) AS sub
                 group by 
                 pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t; `,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `SELECT
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `SELECT
                 ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                 ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                 ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -7070,10 +7116,10 @@ gross_enroll_table: {
             ) AS sub
             group by 
             pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t;`,
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
                     ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                     ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                     ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -7120,17 +7166,17 @@ gross_enroll_table: {
                 ) AS sub
                 group by 
                 pri_b,pri_t_b,pri_t_g,upr_t_b,upr_t_g,sec_t_b,sec_t_g,hsec_t_b,hsec_t_g, upr_b,sec_b,hsec_b,pri_g, upr_g,sec_g,hsec_g,pri_t, upr_t,sec_t,hsec_t;`,
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table": `SELECT
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": `SELECT
                 ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                 ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                 ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -7180,10 +7226,10 @@ gross_enroll_table: {
                 
             
                 `
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT
                     ROUND((sum(pri_b) /pri_t_b)* 100,0) as primary_male,
                     ROUND((sum(pri_g) /pri_t_g)* 100,0) as primary_female,
                     ROUND((SUM(pri_b) + SUM(pri_g)) / pri_t * 100, 0) AS primary_total,
@@ -7233,326 +7279,330 @@ gross_enroll_table: {
                     
                 
                     `,
-                },
-                "level": "school"
-            }
-        },
-        // {
-        //     "name": "School",
-        //     "labelProp": "school_name",
-        //     "valueProp": "school_id",
-        //     "hierarchyLevel": "5",
-        //     "timeSeriesQueries": {
-        //         "table": `SELECT
-        //         sam.student_name,
-        //         COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //     FROM
-        //        student_attendance.student_attendance_master sam
-        //     LEFT join
-        //     dimensions.district d on sam.district_id = d.district_id
-        //     LEFT JOIN
-        //         dimensions.class cc ON sam.class_id = cc.class_id
-        //     LEFT join
-        //         dimensions.block b on sam.block_id = b.block_id
-        //     left join
-        //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //     left join
-        //         dimensions.school sch on sam.school_id = sch.school_id
-        //     where
-        //       sam.date in ( startDate,endDate) 
-        //       and sam.school_id = {school_id}
-        //     GROUP BY
-        //          sam.student_name`,
-        //     },
-        //     "actions": {
-        //         "queries": {
-        //             "table":`SELECT
-        //             sam.student_name,
-        //             COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //         FROM
-        //            student_attendance.student_attendance_master sam
-        //         LEFT join
-        //         dimensions.district d on sam.district_id = d.district_id
-        //         LEFT JOIN
-        //             dimensions.class cc ON sam.class_id = cc.class_id
-        //         LEFT join
-        //             dimensions.block b on sam.block_id = b.block_id
-        //         left join
-        //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //         left join
-        //             dimensions.school sch on sam.school_id = sch.school_id
-        //         where
-        //           sam.date in ( startDate,endDate) 
-        //           and sam.school_id = {school_id}
-        //         GROUP BY
-        //              sam.student_name`,
-        //         },
-        //         "level": "school"
-        //     }
-        // }
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                {
-                    name: "State",
-                    property: "state_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "state_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "state_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 1,
-                            linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]
+                    },
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.student_name,
+            //         COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam
+            //     LEFT join
+            //     dimensions.district d on sam.district_id = d.district_id
+            //     LEFT JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id
+            //     LEFT join
+            //         dimensions.block b on sam.block_id = b.block_id
+            //     left join
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //     left join
+            //         dimensions.school sch on sam.school_id = sch.school_id
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id = {school_id}
+            //     GROUP BY
+            //          sam.student_name`,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.student_name,
+            //             COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             COUNT(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - COUNT(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam
+            //         LEFT join
+            //         dimensions.district d on sam.district_id = d.district_id
+            //         LEFT JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id
+            //         LEFT join
+            //             dimensions.block b on sam.block_id = b.block_id
+            //         left join
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //         left join
+            //             dimensions.school sch on sam.school_id = sch.school_id
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id = {school_id}
+            //         GROUP BY
+            //              sam.student_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "state_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "state_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 1,
+                                linkedReports: ["management_barchart", "category_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "district_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "district_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 2,
+                                linkedReports: ["management_barchart", "category_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "block_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "block_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 3,
+                                linkedReports: ["management_barchart", "category_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "cluster_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "cluster_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 4,
+                                linkedReports: ["management_barchart", "category_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "school_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "school_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 5,
+                                linkedReports: ["management_barchart", "category_barchart", "receipts_barchart", "classroom_ratio_table", "teacher_ratio_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+
+
+                    {
+                        name: "Primary Boys",
+                        property: "primary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Primary Girls",
+                        property: "primary_female",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: " Primary Total",
+                        property: "primary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
                         },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "District",
-                    property: "district_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "district_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "district_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 2,
-                            linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                          },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "block_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "block_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 3,
-                            linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"]                           },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "cluster_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "cluster_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 4,
-                            linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
-                        allowedLevels: [1, 2, 3]
+                    },
+                    {
+                        name: " Upper Primary Boys",
+                        property: "upper_primary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: " Upper Primary Girls",
+                        property: "upper_primary_female",
+                        class: "text-center"
+                    },
 
-                    }
-                },
-                {
-                    name: "School",
-                    property: "school_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "school_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "school_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 5,
-                            linkedReports: ["management_barchart", "category_barchart","receipts_barchart","classroom_ratio_table","teacher_ratio_table"] },
-                        allowedLevels: [1, 2, 3]
+                    {
+                        name: "Upper Primary Total",
+                        property: "upper_primary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Secondary Boys",
+                        property: "secondary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Secondary Girls",
+                        property: "secondary_female",
+                        class: "text-center"
+                    },
 
-                    }
-                },
-               
-               
-                {
-                    name: "Primary Boys",
-                    property: "primary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Primary Girls",
-                    property: "primary_female",
-                    class: "text-center"
-                },
-               
-                {
-                    name: " Primary Total",
-                    property: "primary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    {
+                        name: "Secondary Total",
+                        property: "secondary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
                     },
-                },
-                {
-                    name: " Upper Primary Boys",
-                    property: "upper_primary_male",
-                    class: "text-center"
-                },
-                {
-                    name: " Upper Primary Girls",
-                    property: "upper_primary_female",
-                    class: "text-center"
-                },
-               
-                {
-                    name: "Upper Primary Total",
-                    property: "upper_primary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    {
+                        name: " Higher Secondary Boys",
+                        property: "higher_secondary_male",
+                        class: "text-center"
                     },
-                },
-                {
-                    name: "Secondary Boys",
-                    property: "secondary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Secondary Girls",
-                    property: "secondary_female",
-                    class: "text-center"
-                },
-               
-                {
-                    name: "Secondary Total",
-                    property: "secondary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+                    {
+                        name: " Higher Secondary Girls",
+                        property: "higher_secondary_female",
+                        class: "text-center"
                     },
-                },
-                {
-                    name: " Higher Secondary Boys",
-                    property: "higher_secondary_male",
-                    class: "text-center"
-                },
-                {
-                    name: " Higher Secondary Girls",
-                    property: "higher_secondary_female",
-                    class: "text-center"
-                },
-               
-                {
-                    name: " Higher Secondary Total",
-                    property: "higher_secondary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
+
+                    {
+                        name: " Higher Secondary Total",
+                        property: "higher_secondary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
                     },
-                },
-            ],
-        },
-        "bigNumber": {
-            "valueSuffix": '%',
-            "property": 'perc_teachers'
+                ],
+            },
+            "bigNumber": {
+                "valueSuffix": '%',
+                "property": 'perc_teachers'
+            }
         }
-    }
-},
+    },
 
 
-net_enroll_table: {
-    "label": "Average Student Present",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `
+    net_enroll_table: {
+        "label": "Average Student Present",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `
                 SELECT 
     ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
     ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
@@ -7606,10 +7656,10 @@ FROM
 group by 
 pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
  `
-            },
-            "actions": {
-                "queries": {
-                    "table": `
+                },
+                "actions": {
+                    "queries": {
+                        "table": `
                     SELECT 
     ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
     ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
@@ -7663,17 +7713,17 @@ FROM
 group by 
 pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": `SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                 ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                 ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -7725,10 +7775,10 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
             ) AS sub
             group by 
             pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;`
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
                     ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                     ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                     ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -7781,17 +7831,17 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 group by 
                 pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                 ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                 ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -7844,10 +7894,10 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
             group by 
             pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
                 `
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
                     ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                     ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                     ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -7900,17 +7950,17 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 group by 
                 pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table":`SELECT 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": `SELECT 
                 ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                 ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                 ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -7964,10 +8014,10 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
             pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
             
             `
-            },
-            "actions": {
-                "queries": {
-                    "table": `SELECT 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `SELECT 
                     ROUND((SUM(pri_b)*100/ pri_t_b),0) AS primary_male,
                     ROUND((SUM(pri_g) *100 / pri_t_g),0) AS primary_female,
                     ROUND((SUM(pri_b)+ SUM(pri_g))* 100 / pri_t ,0) AS primary_total,
@@ -8021,287 +8071,287 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hsec_t_g, hsec_t;
                 
                 `,
-                },
-                "level": "school"
-            }
-        },
-        // {
-        //     "name": "School",
-        //     "labelProp": "school_name",
-        //     "valueProp": "school_id",
-        //     "hierarchyLevel": "5",
-        //     "timeSeriesQueries": {
-        //         "table": `SELECT
-        //         sam.district_id,
-        //         d.district_name,
-        //         sam.block_id ,
-        //         b.block_name,
-        //         sam.cluster_id ,
-        //         c.cluster_name,
-        //         sam.school_id,
-        //         sch.school_name,
-        //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //     FROM
-        //        student_attendance.student_attendance_master sam 
-        //      join
-        //     dimensions.district d on sam.district_id = d.district_id 
-        //      JOIN
-        //         dimensions.class cc ON sam.class_id = cc.class_id 
-        //      join
-        //         dimensions.block b on sam.block_id = b.block_id 
-        //      join 
-        //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //      join 
-        //         dimensions.school sch on sam.school_id = sch.school_id 
-        //     where
-        //       sam.date in ( startDate,endDate) 
-        //       and sam.school_id  = {school_id}
-        //     GROUP BY
-        //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
-        //     },
-        //     "actions": {
-        //         "queries": {
-        //             "table":`SELECT
-        //             sam.district_id,
-        //             d.district_name,
-        //             sam.block_id ,
-        //             b.block_name,
-        //             sam.cluster_id ,
-        //             c.cluster_name,
-        //             sam.school_id,
-        //             sch.school_name,
-        //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //         FROM
-        //            student_attendance.student_attendance_master sam 
-        //          join
-        //         dimensions.district d on sam.district_id = d.district_id 
-        //          JOIN
-        //             dimensions.class cc ON sam.class_id = cc.class_id 
-        //          join
-        //             dimensions.block b on sam.block_id = b.block_id 
-        //          join 
-        //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //          join 
-        //             dimensions.school sch on sam.school_id = sch.school_id 
-        //         where
-        //           sam.date in ( startDate,endDate) 
-        //           and sam.school_id  = {school_id}
-        //         GROUP BY
-        //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
-        //         },
-        //         "level": "school"
-        //     }
-        // }
-        
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                // {
-                //     name: "Date",
-                //     property: "ex_date",
-                //     class: "text-left",
-                //     type: "date",
-                // },
-                {
-                    name: "District",
-                    property: "district_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-center"
-                },
-                // {
-                //     name: "UDISE Code",
-                //     property: "udise_code",
-                //     class: "text-left"
-                // },
-                {
-                    name: "SCHOOL Code",
-                    property: "school_id",
-                    class: "text-center"
-                },
-                {
-                    name: "School",
-                    property: "school_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Primary Boys",
-                    property: "primary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Primary Girls",
-                    property: "primary_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Primary Total",
-                    property: "primary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
                     },
-                },
-                {
-                    name: "Upper Primary Boys",
-                    property: "upper_primary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Upper Primary Girls",
-                    property: "upper_primary_female",
-                    class: "text-center"
-                },
-                {
-                    name: " Upper Primary Total",
-                    property: "upper_primary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
-                    },
-                },
-                {
-                    name: "Secondary Boys",
-                    property: "secondary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Secondary Girls",
-                    property: "secondary_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Secondary Total",
-                    property: "secondary_total",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
-                    },
-                },
-                {
-                    name: "Higher Secondary Boys",
-                    property: "hrsecondary_male",
-                    class: "text-center"
-                },
-                {
-                    name: "Higher Secondary Girls",
-                    property: "hrsecondary_female",
-                    class: "text-center"
-                },
-                {
-                    name: "Higher Secondary Total",
-                    property: "hrsecondary_level",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 70
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 40
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: 0
-                            }
-                        ]
-                    },
-                },
-               
-            ],
-        },
-        "searchBar_config": {
-            "title": "School Code",
-            "searchProps": ['school_id'],
-            "searchType": "number"
-        },
-        
-    }
-},
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.district_id,
+            //         d.district_name,
+            //         sam.block_id ,
+            //         b.block_name,
+            //         sam.cluster_id ,
+            //         c.cluster_name,
+            //         sam.school_id,
+            //         sch.school_name,
+            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam 
+            //      join
+            //     dimensions.district d on sam.district_id = d.district_id 
+            //      JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //      join
+            //         dimensions.block b on sam.block_id = b.block_id 
+            //      join 
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //      join 
+            //         dimensions.school sch on sam.school_id = sch.school_id 
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id  = {school_id}
+            //     GROUP BY
+            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.district_id,
+            //             d.district_name,
+            //             sam.block_id ,
+            //             b.block_name,
+            //             sam.cluster_id ,
+            //             c.cluster_name,
+            //             sam.school_id,
+            //             sch.school_name,
+            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam 
+            //          join
+            //         dimensions.district d on sam.district_id = d.district_id 
+            //          JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //          join
+            //             dimensions.block b on sam.block_id = b.block_id 
+            //          join 
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //          join 
+            //             dimensions.school sch on sam.school_id = sch.school_id 
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id  = {school_id}
+            //         GROUP BY
+            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
 
-gender_parity_barchart:{
-    "label": "Overall Summary",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "barChart": `SELECT
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    // {
+                    //     name: "UDISE Code",
+                    //     property: "udise_code",
+                    //     class: "text-left"
+                    // },
+                    {
+                        name: "SCHOOL Code",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Primary Boys",
+                        property: "primary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Primary Girls",
+                        property: "primary_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Primary Total",
+                        property: "primary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Upper Primary Boys",
+                        property: "upper_primary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Upper Primary Girls",
+                        property: "upper_primary_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: " Upper Primary Total",
+                        property: "upper_primary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Secondary Boys",
+                        property: "secondary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Secondary Girls",
+                        property: "secondary_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Secondary Total",
+                        property: "secondary_total",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+                    {
+                        name: "Higher Secondary Boys",
+                        property: "hrsecondary_male",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Higher Secondary Girls",
+                        property: "hrsecondary_female",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Higher Secondary Total",
+                        property: "hrsecondary_level",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 70
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 40
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: 0
+                                }
+                            ]
+                        },
+                    },
+
+                ],
+            },
+            "searchBar_config": {
+                "title": "School Code",
+                "searchProps": ['school_id'],
+                "searchType": "number"
+            },
+
+        }
+    },
+
+    gender_parity_barchart: {
+        "label": "Overall Summary",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
                 levels.level,
                 CASE
                     WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8344,10 +8394,10 @@ gender_parity_barchart:{
                 END;
              
                 `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `SELECT
                     levels.level,
                     CASE
                         WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8390,18 +8440,18 @@ gender_parity_barchart:{
                     END;
                  
                     `
-                
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "barChart": `SELECT
+
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
                 levels.level,
                 CASE
                     WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8443,11 +8493,11 @@ gender_parity_barchart:{
                     WHEN levels.level = 'higher_secondary_level' THEN 4
                 END;
               `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":
-                    `SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "barChart":
+                            `SELECT
                     levels.level,
                     CASE
                         WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8489,17 +8539,17 @@ gender_parity_barchart:{
                         WHEN levels.level = 'higher_secondary_level' THEN 4
                     END;
                  `,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "barChart": `SELECT
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
                 levels.level,
                 CASE
                     WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8541,10 +8591,10 @@ gender_parity_barchart:{
                     WHEN levels.level = 'higher_secondary_level' THEN 4
                 END;
              `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `SELECT
                     levels.level,
                     CASE
                         WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8586,17 +8636,17 @@ gender_parity_barchart:{
                         WHEN levels.level = 'higher_secondary_level' THEN 4
                     END;
                  `
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "barChart": `SELECT
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "barChart": `SELECT
                 levels.level,
                 CASE
                     WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8640,10 +8690,10 @@ gender_parity_barchart:{
              
             
             `,
-            },
-            "actions": {
-                "queries": {
-                    "barChart":`SELECT
+                },
+                "actions": {
+                    "queries": {
+                        "barChart": `SELECT
                     levels.level,
                     CASE
                         WHEN levels.level = 'primary_level' THEN ROUND((SUM(pri_g) / NULLIF(SUM(pri_b), 0)), 2)
@@ -8686,216 +8736,216 @@ gender_parity_barchart:{
                     END;
                  
                 `
-                },
-                "level": "school"
-            }
-        },
+                    },
+                    "level": "school"
+                }
+            },
 
-    ],
-    "options": {
-        "barChart": {
-            "metricLabelProp": "Gender Parity Index(GPI)",
-            "metricValueProp": "gpi",
-            "yAxis": {
-                "title": "Gender Parity Index"
-            },
-            "benchmarkConfig": {
-                "linkedReport": "tas_average_attendance_bignumber"
-            },
-            "xAxis": {
-                "title": "",
-                "label": "level",
-                "value": "level",
-
-            },
-            "tooltipMetrics": [
-                {
-                    "valuePrefix": "District Id: ",
-                    "value": "district_id",
-                    "valueSuffix": ""
+        ],
+        "options": {
+            "barChart": {
+                "metricLabelProp": "Gender Parity Index(GPI)",
+                "metricValueProp": "gpi",
+                "yAxis": {
+                    "title": "Gender Parity Index"
                 },
-                {
-                    "valuePrefix": "District Name: ",
-                    "value": "district_name",
-                    "valueSuffix": "%"
+                "benchmarkConfig": {
+                    "linkedReport": "tas_average_attendance_bignumber"
                 },
-               
-                {
-                    "valuePrefix": "Block Id: ",
-                    "value": "block_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Block Name: ",
-                    "value": "block_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Id: ",
-                    "value": "cluster_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Cluster Name: ",
-                    "value": "cluster_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Id: ",
-                    "value": "school_id",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "level ",
+                "xAxis": {
+                    "title": "",
+                    "label": "level",
                     "value": "level",
-                    "valueSuffix": ""
+
                 },
-                {
-                    "valuePrefix": "No of schools ",
-                    "value": "no_of_schools",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "School Name: ",
-                    "value": "school_name",
-                    "valueSuffix": ""
-                },
-                {
-                    "valuePrefix": "Average Percentage Student: ",
-                    "value": "perc_students",
-                    "valueSuffix": ""
-                },
-                
-                // {
-                //     "valuePrefix": "Average percentage of LO: ",
-                //     "value": "perc_lo",
-                //     "valueSuffix": "%"
-                // },
-            ]
+                "tooltipMetrics": [
+                    {
+                        "valuePrefix": "District Id: ",
+                        "value": "district_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "District Name: ",
+                        "value": "district_name",
+                        "valueSuffix": "%"
+                    },
+
+                    {
+                        "valuePrefix": "Block Id: ",
+                        "value": "block_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Block Name: ",
+                        "value": "block_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Id: ",
+                        "value": "cluster_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Cluster Name: ",
+                        "value": "cluster_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "level ",
+                        "value": "level",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "No of schools ",
+                        "value": "no_of_schools",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": ""
+                    },
+                    {
+                        "valuePrefix": "Average Percentage Student: ",
+                        "value": "perc_students",
+                        "valueSuffix": ""
+                    },
+
+                    // {
+                    //     "valuePrefix": "Average percentage of LO: ",
+                    //     "value": "perc_lo",
+                    //     "valueSuffix": "%"
+                    // },
+                ]
+            }
         }
-    }
-},
+    },
 
-//pat bignumber1
+    //pat bignumber1
 
-// student_attendance_bignumber1: {
-//     "label": "Total Enrolled Students",
-//     "filters": [
-//         {
-//             "name": "State",
-//             "labelProp": "state_name",
-//             "valueProp": "state_id",
-//             "hierarchyLevel": "1",
-//             "timeSeriesQueries": {
-//                 "bigNumber":`SELECT count(sam.attendance_status) AS enrolled_count
-//                 FROM student_attendance.student_attendance_master sam
-//                 WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
-//                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//             },
-//             "actions": {
-//                 "queries": {
-//                     "bigNumber": `SELECT count(sam.attendance_status) AS enrolled_count
-//                     FROM student_attendance.student_attendance_master sam
-//                     WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
-//                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
-//                 },
-//                 "level": "district"
-//             }
-//         }
-        
-//     ],
-//     "options": {
-//         "bigNumber": {
-//             "title": "Total Enrolled Students",
-//             "valueSuffix": '',
-//             "property": 'enrolled_count'
-//         }
-//     }
-// },
+    // student_attendance_bignumber1: {
+    //     "label": "Total Enrolled Students",
+    //     "filters": [
+    //         {
+    //             "name": "State",
+    //             "labelProp": "state_name",
+    //             "valueProp": "state_id",
+    //             "hierarchyLevel": "1",
+    //             "timeSeriesQueries": {
+    //                 "bigNumber":`SELECT count(sam.attendance_status) AS enrolled_count
+    //                 FROM student_attendance.student_attendance_master sam
+    //                 WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
+    //                 // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+    //             },
+    //             "actions": {
+    //                 "queries": {
+    //                     "bigNumber": `SELECT count(sam.attendance_status) AS enrolled_count
+    //                     FROM student_attendance.student_attendance_master sam
+    //                     WHERE date = (SELECT MAX(date) FROM student_attendance.student_attendance_master);`,
+    //                     // "bigNumberComparison": "select round(avg(percentage),2) as percentage from ingestion.sac_stds_avg_atd_by_district as t left join ingestion.dimension_master as m on t.district_id = m.district_id where (date between startDate and endDate) and m.state_id={state_id}"
+    //                 },
+    //                 "level": "district"
+    //             }
+    //         }
 
-//top bignumbers---card display (Ashish)
-staff_students_metrics_card: {
-    "label": "ETB Coverage Status",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "actions": {
-                "queries": {
-                   
-                    "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
+    //     ],
+    //     "options": {
+    //         "bigNumber": {
+    //             "title": "Total Enrolled Students",
+    //             "valueSuffix": '',
+    //             "property": 'enrolled_count'
+    //         }
+    //     }
+    // },
+
+    //top bignumbers---card display (Ashish)
+    staff_students_metrics_card: {
+        "label": "ETB Coverage Status",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+
+                        "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
                     where tp.nature_of_appt = '1' `,
-                    "bigNumber2": `select count(tp.tch_name) as tch_staff_contrct from staff_students.tch_profile tp where tp.nature_of_appt = '2'`,
-                    "bigNumber3": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
-                    "bigNumber4": `select count(tp.tch_name) as tch_staff_total from staff_students.tch_profile tp`,
-                    "bigNumber5": `select 
+                        "bigNumber2": `select count(tp.tch_name) as tch_staff_contrct from staff_students.tch_profile tp where tp.nature_of_appt = '2'`,
+                        "bigNumber3": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
+                        "bigNumber4": `select count(tp.tch_name) as tch_staff_total from staff_students.tch_profile tp`,
+                        "bigNumber5": `select 
                     sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
                     + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total
                     from
                     staff_students.nontch_profile np `
-                },
-                "level": "district"
+                    },
+                    "level": "district"
+                }
+            },
+        ],
+        "options": {
+            "bigNumber": {
+                "title": ['Teaching Staff Regular', 'Teaching Staff Contract', 'Teaching Staff Part Time/Guest', 'Teaching Staff Total', 'Non Teaching Staff Total'],
+                "valueSuffix": ['', '', '', '', '', ''],
+                "property": ['tch_staff_reg', 'tch_staff_contrct', 'tch_staff_parttime', 'tch_staff_total', 'nontch_staff_total']
             }
-        },
-    ],
-    "options": {
-        "bigNumber": {
-            "title": ['Teaching Staff Regular', 'Teaching Staff Contract', 'Teaching Staff Part Time/Guest', 'Teaching Staff Total', 'Non Teaching Staff Total'],
-            "valueSuffix": ['', '', '', '','',''],
-            "property": ['tch_staff_reg', 'tch_staff_contrct','tch_staff_parttime','tch_staff_total','nontch_staff_total']
         }
-    }
-},
-students_metrics_card: {
-    "label": "Students Details",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "actions": {
-                "queries": {
-                   
-                    "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
+    },
+    students_metrics_card: {
+        "label": "Students Details",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "actions": {
+                    "queries": {
+
+                        "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
                     where tp.nature_of_appt = '1' `,
-                    // "bigNumber2": '',
-                    "bigNumber2": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
-                    // "bigNumber4": '',
-                    "bigNumber3": `select 
+                        // "bigNumber2": '',
+                        "bigNumber2": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
+                        // "bigNumber4": '',
+                        "bigNumber3": `select 
                     sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
                     + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total
                     from
                     staff_students.nontch_profile np `
-                },
-                "level": "district"
+                    },
+                    "level": "district"
+                }
+            },
+        ],
+        "options": {
+            "bigNumber": {
+                "title": ['Total CWSN Schools', 'CWSN Enrolments', 'BPL Beneficiaries'],
+                "valueSuffix": ['', '', '', '', '', ''],
+                "property": ['tch_staff_reg', 'tch_staff_parttime', 'nontch_staff_total']
             }
-        },
-    ],
-    "options": {
-        "bigNumber": {
-            "title": ['Total CWSN Schools', 'CWSN Enrolments', 'BPL Beneficiaries'],
-            "valueSuffix": ['', '', '', '','',''],
-            "property": ['tch_staff_reg','tch_staff_parttime','nontch_staff_total']
         }
-    }
-},
-// ********Second tab-- Students Detsils Tab -(Table queries)
+    },
+    // ********Second tab-- Students Detsils Tab -(Table queries)
 
-   //second tab (bpl table--- first table)
-   performance_table: {
-    "label": "Students Details",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `select
+    //second tab (bpl table--- first table)
+    performance_table: {
+        "label": "Students Details",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `select
                 d.district_id,
                 d.district_name,
                 count(case when item_group = '4' then school_id end) as sch_enr,
@@ -8916,10 +8966,10 @@ students_metrics_card: {
                 ay.ac_year = '2022-23'
                 group by 
                 d.district_id , d.district_name;`,
-            },
-            "actions": {
-                "queries": {
-                    "table": `select
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select
                     d.district_id,
                     d.district_name,
                     count(case when item_group = '4' then school_id end) as sch_enr,
@@ -8940,17 +8990,17 @@ students_metrics_card: {
                     ay.ac_year = '2022-23'
                     group by 
                     d.district_id , d.district_name ;`,
-                },
-                "level": "district"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": `select
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `select
                 b.block_name,
                 count(case when item_group = '4' then school_id end) as sch_enr,
                 sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -8973,10 +9023,10 @@ students_metrics_card: {
                 group by 
                 sef.block_id , b.block_name 
                ;`,
-            },
-            "actions": {
-                "queries": {
-                    "table": `select
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select
                     b.block_name,
                     count(case when item_group = '4' then school_id end) as sch_enr,
                     sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -8998,17 +9048,17 @@ students_metrics_card: {
                     ay.ac_year = '2022-23' and sef.district_id = '600'
                     group by 
                     sef.block_id , b.block_name;`,
-                },
-                "level": "block"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `select
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `select
                 c.cluster_name,
                 count(case when item_group = '4' then school_id end) as sch_enr,
                 sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -9033,10 +9083,10 @@ students_metrics_card: {
                 group by 
                 sef.cluster_id , c.cluster_name ;
                `,
-            },
-            "actions": {
-                "queries": {
-                    "table": `select
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select
                     c.cluster_name,
                     count(case when item_group = '4' then school_id end) as sch_enr,
                     sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -9061,17 +9111,17 @@ students_metrics_card: {
                     group by 
                     sef.cluster_id , c.cluster_name ;
                   `,
-                },
-                "level": "cluster"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table": `select
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": `select
                 sch.school_name,
                 count(case when item_group = '4' then sef.school_id end) as sch_enr,
                 sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -9097,10 +9147,10 @@ students_metrics_card: {
                 ay.ac_year = '2022-23' and sef.cluster_id = '3401010001'
                 group by 
                 sef.school_id , sch.school_name ;`
-            },
-            "actions": {
-                "queries": {
-                    "table": `select
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select
                     sch.school_name,
                     count(case when item_group = '4' then sef.school_id end) as sch_enr,
                     sum(case when item_group = '4' then pp3_b+pp2_b+pp1_b+c1_b+c2_b+c3_b+c4_b+c5_b+c6_b+c7_b+c8_b+
@@ -9126,166 +9176,170 @@ students_metrics_card: {
                     ay.ac_year = '2022-23' and sef.cluster_id = '3401010001'
                     group by 
                     sef.school_id , sch.school_name ;`,
-                },
-                "level": "school"
-            }
-        },
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                {
-                    name: "State",
-                    property: "state_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "state_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "state_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 1,
-                            linkedReports: ["gradewise_table" ]
-                        },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "District",
-                    property: "district_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "district_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "district_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 2,
-                            linkedReports: ["gradewise_table" ]                       },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "block_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "block_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 3,
-                            linkedReports: ["gradewise_table" ]                         },
-                        allowedLevels: [1, 2, 3]
-                    }
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "cluster_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "cluster_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 4,
-                            linkedReports: ["gradewise_table" ] },
-                        allowedLevels: [1, 2, 3]
-
-                    }
-                },
-                {
-                    name: "School",
-                    property: "school_name",
-                    class: "text-left",
-                    action: {
-                        dataProps: [{
-                            "prop": "school_id",
-                            "alias": "id"
-                        }, {
-                            "prop": "school_name"
-                        }],
-                        extraInfo: {
-                            hierarchyLevel: 5,
-                            linkedReports: ["gradewise_table" ] },
-                        allowedLevels: [1, 2, 3]
-
-                    }
-                },
-               
-               
-                {
-                    name: "School with BPL Beneficiary Enrolments",
-                    property: "sch_enr",
-                    class: "text-center"
-                },
-                {
-                    name: "BPL Beneficiary Boys",
-                    property: "benf_boys",
-                    class: "text-center"
-                },
-                {
-                    name: "BPL Beneficiary Girls",
-                    property: "bpl_benf_g",
-                    class: "text-center"
-                },
-               
-               
-                {
-                    name: "Total",
-                    property: "tot_bpl_benef",
-                    class: "text-center",
-                    valueSuffix: '',
-                    isHeatMapRequired: true,
-                    type: "number",
-                    color: {
-                        type: "percentage",
-                        values: [
-                            {
-                                color: "#007000",
-                                breakPoint: 50
-                            },
-                            {
-                                color: "#FFBF00",
-                                breakPoint: 1
-                            },
-                            {
-                                color: "#D2222D",
-                                breakPoint: -10000
-                            }
-                        ]
                     },
+                    "level": "school"
                 }
-            ],
-        },
-        "bigNumber": {
-            "valueSuffix": '%',
-            "property": 'perc_teachers'
+            },
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    {
+                        name: "State",
+                        property: "state_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "state_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "state_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 1,
+                                linkedReports: ["gradewise_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "District",
+                        property: "district_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "district_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "district_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 2,
+                                linkedReports: ["gradewise_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "block_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "block_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 3,
+                                linkedReports: ["gradewise_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+                        }
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "cluster_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "cluster_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 4,
+                                linkedReports: ["gradewise_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+                    {
+                        name: "School",
+                        property: "school_name",
+                        class: "text-left",
+                        action: {
+                            dataProps: [{
+                                "prop": "school_id",
+                                "alias": "id"
+                            }, {
+                                "prop": "school_name"
+                            }],
+                            extraInfo: {
+                                hierarchyLevel: 5,
+                                linkedReports: ["gradewise_table"]
+                            },
+                            allowedLevels: [1, 2, 3]
+
+                        }
+                    },
+
+
+                    {
+                        name: "School with BPL Beneficiary Enrolments",
+                        property: "sch_enr",
+                        class: "text-center"
+                    },
+                    {
+                        name: "BPL Beneficiary Boys",
+                        property: "benf_boys",
+                        class: "text-center"
+                    },
+                    {
+                        name: "BPL Beneficiary Girls",
+                        property: "bpl_benf_g",
+                        class: "text-center"
+                    },
+
+
+                    {
+                        name: "Total",
+                        property: "tot_bpl_benef",
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: -10000
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            "bigNumber": {
+                "valueSuffix": '%',
+                "property": 'perc_teachers'
+            }
         }
-    }
-},
-// second tab (school table)
-gradewise_table: {
-    "label": "Average Student Present",
-    "defaultLevel": "state",
-    "filters": [
-        {
-            "name": "State",
-            "labelProp": "state_name",
-            "valueProp": "state_id",
-            "hierarchyLevel": "1",
-            "timeSeriesQueries": {
-                "table": `
+    },
+    // second tab (school table)
+    gradewise_table: {
+        "label": "Average Student Present",
+        "defaultLevel": "state",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "table": `
                 select 
                 school_name,
                 blindness,
@@ -9399,10 +9453,10 @@ gradewise_table: {
                 thalassemia,
                 heamophila,
                 parkinsons_disease; `
-            },
-            "actions": {
-                "queries": {
-                    "table": `select school_name,
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select school_name,
                     blindness,
                     low_vision,
                     hearing_impairment,
@@ -9514,17 +9568,17 @@ gradewise_table: {
                     thalassemia,
                     heamophila,
                     parkinsons_disease;`,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "District",
-            "labelProp": "district_name",
-            "valueProp": "district_id",
-            "hierarchyLevel": "2",
-            "timeSeriesQueries": {
-                "table": `select 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "table": `select 
                 school_name,
                 blindness,
                 low_vision,
@@ -9639,10 +9693,10 @@ gradewise_table: {
                 thalassemia,
                 heamophila,
                 parkinsons_disease;`
-            },
-            "actions": {
-                "queries": {
-                    "table": `select 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
                     school_name,
                     blindness,
                     low_vision,
@@ -9758,17 +9812,17 @@ gradewise_table: {
                     heamophila,
                     parkinsons_disease;
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Block",
-            "labelProp": "block_name",
-            "valueProp": "block_id",
-            "hierarchyLevel": "3",
-            "timeSeriesQueries": {
-                "table": `select 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "table": `select 
                 school_name,
                 blindness,
                 low_vision,
@@ -9887,10 +9941,10 @@ gradewise_table: {
                 parkinsons_disease;
             
                 `
-            },
-            "actions": {
-                "queries": {
-                    "table": `select 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
                     school_name,
                     blindness,
                     low_vision,
@@ -10009,17 +10063,17 @@ gradewise_table: {
                     parkinsons_disease;
                 
 `,
-                },
-                "level": "school"
-            }
-        },
-        {
-            "name": "Cluster",
-            "labelProp": "cluster_name",
-            "valueProp": "cluster_id",
-            "hierarchyLevel": "4",
-            "timeSeriesQueries": {
-                "table":`select 
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "table": `select 
                 school_name,
                 blindness,
                 low_vision,
@@ -10136,10 +10190,10 @@ gradewise_table: {
                 heamophila,
                 parkinsons_disease;
             `
-            },
-            "actions": {
-                "queries": {
-                    "table": `select 
+                },
+                "actions": {
+                    "queries": {
+                        "table": `select 
                     school_name,
                     blindness,
                     low_vision,
@@ -10256,166 +10310,166 @@ gradewise_table: {
                     heamophila,
                     parkinsons_disease;
                 `,
-                },
-                "level": "school"
-            }
-        },
-        // {
-        //     "name": "School",
-        //     "labelProp": "school_name",
-        //     "valueProp": "school_id",
-        //     "hierarchyLevel": "5",
-        //     "timeSeriesQueries": {
-        //         "table": `SELECT
-        //         sam.district_id,
-        //         d.district_name,
-        //         sam.block_id ,
-        //         b.block_name,
-        //         sam.cluster_id ,
-        //         c.cluster_name,
-        //         sam.school_id,
-        //         sch.school_name,
-        //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //     FROM
-        //        student_attendance.student_attendance_master sam 
-        //      join
-        //     dimensions.district d on sam.district_id = d.district_id 
-        //      JOIN
-        //         dimensions.class cc ON sam.class_id = cc.class_id 
-        //      join
-        //         dimensions.block b on sam.block_id = b.block_id 
-        //      join 
-        //         dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //      join 
-        //         dimensions.school sch on sam.school_id = sch.school_id 
-        //     where
-        //       sam.date in ( startDate,endDate) 
-        //       and sam.school_id  = {school_id}
-        //     GROUP BY
-        //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
-        //     },
-        //     "actions": {
-        //         "queries": {
-        //             "table":`SELECT
-        //             sam.district_id,
-        //             d.district_name,
-        //             sam.block_id ,
-        //             b.block_name,
-        //             sam.cluster_id ,
-        //             c.cluster_name,
-        //             sam.school_id,
-        //             sch.school_name,
-        //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
-        //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
-        //         FROM
-        //            student_attendance.student_attendance_master sam 
-        //          join
-        //         dimensions.district d on sam.district_id = d.district_id 
-        //          JOIN
-        //             dimensions.class cc ON sam.class_id = cc.class_id 
-        //          join
-        //             dimensions.block b on sam.block_id = b.block_id 
-        //          join 
-        //             dimensions.cluster c on sam.cluster_id = c.cluster_id
-        //          join 
-        //             dimensions.school sch on sam.school_id = sch.school_id 
-        //         where
-        //           sam.date in ( startDate,endDate) 
-        //           and sam.school_id  = {school_id}
-        //         GROUP BY
-        //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
-        //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
-        //         },
-        //         "level": "school"
-        //     }
-        // }
-        
-    ],
-    "options": {
-        "table": {
-            "columns": [
-                // {
-                //     name: "Date",
-                //     property: "ex_date",
-                //     class: "text-left",
-                //     type: "date",
-                // },
-                {
-                    name: "School UDISE",
-                    property: "school_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Block",
-                    property: "block_name",
-                    class: "text-center"
-                },
-                {
-                    name: "Cluster",
-                    property: "cluster_name",
-                    class: "text-center"
-                },
-                {
-                    name: "School ID",
-                    property: "school_id",
-                    class: "text-center"
-                },
-                {
-                    name: "Blindness",
-                    property: "blindness",
-                    class: "text-center"
-                },
-               
-                
-                {
-                    name: "Low Vision",
-                    property: "low_vision",
-                    class: "text-center"
-                    
-                },
-                {
-                    name: "Hearing Impairment",
-                    property: "hearing_impairment",
-                    class: "text-center"
-                },
-                {
-                    name: "Speech & Language",
-                    property: "speech_and_language",
-                    class: "text-center"
-                },
-                {
-                    name: "Locomotor Disability",
-                    property: "locomotor_disability",
-                    class: "text-center"
-                },
-               
-                {
-                    name: "Mental Illness",
-                    property: "mental_illness",
-                    class: "text-center"
-                },
-                   
-                {
-                    name: "Total",
-                    property: "total",
-                    class: "text-center"
-                },
-               
-              
-                
-            ],
-        },
-        "searchBar_config": {
-            "title": "School Code",
-            "searchProps": ['school_id'],
-            "searchType": "number"
-        },
-        
-    }
-},
+                    },
+                    "level": "school"
+                }
+            },
+            // {
+            //     "name": "School",
+            //     "labelProp": "school_name",
+            //     "valueProp": "school_id",
+            //     "hierarchyLevel": "5",
+            //     "timeSeriesQueries": {
+            //         "table": `SELECT
+            //         sam.district_id,
+            //         d.district_name,
+            //         sam.block_id ,
+            //         b.block_name,
+            //         sam.cluster_id ,
+            //         c.cluster_name,
+            //         sam.school_id,
+            //         sch.school_name,
+            //         SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //         SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //     FROM
+            //        student_attendance.student_attendance_master sam 
+            //      join
+            //     dimensions.district d on sam.district_id = d.district_id 
+            //      JOIN
+            //         dimensions.class cc ON sam.class_id = cc.class_id 
+            //      join
+            //         dimensions.block b on sam.block_id = b.block_id 
+            //      join 
+            //         dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //      join 
+            //         dimensions.school sch on sam.school_id = sch.school_id 
+            //     where
+            //       sam.date in ( startDate,endDate) 
+            //       and sam.school_id  = {school_id}
+            //     GROUP BY
+            //         sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //         sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name `,
+            //     },
+            //     "actions": {
+            //         "queries": {
+            //             "table":`SELECT
+            //             sam.district_id,
+            //             d.district_name,
+            //             sam.block_id ,
+            //             b.block_name,
+            //             sam.cluster_id ,
+            //             c.cluster_name,
+            //             sam.school_id,
+            //             sch.school_name,
+            //             SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS date1_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) AS date2_count,
+            //             SUM(CASE WHEN sam.date = endDate THEN sam.attendance_status END) - SUM(CASE WHEN sam.date = startDate THEN sam.attendance_status END) AS student_count_change
+            //         FROM
+            //            student_attendance.student_attendance_master sam 
+            //          join
+            //         dimensions.district d on sam.district_id = d.district_id 
+            //          JOIN
+            //             dimensions.class cc ON sam.class_id = cc.class_id 
+            //          join
+            //             dimensions.block b on sam.block_id = b.block_id 
+            //          join 
+            //             dimensions.cluster c on sam.cluster_id = c.cluster_id
+            //          join 
+            //             dimensions.school sch on sam.school_id = sch.school_id 
+            //         where
+            //           sam.date in ( startDate,endDate) 
+            //           and sam.school_id  = {school_id}
+            //         GROUP BY
+            //             sam.district_id, d.district_name, sam.block_id , b.block_name ,
+            //             sam.cluster_id, c.cluster_name , sam.school_id , sch.school_name`,
+            //         },
+            //         "level": "school"
+            //     }
+            // }
+
+        ],
+        "options": {
+            "table": {
+                "columns": [
+                    // {
+                    //     name: "Date",
+                    //     property: "ex_date",
+                    //     class: "text-left",
+                    //     type: "date",
+                    // },
+                    {
+                        name: "School UDISE",
+                        property: "school_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Block",
+                        property: "block_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cluster",
+                        property: "cluster_name",
+                        class: "text-center"
+                    },
+                    {
+                        name: "School ID",
+                        property: "school_id",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Blindness",
+                        property: "blindness",
+                        class: "text-center"
+                    },
+
+
+                    {
+                        name: "Low Vision",
+                        property: "low_vision",
+                        class: "text-center"
+
+                    },
+                    {
+                        name: "Hearing Impairment",
+                        property: "hearing_impairment",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Speech & Language",
+                        property: "speech_and_language",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Locomotor Disability",
+                        property: "locomotor_disability",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: "Mental Illness",
+                        property: "mental_illness",
+                        class: "text-center"
+                    },
+
+                    {
+                        name: "Total",
+                        property: "total",
+                        class: "text-center"
+                    },
+
+
+
+                ],
+            },
+            "searchBar_config": {
+                "title": "School Code",
+                "searchProps": ['school_id'],
+                "searchType": "number"
+            },
+
+        }
+    },
 
 }
