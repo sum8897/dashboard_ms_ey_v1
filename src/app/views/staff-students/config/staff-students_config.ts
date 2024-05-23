@@ -3599,13 +3599,13 @@ school_name`,
                         dimensions.district d ON tp.district_id = d.district_id 
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                    WHERE
+                     WHERE
                      tp.ac_year = '2022-23'
                     group by d.district_name,cl.class_level, cl.class_taught) as sub
                     group by 
                     class_level, class_taught
                     order by 
-                    class_taught;
+                    class_taught
                     `,
                 },
                 "actions": {
@@ -3646,76 +3646,63 @@ school_name`,
                 "valueProp": "district_id",
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    category_name as level,
-                    SUM(no_of_schools) AS total_schools
-                FROM (
-                    SELECT 
-                        b.block_name,
-                        scr.category_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id  = b.block_id 
-                    LEFT JOIN 
-                        dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.district_id = {district_id}
-                    GROUP BY 
-                        b.block_name, scr.category_name
-                ) AS subquery
-                GROUP BY 
-                    category_name
-                    ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;`,
+                    "barChart": `select 
+                    class_level as class_level,
+                    sum(no_of_teachers) as no_of_teachers
+                    from (
+                    select 
+                    b.block_name,
+                    cl.class_level  ,
+                    cl.class_taught ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                     d.district_id = {district_id}
+                    group by b.block_name,cl.class_level, cl.class_taught) as sub
+                    group by 
+                    class_level, class_taught
+                    order by 
+                    class_taught`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":
-                        ` SELECT 
-                        category_name as level,
-                        SUM(no_of_schools) AS total_schools
-                    FROM (
-                        SELECT 
-                            b.block_name,
-                            scr.category_name,
-                            COUNT(DISTINCT sd.school_id) AS no_of_schools
-                        FROM 
-                            school_general.schooldetails sd
-                        LEFT JOIN
-                            dimensions.district d ON sd.district_id = d.district_id 
-                        LEFT JOIN
-                            dimensions.block b ON sd.block_id  = b.block_id 
-                        LEFT JOIN 
-                            dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                        LEFT JOIN 
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                        WHERE 
-                              sd.district_id = {district_id}
-                        GROUP BY 
-                            b.block_name, scr.category_name
-                    ) AS subquery
-                    GROUP BY 
-                        category_name
-                        ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;`,
+                        `select 
+                        class_level as class_level,
+                        sum(no_of_teachers) as no_of_teachers
+                        from (
+                        select 
+                        b.block_name,
+                        cl.class_level  ,
+                        cl.class_taught ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN 
+                            dimensions.block b ON tp.block_id = b.block_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                         d.district_id = '598'
+                        group by b.block_name,cl.class_level, cl.class_taught) as sub
+                        group by 
+                        class_level, class_taught
+                        order by 
+                        class_taught`,
                     },
                     "level": "block"
                 }
@@ -3726,79 +3713,65 @@ school_name`,
                 "valueProp": "block_id",
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    category_name as level,
-                    SUM(no_of_schools) AS total_schools
-                FROM (
-                    SELECT 
-                        c.cluster_name,
-                        scr.category_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id  = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN 
-                        dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.block_id = {block_id}
-                    GROUP BY 
-                        c.cluster_name, scr.category_name
-                ) AS subquery
-                GROUP BY 
-                    category_name
-                    ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;`,
+                    "barChart": `select 
+                    class_level as class_level,
+                    sum(no_of_teachers) as no_of_teachers
+                    from (
+                    select 
+                    c.cluster_name,
+                    cl.class_level  ,
+                    cl.class_taught ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                      b.block_id = {block_id}
+                    group by c.cluster_name,cl.class_level, cl.class_taught) as sub
+                    group by 
+                    class_level, class_taught
+                    order by 
+                    class_taught`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
-                        category_name as level,
-                        SUM(no_of_schools) AS total_schools
-                    FROM (
-                        SELECT 
-                            c.cluster_name,
-                            scr.category_name,
-                            COUNT(DISTINCT sd.school_id) AS no_of_schools
-                        FROM 
-                            school_general.schooldetails sd
-                        LEFT JOIN
-                            dimensions.district d ON sd.district_id = d.district_id 
-                        LEFT JOIN
-                            dimensions.block b ON sd.block_id  = b.block_id 
-                        LEFT JOIN
-                            dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                        LEFT JOIN 
-                            dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                        LEFT JOIN 
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                        WHERE 
-                              sd.block_id = {block_id}
-                        GROUP BY 
-                            c.cluster_name, scr.category_name
-                    ) AS subquery
-                    GROUP BY 
-                        category_name
-                        ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;`
+                        "barChart":`select 
+                        class_level as class_level,
+                        sum(no_of_teachers) as no_of_teachers
+                        from (
+                        select 
+                        c.cluster_name,
+                        cl.class_level  ,
+                        cl.class_taught ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN 
+                            dimensions.block b ON tp.block_id = b.block_id 
+                        JOIN 
+                            dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                          b.block_id = {block_id}
+                        group by c.cluster_name,cl.class_level, cl.class_taught) as sub
+                        group by 
+                        class_level, class_taught
+                        order by 
+                        class_taught`
                     },
                     "level": "cluster"
                 }
@@ -3809,86 +3782,69 @@ school_name`,
                 "valueProp": "cluster_id",
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
-                    "barChart": `SELECT 
-                    category_name as level,
-                    SUM(no_of_schools) AS total_schools
-                FROM (
-                    SELECT 
-                        sch.school_name,
-                        scr.category_name,
-                        COUNT(DISTINCT sd.school_id) AS no_of_schools
-                    FROM 
-                        school_general.schooldetails sd
-                    LEFT JOIN
-                        dimensions.district d ON sd.district_id = d.district_id 
-                    LEFT JOIN
-                        dimensions.block b ON sd.block_id  = b.block_id 
-                    LEFT JOIN
-                        dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                    LEFT JOIN
-                        dimensions.school sch ON sd.cluster_id = sch.school_id  
-                    LEFT JOIN 
-                        dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                    LEFT JOIN 
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                    WHERE 
-                          sd.cluster_id = {cluster_id}
-                    GROUP BY 
-                        sch.school_name, scr.category_name
-                ) AS subquery
-                GROUP BY 
-                    category_name
-                    ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;
-                `,
+                    "barChart": `select 
+                    class_level as class_level,
+                    sum(no_of_teachers) as no_of_teachers
+                    from (
+                    select 
+                    sch.school_name,
+                    cl.class_level  ,
+                    cl.class_taught ,
+                    COUNT(tp.tch_name) AS no_of_teachers
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN 
+                        dimensions.school sch ON tp.school_id = sch.school_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     c.cluster_id = {cluster_id}
+                    group by sch.school_name,cl.class_level, cl.class_taught) as sub
+                    group by 
+                    class_level, class_taught
+                    order by 
+                    class_taught`,
                 },
                 "actions": {
                     "queries": {
-                        "barChart":`SELECT 
-                        category_name as level,
-                        SUM(no_of_schools) AS total_schools
-                    FROM (
-                        SELECT 
-                            sch.school_name,
-                            scr.category_name,
-                            COUNT(DISTINCT sd.school_id) AS no_of_schools
-                        FROM 
-                            school_general.schooldetails sd
-                        LEFT JOIN
-                            dimensions.district d ON sd.district_id = d.district_id 
-                        LEFT JOIN
-                            dimensions.block b ON sd.block_id  = b.block_id 
-                        LEFT JOIN
-                            dimensions.cluster c ON sd.cluster_id = c.cluster_id 
-                        LEFT JOIN
-                            dimensions.school sch ON sd.cluster_id = sch.school_id  
-                        LEFT JOIN 
-                            dimensions.school_category_relation scr ON sd.sch_category_id = scr.category_id 
-                        LEFT JOIN 
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year
-                        WHERE 
-                              sd.cluster_id = {cluster_id}
-                        GROUP BY 
-                            sch.school_name, scr.category_name
-                    ) AS subquery
-                    GROUP BY 
-                        category_name
-                        ORDER BY 
-    CASE 
-        WHEN category_name = 'Primary School' THEN 1 
-        WHEN category_name = 'Upper Primary School' THEN 2 
-        WHEN category_name = 'Secondary School' THEN 3 
-        WHEN category_name = 'Higher Secondary School' THEN 4 
-        ELSE 5 
-    END;
-                    
-                    `
+                        "barChart":`select 
+                        class_level as class_level,
+                        sum(no_of_teachers) as no_of_teachers
+                        from (
+                        select 
+                        sch.school_name,
+                        cl.class_level  ,
+                        cl.class_taught ,
+                        COUNT(tp.tch_name) AS no_of_teachers
+                        from
+                        staff_students.tch_profile tp 
+                        join
+                        dimensions.class_level cl on tp.class_taught  = cl.class_taught  
+                        JOIN 
+                            dimensions.district d ON tp.district_id = d.district_id 
+                        JOIN 
+                            dimensions.block b ON tp.block_id = b.block_id 
+                        JOIN 
+                            dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                        JOIN 
+                            dimensions.school sch ON tp.school_id = sch.school_id 
+                        JOIN
+                            dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                        WHERE
+                         c.cluster_id = {cluster_id}
+                        group by sch.school_name,cl.class_level, cl.class_taught) as sub
+                        group by 
+                        class_level, class_taught
+                        order by 
+                        class_taught`
                     },
                     "level": "school"
                 }
@@ -3900,7 +3856,7 @@ school_name`,
                 "metricLabelProp": "Teachers Engagement by Education Level",
                 "metricValueProp": "no_of_teachers",
                 "yAxis": {
-                    "title": " Number Of Teachers"
+                    "title": "Number Of Teachers"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
@@ -5314,84 +5270,73 @@ enrollment_barchart:{
             "valueProp": "district_id",
             "hierarchyLevel": "2",
             "timeSeriesQueries": {
-                "barChart": `select
-                block_name as level,
-                SUM(pri_students) AS primary_school,
-                SUM(upr_students) AS upper_primary,
-                SUM(sec_students) AS secondary_school,
-                SUM(hsec_students) AS higher_secondary_school,
-                SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-            FROM (
-                select
-                b.block_name,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                ELSE 0 END) AS pri_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                    ELSE 0 END) as upr_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                    ELSE 0 END) as sec_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                    ELSE 0 END) as hsec_students
-                    FROM
-                    school_general.sch_enr_fresh sef
-                 left join
-                     dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                 left join 
-                     dimensions.district d on sef.district_id = d.district_id 
-                 left join 
-                     dimensions.block b on sef.block_id = b.block_id
-                     where 
-                sef.district_id = {district_id}
-                GROUP BY
-                    sef.school_id, b.block_name
-            ) AS subquery
-            group by 
-            block_name `,
+                "barChart": `select 
+                category as level,
+                sum(male) as male,
+                sum(female) as female,
+                sum(transgender) as transgender
+                from (
+                select 
+                sc.category ,
+                sc.social_cat,
+                COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                from
+                staff_students.tch_profile tp 
+                join
+                dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                join 
+                dimensions.gender g on tp.gender = g.gender 
+                JOIN 
+                    dimensions.district d ON tp.district_id = d.district_id 
+                JOIN 
+                    dimensions.block b ON tp.block_id = b.block_id 
+                JOIN
+                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                WHERE
+                 tp.ac_year = '2022-23' AND
+                 d.district_id = {district_id}
+                group by b.block_name,sc.category, sc.social_cat) as sub
+                group by 
+                category, social_cat
+                order by 
+                social_cat`,
             },
             "actions": {
                 "queries": {
-                    "barChart":
-                    `select
-                    block_name as level,
-                    SUM(pri_students) AS primary_school,
-                    SUM(upr_students) AS upper_primary,
-                    SUM(sec_students) AS secondary_school,
-                    SUM(hsec_students) AS higher_secondary_school,
-                    SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-                FROM (
-                    select
-                    b.block_name,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                    ELSE 0 END) AS pri_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                        ELSE 0 END) as upr_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                        ELSE 0 END) as sec_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                        ELSE 0 END) as hsec_students
-                        FROM
-                        school_general.sch_enr_fresh sef
-                     left join
-                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                     left join 
-                         dimensions.district d on sef.district_id = d.district_id 
-                     left join 
-                         dimensions.block b on sef.block_id = b.block_id
-                         where 
-                    sef.district_id = {district_id}
-                    GROUP BY
-                        sef.school_id, b.block_name
-                ) AS subquery
-                group by 
-                block_name`,
+                    "barChart":`select 
+                    category,
+                    sum(male) as male,
+                    sum(female) as female,
+                    sum(transgender) as transgender
+                    from (
+                    select 
+                    sc.category ,
+                    sc.social_cat,
+                    COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                    COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                    COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                    join 
+                    dimensions.gender g on tp.gender = g.gender 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                     d.district_id = {district_id}
+                    group by b.block_name,sc.category, sc.social_cat) as sub
+                    group by 
+                    category, social_cat
+                    order by 
+                    social_cat`,
                 },
                 "level": "block"
             }
@@ -5402,87 +5347,77 @@ enrollment_barchart:{
             "valueProp": "block_id",
             "hierarchyLevel": "3",
             "timeSeriesQueries": {
-                "barChart": `select
-                cluster_name as level,
-               SUM(pri_students) AS primary_school,
-                SUM(upr_students) AS upper_primary,
-                SUM(sec_students) AS secondary_school,
-                SUM(hsec_students) AS higher_secondary_school,
-               SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-            FROM (
-                select
-                c.cluster_name,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                ELSE 0 END) AS pri_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                    ELSE 0 END) as upr_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                    ELSE 0 END) as sec_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                    ELSE 0 END) as hsec_students
-                FROM
-                    school_general.sch_enr_fresh sef
-                 left join
-                     dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                 left join 
-                     dimensions.district d on sef.district_id = d.district_id 
-                 left join 
-                     dimensions.block b on sef.block_id = b.block_id
-                 left join 
-                     dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                     where 
-                       sef.block_id = {block_id}
-                GROUP BY
-                    sef.school_id, c.cluster_name
-            ) AS subquery
-            group by 
-            cluster_name`,
+                "barChart": `select 
+                category as level,
+                sum(male) as male,
+                sum(female) as female,
+                sum(transgender) as transgender
+                from (
+                select 
+                sc.category ,
+                sc.social_cat,
+                COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                from
+                staff_students.tch_profile tp 
+                join
+                dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                join 
+                dimensions.gender g on tp.gender = g.gender 
+                JOIN 
+                    dimensions.district d ON tp.district_id = d.district_id 
+                JOIN 
+                    dimensions.block b ON tp.block_id = b.block_id 
+                JOIN 
+                    dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                JOIN
+                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                WHERE
+                 tp.ac_year = '2022-23' AND
+                  b.block_id = {block_id}
+                group by c.cluster_name,sc.category, sc.social_cat) as sub
+                group by 
+                category, social_cat
+                order by 
+                social_cat`,
             },
             "actions": {
                 "queries": {
-                    "barChart":`select
-                    cluster_name as level,
-                   SUM(pri_students) AS primary_school,
-                    SUM(upr_students) AS upper_primary,
-                    SUM(sec_students) AS secondary_school,
-                    SUM(hsec_students) AS higher_secondary_school,
-                   SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-                FROM (
-                    select
-                    c.cluster_name,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                    ELSE 0 END) AS pri_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                        ELSE 0 END) as upr_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                        ELSE 0 END) as sec_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                        ELSE 0 END) as hsec_students
-                    FROM
-                        school_general.sch_enr_fresh sef
-                     left join
-                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                     left join 
-                         dimensions.district d on sef.district_id = d.district_id 
-                     left join 
-                         dimensions.block b on sef.block_id = b.block_id
-                     left join 
-                         dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                         where 
-                           sef.block_id = {block_id}
-                    GROUP BY
-                        sef.school_id, c.cluster_name
-                ) AS subquery
-                group by 
-                cluster_name`
+                    "barChart":`select 
+                    category as level,
+                    sum(male) as male,
+                    sum(female) as female,
+                    sum(transgender) as transgender
+                    from (
+                    select 
+                    sc.category ,
+                    sc.social_cat,
+                    COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                    COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                    COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                    join 
+                    dimensions.gender g on tp.gender = g.gender 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                      b.block_id = {block_id}
+                    group by c.cluster_name,sc.category, sc.social_cat) as sub
+                    group by 
+                    category, social_cat
+                    order by 
+                    social_cat`
                 },
                 "level": "cluster"
             }
@@ -5493,95 +5428,81 @@ enrollment_barchart:{
             "valueProp": "cluster_id",
             "hierarchyLevel": "4",
             "timeSeriesQueries": {
-                "barChart": `select
-                school_name as level,
-                SUM(pri_students) AS primary_school,
-                SUM(upr_students) AS upper_primary,
-                SUM(sec_students) AS secondary_school,
-                SUM(hsec_students) AS higher_secondary_school,
-                SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-            FROM (
-                select
-                    sch.school_name ,
-                   SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                ELSE 0 END) AS pri_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                    ELSE 0 END) as upr_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                    ELSE 0 END) as sec_students,
-                    SUM(CASE WHEN sef.item_group = '1' THEN
-                sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                    ELSE 0 END) as hsec_students
-                FROM
-                    school_general.sch_enr_fresh sef
-                 left join
-                     dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                 left join 
-                     dimensions.district d on sef.district_id = d.district_id 
-                 left join 
-                     dimensions.block b on sef.block_id = b.block_id
-                 left join 
-                     dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                 left join 
-                     dimensions.school sch on sef.school_id = sch.school_id 
-                     where 
-                      sef.cluster_id  = {cluster_id}
-                GROUP BY
-                    sef.school_id, sch.school_name 
-            ) AS subquery
-            group by 
-            school_name 
-            
-            `,
+                "barChart": `select 
+                category as level,
+                sum(male) as male,
+                sum(female) as female,
+                sum(transgender) as transgender
+                from (
+                select 
+                sc.category ,
+                sc.social_cat,
+                COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                from
+                staff_students.tch_profile tp 
+                join
+                dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                join 
+                dimensions.gender g on tp.gender = g.gender 
+                JOIN 
+                    dimensions.district d ON tp.district_id = d.district_id 
+                JOIN 
+                    dimensions.block b ON tp.block_id = b.block_id 
+                JOIN 
+                    dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                JOIN 
+                    dimensions.school sch ON tp.school_id = sch.school_id 
+                JOIN
+                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                WHERE
+                 tp.ac_year = '2022-23' AND
+                 c.cluster_id = {cluster_id}
+                group by sch.school_name,sc.category, sc.social_cat) as sub
+                group by 
+                category, social_cat
+                order by 
+                social_cat`,
             },
             "actions": {
                 "queries": {
-                    "barChart":`select
-                    school_name as level,
-                    SUM(pri_students) AS primary_school,
-                    SUM(upr_students) AS upper_primary,
-                    SUM(sec_students) AS secondary_school,
-                    SUM(hsec_students) AS higher_secondary_school,
-                    SUM(pri_students)+SUM(upr_students)+SUM(sec_students)+ SUM(hsec_students) as total
-                FROM (
-                    select
-                        sch.school_name ,
-                       SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g
-                    ELSE 0 END) AS pri_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g
-                        ELSE 0 END) as upr_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g
-                        ELSE 0 END) as sec_students,
-                        SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                        ELSE 0 END) as hsec_students
-                    FROM
-                        school_general.sch_enr_fresh sef
-                     left join
-                         dimensions.academic_year ay on sef.ac_year = ay.ac_year
-                     left join 
-                         dimensions.district d on sef.district_id = d.district_id 
-                     left join 
-                         dimensions.block b on sef.block_id = b.block_id
-                     left join 
-                         dimensions.cluster c on sef.cluster_id = c.cluster_id 
-                     left join 
-                         dimensions.school sch on sef.school_id = sch.school_id 
-                         where 
-                          sef.cluster_id  = {cluster_id}
-                    GROUP BY
-                        sef.school_id, sch.school_name 
-                ) AS subquery
-                group by 
-                school_name
-                
-                `
+                    "barChart":`select 
+                    category as level,
+                    sum(male) as male,
+                    sum(female) as female,
+                    sum(transgender) as transgender
+                    from (
+                    select 
+                    sc.category ,
+                    sc.social_cat,
+                    COUNT(case when tp.gender= '1' then tp.tch_name end) AS male,
+                    COUNT(case when tp.gender= '2' then tp.tch_name end) AS female,
+                    COUNT(case when tp.gender= '3' then tp.tch_name end) AS transgender
+                    from
+                    staff_students.tch_profile tp 
+                    join
+                    dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+                    join 
+                    dimensions.gender g on tp.gender = g.gender 
+                    JOIN 
+                        dimensions.district d ON tp.district_id = d.district_id 
+                    JOIN 
+                        dimensions.block b ON tp.block_id = b.block_id 
+                    JOIN 
+                        dimensions.cluster c ON tp.cluster_id = c.cluster_id 
+                    JOIN 
+                        dimensions.school sch ON tp.school_id = sch.school_id 
+                    JOIN
+                        dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    WHERE
+                     tp.ac_year = '2022-23' AND
+                     c.cluster_id = {cluster_id}
+                    group by sch.school_name,sc.category, sc.social_cat) as sub
+                    group by 
+                    category, social_cat
+                    order by 
+                    social_cat`
                 },
                 "level": "school"
             }
