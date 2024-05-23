@@ -26,7 +26,7 @@ export class TeacherByGenderAndSocialCategoryComponent implements OnInit {
   marginTop: any;
   config;
   data;
-  fileName: string = "Enrollment by Education Level";
+  fileName: string = "Teachers by Gender and Social Category";
   reportName: string = 'enrollment_barchart';
   filters: any = [];
   levels: any;

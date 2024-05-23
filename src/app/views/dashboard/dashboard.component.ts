@@ -153,7 +153,8 @@ export class DashboardComponent implements OnInit {
     this._commonService.getDashboardMetrics().subscribe(async (menuResult: any) => {
       this.dashboardMenu = [];
       let rbacDetails;
-      let menuData = menuResult?.data
+      let menuData = menuResult?.data;
+      console.log(menuData);
       for (let i = 0; i < menuData?.length; i++) {
         if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
 

@@ -2240,14 +2240,14 @@ school_name`,
                     },
                     {
                         name: "Post Graduate",
-                        property: "sec_ptr",
+                        property: "post_graduate",
                         class: "text-center"
                     },
-                    // {
-                    //     name: "Mphil",
-                    //     property: "mphil",
-                    //     class: "text-center"
-                    // },
+                    {
+                        name: "Mphil",
+                        property: "mphil",
+                        class: "text-center"
+                    },
                     {
                         name: "Phd",
                         property: "ph_d",
@@ -2819,14 +2819,14 @@ school_name`,
                     },
                     {
                         name: "Post Graduate",
-                        property: "sec_ptr",
+                        property: "post_graduate",
                         class: "text-center"
                     },
-                    // {
-                    //     name: "Mphil",
-                    //     property: "mphil",
-                    //     class: "text-center"
-                    // },
+                    {
+                        name: "Mphil",
+                        property: "mphil",
+                        class: "text-center"
+                    },
                     {
                         name: "Phd",
                         property: "ph_d",
@@ -3532,7 +3532,7 @@ school_name`,
                 "metricLabelProp": "Teachers By Appointment",
                 "metricValueProp": "no_of_teachers",
                 "yAxis": {
-                    "title": "Number of Schools"
+                    "title": "Number of Teachers"
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
@@ -5560,13 +5560,13 @@ school_name`,
                 "metricLabelProp": "Male",
                 "metricValueProp": "male",
                 "yAxis": {
-                    "title": "Social Category Gender"
+                    "title": ""
                 },
                 "benchmarkConfig": {
                     "linkedReport": "tas_average_attendance_bignumber"
                 },
                 "xAxis": {
-                    "title": "",
+                    "title": "Social Category Gender",
                     "label": "level",
                     "value": "level",
 
@@ -8909,16 +8909,21 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 "actions": {
                     "queries": {
 
-                        "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
-                    where tp.nature_of_appt = '1' `,
+                        "bigNumber1": `select count(school_id) as total_cwsn_schools from staff_students.schoolmaster s where cwsn_sch_yn = '1'`,
                         // "bigNumber2": '',
-                        "bigNumber2": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
+                        "bigNumber2": `select 
+                        sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+                        c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+                        c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as tot_enrolments
+                        from 
+                        staff_students.sch_enr_cwsn sec`,
                         // "bigNumber4": '',
                         "bigNumber3": `select 
-                    sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
-                    + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total
-                    from
-                    staff_students.nontch_profile np `
+                        sum(case when item_group = '4' then pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+                        c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+                        c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t else 0 end ) as bpl_benef
+                        from 
+                        staff_students.sch_enr_fresh`
                     },
                     "level": "district"
                 }
@@ -8926,9 +8931,9 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
         ],
         "options": {
             "bigNumber": {
-                "title": ['Total CWSN Schools', 'CWSN Enrolments', 'BPL Beneficiaries'],
+                "title": ['Total CWSN Schools', 'CWSN Enrolments', 'Total BPL Beneficiaries'],
                 "valueSuffix": ['', '', '', '', '', ''],
-                "property": ['tch_staff_reg', 'tch_staff_parttime', 'nontch_staff_total']
+                "property": ['total_cwsn_schools', 'tot_enrolments', 'bpl_benef']
             }
         }
     },
@@ -9339,8 +9344,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 "valueProp": "state_id",
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
-                    "table": `
-                select 
+                    "table": `select 
                 school_name,
                 blindness,
                 low_vision,
