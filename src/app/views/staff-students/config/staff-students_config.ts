@@ -75,7 +75,81 @@ export const config = {
 
 
 
+    student_attendance_bignumber1: {
+        "label": "Total Enrolled Students",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber":`select
+                    sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
+                    + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as total_nonteaching_staff
+                    from
+                    staff_students.nontch_profile np`,
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select
+                        sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
+                        + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as total_nonteaching_staff
+                        from
+                        staff_students.nontch_profile np`,
+                    },
+                    "level": "district"
+                }
+            }
+            
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Total Non Teaching Staff",
+                "valueSuffix": '',
+                "property": 'total_nonteaching_staff'
+            }
+        }
+    },
 
+    student_attendance_bignumber2: {
+        "label": "Total Enrolled Students",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber":`select
+                    sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+                    c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+                    c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as total_cwsn_students
+                    from
+                    staff_students.sch_enr_cwsn sec`,
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select
+                        sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+                        c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+                        c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as total_cwsn_students
+                        from
+                        staff_students.sch_enr_cwsn sec`,
+                    },
+                    "level": "district"
+                }
+            }
+            
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Total CWSN Students",
+                "valueSuffix": '',
+                "property": 'total_cwsn_students'
+            }
+        }
+    },
 
 
 
@@ -10456,12 +10530,97 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                         property: "mental_illness",
                         class: "text-center"
                     },
+                    {
+                        name: "Learning Disability",
+                        property: "learning_disability",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Cerebral Palsy",
+                        property: "cerebral_palsy",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Autism Spectrum Disorder",
+                        property: "autism_spectrum_disorder",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Multiple Disability",
+                        property: "multiple_disability",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Leprosy Cured Students",
+                        property: "leprosy_cured_students",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Dwarfism",
+                        property: "dwarfism",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Intellectual Disability",
+                        property: "intellectual_disability",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Muscular Dystrophy",
+                        property: "muscular_dystrophy",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Chromic Neuro",
+                        property: "chromic_neuro",
+                        class: "text-center"
+                    },
+                    {
+                        name: "thalassemia",
+                        property: "Thalassemia",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Heamophila",
+                        property: "heamophila",
+                        class: "text-center"
+                    },
+                    {
+                        name: "Parkinsons Disease",
+                        property: "parkinsons_disease",
+                        class: "text-center"
+                    },
 
+                    // {
+                    //     name: "Total",
+                    //     property: "total",
+                    //     class: "text-center"
+                    // },
                     {
                         name: "Total",
                         property: "total",
-                        class: "text-center"
-                    },
+                        class: "text-center",
+                        valueSuffix: '',
+                        isHeatMapRequired: true,
+                        type: "number",
+                        color: {
+                            type: "percentage",
+                            values: [
+                                {
+                                    color: "#007000",
+                                    breakPoint: 50
+                                },
+                                {
+                                    color: "#FFBF00",
+                                    breakPoint: 1
+                                },
+                                {
+                                    color: "#D2222D",
+                                    breakPoint: -10000
+                                }
+                            ]
+                        },
+                    }
 
 
 
