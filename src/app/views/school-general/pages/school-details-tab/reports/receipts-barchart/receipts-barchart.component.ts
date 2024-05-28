@@ -117,7 +117,7 @@ export class ReceiptsBarchartComponent implements OnInit, OnDestroy {
   }
 
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
-
+    this.tableReportData='';
     
     let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
     if (filterValues === undefined) {

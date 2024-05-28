@@ -160,7 +160,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct school_id) as total
                     from
-                    school_general.schooldetails sd 
+                    school_general.keyindicators sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -178,7 +178,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct school_id) as total
                         from
-                        school_general.schooldetails sd 
+                        school_general.keyindicators sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -203,7 +203,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.schooldetails sd 
+                    school_general.keyindicators sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -224,7 +224,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.schooldetails sd 
+                        school_general.keyindicators sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -252,7 +252,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.schooldetails sd 
+                    school_general.keyindicators sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -275,7 +275,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.schooldetails sd 
+                        school_general.keyindicators sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -305,7 +305,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.schooldetails sd 
+                    school_general.keyindicators sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -333,7 +333,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.schooldetails sd 
+                        school_general.keyindicators sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -1730,7 +1730,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.schooldetails sd
+                    school_general.keyindicators sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN 
@@ -1755,7 +1755,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN 
@@ -1788,7 +1788,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.schooldetails sd
+                    school_general.keyindicators sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1817,7 +1817,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -1852,7 +1852,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.schooldetails sd
+                    school_general.keyindicators sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1882,7 +1882,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -1919,7 +1919,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.schooldetails sd
+                    school_general.keyindicators sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1953,7 +1953,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2065,7 +2065,7 @@ group by sub.district_name`,
         }
     },
     category_barchart:{
-        "label": "Overall Summary",
+        "label": "School Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -2084,7 +2084,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN 
@@ -2118,7 +2118,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.schooldetails sd
+                            school_general.keyindicators sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN 
@@ -2160,7 +2160,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2197,7 +2197,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.schooldetails sd
+                            school_general.keyindicators sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
@@ -2240,7 +2240,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2278,7 +2278,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.schooldetails sd
+                            school_general.keyindicators sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
@@ -2323,7 +2323,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.schooldetails sd
+                        school_general.keyindicators sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2364,7 +2364,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.schooldetails sd
+                            school_general.keyindicators sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
