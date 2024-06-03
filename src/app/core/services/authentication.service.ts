@@ -25,6 +25,9 @@ export class AuthenticationService {
     return this._http.post(`${environment.apiURL}/login`, inputData)
   }
 
+  calling(inputData: any) {
+    return this._http.post(`${environment.apiURLOnly}/ClickToCall`, inputData)
+  }
   refreshToken(refreshToken: any) {
     return this._http.post(`${environment.apiURL}/refresh_token`, {refresh_token: refreshToken}).pipe(map((res: any) => {
       localStorage.setItem('token', res.access_token)

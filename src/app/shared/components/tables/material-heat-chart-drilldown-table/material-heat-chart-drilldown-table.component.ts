@@ -21,7 +21,10 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
 
   @Input() title: any;
   @Input() tableData: any;
+  @Input() showCallButton: boolean; // Add this line
+  @Input() showDownloadButton: boolean; // Add this line
   @Output() drillDownFilter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() drillDownCallingFilter: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(MatTable) table!: MatTable<any>;
   @ViewChild(MatSort) sort!: MatSort;
@@ -89,6 +92,9 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
         });
         //this.columnProperties = [...['id'], ...this.tableData.columns.map((column: any) => column.property)];
         this.columnProperties = this.tableData.columns.map((column: any) => column.property);
+        if(this.showCallButton){
+          this.columnProperties.push('callButton');
+        }
         this.matSortActive = this.tableData.sortByProperty;
         this.matSortDirection = this.tableData.sortDirection;
       });
@@ -119,5 +125,14 @@ export class MaterialHeatChartDrilldownTableComponent implements OnInit, OnChang
 
       this._reportDrilldownService.emit(data);
     }
+  }
+  onCallButtonClick(element: any) {
+    console.log('Call button clicked for element:', element);
+    // Add your call handling logic here
+    this.drillDownCallingFilter.emit(element);
+  }
+  onDownloadButtonClick(element: any) {
+    console.log('Download button clicked for element:', element);
+    this.drillDownFilter.emit(element);
   }
 }

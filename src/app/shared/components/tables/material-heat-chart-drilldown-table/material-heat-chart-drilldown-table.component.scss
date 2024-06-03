@@ -61,3 +61,30 @@ $light-grey: #eee;
     }
 
 }
+.download-icon{
+    width: 25px;
+    height: 23px;
+    margin-top: 5px;
+    color: black !important;
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.table-title {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.download-link {
+    text-transform: capitalize;
+    text-decoration: underline;
+    padding-right: 10px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--cQ-secondary);
+}

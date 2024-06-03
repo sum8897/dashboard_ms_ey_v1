@@ -4,7 +4,7 @@ import { CommonService } from './common/common.service';
 import * as _ from 'lodash';
 import { WrapperService } from './wrapper.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import Swal from 'sweetalert2'; 
 @Injectable({
   providedIn: 'root'
 })
@@ -946,5 +946,22 @@ stackBar(data: any, config: any, param: string) {
 
     return "";
   }
+successMessage(title: any){
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: title,
+    showConfirmButton: false,
+    timer: 1500
+  });
+}
+errorMessage(msg){
+  Swal.fire({
+    position: "center",
+    icon: "error",
+    title: "Oops...",
+    text: msg,
+  });
+}
 
 }

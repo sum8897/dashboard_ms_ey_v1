@@ -1,13 +1,14 @@
 <!-- <p>hello</p> -->
 <div class="chart-wrapper">
-	<div
-		class="xs:col-span-full text-center py-2"
-		*ngIf="tableReportData?.data?.length > 0"
-	>
-		<app-material-heat-chart-drilldown-table
-			[tableData]="tableReportData"
-			[title]="title"
-		></app-material-heat-chart-drilldown-table>
+	<div class="xs:col-span-full text-center py-2" *ngIf="tableReportData?.data?.length > 0">
+		<app-material-heat-chart-drilldown-table 
+		    [tableData]="tableReportData" [title]="title"
+			[showCallButton]="showCallButton" 
+			[showDownloadButton]="showDownloadButton"
+			(drillDownFilter)="handleDrillDownFilter($event)"
+			(drillDownCallingFilter)="handleCallingFilter($event)">
+
+		</app-material-heat-chart-drilldown-table>
 	</div>
 </div>
 <div class="noData" *ngIf="tableReportData?.data?.length <= 0">

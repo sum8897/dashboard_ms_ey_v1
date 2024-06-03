@@ -10,6 +10,9 @@ import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/r
 import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { startCase } from 'lodash';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 @Component({
   selector: 'app-student-average-table',
   templateUrl: './student-average-table.component.html',
@@ -22,6 +25,8 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
   tableReportData: any;
   backUpData: any = [];
   criteriaApplied: boolean = false;
+  showCallButton = false;
+  showDownloadButton = true;
   bigNumberReportData: any = {
     reportName: "Average Student Present"
   };
@@ -35,13 +40,13 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;
-  filterValues:any;
-  filterneed:any;
-  metricFilter:any;
+  filterValues: any;
+  filterneed: any;
+  metricFilter: any;
   selectedYear: any;
   selectedMonth: any;
   config: any;
-
+  downloadedFileName: any = '';
 
 
   @Output() bigNumberReport = new EventEmitter<any>();
@@ -59,6 +64,8 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
     private readonly _criteriaService: CriteriaService,
     private spinner: NgxSpinnerService,
     private readonly _dataService: DataService,
+    private readonly _authenticationService: AuthenticationService
+    
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -91,11 +98,23 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
         this._criteriaService.emit('reset')
         this.criteriaApplied = false;
 
-        let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
+        let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails, this.filterValues, this.metricFilter, this.filterneed)
         this.drillDownDetails = result?.drillDownDetails
         this.tableReportData = result?.reportData
         if (this.tableReportData?.data?.length > 0) {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+          console.log(this.tableReportData?.data[0])
+          const schoolNameKey = Object.keys(this.tableReportData?.data[0]).find(key => key === "school_name");
+             this.downloadedFileName=schoolNameKey;
+          console.log(schoolNameKey);
+          if (schoolNameKey == 'school_name') {
+            // this.showDownloadButton = true;
+            this.showCallButton = true;
+          }
+          else {
+            // this.showDownloadButton = false;
+            this.showCallButton = false;
+          }
           this.csv.csvDownload(reportsData)
         }
       }
@@ -116,7 +135,7 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
     // this.getReportData();
   }
 
- 
+
   //   this.startDate = startDate;
   //   this.endDate = endDate;
   //   this._criteriaService.emit('reset')
@@ -177,10 +196,10 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
   // }
 
   //function for filters
-  async getReportData(values: any,startDate: any, endDate : any): Promise<void> {
+  async getReportData(values: any, startDate: any, endDate: any): Promise<void> {
 
-    
-    let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed:[] };
+
+    let { filterValues, timeSeriesValues, filterneed } = values ?? { filterValues: [], timeSeriesValues: [], filterneed: [] };
     if (filterValues === undefined) {
       filterValues = []
     }
@@ -190,14 +209,14 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
     this.filterValues = [...filterValues].filter((filter: any) => {
       return filter.filterType !== 'metric'
     })
-    this.filterneed=filterneed;
-    console.log('lo-wise filterneed',this.filterneed)
+    this.filterneed = filterneed;
+    console.log('lo-wise filterneed', this.filterneed)
     // console.log("reportData:",this.drillDownDetails)
-     if (this.drillDownDetails !== undefined) {
-      let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], startDate, endDate, this.drillDownDetails, this.filterValues,this.metricFilter,this.filterneed)
+    if (this.drillDownDetails !== undefined) {
+      let result: any = await this._reportDrilldownService.drilldown({ hierarchyLevel: this.drillDownLevel }, this.rbacDetails, config[this.reportName], startDate, endDate, this.drillDownDetails, this.filterValues, this.metricFilter, this.filterneed)
       this.drillDownDetails = result?.drillDownDetails
       this.tableReportData = result?.reportData
-      
+
     }
     else {
       // console.log("hello click===================", this.drillDownDetails)
@@ -206,7 +225,7 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
       if (filterValues === undefined) {
         filterValues = []
       }
-    
+
       // this.filterValues = filterValues
       this.startDate = startDate;
       this.endDate = endDate;
@@ -235,9 +254,9 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
           let days = endDate.getDate() - this.compareDateRange;
           let startDate = new Date();
           startDate.setDate(days)
-          
+
           onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
-          console.log('237',this.startDate,this.endDate)
+          console.log('237', this.startDate, this.endDate)
         }
         else if (this.startDate !== undefined && this.endDate !== undefined) {
           onLoadQuery = parseTimeSeriesQuery(queries[key], this.startDate, this.endDate)
@@ -249,14 +268,14 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
         let metricFilter = [...filterValues].filter((filter: any) => {
           return filter.filterType === 'metric'
         })
-       
+
 
         this.filterValues.forEach((filterParams: any) => {
           query = parseFilterToQuery(query, filterParams)
         });
-        console.log(key,filterneed)
+        console.log(key, filterneed)
         console.log(query)
-        if (query && key === 'table'&& filterneed) {
+        if (query && key === 'table' && filterneed) {
           this.tableReportData = await this._dataService.getTableReportData(query, options);
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
@@ -278,10 +297,10 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
             this.exportReportData.emit(reportsData)
           }
         }
-        
+
         else if (query && key === 'map' && filterneed) {
           this.tableReportData = await this._dataService.getMapReportData(query, options, metricFilter)
-          
+
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'map', reportName: this.title }
             // console.log("report_dat:",reportsData,query)
@@ -295,10 +314,10 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
         //     this.exportReportData.emit(reportsData)
         //   }
         // }
-        
+
       })
     }
-    }
+  }
 
 
   parseRbacFilter(query: string) {
@@ -347,6 +366,179 @@ export class StudentAverageTableComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  handleCallingFilter(data: any) {
+    const calling_data={
+      "agent_name":"Agent18@axom.com",
+      "dialed_number":"07290925354",
+      "Type":"ClickToCall",
+      "data":{
+       "First_Name":"Pankaj",
+       "Last_Name":"Tiwari",
+       "Personal_Mail":"pankaj.tiwari@sansoftwares.com",
+       "Call_to":"Teacher",
+       "District":"BARPETA",
+       "Block":"BAJALI",
+       "Cluster":"ANANDAPUR",
+       "School_Name":"AGCHIA LPS",
+       "Ticket_Type":"Query",
+       "Topic":"Staff Attendance",
+       "KPI":"Teacher Absent",
+       "Gist_of_discussion":"On authorized leave",
+       "Ticket_Status":"Closed"
+    }
+  }
+    this.spinner.show();
+    this._authenticationService.calling(calling_data).subscribe((res: any) => {
+      this.spinner.hide();
+      this._dataService.successMessage('Call dialed successfully...');
+    },
+      err => {
+        this.spinner.hide();
+        this._dataService.errorMessage('Something went wrong!, Please try after sometimes...')
+      })
+  }
+
+  handleDrillDownFilter(data: any) {
+    console.log(data);
+    console.log(this.tableReportData?.data);
+    // this.downloadDataAsCSV(data);
+    this.downloadDataAsPDF(this.tableReportData?.data);
+    this.getFirstKeyValue(this.tableReportData?.data);
+
+    // if (this.tableReportData?.data?.length > 0) {
+    //   let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+    //   console.log(reportsData);
+
+    // }
+  }
+  getFirstKeyValue(obj: { [key: string]: { value: any } }): any {
+    this.downloadedFileName = '';
+    const keys = Object.keys(obj);
+    if (keys.length > 0) {
+      const firstKey = keys[0];
+      // this.downloadedFileName = obj[firstKey].value;
+      return obj[firstKey].value;
+    }
+    return null; // or throw an error, or handle it as needed
+  }
+  downloadDataAsCSV(data: any) {
+    const csvData = this.convertToCSV(data);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('style', 'display: none');
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = 'data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
+
+  convertToCSV(data: any): string {
+    // Convert data to an array if it's not already
+    const array = Array.isArray(data) ? data : [data];
+    let str = '';
+    let row = '';
+
+    // Get headers
+    const headers = Object.keys(array[0]);
+    row = headers.join(',') + '\r\n';
+    str += row;
+
+    // Get data rows
+    for (let i = 0; i < array.length; i++) {
+      let line = '';
+      for (let key of headers) {
+        if (line !== '') line += ',';
+        line += array[i][key]?.value || '';  // Access nested value
+      }
+      str += line + '\r\n';
+    }
+    return str;
+  }
+  downloadDataAsPDF(data: any) {
+    const array = Array.isArray(data) ? data : [data];
+    let tableContent = '<table><thead><tr>';
+
+    // Get headers
+    const headers = Object.keys(array[0]);
+    headers.forEach(header => {
+      tableContent += `<th>${header}</th>`;
+    });
+    tableContent += '</tr></thead><tbody>';
+
+    // Get data rows
+    array.forEach(item => {
+      tableContent += '<tr>';
+      headers.forEach(header => {
+        tableContent += `<td>${item[header]?.value || ''}</td>`;
+      });
+      tableContent += '</tr>';
+    });
+
+    tableContent += '</tbody></table>';
+
+    const content = `
+      <html>
+        <head>
+          <style>
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid black;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+          </style>
+        </head>
+        <body>
+          ${tableContent}
+        </body>
+      </html>
+    `;
+
+    this.createPDF(content);
+  }
+
+  createPDF(content: string) {
+    console.log(content);
+    const div = document.createElement('div');
+    div.style.position = 'absolute';
+    div.style.left = '-9999px';
+    div.innerHTML = content;
+    document.body.appendChild(div);
+
+    html2canvas(div).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(this.title + this.downloadedFileName + '.pdf');
+      document.body.removeChild(div);
+    });
+  }
   ngOnDestroy(): void {
     this.drillDownSubscription.unsubscribe()
   }

@@ -586,6 +586,7 @@ GROUP BY
                     "table": `SELECT 
                     ts.district_id,
                     d.district_name,
+                    ts.rank,
                     SUM(ts.attendance_status) AS present_students,
                     COUNT(ts.attendance_status) AS total_students,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -598,13 +599,14 @@ GROUP BY
                 WHERE
                     ts.date BETWEEN startDate AND endDate 
                 GROUP BY
-                    ts.district_id, d.district_name;`,
+                    ts.district_id, ts.rank, d.district_name;`,
                 },
                 "actions": {
                     "queries": {
                         "table": `SELECT 
                         ts.district_id,
                         d.district_name,
+                        ts.rank,
                         SUM(ts.attendance_status) AS present_students,
                         COUNT(ts.attendance_status) AS total_students,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -617,7 +619,7 @@ GROUP BY
                     WHERE
                         ts.date BETWEEN startDate AND endDate 
                     GROUP BY
-                        ts.district_id, d.district_name;`,
+                        ts.district_id, ts.rank, d.district_name;`,
                     },
                     "level": "district"
                 }
@@ -632,7 +634,7 @@ GROUP BY
                     ts.block_id,
                     b.block_name,
                     b.district_id,
-                   
+                    ts.rank,
                     SUM(ts.attendance_status) AS present_students,
                     COUNT(ts.attendance_status) AS total_students,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -647,7 +649,7 @@ GROUP BY
                 WHERE
                     ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                 GROUP BY
-                    ts.block_id,
+                    ts.block_id, ts.rank,
                     b.block_name,b.district_id;`,
                 },
                 "actions": {
@@ -656,7 +658,7 @@ GROUP BY
                         ts.block_id,
                         b.block_name,
                         b.district_id,
-                       
+                        ts.rank,
                         SUM(ts.attendance_status) AS present_students,
                         COUNT(ts.attendance_status) AS total_students,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -671,7 +673,7 @@ GROUP BY
                     WHERE
                         ts.date BETWEEN startDate AND endDate AND b.district_id = {district_id}
                     GROUP BY
-                        ts.block_id,
+                        ts.block_id, ts.rank,
                         b.block_name,b.district_id;`,
                     },
                     "level": "block"
@@ -687,9 +689,8 @@ GROUP BY
                     ts.cluster_id,
                     c.cluster_name,
                     c.block_id,
-                    
                     b.district_id,
-                   
+                    ts.rank,
                     SUM(ts.attendance_status) AS present_students,
                     COUNT(ts.attendance_status) AS total_students,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -707,6 +708,7 @@ GROUP BY
                     ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                 GROUP BY
                     ts.cluster_id,
+                    ts.rank,
                     c.cluster_name,
                     c.block_id,
                     b.district_id;`,
@@ -716,10 +718,9 @@ GROUP BY
                         "table": `SELECT
                         ts.cluster_id,
                         c.cluster_name,
-                        c.block_id,
-                        
+                        c.block_id,                     
                         b.district_id,
-                       
+                        ts.rank,
                         SUM(ts.attendance_status) AS present_students,
                         COUNT(ts.attendance_status) AS total_students,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -737,6 +738,7 @@ GROUP BY
                         ts.date BETWEEN startDate AND endDate  AND c.block_id = {block_id}
                     GROUP BY
                         ts.cluster_id,
+                        ts.rank,
                         c.cluster_name,
                         c.block_id,
                         b.district_id;`,
@@ -754,11 +756,9 @@ GROUP BY
                     ts.school_id,
                     sch.school_name,
                     sch.cluster_id,
-                    
                     c.block_id,
-                    
-                    b.district_id,
-                    
+                    ts.rank,
+                    b.district_id,              
                     SUM(ts.attendance_status) AS present_students,
                     COUNT(ts.attendance_status) AS total_students,
                     ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -780,7 +780,7 @@ GROUP BY
                    ts.school_id,
                     sch.school_name,
                     sch.cluster_id,
-                    
+                    ts.rank,                   
                     c.block_id,
                     b.district_id;
                 
@@ -791,12 +791,10 @@ GROUP BY
                         "table": `SELECT
                         ts.school_id,
                         sch.school_name,
-                        sch.cluster_id,
-                        
+                        sch.cluster_id,                 
                         c.block_id,
-                        
-                        b.district_id,
-                        
+                        ts.rank,
+                        b.district_id,                  
                         SUM(ts.attendance_status) AS present_students,
                         COUNT(ts.attendance_status) AS total_students,
                         ROUND(SUM(ts.attendance_status) * 100.0 / COUNT(ts.attendance_status), 2) AS perc_students
@@ -818,11 +816,9 @@ GROUP BY
                        ts.school_id,
                         sch.school_name,
                         sch.cluster_id,
-                        
+                        ts.rank,
                         c.block_id,
-                        b.district_id;
-                    
-                        `,
+                        b.district_id;`,
                     },
                     "level": "school"
                 }
@@ -925,7 +921,7 @@ GROUP BY
                         name: "Grade",
                         property: "grade_number",
                         class: "text-center"
-                    },
+                    },                   
                     {
                         name: "% Average Present",
                         property: "perc_students",
@@ -950,7 +946,12 @@ GROUP BY
                                 }
                             ]
                         },
-                    }
+                    },
+                    {
+                        name: "Gunotsav Rank",
+                        property: "rank",
+                        class: "text-center"
+                    },
                 ],
             },
             "bigNumber": {

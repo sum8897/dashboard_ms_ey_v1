@@ -10,6 +10,7 @@ export const environment = {
   // apiURL: 'https://cqubedemo.gpsdemo.live/api/queryBuilder',
   // apiURL: 'https://vsk-py.in/api/queryBuilder',
   apiURL: 'https://vsk-ssa.assam.gov.in/api/queryBuilder',
+  apiURLOnly:'https://sanccssl.sansoftwares.com/crm/caller/Api',
   stateCode: "AS",
   numberFormat: {
     reports: {
