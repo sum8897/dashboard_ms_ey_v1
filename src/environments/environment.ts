@@ -2,21 +2,26 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {  
+export const environment = {
   production: false,
   // apiURL: 'https://qr.staging.cqube.samagra.io',
-  apiURL: 'http://localhost:3008',
+  // apiURL: 'http://localhost:3008',
   // apiURL: 'http://192.168.1.159:3008',
-  stateCode: "NA",
+  // apiURL: 'https://cqubedemo.gpsdemo.live/api/queryBuilder',
+  // apiURL: 'https://vsk-py.in/api/queryBuilder',
+  apiURL: 'https://vsk-ssa.assam.gov.in/api/queryBuilder',
+  apiURLOnly:'https://sanccssl.sansoftwares.com/crm/caller/Api', 
+  
+  stateCode: "AS",
   numberFormat: {
     reports: {
       locale: 'en-IN',
       format: 'short'
     }
   },
-  config: "NVSK",
+  config: "VSK",
   loginNeeded: true,
-  guestUsername: "guest-user",
+  guestUsername: "guest",
   guestPassword: "guest"
 };
 
