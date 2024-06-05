@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, 
     private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
-      console.log(localStorage.getItem('user_check'));
-      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('user_check')==null || localStorage.getItem('user_check')=='' || localStorage.getItem('user_check')==undefined)){
+      console.log(localStorage.getItem('access_user'));
+      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('user_check')==null || localStorage.getItem('user_check')=='' || localStorage.getItem('user_check')==undefined) && (localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==null)){
         console.log(localStorage.getItem('token'));
         console.log(localStorage.getItem('access_user'));
         // this.router.navigate(['/summary-statistics']);
