@@ -33,10 +33,10 @@ routes = [
         canActivate: [AuthGuard]
       },
       
-      {
-        path: 'home', component: HomePageComponent,
-        canActivate: [AuthGuard]
-      },
+      // {
+      //   path: 'home', component: HomePageComponent,
+      //   canActivate: [AuthGuard]
+      // },
       {
         path: 'summary-statistics',
         loadChildren: () =>

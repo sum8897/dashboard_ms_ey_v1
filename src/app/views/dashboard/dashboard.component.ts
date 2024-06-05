@@ -30,10 +30,11 @@ export class DashboardComponent implements OnInit {
      private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService,
      private _rbacService: RbacService,private router: Router,
      private readonly _authenticationService: AuthenticationService) {
-     
-      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined)){
+      console.log(localStorage.getItem('token'));
+      console.log(localStorage.getItem('access_user'));
+      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='public_user' || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined)){
         console.log(localStorage.getItem('token'));
-        console.log(localStorage.getItem('access_user'));
+        // alert(localStorage.getItem('access_user'));
         let role= {
           id:"state",
           imageUrl: "state.png",
