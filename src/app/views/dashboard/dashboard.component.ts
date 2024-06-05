@@ -86,6 +86,7 @@ export class DashboardComponent implements OnInit {
     // alert(localStorage.getItem('login_access')=='login_public'); 
     if (cardInfo) {
       if((cardInfo.title=='UDISE School Infrastructure' || cardInfo.title=='School General' || cardInfo.title=='PAS' || cardInfo.title=='Staff and Students') && (localStorage.getItem('login_access')=='login_public')){
+        localStorage.setItem('user_check','private_user');
         this.router.navigate(['/login']);
       }else{
         this._router.navigate([cardInfo.navigationURL.trim()]);
