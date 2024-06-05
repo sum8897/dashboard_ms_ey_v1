@@ -10,6 +10,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { startCase } from 'lodash';
 import { config } from 'src/app/views/teacher-attendance/config/teacher_attendance_config';
 import { TeacherSummaryTabComponent } from '../../teacher-summary-tab.component';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-teacher-average-table',
   templateUrl: './teacher-average-table.component.html',
@@ -41,7 +44,9 @@ export class TeacherAverageTableComponent implements OnInit, OnDestroy {
   selectedYear: any;
   selectedMonth: any;
   config: any;
-
+  downloadedFileName: any = '';
+  showCallButton = false;
+  showDownloadButton = true;
 
 
   @Output() bigNumberReport = new EventEmitter<any>();
@@ -59,6 +64,7 @@ export class TeacherAverageTableComponent implements OnInit, OnDestroy {
     private readonly _criteriaService: CriteriaService,
     private spinner: NgxSpinnerService,
     private readonly _dataService: DataService,
+    private readonly _authenticationService: AuthenticationService
   ) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
       this.rbacDetails = rbacDetails;
@@ -96,6 +102,18 @@ export class TeacherAverageTableComponent implements OnInit, OnDestroy {
         this.tableReportData = result?.reportData
         if (this.tableReportData?.data?.length > 0) {
           let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+          console.log(this.tableReportData?.data[0])
+          const schoolNameKey = Object.keys(this.tableReportData?.data[0]).find(key => key === "school_name");
+             this.downloadedFileName=schoolNameKey;
+          console.log(schoolNameKey);
+          if (schoolNameKey == 'school_name') {
+            // this.showDownloadButton = true;
+            this.showCallButton = true;
+          }
+          else {
+            // this.showDownloadButton = false;
+            this.showCallButton = false;
+          }
           this.csv.csvDownload(reportsData)
         }
       }
@@ -284,6 +302,7 @@ export class TeacherAverageTableComponent implements OnInit, OnDestroy {
           
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'map', reportName: this.title }
+
             // console.log("report_dat:",reportsData,query)
             this.exportReportData.emit(reportsData)
           }
@@ -344,6 +363,147 @@ export class TeacherAverageTableComponent implements OnInit, OnDestroy {
         let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
         this.csv.csvDownload(reportsData)
       }
+    });
+  }
+
+  handleDrillDownFilter(data: any) {
+    console.log(data);
+    console.log(this.tableReportData?.data);
+    // this.downloadDataAsCSV(data);
+    this.downloadDataAsPDF(this.tableReportData?.data);
+    this.getFirstKeyValue(this.tableReportData?.data);
+
+    // if (this.tableReportData?.data?.length > 0) {
+    //   let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+    //   console.log(reportsData);
+
+    // }
+  }
+  getFirstKeyValue(obj: { [key: string]: { value: any } }): any {
+    this.downloadedFileName = '';
+    const keys = Object.keys(obj);
+    if (keys.length > 0) {
+      const firstKey = keys[0];
+      // this.downloadedFileName = obj[firstKey].value;
+      return obj[firstKey].value;
+    }
+    return null; // or throw an error, or handle it as needed
+  }
+  downloadDataAsCSV(data: any) {
+    const csvData = this.convertToCSV(data);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('style', 'display: none');
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = 'data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
+
+  convertToCSV(data: any): string {
+    // Convert data to an array if it's not already
+    const array = Array.isArray(data) ? data : [data];
+    let str = '';
+    let row = '';
+
+    // Get headers
+    const headers = Object.keys(array[0]);
+    row = headers.join(',') + '\r\n';
+    str += row;
+
+    // Get data rows
+    for (let i = 0; i < array.length; i++) {
+      let line = '';
+      for (let key of headers) {
+        if (line !== '') line += ',';
+        line += array[i][key]?.value || '';  // Access nested value
+      }
+      str += line + '\r\n';
+    }
+    return str;
+  }
+  downloadDataAsPDF(data: any) {
+    const array = Array.isArray(data) ? data : [data];
+    let tableContent = '<table><thead><tr>';
+
+    // Get headers
+    const headers = Object.keys(array[0]);
+    headers.forEach(header => {
+      tableContent += `<th>${header}</th>`;
+    });
+    tableContent += '</tr></thead><tbody>';
+
+    // Get data rows
+    array.forEach(item => {
+      tableContent += '<tr>';
+      headers.forEach(header => {
+        tableContent += `<td>${item[header]?.value || ''}</td>`;
+      });
+      tableContent += '</tr>';
+    });
+
+    tableContent += '</tbody></table>';
+
+    const content = `
+      <html>
+        <head>
+          <style>
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid black;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+          </style>
+        </head>
+        <body>
+          ${tableContent}
+        </body>
+      </html>
+    `;
+
+    this.createPDF(content);
+  }
+
+  createPDF(content: string) {
+    console.log(content);
+    const div = document.createElement('div');
+    div.style.position = 'absolute';
+    div.style.left = '-9999px';
+    div.innerHTML = content;
+    document.body.appendChild(div);
+
+    html2canvas(div).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(this.title + this.downloadedFileName + '.pdf');
+      document.body.removeChild(div);
     });
   }
 

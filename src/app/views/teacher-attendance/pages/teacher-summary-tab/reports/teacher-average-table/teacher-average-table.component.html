@@ -7,6 +7,10 @@
 		<app-material-heat-chart-drilldown-table
 			[tableData]="tableReportData"
 			[title]="title"
+			
+			[showDownloadButton]="showDownloadButton"
+			(drillDownFilter)="handleDrillDownFilter($event)"
+			
 		></app-material-heat-chart-drilldown-table>
 	</div>
 </div>
