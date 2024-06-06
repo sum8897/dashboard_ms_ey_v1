@@ -5,12 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { AuthenticationComponent } from './authentication.component';
 import { LoginComponent } from './pages/login/login.component';
+import { LoggedInComponent } from './pages/logged-in/logged-in.component';
 
 
 @NgModule({
   declarations: [
     AuthenticationComponent,
-    LoginComponent
+    LoginComponent,
+    LoggedInComponent
   ],
   imports: [
     CommonModule,

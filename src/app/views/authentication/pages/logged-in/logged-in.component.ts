@@ -7,13 +7,13 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 import * as config from 'src/assets/config/ui_config.json'
 import { rbacConfig } from 'src/app/shared/components/rbac-dialog/rbacConfig';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
-
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-logged-in',
+  templateUrl: './logged-in.component.html',
+  styleUrls: ['./logged-in.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoggedInComponent implements OnInit {
+
   adminUrl;
   adminDashUrl;
   role;
@@ -51,26 +51,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, 
     private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
-      console.log(localStorage.getItem('access_user'));
-      console.log(localStorage.getItem('user_check'));
-      if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('user_check')==null || localStorage.getItem('user_check')=='' || localStorage.getItem('user_check')==undefined)){
-        console.log(localStorage.getItem('token'));
-        console.log(localStorage.getItem('access_user'));
-        // this.router.navigate(['/summary-statistics']);
-        this.onSubmit();
-      }else if(localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined){
-          // this.router.navigate(['/summary-statistics']);
-          this.onSubmit();
-      }else{
-
-      }
-   
-    // this.onSubmit();
-    // if (this._authenticationService.isUserLoggedIn()) {
-
-    //   this.router.navigate(['/home']);
-    // }
-    // this.router.navigate(['/home']);
+    
   }
 
   async ngOnInit(): Promise<void> {

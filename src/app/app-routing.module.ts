@@ -6,6 +6,7 @@ import { HomePageComponent } from './views/home-page/home-page.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { NewChartComponent } from './views/new-chart/new-chart.component';
 import { LoginComponent } from './views/authentication/pages/login/login.component';
+import { LoggedInComponent } from './views/authentication/pages/logged-in/logged-in.component';
 
 var routes: Routes = [];
 
@@ -267,6 +268,10 @@ routes = [
     path: '',
     loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
   },
+  {
+    path:'loggedIn',
+    component: LoggedInComponent
+  }
 ];
 
 @NgModule({

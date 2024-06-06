@@ -20,7 +20,16 @@ export class AuthenticationService {
     this.stopRefreshTokenTimer();
     localStorage.clear();
     localStorage.setItem('access_user','public_user');
-    this._router.navigate(['/login']);
+    this._router.navigate(['/loggedIn']);
+    // this._router.navigate(['/login']);
+  }
+  logouted(): void {
+    // alert('logged out');
+    this.stopRefreshTokenTimer();
+    localStorage.clear();
+    localStorage.setItem('access_user','public_user');
+    this._router.navigate(['/loggedIn']);
+    // this._router.navigate(['/login']);
   }
 
   login(inputData: any) {
