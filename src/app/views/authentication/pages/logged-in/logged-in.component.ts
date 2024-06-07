@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -50,7 +50,7 @@ export class LoggedInComponent implements OnInit {
   tempUserId: any;
 
   constructor(private router: Router, private formBuilder: FormBuilder, 
-    private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
+    private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,private elementRef: ElementRef) {
     
   }
 
@@ -180,7 +180,9 @@ export class LoggedInComponent implements OnInit {
         })
     }
     
-    
+    ngOndestroy() {
+      this.elementRef.nativeElement.remove();
+    }
 
   }
 

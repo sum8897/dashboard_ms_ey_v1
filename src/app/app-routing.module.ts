@@ -206,6 +206,13 @@ routes = [
           ),
         // canLoad: [AuthGuard]
       },
+      // {
+      //   path: 'pgi-govt-aided',
+      //   loadChildren: () =>
+      //     import('./views/pgi-govt-aided/pgi-govt-aided.module').then(
+      //       (module) => module.PgiGovtAidedModule
+      //     ),
+      // },
       {
         path: 'student-assessment',
         loadChildren: () =>
