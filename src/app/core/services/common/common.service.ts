@@ -10,8 +10,8 @@ import { IReportDataPayload } from '../../models/IReportDataPayload';
   providedIn: 'root'
 })
 export class CommonService implements OnDestroy {
-  // private storageKey = 'vsk.py.gov.in.tabId';
-  private storageKey = 'http://127.0.0.1:4200/';
+  private storageKey = 'vsk.py.gov.in';
+  // private storageKey = 'http://127.0.0.1:4200/';
   private currentTabId: string;
 
   constructor(private readonly _http: HttpClient) {
