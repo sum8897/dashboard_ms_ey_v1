@@ -1,3 +1,4 @@
+import { CommonService } from 'src/app/core/services/common/common.service';
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
@@ -25,7 +26,8 @@ export class AppComponent {
   constructor(private translate: TranslateService, private titleService: Title,
     private router: Router, private activatedRoute: ActivatedRoute, 
     public config: AppConfig, private http: HttpClient,
-    private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,) {
+    private readonly _authenticationService: AuthenticationService,private _rbacService: RbacService,
+  public CommonService: CommonService) {
     translate.setDefaultLang('en');
     translate.use('en');
     if(localStorage.getItem('login_access')=='' || localStorage.getItem('login_access')==null || localStorage.getItem('login_access')==undefined){
