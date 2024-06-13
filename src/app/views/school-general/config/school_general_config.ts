@@ -7424,7 +7424,7 @@ diksha_metrics: {
                     from (SELECT
                         COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
                     FROM
-                        school_general.schooldetails
+                        school_general.tch_profile
                     GROUP BY
                         school_id) as sub_query;`,
                     "bigNumber2": `select SUM(CASE WHEN sef.item_group = '1' THEN
@@ -7434,11 +7434,11 @@ diksha_metrics: {
                     ELSE 0 END) AS total_students
                     FROM
                     school_general.sch_enr_fresh sef`,
-                    "bigNumber3": "select count(distinct school_id) as active_schools from school_general.schooldetails",
+                    "bigNumber3": "select count(distinct school_id) as active_schools from school_general.enrolment_info",
                     "bigNumber4": `SELECT
                     COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
                 FROM
-                    school_general.schooldetails sd`
+                    school_general.enrolment_info sd`
                 },
                 "level": "district"
             }
