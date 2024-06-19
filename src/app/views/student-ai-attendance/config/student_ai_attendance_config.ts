@@ -531,6 +531,16 @@ GROUP BY
                         value: 'cluster_name',
                         valueSuffix: '\n',
                     },
+                    {
+                        "valuePrefix": "School Id: ",
+                        "value": "school_id",
+                        "valueSuffix": "\n"
+                    },
+                    {
+                        "valuePrefix": "School Name: ",
+                        "value": "school_name",
+                        "valueSuffix": "\n"
+                    },
 					{
 						valuePrefix: 'Student Present: ',
 						value: 'percentage_of_student_present',
