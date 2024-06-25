@@ -90,20 +90,36 @@
       "orderBy": "13"
     },
     {
-      "programName": "NCF",
-      "tooltip": "National Curriculum Framework",
-      "navigationUrl": "/ncf",
-      "imageUrl": "NCF.png",
-      "programID": "ncf",
+      "programName": "UDISE School Infrastructure",
+      "tooltip": "State Specifiy School Infra",
+      "navigationUrl": "/udise-schoolinfra",
+      "imageUrl": "udise.png",
+      "programID": "udiseschoolinfrastructure",
       "orderBy": "14"
-    },
+  },
     {
-      "programName": "Micro-Improvements",
-      "tooltip": "Micro-Improvements",
-      "navigationUrl": "/microimprovement",
-      "imageUrl": "Micro Improvement.png",
-      "programID": "microImprovement",
+      "programName": "School General",
+      "tooltip": "School General",
+      "navigationUrl": "/school-general",
+      "imageUrl": "school_general.png",
+      "programID": "schoolGeneral",
       "orderBy": "15"
-    }
+  },
+    {
+      "programName": "PAS",
+      "tooltip": "PAS",
+      "navigationUrl": "/pas",
+      "imageUrl": "pass.png",
+      "programID": "pas",
+      "orderBy": "16"
+  },
+  {
+    "programName": "Staff and Students",
+    "tooltip": "Staff&Students",
+    "navigationUrl": "/staff-students",
+    "imageUrl": "staff_student.png",
+    "programID": "staffstudents",
+    "orderBy": "17"
+}
   ]
 }
