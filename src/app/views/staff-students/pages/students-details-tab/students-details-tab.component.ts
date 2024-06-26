@@ -37,7 +37,7 @@ bigNumberMetrics: any = [];
   };
   filterValues:any;
   drillDownSubscription: any;
-  tabLabel:any='Students Details';
+  tabLabel:any='Student Details-Inclusivity';
 
   //added for full school report download
   // title = "Download School Report"
