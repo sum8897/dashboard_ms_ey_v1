@@ -11,10 +11,11 @@ export class NewLineChartComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() config: any;
   @Input() type: any = 'line';
+  @Input() pageSize: number = 5; // Default pageSize
 
   filterData: any;
   currentPage = 0;
-  pageSize = 10;
+  // pageSize = 10;
 
   ngOnInit() {
 // console.log('inside barchart',this.data,this.config)
