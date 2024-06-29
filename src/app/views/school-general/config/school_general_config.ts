@@ -10,6 +10,7 @@ export const config = {
         unitKey: "perc_teachers",
         linkedReports: ['lo_wise_performance', 'lo_average_barchart', 'lo_average_school']
     },
+    
 	filters: [
        
         {
