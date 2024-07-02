@@ -19,6 +19,8 @@ import{ config as studentAiAttendanceConfig} from '../../views/student-ai-attend
 import{ config as studentEnrollmentConfig} from '../../views/student-enrollment/config/student_enrollment_config';
 import{ config as schoolGeneralConfig} from '../../views/school-general/config/school_general_config';
 import{ config as staffStudentsConfig} from '../../views/staff-students/config/staff-students_config';
+import{ config as pgiSchoolSafetyConfig} from '../../views/pgi-govt-aided/config/pgi-govt-aided_config';
+
 
 import{ config as schoolLibraryConfig} from '../../views/school-library/config/school_library_config';
 import{ config as ictConfig} from '../../views/ict/config/ict_config';
@@ -33,6 +35,7 @@ import {config as libraryConfig} from '../../views/library/config';
 export const configFiles = {
   schoolGeneral:schoolGeneralConfig,
   staffstudents:staffStudentsConfig,
+  pgiSchoolSafety:pgiSchoolSafetyConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
   pas:pasConfig,
@@ -63,6 +66,7 @@ export const configFiles = {
 export const programFolderNames = {
   schoolGeneral:'schoolGeneral',
   staffstudents:'staffStudents',
+  pgiSchoolSafety:'pgiSchoolSafety',
   studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
   teacherAttendance: 'sch_att',
@@ -89,6 +93,7 @@ export const programFolderNames = {
 export const stateProgramsFolderNames = {
   schoolGeneral:'',
   staffstudents:'',
+  pgiSchoolSafety:'',
   studentAiAttendance:'',
   studentEnrollment:'',
   schoolLibrary:'',

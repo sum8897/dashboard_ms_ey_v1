@@ -120,6 +120,14 @@
     "imageUrl": "staff_student.png",
     "programID": "staffstudents",
     "orderBy": "17"
+},
+{
+  "programName": "PGI and School Safety",
+  "tooltip": "PGI and School Safety",
+  "navigationUrl": "/pgi-govt-aided",
+  "imageUrl": "teacher_attendance.png",
+  "programID": "pgiSchoolSafety",
+  "orderBy": "18"
 }
   ]
 }

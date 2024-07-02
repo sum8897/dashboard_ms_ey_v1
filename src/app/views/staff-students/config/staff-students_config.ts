@@ -8949,8 +8949,12 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 "actions": {
                     "queries": {
 
-                        "bigNumber1": `select count (tp.tch_name) as tch_staff_reg from staff_students.tch_profile tp 
-                    where tp.nature_of_appt = '1' `,
+                        "bigNumber1": `select sum(case when tp.nature_of_appt = '1' then 1 else 0 end ) as tch_staff_reg
+                                 from staff_students.tch_profile tp
+                                    left join
+                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                          where
+                      ay.ac_year = '2022-23'`,
                         "bigNumber2": `select count(tp.tch_name) as tch_staff_contrct from staff_students.tch_profile tp where tp.nature_of_appt = '2'`,
                         "bigNumber3": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
                         "bigNumber4": `select count(tp.tch_name) as tch_staff_total from staff_students.tch_profile tp`,

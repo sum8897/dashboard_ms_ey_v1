@@ -1,0 +1,41 @@
+<div class="col-span-full tab-wrapper">
+	<div class="filter-row grid grid-cols-12">
+		<app-filter-panel
+			[filters]="filters"
+			(filtersUpdated)="filtersUpdated($event)"
+			class="col-span-12"
+		></app-filter-panel>
+	</div>
+    <div class="reports-row">
+		<div *ngIf="checkReport('school_safety_cards_data', 'bigNumber1')" id="bignumber1">
+			<app-school-safety-big-number-metrics
+				(exportReportData)="importBigNumberMetrics($event)">
+            </app-school-safety-big-number-metrics>
+		</div>
+		<div class="row-wrapper grid grid-cols-5 gap-4">
+			<div class="col-span-2 xmd:col-span-1 bignumber-container" id="bignumber2"
+				*ngFor="let bigNumberData of bigNumberMetrics; let index = index">
+				<div *ngIf="checkReport('school_safety_cards_data', 'bigNumber' + (index + 1))">
+					<app-big-number [bigNumberReportData]="bigNumberData"></app-big-number>
+				</div>
+			</div>
+		</div>
+		<div class="md:col-span-2 col-span-4">
+			<app-breadcrumb-component></app-breadcrumb-component>
+		</div>
+        <div class="row-wrapper grid grid-cols-2 gap-4">
+            <div class="col-span-2 xmd:col-span-1 div-shadow" *ngIf="checkReport('management_barchart', 'barChart')"
+				id="bar">
+				<app-school-safety-first-bar-chart #managementBarchart
+					(exportReportData)="csvDownload($event)">
+                </app-school-safety-first-bar-chart>
+			</div>
+			<div class="col-span-2 xmd:col-span-1 div-shadow" id="table1"
+				*ngIf="checkReport('district_wise_table', 'table')">
+				<app-school-safety-first-table #districtWiseTable
+					(exportReportData)="csvDownload($event)">
+                </app-school-safety-first-table>
+			</div>
+        </div>
+     </div>   
+</div>    
