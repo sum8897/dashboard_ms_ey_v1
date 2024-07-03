@@ -53,8 +53,10 @@ export class SideNavComponent implements OnInit, OnChanges {
     console.log(menuItemSelected);
 
     if (menuItemSelected) {
-      if((menuItemSelected.label =='UDISE School Infrastructure' || menuItemSelected.label=='School General' || menuItemSelected.label=='PAS') && (localStorage.getItem('login_access')=='login_public')){
-        this.router.navigate(['/login']);
+      if((menuItemSelected.label =='UDISE School Infrastructure' || menuItemSelected.label=='School General' || menuItemSelected.label=='PAS' || menuItemSelected.label=='Staff and Students' || menuItemSelected.label=='PGI and School Safety') && (localStorage.getItem('login_access')=='login_public')){
+        // this.router.navigate(['/login']);
+        localStorage.setItem('user_check','private_user');
+        this.router.navigate(['/loggedIn']);
       }else{
         // this._router.navigate([cardInfo.navigationURL.trim()]);
         this.menu?.forEach(menuItem => {
