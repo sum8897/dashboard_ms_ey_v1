@@ -2,109 +2,108 @@
 	<div class="row">
 		<div class="col-lg-4 col-md-6 col-sm-12">
 			<div class="logo d-flex">
-				<img
+				<!-- <img
 					[src]="'./../../../../../assets/images/' + loginObj.logoURL"
 					class="logoImg mr-3"
-				/>
-				<p>{{ loginObj.title }}</p>
+				/> -->
+				<!-- <p>{{ loginObj.title }}</p> -->
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-lg-6 col-sm-12">
-			<div class="row" (click)="onSubmit()">
-				<div class="col-sm-12">
-					<div class="logoText">
-						<p>{{ stateName }}</p>
-					</div>
+
+		<div class="col-lg-12 col-sm-12">
+			<div class="backImg" class="col-lg-12 col-md-12 col-sm-12 row">
+				<div class="col-lg-4 col-md-4 col-sm-4" style="padding-top: 1%;">
+					<img src="../../../../../assets/images/samagrashikshalogo.png" style="width: 270px;height: 95px;" />
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<img src="../../../../../assets/images/satyaMevjate.png"
+						style="width: 220px;display:block;margin:auto;" />
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					<img src="../../../../../assets/images/pm-shri-removebg-preview.png"
+						style="width: 220px;float: right;" />
+				</div>
+				<!-- <img [src]="'./../../../../../assets/images/' + loginObj.imageURL" /> -->
+			</div>
+
+		</div>
+		<div class="col-lg-12 col-sm-12 row">
+			<div class="backImg" class="col-lg-7 col-md-7 col-sm-12"
+				style="font-size: 32px;color: #1296d4 !important;text-align: left;padding: 7% 5%;font-weight: bold;">
+				<div>Government of Puducherry<br>
+					Directorate of School Education<br>
+					Samagra Shiksha<br>
+					Vidya Samiksha Kendra
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-lg-12 col-md-12 col-sm-12">
-					<div class="card-pf">
-						<div id="kc-content-wrapper">
-							<div>
-								<div class="alert alert-error d-flex" *ngIf="error">
-									<span class="pficon fa fa-times-circle fa-2x text-danger">{{
-										'Invalid
-                                        Credentials'
-									}}</span>
+			<div class="col-lg-5 col-md-5  col-sm-12">
+				<div class="row" (click)="onSubmit()">
+					<div class="col-sm-12">
+						<div class="logoText">
+							<!-- <p>{{ stateName }}</p> -->
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12" style="padding-top: 10px;">
+						<div class="card-pf">
+							<div id="kc-content-wrapper">
+								<div>
+									<div class="alert alert-error d-flex" *ngIf="error">
+										<span class="pficon fa fa-times-circle fa-2x text-danger">{{
+											'Invalid
+											Credentials'
+											}}</span>
 
-									<span class="kc-feedback-text ml-2"></span>
+										<span class="kc-feedback-text ml-2"></span>
+									</div>
+									<form class="form" [formGroup]="LoginForm" (ngSubmit)="onSubmitPrivate()"
+										id="kc-form-login1" autocomplete="off">
+										<label>User ID</label><br />
+										<input id="username1" class="login-field" formControlName="userId"
+											placeholder="Enter your user ID" type="text" name="username" tabindex="1" />
+										<br /><br />
+										<label>Password</label>
+										<input type="password" id="password1" class="login-field"
+											formControlName="password" placeholder="Enter your password" name="password"
+											tabindex="2" />
+										<br />
+										<br />
+										<button [ngClass]="LoginForm.valid ? 'valid' : ''" class="submit" type="submit"
+											id="login" name="login" value="Login" tabindex="3">
+											Login
+										</button>
+									</form>
 								</div>
-								<form
-									class="form"
-									[formGroup]="LoginForm"
-									(ngSubmit)="onSubmitPrivate()"
-									id="kc-form-login1"
-									autocomplete="off"
-								>
-									<label>User ID</label><br />
-									<input
-										id="username1"
-										class="login-field"
-										formControlName="userId"
-										placeholder="Enter your user ID"
-										type="text"
-										name="username"
-										tabindex="1"
-									/>
-									<br /><br />
-									<label>Password</label>
-									<input
-										type="password"
-										id="password1"
-										class="login-field"
-										formControlName="password"
-										placeholder="Enter your password"
-										name="password"
-										tabindex="2"
-									/>
-									<br /><br />
-									<br />
-									<button
-										[ngClass]="LoginForm.valid ? 'valid' : ''"
-										class="submit"
-										type="submit"
-										id="login"
-										name="login"
-										value="Login"
-										tabindex="3"
-									>
-										Login
-									</button>
-								</form>
+							</div>
+							<div class="dashboard_route_div">
+								<button (click)="onSubmit()" tabindex="4" class="dashboard_route">Go To Public
+									Dashboard</button>
 							</div>
 						</div>
-						<div class="dashboard_route_div">
-							<button (click)="onSubmit()" tabindex="4" class="dashboard_route">Go To Public Dashboard</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-sm-12" style="">
+						<div class="infoText" style="color: black;font-style: italic;float: right;">
+							<!-- Shared seeing for coordinated action towards achieving outcomes and goals -->
+
+							<h6 style="
+									color: black;
+									font-size: 16px;
+									font-weight: bold;
+									line-height: 1.4em;
+									margin-top: 10px;
+								">
+								{{ loginObj.tagLine }}
+							</h6>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-lg-12 col-sm-12">
-					<div class="infoText" style="color: white; padding: 0px 20px 0px 0px">
-						<h6
-							style="
-								color: white;
-								font-size: 16px;
-								font-weight: bold;
-								line-height: 1.4em;
-								margin-top: 20px;
-							"
-						>
-							{{ loginObj.tagLine }}
-						</h6>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-lg-6 col-sm-12">
-			<div class="backImg">
-				<img [src]="'./../../../../../assets/images/' + loginObj.imageURL" />
-			</div>
 		</div>
 	</div>
 	<div></div>
