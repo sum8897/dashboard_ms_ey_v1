@@ -9,14 +9,23 @@
 			<app-staff-details-big-number-metrics
 				(exportReportData)="importBigNumberMetrics($event)"></app-staff-details-big-number-metrics>
 		</div>
-		<div class="row-wrapper grid grid-cols-5 gap-4">
+		<div class="row-wrapper flex flex-col lg:flex-row flex-wrap gap-4 lg:px-2.5">
+			<div class="custom-box-shadow flex flex-wrap lg:flex-col">
+				<app-staff-details-big-number-card-one #StaffDetailsBigNumbercardOne></app-staff-details-big-number-card-one>
+				<app-staff-details-big-number-card-two #StaffDetailsBigNumbercardTwo></app-staff-details-big-number-card-two>
+				<app-staff-details-big-number-card-three #StaffDetailsBigNumbercardThree></app-staff-details-big-number-card-three>
+				<app-staff-details-big-number-card-four #StaffDetailsBigNumbercardFour></app-staff-details-big-number-card-four>
+				<app-staff-details-big-number-card-five #StaffDetailsBigNumbercardFive></app-staff-details-big-number-card-five>
+			</div>
+		</div>
+		<!-- <div class="row-wrapper grid grid-cols-5 gap-4">
 			<div class="col-span-2 xmd:col-span-1 bignumber-container" id="bignumber2"
 				*ngFor="let bigNumberData of bigNumberMetrics; let index = index">
 				<div *ngIf="checkReport('staff_students_metrics_card', 'bigNumber' + (index + 1))">
 					<app-big-number [bigNumberReportData]="bigNumberData"></app-big-number>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div class="md:col-span-2 col-span-4">
 			<app-breadcrumb-component></app-breadcrumb-component>
 		</div>

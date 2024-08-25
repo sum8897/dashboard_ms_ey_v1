@@ -2484,7 +2484,7 @@ group by sub.district_name`,
         }
     },
     receipts_barchart:{
-        "label": "Overall Summary",
+        "label": "School Details",
         "defaultLevel": "state",
         "filters": [
             {
@@ -2494,168 +2494,168 @@ group by sub.district_name`,
                 "hierarchyLevel": "1",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    receipt_exp AS level,  
-                    SUM(received) AS received,     
-                    SUM(expenditure) AS expenditure      
-                FROM (                        
-                    SELECT                           
-                        'school_grant' AS receipt_exp,               
-                        SUM(sd.compo_grt_r) AS received,          
-                        SUM(sd.compo_grt_e) AS expenditure,
-                        sd.ac_year          
-                    FROM                           
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                    group by 
-                        sd.ac_year
-                UNION ALL                    
-                    SELECT                         
-                        'library' AS receipt_exp,          
-                        SUM(sd.lib_grt_r) AS received,   
-                        SUM(sd.lib_grt_e) AS expenditure,
-                        sd.ac_year     
-                    FROM                            
-                        school_general.sch_recp_exp sd      
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year
-                UNION ALL                      
-                    SELECT                           
-                        'major repair' AS receipt_exp,     
-                        SUM(sd.major_grant_r) AS received,   
-                        SUM(sd.major_grant_e) AS expenditure,
-                        sd.ac_year         
-                    FROM                          
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year
-                UNION ALL                       
-                    SELECT                          
-                        'sports grant' AS receipt_exp,      
-                        SUM(sd.sport_grt_r) AS received,  
-                        SUM(sd.sport_grt_e) AS expenditure,
-                        sd.ac_year   
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                        
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year
-                UNION ALL                       
-                    SELECT                        
-                        'media grant' AS receipt_exp,      
-                        SUM(sd.media_grt_r) AS received,  
-                        SUM(sd.media_grt_e) AS expenditure,
-                        sd.ac_year   
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year
-                UNION ALL                  
-                    SELECT                         
-                        'training grant' AS receipt_exp,    
-                        SUM(sd.smc_grt_r) AS received,   
-                        SUM(sd.smc_grt_e) AS expenditure,
-                        sd.ac_year     
-                    FROM                             
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                        group by 
-                        sd.ac_year
-                ) AS grant_summary 
-                JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                GROUP BY receipt_exp;
-                    `,
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year          
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+    group by 
+        sd.ac_year
+UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year     
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year
+UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year         
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year
+UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year   
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year
+UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year   
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year
+UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year     
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+        group by 
+        sd.ac_year
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+
+GROUP BY receipt_exp;`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        receipt_exp AS level,  
-                        SUM(received) AS received,     
-                        SUM(expenditure) AS expenditure      
-                    FROM (                        
-                        SELECT                           
-                            'school_grant' AS receipt_exp,               
-                            SUM(sd.compo_grt_r) AS received,          
-                            SUM(sd.compo_grt_e) AS expenditure,
-                            sd.ac_year          
-                        FROM                           
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                        group by 
-                            sd.ac_year
-                    UNION ALL                    
-                        SELECT                         
-                            'library' AS receipt_exp,          
-                            SUM(sd.lib_grt_r) AS received,   
-                            SUM(sd.lib_grt_e) AS expenditure,
-                            sd.ac_year     
-                        FROM                            
-                            school_general.sch_recp_exp sd      
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year
-                    UNION ALL                      
-                        SELECT                           
-                            'major repair' AS receipt_exp,     
-                            SUM(sd.major_grant_r) AS received,   
-                            SUM(sd.major_grant_e) AS expenditure,
-                            sd.ac_year         
-                        FROM                          
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year
-                    UNION ALL                       
-                        SELECT                          
-                            'sports grant' AS receipt_exp,      
-                            SUM(sd.sport_grt_r) AS received,  
-                            SUM(sd.sport_grt_e) AS expenditure,
-                            sd.ac_year   
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                        
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year
-                    UNION ALL                       
-                        SELECT                        
-                            'media grant' AS receipt_exp,      
-                            SUM(sd.media_grt_r) AS received,  
-                            SUM(sd.media_grt_e) AS expenditure,
-                            sd.ac_year   
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year
-                    UNION ALL                  
-                        SELECT                         
-                            'training grant' AS receipt_exp,    
-                            SUM(sd.smc_grt_r) AS received,   
-                            SUM(sd.smc_grt_e) AS expenditure,
-                            sd.ac_year     
-                        FROM                             
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                            group by 
-                            sd.ac_year
-                    ) AS grant_summary 
-                    JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                    GROUP BY receipt_exp;
-                        `
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year          
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+    group by 
+        sd.ac_year
+UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year     
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year
+UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year         
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year
+UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year   
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year
+UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year   
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year
+UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year     
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+        group by 
+        sd.ac_year
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+
+GROUP BY receipt_exp;`
                     
                     },
                     "level": "district"
@@ -2668,181 +2668,181 @@ group by sub.district_name`,
                 "hierarchyLevel": "2",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    receipt_exp AS level,  
-                    SUM(received) AS received,     
-                    SUM(expenditure) AS expenditure      
-                FROM (                        
-                    SELECT                           
-                        'school_grant' AS receipt_exp,               
-                        SUM(sd.compo_grt_r) AS received,          
-                        SUM(sd.compo_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.district_id
-                    FROM                           
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                    group by 
-                        sd.ac_year,sd.district_id
-                        UNION ALL                    
-                    SELECT                         
-                        'library' AS receipt_exp,          
-                        SUM(sd.lib_grt_r) AS received,   
-                        SUM(sd.lib_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.district_id
-                    FROM                            
-                        school_general.sch_recp_exp sd      
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.district_id
-                        UNION ALL                      
-                    SELECT                           
-                        'major repair' AS receipt_exp,     
-                        SUM(sd.major_grant_r) AS received,   
-                        SUM(sd.major_grant_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.district_id
-                    FROM                          
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.district_id
-                        UNION ALL                       
-                    SELECT                          
-                        'sports grant' AS receipt_exp,      
-                        SUM(sd.sport_grt_r) AS received,  
-                        SUM(sd.sport_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.district_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                        
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.district_id
-                        UNION ALL                       
-                    SELECT                        
-                        'media grant' AS receipt_exp,      
-                        SUM(sd.media_grt_r) AS received,  
-                        SUM(sd.media_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.district_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.district_id
-                        UNION ALL                  
-                    SELECT                         
-                        'training grant' AS receipt_exp,    
-                        SUM(sd.smc_grt_r) AS received,   
-                        SUM(sd.smc_grt_e) AS expenditure,
-                        sd.ac_year ,sd.district_id    
-                    FROM                             
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                        group by 
-                        sd.ac_year,sd.district_id
-                ) AS grant_summary 
-                JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                JOIN dimensions.district d ON grant_summary.district_id = d.district_id 
-                WHERE  d.district_id = {district_id} 
-                GROUP BY receipt_exp;`,
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.district_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.district_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.district d ON grant_summary.district_id = d.district_id 
+  AND d.district_id = {district_id}
+GROUP BY receipt_exp;`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":
                         `SELECT 
-                        receipt_exp AS level,  
-                        SUM(received) AS received,     
-                        SUM(expenditure) AS expenditure      
-                    FROM (                        
-                        SELECT                           
-                            'school_grant' AS receipt_exp,               
-                            SUM(sd.compo_grt_r) AS received,          
-                            SUM(sd.compo_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.district_id
-                        FROM                           
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
-                        group by 
-                            sd.ac_year,sd.district_id
-                            UNION ALL                    
-                        SELECT                         
-                            'library' AS receipt_exp,          
-                            SUM(sd.lib_grt_r) AS received,   
-                            SUM(sd.lib_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.district_id
-                        FROM                            
-                            school_general.sch_recp_exp sd      
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.district_id
-                            UNION ALL                      
-                        SELECT                           
-                            'major repair' AS receipt_exp,     
-                            SUM(sd.major_grant_r) AS received,   
-                            SUM(sd.major_grant_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.district_id
-                        FROM                          
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.district_id
-                            UNION ALL                       
-                        SELECT                          
-                            'sports grant' AS receipt_exp,      
-                            SUM(sd.sport_grt_r) AS received,  
-                            SUM(sd.sport_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.district_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                        
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.district_id
-                            UNION ALL                       
-                        SELECT                        
-                            'media grant' AS receipt_exp,      
-                            SUM(sd.media_grt_r) AS received,  
-                            SUM(sd.media_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.district_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.district_id
-                            UNION ALL                  
-                        SELECT                         
-                            'training grant' AS receipt_exp,    
-                            SUM(sd.smc_grt_r) AS received,   
-                            SUM(sd.smc_grt_e) AS expenditure,
-                            sd.ac_year ,sd.district_id    
-                        FROM                             
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                            group by 
-                            sd.ac_year,sd.district_id
-                    ) AS grant_summary 
-                    JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                    JOIN dimensions.district d ON grant_summary.district_id = d.district_id 
-                    WHERE  d.district_id = {district_id} 
-                    GROUP BY receipt_exp;`,
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year  
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.district_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.district_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.district_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.district_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.district d ON grant_summary.district_id = d.district_id 
+  AND d.district_id = {district_id}
+GROUP BY receipt_exp;`,
                     },
                     "level": "block"
                 }
@@ -2854,180 +2854,180 @@ group by sub.district_name`,
                 "hierarchyLevel": "3",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    receipt_exp AS level,  
-                    SUM(received) AS received,     
-                    SUM(expenditure) AS expenditure      
-                FROM (                        
-                    SELECT                           
-                        'school_grant' AS receipt_exp,               
-                        SUM(sd.compo_grt_r) AS received,          
-                        SUM(sd.compo_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.block_id
-                    FROM                           
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                    group by 
-                        sd.ac_year,sd.block_id
-                        UNION ALL                    
-                    SELECT                         
-                        'library' AS receipt_exp,          
-                        SUM(sd.lib_grt_r) AS received,   
-                        SUM(sd.lib_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.block_id
-                    FROM                            
-                        school_general.sch_recp_exp sd      
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.block_id
-                        UNION ALL                      
-                    SELECT                           
-                        'major repair' AS receipt_exp,     
-                        SUM(sd.major_grant_r) AS received,   
-                        SUM(sd.major_grant_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.block_id
-                    FROM                          
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.block_id
-                        UNION ALL                       
-                    SELECT                          
-                        'sports grant' AS receipt_exp,      
-                        SUM(sd.sport_grt_r) AS received,  
-                        SUM(sd.sport_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.block_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                        
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.block_id
-                        UNION ALL                       
-                    SELECT                        
-                        'media grant' AS receipt_exp,      
-                        SUM(sd.media_grt_r) AS received,  
-                        SUM(sd.media_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.block_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.block_id
-                        UNION ALL                  
-                    SELECT                         
-                        'training grant' AS receipt_exp,    
-                        SUM(sd.smc_grt_r) AS received,   
-                        SUM(sd.smc_grt_e) AS expenditure,
-                        sd.ac_year ,sd.block_id    
-                    FROM                             
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                        group by 
-                        sd.ac_year,sd.block_id
-                ) AS grant_summary 
-                JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                JOIN dimensions.block b ON grant_summary.block_id = b.block_id 
-                WHERE b.block_id = {block_id} 
-                GROUP BY receipt_exp;`,
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.block_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.block_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.block b ON grant_summary.block_id = b.block_id 
+  AND b.block_id = {block_id} 
+GROUP BY receipt_exp;`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        receipt_exp AS level,  
-                        SUM(received) AS received,     
-                        SUM(expenditure) AS expenditure      
-                    FROM (                        
-                        SELECT                           
-                            'school_grant' AS receipt_exp,               
-                            SUM(sd.compo_grt_r) AS received,          
-                            SUM(sd.compo_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.block_id
-                        FROM                           
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                        group by 
-                            sd.ac_year,sd.block_id
-                            UNION ALL                    
-                        SELECT                         
-                            'library' AS receipt_exp,          
-                            SUM(sd.lib_grt_r) AS received,   
-                            SUM(sd.lib_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.block_id
-                        FROM                            
-                            school_general.sch_recp_exp sd      
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.block_id
-                            UNION ALL                      
-                        SELECT                           
-                            'major repair' AS receipt_exp,     
-                            SUM(sd.major_grant_r) AS received,   
-                            SUM(sd.major_grant_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.block_id
-                        FROM                          
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.block_id
-                            UNION ALL                       
-                        SELECT                          
-                            'sports grant' AS receipt_exp,      
-                            SUM(sd.sport_grt_r) AS received,  
-                            SUM(sd.sport_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.block_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                        
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.block_id
-                            UNION ALL                       
-                        SELECT                        
-                            'media grant' AS receipt_exp,      
-                            SUM(sd.media_grt_r) AS received,  
-                            SUM(sd.media_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.block_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.block_id
-                            UNION ALL                  
-                        SELECT                         
-                            'training grant' AS receipt_exp,    
-                            SUM(sd.smc_grt_r) AS received,   
-                            SUM(sd.smc_grt_e) AS expenditure,
-                            sd.ac_year ,sd.block_id    
-                        FROM                             
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                            group by 
-                            sd.ac_year,sd.block_id
-                    ) AS grant_summary 
-                    JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                    JOIN dimensions.block b ON grant_summary.block_id = b.block_id 
-                    WHERE b.block_id = {block_id} 
-                    GROUP BY receipt_exp;`
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.block_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.block_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.block_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.block_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.block b ON grant_summary.block_id = b.block_id 
+  AND b.block_id = {block_id} 
+GROUP BY receipt_exp;`
                     },
                     "level": "cluster"
                 }
@@ -3039,186 +3039,182 @@ group by sub.district_name`,
                 "hierarchyLevel": "4",
                 "timeSeriesQueries": {
                     "barChart": `SELECT 
-                    receipt_exp AS level,  
-                    SUM(received) AS received,     
-                    SUM(expenditure) AS expenditure      
-                FROM (                        
-                    SELECT                           
-                        'school_grant' AS receipt_exp,               
-                        SUM(sd.compo_grt_r) AS received,          
-                        SUM(sd.compo_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.cluster_id
-                    FROM                           
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                    group by 
-                        sd.ac_year,sd.cluster_id
-                        UNION ALL                    
-                    SELECT                         
-                        'library' AS receipt_exp,          
-                        SUM(sd.lib_grt_r) AS received,   
-                        SUM(sd.lib_grt_e) AS expenditure,
-                        sd.ac_year ,
-                       sd.cluster_id
-                    FROM                            
-                        school_general.sch_recp_exp sd      
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.cluster_id
-                        UNION ALL                      
-                    SELECT                           
-                        'major repair' AS receipt_exp,     
-                        SUM(sd.major_grant_r) AS received,   
-                        SUM(sd.major_grant_e) AS expenditure,
-                        sd.ac_year ,
-                       sd.cluster_id
-                    FROM                          
-                        school_general.sch_recp_exp sd     
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.cluster_id
-                        UNION ALL                       
-                    SELECT                          
-                        'sports grant' AS receipt_exp,      
-                        SUM(sd.sport_grt_r) AS received,  
-                        SUM(sd.sport_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.cluster_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                        
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                    group by 
-                        sd.ac_year,sd.cluster_id
-                        UNION ALL                       
-                    SELECT                        
-                        'media grant' AS receipt_exp,      
-                        SUM(sd.media_grt_r) AS received,  
-                        SUM(sd.media_grt_e) AS expenditure,
-                        sd.ac_year ,
-                        sd.cluster_id
-                    FROM                           
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                    group by 
-                        sd.ac_year,sd.cluster_id
-                        UNION ALL                  
-                    SELECT                         
-                        'training grant' AS receipt_exp,    
-                        SUM(sd.smc_grt_r) AS received,   
-                        SUM(sd.smc_grt_e) AS expenditure,
-                        sd.ac_year ,sd.cluster_id    
-                    FROM                             
-                        school_general.sch_recp_exp sd    
-                    JOIN                           
-                        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                        group by 
-                        sd.ac_year,sd.cluster_id
-                ) AS grant_summary 
-                JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                JOIN dimensions.cluster c ON grant_summary.cluster_id = c.cluster_id 
-                WHERE  c.cluster_id = {cluster_id} 
-                GROUP BY receipt_exp;
-                
-                
-                `,
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+       sd.cluster_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+       sd.cluster_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.cluster_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.cluster_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.cluster c ON grant_summary.cluster_id = c.cluster_id 
+  AND c.cluster_id = {cluster_id}
+GROUP BY receipt_exp;
+`,
                 },
                 "actions": {
                     "queries": {
                         "barChart":`SELECT 
-                        receipt_exp AS level,  
-                        SUM(received) AS received,     
-                        SUM(expenditure) AS expenditure      
-                    FROM (                        
-                        SELECT                           
-                            'school_grant' AS receipt_exp,               
-                            SUM(sd.compo_grt_r) AS received,          
-                            SUM(sd.compo_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.cluster_id
-                        FROM                           
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                        group by 
-                            sd.ac_year,sd.cluster_id
-                            UNION ALL                    
-                        SELECT                         
-                            'library' AS receipt_exp,          
-                            SUM(sd.lib_grt_r) AS received,   
-                            SUM(sd.lib_grt_e) AS expenditure,
-                            sd.ac_year ,
-                           sd.cluster_id
-                        FROM                            
-                            school_general.sch_recp_exp sd      
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.cluster_id
-                            UNION ALL                      
-                        SELECT                           
-                            'major repair' AS receipt_exp,     
-                            SUM(sd.major_grant_r) AS received,   
-                            SUM(sd.major_grant_e) AS expenditure,
-                            sd.ac_year ,
-                           sd.cluster_id
-                        FROM                          
-                            school_general.sch_recp_exp sd     
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.cluster_id
-                            UNION ALL                       
-                        SELECT                          
-                            'sports grant' AS receipt_exp,      
-                            SUM(sd.sport_grt_r) AS received,  
-                            SUM(sd.sport_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.cluster_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                        
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
-                        group by 
-                            sd.ac_year,sd.cluster_id
-                            UNION ALL                       
-                        SELECT                        
-                            'media grant' AS receipt_exp,      
-                            SUM(sd.media_grt_r) AS received,  
-                            SUM(sd.media_grt_e) AS expenditure,
-                            sd.ac_year ,
-                            sd.cluster_id
-                        FROM                           
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
-                        group by 
-                            sd.ac_year,sd.cluster_id
-                            UNION ALL                  
-                        SELECT                         
-                            'training grant' AS receipt_exp,    
-                            SUM(sd.smc_grt_r) AS received,   
-                            SUM(sd.smc_grt_e) AS expenditure,
-                            sd.ac_year ,sd.cluster_id    
-                        FROM                             
-                            school_general.sch_recp_exp sd    
-                        JOIN                           
-                            dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
-                            group by 
-                            sd.ac_year,sd.cluster_id
-                    ) AS grant_summary 
-                    JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
-                    JOIN dimensions.cluster c ON grant_summary.cluster_id = c.cluster_id 
-                    WHERE  c.cluster_id = {cluster_id} 
-                    GROUP BY receipt_exp;
-                    
-                    
-                    `
+    receipt_exp AS level,  
+    SUM(received) AS received,     
+    SUM(expenditure) AS expenditure      
+FROM (                        
+    SELECT                           
+        'school_grant' AS receipt_exp,               
+        SUM(sd.compo_grt_r) AS received,          
+        SUM(sd.compo_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                    
+    SELECT                         
+        'library' AS receipt_exp,          
+        SUM(sd.lib_grt_r) AS received,   
+        SUM(sd.lib_grt_e) AS expenditure,
+        sd.ac_year ,
+       sd.cluster_id
+    FROM                            
+        school_general.sch_recp_exp sd      
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                      
+    SELECT                           
+        'major repair' AS receipt_exp,     
+        SUM(sd.major_grant_r) AS received,   
+        SUM(sd.major_grant_e) AS expenditure,
+        sd.ac_year ,
+       sd.cluster_id
+    FROM                          
+        school_general.sch_recp_exp sd     
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                       
+    SELECT                          
+        'sports grant' AS receipt_exp,      
+        SUM(sd.sport_grt_r) AS received,  
+        SUM(sd.sport_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                        
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year    
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                       
+    SELECT                        
+        'media grant' AS receipt_exp,      
+        SUM(sd.media_grt_r) AS received,  
+        SUM(sd.media_grt_e) AS expenditure,
+        sd.ac_year ,
+        sd.cluster_id
+    FROM                           
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year   
+    group by 
+        sd.ac_year,sd.cluster_id
+        UNION ALL                  
+    SELECT                         
+        'training grant' AS receipt_exp,    
+        SUM(sd.smc_grt_r) AS received,   
+        SUM(sd.smc_grt_e) AS expenditure,
+        sd.ac_year ,sd.cluster_id    
+    FROM                             
+        school_general.sch_recp_exp sd    
+    JOIN                           
+        dimensions.academic_year ay ON sd.ac_year = ay.ac_year 
+        group by 
+        sd.ac_year,sd.cluster_id
+) AS grant_summary 
+JOIN dimensions.academic_year ay ON ay.ac_year = grant_summary.ac_year
+JOIN dimensions.cluster c ON grant_summary.cluster_id = c.cluster_id 
+  AND c.cluster_id = {cluster_id}
+GROUP BY receipt_exp;
+`
                     },
                     "level": "school"
                 }
@@ -3388,7 +3384,7 @@ category_table: {
             },
             "actions": {
                 "queries": {
-                    "table": `   SELECT 
+                    "table": `SELECT 
                     sef.block_id ,
                        b.block_name,
                     SUM(CASE WHEN item_group = 1 AND item_id = 1 THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b+c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS general,
@@ -7421,19 +7417,25 @@ diksha_metrics: {
                 "queries": {
                    
                     "bigNumber1": `select sum(state_teacher_count) as teaching_staff
-                    from (SELECT
-                        COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
-                    FROM
-                        school_general.tch_profile
-                    GROUP BY
-                        school_id) as sub_query;`,
+from (SELECT
+COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
+FROM
+school_general.tch_profile tp
+left join
+dimensions.academic_year ay on tp.ac_year = ay.ac_year
+where
+  ay.ac_year = ay.ac_year
+GROUP BY
+school_id) as sub_query;`,
                     "bigNumber2": `select SUM(CASE WHEN sef.item_group = '1' THEN
-                    sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g+
-                    sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
-                    sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
-                    ELSE 0 END) AS total_students
-                    FROM
-                    school_general.sch_enr_fresh sef`,
+sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g+
+sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
+sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+ELSE 0 END) AS total_students
+FROM
+school_general.sch_enr_fresh sef
+left join
+dimensions.academic_year ay on sef.ac_year = ay.ac_year`,
                     "bigNumber3": "select count(distinct school_id) as active_schools from school_general.enrolment_info",
                     "bigNumber4": `SELECT
                     COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
@@ -7454,6 +7456,141 @@ diksha_metrics: {
             "property": ['teaching_staff', 'total_students', 'active_schools', 'rte_compliant_schools']
         }
     }
-}
+},
+
+school_details_bignumber_card_one: {
+    "label": "Average Student Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": `select sum(state_teacher_count) as teaching_staff
+from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
+FROM school_general.tch_profile tp
+left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
+GROUP BY school_id) as sub_query`
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber":  `select sum(state_teacher_count) as teaching_staff
+                    from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
+                    FROM school_general.tch_profile tp
+                    left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                    GROUP BY school_id) as sub_query`
+                },
+                "level": "district"
+            }
+        },
+
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Teaching Staff",
+            "valueSuffix": '',
+            "property": 'teaching_staff'
+        }
+    }
+},
+school_details_bignumber_card_two: {
+    "label": "Average Student Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": `select SUM(CASE WHEN sef.item_group = '1' THEN
+sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g+
+sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
+sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select SUM(CASE WHEN sef.item_group = '1' THEN
+sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g + sef.c2_b + sef.c2_g + sef.c3_b + sef.c3_g + sef.c4_b + sef.c4_g + sef.c5_b + sef.c5_g+
+sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
+sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
+ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+                },
+                "level": "district"
+            }
+        },
+
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Student Enrollment",
+            "valueSuffix": '',
+            "property": 'total_students'
+        }
+    }
+},
+school_details_bignumber_card_three: {
+    "label": "Average Student Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": `select count(distinct school_id) as active_schools from school_general.enrolment_info sef
+                              left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `select count(distinct school_id) as active_schools from school_general.enrolment_info sef
+                                  left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+                },
+                "level": "district"
+            }
+        },
+
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "Active Schools",
+            "valueSuffix": '',
+            "property": 'active_schools'
+        }
+    }
+},
+school_details_bignumber_card_four: {
+    "label": "Average Student Present",
+    "filters": [
+        {
+            "name": "State",
+            "labelProp": "state_name",
+            "valueProp": "state_id",
+            "hierarchyLevel": "1",
+            "timeSeriesQueries": {
+                "bigNumber": `SELECT COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
+                              FROM school_general.enrolment_info sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
+            },
+            "actions": {
+                "queries": {
+                    "bigNumber": `SELECT COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
+                                   FROM school_general.enrolment_info sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
+                },
+                "level": "district"
+            }
+        },
+
+    ],
+    "options": {
+        "bigNumber": {
+            "title": "RTE Compliant Schools (Private Unaided)",
+            "valueSuffix": '',
+            "property": 'rte_compliant_schools'
+        }
+    }
+},
 
 }

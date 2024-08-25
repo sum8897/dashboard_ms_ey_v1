@@ -22,6 +22,10 @@ import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/
 import { GrossEnrollTableComponent } from './pages/key-indicators-tab/reports/gross-enroll-table/gross-enroll-table.component';
 import { NetEnrollTableComponent } from './pages/key-indicators-tab/reports/net-enroll-table/net-enroll-table.component';
 import { GenderParityBarchartComponent } from './pages/key-indicators-tab/reports/gender-parity-barchart/gender-parity-barchart.component';
+import { SchoolDetailsBigNumberCardOneComponent } from './pages/school-details-tab/reports/school-details-big-number-card-one/school-details-big-number-card-one.component';
+import { SchoolDetailsBigNumberCardTwoComponent } from './pages/school-details-tab/reports/school-details-big-number-card-two/school-details-big-number-card-two.component';
+import { SchoolDetailsBigNumberCardThreeComponent } from './pages/school-details-tab/reports/school-details-big-number-card-three/school-details-big-number-card-three.component';
+import { SchoolDetailsBigNumberCardFourComponent } from './pages/school-details-tab/reports/school-details-big-number-card-four/school-details-big-number-card-four.component';
 
 
 
@@ -43,7 +47,11 @@ import { GenderParityBarchartComponent } from './pages/key-indicators-tab/report
     EnrollmentByCategoryTableComponent,
     GrossEnrollTableComponent,
     NetEnrollTableComponent,
-    GenderParityBarchartComponent
+    GenderParityBarchartComponent,
+    SchoolDetailsBigNumberCardOneComponent,
+    SchoolDetailsBigNumberCardTwoComponent,
+    SchoolDetailsBigNumberCardThreeComponent,
+    SchoolDetailsBigNumberCardFourComponent
   ],
   imports: [DashletModule.forRoot({
     dataService: DataService

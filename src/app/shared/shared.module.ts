@@ -61,6 +61,7 @@ import { NewBarChartComponent } from './components/charts/new-bar-chart/new-bar-
 import { NewLineChartComponent } from './components/charts/new-line-chart/new-line-chart.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { BarChatSixItemsPerPageComponent } from './components/charts/bar-chat-six-items-per-page/bar-chat-six-items-per-page.component';
+import { ChartFilterTypeComponent } from './components/chart-filter-type/chart-filter-type.component';
 
 
 const IMPORTS: any[] = [
@@ -128,7 +129,8 @@ const DECLARATIONS = [
   CriteriaComponent,
   MaterialHeatChartDrilldownTableComponent,
   SearchFilterPipe,
-  SearchBarComponent
+  SearchBarComponent,
+  ChartFilterTypeComponent
 ];
 
 @NgModule({
@@ -138,6 +140,7 @@ const DECLARATIONS = [
     NewBarChartComponent,
     LineChartComponent,
     DatePickerComponent,
+    ChartFilterTypeComponent,
     
   ],
   imports: [

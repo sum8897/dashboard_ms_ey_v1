@@ -170,8 +170,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
-where 
-ay.ac_year = '2022-23'
+
 group by 
 pi.district_id, d.district_name `,
 				},
@@ -188,8 +187,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
-where 
-ay.ac_year = '2022-23'
+
 group by 
 pi.district_id, d.district_name `,
 					},
@@ -216,7 +214,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and d.district_id = {district_id}
+ d.district_id = {district_id}
 group by 
 pi.block_id, b.block_name`,
 				},
@@ -236,7 +234,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and d.district_id = {district_id}
+d.district_id = {district_id}
 group by 
 pi.block_id, b.block_name`,
 					},
@@ -265,7 +263,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and b.block_id = {block_id}
+b.block_id = {block_id}
 group by 
 pi.cluster_id, c.cluster_name `,
 				},
@@ -287,7 +285,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and b.block_id = {block_id}
+b.block_id = {block_id}
 group by 
 pi.cluster_id, c.cluster_name `,
 					},
@@ -318,7 +316,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+c.cluster_id = {cluster_id}
 group by 
 pi.school_id, sch.school_name `
 				},
@@ -342,7 +340,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+c.cluster_id = {cluster_id}
 group by 
 pi.school_id, sch.school_name `,
 					},
@@ -518,8 +516,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
-where 
-ay.ac_year = '2022-23'
+
 group by 
 d.district_name, pi.district_id`,
 				},
@@ -541,8 +538,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
-where 
-ay.ac_year = '2022-23'
+
 group by 
 d.district_name, pi.district_id`,
 					},
@@ -574,7 +570,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and d.district_id = {district_id}
+d.district_id = {district_id}
 group by 
 b.block_name,
 pi.block_id`,
@@ -600,7 +596,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and d.district_id = {district_id}
+d.district_id = {district_id}
 group by 
 b.block_name,
 pi.block_id`,
@@ -635,7 +631,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and b.block_id = {block_id}
+b.block_id = {block_id}
 group by 
 c.cluster_name,
 pi.cluster_id`,
@@ -663,7 +659,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and b.block_id = {block_id}
+ b.block_id = {block_id}
 group by 
 c.cluster_name,
 pi.cluster_id`,
@@ -700,7 +696,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+c.cluster_id = {cluster_id}
 group by 
 sch.school_name,
 pi.school_id
@@ -731,7 +727,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join 
 dimensions.academic_year ay on pi.ac_year = ay.ac_year 
 where 
-ay.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+c.cluster_id = {cluster_id}
 group by 
 sch.school_name,
 pi.school_id`,
@@ -953,8 +949,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
-where 
-ay.ac_year = '2022-23'
+
 group by 
 pi.district_id, d.district_name ;
    `
@@ -973,8 +968,7 @@ left join
 dimensions.district d on pi.district_id = d.district_id 
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
-where 
-ay.ac_year = '2022-23'
+
 group by 
 pi.district_id, d.district_name ;
    `,
@@ -1003,7 +997,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and d.district_id = {district_id}
+d.district_id = {district_id}
 group by 
 pi.block_id, b.block_name ;`
 				},
@@ -1024,7 +1018,7 @@ dimensions.block b on pi.block_id = b.block_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and d.district_id = {district_id}
+ d.district_id = {district_id}
 group by 
 pi.block_id, b.block_name;
 `,
@@ -1055,7 +1049,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and b.block_id = {block_id}
+b.block_id = {block_id}
 group by 
 pi.cluster_id, c.cluster_name `
 				},
@@ -1078,7 +1072,7 @@ dimensions.cluster c on pi.cluster_id = c.cluster_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and b.block_id = {block_id}
+b.block_id = {block_id}
 group by 
 pi.cluster_id, c.cluster_name `,
 					},
@@ -1110,7 +1104,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+ c.cluster_id = {cluster_id}
 group by 
 pi.school_id, sch.school_name `
 				},
@@ -1135,7 +1129,7 @@ dimensions.school sch on pi.school_id = sch.school_id
 left join
 dimensions.academic_year ay on pi.ac_year = ay.ac_year
 where 
-pi.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+c.cluster_id = {cluster_id}
 group by 
 pi.school_id, sch.school_name `,
 					},
@@ -1245,6 +1239,8 @@ pi.school_id, sch.school_name `,
 
 
 	// card data display in school safety 
+	
+	
 	school_safety_cards_data: {
 		"label": "School Safery",
 		"filters": [
@@ -1253,10 +1249,14 @@ pi.school_id, sch.school_name `,
 				"labelProp": "state_name",
 				"valueProp": "state_id",
 				"hierarchyLevel": "1",
+				"timeSeriesQueries": {
+                    "bigNumber1": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan from pgi.performing_indicators pi
+left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
 				"actions": {
 					"queries": {
-
-						"bigNumber1": `select count(school_id) as schools_with_sdmpplan from pgi.performing_indicators pi where pi.sdmp_plan_yn = 1`,
+						"bigNumber1": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan from pgi.performing_indicators pi
+left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`,
 						"bigNumber2": `select count(school_id) as schools_with_structuralaudit from pgi.performing_indicators pi where pi.struct_safaud_yn = 1`,
 						"bigNumber3": `select count(school_id) as schools_with_cctv_camera from pgi.performing_indicators pi where cctv_cam_yn = 1`,
 						"bigNumber4": `select count(school_id) as schools_with_fire_ext from pgi.performing_indicators pi where fire_ext_yn = 1`,
@@ -1278,7 +1278,7 @@ pi.school_id, sch.school_name `,
 
 
 	management_barchart: {
-		"label": "Overall Summary",
+		"label": "School Safety",
 		"defaultLevel": "state",
 		"filters": [
 			{
@@ -1335,7 +1335,7 @@ dimensions.academic_year ay on pi.ac_year = ay.ac_year
 group by 
 pi.ac_year) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
-where ay.ac_year = '2022-23'
+
 group by count,level`,
 				},
 				"actions": {
@@ -1388,7 +1388,7 @@ dimensions.academic_year ay on pi.ac_year = ay.ac_year
 group by 
 pi.ac_year) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
-where ay.ac_year = '2022-23'
+
 group by count,level`
 
 					},
@@ -1454,7 +1454,7 @@ group by
 pi.ac_year,pi.district_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.district d on d.district_id = tot_count.district_id
-where ay.ac_year = '2022-23' and d.district_id = {district_id}
+where d.district_id = {district_id}
 group by count,level`,
 				},
 				"actions": {
@@ -1512,7 +1512,7 @@ group by
 pi.ac_year,pi.district_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.district d on d.district_id = tot_count.district_id
-where ay.ac_year = '2022-23' and d.district_id = {district_id}
+where d.district_id = {district_id}
 group by count,level`,
 					},
 					"level": "block"
@@ -1577,7 +1577,7 @@ group by
 pi.ac_year,pi.block_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.block b on b.block_id = tot_count.block_id
-where ay.ac_year = '2022-23' and b.block_id = {block_id}
+where b.block_id = {block_id}
 group by count,level`,
 				},
 				"actions": {
@@ -1635,7 +1635,7 @@ group by
 pi.ac_year,pi.block_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.block b on b.block_id = tot_count.block_id
-where ay.ac_year = '2022-23' and b.block_id = {block_id}
+where b.block_id = {block_id}
 group by count,level`
 					},
 					"level": "cluster"
@@ -1700,7 +1700,7 @@ group by
 pi.ac_year,pi.cluster_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.cluster c on c.cluster_id = tot_count.cluster_id
-where ay.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+where c.cluster_id = {cluster_id}
 group by count,level`,
 				},
 				"actions": {
@@ -1758,7 +1758,7 @@ group by
 pi.ac_year,pi.cluster_id) as tot_count
 join dimensions.academic_year ay on ay.ac_year = tot_count.ac_year
 join dimensions.cluster c on c.cluster_id = tot_count.cluster_id
-where ay.ac_year = '2022-23' and c.cluster_id = {cluster_id}
+where  c.cluster_id = {cluster_id}
 group by count,level`
 					},
 					"level": "school"
@@ -1768,7 +1768,7 @@ group by count,level`
 		],
 		"options": {
 			"barChart": {
-				"metricLabelProp": "PGI Indicators",
+				"metricLabelProp": " ",
 				"metricValueProp": "total_count",
 				"yAxis": {
 					"title": "Total Count"
@@ -1850,4 +1850,369 @@ group by count,level`
 		}
 	},
 
+
+	student_comparative_bignumber: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan from pgi.performing_indicators pi
+  left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan from pgi.performing_indicators pi
+  left join
+  dimensions.academic_year ay on pi.ac_year = ay.ac_year
+
+                        `
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "students enrolled in the period",
+                "valueSuffix": '',
+                "property": 'schools_with_sdmpplan'
+            }
+        }
+    },
+	performing_bignumber_card_one: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.vidya_pravesh = 1 then 1 else 0 end) as teachers_photographs_displayed from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.vidya_pravesh = 1 then 1 else 0 end) as teachers_photographs_displayed from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Teacher Photographs Displayed",
+                "valueSuffix": '',
+                "property": 'teachers_photographs_displayed'
+            }
+        }
+    },
+	performing_bignumber_card_two: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.teacher_displaying_photo = 1 then 1 else 0 end) as vidyapravesh_module_adopted from pgi.performing_indicators pi left join
+                                  dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.teacher_displaying_photo = 1 then 1 else 0 end) as vidyapravesh_module_adopted from pgi.performing_indicators pi left join
+                                  dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Vidya Pravesh Module Adopted",
+                "valueSuffix": '',
+                "property": 'vidyapravesh_module_adopted'
+            }
+        }
+    },
+	performing_bignumber_card_three: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.sch_youth_club_yn = 1 then 1 else 0 end) as Youth_club_constituted from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.sch_youth_club_yn = 1 then 1 else 0 end) as Youth_club_constituted from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Youth Club Constituted",
+                "valueSuffix": '',
+                "property": 'youth_club_constituted'
+            }
+        }
+    },
+	performing_bignumber_card_four: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.sch_eco_club_yn = 1 then 1 else 0 end) as eco_club_constituted from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.sch_eco_club_yn = 1 then 1 else 0 end) as eco_club_constituted from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Eco Club Constituted",
+                "valueSuffix": '',
+                "property": 'eco_club_constituted'
+            }
+        }
+    },
+	performing_bignumber_card_five: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.tch_icard_yn = 1 then 1 else 0 end) as issued_teacher_id from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.tch_icard_yn = 1 then 1 else 0 end) as issued_teacher_id from
+pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Issued Teacher Id",
+                "valueSuffix": '',
+                "property": 'issued_teacher_id'
+            }
+        }
+    },
+	performing_bignumber_card_six: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when pi.self_cert_obtained_yn = 1 then 1 else 0 end) as sssa_self_certification
+from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when pi.self_cert_obtained_yn = 1 then 1 else 0 end) as sssa_self_certification
+from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "SSSA Self Certification",
+                "valueSuffix": '',
+                "property": 'sssa_self_certification'
+            }
+        }
+    },
+	// ***** school Safety card***
+	school_safety_bignumber_card_one: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan
+from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.sdmp_plan_yn = 1 then school_id end) as schools_with_sdmpplan
+from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools with SDM Plan",
+                "valueSuffix": '',
+                "property": 'schools_with_sdmpplan'
+            }
+        }
+    },
+	school_safety_bignumber_card_two: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.struct_safaud_yn = 1 then school_id end) as schools_with_structuralaudit
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.struct_safaud_yn = 1 then school_id end) as schools_with_structuralaudit
+                                       from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools with Structural audit",
+                "valueSuffix": '',
+                "property": 'schools_with_structuralaudit'
+            }
+        }
+    },
+	school_safety_bignumber_card_three: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.cctv_cam_yn = 1 then school_id end) as schools_with_cctv_camera
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.cctv_cam_yn = 1 then school_id end) as schools_with_cctv_camera
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools with CCTV Camera",
+                "valueSuffix": '',
+                "property": 'schools_with_cctv_camera'
+            }
+        }
+    },
+	school_safety_bignumber_card_four: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.fire_ext_yn = 1 then school_id end) as schools_with_fire_ext  
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.fire_ext_yn = 1 then school_id end) as schools_with_fire_ext  
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools with Fire Exit",
+                "valueSuffix": '',
+                "property": 'schools_with_fire_ext'
+            }
+        }
+    },
+	school_safety_bignumber_card_five: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when pi.nodal_tch_yn = 1 then school_id end) as schools_with_nodal_safetytchr  
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when pi.nodal_tch_yn = 1 then school_id end) as schools_with_nodal_safetytchr  
+                                      from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Schools with Nodal Safety Teacher",
+                "valueSuffix": '',
+                "property": 'schools_with_nodal_safetytchr'
+            }
+        }
+    },
 }

@@ -157,8 +157,22 @@
 .noData {
     color: red;
     text-align: center;
+
     // margin-top: 9rem;
 }
+.noDataFound{
+    color: red;
+    text-align: center;
+    height: 150px;
+    width: 150px;
+    padding-top: 60px;
+}
+.custom-box-shadow > * {
+    box-shadow: 0px 7.16865px 19.7138px rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+    margin: 10px;
+}
+
 
 .filename{
     color: var(--cQ-secondary) !important;

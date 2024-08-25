@@ -26,7 +26,7 @@ export class SchoolSafetyFirstTableComponent implements OnInit {
   backUpData: any = [];
   criteriaApplied: boolean = false;
   bigNumberReportData: any = {
-    reportName: "PGI Indicators (Govt. and Govt. Aided Schools)"
+    reportName: "School Safety Activities (Govt. Schools)"
   };
   minDate: any;
   maxDate: any;
@@ -34,7 +34,7 @@ export class SchoolSafetyFirstTableComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = 'PGI Indicators (Govt. and Govt. Aided Schools)';
+  title = 'School Safety Activities (Govt. Schools)';
   drillDownDetails: any;
   drillDownLevel: any;
   drillDownSubscription: any;

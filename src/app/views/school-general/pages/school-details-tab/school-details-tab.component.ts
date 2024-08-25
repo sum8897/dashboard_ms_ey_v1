@@ -11,6 +11,10 @@ import { ManagementBarchartComponent } from './reports/management-barchart/manag
 import { CategoryBarchartComponent } from './reports/category-barchart/category-barchart.component';
 import { ReceiptsBarchartComponent } from './reports/receipts-barchart/receipts-barchart.component';
 import moment from 'moment';
+import { SchoolDetailsBigNumberCardOneComponent } from './reports/school-details-big-number-card-one/school-details-big-number-card-one.component';
+import { SchoolDetailsBigNumberCardTwoComponent } from './reports/school-details-big-number-card-two/school-details-big-number-card-two.component';
+import { SchoolDetailsBigNumberCardThreeComponent } from './reports/school-details-big-number-card-three/school-details-big-number-card-three.component';
+import { SchoolDetailsBigNumberCardFourComponent } from './reports/school-details-big-number-card-four/school-details-big-number-card-four.component';
 @Component({
   selector: 'app-school-details-tab',
   templateUrl: './school-details-tab.component.html',
@@ -53,9 +57,11 @@ bigNumberMetrics: any = [];
   @ViewChild('receiptsBarchart') receiptsBarchart: ReceiptsBarchartComponent;
   @ViewChild('classroomRatioTable') classroomRatioTable: ClassroomRatioTableComponent;
   @ViewChild('teacherRatioTable') teacherRatioTable: TeacherRatioTableComponent;
-  // @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
-  // @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
-  // @ViewChild('studentTrendchart') studentTrendchart: StudentTrendlineComponent;
+
+  @ViewChild('schoolDetailsBigNumbercardOne') schoolDetailsBigNumbercardOne: SchoolDetailsBigNumberCardOneComponent;
+  @ViewChild('schoolDetailsBigNumbercardTwo') schoolDetailsBigNumbercardTwo: SchoolDetailsBigNumberCardTwoComponent;
+  @ViewChild('schoolDetailsBigNumbercardThree') schoolDetailsBigNumbercardThree: SchoolDetailsBigNumberCardThreeComponent;
+  @ViewChild('schoolDetailsBigNumbercardFour') schoolDetailsBigNumbercardFour: SchoolDetailsBigNumberCardFourComponent;
   
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
@@ -96,6 +102,12 @@ bigNumberMetrics: any = [];
           this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.schoolDetailsBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolDetailsBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolDetailsBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolDetailsBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
           
          
           }
@@ -148,10 +160,15 @@ bigNumberMetrics: any = [];
     this.teacherRatioTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
-    this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-   
+    this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate); 
     this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+    this.schoolDetailsBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolDetailsBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolDetailsBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolDetailsBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
    
    
   

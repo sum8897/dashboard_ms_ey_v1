@@ -13,6 +13,11 @@ import { TeacherByHighestProfessionalQualificationComponent } from './reports/te
 import { TeacherEngagementByEducationLevelComponent } from './reports/teacher-engagement-by-education-level/teacher-engagement-by-education-level.component';
 import { StaffByManagementTableComponent } from './reports/staff-by-management-table/staff-by-management-table.component';
 import { TeacherByAppointmentChartComponent } from './reports/teacher-by-appointment-chart/teacher-by-appointment-chart.component';
+import { StaffDetailsBigNumberCardFiveComponent } from './reports/staff-details-big-number-card-five/staff-details-big-number-card-five.component';
+import { StaffDetailsBigNumberCardOneComponent } from './reports/staff-details-big-number-card-one/staff-details-big-number-card-one.component';
+import { StaffDetailsBigNumberCardTwoComponent } from './reports/staff-details-big-number-card-two/staff-details-big-number-card-two.component';
+import { StaffDetailsBigNumberCardThreeComponent } from './reports/staff-details-big-number-card-three/staff-details-big-number-card-three.component';
+import { StaffDetailsBigNumberCardFourComponent } from './reports/staff-details-big-number-card-four/staff-details-big-number-card-four.component';
 
 @Component({
   selector: 'app-staff-details-tab',
@@ -58,6 +63,13 @@ bigNumberMetrics: any = [];
   @ViewChild('classroomRatioTable') classroomRatioTable:   TeacherByHighestAcademicQualificationComponent;
   @ViewChild('categoryBarchart') categoryBarchart: TeacherEngagementByEducationLevelComponent;
 
+  @ViewChild('StaffDetailsBigNumbercardOne') StaffDetailsBigNumbercardOne: StaffDetailsBigNumberCardOneComponent;
+  @ViewChild('StaffDetailsBigNumbercardTwo') StaffDetailsBigNumbercardTwo: StaffDetailsBigNumberCardTwoComponent;
+  @ViewChild('StaffDetailsBigNumbercardThree') StaffDetailsBigNumbercardThree: StaffDetailsBigNumberCardThreeComponent;
+  @ViewChild('StaffDetailsBigNumbercardFour') StaffDetailsBigNumbercardFour: StaffDetailsBigNumberCardFourComponent;
+  @ViewChild('StaffDetailsBigNumbercardFive') StaffDetailsBigNumbercardFive: StaffDetailsBigNumberCardFiveComponent;
+
+
   // @ViewChild('comparativeSchool') comparativeSchool: StudentComparativeSchoolTableComponent;
   // @ViewChild('studentComparativeBarchart') studentComparativeBarchart: StudentComparativeBarchartComponent;
   // @ViewChild('studentTrendchart') studentTrendchart: StudentTrendlineComponent;
@@ -101,6 +113,13 @@ bigNumberMetrics: any = [];
           this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.educationBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.StaffDetailsBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StaffDetailsBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StaffDetailsBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StaffDetailsBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StaffDetailsBigNumbercardFive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
 
           // this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           
@@ -159,6 +178,13 @@ bigNumberMetrics: any = [];
    
     this.categoryBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.educationBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+        this.StaffDetailsBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        this.StaffDetailsBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        this.StaffDetailsBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        this.StaffDetailsBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        this.StaffDetailsBigNumbercardFive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
     // this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
    
    

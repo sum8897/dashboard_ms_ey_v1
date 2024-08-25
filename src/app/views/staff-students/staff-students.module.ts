@@ -25,6 +25,14 @@ import { EnrollmentByGenderTableComponent } from './pages/enrollment-info-tab/re
 import { EnrollmentByCategoryTableComponent } from './pages/enrollment-info-tab/reports/enrollment-by-category-table/enrollment-by-category-table.component';
 import { StaffByManagementTableComponent } from './pages/staff-details-tab/reports/staff-by-management-table/staff-by-management-table.component';
 import { TeacherByAppointmentChartComponent } from './pages/staff-details-tab/reports/teacher-by-appointment-chart/teacher-by-appointment-chart.component';
+import { StaffDetailsBigNumberCardOneComponent } from './pages/staff-details-tab/reports/staff-details-big-number-card-one/staff-details-big-number-card-one.component';
+import { StaffDetailsBigNumberCardTwoComponent } from './pages/staff-details-tab/reports/staff-details-big-number-card-two/staff-details-big-number-card-two.component';
+import { StaffDetailsBigNumberCardThreeComponent } from './pages/staff-details-tab/reports/staff-details-big-number-card-three/staff-details-big-number-card-three.component';
+import { StaffDetailsBigNumberCardFourComponent } from './pages/staff-details-tab/reports/staff-details-big-number-card-four/staff-details-big-number-card-four.component';
+import { StaffDetailsBigNumberCardFiveComponent } from './pages/staff-details-tab/reports/staff-details-big-number-card-five/staff-details-big-number-card-five.component';
+import { StudentDetailsBigNumberCardOneComponent } from './pages/students-details-tab/reports/student-details-big-number-card-one/student-details-big-number-card-one.component';
+import { StudentDetailsBigNumberCardTwoComponent } from './pages/students-details-tab/reports/student-details-big-number-card-two/student-details-big-number-card-two.component';
+import { StudentDetailsBigNumberCardThreeComponent } from './pages/students-details-tab/reports/student-details-big-number-card-three/student-details-big-number-card-three.component';
 
 
 @NgModule({
@@ -48,6 +56,14 @@ import { TeacherByAppointmentChartComponent } from './pages/staff-details-tab/re
     EnrollmentByCategoryTableComponent,
     StaffByManagementTableComponent,
     TeacherByAppointmentChartComponent,
+    StaffDetailsBigNumberCardOneComponent,
+    StaffDetailsBigNumberCardTwoComponent,
+    StaffDetailsBigNumberCardThreeComponent,
+    StaffDetailsBigNumberCardFourComponent,
+    StaffDetailsBigNumberCardFiveComponent,
+    StudentDetailsBigNumberCardOneComponent,
+    StudentDetailsBigNumberCardTwoComponent,
+    StudentDetailsBigNumberCardThreeComponent,
     
   ],
   // imports: [

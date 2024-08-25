@@ -20,13 +20,20 @@ import { SchoolSafetyComponent } from '../../school-safety.component';
 })
 export class SchoolSafetyFirstBarChartComponent implements OnInit {
 
+  dropdownOptions = [
+    { id: 1, value: 'bar', name: 'bar' },
+    { id: 1, value: 'line', name: 'line' }
+  ];
+
+  chartType: string;
+
   compareDateRange: any = 7;
   title: any;
   chartHeight: any;
   marginTop: any;
   config;
   data;
-  fileName: string = "PGI Indicators";
+  fileName: string = "School Safety Activities (All Schools)";
   reportName: string = 'management_barchart';
   filters: any = [];
   levels: any;
@@ -49,7 +56,7 @@ export class SchoolSafetyFirstBarChartComponent implements OnInit {
   metricFilter:any;
   selectedYear: any;
   selectedMonth: any;
-  
+  type: any= 'bar';
   
   
 
@@ -102,6 +109,12 @@ export class SchoolSafetyFirstBarChartComponent implements OnInit {
       }
     })
     // this.getReportData();
+  }
+
+  onDropdownChange(selectedValue: string): void {
+    this.chartType = selectedValue;
+    this.type = this.chartType;
+    // alert(this.chartType)
   }
 
   async getReportData(values: any,startDate: any, endDate : any): Promise<void> {

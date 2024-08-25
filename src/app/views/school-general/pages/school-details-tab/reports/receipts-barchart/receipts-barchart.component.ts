@@ -12,6 +12,7 @@ import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchma
 import { DataService } from 'src/app/core/services/data.service';
 import { SchoolDetailsTabComponent } from '../../school-details-tab.component';
 import { config } from 'src/app/views/school-general/config/school_general_config';
+
 @Component({
   selector: 'app-receipts-barchart',
   templateUrl: './receipts-barchart.component.html',

@@ -808,7 +808,7 @@ export const config = {
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                 WHERE
-                 tp.ac_year = '2022-23' AND
+                
                  b.block_id = { block_id }
                 GROUP BY 
                     tp.cluster_id,c.cluster_name, m.schoolmanagement_name, sm.sch_mgmt_id
@@ -852,7 +852,7 @@ export const config = {
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                 
                      b.block_id = { block_id }
                     GROUP BY 
                         tp.cluster_id,c.cluster_name, m.schoolmanagement_name, sm.sch_mgmt_id
@@ -904,7 +904,7 @@ export const config = {
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                 WHERE
-                 tp.ac_year = '2022-23' AND
+                 
                  c.cluster_id = { cluster_id }
                 GROUP BY 
                     tp.school_id,sch.school_name, m.schoolmanagement_name, sm.sch_mgmt_id
@@ -949,7 +949,7 @@ export const config = {
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                    
                      c.cluster_id = { cluster_id }
                     GROUP BY 
                         tp.school_id,sch.school_name, m.schoolmanagement_name, sm.sch_mgmt_id
@@ -1789,8 +1789,7 @@ join
 dimensions.school sch on tp.school_id = sch.school_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
- tp.ac_year = '2022-23'
+
 group by
 sch.school_name, tp.district_id ) as sub
 group by 
@@ -1826,8 +1825,7 @@ join
 dimensions.school sch on tp.school_id = sch.school_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
- tp.ac_year = '2022-23'
+
 group by
 sch.school_name, tp.district_id ) as sub
 group by 
@@ -1873,7 +1871,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                            
                             tp.district_id = {district_id}
                             group by
                             sch.school_name, tp.block_id ) as sub
@@ -1913,7 +1911,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                                 
                                 tp.district_id = {district_id}
                                 group by
                                 sch.school_name, tp.block_id ) as sub
@@ -1962,7 +1960,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                           
                             tp.block_id = {block_id}
                             group by
                             sch.school_name, tp.cluster_id ) as sub
@@ -2004,7 +2002,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                                
                                 tp.block_id = {block_id}
                                 group by
                                 sch.school_name, tp.cluster_id ) as sub
@@ -2054,7 +2052,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                           
                             tp.cluster_id = {cluster_id}
                             group by
                             sch.school_name, tp.school_id ) as sub
@@ -2098,7 +2096,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                                
                                 tp.cluster_id = {cluster_id}
                                 group by
                                 sch.school_name, tp.school_id ) as sub
@@ -2327,8 +2325,7 @@ join
 dimensions.school sch on tp.school_id = sch.school_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
- tp.ac_year = '2022-23'
+
 group by
 sch.school_name, tp.district_id ) as sub
 group by 
@@ -2364,8 +2361,7 @@ join
 dimensions.school sch on tp.school_id = sch.school_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
- tp.ac_year = '2022-23'
+
 group by
 sch.school_name, tp.district_id ) as sub
 group by 
@@ -2381,78 +2377,42 @@ school_name`,
                         "hierarchyLevel": "2",
                         "timeSeriesQueries": {
                             "table": `select
-                            school_name,
-                            sum(below_secondary) as below_secondary,
-                            sum(secondary) as secondary,
-                            sum(higher_secondary) as higher_secondary,
-                            sum(graduate) as graduate,
-                            sum(post_graduate) as post_graduate,
-                            sum(mphil) as mphil,
-                            sum(ph_d) as ph_d,
-                            sum(post_doctoral) as post_doctoral
-                            from (select 
-                            sch.school_name,
-                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
-                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
-                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
-                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
-                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
-                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
-                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
-                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
-                            from
-                            staff_students.tch_profile tp 
-                            join
-                            dimensions.district d on tp.district_id = d.district_id 
-                            join 
-                            dimensions.block b on tp.block_id = b.block_id 
-                            join
-                            dimensions.school sch on tp.school_id = sch.school_id 
-                            JOIN
-                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                            WHERE
-                             tp.ac_year = '2022-23' AND
-                            tp.district_id = '601'
-                            group by
-                            sch.school_name, tp.block_id ) as sub
-                            group by 
-                            school_nameselect
-                            school_name,
-                            sum(below_secondary) as below_secondary,
-                            sum(secondary) as secondary,
-                            sum(higher_secondary) as higher_secondary,
-                            sum(graduate) as graduate,
-                            sum(post_graduate) as post_graduate,
-                            sum(mphil) as mphil,
-                            sum(ph_d) as ph_d,
-                            sum(post_doctoral) as post_doctoral
-                            from (select 
-                            sch.school_name,
-                            count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
-                            count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
-                            count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
-                            count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
-                            count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
-                            count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
-                            count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
-                            count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
-                            from
-                            staff_students.tch_profile tp 
-                            join
-                            dimensions.district d on tp.district_id = d.district_id 
-                            join 
-                            dimensions.block b on tp.block_id = b.block_id 
-                            join
-                            dimensions.school sch on tp.school_id = sch.school_id 
-                            JOIN
-                                dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                            WHERE
-                             tp.ac_year = '2022-23' AND
-                            tp.district_id = {district_id}
-                            group by
-                            sch.school_name, tp.block_id ) as sub
-                            group by 
-                            school_name
+                                school_name,
+                                sum(below_secondary) as below_secondary,
+                                sum(secondary) as secondary,
+                                sum(higher_secondary) as higher_secondary,
+                                sum(graduate) as graduate,
+                                sum(post_graduate) as post_graduate,
+                                sum(mphil) as mphil,
+                                sum(ph_d) as ph_d,
+                                sum(post_doctoral) as post_doctoral
+                                from (select 
+                                sch.school_name,
+                                count(case when tp.qual_prof = '1' then tp.tch_name end) as below_secondary,
+                                count(case when tp.qual_prof = '2' then tp.tch_name end) as secondary,
+                                count(case when tp.qual_prof = '3' then tp.tch_name end) as higher_secondary,
+                                count(case when tp.qual_prof = '4' then tp.tch_name end) as graduate,
+                                count(case when tp.qual_prof = '5' then tp.tch_name end) as post_graduate,
+                                count(case when tp.qual_prof = '6' then tp.tch_name end) as mphil,
+                                count(case when tp.qual_prof = '7' then tp.tch_name end) as ph_d,
+                                count(case when tp.qual_prof = '8' then tp.tch_name end) as post_doctoral
+                                from
+                                staff_students.tch_profile tp 
+                                join
+                                dimensions.district d on tp.district_id = d.district_id 
+                                join 
+                                dimensions.block b on tp.block_id = b.block_id 
+                                join
+                                dimensions.school sch on tp.school_id = sch.school_id 
+                                JOIN
+                                    dimensions.academic_year ay on tp.ac_year = ay.ac_year
+                                WHERE
+                                
+                                tp.district_id = {district_id}
+                                group by
+                                sch.school_name, tp.block_id ) as sub
+                                group by 
+                                school_name
                         `
                         },
                         "actions": {
@@ -2488,7 +2448,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                                
                                 tp.district_id = {district_id}
                                 group by
                                 sch.school_name, tp.block_id ) as sub
@@ -2539,7 +2499,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                            
                             tp.block_id = {block_id}
                             group by
                             sch.school_name, tp.cluster_id ) as sub
@@ -2582,7 +2542,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                                
                                 tp.block_id = {block_id}
                                 group by
                                 sch.school_name, tp.cluster_id ) as sub
@@ -2632,7 +2592,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                             
                             tp.cluster_id = {cluster_id}
                             group by
                             sch.school_name, tp.school_id ) as sub
@@ -2676,7 +2636,7 @@ school_name`,
                                 JOIN
                                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                                 WHERE
-                                 tp.ac_year = '2022-23' AND
+                               
                                 tp.cluster_id = {cluster_id}
                                 group by
                                 sch.school_name, tp.school_id ) as sub
@@ -2896,8 +2856,7 @@ school_name`,
                         dimensions.district d ON tp.district_id = d.district_id 
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                    WHERE
-                     tp.ac_year = '2022-23'
+                   
                     group by d.district_name,td.designation, td.tch_type) as sub
                     group by 
                     designation, tch_type
@@ -2924,8 +2883,7 @@ school_name`,
                             dimensions.district d ON tp.district_id = d.district_id 
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                        WHERE
-                         tp.ac_year = '2022-23'
+                        
                         group by d.district_name,td.designation, td.tch_type) as sub
                         group by 
                         designation, tch_type
@@ -2962,7 +2920,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                  
                      d.district_id = { district_id }
                     group by b.block_name,td.designation, td.tch_type) as sub
                     group by 
@@ -2992,7 +2950,7 @@ school_name`,
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
                         WHERE
-                         tp.ac_year = '2022-23' AND
+                        
                          d.district_id = { district_id }
                         group by b.block_name,td.designation, td.tch_type) as sub
                         group by 
@@ -3031,7 +2989,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                     
                       b.block_id = { block_id }
                     group by c.cluster_name,td.designation, td.tch_type) as sub
                     group by 
@@ -3063,7 +3021,7 @@ school_name`,
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
                         WHERE
-                         tp.ac_year = '2022-23' AND
+                         
                           b.block_id = { block_id }
                         group by c.cluster_name,td.designation, td.tch_type) as sub
                         group by 
@@ -3104,7 +3062,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                    
                      c.cluster_id = { cluster_id }
                     group by sch.school_name,td.designation, td.tch_type) as sub
                     group by 
@@ -3138,7 +3096,7 @@ school_name`,
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
                         WHERE
-                         tp.ac_year = '2022-23' AND
+                       
                          c.cluster_id = { cluster_id }
                         group by sch.school_name,td.designation, td.tch_type) as sub
                         group by 
@@ -3262,8 +3220,7 @@ school_name`,
                         dimensions.district d ON tp.district_id = d.district_id 
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                    WHERE
-                     tp.ac_year = '2022-23'
+                  
                     group by d.district_name,td.designation, td.tch_type) as sub
                     group by 
                     designation, tch_type
@@ -3290,8 +3247,7 @@ school_name`,
                             dimensions.district d ON tp.district_id = d.district_id 
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                        WHERE
-                         tp.ac_year = '2022-23'
+                        
                         group by d.district_name,td.designation, td.tch_type) as sub
                         group by 
                         designation, tch_type
@@ -3329,7 +3285,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                     
                      d.district_id = {district_id}
                     group by b.block_name,td.designation, td.tch_type) as sub
                     group by 
@@ -3359,7 +3315,7 @@ school_name`,
                             JOIN
                                 dimensions.academic_year ay on tp.ac_year = ay.ac_year
                             WHERE
-                             tp.ac_year = '2022-23' AND
+                            
                              d.district_id = {district_id}
                             group by b.block_name,td.designation, td.tch_type) as sub
                             group by 
@@ -3398,7 +3354,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                    
                       b.block_id = {block_id}
                     group by c.cluster_name,td.designation, td.tch_type) as sub
                     group by 
@@ -3430,7 +3386,7 @@ school_name`,
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
                         WHERE
-                         tp.ac_year = '2022-23' AND
+                         
                           b.block_id = {block_id}
                         group by c.cluster_name,td.designation, td.tch_type) as sub
                         group by 
@@ -3471,7 +3427,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                     
                      c.cluster_id = {cluster_id}
                     group by sch.school_name,td.designation, td.tch_type) as sub
                     group by 
@@ -3507,7 +3463,7 @@ school_name`,
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
                         WHERE
-                         tp.ac_year = '2022-23' AND
+                         
                          c.cluster_id = {cluster_id}
                         group by sch.school_name,td.designation, td.tch_type) as sub
                         group by 
@@ -3636,8 +3592,7 @@ school_name`,
                         dimensions.district d ON tp.district_id = d.district_id 
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                     WHERE
-                     tp.ac_year = '2022-23'
+                   
                     group by d.district_name,cl.class_level, cl.class_taught) as sub
                     group by 
                     class_level, class_taught
@@ -3664,8 +3619,7 @@ school_name`,
                             dimensions.district d ON tp.district_id = d.district_id 
                         JOIN
                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                        WHERE
-                         tp.ac_year = '2022-23'
+                       
                         group by d.district_name,cl.class_level, cl.class_taught) as sub
                         group by 
                         class_level, class_taught
@@ -3703,7 +3657,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                    
                      d.district_id = {district_id}
                     group by b.block_name,cl.class_level, cl.class_taught) as sub
                     group by 
@@ -5260,8 +5214,7 @@ school_name`,
                     dimensions.district d ON tp.district_id = d.district_id 
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                WHERE
-                 tp.ac_year = '2022-23'
+               
                 group by d.district_name,sc.category, sc.social_cat) as sub
                 group by 
                 category, social_cat
@@ -5336,7 +5289,7 @@ school_name`,
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                 WHERE
-                 tp.ac_year = '2022-23' AND
+                
                  d.district_id = {district_id}
                 group by b.block_name,sc.category, sc.social_cat) as sub
                 group by 
@@ -5371,7 +5324,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                   
                      d.district_id = {district_id}
                     group by b.block_name,sc.category, sc.social_cat) as sub
                     group by 
@@ -5415,7 +5368,7 @@ school_name`,
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                 WHERE
-                 tp.ac_year = '2022-23' AND
+                 
                   b.block_id = {block_id}
                 group by c.cluster_name,sc.category, sc.social_cat) as sub
                 group by 
@@ -5452,7 +5405,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                     
                       b.block_id = {block_id}
                     group by c.cluster_name,sc.category, sc.social_cat) as sub
                     group by 
@@ -5498,7 +5451,7 @@ school_name`,
                 JOIN
                     dimensions.academic_year ay on tp.ac_year = ay.ac_year
                 WHERE
-                 tp.ac_year = '2022-23' AND
+                 
                  c.cluster_id = {cluster_id}
                 group by sch.school_name,sc.category, sc.social_cat) as sub
                 group by 
@@ -5537,7 +5490,7 @@ school_name`,
                     JOIN
                         dimensions.academic_year ay on tp.ac_year = ay.ac_year
                     WHERE
-                     tp.ac_year = '2022-23' AND
+                  
                      c.cluster_id = {cluster_id}
                     group by sch.school_name,sc.category, sc.social_cat) as sub
                     group by 
@@ -8952,9 +8905,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                         "bigNumber1": `select sum(case when tp.nature_of_appt = '1' then 1 else 0 end ) as tch_staff_reg
                                  from staff_students.tch_profile tp
                                     left join
-                             dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                          where
-                      ay.ac_year = '2022-23'`,
+                             dimensions.academic_year ay on tp.ac_year = ay.ac_year`,
                         "bigNumber2": `select count(tp.tch_name) as tch_staff_contrct from staff_students.tch_profile tp where tp.nature_of_appt = '2'`,
                         "bigNumber3": `select count(tp.tch_name) as tch_staff_parttime from staff_students.tch_profile tp where tp.nature_of_appt = '3'`,
                         "bigNumber4": `select count(tp.tch_name) as tch_staff_total from staff_students.tch_profile tp`,
@@ -9045,8 +8996,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 dimensions.district d on sef.district_id = d.district_id 
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
-                where 
-                ay.ac_year = '2022-23'
+                
                 group by 
                 d.district_id , d.district_name;`,
                 },
@@ -9069,8 +9019,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     dimensions.district d on sef.district_id = d.district_id 
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
-                    where 
-                    ay.ac_year = '2022-23'
+                    
                     group by 
                     d.district_id , d.district_name ;`,
                     },
@@ -9102,10 +9051,9 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sef.district_id = '600'
+                sef.district_id = {district_id}
                 group by 
-                sef.block_id , b.block_name 
-               ;`,
+                sef.block_id , b.block_name;`,
                 },
                 "actions": {
                     "queries": {
@@ -9128,7 +9076,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sef.district_id = '600'
+                    sef.district_id = {district_id}
                     group by 
                     sef.block_id , b.block_name;`,
                     },
@@ -9162,7 +9110,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sef.block_id = '340101'
+                sef.block_id = {block_id}
                 group by 
                 sef.cluster_id , c.cluster_name ;
                `,
@@ -9190,7 +9138,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sef.block_id = '340101'
+                    sef.block_id = {block_id}
                     group by 
                     sef.cluster_id , c.cluster_name ;
                   `,
@@ -9227,7 +9175,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sef.cluster_id = '3401010001'
+                sef.cluster_id = {cluster_id}
                 group by 
                 sef.school_id , sch.school_name ;`
                 },
@@ -9256,7 +9204,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sef.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sef.cluster_id = '3401010001'
+                    sef.cluster_id = {cluster_id}
                     group by 
                     sef.school_id , sch.school_name ;`,
                     },
@@ -9511,8 +9459,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 dimensions.school sch on sec.school_id = sch.school_id 
                 left join 
                 dimensions.academic_year ay on sec.ac_year = ay.ac_year 
-                where 
-                ay.ac_year = '2022-23'
+             
                 group by 
                 sec.district_id , d.district_name, sch.school_name ) as sub
                 group by 
@@ -9626,8 +9573,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     dimensions.school sch on sec.school_id = sch.school_id 
                     left join 
                     dimensions.academic_year ay on sec.ac_year = ay.ac_year 
-                    where 
-                    ay.ac_year = '2022-23'
+                   
                     group by 
                     sec.district_id , d.district_name, sch.school_name ) as sub
                     group by 
@@ -9752,7 +9698,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sec.district_id = '599'
+                sec.district_id = {district_id}
                 group by 
                 sec.block_id ,sch.school_name, b.block_name ) as sub
                 group by 
@@ -9870,7 +9816,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sec.district_id = '599'
+                    sec.district_id = {district_id}
                     group by 
                     sec.block_id ,sch.school_name, b.block_name ) as sub
                     group by 
@@ -9998,7 +9944,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sec.block_id = '340101'
+               sec.block_id = {block_id}
                 group by 
                 sec.cluster_id , sch.school_name,c.cluster_name ) as sub
                 group by 
@@ -10120,7 +10066,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sec.block_id = '340101'
+                    sec.block_id = {block_id}
                     group by 
                     sec.cluster_id , sch.school_name,c.cluster_name ) as sub
                     group by 
@@ -10248,7 +10194,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 left join 
                 dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                 where 
-                ay.ac_year = '2022-23' and sec.cluster_id = '3401010001'
+               sec.cluster_id = {cluster_id}
                 group by 
                 sec.school_id , sch.school_name ) as sub
                 group by 
@@ -10368,7 +10314,7 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     left join 
                     dimensions.academic_year ay on sec.ac_year = ay.ac_year 
                     where 
-                    ay.ac_year = '2022-23' and sec.cluster_id = '3401010001'
+                    sec.cluster_id = {cluster_id}
                     group by 
                     sec.school_id , sch.school_name ) as sub
                     group by 
@@ -10643,6 +10589,263 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
 
 
 
-    ///left table --Teacher by Management table
-    
+    /// staff students dynamic card
+    staff_details_bignumber_card_one: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when tp.nature_of_appt = '1' then 1 else 0 end ) as tch_staff_reg
+                                 from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when tp.nature_of_appt = '1' then 1 else 0 end ) as tch_staff_reg
+                                      from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Teaching Staff Regular",
+                "valueSuffix": '',
+                "property": 'tch_staff_reg'
+            }
+        }
+    },
+    staff_details_bignumber_card_two: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count (case when tp.nature_of_appt = '2' then tp.tch_name end ) as tch_staff_contrct
+                                  from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count (case when tp.nature_of_appt = '2' then tp.tch_name end ) as tch_staff_contrct
+                                  from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Teaching Staff Contract",
+                "valueSuffix": '',
+                "property": 'tch_staff_contrct'
+            }
+        }
+    },
+    staff_details_bignumber_card_three: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when tp.nature_of_appt = '3' then tp.tch_name end ) as tch_staff_parttime
+                                  from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when tp.nature_of_appt = '3' then tp.tch_name end ) as tch_staff_parttime
+                                    from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Teaching Staff Part Time/Guest",
+                "valueSuffix": '',
+                "property": 'tch_staff_parttime'
+            }
+        }
+    },
+    staff_details_bignumber_card_four: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(tp.tch_name) as tch_staff_total
+                                   from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(tp.tch_name) as tch_staff_total
+                                    from staff_students.tch_profile tp left join dimensions.academic_year ay on tp.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Teaching Staff Total",
+                "valueSuffix": '',
+                "property": 'tch_staff_total'
+            }
+        }
+    },
+    staff_details_bignumber_card_five: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
++ sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total
+from staff_students.nontch_profile np left join dimensions.academic_year ay on np.ac_year = ay.ac_yearselect count(case when pi.nodal_tch_yn = 1 then school_id end) as schools_with_nodal_safetytchr  
+                                  from pgi.performing_indicators pi left join dimensions.academic_year ay on pi.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
++ sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total
+from staff_students.nontch_profile np left join dimensions.academic_year ay on np.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Non Teaching Staff Total",
+                "valueSuffix": '',
+                "property": 'nontch_staff_total'
+            }
+        }
+    },
+     // students details dynamic card
+     studenet_details_bignumber_card_one: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select count(case when s.cwsn_sch_yn = '1' then s.school_id end ) as total_cwsn_schools
+from staff_students.schoolmaster s left join
+dimensions.academic_year ay on s.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select count(case when s.cwsn_sch_yn = '1' then s.school_id end ) as total_cwsn_schools
+from staff_students.schoolmaster s left join
+dimensions.academic_year ay on s.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Total CWSN Schools",
+                "valueSuffix": '',
+                "property": 'total_cwsn_schools'
+            }
+        }
+    },
+    studenet_details_bignumber_card_two: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as tot_enrolments
+from staff_students.sch_enr_cwsn sec
+left join dimensions.academic_year ay on sec.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as tot_enrolments
+from staff_students.sch_enr_cwsn sec
+left join dimensions.academic_year ay on sec.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "CWSN Enrolments",
+                "valueSuffix": '',
+                "property": 'tot_enrolments'
+            }
+        }
+    },
+    studenet_details_bignumber_card_three: {
+        "label": "Average Student Present",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": `select sum(case when item_group = '4' then pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t else 0 end ) as bpl_benef
+from staff_students.sch_enr_fresh sef
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": `select sum(case when item_group = '4' then pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
+c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
+c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t else 0 end ) as bpl_benef
+from staff_students.sch_enr_fresh sef
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+                    },
+                    "level": "district"
+                }
+            },
+ 
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Total BPL Beneficiaries",
+                "valueSuffix": '',
+                "property": 'bpl_benef'
+            }
+        }
+    },
 }

@@ -8,6 +8,13 @@ import { config } from 'src/app/views/pgi-govt-aided/config/pgi-govt-aided_confi
 import { PerformingIndicatorsTableComponent } from './reports/performing-indicators-table/performing-indicators-table.component';
 import { PerformingIndicatorsTableTwoComponent } from './reports/performing-indicators-table-two/performing-indicators-table-two.component';
 import moment from 'moment';
+import { ComparativeCardComponent } from './reports/comparative-card/comparative-card.component';
+import { BigNumberPhotographsComponent } from './reports/big-number-photographs/big-number-photographs.component';
+import { BigNumberTwoComponent } from './reports/big-number-two/big-number-two.component';
+import { BigNumberThreeComponent } from './reports/big-number-three/big-number-three.component';
+import { BigNumberFourComponent } from './reports/big-number-four/big-number-four.component';
+import { BigNumberFiveComponent } from './reports/big-number-five/big-number-five.component';
+import { BigNumberSixComponent } from './reports/big-number-six/big-number-six.component';
 
 @Component({
   selector: 'app-performing-indicators-tabs',
@@ -47,6 +54,13 @@ bigNumberMetrics: any = [];
   //
   @ViewChild('performing_wise_table_one') performing_wise_table_one: PerformingIndicatorsTableComponent;
   @ViewChild('genderTable') genderTable:  PerformingIndicatorsTableTwoComponent;
+  @ViewChild('performingBigNumbercardone') performingBigNumbercardone: BigNumberPhotographsComponent;
+  @ViewChild('performingBigNumbercardtwo') performingBigNumbercardtwo: BigNumberTwoComponent;
+  @ViewChild('performingBigNumbercardthree') performingBigNumbercardthree: BigNumberThreeComponent;
+  @ViewChild('performingBigNumbercardfour') performingBigNumbercardfour: BigNumberFourComponent;
+  @ViewChild('performingBigNumbercardfive') performingBigNumbercardfive: BigNumberFiveComponent;
+  @ViewChild('performingBigNumbercardsix') performingBigNumbercardsix: BigNumberSixComponent;
+  @ViewChild('studentComparativeBigNumber') studentComparativeBigNumber: ComparativeCardComponent;
 
 
 
@@ -82,6 +96,14 @@ bigNumberMetrics: any = [];
           console.log('line103- filters',this.filters)
           this.performing_wise_table_one?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.genderTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardone?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardtwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardfour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardfive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.performingBigNumbercardsix?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.studentComparativeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
 
           
@@ -133,6 +155,13 @@ bigNumberMetrics: any = [];
 
     this.performing_wise_table_one?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.genderTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardone?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardtwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardfour?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardfive?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.performingBigNumbercardsix?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.studentComparativeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
    
    
@@ -200,6 +229,7 @@ bigNumberMetrics: any = [];
   }
   importBigNumberMetrics(bigNumberMetric: any) {
     this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
+    console.log(bigNumberMetric);
 }
   
 

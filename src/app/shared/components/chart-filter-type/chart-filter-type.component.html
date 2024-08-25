@@ -1,0 +1,40 @@
+<div class="wrapper">
+	<div class="grid grid-cols-10 filter-panel-wrapper align-items-center">
+		<div class="col-span-full xmd:col-span-full">
+			<div class="grid grid-cols-12">
+				<ng-container>
+					<div class="filter-wrapper" [ngClass]="colSize">
+						<!-- <label class="ml-2 less-bold">{{ filter.displayLabel }}</label> -->
+                        <select 
+                        (change)="onChange($event)"
+                         [(ngModel)]="selectedValue">
+                            <option *ngFor="let option of options" [value]="option.value">{{ option.name }}</option>
+                          </select>
+						<!-- <ng-select
+							#selectRef
+							class="mx-2 custom-dropdown"
+							dropdownPosition="bottom"
+							[id]="'filter-' + filter.name"
+							[name]="'filter-' + filter.name"
+							[multiple]="isFilterMulti()"
+							[closeOnSelect]="false"
+							placeholder="Select {{ filter.name }}"
+							[clearable]="resetOthers"
+							[(ngModel)]="filter.value"
+							(ngModelChange)="onSelectOption($event, i, selectRef)"
+						>
+							<ng-option
+								*ngFor="let option of filter.options"
+								[value]="option.value"
+								>{{ option.label }}</ng-option
+							>
+						</ng-select> -->
+					</div>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="col-span-2 text-right" *ngIf="!hideClearButton">
+    <button mat-raised-button color="primary" (click)="clearFilters()">Clear Filters</button>
+  </div> -->
+</div>

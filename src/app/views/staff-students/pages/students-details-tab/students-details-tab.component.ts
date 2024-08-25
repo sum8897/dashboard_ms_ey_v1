@@ -7,6 +7,9 @@ import moment from 'moment';
 import { config } from '../../config/staff-students_config';
 import { PerformanceTableComponent } from 'src/app/views/pas/pages/performance-evaluation-tab/reports/performance-table/performance-table.component';
 import { GradewiseTableComponent } from 'src/app/views/pas/pages/performance-evaluation-tab/reports/gradewise-table/gradewise-table.component';
+import { StudentDetailsBigNumberCardOneComponent } from './reports/student-details-big-number-card-one/student-details-big-number-card-one.component';
+import { StudentDetailsBigNumberCardTwoComponent } from './reports/student-details-big-number-card-two/student-details-big-number-card-two.component';
+import { StudentDetailsBigNumberCardThreeComponent } from './reports/student-details-big-number-card-three/student-details-big-number-card-three.component';
 
 @Component({
   selector: 'app-students-details-tab',
@@ -46,7 +49,10 @@ bigNumberMetrics: any = [];
   
   @ViewChild('performanceTable') performanceTable: PerformanceTableComponent;
   @ViewChild('gradeWiseTable') gradeWiseTable: GradewiseTableComponent;
- 
+
+  @ViewChild('StudentDetailsBigNumbercardOne') StudentDetailsBigNumbercardOne: StudentDetailsBigNumberCardOneComponent;
+  @ViewChild('StudentDetailsBigNumbercardTwo') StudentDetailsBigNumbercardTwo: StudentDetailsBigNumberCardTwoComponent;
+  @ViewChild('StudentDetailsBigNumbercardThree') StudentDetailsBigNumbercardThree: StudentDetailsBigNumberCardThreeComponent;
   
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
@@ -81,8 +87,11 @@ bigNumberMetrics: any = [];
           console.log('line103- filters',this.filters)
           
           this.performanceTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-
           this.gradeWiseTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+          this.StudentDetailsBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StudentDetailsBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.StudentDetailsBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
        
          
@@ -134,6 +143,11 @@ bigNumberMetrics: any = [];
     this.performanceTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
     this.gradeWiseTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
+    this.StudentDetailsBigNumbercardOne?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.StudentDetailsBigNumbercardTwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.StudentDetailsBigNumbercardThree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
     
 
    

@@ -6,3 +6,41 @@
         font-size: 0.875rem !important;
     }
 }
+
+/* Base Styles */
+.dashboard-container {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr; /* Single column for very small screens */
+  }
+  
+  /* Small Screens (e.g., sm) */
+  @media (min-width: 640px) {
+    .dashboard-container {
+      grid-template-columns: repeat(2, 1fr); /* Two columns */
+    }
+  }
+  
+  /* Medium Screens (e.g., md) */
+  @media (min-width: 768px) {
+    .dashboard-container {
+      grid-template-columns: repeat(3, 1fr); /* Three columns */
+      gap: 16px;
+    }
+  }
+  
+  /* Large Screens (e.g., lg) */
+  @media (min-width: 1024px) {
+    .dashboard-container {
+      grid-template-columns: repeat(2, 1fr); /* Two columns */
+    }
+  }
+  
+  /* 4K Screens (Custom 2560px and above) */
+  @media (min-width: 2560px) {
+    .dashboard-container {
+      grid-template-columns: repeat(4, 1fr); /* Four columns */
+      gap: 8px;
+    }
+  }
+  

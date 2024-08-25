@@ -7,6 +7,11 @@ import moment from 'moment';
 import { config } from '../../config/pgi-govt-aided_config';
 import { SchoolSafetyFirstTableComponent } from './reports/school-safety-first-table/school-safety-first-table.component';
 import { SchoolSafetyFirstBarChartComponent } from './reports/school-safety-first-bar-chart/school-safety-first-bar-chart.component';
+import { SchoolBigNumberCardOneComponent } from './reports/school-big-number-card-one/school-big-number-card-one.component';
+import { SchoolBigNumberCardTwoComponent } from './reports/school-big-number-card-two/school-big-number-card-two.component';
+import { SchoolBigNumberCardThreeComponent } from './reports/school-big-number-card-three/school-big-number-card-three.component';
+import { SchoolBigNumberCardFourComponent } from './reports/school-big-number-card-four/school-big-number-card-four.component';
+import { SchoolBigNumberCardFiveComponent } from './reports/school-big-number-card-five/school-big-number-card-five.component';
 
 @Component({
   selector: 'app-school-safety',
@@ -47,6 +52,13 @@ bigNumberMetrics: any = [];
  
   @ViewChild('districtWiseTable') districtWiseTable: SchoolSafetyFirstTableComponent;
   @ViewChild('managementBarchart') managementBarchart: SchoolSafetyFirstBarChartComponent;
+  @ViewChild('schoolSaferyBigNumbercardOne') schoolSaferyBigNumbercardOne: SchoolBigNumberCardOneComponent;
+  @ViewChild('schoolSaferyBigNumbercardTwo') schoolSaferyBigNumbercardTwo: SchoolBigNumberCardTwoComponent;
+  @ViewChild('schoolSaferyBigNumbercardThree') schoolSaferyBigNumbercardThree: SchoolBigNumberCardThreeComponent;
+  @ViewChild('schoolSaferyBigNumbercardFour') schoolSaferyBigNumbercardFour: SchoolBigNumberCardFourComponent;
+  @ViewChild('schoolSaferyBigNumbercardFive') schoolSaferyBigNumbercardFive: SchoolBigNumberCardFiveComponent;
+
+
 
   constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -80,6 +92,11 @@ bigNumberMetrics: any = [];
           console.log('line103- filters',this.filters)
           this.districtWiseTable?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolSaferyBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolSaferyBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolSaferyBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolSaferyBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          this.schoolSaferyBigNumbercardFive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
 
           // this.receiptsBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           
@@ -131,7 +148,12 @@ bigNumberMetrics: any = [];
 
     this.districtWiseTable?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     this.managementBarchart?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-   
+    this.schoolSaferyBigNumbercardOne?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolSaferyBigNumbercardTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolSaferyBigNumbercardThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolSaferyBigNumbercardFour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.schoolSaferyBigNumbercardFive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+
     }
      filtersUpdated(filters: any) {
       this.reportsData = [];
