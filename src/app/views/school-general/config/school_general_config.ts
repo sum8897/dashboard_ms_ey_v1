@@ -3731,6 +3731,8 @@ category_table: {
         }
     }
 },
+
+
 //stack bar
 enrollment_barchart:{
     "label": "Overall Summary",

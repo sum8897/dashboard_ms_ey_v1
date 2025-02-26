@@ -5257,7 +5257,7 @@ school_name`,
                     },
                     "level": "district"
                 }
-            },
+            },  
             {
                 "name": "District",
                 "labelProp": "district_name",
