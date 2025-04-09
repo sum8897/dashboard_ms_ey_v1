@@ -6801,18 +6801,20 @@ student_attendance_bignumber1: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":`select
-                sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
-                + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as total_nonteaching_staff
-                from
-                staff_students.nontch_profile np`,
+     SUM(CASE WHEN item_group = 1 AND item_id in  (1,2,3,4) THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b
+     +c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS total_students
+     from
+     staff_students.sch_enr_fresh sec
+     where ac_year = (select max(ac_year) from staff_students.sch_enr_fresh sec)`,
             },
             "actions": {
                 "queries": {
                     "bigNumber": `select
-                    sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc)
-                    + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as total_nonteaching_staff
-                    from
-                    staff_students.nontch_profile np`,
+     SUM(CASE WHEN item_group = 1 AND item_id in  (1,2,3,4) THEN pp1_g+pp1_b+pp2_g+pp2_b+pp3_g+pp3_b+c1_g+c1_b+c2_g+c2_b+c3_g+c3_b+c4_g+c4_b+c5_g+c5_b
+     +c6_g+c6_b+c7_g+c7_b+c8_g+c8_b+c9_g+c9_b+c10_g+c10_b+c11_g+c11_b+c12_g+c12_b ELSE 0 END) AS total_students
+     from
+     staff_students.sch_enr_fresh sec
+     where ac_year = (select max(ac_year) from staff_students.sch_enr_fresh sec)`,
                 },
                 "level": "district"
             }
@@ -6821,9 +6823,9 @@ student_attendance_bignumber1: {
     ],
     "options": {
         "bigNumber": {
-            "title": "Total Non Teaching Staff",
+            "title": "Total Students",
             "valueSuffix": '',
-            "property": 'total_nonteaching_staff'
+            "property": 'total_students'
         }
     }
 },
@@ -6838,20 +6840,22 @@ student_attendance_bignumber2: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber":`select
-                sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
-                c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
-                c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as total_cwsn_students
-                from
-                staff_students.sch_enr_cwsn sec`,
+     sum(pp3_b+pp3_g+pp2_b+pp2_g+pp1_b+pp1_g+
+     c1_b+c1_g+c2_b+c2_g+c3_b+c3_g+c4_b+c4_g+c5_b+c5_g+c6_b+c6_g+
+     c7_b+c7_g+c8_b+c8_g+c9_b+c9_b+c10_b+c10_g+c11_b+c11_g+c12_b+c12_g) as total_cwsn_students
+     from
+     staff_students.sch_enr_cwsn sec
+     where ac_year = (select max(ac_year) from staff_students.sch_enr_cwsn sec)`,
             },
             "actions": {
                 "queries": {
                     "bigNumber": `select
-                    sum(pp3_b+pp3_g+pp3_t+pp2_b+pp2_g+pp2_t+pp1_b+pp1_g+pp1_t+
-                    c1_b+c1_g+c1_t+c2_b+c2_g+c2_t+c3_b+c3_g+c3_t+c4_b+c4_g+c4_t+c5_b+c5_g+c5_t+c6_b+c6_g+c6_t+
-                    c7_b+c8_g+c9_t+c10_b+c10_g+c10_t+c11_b+c11_g+c11_t+c12_b+c12_g+c12_t) as total_cwsn_students
-                    from
-                    staff_students.sch_enr_cwsn sec`,
+     sum(pp3_b+pp3_g+pp2_b+pp2_g+pp1_b+pp1_g+
+     c1_b+c1_g+c2_b+c2_g+c3_b+c3_g+c4_b+c4_g+c5_b+c5_g+c6_b+c6_g+
+     c7_b+c7_g+c8_b+c8_g+c9_b+c9_b+c10_b+c10_g+c11_b+c11_g+c12_b+c12_g) as total_cwsn_students
+     from
+     staff_students.sch_enr_cwsn sec
+     where ac_year = (select max(ac_year) from staff_students.sch_enr_cwsn sec)`,
                 },
                 "level": "district"
             }
