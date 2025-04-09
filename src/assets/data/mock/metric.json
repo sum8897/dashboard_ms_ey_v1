@@ -128,6 +128,14 @@
   "imageUrl": "teacher_attendance.png",
   "programID": "pgiSchoolSafety",
   "orderBy": "18"
+},
+{
+  "programName": "Staff",
+  "tooltip": "Staff",
+  "navigationUrl": "/staff",
+  "imageUrl": "school_general.png",
+  "programID": "staff",
+  "orderBy": "19"
 }
   ]
 }

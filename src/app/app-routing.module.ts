@@ -269,6 +269,10 @@ routes = [
           ),
         canLoad: [AuthGuard]
       },
+      {
+        path: 'staff',
+        loadChildren: () => import('./views/staff/staff.module').then((module) => module.StaffModule)
+      }
     ],
   },
   {

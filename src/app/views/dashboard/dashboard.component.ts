@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onClickOfDashboardItem(cardInfo: IDashboardMenu | undefined): void {
-    // alert(cardInfo.title);
+    console.log(cardInfo);
     // alert(localStorage.getItem('login_access')=='login_public'); 
     if (cardInfo) {
       if((cardInfo.title=='UDISE School Infrastructure' || cardInfo.title=='School General' || cardInfo.title=='PAS' || cardInfo.title=='Staff and Students' || cardInfo.title=='PGI and School Safety')  && (localStorage.getItem('login_access')=='login_public')){
@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit {
           menuToDisplay.tooltip = menuData[i].tooltip;
            this.getDashboardMetrics(configFiles[menuData[i].programID], this.rbacDetails)
                .then(d => {
-                
+                console.log(d);
                  menuToDisplay.metrics = d;
                });
           this.dashboardMenu.push(menuToDisplay);

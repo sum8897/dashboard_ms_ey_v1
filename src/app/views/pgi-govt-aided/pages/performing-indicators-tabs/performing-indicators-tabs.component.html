@@ -44,7 +44,8 @@
 			</div>
 		</div>
 		<div class="row-wrapper grid grid-cols-2 gap-4">
-			<div class="col-span-2 xmd:col-span-2 div-shadow" id="table1" *ngIf="checkReport('gender_table', 'table')">
+			<div class="col-span-2 xmd:col-span-2 div-shadow" id="table1"
+			 *ngIf="checkReport('gender_table', 'table')">
 				<app-performing-indicators-table-two #genderTable
 					(exportReportData)="csvDownload($event)"></app-performing-indicators-table-two>
 			</div>

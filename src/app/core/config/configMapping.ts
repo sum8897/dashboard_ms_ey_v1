@@ -29,12 +29,14 @@ import{ config as pasConfig} from '../../views/pas/config/pas_config';
 // import{ config as udiseSchoolinfraConfig} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config.ts';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
 import {config as libraryConfig} from '../../views/library/config';
+import { config as staffConfig } from '../../views/staff/config/staff_config';
 
 
 
 export const configFiles = {
   schoolGeneral:schoolGeneralConfig,
   staffstudents:staffStudentsConfig,
+  staff: staffConfig,
   pgiSchoolSafety:pgiSchoolSafetyConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
@@ -66,6 +68,7 @@ export const configFiles = {
 export const programFolderNames = {
   schoolGeneral:'schoolGeneral',
   staffstudents:'staffStudents',
+  staff:'staff',
   pgiSchoolSafety:'pgiSchoolSafety',
   studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
@@ -93,6 +96,7 @@ export const programFolderNames = {
 export const stateProgramsFolderNames = {
   schoolGeneral:'',
   staffstudents:'',
+  staff: '',
   pgiSchoolSafety:'',
   studentAiAttendance:'',
   studentEnrollment:'',

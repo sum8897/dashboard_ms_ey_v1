@@ -54,7 +54,7 @@ bigNumberMetrics: any = [];
   // title = "Download School Report"
   schoolReportsData: any[] = [];
   pagereportName = "staffstudents"
-  //districtWiseTable
+
  
   @ViewChild('districtWiseTable') districtWiseTable: StaffByManagementTableComponent;
   @ViewChild('managementBarchart') managementBarchart: TeacherByAppointmentChartComponent;
