@@ -7426,7 +7426,7 @@ school_general.tch_profile tp
 left join
 dimensions.academic_year ay on tp.ac_year = ay.ac_year
 where
-  ay.ac_year = ay.ac_year
+  ay.ac_year = (select max(ac_year) from school_general.tch_profile tp)
 GROUP BY
 school_id) as sub_query;`,
                     "bigNumber2": `select SUM(CASE WHEN sef.item_group = '1' THEN
@@ -7437,7 +7437,8 @@ ELSE 0 END) AS total_students
 FROM
 school_general.sch_enr_fresh sef
 left join
-dimensions.academic_year ay on sef.ac_year = ay.ac_year`,
+dimensions.academic_year ay on sef.ac_year = ay.ac_year
+where sef.ac_year= (select max(ac_year) from school_general.sch_enr_fresh sef)`,
                     "bigNumber3": "select count(distinct school_id) as active_schools from school_general.enrolment_info",
                     "bigNumber4": `SELECT
                     COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
