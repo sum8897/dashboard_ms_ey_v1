@@ -30,7 +30,7 @@ export class DistrictWisePerformanceTabComponent implements OnInit, AfterViewIni
     tabLabel: any = "District Wise Performance";
     bigNumberMetrics: any = [];
 
-@ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
+// @ViewChild('districtWisePerformance') districtWisePerformance: DistrictWisePerformanceComponent;
         
 constructor(private _wrapperService: WrapperService, private _rbacService: RbacService) {
     this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
@@ -45,14 +45,14 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     async ngAfterViewInit(): Promise<void> {
     if (this.hasCommonFilters) {
         this.filters = await this._wrapperService.constructCommonFilters(config.filters, this.tabLabel);
-        this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
+        // this.districtWisePerformance?.getReportData({ filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
     if (this.startDate === undefined && this.endDate === undefined && this.hasTimeSeriesFilters) {
         let endDate = new Date();
         let days = endDate.getDate() - this.defaultSelectedDays;
         let startDate = new Date();
         startDate.setDate(days);
-        this.districtWisePerformance?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
+        // this.districtWisePerformance?.getReportData({ timeSeriesValues: { startDate: startDate?.toISOString().split('T')[0], endDate: endDate?.toISOString().split('T')[0] } });
         }
     }
 
@@ -75,7 +75,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
 
     filtersUpdated(filters: any) {
     this.reportsData = [];
-    this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
+    // this.districtWisePerformance?.getReportData({ filterValues: filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id} }) });
         }
 
     timeSeriesUpdated(event: any): void {
@@ -83,7 +83,7 @@ constructor(private _wrapperService: WrapperService, private _rbacService: RbacS
     this.endDate = event?.endDate?.toDate().toISOString().split('T')[0]
     if (event?.startDate !== null && event?.endDate !== null) {
         this.reportsData = [];
-        this.districtWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
+        // this.districtWisePerformance?.getReportData({timeSeriesValues: {startDate: this.startDate, endDate: this.endDate}});
         }
     }
 

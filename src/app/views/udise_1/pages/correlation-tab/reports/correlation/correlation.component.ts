@@ -7,18 +7,18 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/udise/config/udise_config';
 
 @Component({
-  selector: 'app-district-wise-performance',
-  templateUrl: './district-wise-performance.component.html',
-  styleUrls: ['./district-wise-performance.component.scss']
+  selector: 'app-correlation',
+  templateUrl: './correlation.component.html',
+  styleUrls: ['./correlation.component.scss']
 })
-export class DistrictWisePerformanceComponent implements OnInit {
-  reportName: string = 'district_wise_performance1';
+export class CorrelationComponent implements OnInit {
+  reportName: string = 'correlation';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "District Wise Performance"
+    reportName: "Correlation"
   };
-  title: string = 'District Wise Performance'
+  title: string = 'Correlation'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -27,7 +27,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
   compareDateRange: any = 30;
   filterIndex: any;
   rbacDetails: any;
-
   @Output() exportReportData = new EventEmitter<any>();
 
   constructor(private readonly _dataService: DataService, private readonly _wrapperService: WrapperService, private _rbacService: RbacService) {
@@ -39,7 +38,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getReportData(values: any): void {
+  getReportData(values: any, correlationFilters): void {
     let { filterValues, timeSeriesValues } = values ?? {};
     this.startDate = timeSeriesValues?.startDate;
     this.endDate = timeSeriesValues?.endDate;
@@ -49,7 +48,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
     let onLoadQuery;
     let currentLevel;
 
-    if (this.rbacDetails?.role !== null && this.rbacDetails.role !== undefined) {
+    if (this.rbacDetails?.role) {
       filters.every((filter: any) => {
         if (Number(this.rbacDetails?.role) === Number(filter.hierarchyLevel)) {
           queries = { ...filter?.actions?.queries }
@@ -58,7 +57,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
             ...this.reportData,
             reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
           }
-          console.log(this.reportData);
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
           });
@@ -107,7 +105,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
         this.reportData = await this._dataService.getBigNumberReportData(query, options, 'differencePercentage', this.reportData);
       }
       else if (query && key === 'barChart') {
-        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, filters, defaultLevel);
+        let { reportData, config } = await this._dataService.getBarChartReportData(query, options, correlationFilters, defaultLevel);
         this.reportData = reportData
         this.config = config;
         if (this.reportData?.values?.length > 0) {

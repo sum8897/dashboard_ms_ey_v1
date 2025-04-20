@@ -7,18 +7,18 @@ import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery }
 import { config } from 'src/app/views/udise/config/udise_config';
 
 @Component({
-  selector: 'app-district-wise-performance',
-  templateUrl: './district-wise-performance.component.html',
-  styleUrls: ['./district-wise-performance.component.scss']
+  selector: 'app-implementation-status',
+  templateUrl: './implementation-status.component.html',
+  styleUrls: ['./implementation-status.component.scss']
 })
-export class DistrictWisePerformanceComponent implements OnInit {
-  reportName: string = 'district_wise_performance1';
+export class ImplementationStatusComponent implements OnInit {
+  reportName: string = 'implementation_status';
   filters: any = [];
   levels: any;
   reportData: any = {
-    reportName: "District Wise Performance"
+    reportName: "Implementation Status"
   };
-  title: string = 'District Wise Performance'
+  title: string = 'Implementation Status'
   selectedYear: any;
   selectedMonth: any;
   startDate: any;
@@ -58,7 +58,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
             ...this.reportData,
             reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
           }
-          console.log(this.reportData);
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
           });

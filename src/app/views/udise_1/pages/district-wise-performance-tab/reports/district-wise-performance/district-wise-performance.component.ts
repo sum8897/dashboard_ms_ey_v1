@@ -12,7 +12,7 @@ import { config } from 'src/app/views/udise/config/udise_config';
   styleUrls: ['./district-wise-performance.component.scss']
 })
 export class DistrictWisePerformanceComponent implements OnInit {
-  reportName: string = 'district_wise_performance1';
+  reportName: string = 'district_wise_performance';
   filters: any = [];
   levels: any;
   reportData: any = {
@@ -58,7 +58,6 @@ export class DistrictWisePerformanceComponent implements OnInit {
             ...this.reportData,
             reportName: `% ${currentLevel[0].toUpperCase() + currentLevel.substring(1)}s which conducted meeting`
           }
-          console.log(this.reportData);
           Object.keys(queries).forEach((key) => {
             queries[key] = parseRbacFilter(queries[key], this.rbacDetails)
           });
@@ -116,7 +115,7 @@ export class DistrictWisePerformanceComponent implements OnInit {
         }
       }
       else if (query && key === 'map') {
-        this.reportData = await this._dataService.getMapReportData(query, options, metricFilter)
+        this.reportData = await this._dataService.getOldMapReportData(query, options, metricFilter)
         if (this.reportData?.data?.length > 0) {
           let reportsData = { reportData: this.reportData.data, reportType: 'map', reportName: this.title }
           this.exportReportData.emit(reportsData)

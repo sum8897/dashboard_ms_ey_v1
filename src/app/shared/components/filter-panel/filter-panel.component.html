@@ -18,6 +18,7 @@
 							[(ngModel)]="filter.value"
 							(ngModelChange)="onSelectOption($event, i, selectRef)"
 						>
+						<ng-option [value]="null" disabled hidden>Select</ng-option>
 							<ng-option
 								*ngFor="let option of filter.options"
 								[value]="option.value"
