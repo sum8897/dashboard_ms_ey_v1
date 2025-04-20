@@ -30,7 +30,7 @@ export class Table1Component implements OnInit {
    // level = environment.config === 'NVSK' ? 'VSK' : 'district';
    filterIndex: any;
    rbacDetails: any;
-   title = 'Teachers Table One';
+   title = '';
    backUpData: any = [];
    criteriaApplied: boolean = false;
    searchText: any;

@@ -32,7 +32,7 @@ export class TableDepartmentOneComponent implements OnInit {
     compareDateRange: any = 7;
     filterIndex: any;
     rbacDetails: any;
-    title = 'Management First Table';
+    title = '';
     drillDownDetails: any;
     drillDownLevel: any;
     drillDownSubscription: any;

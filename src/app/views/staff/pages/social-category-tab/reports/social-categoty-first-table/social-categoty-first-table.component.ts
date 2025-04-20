@@ -32,7 +32,7 @@ export class SocialCategotyFirstTableComponent implements OnInit {
        compareDateRange: any = 7;
        filterIndex: any;
        rbacDetails: any;
-       title = 'Social Category First Table';
+       title = '';
        drillDownDetails: any;
        drillDownLevel: any;
        drillDownSubscription: any;

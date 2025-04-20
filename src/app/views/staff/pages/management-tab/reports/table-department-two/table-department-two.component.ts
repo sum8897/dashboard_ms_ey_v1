@@ -42,7 +42,7 @@ export class TableDepartmentTwoComponent implements OnInit {
   // level = environment.config === 'NVSK' ? 'VSK' : 'district';
   filterIndex: any;
   rbacDetails: any;
-  title = "Management Second Table";
+  title = "";
   backUpData: any = [];
   criteriaApplied: boolean = false;
   searchText: any;

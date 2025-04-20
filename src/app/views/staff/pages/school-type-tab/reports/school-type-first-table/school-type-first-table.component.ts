@@ -32,7 +32,7 @@ export class SchoolTypeFirstTableComponent implements OnInit {
         compareDateRange: any = 7;
         filterIndex: any;
         rbacDetails: any;
-        title = 'School First Table';
+        title = '';
         drillDownDetails: any;
         drillDownLevel: any;
         drillDownSubscription: any;

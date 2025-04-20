@@ -32,7 +32,7 @@ export class GenderFirstTableComponent implements OnInit {
         compareDateRange: any = 7;
         filterIndex: any;
         rbacDetails: any;
-        title = 'Class First Table';
+        title = '';
         drillDownDetails: any;
         drillDownLevel: any;
         drillDownSubscription: any;

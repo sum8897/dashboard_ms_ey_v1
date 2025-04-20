@@ -30,7 +30,7 @@ export class Table2Component implements OnInit {
     // level = environment.config === 'NVSK' ? 'VSK' : 'district';
     filterIndex: any;
     rbacDetails: any;
-    title = 'Designation Second Table';
+    title = '';
     backUpData: any = [];
     criteriaApplied: boolean = false;
     searchText: any;
