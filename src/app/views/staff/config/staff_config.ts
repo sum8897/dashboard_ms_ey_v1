@@ -885,7 +885,7 @@ tp.tch_name`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 5,
-							linkedReports: ["designation_second_table"]
+							linkedReports: [""]
 						},
 						allowedLevels: [1, 2, 3, 4, 5]
 
