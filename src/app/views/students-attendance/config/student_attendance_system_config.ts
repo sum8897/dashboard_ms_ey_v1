@@ -1171,10 +1171,11 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
- join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+ 
 where
  a.date BETWEEN startDate AND endDate
 GROUP BY 
@@ -1208,10 +1209,11 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
- join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+ 
 where
  a.date BETWEEN startDate AND endDate
 GROUP BY 
@@ -1252,14 +1254,15 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+   join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
- join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+
 where
- a.date BETWEEN startDate AND endDate and d.district_id = { district_id }
+ a.date BETWEEN startDate AND endDate and d.district_id = {district_id}
 GROUP BY 
     sm.block_id,b.block_name
 ORDER BY
@@ -1291,14 +1294,14 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+   join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
- join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
 where
- a.date BETWEEN startDate AND endDate and d.district_id = { district_id }
+ a.date BETWEEN startDate AND endDate and d.district_id = {district_id}
 GROUP BY 
     sm.block_id,b.block_name
 ORDER BY
@@ -1337,16 +1340,17 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions."cluster" c on sm.cluster_id = c.cluster_id 
-join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+
 where
- a.date BETWEEN startDate AND endDate and b.block_id  = { block_id }
+ a.date BETWEEN startDate AND endDate and b.block_id  =  {block_id}
 GROUP BY 
     sm.cluster_id,c.cluster_name 
 ORDER BY
@@ -1378,16 +1382,16 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions."cluster" c on sm.cluster_id = c.cluster_id 
-join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
 where
- a.date BETWEEN startDate AND endDate and b.block_id  = { block_id }
+ a.date BETWEEN startDate AND endDate and b.block_id  =  {block_id}
 GROUP BY 
     sm.cluster_id,c.cluster_name 
 ORDER BY
@@ -1426,16 +1430,17 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions."cluster" c on sm.cluster_id = c.cluster_id 
-join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+
 where
- a.date BETWEEN startDate AND endDate and c.cluster_id  = { cluster_id }
+ a.date BETWEEN startDate AND endDate and c.cluster_id  = {cluster_id}
 GROUP BY 
     sm.school_id ,sm.school_name  
 ORDER BY
@@ -1467,16 +1472,17 @@ from
   student_attendance.attendance a 
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	attendance_filters.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions."cluster" c on sm.cluster_id = c.cluster_id 
-join 
-	attendance_filters.school_type st on sm.level_id = st.level_id 
+
 where
- a.date BETWEEN startDate AND endDate and c.cluster_id  = { cluster_id }
+ a.date BETWEEN startDate AND endDate and c.cluster_id  = {cluster_id}
 GROUP BY 
     sm.school_id ,sm.school_name  
 ORDER BY

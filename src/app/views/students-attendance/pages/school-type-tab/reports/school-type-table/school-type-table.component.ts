@@ -34,7 +34,7 @@ export class SchoolTypeTableComponent implements OnInit {
   levels: any;
   tableReportData: any;
   bigNumberReportData: any = {
-    reportName: "School table",
+    reportName: "School Table",
   };
   minDate: any;
   maxDate: any;

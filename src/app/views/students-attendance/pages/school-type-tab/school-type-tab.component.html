@@ -32,14 +32,14 @@
       </div>
       <div
         class="col-span-2 xmd:col-span-2 div-shadow"
-        *ngIf="checkReport('enrollment_barchart', 'barChart')"
+        *ngIf="checkReport('school_barchart', 'barChart')"
         id="bar"
       >
-        <app-school-type-graph
+        <!-- <app-school-type-graph
           #attendanceGraph
           (exportReportData)="csvDownload($event)"
         >
-        </app-school-type-graph>
+        </app-school-type-graph> -->
       </div>
     </div>
   </div>
