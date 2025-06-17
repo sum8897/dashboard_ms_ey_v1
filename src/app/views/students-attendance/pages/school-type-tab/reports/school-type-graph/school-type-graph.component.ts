@@ -407,7 +407,7 @@ export class SchoolTypeGraphComponent implements OnInit {
         this.tableReportData,
         this.config,
         "male_absent",
-        "Boys Absent",
+        "Male Absent",
         "rgba(255, 0, 0, 0.5)",
         0.42
       );

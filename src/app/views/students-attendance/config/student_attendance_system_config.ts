@@ -417,7 +417,7 @@ export const config = {
   dimensions.social_category sc on sm.social_category_id = sc.social_cat 
   join 
   dimensions.gender g on sm.gender_id = g.gender 
-  where a.date BETWEEN startDate AND endDate and  sm.class_id = '1'
+  where a.date BETWEEN startDate AND endDate and  sm.class_id = {class_id}
   group by 
   a.student_id  , sm.student_name  , g.gen, sc.category 
   order by sm.student_name`,
@@ -447,7 +447,7 @@ export const config = {
   dimensions.social_category sc on sm.social_category_id = sc.social_cat 
   join 
   dimensions.gender g on sm.gender_id = g.gender 
-  where a.date BETWEEN startDate AND endDate  and sm.class_id = '1'
+  where a.date BETWEEN startDate AND endDate  and sm.class_id = {class_id}
   group by 
   a.student_id  , sm.student_name  , g.gen, sc.category 
   order by sm.student_name`,
@@ -708,7 +708,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join
 dimensions.gender g on sm.gender_id = g.gender
 WHERE
-a.date BETWEEN '2025-06-05' and '2025-06-05'
+a.date BETWEEN startDate and endDate
 group by sm.school_management_id ,s.schoolmanagement_name
 order by
 sm.school_management_id`,
@@ -733,7 +733,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join
 dimensions.gender g on sm.gender_id = g.gender
 WHERE
-a.date BETWEEN '2025-06-05' and '2025-06-05'
+a.date BETWEEN startDate and endDate
 group by sm.school_management_id ,s.schoolmanagement_name
 order by
 sm.school_management_id`,
@@ -767,7 +767,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
         },
         actions: {
@@ -792,7 +792,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
           },
           level: "block",
@@ -826,7 +826,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
-a.date BETWEEN '2025-06-05' and '2025-06-05' and b.block_id = {block_id}
+a.date BETWEEN startDate and endDate and b.block_id = {block_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
         },
         actions: {
@@ -853,7 +853,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
-a.date BETWEEN '2025-06-05' and '2025-06-05' and b.block_id = {block_id}
+a.date BETWEEN startDate and endDate and b.block_id = {block_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
           },
           level: "cluster",
@@ -887,7 +887,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and c.cluster_id = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
         },
         actions: {
@@ -914,7 +914,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and c.cluster_id = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
 group by d.district_name ,sm.school_management_id ,s.schoolmanagement_name`,
           },
           level: "school",
@@ -950,7 +950,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = '34020101605'
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by cl.class_name, sm.class_id 
 order by 
 sm.class_id`,
@@ -981,7 +981,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = '34020101605'
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by cl.class_name, sm.class_id 
 order by 
 sm.class_id`,
@@ -1016,7 +1016,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = '34030100413' and sm.class_id = {class_id}
+ a.date BETWEEN startDate and endDate and sm.class_id = {class_id}
 group by sm.student_name , a.attendance_status 
 order by 
 sm.student_name`,
@@ -1044,7 +1044,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = '34030100413' and sm.class_id = {class_id}
+ a.date BETWEEN startDate and endDate and sm.class_id = {class_id}
 group by sm.student_name , a.attendance_status 
 order by 
 sm.student_name`,
@@ -1940,7 +1940,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'
+ a.date BETWEEN  and '2025-06-05'
 group by sm.level_id ,st.level`,
         },
         actions: {
@@ -2088,7 +2088,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'' and b.block_id = {block_id}
+ a.date BETWEEN '2025-06-05' and '2025-06-05' and b.block_id = {block_id}
 group by d.district_name ,sm.level_id ,st.level`,
           },
           level: "cluster",
