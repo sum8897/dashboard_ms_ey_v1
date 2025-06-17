@@ -74,7 +74,8 @@ export class Table2Component implements OnInit {
           // this.drilldownData(data);
           let result: any = await this._reportDrilldownService.drilldown(data, this.rbacDetails, config[this.reportName], this.startDate, this.endDate, this.drillDownDetails,this.filterValues, this.metricFilter,this.filterneed)
           this.drillDownDetails = result?.drillDownDetails
-          this.tableReportData = result?.reportData
+          this.tableReportData = result?.reportData;
+          console.log(this.tableReportData);
           if (this.tableReportData?.data?.length > 0) {
             let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
             this.csv.schoolCsvDownload(reportsData, this.drillDownLevel)
@@ -246,6 +247,7 @@ export class Table2Component implements OnInit {
             this.tableReportData = await this._dataService.getTableReportData(query, options);
             if (this.tableReportData?.data?.length > 0) {
               let reportsData = { reportData: this.tableReportData.data, reportType: 'table', reportName: this.title }
+              console.log(reportsData);
               this.exportReportData.emit(reportsData)
             }
           }

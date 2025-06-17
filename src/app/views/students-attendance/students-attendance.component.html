@@ -1,0 +1,39 @@
+<div class="metric-card-wrapper">
+  <div class="grid gap-4 grid-cols-6 xmd:grid-cols-12">
+    <div class="col-span-12">
+      <p class="program-title">
+        Students Attendance Details<em><small></small></em>
+      </p>
+      <p class="program-desc"></p>
+    </div>
+  </div>
+</div>
+<div class="custom-tab-group-wrapper">
+  <mat-tab-group
+    [selectedIndex]="tabIndex"
+    mat-align-tabs="start"
+    animationDuration="0ms"
+    (selectedTabChange)="onTabChanged($event)"
+    appFullScreen
+  >
+    <mat-tab label="Management" *ngIf="tabs.includes('Management')">
+      <app-management-tab
+        *ngIf="selectedTabLabel === 'Management'"
+      ></app-management-tab>
+    </mat-tab>
+    <mat-tab label="School Type">
+      <app-school-type-tab
+        *ngIf="selectedTabLabel === 'School Type'"
+      ></app-school-type-tab>
+    </mat-tab>
+    <mat-tab label="Gender">
+      <app-gender-tab *ngIf="selectedTabLabel === 'Gender'"></app-gender-tab>
+    </mat-tab>
+        <mat-tab label="Social Category">
+      <app-social-category-tab
+        *ngIf="selectedTabLabel === 'Social Category'"
+      ></app-social-category-tab>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

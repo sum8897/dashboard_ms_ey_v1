@@ -11,7 +11,10 @@ export class RbacService {
     district: null,
     block: null,
     cluster: null,
-    school: null
+    school: null,
+    teacher: null,
+    class: null,
+    studenet: null
   };
   rbacDetails: BehaviorSubject<any>;
   constructor() {

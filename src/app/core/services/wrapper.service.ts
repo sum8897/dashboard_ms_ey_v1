@@ -110,7 +110,7 @@ export class WrapperService {
     return new Promise((resolve, reject) => {
       this.spinner.show();
       try {
-        this._commonService.getReportDataNew(query).subscribe((res: any) => {
+        this._commonService?.getReportDataNew(query)?.subscribe((res: any) => {
           this.spinner.hide()
           resolve(res);
         },

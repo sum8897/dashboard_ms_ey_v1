@@ -1,292 +1,303 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './core/components/layout/layout.component';
-import { RbacDialogComponent } from './shared/components/rbac-dialog/rbac-dialog.component';
-import { HomePageComponent } from './views/home-page/home-page.component';
-import { AuthGuard } from './core/guards/auth.guard';
-import { NewChartComponent } from './views/new-chart/new-chart.component';
-import { LoginComponent } from './views/authentication/pages/login/login.component';
-import { LoggedInComponent } from './views/authentication/pages/logged-in/logged-in.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { LayoutComponent } from "./core/components/layout/layout.component";
+import { RbacDialogComponent } from "./shared/components/rbac-dialog/rbac-dialog.component";
+import { HomePageComponent } from "./views/home-page/home-page.component";
+import { AuthGuard } from "./core/guards/auth.guard";
+import { NewChartComponent } from "./views/new-chart/new-chart.component";
+import { LoginComponent } from "./views/authentication/pages/login/login.component";
+import { LoggedInComponent } from "./views/authentication/pages/logged-in/logged-in.component";
 
 var routes: Routes = [];
 
-
 routes = [
   {
-    path: '', redirectTo: 'summary-statistics', pathMatch: 'full'
+    path: "",
+    redirectTo: "summary-statistics",
+    pathMatch: "full",
   },
- 
+
   {
-    path: 'chart', component: NewChartComponent,
+    path: "chart",
+    component: NewChartComponent,
     // canActivate: [AuthGuard]
   },
   {
-    path: '',
+    path: "",
     component: LayoutComponent,
     children: [
       {
-        path: 'rbac', component: RbacDialogComponent,
-        canActivate: [AuthGuard]
-
+        path: "rbac",
+        component: RbacDialogComponent,
+        canActivate: [AuthGuard],
       },
       {
-        path: 'home', component: HomePageComponent,
-        canActivate: [AuthGuard]
+        path: "home",
+        component: HomePageComponent,
+        canActivate: [AuthGuard],
       },
-      
+
       // {
       //   path: 'home', component: HomePageComponent,
       //   canActivate: [AuthGuard]
       // },
       {
-        path: 'summary-statistics',
+        path: "summary-statistics",
         loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then(
+          import("./views/dashboard/dashboard.module").then(
             (module) => module.DashboardModule
           ),
         // canLoad: [AuthGuard]
       },
       {
-        path: 'student-attendance',
+        path: "student-attendance",
         loadChildren: () =>
-          import('./views/student-attendance/student-attendance.module').then(
+          import("./views/student-attendance/student-attendance.module").then(
             (module) => module.StudentAttendanceModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'teacher-attendance',
+        path: "teacher-attendance",
         loadChildren: () =>
-          import('./views/teacher-attendance/teacher-attendance.module').then(
+          import("./views/teacher-attendance/teacher-attendance.module").then(
             (module) => module.TeacherAttendanceModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'pat',
+        path: "pat",
         loadChildren: () =>
-          import('./views/pat/pat.module').then(
-            (module) => module.PatModule
-          ),
-        canLoad: [AuthGuard]
+          import("./views/pat/pat.module").then((module) => module.PatModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'library',
+        path: "library",
         loadChildren: () =>
-          import('./views/library/library.module').then(
+          import("./views/library/library.module").then(
             (module) => module.LibraryModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'ict',
+        path: "ict",
         loadChildren: () =>
-          import('./views/ict/ict.module').then(
-            (module) => module.IctModule
-          ),
-        canLoad: [AuthGuard]
+          import("./views/ict/ict.module").then((module) => module.IctModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'student-ai-attendance',
+        path: "student-ai-attendance",
         loadChildren: () =>
-          import('./views/student-ai-attendance/student-ai-attendance.module').then(
-            (module) => module.StudentAiAttendanceModule
-          ),
-        canLoad: [AuthGuard]
+          import(
+            "./views/student-ai-attendance/student-ai-attendance.module"
+          ).then((module) => module.StudentAiAttendanceModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'student-enrollment',
+        path: "student-enrollment",
         loadChildren: () =>
-          import('./views/student-enrollment/student-enrollment.module').then(
+          import("./views/student-enrollment/student-enrollment.module").then(
             (module) => module.StudentEnrollmentModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'school-general',
+        path: "school-general",
         loadChildren: () =>
-          import('./views/school-general/school-general.module').then(
+          import("./views/school-general/school-general.module").then(
             (module) => module.SchoolGeneralModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'pas',
+        path: "pas",
         loadChildren: () =>
-          import('./views/pas/pas.module').then(
-            (module) => module.PasModule
-          ),
-        canLoad: [AuthGuard]
+          import("./views/pas/pas.module").then((module) => module.PasModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'school-library',
+        path: "school-library",
         loadChildren: () =>
-          import('./views/school-library/school-library.module').then(
+          import("./views/school-library/school-library.module").then(
             (module) => module.SchoolLibraryModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'udise-schoolinfra',
+        path: "udise-schoolinfra",
         loadChildren: () =>
-            import('./views/udise-schoolinfra/udise-schoolinfra.module').then(
-                (module) => module.UdiseSchoolinfraModule
-            ),
-        canLoad: [AuthGuard]
+          import("./views/udise-schoolinfra/udise-schoolinfra.module").then(
+            (module) => module.UdiseSchoolinfraModule
+          ),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'teacher-attendance',
+        path: "teacher-attendance",
         loadChildren: () =>
-          import('./views/teacher-attendance/teacher-attendance.module').then(
+          import("./views/teacher-attendance/teacher-attendance.module").then(
             (module) => module.TeacherAttendanceModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'review-meetings',
+        path: "review-meetings",
         loadChildren: () =>
-          import('./views/review-meetings/review-meetings.module').then(
+          import("./views/review-meetings/review-meetings.module").then(
             (module) => module.ReviewMeetingsModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'udise',
+        path: "udise",
         loadChildren: () =>
-          import('./views/udise/udise.module').then(
+          import("./views/udise/udise.module").then(
             (module) => module.UdiseModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'nishtha',
+        path: "nishtha",
         loadChildren: () =>
-          import('./views/nishtha/nishtha.module').then(
+          import("./views/nishtha/nishtha.module").then(
             (module) => module.NishthaModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'pgi',
+        path: "pgi",
         loadChildren: () =>
-          import('./views/pgi/pgi.module').then(
-            (module) => module.PgiModule
-          ),
-        canLoad: [AuthGuard]
+          import("./views/pgi/pgi.module").then((module) => module.PgiModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'pmposhan',
+        path: "pmposhan",
         loadChildren: () =>
-          import('./views/pmposhan/pmposhan.module').then(
+          import("./views/pmposhan/pmposhan.module").then(
             (module) => module.PmPoshanModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'nas',
+        path: "nas",
         loadChildren: () =>
-          import('./views/nas/nas.module').then(
-            (module) => module.NasModule
-          ),
-        canLoad: [AuthGuard]
+          import("./views/nas/nas.module").then((module) => module.NasModule),
+        canLoad: [AuthGuard],
       },
       {
-        path: 'diksha',
+        path: "diksha",
         loadChildren: () =>
-          import('./views/diksha/diksha.module').then(
+          import("./views/diksha/diksha.module").then(
             (module) => module.DikshaModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'staff-students',
+        path: "staff-students",
         loadChildren: () =>
-          import('./views/staff-students/staff-students.module').then(
+          import("./views/staff-students/staff-students.module").then(
             (module) => module.StaffStudentsModule
           ),
         // canLoad: [AuthGuard]
       },
       {
-        path: 'pgi-govt-aided',
+        path: "pgi-govt-aided",
         loadChildren: () =>
-          import('./views/pgi-govt-aided/pgi-govt-aided.module').then(
+          import("./views/pgi-govt-aided/pgi-govt-aided.module").then(
             (module) => module.PgiGovtAidedModule
           ),
       },
       {
-        path: 'student-assessment',
+        path: "student-assessment",
         loadChildren: () =>
-            import('./views/student-assessment/student-assessment.module').then(
-                (module) => module.StudentAssessmentModule
-            ),
-        canLoad: [AuthGuard]
-      },
-      {
-        path: 'school-infrastructure',
-        loadChildren: () =>
-            import('./views/school-infrastructure/school-infrastructure.module').then(
-                (module) => module.SchoolInfrastructureModule
-            ),
-        canLoad: [AuthGuard]
-      },
-      {
-        path: 'school-progression',
-        loadChildren: () =>
-            import('./views/school-progression/school-progression.module').then(
-                (module) => module.SchoolProgressionModule
-            ),
-        canLoad: [AuthGuard]
-      },
-      {
-        path: 'student-assessments',
-        loadChildren: () =>
-            import('./views/student-assessments/student-assessments.module').then(
-                (module) => module.StudentAssessmentsModule
-            ),
-        canLoad: [AuthGuard]
-      },
-      {
-        path: 'ncf',
-        loadChildren: () =>
-          import('./views/ncf/ncf.module').then(
-            (module) => module.NcfModule
+          import("./views/student-assessment/student-assessment.module").then(
+            (module) => module.StudentAssessmentModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'quizzes',
+        path: "school-infrastructure",
         loadChildren: () =>
-          import('./views/ncert-quiz/ncert-quiz.module').then(
+          import(
+            "./views/school-infrastructure/school-infrastructure.module"
+          ).then((module) => module.SchoolInfrastructureModule),
+        canLoad: [AuthGuard],
+      },
+      {
+        path: "school-progression",
+        loadChildren: () =>
+          import("./views/school-progression/school-progression.module").then(
+            (module) => module.SchoolProgressionModule
+          ),
+        canLoad: [AuthGuard],
+      },
+      {
+        path: "student-assessments",
+        loadChildren: () =>
+          import("./views/student-assessments/student-assessments.module").then(
+            (module) => module.StudentAssessmentsModule
+          ),
+        canLoad: [AuthGuard],
+      },
+      {
+        path: "ncf",
+        loadChildren: () =>
+          import("./views/ncf/ncf.module").then((module) => module.NcfModule),
+        canLoad: [AuthGuard],
+      },
+      {
+        path: "quizzes",
+        loadChildren: () =>
+          import("./views/ncert-quiz/ncert-quiz.module").then(
             (module) => module.NcertQuizModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'microimprovement',
+        path: "microimprovement",
         loadChildren: () =>
-          import('./views/micro-improvements/micro-improvements.module').then(
+          import("./views/micro-improvements/micro-improvements.module").then(
             (module) => module.MicroImprovementsModule
           ),
-        canLoad: [AuthGuard]
+        canLoad: [AuthGuard],
       },
       {
-        path: 'staff',
-        loadChildren: () => import('./views/staff/staff.module').then((module) => module.StaffModule)
-      }
+        path: "staff",
+        loadChildren: () =>
+          import("./views/staff/staff.module").then(
+            (module) => module.StaffModule
+          ),
+      }, 
+       // {
+      //   path: "Student-attendance",
+      //   loadChildren: () =>
+      //   import("./views/student-attendance-system/student-attendance-system.module").then(
+      //   (m)=> m.StudentAttendanceSystemModule
+      //   )
+      // },
+      {
+        path: "Student-attendance",
+        loadChildren: () =>
+        import("./views/students-attendance/students-attendance.module").then(
+        (m)=> m.StudentsAttendanceModule
+        )
+      },
     ],
   },
   {
-    path: '',
-    loadChildren: () => import('./views/authentication/authentication.module').then(module => module.AuthenticationModule)
+    path: "",
+    loadChildren: () =>
+      import("./views/authentication/authentication.module").then(
+        (module) => module.AuthenticationModule
+      ),
   },
   {
-    path:'loggedIn',
-    component: LoggedInComponent
-  }
+    path: "loggedIn",
+    component: LoggedInComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

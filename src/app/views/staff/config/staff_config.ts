@@ -41,44 +41,45 @@ export const config = {
 			query:
 				'select id, ac_year from dimensions.academic_year',
 		},
+ // {
+    //   label: "Designation",
+    //   name: "schoolmanagement_name",
+    //   id: "schoolmanagement_name",
+    //   labelProp: "schoolmanagement_name",
+    //   valueProp: "schoolmanagement_name",
+    //   tableAlias: 'm',
+    //   query:
+    //     "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+    // },
+    // {
+    //   label: "Designation",
+    //   name: "level",
+    //   id: "level",
+    //   labelProp: "level",
+    //   valueProp: "level",
+    //   tableAlias: 'st',
+    //   query: "select level_id, level from dimensions.school_type st",
+    // },
+    // {
+    //   label: "Designation",
+    //   name: "category",
+    //   id: "category",
+    //   labelProp: "category",
+    //   valueProp: "category",
+    //   tableAlias: 'sc',
+    //   query: "select social_cat, category from dimensions.social_category sc",
+    // },
+    // {
+    //   label: "Designation",
+    //   name: "gen",
+    //   id: "gen",
+    //   labelProp: "gen",
+    //   valueProp: "gen",
+    //   tableAlias: 'g',
+    //   query: "select gender, gen from dimensions.gender g",
+    // },
+   
 
-    {
-      label: "Designation",
-      name: "schoolmanagement_name",
-      id: "schoolmanagement_name",
-      labelProp: "schoolmanagement_name",
-      valueProp: "schoolmanagement_name",
-      tableAlias: 'm',
-      query:
-        "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-    },
-    {
-      label: "Designation",
-      name: "level",
-      id: "level",
-      labelProp: "level",
-      valueProp: "level",
-      tableAlias: 'st',
-      query: "select level_id, level from dimensions.school_type st",
-    },
-    {
-      label: "Designation",
-      name: "category",
-      id: "category",
-      labelProp: "category",
-      valueProp: "category",
-      tableAlias: 'sc',
-      query: "select social_cat, category from dimensions.social_category sc",
-    },
-    {
-      label: "Designation",
-      name: "gen",
-      id: "gen",
-      labelProp: "gen",
-      valueProp: "gen",
-      tableAlias: 'g',
-      query: "select gender, gen from dimensions.gender g",
-    },
 	{
 		label: 'Management',
 		name: '',
@@ -89,43 +90,45 @@ export const config = {
 		query:
 			'select id, ac_year from dimensions.academic_year',
 	},
-	{
-		label: "Management",
-		name: "schoolmanagement_name",
-		id: "schoolmanagement_name",
-		labelProp: "schoolmanagement_name",
-		valueProp: "schoolmanagement_name",
-		tableAlias: 'm',
-		query:
-		  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-	  },
-	  {
-		label: "Management",
-		name: "level",
-		id: "level",
-		labelProp: "level",
-		valueProp: "level",
-		tableAlias: 'st',
-		query: "select level_id, level from dimensions.school_type st",
-	  },
-	  {
-		label: "Management",
-		name: "category",
-		id: "category",
-		labelProp: "category",
-		valueProp: "category",
-		tableAlias: 'sc',
-		query: "select social_cat, category from dimensions.social_category sc",
-	  },
-	  {
-		label: "Management",
-		name: "gen",
-		id: "gen",
-		labelProp: "gen",
-		valueProp: "gen",
-		tableAlias: 'g',
-		query: "select gender, gen from dimensions.gender g",
-	  },
+
+	// {
+	// 	label: "Management",
+	// 	name: "schoolmanagement_name",
+	// 	id: "schoolmanagement_name",
+	// 	labelProp: "schoolmanagement_name",
+	// 	valueProp: "schoolmanagement_name",
+	// 	tableAlias: 'm',
+	// 	query:
+	// 	  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+	//   },
+	//   {
+	// 	label: "Management",
+	// 	name: "level",
+	// 	id: "level",
+	// 	labelProp: "level",
+	// 	valueProp: "level",
+	// 	tableAlias: 'st',
+	// 	query: "select level_id, level from dimensions.school_type st",
+	//   },
+	//   {
+	// 	label: "Management",
+	// 	name: "category",
+	// 	id: "category",
+	// 	labelProp: "category",
+	// 	valueProp: "category",
+	// 	tableAlias: 'sc',
+	// 	query: "select social_cat, category from dimensions.social_category sc",
+	//   },
+	//   {
+	// 	label: "Management",
+	// 	name: "gen",
+	// 	id: "gen",
+	// 	labelProp: "gen",
+	// 	valueProp: "gen",
+	// 	tableAlias: 'g',
+	// 	query: "select gender, gen from dimensions.gender g",
+	//   },
+
 	  {
 		label: 'Inspecting',
 		name: '',
@@ -136,43 +139,45 @@ export const config = {
 		query:
 			'select id, ac_year from dimensions.academic_year',
 	},
-	{
-		label: "Inspecting",
-		name: "schoolmanagement_name",
-		id: "schoolmanagement_name",
-		labelProp: "schoolmanagement_name",
-		valueProp: "schoolmanagement_name",
-		tableAlias: 'm',
-		query:
-		  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-	  },
-	  {
-		label: "Inspecting",
-		name: "level",
-		id: "level",
-		labelProp: "level",
-		valueProp: "level",
-		tableAlias: 'st',
-		query: "select level_id, level from dimensions.school_type st",
-	  },
-	  {
-		label: "Inspecting",
-		name: "category",
-		id: "category",
-		labelProp: "category",
-		valueProp: "category",
-		tableAlias: 'sc',
-		query: "select social_cat, category from dimensions.social_category sc",
-	  },
-	  {
-		label: "Inspecting",
-		name: "gen",
-		id: "gen",
-		labelProp: "gen",
-		valueProp: "gen",
-		tableAlias: 'g',
-		query: "select gender, gen from dimensions.gender g",
-	  },
+
+	// {
+	// 	label: "Inspecting",
+	// 	name: "schoolmanagement_name",
+	// 	id: "schoolmanagement_name",
+	// 	labelProp: "schoolmanagement_name",
+	// 	valueProp: "schoolmanagement_name",
+	// 	tableAlias: 'm',
+	// 	query:
+	// 	  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+	//   },
+	//   {
+	// 	label: "Inspecting",
+	// 	name: "level",
+	// 	id: "level",
+	// 	labelProp: "level",
+	// 	valueProp: "level",
+	// 	tableAlias: 'st',
+	// 	query: "select level_id, level from dimensions.school_type st",
+	//   },
+	//   {
+	// 	label: "Inspecting",
+	// 	name: "category",
+	// 	id: "category",
+	// 	labelProp: "category",
+	// 	valueProp: "category",
+	// 	tableAlias: 'sc',
+	// 	query: "select social_cat, category from dimensions.social_category sc",
+	//   },
+	//   {
+	// 	label: "Inspecting",
+	// 	name: "gen",
+	// 	id: "gen",
+	// 	labelProp: "gen",
+	// 	valueProp: "gen",
+	// 	tableAlias: 'g',
+	// 	query: "select gender, gen from dimensions.gender g",
+	//   },
+
 	  {
 		label: 'School Type',
 		name: '',
@@ -183,43 +188,45 @@ export const config = {
 		query:
 			'select id, ac_year from dimensions.academic_year',
 	},
-	{
-		label: "School Type",
-		name: "schoolmanagement_name",
-		id: "schoolmanagement_name",
-		labelProp: "schoolmanagement_name",
-		valueProp: "schoolmanagement_name",
-		tableAlias: 'm',
-		query:
-		  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-	  },
-	  {
-		label: "School Type",
-		name: "level",
-		id: "level",
-		labelProp: "level",
-		valueProp: "level",
-		tableAlias: 'st',
-		query: "select level_id, level from dimensions.school_type st",
-	  },
-	  {
-		label: "School Type",
-		name: "category",
-		id: "category",
-		labelProp: "category",
-		valueProp: "category",
-		tableAlias: 'sc',
-		query: "select social_cat, category from dimensions.social_category sc",
-	  },
-	  {
-		label: "School Type",
-		name: "gen",
-		id: "gen",
-		labelProp: "gen",
-		valueProp: "gen",
-		tableAlias: 'g',
-		query: "select gender, gen from dimensions.gender g",
-	  },
+
+	// {
+	// 	label: "School Type",
+	// 	name: "schoolmanagement_name",
+	// 	id: "schoolmanagement_name",
+	// 	labelProp: "schoolmanagement_name",
+	// 	valueProp: "schoolmanagement_name",
+	// 	tableAlias: 'm',
+	// 	query:
+	// 	  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+	//   },
+	//   {
+	// 	label: "School Type",
+	// 	name: "level",
+	// 	id: "level",
+	// 	labelProp: "level",
+	// 	valueProp: "level",
+	// 	tableAlias: 'st',
+	// 	query: "select level_id, level from dimensions.school_type st",
+	//   },
+	//   {
+	// 	label: "School Type",
+	// 	name: "category",
+	// 	id: "category",
+	// 	labelProp: "category",
+	// 	valueProp: "category",
+	// 	tableAlias: 'sc',
+	// 	query: "select social_cat, category from dimensions.social_category sc",
+	//   },
+	//   {
+	// 	label: "School Type",
+	// 	name: "gen",
+	// 	id: "gen",
+	// 	labelProp: "gen",
+	// 	valueProp: "gen",
+	// 	tableAlias: 'g',
+	// 	query: "select gender, gen from dimensions.gender g",
+	//   },
+
 	  {
 		label: 'Gender',
 		name: '',
@@ -230,43 +237,45 @@ export const config = {
 		query:
 			'select id, ac_year from dimensions.academic_year',
 	},
-	{
-		label: "Gender",
-		name: "schoolmanagement_name",
-		id: "schoolmanagement_name",
-		labelProp: "schoolmanagement_name",
-		valueProp: "schoolmanagement_name",
-		tableAlias: 'm',
-		query:
-		  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-	  },
-	  {
-		label: "Gender",
-		name: "level",
-		id: "level",
-		labelProp: "level",
-		valueProp: "level",
-		tableAlias: 'st',
-		query: "select level_id, level from dimensions.school_type st",
-	  },
-	  {
-		label: "Gender",
-		name: "category",
-		id: "category",
-		labelProp: "category",
-		valueProp: "category",
-		tableAlias: 'sc',
-		query: "select social_cat, category from dimensions.social_category sc",
-	  },
-	  {
-		label: "Gender",
-		name: "gen",
-		id: "gen",
-		labelProp: "gen",
-		valueProp: "gen",
-		tableAlias: 'g',
-		query: "select gender, gen from dimensions.gender g",
-	  },
+
+	// {
+	// 	label: "Gender",
+	// 	name: "schoolmanagement_name",
+	// 	id: "schoolmanagement_name",
+	// 	labelProp: "schoolmanagement_name",
+	// 	valueProp: "schoolmanagement_name",
+	// 	tableAlias: 'm',
+	// 	query:
+	// 	  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+	//   },
+	//   {
+	// 	label: "Gender",
+	// 	name: "level",
+	// 	id: "level",
+	// 	labelProp: "level",
+	// 	valueProp: "level",
+	// 	tableAlias: 'st',
+	// 	query: "select level_id, level from dimensions.school_type st",
+	//   },
+	//   {
+	// 	label: "Gender",
+	// 	name: "category",
+	// 	id: "category",
+	// 	labelProp: "category",
+	// 	valueProp: "category",
+	// 	tableAlias: 'sc',
+	// 	query: "select social_cat, category from dimensions.social_category sc",
+	//   },
+	//   {
+	// 	label: "Gender",
+	// 	name: "gen",
+	// 	id: "gen",
+	// 	labelProp: "gen",
+	// 	valueProp: "gen",
+	// 	tableAlias: 'g',
+	// 	query: "select gender, gen from dimensions.gender g",
+	//   },
+
 	  {
 		label: 'Social Category',
 		name: '',
@@ -277,43 +286,44 @@ export const config = {
 		query:
 			'select id, ac_year from dimensions.academic_year',
 	},
-	{
-		label: "Social Category",
-		name: "schoolmanagement_name",
-		id: "schoolmanagement_name",
-		labelProp: "schoolmanagement_name",
-		valueProp: "schoolmanagement_name",
-		tableAlias: 'm',
-		query:
-		  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
-	  },
-	  {
-		label: "Social Category",
-		name: "level",
-		id: "level",
-		labelProp: "level",
-		valueProp: "level",
-		tableAlias: 'st',
-		query: "select level_id, level from dimensions.school_type st",
-	  },
-	  {
-		label: "Social Category",
-		name: "category",
-		id: "category",
-		labelProp: "category",
-		valueProp: "category",
-		tableAlias: 'sc',
-		query: "select social_cat, category from dimensions.social_category sc",
-	  },
-	  {
-		label: "Social Category",
-		name: "gen",
-		id: "gen",
-		labelProp: "gen",
-		valueProp: "gen",
-		tableAlias: 'g',
-		query: "select gender, gen from dimensions.gender g",
-	  },
+
+	// {
+	// 	label: "Social Category",
+	// 	name: "schoolmanagement_name",
+	// 	id: "schoolmanagement_name",
+	// 	labelProp: "schoolmanagement_name",
+	// 	valueProp: "schoolmanagement_name",
+	// 	tableAlias: 'm',
+	// 	query:
+	// 	  "select schoolmanagement_id , schoolmanagement_name  from dimensions.schoolmanagement m",
+	//   },
+	//   {
+	// 	label: "Social Category",
+	// 	name: "level",
+	// 	id: "level",
+	// 	labelProp: "level",
+	// 	valueProp: "level",
+	// 	tableAlias: 'st',
+	// 	query: "select level_id, level from dimensions.school_type st",
+	//   },
+	//   {
+	// 	label: "Social Category",
+	// 	name: "category",
+	// 	id: "category",
+	// 	labelProp: "category",
+	// 	valueProp: "category",
+	// 	tableAlias: 'sc',
+	// 	query: "select social_cat, category from dimensions.social_category sc",
+	//   },
+	//   {
+	// 	label: "Social Category",
+	// 	name: "gen",
+	// 	id: "gen",
+	// 	labelProp: "gen",
+	// 	valueProp: "gen",
+	// 	tableAlias: 'g',
+	// 	query: "select gender, gen from dimensions.gender g",
+	//   },
   ],
   staff_dashboad_metrics: {
     label: "Designation",
@@ -814,7 +824,7 @@ tp.tch_name`,
 							hierarchyLevel: 1,
 							linkedReports: ["designation_second_table"]
 						},
-						allowedLevels: [1, 2, 3, 4, 5]
+						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
 				},
 				{
@@ -832,7 +842,7 @@ tp.tch_name`,
 							hierarchyLevel: 2,
 							linkedReports: ["designation_second_table"]
 						},
-						allowedLevels: [1, 2, 3, 4, 5]
+						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
 				},
 				{
@@ -850,7 +860,7 @@ tp.tch_name`,
 							hierarchyLevel: 3,
 							linkedReports: ["designation_second_table"]
 						},
-						allowedLevels: [1, 2, 3, 4, 5]
+						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
 				},
 				{
@@ -868,7 +878,7 @@ tp.tch_name`,
 							hierarchyLevel: 4,
 							linkedReports: ["designation_second_table"]
 						},
-						allowedLevels: [1, 2, 3, 4, 5]
+						allowedLevels: [1, 2, 3, 4, 5, 6]
 
 					}
 				},
@@ -885,9 +895,9 @@ tp.tch_name`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 5,
-							linkedReports: [""]
+							linkedReports: ["designation_second_table"]
 						},
-						allowedLevels: [1, 2, 3, 4, 5]
+						allowedLevels: [1, 2, 3, 4, 5, 6]
 
 					}
 				},
@@ -906,7 +916,7 @@ tp.tch_name`,
 							hierarchyLevel: 6,
 							linkedReports: [""]
 						},
-						allowedLevels: [1, 2, 3, 4, 5, 6]
+						allowedLevels: []
 
 					}
 				},
@@ -1409,8 +1419,7 @@ tp.school_id`,
 				},
 				"level": "school"
 			}
-		},
-		
+		}
 
 	],
 	"options": {

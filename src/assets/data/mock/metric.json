@@ -96,7 +96,7 @@
       "imageUrl": "udise.png",
       "programID": "udiseschoolinfrastructure",
       "orderBy": "14"
-  },
+    },
     {
       "programName": "School General",
       "tooltip": "School General",
@@ -104,7 +104,7 @@
       "imageUrl": "school_general.png",
       "programID": "schoolGeneral",
       "orderBy": "15"
-  },
+    },
     {
       "programName": "PAS",
       "tooltip": "PAS",
@@ -112,30 +112,38 @@
       "imageUrl": "pass.png",
       "programID": "pas",
       "orderBy": "16"
-  },
-  {
-    "programName": "Staff and Students",
-    "tooltip": "Staff&Students",
-    "navigationUrl": "/staff-students",
-    "imageUrl": "staff_student.png",
-    "programID": "staffstudents",
-    "orderBy": "17"
-},
-{
-  "programName": "PGI and School Safety",
-  "tooltip": "PGI and School Safety",
-  "navigationUrl": "/pgi-govt-aided",
-  "imageUrl": "teacher_attendance.png",
-  "programID": "pgiSchoolSafety",
-  "orderBy": "18"
-},
-{
-  "programName": "Staff",
-  "tooltip": "Staff",
-  "navigationUrl": "/staff",
-  "imageUrl": "school_general.png",
-  "programID": "staff",
-  "orderBy": "19"
-}
+    },
+    {
+      "programName": "Staff and Students",
+      "tooltip": "Staff&Students",
+      "navigationUrl": "/staff-students",
+      "imageUrl": "staff_student.png",
+      "programID": "staffstudents",
+      "orderBy": "17"
+    },
+    {
+      "programName": "PGI and School Safety",
+      "tooltip": "PGI and School Safety",
+      "navigationUrl": "/pgi-govt-aided",
+      "imageUrl": "teacher_attendance.png",
+      "programID": "pgiSchoolSafety",
+      "orderBy": "18"
+    },
+    {
+      "programName": "Staff",
+      "tooltip": "Staff",
+      "navigationUrl": "/staff",
+      "imageUrl": "school_general.png",
+      "programID": "staff",
+      "orderBy": "19"
+    },
+    {
+      "programName": "Student Attendance",
+      "tooltip": "Student Attendance",
+      "navigationUrl": "/Student-attendance",
+      "imageUrl": "teacher_attendance.png",
+      "programID": "StudentAttendance",
+      "orderBy": "20"
+    }
   ]
 }

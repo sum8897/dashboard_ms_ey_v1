@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this._commonService.getDashboardMetrics().subscribe(async (menuResult: any) => {
+    this._commonService?.getDashboardMetrics().subscribe(async (menuResult: any) => {
       this.dashboardMenu = [];
       let rbacDetails;
       let menuData = menuResult?.data;

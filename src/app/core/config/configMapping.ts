@@ -30,6 +30,7 @@ import{ config as pasConfig} from '../../views/pas/config/pas_config';
 import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/udise_schoolinfra_config';
 import {config as libraryConfig} from '../../views/library/config';
 import { config as staffConfig } from '../../views/staff/config/staff_config';
+import { config as studentAttendanceConfig } from '../../views/students-attendance/config/student_attendance_system_config';
 
 
 
@@ -37,13 +38,14 @@ export const configFiles = {
   schoolGeneral:schoolGeneralConfig,
   staffstudents:staffStudentsConfig,
   staff: staffConfig,
+  StudentAttendance: studentAttendanceConfig,
   pgiSchoolSafety:pgiSchoolSafetyConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
   pas:pasConfig,
   studentAiAttendance:studentAiAttendanceConfig,
   studentEnrollment:studentEnrollmentConfig,
-  studentAttendance: studentAttendaceConfig,
+  // studentAttendance: studentAttendaceConfig,
   reviewMeetings: reviewMeetingsConfig,
   teacherAttendance: teacherAttendanceConfig,
   pgi: pgiConfig,
@@ -69,8 +71,9 @@ export const programFolderNames = {
   schoolGeneral:'schoolGeneral',
   staffstudents:'staffStudents',
   staff:'staff',
+  StudentAttendance: 'StudentAttendance',
   pgiSchoolSafety:'pgiSchoolSafety',
-  studentAttendance: 'studentattendance',
+  // studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
   teacherAttendance: 'sch_att',
   pgi: 'pgi',
@@ -86,7 +89,7 @@ export const programFolderNames = {
   pat:'pat',
   library:'library',
   studentAiAttendance:'studentattendance',
-  studentEnrollment:'studentattendance',
+  // studentEnrollment:'studentattendance',
   schoolLibrary:'schoollibrary',
   ict:'ict',
   pas:'pas'
@@ -97,11 +100,12 @@ export const stateProgramsFolderNames = {
   schoolGeneral:'',
   staffstudents:'',
   staff: '',
+  StudentAttendance: '',
   pgiSchoolSafety:'',
   studentAiAttendance:'',
   studentEnrollment:'',
   schoolLibrary:'',
-  studentAttendance: '',
+  // studentAttendance: '',
   reviewMeetings: '',
   teacherAttendance: '',
   pgi: '',
