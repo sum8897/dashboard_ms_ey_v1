@@ -36,9 +36,9 @@ export const config = {
         actions: {
           queries: {
             bigNumber1:
-              "select count(tp.tch_name) as tch_staff_total from staff_students.tch_profile tp where ac_year = (select max(ac_year) from staff_details.tch_profile tp )",
+              "select ROUND(100.0 * SUM(CASE WHEN am.attendance_status = '1'  THEN 1 ELSE 0 END)/ NULLIF(count(am.student_id), 0), 2) AS attendance_percentage  from student_attendance.attendance_master am where am.date = (select max(am.date) from student_attendance.attendance_master am )",
             bigNumber2:
-              "select sum(nontch_accnt) + sum(nontch_lib_asst)  + sum(nontch_lab_asst)  + sum(nontch_udc) + sum(nontch_ldc) + sum(nontch_peon) + sum(nontch_watchman) as nontch_staff_total from staff_students.nontch_profile np where ac_year =(select max(ac_year) from staff_students.nontch_profile)",
+              "select count(distinct am.school_id) as schools_marked_attendance from student_attendance.attendance_master am where am.date =  (select max(am.date) from student_attendance.attendance_master am );",
           },
           level: "district",
         },
@@ -46,9 +46,9 @@ export const config = {
     ],
     options: {
       bigNumber: {
-        title: ["Total Teaching staff", "Total Nonteaching staf"],
+        title: ["Attendance Percentage", "Schools Marked Attendance"],
         valueSuffix: ["", "", "", "", ""],
-        property: ["tch_staff_total", "nontch_staff_total"],
+        property: ["attendance_percentage", "schools_marked_attendance"],
       },
     },
   },
