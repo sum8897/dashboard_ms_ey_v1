@@ -30,12 +30,12 @@ import { GenderTabComponent } from "../../gender-tab.component";
 })
 export class GenderTableComponent implements OnInit {
 
-   reportName: string = "school_type_table";
+   reportName: string = "gender_type_table";
    filters: any = [];
    levels: any;
    tableReportData: any;
    bigNumberReportData: any = {
-     reportName: "School table",
+     reportName: "Gender Table",
    };
    minDate: any;
    maxDate: any;
