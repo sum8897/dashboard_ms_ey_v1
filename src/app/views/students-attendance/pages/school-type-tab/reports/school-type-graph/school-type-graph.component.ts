@@ -41,7 +41,7 @@ export class SchoolTypeGraphComponent implements OnInit {
   config;
   data;
   fileName: string = "Gender Management";
-  reportName: string = "scholl_barchart";
+  reportName: string = "school_barchart";
   filters: any = [];
   levels: any;
   tableReportData: any;

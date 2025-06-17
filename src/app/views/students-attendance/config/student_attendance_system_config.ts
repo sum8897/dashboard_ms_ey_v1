@@ -997,7 +997,7 @@ sm.class_id`,
         timeSeriesQueries: {
           barChart: `select 
           sm.student_id,
-sm.student_name ,
+sm.student_name as level,
 (case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
 from
 student_attendance.attendance a  
@@ -1025,7 +1025,7 @@ sm.student_name`,
           queries: {
             barChart: `select 
             sm.student_id,
-sm.student_name ,
+sm.student_name as level,
 (case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
 from
 student_attendance.attendance a  
@@ -1923,7 +1923,7 @@ ORDER BY
         timeSeriesQueries: {
           barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -1932,10 +1932,11 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+	dimensions.school_type st on sm.level_id = st.level_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -1946,7 +1947,7 @@ group by sm.level_id ,st.level`,
           queries: {
             barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -1963,7 +1964,9 @@ join
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
  a.date BETWEEN '2025-06-05' and '2025-06-05'
-group by sm.level_id ,st.level`,
+group by sm.level_id ,st.level
+order by
+sm.level_id`,
           },
           level: "district",
         },
@@ -1976,7 +1979,7 @@ group by sm.level_id ,st.level`,
         timeSeriesQueries: {
           barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -1985,23 +1988,25 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
-	dimensions.school_type st on sm.level_id = st.level_id 
-join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
  a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
-group by d.district_name ,sm.level_id ,st.level`,
+group by sm.level_id ,st.level
+order by 
+sm.level_id`,
         },
         actions: {
           queries: {
             barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2010,17 +2015,18 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
  a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
-group by d.district_name ,sm.level_id ,st.level`,
+group by sm.level_id ,st.level`,
           },
           level: "block",
         },
@@ -2033,7 +2039,7 @@ group by d.district_name ,sm.level_id ,st.level`,
         timeSeriesQueries: {
           barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2042,14 +2048,15 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2060,7 +2067,7 @@ group by d.district_name ,sm.level_id ,st.level`,
           queries: {
             barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2069,14 +2076,15 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2094,7 +2102,7 @@ group by d.district_name ,sm.level_id ,st.level`,
         timeSeriesQueries: {
           barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2103,14 +2111,15 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2121,7 +2130,7 @@ group by d.district_name ,sm.level_id ,st.level`,
           queries: {
             barChart: `select 
 sm.level_id,
-st.level  ,
+st.level  as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2130,14 +2139,15 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
 	dimensions.block b on sm.block_id = b.block_id 
 join 
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2155,7 +2165,7 @@ group by d.district_name ,sm.level_id ,st.level`,
         timeSeriesQueries: {
           barChart: `select 
 sm.class_id ,
-cl.class_name,
+cl.class_name as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS boys_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS boys_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2164,6 +2174,8 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
@@ -2172,8 +2184,7 @@ join
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
 join 
 	attendance_filters.class cl on sm.class_id = cl.class_id
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+ 
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2186,7 +2197,7 @@ sm.class_id `,
           queries: {
             barChart: `select 
 sm.class_id ,
-cl.class_name,
+cl.class_name as level,
 sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS boys_present,
 sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS boys_absent,
 sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
@@ -2195,6 +2206,8 @@ from
 student_attendance.attendance a  
 join
   student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
 join 
   dimensions.district d on sm.district_id = d.district_id 
 join 
@@ -2203,8 +2216,7 @@ join
 	dimensions.cluster c on sm.cluster_id = c.cluster_id 
 join 
 	attendance_filters.class cl on sm.class_id = cl.class_id
-join 
-	dimensions.school_type st on sm.level_id = st.level_id 
+
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
@@ -2223,7 +2235,8 @@ sm.class_id `,
         hierarchyLevel: "6",
         timeSeriesQueries: {
           barChart: `select 
-sm.student_name ,
+          sm.student_id
+sm.student_name as level,
 (case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
 from
 student_attendance.attendance a  
@@ -2250,7 +2263,8 @@ sm.student_name`,
         actions: {
           queries: {
             barChart: `select 
-sm.student_name ,
+           sm.student_id
+sm.student_name as level,
 (case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
 from
 student_attendance.attendance a  

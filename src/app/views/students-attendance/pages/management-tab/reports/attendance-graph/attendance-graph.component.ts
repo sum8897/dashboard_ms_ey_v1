@@ -27,7 +27,7 @@ export class AttendanceGraphComponent implements OnInit {
     config;
     data;
     fileName: string = "Gender Management";
-    reportName: string = 'enrollment_barchart';
+    reportName: string = 'school_barchart';
     filters: any = [];
     levels: any;
     tableReportData: any;
