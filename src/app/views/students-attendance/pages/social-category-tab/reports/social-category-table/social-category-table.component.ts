@@ -65,10 +65,11 @@ export class SocialCategoryTableComponent implements OnInit {
   @Input() startDate: any;
   @Input() endDate: any;
   @Output() exportReportData = new EventEmitter<any>();
+  
 
   constructor(
     private readonly _commonService: CommonService,
-    private csv: SocialCategoryTabComponent,
+   // private csv: SocialCategoryTabComponent,
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
@@ -109,7 +110,8 @@ export class SocialCategoryTableComponent implements OnInit {
               reportType: "table",
               reportName: this.title,
             };
-            this.csv.csvDownload(reportsData);
+            //this.csv.csvDownload(reportsData);
+            this.exportReportData.emit(reportsData);
           }
         }
       });
@@ -380,7 +382,8 @@ export class SocialCategoryTableComponent implements OnInit {
           reportType: "table",
           reportName: this.title,
         };
-        this.csv.csvDownload(reportsData);
+        //this.csv.csvDownload(reportsData);
+        this.exportReportData.emit(reportsData);
       }
     });
   }

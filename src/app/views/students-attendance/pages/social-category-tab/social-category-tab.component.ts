@@ -12,7 +12,7 @@ import { CommonService } from "src/app/core/services/common/common.service";
 import moment from "moment";
 import { config } from "../../config/student_attendance_system_config";
 import { SocialCategoryTableComponent } from "./reports/social-category-table/social-category-table.component";
-import { SocialCategoryGraphComponent } from "./reports/social-category-graph/social-category-graph.component";
+//import { SocialCategoryGraphComponent } from "./reports/social-category-graph/social-category-graph.component";
 
 @Component({
   selector: "app-social-category-tab",
@@ -51,7 +51,7 @@ export class SocialCategoryTabComponent implements OnInit {
   //
   @ViewChild("social_category_table_one")
   social_category_table_one: SocialCategoryTableComponent;
-  @ViewChild("attendanceGraph") attendanceGraph: SocialCategoryGraphComponent;
+  //@ViewChild("attendanceGraph") attendanceGraph: SocialCategoryGraphComponent;
 
   // @ViewChild('genderTable') genderTable:  AttendanceTableComponent;
   // @ViewChild('performingBigNumbercardone') performingBigNumbercardone: BigNumberPhotographsComponent;
@@ -112,20 +112,20 @@ export class SocialCategoryTabComponent implements OnInit {
         this.startDate,
         this.endDate
       );
-      this.attendanceGraph?.getReportData(
-        {
-          filterneed: this.hasCommonFilters,
-          filterValues: this.filters.map((filter) => {
-            return {
-              ...filter,
-              columnName: filter.valueProp,
-              filterType: filter.id,
-            };
-          }),
-        },
-        this.startDate,
-        this.endDate
-      );
+      // this.attendanceGraph?.getReportData(
+      //   {
+      //     filterneed: this.hasCommonFilters,
+      //     filterValues: this.filters.map((filter) => {
+      //       return {
+      //         ...filter,
+      //         columnName: filter.valueProp,
+      //         filterType: filter.id,
+      //       };
+      //     }),
+      //   },
+      //   this.startDate,
+      //   this.endDate
+      // );
       // this.performingBigNumbercardone?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardtwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -190,20 +190,20 @@ export class SocialCategoryTabComponent implements OnInit {
       this.startDate,
       this.endDate
     );
-    this.attendanceGraph?.getReportData(
-      {
-        filterneed: this.hasCommonFilters,
-        filterValues: this.filters.map((filter) => {
-          return {
-            ...filter,
-            columnName: filter.valueProp,
-            filterType: filter.id,
-          };
-        }),
-      },
-      this.startDate,
-      this.endDate
-    );
+    // this.attendanceGraph?.getReportData(
+    //   {
+    //     filterneed: this.hasCommonFilters,
+    //     filterValues: this.filters.map((filter) => {
+    //       return {
+    //         ...filter,
+    //         columnName: filter.valueProp,
+    //         filterType: filter.id,
+    //       };
+    //     }),
+    //   },
+    //   this.startDate,
+    //   this.endDate
+    // );
     // this.performingBigNumbercardone?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardtwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);

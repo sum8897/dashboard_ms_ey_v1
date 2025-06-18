@@ -24,13 +24,12 @@
         id="table1"
         *ngIf="checkReport('social_category_table', 'table')"
       >
-        <app-social-category-table
-          #school_type_table_one
-          (exportReportData)="csvDownload($event)"
-        >
+          <app-social-category-table
+          #social_category_table_one
+        (exportReportData)="csvDownload($event)">
         </app-social-category-table>
       </div>
-     <!-- <div
+      <div
         class="col-span-2 xmd:col-span-2 div-shadow"
         *ngIf="checkReport('social_category_barchart', 'barChart')"
         id="bar"
@@ -40,7 +39,7 @@
           (exportReportData)="csvDownload($event)"
         >
         </app-social-category-graph> 
-      </div> -->
+      </div> 
     </div>
   </div>
 </div>
