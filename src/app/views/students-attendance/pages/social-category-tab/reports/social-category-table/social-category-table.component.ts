@@ -69,7 +69,7 @@ export class SocialCategoryTableComponent implements OnInit {
 
   constructor(
     private readonly _commonService: CommonService,
-   // private csv: SocialCategoryTabComponent,
+   private csv: SocialCategoryTabComponent,
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
