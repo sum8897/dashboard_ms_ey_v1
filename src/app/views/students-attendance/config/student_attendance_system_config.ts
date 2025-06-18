@@ -4303,5 +4303,466 @@ ORDER BY
       },
     },
   },
+social_category_barchart: {
+    label: "School Type",
+    defaultLevel: "state",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.school_type st on sm.level_id = st.level_id
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN  startDate and endDate
+group by sm.level_id ,st.level`,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN  startDate and endDate
+group by sm.level_id ,st.level
+order by
+sm.level_id`,
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
+group by sm.level_id ,st.level
+order by 
+sm.level_id`,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
+group by sm.level_id ,st.level`,
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and b.block_id = {block_id}
+group by d.district_name ,sm.level_id ,st.level`,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and b.block_id = {block_id}
+group by d.district_name ,sm.level_id ,st.level`,
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
+group by d.district_name ,sm.level_id ,st.level`,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+sm.level_id,
+st.level  as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS male_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS male_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
+group by d.district_name ,sm.level_id ,st.level`,
+          },
+          level: "school",
+        },
+      },
+      {
+        name: "School",
+        labelProp: "school_name",
+        valueProp: "school_id",
+        hierarchyLevel: "5",
+        timeSeriesQueries: {
+          barChart: `select 
+sm.class_id ,
+cl.class_name as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS boys_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS boys_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+join 
+	attendance_filters.class cl on sm.class_id = cl.class_id
+ 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
+group by cl.class_name, sm.class_id 
+order by 
+sm.class_id `,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+sm.class_id ,
+cl.class_name as level,
+sum(case when a.attendance_status='1' and sm.gender_id= '1' then 1 else 0 end) AS boys_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '1' then 1 else 0 end) AS boys_absent,
+sum(case when a.attendance_status='1' and sm.gender_id= '2' then 1 else 0 end) AS female_present,
+sum(case when a.attendance_status='0' and sm.gender_id= '2' then 1 else 0 end) AS female_absent
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+  join 
+	dimensions.school_type st on sm.level_id = st.level_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+join 
+	attendance_filters.class cl on sm.class_id = cl.class_id
+
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
+group by cl.class_name, sm.class_id 
+order by 
+sm.class_id `,
+          },
+          level: "class",
+        },
+      },
+      {
+        name: "Class",
+        labelProp: "class_name",
+        valueProp: "class_id",
+        hierarchyLevel: "6",
+        timeSeriesQueries: {
+          barChart: `select 
+          sm.student_id
+sm.student_name as level,
+(case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+join 
+	attendance_filters.class cl on sm.class_id = cl.class_id
+join 
+dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id} and sm.class_id = {class_id}
+group by sm.student_name , a.attendance_status 
+order by 
+sm.student_name`,
+        },
+        actions: {
+          queries: {
+            barChart: `select 
+           sm.student_id
+sm.student_name as level,
+(case when a.attendance_status= '1' then 'Present' else 'Absent' end) as attendance_status
+from
+student_attendance.attendance a  
+join
+  student_attendance.student_master sm on a.student_id = sm.student_id 
+join 
+  dimensions.district d on sm.district_id = d.district_id 
+join 
+	dimensions.block b on sm.block_id = b.block_id 
+join 
+	dimensions.cluster c on sm.cluster_id = c.cluster_id 
+join 
+	attendance_filters.class cl on sm.class_id = cl.class_id
+join 
+dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id 
+join 
+dimensions.gender g on sm.gender_id = g.gender 
+WHERE
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id} and sm.class_id = {class_id}
+group by sm.student_name , a.attendance_status 
+order by 
+sm.student_name`,
+          },
+          level: "teacher",
+        },
+      },
+    ],
+    options: {
+      barChart: {
+        metricLabelProp: "Male Present",
+        metricValueProp: "male_present",
+        yAxis: {
+          title: "Number Of Students",
+        },
+        benchmarkConfig: {
+          linkedReport: "tas_average_attendance_bignumber",
+        },
+        xAxis: {
+          title: "Gender Management",
+          label: "level",
+          value: "level",
+        },
+        tooltipMetrics: [
+          {
+            valuePrefix: "District Id:",
+            value: "district_id",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "District Name:",
+            value: "district_name",
+            valueSuffix: "%",
+          },
+
+          {
+            valuePrefix: "Block Id:",
+            value: "block_id",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "Block Name:",
+            value: "block_name",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "Cluster Id:",
+            value: "cluster_id",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "Cluster Name:",
+            value: "cluster_name",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "School Id:",
+            value: "school_id",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "level",
+            value: "level",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "No of schools",
+            value: "no_of_schools",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "School Name:",
+            value: "school_name",
+            valueSuffix: "",
+          },
+            {
+            valuePrefix: "class Name:",
+            value: "class_name",
+            valueSuffix: "",
+          },
+          {
+            valuePrefix: "Average Percentage Student:",
+            value: "perc_students",
+            valueSuffix: "",
+          },
+        ],
+      },
+    },
+  },
 };
