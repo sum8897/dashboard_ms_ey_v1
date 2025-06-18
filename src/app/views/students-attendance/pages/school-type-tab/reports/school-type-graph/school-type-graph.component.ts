@@ -310,7 +310,7 @@ export class SchoolTypeGraphComponent implements OnInit {
             reportData,
             config,
             "male_absent",
-            "Male Absent",
+            "Boys Absent",
             "rgba(255, 0, 0, 0.5)",
             0.42
           );
@@ -318,7 +318,7 @@ export class SchoolTypeGraphComponent implements OnInit {
             reportData,
             config,
             "female_present",
-            "Female Present",
+            "Girls Present",
             "rgba(0, 255, 0, 0.5)",
             0.4
           );
@@ -326,7 +326,7 @@ export class SchoolTypeGraphComponent implements OnInit {
             reportData,
             config,
             "female_absent",
-            "Female Absent",
+            "Girls Absent",
             "rgba(214,215,39, 0.6)",
             0.4
           );
@@ -407,7 +407,7 @@ export class SchoolTypeGraphComponent implements OnInit {
         this.tableReportData,
         this.config,
         "male_absent",
-        "Male Absent",
+        "Boys Absent",
         "rgba(255, 0, 0, 0.5)",
         0.42
       );
@@ -415,7 +415,7 @@ export class SchoolTypeGraphComponent implements OnInit {
         this.tableReportData,
         this.config,
         "female_present",
-        "Female Present",
+        "Girls Present",
         "rgba(0, 255, 0, 0.5)",
         0.4
       );
@@ -423,7 +423,7 @@ export class SchoolTypeGraphComponent implements OnInit {
         this.tableReportData,
         this.config,
         "female_absent",
-        "Female Absent",
+        "Girls Absent",
         "rgba(214,215,39, 0.6)",
         0.4
       );

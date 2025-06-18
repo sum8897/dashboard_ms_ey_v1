@@ -2294,7 +2294,7 @@ sm.student_name`,
     ],
     options: {
       barChart: {
-        metricLabelProp: "Male Present",
+        metricLabelProp: "Boys Present",
         metricValueProp: "male_present",
         yAxis: {
           title: "Number Of Students",
@@ -4754,7 +4754,7 @@ sm.student_name`,
     ],
     options: {
       barChart: {
-        metricLabelProp: "Male Present",
+        metricLabelProp: "Boys Present",
         metricValueProp: "male_present",
         yAxis: {
           title: "Number Of Students",
