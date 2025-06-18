@@ -3012,58 +3012,6 @@ sam.student_name`,
             property: "girls_total",
             class: "text-center",
           },
-          //  {
-          //   name: "Attendance Percentage",
-          //   property: "attendance_percentage",
-          //   class: "text-center",
-          // },
-          // {
-          //   name: "Present Students",
-          //   property: "present_students",
-          //   class: "text-center",
-          // },
-          // {
-          //   name: "Absent Students",
-          //   property: "absent_students",
-          //   class: "text-center",
-          // },
-          // {
-          //   name: "Present",
-          //   property: "present",
-          //   class: "text-center",
-          // },
-          // {
-          //   name: "Absent",
-          //   property: "absent",
-          //   class: "text-center",
-          // },
-
-          // {
-          // 	name: "DOB",
-          // 	property: "dob",
-          // 	class: "text-center"
-          // },
-          // {
-          // 	name: "Gender",
-          // 	property: "gen",
-          // 	class: "text-center"
-          // },
-          // {
-          // 	name: "Date of Joining",
-          // 	property: "date_of_joining",
-          // 	class: "text-center"
-          // },
-          // {
-          // 	name: "Designation",
-          // 	property: "designation",
-          // 	class: "text-center"
-          // },
-          // {
-          // 	name: "Category",
-          // 	property: "category",
-          // 	class: "text-center"
-          // },
-
           {
               name: "Attendance Percentage",
               property: "attendance_percentage",
@@ -3126,7 +3074,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'
+ a.date BETWEEN startDate and endDate
 group by sm.level_id ,st.level`,
         },
         actions: {
@@ -3149,7 +3097,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'
+ a.date BETWEEN startDate and endDate
 group by sm.level_id ,st.level
 order by
 sm.level_id`,
@@ -3183,7 +3131,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
+ a.date BETWEEN BETWEEN startDate and endDate and d.district_id = {district_id}
 group by sm.level_id ,st.level
 order by 
 sm.level_id`,
@@ -3211,7 +3159,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and d.district_id = {district_id}
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
 group by sm.level_id ,st.level`,
           },
           level: "block",
@@ -3246,7 +3194,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'' and b.block_id = {block_id}
+ a.date BETWEEN startDate and endDate and b.block_id = {block_id}
 group by d.district_name ,sm.level_id ,st.level`,
         },
         actions: {
@@ -3274,7 +3222,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05'' and b.block_id = {block_id}
+ a.date BETWEEN startDate and endDate and b.block_id = {block_id}
 group by d.district_name ,sm.level_id ,st.level`,
           },
           level: "cluster",
@@ -3309,7 +3257,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and c.cluster_id = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
 group by d.district_name ,sm.level_id ,st.level`,
         },
         actions: {
@@ -3337,7 +3285,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and c.cluster_id = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id = {cluster_id}
 group by d.district_name ,sm.level_id ,st.level`,
           },
           level: "school",
@@ -3374,7 +3322,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = {school_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by cl.class_name, sm.class_id 
 order by 
 sm.class_id `,
@@ -3406,7 +3354,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = {school_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by cl.class_name, sm.class_id 
 order by 
 sm.class_id `,
@@ -3441,7 +3389,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = {school_id} and sm.class_id = {class_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id} and sm.class_id = {class_id}
 group by sm.student_name , a.attendance_status 
 order by 
 sm.student_name`,
@@ -3469,7 +3417,7 @@ dimensions.schoolmanagement s on sm.school_management_id = s.schoolmanagement_id
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN '2025-06-05' and '2025-06-05' and sm.school_id  = {school_id} and sm.class_id = {class_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id} and sm.class_id = {class_id}
 group by sm.student_name , a.attendance_status 
 order by 
 sm.student_name`,
@@ -4383,7 +4331,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate
+ a.date BETWEEN startDate and endDate
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4409,7 +4357,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate
+ a.date BETWEEN startDate and endDate
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4472,7 +4420,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and d.district_id = {district_id}
+ a.date BETWEEN startDate and endDate and d.district_id = {district_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4509,7 +4457,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and b.block_id  = {block_id}
+ a.date BETWEEN startDate and endDate and b.block_id  = {block_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4540,7 +4488,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and b.block_id  = {block_id}
+ a.date BETWEEN startDate and endDate and b.block_id  = {block_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4577,7 +4525,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and c.cluster_id  = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id  = {cluster_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4608,7 +4556,7 @@ left join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and c.cluster_id  = {cluster_id}
+ a.date BETWEEN startDate and endDate and c.cluster_id  = {cluster_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4647,7 +4595,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and sm.school_id  = {school_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
@@ -4679,7 +4627,7 @@ join
 join 
 dimensions.gender g on sm.gender_id = g.gender 
 WHERE
- a.date BETWEEN  startDate and endDate and sm.school_id  = {school_id}
+ a.date BETWEEN startDate and endDate and sm.school_id  = {school_id}
 group by sm.social_category_id ,sc.category 
 HAVING sc.category IS NOT null
 order by 
