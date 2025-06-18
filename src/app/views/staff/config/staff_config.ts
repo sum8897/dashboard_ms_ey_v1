@@ -2719,27 +2719,27 @@ tp.teacher_id`,
 					}
 				},
 				{
-					name: "Dis_1",
+					name: "Dis 1",
 					property: "dis_1",
 					class: "text-center"
 				},
 				{
-					name: "dis_2",
+					name: "Dis 2",
 					property: "dis_2",
 					class: "text-center"
 				},
 				{
-					name: "dis_3",
+					name: "Dis 3",
 					property: "dis_3",
 					class: "text-center"
 				},
 				{
-					name: "dis_4",
+					name: "Dis 4",
 					property: "dis_4",
 					class: "text-center"
 				},
 				{
-					name: "dis_5",
+					name: "Dis 5",
 					property: "dis_5",
 					class: "text-center"
 				},
@@ -2749,7 +2749,7 @@ tp.teacher_id`,
 					class: "text-center"
 				},
 				{
-					name: "dd_sec",
+					name: "DD Sec",
 					property: "dd_sec",
 					class: "text-center"
 				},
@@ -2759,7 +2759,7 @@ tp.teacher_id`,
 					class: "text-center"
 				},
 				{
-					name: "ddse",
+					name: "DDSE",
 					property: "ddse",
 					class: "text-center"
 				},
