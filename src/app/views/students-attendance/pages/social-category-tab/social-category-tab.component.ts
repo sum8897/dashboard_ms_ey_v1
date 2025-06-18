@@ -11,7 +11,7 @@ import { ReportDrilldownService } from "src/app/core/services/report-drilldown/r
 import { CommonService } from "src/app/core/services/common/common.service";
 import moment from "moment";
 import { config } from "../../config/student_attendance_system_config";
-import { SocialCategoryTableComponent } from "./reports/social-category-table/social-category-tab.component";
+import { SocialCategoryTableComponent } from "./reports/social-category-table/social-category-table.component";
 import { SocialCategoryGraphComponent } from "./reports/social-category-graph/social-category-graph.component";
 
 @Component({
