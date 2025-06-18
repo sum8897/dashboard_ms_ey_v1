@@ -28,7 +28,7 @@ export class SchoolTypeTabComponent implements OnInit {
   endDate: any;
   reportsData: any[] = [];
   rbacDetails: any;
-  defaultSelectedDays: any = 7;
+  defaultSelectedDays: any = 2;
   drillDownLevel: any = 1;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
