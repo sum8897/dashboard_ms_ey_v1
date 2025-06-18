@@ -22,6 +22,7 @@ import { CriteriaService } from "src/app/core/services/criteria.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { config } from "src/app/views/students-attendance/config/student_attendance_system_config";
 import { SchoolTypeTabComponent } from "../../school-type-tab.component";
+import { SocialCategoryTabComponent } from "../../social-category-tab.component";
 
 @Component({
   selector: 'app-social-category-table',
@@ -67,7 +68,7 @@ export class SocialCategoryTableComponent implements OnInit {
 
   constructor(
     private readonly _commonService: CommonService,
-    private csv: SocialCategoryTableComponent,
+    private csv: SocialCategoryTabComponent,
     private readonly _wrapperService: WrapperService,
     private _rbacService: RbacService,
     private readonly _reportDrilldownService: ReportDrilldownService,
