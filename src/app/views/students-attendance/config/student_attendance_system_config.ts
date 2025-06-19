@@ -580,7 +580,7 @@ export const config = {
               ],
               extraInfo: {
                 hierarchyLevel: 6,
-                linkedReports: ["enrollment_barchart"],
+                linkedReports: [""],
               },
               allowedLevels: [1, 2, 3, 4, 5, 6, 7],
             },
