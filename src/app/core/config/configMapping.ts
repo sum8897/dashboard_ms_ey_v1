@@ -31,6 +31,7 @@ import {config as udiseschoolinfra} from '../../views/udise-schoolinfra/config/u
 import {config as libraryConfig} from '../../views/library/config';
 import { config as staffConfig } from '../../views/staff/config/staff_config';
 import { config as studentAttendanceConfig } from '../../views/students-attendance/config/student_attendance_system_config';
+import { config as staffAttendanceConfig } from '../../views/staff-attendance/config/staff_attendance_system_config';
 
 
 
@@ -39,6 +40,7 @@ export const configFiles = {
   staffstudents:staffStudentsConfig,
   staff: staffConfig,
   StudentAttendance: studentAttendanceConfig,
+  StaffAttendance: staffAttendanceConfig,
   pgiSchoolSafety:pgiSchoolSafetyConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
@@ -72,6 +74,7 @@ export const programFolderNames = {
   staffstudents:'staffStudents',
   staff:'staff',
   StudentAttendance: 'StudentAttendance',
+  StaffAttendance: 'StaffAttendance',
   pgiSchoolSafety:'pgiSchoolSafety',
   // studentAttendance: 'studentattendance',
   reviewMeetings: 'rev_and_monitoring',
@@ -101,6 +104,7 @@ export const stateProgramsFolderNames = {
   staffstudents:'',
   staff: '',
   StudentAttendance: '',
+  StaffAttendance: '',
   pgiSchoolSafety:'',
   studentAiAttendance:'',
   studentEnrollment:'',

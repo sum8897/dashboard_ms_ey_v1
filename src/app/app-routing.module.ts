@@ -281,6 +281,13 @@ routes = [
         (m)=> m.StudentsAttendanceModule
         )
       },
+      {
+        path: "Staff-attendance",
+        loadChildren: () =>
+        import("./views/staff-attendance/staff-attendance.module").then(
+        (m)=> m.StaffAttendanceModule
+        )
+      },
     ],
   },
   {
