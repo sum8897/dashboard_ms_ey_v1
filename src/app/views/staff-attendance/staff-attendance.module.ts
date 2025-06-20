@@ -11,6 +11,7 @@ import { DashletModule, DataService } from "@project-sunbird/sb-dashlet";
 
 import { OverallStatusTabComponent } from './pages/overall-status-tab/overall-status-tab.component';
 import { OverallStatusTableComponent } from './pages/overall-status-tab/reports/overall-status-table/overall-status-table.component';
+import { OverallStatusBignumberMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumber-metrics/overall-status-bignumber-metrics.component';
 
 
 
@@ -18,7 +19,8 @@ import { OverallStatusTableComponent } from './pages/overall-status-tab/reports/
   declarations: [
     StaffAttendanceComponent,
     OverallStatusTabComponent,
-    OverallStatusTableComponent
+    OverallStatusTableComponent,
+    OverallStatusBignumberMetricsComponent
   ],
   imports: [
     DashletModule.forRoot({

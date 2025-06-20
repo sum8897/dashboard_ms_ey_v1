@@ -12,7 +12,7 @@ export const config = {
       "lo_average_school",
     ],
   },
-  filters: [ ],
+  filters: [],
 
   staff_dashboad_metrics: {
     label: "Overall Status",

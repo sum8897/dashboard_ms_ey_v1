@@ -30,10 +30,10 @@ export class DashboardComponent implements OnInit {
      private readonly _router: Router, private readonly rbac: RbacService, private _wrapperService: WrapperService,
      private _rbacService: RbacService,private router: Router,
      private readonly _authenticationService: AuthenticationService) {
-      console.log(localStorage.getItem('token'));
-      console.log(localStorage.getItem('access_user'));
+      // console.log(localStorage.getItem('token'));
+      // console.log(localStorage.getItem('access_user'));
       if((localStorage.getItem('token')== null || localStorage.getItem('token')==='' || localStorage.getItem('token')=== undefined) && (localStorage.getItem('access_user')==null || localStorage.getItem('access_user')=='public_user' || localStorage.getItem('access_user')=='' || localStorage.getItem('access_user')==undefined)){
-        console.log(localStorage.getItem('token'));
+        // console.log(localStorage.getItem('token'));
         // alert(localStorage.getItem('access_user'));
         let role= {
           id:"state",
@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onClickOfDashboardItem(cardInfo: IDashboardMenu | undefined): void {
-    console.log(cardInfo);
+    // console.log(cardInfo);
     // alert(localStorage.getItem('login_access')=='login_public'); 
     if (cardInfo) {
       if((cardInfo.title=='UDISE School Infrastructure' || cardInfo.title=='School General' || cardInfo.title=='PAS' || cardInfo.title=='Staff and Students' || cardInfo.title=='PGI and School Safety' || cardInfo.title=='Staff' || cardInfo.title=='Student Attendance' || cardInfo.title=='Staff ATtendance')  && (localStorage.getItem('login_access')=='login_public')){
@@ -133,9 +133,11 @@ export class DashboardComponent implements OnInit {
     programIds.forEach(key => {
       const programObject = configFiles[key];
       const reportNames = Object.keys(programObject);
+      console.log(reportNames)
       reportNames.forEach(reportName => {
         const reportObject = programObject[reportName];
         const filters = reportObject.filters;
+        console.log(filters)
         if (filters) {
           filters.forEach(element => {
             if (element.hierarchyLevel) {
@@ -158,6 +160,8 @@ export class DashboardComponent implements OnInit {
       let menuData = menuResult?.data;
       console.log(menuData);
       for (let i = 0; i < menuData?.length; i++) {
+        console.log(hierarchyLevels[menuData[i]?.programID]);
+        console.log(String(this.rbacDetails?.role));
         if (hierarchyLevels[menuData[i].programID]?.includes(String(this.rbacDetails?.role))) {
 
           let menuToDisplay: IMenuItem | any = {};

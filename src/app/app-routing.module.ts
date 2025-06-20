@@ -282,7 +282,7 @@ routes = [
         )
       },
       {
-        path: "Staff-attendance",
+        path: "staff-attendance",
         loadChildren: () =>
         import("./views/staff-attendance/staff-attendance.module").then(
         (m)=> m.StaffAttendanceModule
