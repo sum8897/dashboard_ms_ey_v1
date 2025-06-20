@@ -52,71 +52,39 @@ export const config = {
         valueProp: "state_id",
         hierarchyLevel: "1",
         timeSeriesQueries: {
-          table: `select 
-	sam.district_id,
-	d.district_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate
-	group by 
-	 sam.district_id , d.district_name`,
+          table: `select tam.district_id,d.district_name,count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+where da.date between startDate and endDate 
+group by tam.district_id ,d.district_name
+order by 
+tam.district_id;`,
         },
         actions: {
           queries: {
-            table: `select 
-	sam.district_id,
-	d.district_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate
-	group by 
-	 sam.district_id , d.district_name`,
+            table: `select tam.district_id,d.district_name,count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+where da.date between startDate and endDate 
+group by tam.district_id ,d.district_name
+order by 
+tam.district_id ;`,
           },
           level: "district",
         },
@@ -127,75 +95,45 @@ export const config = {
         valueProp: "district_id",
         hierarchyLevel: "2",
         timeSeriesQueries: {
-          table: `select 
-	sam.block_id,
-	b.block_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.district_id = {district_id}
-	group by 
-	 sam.block_id , b.block_name`,
+          table: `select tam.block_id,b.block_name,
+count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+where da.date between startDate and endDate and d.district_id = {district_id}
+group by tam.block_id  ,b.block_name 
+order by 
+tam.block_id ;`,
         },
         actions: {
           queries: {
-            table: `select 
-	sam.block_id,
-	b.block_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.district_id = {district_id}
-	group by 
-	 sam.block_id , b.block_name`,
+            table: `select tam.block_id,b.block_name,
+count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+where da.date between startDate and endDate and d.district_id = {district_id}
+group by tam.block_id  ,b.block_name 
+order by 
+tam.block_id;`,
           },
           level: "block",
         },
@@ -206,79 +144,49 @@ export const config = {
         valueProp: "block_id",
         hierarchyLevel: "3",
         timeSeriesQueries: {
-          table: `select 
-	sam.cluster_id,
-	c.cluster_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.block_id = {block_id}
-	group by 
-	 sam.cluster_id , c.cluster_name`,
+          table: `select tam.cluster_id ,c.cluster_name,
+count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and b.block_id  = {block_id}
+group by tam.cluster_id  ,c.cluster_name
+order by 
+tam.cluster_id ;`,
         },
         actions: {
           queries: {
-            table: `select 
-	sam.cluster_id,
-	c.cluster_name,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.block_id = {block_id}
-	group by 
-	 sam.cluster_id , c.cluster_name`,
+            table: `select tam.cluster_id ,c.cluster_name,
+count(distinct tam.school_id) as no_of_school_att_marked ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and b.block_id  = {block_id}
+group by tam.cluster_id  ,c.cluster_name
+order by 
+tam.cluster_id ;`,
           },
           level: "cluster",
         },
@@ -289,81 +197,47 @@ export const config = {
         valueProp: "cluster_id",
         hierarchyLevel: "4",
         timeSeriesQueries: {
-          table: `select 
-	sam.school_id ,
-	sam.school_name,
-	st.school_type ,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.cluster_id = {cluster_id}
-	group by 
-	 sam.school_id  , sam.school_name, st.school_type`,
+          table: `select tam.school_id ,tam.school_name ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and c.cluster_id  = {cluster.id}
+group by tam.school_id  ,tam.school_name 
+order by 
+tam.school_id ;`,
         },
         actions: {
           queries: {
-            table: `select 
-	sam.school_id ,
-	sam.school_name,
-	st.school_type ,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '1' then 1 else 0 end) as govt_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '1' then 1 else 0 end) as govt_absent,
-	sum(case when sam.school_management_id = '1' then 1 else 0 end) as govt_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
-	sum(case when sam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
-	sum(case when sam.attendance_status='1' and sam.school_management_id = '5' then 1 else 0 end) as private_Present,
-	sum(case when sam.attendance_status='0' and sam.school_management_id = '5' then 1 else 0 end) as private_absent,
-	sum(case when sam.school_management_id = '5' then 1 else 0 end) as private_total,
-	ROUND(100.0 * SUM(CASE WHEN sam.attendance_status = '1' AND sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN sam.attendance_status in ('1','0') and sam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
-    ) AS Attendance_Percentage
-	from student_attendance.attendance_master sam 
-	left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where date between startDate and endDate and sam.cluster_id = {cluster_id}
-	group by 
-	 sam.school_id  , sam.school_name, st.school_type `,
+            table: `select tam.school_id ,tam.school_name ,
+sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(da.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS Attendance_Percentage
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and c.cluster_id  = {cluster.id}
+group by tam.school_id  ,tam.school_name 
+order by 
+tam.school_id;`,
           },
           level: "school",
         },
@@ -374,154 +248,120 @@ export const config = {
         valueProp: "school_id",
         hierarchyLevel: "5",
         timeSeriesQueries: {
-          table: `select 
-sam.class_id,
-cl.class_name ,
-sum(case when sam.attendance_status='1' and sam.gender_id =1 then 1 else 0 end) as boys_present,
-sum(case when sam.attendance_status='0' and sam.gender_id =1 then 1 else 0 end) as boys_absent,
-sum(case when sam.attendance_status='1' and sam.gender_id =2 then 1 else 0 end) as girls_present,
-sum(case when sam.attendance_status='0' and sam.gender_id =2 then 1 else 0 end) as girls_absent,
-sum(case when sam.attendance_status in ('1','0') then 1 else 0 end) as total_students,
-ROUND((SUM(CASE WHEN sam.attendance_status = '1' AND sam.gender_id IN (1,2) THEN 1 ELSE 0 END) * 100.0) /
- NULLIF(SUM(CASE WHEN sam.attendance_status IN ('1','0') THEN 1 ELSE 0 END), 0),2) AS attendance_percentage
-from student_attendance.attendance_master sam
-left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id  
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where 
-sam.date between startDate and endDate and sam.school_id  ={school_id}
-group by 
-sam.class_id , cl.class_name 
+          table: `select tam.tch_id  ,tam.tch_name ,
+(case when da.attendance_status = 1 then 1 else 0 end) as present,
+(case when da.attendance_status = 0 then 1 else 0 end) as absent 
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and tam.school_id  = {school_id}
+group by tam.tch_id  ,tam.tch_name, da.attendance_status 
 order by 
-sam.class_id`,
+tam.tch_id;`,
         },
         actions: {
           queries: {
-            table: `select 
-sam.class_id,
-cl.class_name ,
-sum(case when sam.attendance_status='1' and sam.gender_id =1 then 1 else 0 end) as boys_present,
-sum(case when sam.attendance_status='0' and sam.gender_id =1 then 1 else 0 end) as boys_absent,
-sum(case when sam.attendance_status='1' and sam.gender_id =2 then 1 else 0 end) as girls_present,
-sum(case when sam.attendance_status='0' and sam.gender_id =2 then 1 else 0 end) as girls_absent,
-sum(case when sam.attendance_status in ('1','0') then 1 else 0 end) as total_students,
-ROUND((SUM(CASE WHEN sam.attendance_status = '1' AND sam.gender_id IN (1,2) THEN 1 ELSE 0 END) * 100.0) /
- NULLIF(SUM(CASE WHEN sam.attendance_status IN ('1','0') THEN 1 ELSE 0 END), 0),2) AS attendance_percentage
-from student_attendance.attendance_master sam
-left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id  
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where 
-sam.date between startDate and endDate and sam.school_id  ={school_id}
-group by 
-sam.class_id , cl.class_name 
+            table: `select tam.tch_id  ,tam.tch_name ,
+(case when da.attendance_status = 1 then 1 else 0 end) as present,
+(case when da.attendance_status = 0 then 1 else 0 end) as absent 
+from teacher_attendance.daily_attendance da 
+join
+teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+join
+dimensions.district d on tam.district_id = d.district_id 
+join 
+dimensions.block b on tam.block_id = b.block_id 
+join 
+dimensions.cluster c on tam.cluster_id = c.cluster_id 
+where da.date between startDate and endDate and tam.school_id  = {school_id}
+group by tam.tch_id  ,tam.tch_name, da.attendance_status 
 order by 
-sam.class_id`,
+tam.tch_id;`,
           },
           level: "class",
         },
       },
-       {
-        name: "Class",
-        labelProp: "class_name",
-        valueProp: "class_id",
-        hierarchyLevel: "6",
-        timeSeriesQueries: {
-          table: `select 
-sam.student_id,
-sam.student_name,
-g.gen as gender,
-sc.category as social_category ,
-sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
-sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
-from
-student_attendance.attendance_master sam 
-left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where
-sam.date between startDate and endDate and sam.class_id = {class_id}
-group by 
-sam.student_id , sam.student_name , g.gen, sc.category 
-order by 
-sam.student_name`,
-        },
-        actions: {
-          queries: {
-            table: `select 
-sam.student_id,
-sam.student_name,
-g.gen as gender,
-sc.category as social_category ,
-sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
-sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
-from
-student_attendance.attendance_master sam 
-left join
-	dimensions.district d on sam.district_id = d.district_id 
-	left join 
-	dimensions.block b on sam.block_id = b.block_id 
-	left join 
-	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-	left join 
-	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-	left join 
-	attendance_filters.school_type st on sam.level_id = st.level_id 
-	left join 
-	attendance_filters."class" cl on sam.class_id = cl.class_id 
-	left join 
-	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-	left join 
-	dimensions.gender g on sam.gender_id = g.gender
-	where
-sam.date between startDate and endDate and sam.class_id = {class_id}
-group by 
-sam.student_id , sam.student_name , g.gen, sc.category 
-order by 
-sam.student_name`,
-          },
-          level: "teacher",
-        },
-      },
+//        {
+//         name: "Class",
+//         labelProp: "class_name",
+//         valueProp: "class_id",
+//         hierarchyLevel: "6",
+//         timeSeriesQueries: {
+//           table: `select 
+// sam.student_id,
+// sam.student_name,
+// g.gen as gender,
+// sc.category as social_category ,
+// sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
+// sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
+// from
+// student_attendance.attendance_master sam 
+// left join
+// 	dimensions.district d on sam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on sam.block_id = b.block_id 
+// 	left join 
+// 	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	attendance_filters.school_type st on sam.level_id = st.level_id 
+// 	left join 
+// 	attendance_filters."class" cl on sam.class_id = cl.class_id 
+// 	left join 
+// 	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
+// 	left join 
+// 	dimensions.gender g on sam.gender_id = g.gender
+// 	where
+// sam.date between startDate and endDate and sam.class_id = {class_id}
+// group by 
+// sam.student_id , sam.student_name , g.gen, sc.category 
+// order by 
+// sam.student_name`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// sam.student_id,
+// sam.student_name,
+// g.gen as gender,
+// sc.category as social_category ,
+// sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
+// sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
+// from
+// student_attendance.attendance_master sam 
+// left join
+// 	dimensions.district d on sam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on sam.block_id = b.block_id 
+// 	left join 
+// 	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	attendance_filters.school_type st on sam.level_id = st.level_id 
+// 	left join 
+// 	attendance_filters."class" cl on sam.class_id = cl.class_id 
+// 	left join 
+// 	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
+// 	left join 
+// 	dimensions.gender g on sam.gender_id = g.gender
+// 	where
+// sam.date between startDate and endDate and sam.class_id = {class_id}
+// group by 
+// sam.student_id , sam.student_name , g.gen, sc.category 
+// order by 
+// sam.student_name`,
+       //  },
+     //    level: "teacher",
+   //     },
+ //     },
     ],
     options: {
       table: {
@@ -542,9 +382,9 @@ sam.student_name`,
               ],
               extraInfo: {
                 hierarchyLevel: 1,
-                linkedReports: ["enrollment_barchart"],
+                linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -563,9 +403,9 @@ sam.student_name`,
               ],
               extraInfo: {
                 hierarchyLevel: 2,
-                linkedReports: ["enrollment_barchart"],
+                linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -584,9 +424,9 @@ sam.student_name`,
               ],
               extraInfo: {
                 hierarchyLevel: 3,
-                linkedReports: ["enrollment_barchart"],
+                linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -605,9 +445,9 @@ sam.student_name`,
               ],
               extraInfo: {
                 hierarchyLevel: 4,
-                linkedReports: ["enrollment_barchart"],
+                linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -628,143 +468,69 @@ sam.student_name`,
                 hierarchyLevel: 5,
                 linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
+          // {
+          //   name: "Class",
+          //   property: "class_name",
+          //   class: "text-left",
+          //   action: {
+          //     dataProps: [
+          //       {
+          //         prop: "class_id", 
+          //         alias: "id",
+          //       },
+          //       {
+          //         prop: "class_name",
+          //       },
+          //     ],
+          //     extraInfo: {
+          //       hierarchyLevel: 6,
+          //       linkedReports: [""],
+          //     },
+          //     allowedLevels: [1, 2, 3, 4, 5],
+          //   },
+          // },
+          // {
+          //   name: "Student",
+          //   property: "student_name",
+          //   class: "text-left",
+          //   action: {
+          //     dataProps: [
+          //       {
+          //         prop: "student_id",
+          //         alias: "id",
+          //       },
+          //       {
+          //         prop: "student_name",
+          //       },
+          //     ],
+          //     extraInfo: {
+          //       hierarchyLevel: 7,
+          //       linkedReports: [""],
+          //     },
+          //     allowedLevels: [],
+          //   },
+        //  },
           {
-            name: "Class",
-            property: "class_name",
-            class: "text-left",
-            action: {
-              dataProps: [
-                {
-                  prop: "class_id",
-                  alias: "id",
-                },
-                {
-                  prop: "class_name",
-                },
-              ],
-              extraInfo: {
-                hierarchyLevel: 6,
-                linkedReports: [""],
-              },
-              allowedLevels: [1, 2, 3, 4, 5, 6, 7],
-            },
-          },
-          {
-            name: "Student",
-            property: "student_name",
-            class: "text-left",
-            action: {
-              dataProps: [
-                {
-                  prop: "student_id",
-                  alias: "id",
-                },
-                {
-                  prop: "student_name",
-                },
-              ],
-              extraInfo: {
-                hierarchyLevel: 7,
-                linkedReports: [""],
-              },
-              allowedLevels: [],
-            },
-          },
-          {
-            name: "Govt Present",
-            property: "govt_present",
+            name: "Schools Marked Attendance",
+            property: "no_of_school_att_marked",
             class: "text-center",
           },
           {
-            name: "Govt Absent",
-            property: "govt_absent",
+            name: "Present Teachers",
+            property: "present_teachers",
             class: "text-center",
           },
           {
-            name: "Govt Total Students",
-            property: "govttotal_students",
+            name: "Absent Teachers",
+            property: "absent_teachers",
             class: "text-center",
           },
           {
-            name: "Govt Aided Present",
-            property: "govtaided_present",
-            class: "text-center",
-          },
-          {
-            name: "Govt Aided absent",
-            property: "govtaided_absent",
-            class: "text-center",
-          },
-          {
-            name: "Govt Aided Total Students",
-            property: "govtaidedtotal_students",
-            class: "text-center",
-          },
-          {
-            name: "Private Present",
-            property: "private_present",
-            class: "text-center",
-          },
-          {
-            name: "Private Absent",
-            property: "private_absent",
-            class: "text-center",
-          },
-          {
-            name: "Private Total Student",
-            property: "privatetotal_student",
-            class: "text-center",
-          },
-          {
-            name: "Boys Present",
-            property: "boys_present",
-            class: "text-center",
-          },
-          {
-            name: "Boys Absent",
-            property: "boys_absent",
-            class: "text-center",
-          },
-          {
-            name: "Girls Present",
-            property: "girls_present",
-            class: "text-center",
-          },
-          {
-            name: "Girls Absent",
-            property: "girls_absent",
-            class: "text-center",
-          },
-          {
-            name: "Total Students",
-            property: "total_students",
-            class: "text-center",
-          },
-          {
-            name: "Present Students",
-            property: "present_students",
-            class: "text-center",
-          },
-          {
-            name: "Student Name",
-            property: "student_name",
-            class: "text-center",
-          },
-          {
-            name: "Gender",
-            property: "gender",
-            class: "text-center",
-          },{
-            name: "Social Category",
-            property: "social_category",
-            class: "text-center",
-          },
-          {
-            name: "Absent Students",
-            property: "absent_students",
+            name: "Total Teachers",
+            property: "total_teachers",
             class: "text-center",
           },
           {
@@ -776,6 +542,105 @@ sam.student_name`,
             name: "Absent",
             property: "absent",
             class: "text-center",
+          },
+          // {
+          //   name: "Private Present",
+          //   property: "private_present",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Private Absent",
+          //   property: "private_absent",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Private Total Student",
+          //   property: "privatetotal_student",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Boys Present",
+          //   property: "boys_present",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Boys Absent",
+          //   property: "boys_absent",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Girls Present",
+          //   property: "girls_present",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Girls Absent",
+          //   property: "girls_absent",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Total Students",
+          //   property: "total_students",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Present Students",
+          //   property: "present_students",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Student Name",
+          //   property: "student_name",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Gender",
+          //   property: "gender",
+          //   class: "text-center",
+          // },{
+          //   name: "Social Category",
+          //   property: "social_category",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Absent Students",
+          //   property: "absent_students",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Present",
+          //   property: "present",
+          //   class: "text-center",
+          // },
+          // {
+          //   name: "Absent",
+          //   property: "absent",
+          //   class: "text-center",
+          // },
+          {
+              name: "Attendance Percentage",
+              property: "attendance_percentage",
+              class: "text-center",
+              valueSuffix: '',
+              isHeatMapRequired: true,
+              type: "number",
+              color: {
+                  type: "percentage",
+                  values: [
+                      {
+                          color: "#007000",
+                          breakPoint: 50
+                      },
+                      {
+                          color: "#FFBF00",
+                          breakPoint: 1
+                      },
+                      {
+                          color: "#D2222D",
+                          breakPoint: -10000
+                      },
+                    ]
+              },
           }
         ],
       },
