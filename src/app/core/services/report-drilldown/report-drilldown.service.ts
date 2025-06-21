@@ -68,25 +68,25 @@ export class ReportDrilldownService {
       case 5:
         drillDownDetails = {
           ...rbacDetails,
-          school: id ? id : prevDrillDownDetails.school,
+          school: id ? id : prevDrillDownDetails?.school,
         };
         break;
       case 6:
         drillDownDetails = {
           ...rbacDetails,
-          teacher: id ? id : prevDrillDownDetails.teacher,
+          teacher: id ? id : prevDrillDownDetails?.teacher,
         };
         break;
       case 7:
         drillDownDetails = {
           ...rbacDetails,
-          class: id ? id : prevDrillDownDetails.class,
+          class: id ? id : prevDrillDownDetails?.class,
         };
         break;
       case 8:
         drillDownDetails = {
           ...rbacDetails,
-          student: id ? id : prevDrillDownDetails.student,
+          student: id ? id : prevDrillDownDetails?.student,
         };
         break;
     }

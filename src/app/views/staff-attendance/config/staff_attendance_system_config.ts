@@ -1,6 +1,7 @@
+// main query
 export const config = {
   criteria_config: {
-    indicatorName: "Staff Attendance",
+    indicatorName: "Studenet Attendance",
     minRange: 0,
     maxRange: 100,
     defaultFromRange: 0,
@@ -12,8 +13,18 @@ export const config = {
       "lo_average_school",
     ],
   },
-  filters: [],
-
+  filters: [
+    //  {
+    // 			label: 'Management',
+    // 			name: '',
+    // 			labelProp: 'ac_year',
+    // 			valueProp: 'ac_year',
+    // 			id: 'acdemic_year',
+    // 			tableAlias: 'ay',
+    // 			query:
+    // 				'select id, ac_year from dimensions.academic_year',
+    // 		},
+  ],
   staff_dashboad_metrics: {
     label: "Overall Status",
     filters: [
@@ -41,6 +52,7 @@ export const config = {
       },
     },
   },
+
   //Overall Status table
   overall_status_table: {
     label: "Overall Status",
@@ -287,81 +299,81 @@ tam.tch_id;`,
           level: "class",
         },
       },
-//        {
-//         name: "Class",
-//         labelProp: "class_name",
-//         valueProp: "class_id",
-//         hierarchyLevel: "6",
-//         timeSeriesQueries: {
-//           table: `select 
-// sam.student_id,
-// sam.student_name,
-// g.gen as gender,
-// sc.category as social_category ,
-// sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
-// sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
-// from
-// student_attendance.attendance_master sam 
-// left join
-// 	dimensions.district d on sam.district_id = d.district_id 
-// 	left join 
-// 	dimensions.block b on sam.block_id = b.block_id 
-// 	left join 
-// 	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-// 	left join 
-// 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-// 	left join 
-// 	attendance_filters.school_type st on sam.level_id = st.level_id 
-// 	left join 
-// 	attendance_filters."class" cl on sam.class_id = cl.class_id 
-// 	left join 
-// 	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-// 	left join 
-// 	dimensions.gender g on sam.gender_id = g.gender
-// 	where
-// sam.date between startDate and endDate and sam.class_id = {class_id}
-// group by 
-// sam.student_id , sam.student_name , g.gen, sc.category 
-// order by 
-// sam.student_name`,
-//         },
-//         actions: {
-//           queries: {
-//             table: `select 
-// sam.student_id,
-// sam.student_name,
-// g.gen as gender,
-// sc.category as social_category ,
-// sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
-// sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
-// from
-// student_attendance.attendance_master sam 
-// left join
-// 	dimensions.district d on sam.district_id = d.district_id 
-// 	left join 
-// 	dimensions.block b on sam.block_id = b.block_id 
-// 	left join 
-// 	dimensions."cluster" c on sam.cluster_id = c.cluster_id 
-// 	left join 
-// 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id 
-// 	left join 
-// 	attendance_filters.school_type st on sam.level_id = st.level_id 
-// 	left join 
-// 	attendance_filters."class" cl on sam.class_id = cl.class_id 
-// 	left join 
-// 	dimensions.social_category sc on sam.social_category_id = sc.social_cat 
-// 	left join 
-// 	dimensions.gender g on sam.gender_id = g.gender
-// 	where
-// sam.date between startDate and endDate and sam.class_id = {class_id}
-// group by 
-// sam.student_id , sam.student_name , g.gen, sc.category 
-// order by 
-// sam.student_name`,
-       //  },
-     //    level: "teacher",
-   //     },
- //     },
+      //        {
+      //         name: "Class",
+      //         labelProp: "class_name",
+      //         valueProp: "class_id",
+      //         hierarchyLevel: "6",
+      //         timeSeriesQueries: {
+      //           table: `select
+      // sam.student_id,
+      // sam.student_name,
+      // g.gen as gender,
+      // sc.category as social_category ,
+      // sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
+      // sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
+      // from
+      // student_attendance.attendance_master sam
+      // left join
+      // 	dimensions.district d on sam.district_id = d.district_id
+      // 	left join
+      // 	dimensions.block b on sam.block_id = b.block_id
+      // 	left join
+      // 	dimensions."cluster" c on sam.cluster_id = c.cluster_id
+      // 	left join
+      // 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id
+      // 	left join
+      // 	attendance_filters.school_type st on sam.level_id = st.level_id
+      // 	left join
+      // 	attendance_filters."class" cl on sam.class_id = cl.class_id
+      // 	left join
+      // 	dimensions.social_category sc on sam.social_category_id = sc.social_cat
+      // 	left join
+      // 	dimensions.gender g on sam.gender_id = g.gender
+      // 	where
+      // sam.date between startDate and endDate and sam.class_id = {class_id}
+      // group by
+      // sam.student_id , sam.student_name , g.gen, sc.category
+      // order by
+      // sam.student_name`,
+      //         },
+      //         actions: {
+      //           queries: {
+      //             table: `select
+      // sam.student_id,
+      // sam.student_name,
+      // g.gen as gender,
+      // sc.category as social_category ,
+      // sum(case when sam.attendance_status='1' then 1 else 0 end) as present,
+      // sum(case when sam.attendance_status='0' then 1 else 0 end) as absent
+      // from
+      // student_attendance.attendance_master sam
+      // left join
+      // 	dimensions.district d on sam.district_id = d.district_id
+      // 	left join
+      // 	dimensions.block b on sam.block_id = b.block_id
+      // 	left join
+      // 	dimensions."cluster" c on sam.cluster_id = c.cluster_id
+      // 	left join
+      // 	dimensions.schoolmanagement s on sam.school_management_id = s.schoolmanagement_id
+      // 	left join
+      // 	attendance_filters.school_type st on sam.level_id = st.level_id
+      // 	left join
+      // 	attendance_filters."class" cl on sam.class_id = cl.class_id
+      // 	left join
+      // 	dimensions.social_category sc on sam.social_category_id = sc.social_cat
+      // 	left join
+      // 	dimensions.gender g on sam.gender_id = g.gender
+      // 	where
+      // sam.date between startDate and endDate and sam.class_id = {class_id}
+      // group by
+      // sam.student_id , sam.student_name , g.gen, sc.category
+      // order by
+      // sam.student_name`,
+      //  },
+      //    level: "teacher",
+      //     },
+      //     },
     ],
     options: {
       table: {
@@ -478,7 +490,7 @@ tam.tch_id;`,
           //   action: {
           //     dataProps: [
           //       {
-          //         prop: "class_id", 
+          //         prop: "class_id",
           //         alias: "id",
           //       },
           //       {
@@ -512,7 +524,7 @@ tam.tch_id;`,
           //     },
           //     allowedLevels: [],
           //   },
-        //  },
+          //  },
           {
             name: "Schools Marked Attendance",
             property: "no_of_school_att_marked",
@@ -618,30 +630,30 @@ tam.tch_id;`,
           //   class: "text-center",
           // },
           {
-              name: "Attendance Percentage",
-              property: "attendance_percentage",
-              class: "text-center",
-              valueSuffix: '',
-              isHeatMapRequired: true,
-              type: "number",
-              color: {
-                  type: "percentage",
-                  values: [
-                      {
-                          color: "#007000",
-                          breakPoint: 50
-                      },
-                      {
-                          color: "#FFBF00",
-                          breakPoint: 1
-                      },
-                      {
-                          color: "#D2222D",
-                          breakPoint: -10000
-                      },
-                    ]
-              },
-          }
+            name: "Attendance Percentage",
+            property: "attendance_percentage",
+            class: "text-center",
+            valueSuffix: "",
+            isHeatMapRequired: true,
+            type: "number",
+            color: {
+              type: "percentage",
+              values: [
+                {
+                  color: "#007000",
+                  breakPoint: 50,
+                },
+                {
+                  color: "#FFBF00",
+                  breakPoint: 1,
+                },
+                {
+                  color: "#D2222D",
+                  breakPoint: -10000,
+                },
+              ],
+            },
+          },
         ],
       },
       bigNumber: {
@@ -650,7 +662,4 @@ tam.tch_id;`,
       },
     },
   },
-
-}
-
- 
+};

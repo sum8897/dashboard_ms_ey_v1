@@ -40,7 +40,7 @@ export const configFiles = {
   staffstudents:staffStudentsConfig,
   staff: staffConfig,
   StudentAttendance: studentAttendanceConfig,
-  staffAttendanceConfig: staffAttendanceConfig,
+  staffAttendance: staffAttendanceConfig,
   pgiSchoolSafety:pgiSchoolSafetyConfig,
   schoolLibrary:schoolLibraryConfig,
   ict:ictConfig,
