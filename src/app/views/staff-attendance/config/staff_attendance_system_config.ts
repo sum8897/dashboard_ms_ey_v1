@@ -36,9 +36,9 @@ export const config = {
         actions: {
           queries: {
             bigNumber1:
-              "select ROUND(100.0 * SUM(CASE WHEN am.attendance_status = '1'  THEN 1 ELSE 0 END)/ NULLIF(count(am.student_id), 0), 2) AS attendance_percentage  from student_attendance.attendance_master am where am.date = (select max(am.date) from student_attendance.attendance_master am )",
+              "select ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1'  THEN 1 ELSE 0 END)/ NULLIF(count(da.tch_id), 0), 2) AS attendance_percentage  from teacher_attendance.daily_attendance da where da.date = (select max(da.date) from teacher_attendance.daily_attendance da)",
             bigNumber2:
-              "select count(distinct am.school_id) as schools_marked_attendance from student_attendance.attendance_master am where am.date =  (select max(am.date) from student_attendance.attendance_master am );",
+              "select count(distinct tam.school_id) as schools_marked_attendance from teacher_attendance.tch_attendance_master tam where tam.date =  (select max(tam.date) from teacher_attendance.tch_attendance_master tam );",
           },
           level: "district",
         },
