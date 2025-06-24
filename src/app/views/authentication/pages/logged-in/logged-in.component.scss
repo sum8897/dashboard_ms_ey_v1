@@ -546,22 +546,6 @@ input:focus {
     display: none;
 }
 
-   #background{
-    // background: url("/assets/images/Group.svg") no-repeat center center fixed !important;
-    // -webkit-background-size: cover;
-    // -moz-background-size: cover;
-    // -o-background-size: cover;
-    // background-size: cover !important;
-    // height: 100% !important;
-    // width: 100% !important;  
-    // font-family: 'Noto Sans', sans-serif !important;
-    background-size: cover !important;
-    height: 100% !important;
-    width: 100% !important;
-    font-family: "Noto Sans", sans-serif !important;
-    background: #fff;
-}
-
 .card-pf {
     // background: linear-gradient(125deg, #4e22ee 10%, #6b6df1 90%);
     width: 350px !important;
@@ -812,8 +796,16 @@ label[for="totp"]:after{
 
 
 .infoText{
-    margin-left :80px; 
-    width : 71%;
+   display: flex;
+    justify-content: end;
+  padding: 0 35px 0 0;
+    h6{
+        color: white;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1.4em;
+            margin-top: 10px;
+    }
 }
 
 #kc-content-wrapper .row {
@@ -871,10 +863,40 @@ label[for="totp"]:after{
     width: 60px;
     background-color: white;
 }
-
-.background{
-    overflow-y: scroll !important;
+.main_body{
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* keep this too */
+  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  margin: 0 auto;
 }
+
+.background {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(
+      rgba(52, 73, 94, 0.8), 
+      rgba(52, 73, 94, 0.8)
+    ),
+    url('../../../../../assets/images/login_bg.jpg') center / cover no-repeat;
+ background-size: cover;
+
+}
+
+/* Optional: make the content responsive */
+.login-box {
+  max-width: 90vw;
+  width: 350px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px 20px;
+  margin: 30px 0 0 0;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
 .dashboard_route_div{
     text-align: right;
 }
@@ -891,12 +913,7 @@ label[for="totp"]:after{
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(
-      rgba(52, 73, 94, 0.8),
-      rgba(52, 73, 94, 0.8)
-    ),
-    url('../../../../../assets/images/login_bg.jpg') center/cover no-repeat;
-  padding: 80px 0;
+//   padding: 80px 0;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -906,9 +923,10 @@ label[for="totp"]:after{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  gap: 60px;
-  flex-wrap: wrap;
+  padding: 0 35px 0 0;
+//   width: 100%;
+//   gap: 60px;
+//   flex-wrap: wrap;
 }
 
 /* Text area */
@@ -938,17 +956,7 @@ label[for="totp"]:after{
 }
 
 /* Login box */
-.login-box {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 40px 35px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  width: 320px;
-  color: #fff;
-  flex-shrink: 0;
-  transition: box-shadow 0.3s ease;
-}
+
 
 .login-box:hover {
   box-shadow: 0 12px 40px rgba(0, 188, 212, 0.5);
@@ -1011,4 +1019,10 @@ label[for="totp"]:after{
 
 input::placeholder{
     color: #aaa;
+}
+.back_header{
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
