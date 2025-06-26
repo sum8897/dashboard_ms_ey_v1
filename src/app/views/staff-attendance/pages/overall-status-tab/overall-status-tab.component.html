@@ -27,6 +27,17 @@
 					(exportReportData)="csvDownload($event)">
 				</app-attendance-graph>
 			</div> -->
+
+			<div class="reports-row">
+		<div class="row-wrapper grid grid-cols-2 gap-4">
+			<div
+				class="col-span-2 xmd:col-span-1 div-shadow"
+				id="bignumber"
+				*ngIf="checkReport('overall_status_bignumberone', 'bigNumber')"
+			>
+				<app-overall-status-bignumber-metrics #OverallStatusBignumberMetrics></app-overall-status-bignumber-metrics>
+			</div>
+
 		</div>
 
 

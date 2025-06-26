@@ -6,6 +6,8 @@ import { CommonService } from 'src/app/core/services/common/common.service';
 import moment from 'moment';
 import { config } from '../../config/staff_attendance_system_config';
 import { OverallStatusTableComponent } from './reports/overall-status-table/overall-status-table.component';
+import { OverallStatusBignumberMetricsComponent } from './reports/overall-status-bignumber-metrics/overall-status-bignumber-metrics.component';
+
 
 
 @Component({

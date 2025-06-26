@@ -1,7 +1,7 @@
 // main query
 export const config = {
   criteria_config: {
-    indicatorName: "Studenet Attendance",
+    indicatorName: "Staff Attendance",
     minRange: 0,
     maxRange: 100,
     defaultFromRange: 0,
@@ -317,7 +317,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 1,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
@@ -335,7 +335,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 2,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
@@ -353,7 +353,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 3,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 					}
@@ -371,7 +371,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 4,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 
@@ -390,7 +390,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 5,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 
@@ -409,7 +409,7 @@ tam.tch_id;`,
 						}],
 						extraInfo: {
 							hierarchyLevel: 6,
-							linkedReports: [""]
+							linkedReports: ["overall_status_bignumberone"]
 						},
 						allowedLevels: [1, 2, 3, 4, 5, 6]
 
@@ -478,5 +478,96 @@ tam.tch_id;`,
       },
     },
   },
+
+  //Big Number one
+
+  overall_status_bignumberone: {
+        "label": "Overall Status",
+        "filters": [
+            {
+                "name": "State",
+                "labelProp": "state_name",
+                "valueProp": "state_id",
+                "hierarchyLevel": "1",
+                "timeSeriesQueries": {
+                    "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id where tam.date between startDate and endDate;"
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id where tam.date between startDate and endDate;"
+                    },
+                    "level": "district"
+                }
+            },
+            {
+                "name": "District",
+                "labelProp": "district_name",
+                "valueProp": "district_id",
+                "hierarchyLevel": "2",
+                "timeSeriesQueries": {
+                    "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id  join dimensions.block b on tam.block_id = b.block_id where tam.date between startDate and endDate  and d.district_id = {district_id}"
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id  join dimensions.block b on tam.block_id = b.block_id where tam.date between startDate and endDate  and d.district_id = {district_id}",
+                    },
+                    "level": "block"
+                }
+            },
+            {
+                "name": "Block",
+                "labelProp": "block_name",
+                "valueProp": "block_id",
+                "hierarchyLevel": "3",
+                "timeSeriesQueries": {
+                    "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and b.block_id = {block_id};"
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and b.block_id = {block_id};"
+                    },
+                    "level": "cluster"
+                }
+            },
+            {
+                "name": "Cluster",
+                "labelProp": "cluster_name",
+                "valueProp": "cluster_id",
+                "hierarchyLevel": "4",
+                "timeSeriesQueries": {
+                    "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};"
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};"
+                    },
+                    "level": "school"
+                }
+            },
+            {
+                "name": "School",
+                "labelProp": "school_name",
+                "valueProp": "school_id",
+                "hierarchyLevel": "5",
+                "timeSeriesQueries": {
+                    "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and tam.school_id = {school_id};"
+                },
+                "actions": {
+                    "queries": {
+                        "bigNumber": "select sum(tam.attendance_status) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and tam.school_id = {school_id};"
+                    },
+                    "level": "school"
+                }
+            },
+            
+        ],
+        "options": {
+            "bigNumber": {
+                "title": "Present Teachers",
+                "valueSuffix": '%',
+                "property": 'no_of_present_teachers',
+            }
+        }
+    },
 
 };

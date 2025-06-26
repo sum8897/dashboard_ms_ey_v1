@@ -1,9 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CommonService } from 'src/app/core/services/common/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { RbacService } from 'src/app/core/services/rbac-service.service';
 import { WrapperService } from 'src/app/core/services/wrapper.service';
 import { buildQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
 import { config } from 'src/app/views/staff-attendance/config/staff_attendance_system_config';
+import { OverallStatusTabComponent } from '../../overall-status-tab.component';
+import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
+import { BarchartBenchmarkService } from 'src/app/core/services/barchart-benchmark/barchart-benchmark.service';
 
 @Component({
   selector: 'app-overall-status-bignumber-metrics',
@@ -12,7 +16,7 @@ import { config } from 'src/app/views/staff-attendance/config/staff_attendance_s
 })
 export class OverallStatusBignumberMetricsComponent implements OnInit {
 
-   reportName: string = 'staff_dashboad_metrics';
+   reportName: string = 'overall_status_bignumberone';
        filters: any = [];
        levels: any;
        reportData: any = [];
