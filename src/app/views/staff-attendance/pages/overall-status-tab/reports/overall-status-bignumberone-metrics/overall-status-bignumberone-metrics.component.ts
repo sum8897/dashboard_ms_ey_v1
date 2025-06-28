@@ -21,7 +21,7 @@ export class OverallStatusBignumberoneMetricsComponent implements OnInit {
    levels: any;
    tableReportData: any;
    bigNumberReportData: any = {
-     reportName: "Overall Status"
+     reportName: "Present Teachers"
    };
    currentReportName: string = "Overall Status";
    minDate: any;
