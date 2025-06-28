@@ -13,6 +13,7 @@ import moment from "moment";
 import { config } from "../../config/staff_attendance_system_config";
 import { OverallStatusTableComponent } from "./reports/overall-status-table/overall-status-table.component";
 import { OverallStatusBignumberMetricsComponent } from "./reports/overall-status-bignumber-metrics/overall-status-bignumber-metrics.component";
+import { OverallStatusBignumberoneMetricsComponent } from "./reports/overall-status-bignumberone-metrics/overall-status-bignumberone-metrics.component";
 
 @Component({
   selector: "app-overall-status-tab",
@@ -50,7 +51,7 @@ export class OverallStatusTabComponent implements OnInit {
   pagereportName = "Overall Status";
   @ViewChild("performing_wise_table_one")
   performing_wise_table_one: OverallStatusTableComponent;
-  //@ViewChild('attendanceGraph') attendanceGraph:   AttendanceGraphComponent;
+  @ViewChild('OverallStatusBignumberMetrics') OverallStatusBignumberMetrics:   OverallStatusBignumberoneMetricsComponent;
 
   // @ViewChild('genderTable') genderTable:  AttendanceTableComponent;
   // @ViewChild('performingBigNumbercardone') performingBigNumbercardone: BigNumberPhotographsComponent;
@@ -111,7 +112,7 @@ export class OverallStatusTabComponent implements OnInit {
         this.startDate,
         this.endDate
       );
-      //this.attendanceGraph?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+      this.OverallStatusBignumberMetrics?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardone?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardtwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -176,7 +177,7 @@ export class OverallStatusTabComponent implements OnInit {
       this.startDate,
       this.endDate
     );
-    //this.attendanceGraph?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.OverallStatusBignumberMetrics?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardone?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardtwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
