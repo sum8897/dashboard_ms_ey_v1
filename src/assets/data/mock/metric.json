@@ -144,7 +144,15 @@
       "imageUrl": "teacher_attendance.png",
       "programID": "StudentAttendance",
       "orderBy": "20"
+    },
+    {
+      "programName": "Staff Attendance",
+      "tooltip": "Staff Attendance",
+      "navigationUrl": "/staff-attendance",
+      "imageUrl": "teacher_attendance.png",
+      "programID": "staffAttendance",
+      "orderBy": "21"
     }
-    
+
   ]
 }
