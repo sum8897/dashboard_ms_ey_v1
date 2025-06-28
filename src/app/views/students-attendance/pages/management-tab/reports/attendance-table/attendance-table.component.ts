@@ -26,7 +26,7 @@ export class AttendanceTableComponent implements OnInit {
     };
     minDate: any;
     maxDate: any;
-    compareDateRange: any = 7;
+    compareDateRange: any = 1;
     // level = environment.config === 'NVSK' ? 'VSK' : 'district';
     filterIndex: any;
     rbacDetails: any;

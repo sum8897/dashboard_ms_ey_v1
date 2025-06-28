@@ -23,7 +23,7 @@ export class ManagementTabComponent implements OnInit {
       endDate: any
       reportsData: any[] = []
       rbacDetails: any;
-      defaultSelectedDays: any = 2;
+      defaultSelectedDays: any = 1;
       drillDownLevel: any =1;
       hasTimeSeriesFilters: boolean = false;
     hasCommonFilters: boolean = true;

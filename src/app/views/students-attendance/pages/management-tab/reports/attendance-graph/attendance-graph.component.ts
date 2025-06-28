@@ -20,7 +20,7 @@ import { ManagementTabComponent } from '../../management-tab.component';
 })
 export class AttendanceGraphComponent implements OnInit {
 
-  compareDateRange: any = 7;
+  compareDateRange: any = 1;
     title: any;
     chartHeight: any;
     marginTop: any;
