@@ -14,6 +14,7 @@ import { config } from "../../config/staff_attendance_system_config";
 import { OverallStatusTableComponent } from "./reports/overall-status-table/overall-status-table.component";
 import { OverallStatusBignumberMetricsComponent } from "./reports/overall-status-bignumber-metrics/overall-status-bignumber-metrics.component";
 import { OverallStatusBignumberoneMetricsComponent } from "./reports/overall-status-bignumberone-metrics/overall-status-bignumberone-metrics.component";
+import { OverallStatusBignumbertwoMetricsComponent } from "./reports/overall-status-bignumbertwo-metrics/overall-status-bignumbertwo-metrics.component";
 
 @Component({
   selector: "app-overall-status-tab",
