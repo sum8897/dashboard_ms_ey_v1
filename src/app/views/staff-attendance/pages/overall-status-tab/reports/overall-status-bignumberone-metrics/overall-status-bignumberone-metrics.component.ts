@@ -21,15 +21,15 @@ export class OverallStatusBignumberoneMetricsComponent implements OnInit {
    levels: any;
    tableReportData: any;
    bigNumberReportData: any = {
-     reportName: "Overall Status"
+     reportName: "Present Teachers"
    };
-   currentReportName: string = "Overall Status";
+   currentReportName: string = "Present Teachers";
    minDate: any;
    maxDate: any;
    compareDateRange: any = 7;
    filterIndex: any;
    rbacDetails: any;
-   title = 'Score Summary %';
+   title = 'Present Teachers %';
    @Input() startDate: any;
    @Input() endDate: any;
    drillDownSubscription: any;

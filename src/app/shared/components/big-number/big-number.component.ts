@@ -13,6 +13,7 @@ export class BigNumberComponent implements OnInit, OnChanges {
   differenceInPercentage: any;
   differenceIndicator: any= undefined;
   valueSuffix: any;
+  @Input() bigNumberExactValue: any;
   constructor() { }
 
   ngOnInit(): void {
