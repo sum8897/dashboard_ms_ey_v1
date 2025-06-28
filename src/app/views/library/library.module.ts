@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LibraryComponent } from './library.component';
 import { LibraryRoutingModule } from './library-routing.module';
-import { ChartsModule } from 'ng2-charts';
+//import { ChartsModule } from 'ng2-charts';
 
 
 import { DistrictWiseSummaryTabComponent } from './pages/district-wise-summary-tab/district-wise-summary-tab.component';
@@ -46,7 +46,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
       MatCheckboxModule,
       SharedModule,
       LibraryRoutingModule,
-      ChartsModule,
+     // ChartsModule,
       NgxEchartsModule,
   
     ]

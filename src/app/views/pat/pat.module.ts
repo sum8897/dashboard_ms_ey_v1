@@ -16,7 +16,7 @@ import { LoTrendlineChartComponent } from './pages/lo-wise-performance-tab/repor
 import { LoAverageBarchartComponent } from './pages/lo-wise-performance-tab/reports/lo-average-barchart/lo-average-barchart.component';
 import { LoAverageSchoolTableComponent } from './pages/lo-wise-performance-tab/reports/lo-average-school-table/lo-average-school-table.component';
 import { LoAverageBignumberComponent } from './pages/lo-wise-performance-tab/reports/lo-average-bignumber/lo-average-bignumber.component';
-import { ChartsModule } from 'ng2-charts';
+//import { ChartsModule } from 'ng2-charts';
 import { QuesAverageSchoolTableComponent } from './pages/ques-wise-performance-tab/reports/ques-average-school-table/ques-average-school-table.component';
 import { QuesAverageBignumberComponent } from './pages/ques-wise-performance-tab/reports/ques-average-bignumber/ques-average-bignumber.component';
 import { QuesAverageBarchartComponent } from './pages/ques-wise-performance-tab/reports/ques-average-barchart/ques-average-barchart.component';
@@ -47,7 +47,7 @@ import { QuesAverageBarchartComponent } from './pages/ques-wise-performance-tab/
     MatCheckboxModule,
     SharedModule,
     PatRoutingModule,
-    ChartsModule,
+    //ChartsModule,
 
   ]
 })

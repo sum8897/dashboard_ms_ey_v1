@@ -22,8 +22,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MetadataInterceptor } from './core/interceptors/metadata-interceptor/metadata-interceptor.service';
 import { JwtInterceptor } from './utilities/jwtInterceptor';
 import { AppConfig }  from './app.config';
-import { ChartsModule } from 'ng2-charts';
-import { NewChartComponent } from './views/new-chart/new-chart.component';
+//import { ChartsModule } from 'ng2-charts';
+//import { NewChartComponent } from './views/new-chart/new-chart.component';
 // import { NgxEchartsModule } from 'ngx-echarts';
 
 
@@ -36,7 +36,7 @@ function initConfig(config: AppConfig){
   declarations: [
     AppComponent,
     HomePageComponent,
-    NewChartComponent
+    //NewChartComponent
    
   ],
   imports: [
@@ -54,7 +54,7 @@ function initConfig(config: AppConfig){
     NgxSpinnerModule,
     CqubeLibraryModule,
     MatTooltipModule,
-    ChartsModule,
+    //ChartsModule,
     // NgxEchartsModule.forRoot({
     //   echarts: () => import('echarts')
     // }),
