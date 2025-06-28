@@ -26,7 +26,7 @@ export class OverallStatusBignumberMetricsComponent implements OnInit {
        startDate: any;
        endDate: any;
        config: any;
-       compareDateRange: any = 30;
+       compareDateRange: any = 1;
        filterIndex: any;
        rbacDetails: any;
      

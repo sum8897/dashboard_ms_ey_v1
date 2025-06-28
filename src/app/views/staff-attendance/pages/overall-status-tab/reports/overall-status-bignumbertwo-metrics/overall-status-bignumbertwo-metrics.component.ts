@@ -26,7 +26,7 @@ export class OverallStatusBignumbertwoMetricsComponent implements OnInit {
       currentReportName: string = "Absent Teachers";
       minDate: any;
       maxDate: any;
-      compareDateRange: any = 7;
+      compareDateRange: any = 1;
       filterIndex: any;
       rbacDetails: any;
       title = 'Absent Teachers %';
@@ -129,9 +129,13 @@ export class OverallStatusBignumbertwoMetricsComponent implements OnInit {
           Object.keys(queries).forEach(async (key: any) => {
             if (this.startDate === undefined && this.endDate === undefined) {
               let endDate = new Date();
-              let days = endDate.getDate() - this.compareDateRange;
-              let startDate = new Date();
-              startDate.setDate(days)
+let startDate = new Date();
+
+if (this.compareDateRange && this.compareDateRange > 1) {
+  startDate.setDate(endDate.getDate() - (this.compareDateRange - 1));
+} else {
+  startDate = new Date(); // today
+}
               
               onLoadQuery = parseTimeSeriesQuery(queries[key], startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0])
               console.log('237',this.startDate,this.endDate)

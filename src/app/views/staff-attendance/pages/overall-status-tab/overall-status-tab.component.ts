@@ -31,7 +31,7 @@ export class OverallStatusTabComponent implements OnInit {
   endDate: any;
   reportsData: any[] = [];
   rbacDetails: any;
-  defaultSelectedDays: any = 2;
+  defaultSelectedDays: any = 1;
   drillDownLevel: any = 1;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
@@ -53,10 +53,13 @@ export class OverallStatusTabComponent implements OnInit {
   pagereportName = "Overall Status";
   @ViewChild("performing_wise_table_one")
   performing_wise_table_one: OverallStatusTableComponent;
-  @ViewChild('OverallStatusBignumberMetrics') OverallStatusBignumberMetrics:   OverallStatusBignumberoneMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetrics")
+  OverallStatusBignumberMetrics: OverallStatusBignumberoneMetricsComponent;
 
-  @ViewChild('OverallStatusBignumberMetricsTwo') OverallStatusBignumberMetricsTwo:  OverallStatusBignumbertwoMetricsComponent;
-  @ViewChild('OverallStatusBignumberMetricsThree') OverallStatusBignumberMetricsThree: OverallStatusBignumberthreeMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsTwo")
+  OverallStatusBignumberMetricsTwo: OverallStatusBignumbertwoMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsThree")
+  OverallStatusBignumberMetricsThree: OverallStatusBignumberthreeMetricsComponent;
   // @ViewChild('performingBigNumbercardtwo') performingBigNumbercardtwo: BigNumberTwoComponent;
   // @ViewChild('performingBigNumbercardthree') performingBigNumbercardthree: BigNumberThreeComponent;
   // @ViewChild('performingBigNumbercardfour') performingBigNumbercardfour: BigNumberFourComponent;
@@ -114,9 +117,48 @@ export class OverallStatusTabComponent implements OnInit {
         this.startDate,
         this.endDate
       );
-      this.OverallStatusBignumberMetrics?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-      this.OverallStatusBignumberMetricsTwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-      this.OverallStatusBignumberMetricsThree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+      this.OverallStatusBignumberMetrics?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsTwo?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsThree?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
       // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardfour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
       // this.performingBigNumbercardfive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -129,12 +171,17 @@ export class OverallStatusTabComponent implements OnInit {
     if (this.startDate === undefined && this.endDate === undefined) {
       console.log("hello");
       let endDate = new Date();
-      let days = endDate.getDate() - this.defaultSelectedDays;
       let startDate = new Date();
-      startDate.setDate(days);
+
+      if (this.defaultSelectedDays && this.defaultSelectedDays > 1) {
+        startDate = new Date();
+        startDate.setDate(endDate.getDate() - (this.defaultSelectedDays + 1));
+      }
+
       this.startDate = moment(startDate).format("YYYY-MM-DD");
       this.endDate = moment(endDate).format("YYYY-MM-DD");
-      console.log("datess", startDate, endDate);
+
+      console.log("datess", this.startDate, this.endDate);
 
       // this.getSchoolReportData()
       this.updateReportsData();
@@ -179,9 +226,48 @@ export class OverallStatusTabComponent implements OnInit {
       this.startDate,
       this.endDate
     );
-    this.OverallStatusBignumberMetrics?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    this.OverallStatusBignumberMetricsTwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    this.OverallStatusBignumberMetricsThree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+    this.OverallStatusBignumberMetrics?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsTwo?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsThree?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
     // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardfour?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
     // this.performingBigNumbercardfive?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -218,11 +304,16 @@ export class OverallStatusTabComponent implements OnInit {
       this.endDate = endDate;
     } else {
       let endDate = new Date();
-      let days = endDate.getDate() - this.defaultSelectedDays;
       let startDate = new Date();
-      startDate.setDate(days);
-      this.startDate = startDate?.toISOString().split("T")[0];
-      this.endDate = endDate?.toISOString().split("T")[0];
+
+      if (this.defaultSelectedDays && this.defaultSelectedDays > 1) {
+        startDate.setDate(endDate.getDate() - (this.defaultSelectedDays + 1));
+      }
+
+      this.startDate = startDate.toISOString().split("T")[0];
+      this.endDate = endDate.toISOString().split("T")[0];
+
+      console.log("datess", this.startDate, this.endDate);
     }
 
     this._commonService.getReportDataNew(query).subscribe((res: any) => {
