@@ -66,17 +66,15 @@ export const config = {
         hierarchyLevel: "1",
         timeSeriesQueries: {
           table: `select tam.district_id,d.district_name,count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
-where da.date between startDate and endDate 
+where tam.date between startDate and endDate 
 group by tam.district_id ,d.district_name
 order by 
 tam.district_id;`,
@@ -84,17 +82,15 @@ tam.district_id;`,
         actions: {
           queries: {
             table: `select tam.district_id,d.district_name,count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
-where da.date between startDate and endDate 
+where tam.date between startDate and endDate 
 group by tam.district_id ,d.district_name
 order by 
 tam.district_id;`,
@@ -110,19 +106,18 @@ tam.district_id;`,
         timeSeriesQueries: {
           table: `select tam.block_id,b.block_name,
 count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
-where da.date between startDate and endDate and d.district_id = {district_id}
+where tam.date between startDate and endDate and d.district_id = {district_id}
 group by tam.block_id  ,b.block_name 
 order by 
 tam.block_id;`,
@@ -131,19 +126,18 @@ tam.block_id;`,
           queries: {
             table: `select tam.block_id,b.block_name,
 count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
-where da.date between startDate and endDate and d.district_id = {district_id}
+where tam.date between startDate and endDate and d.district_id = {district_id}
 group by tam.block_id  ,b.block_name 
 order by 
 tam.block_id;`,
@@ -159,21 +153,20 @@ tam.block_id;`,
         timeSeriesQueries: {
           table: `select tam.cluster_id ,c.cluster_name,
 count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and b.block_id  = {block_id}
+where tam.date between startDate and endDate and b.block_id  = {block_id}
 group by tam.cluster_id  ,c.cluster_name
 order by 
 tam.cluster_id;`,
@@ -182,21 +175,20 @@ tam.cluster_id;`,
           queries: {
             table: `select tam.cluster_id ,c.cluster_name,
 count(distinct tam.school_id) as no_of_school_att_marked ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and b.block_id  = {block_id}
+where tam.date between startDate and endDate and b.block_id  = {block_id}
 group by tam.cluster_id  ,c.cluster_name
 order by 
 tam.cluster_id;`,
@@ -211,21 +203,20 @@ tam.cluster_id;`,
         hierarchyLevel: "4",
         timeSeriesQueries: {
           table: `select tam.school_id ,tam.school_name ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and c.cluster_id  = {cluster_id}
+where tam.date between startDate and endDate and c.cluster_id  = {cluster_id}
 group by tam.school_id  ,tam.school_name 
 order by 
 tam.school_id ;`,
@@ -233,21 +224,20 @@ tam.school_id ;`,
         actions: {
           queries: {
             table: `select tam.school_id ,tam.school_name ,
-sum(case when da.attendance_status='1' then 1 else 0 end) as present_teachers,
-sum(case when da.attendance_status='0' then 1 else 0 end) as absent_teachers,
-count(da.attendance_status) as total_teachers,
-ROUND(100.0 * SUM(CASE WHEN da.attendance_status = '1' THEN 1 ELSE 0 END)
-        / NULLIF(SUM(CASE WHEN da.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers,
+sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers,
+count(tam.attendance_status) as total_teachers,
+ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' THEN 1 ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0')  THEN 1 ELSE 0 END), 0), 2) AS attendance_percentage
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and c.cluster_id  = {cluster_id}
+where tam.date between startDate and endDate and c.cluster_id  = {cluster_id}
 group by tam.school_id  ,tam.school_name 
 order by 
 tam.school_id ;`,
@@ -262,38 +252,36 @@ tam.school_id ;`,
         hierarchyLevel: "5",
         timeSeriesQueries: {
           table: `select tam.tch_id , tam.tch_name,
-(case when da.attendance_status = 1 then 1 else 0 end) as present,
-(case when da.attendance_status = 0 then 1 else 0 end) as absent 
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+(case when tam.attendance_status = 1 then 1 else 0 end) as present,
+(case when tam.attendance_status = 0 then 1 else 0 end) as absent 
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and tam.school_id  = {school_id}
-group by tam.tch_id  ,tam.tch_name, da.attendance_status 
+where tam.date between startDate and endDate and tam.school_id  = {school_id}
+group by tam.tch_id  ,tam.tch_name, tam.attendance_status 
 order by 
 tam.tch_id;`,
         },
         actions: {
           queries: {
-            table: `select tam.tch_id, tam.tch_name,
-(case when da.attendance_status = 1 then 1 else 0 end) as present,
-(case when da.attendance_status = 0 then 1 else 0 end) as absent 
-from teacher_attendance.daily_attendance da 
-join
-teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id 
+            table: `select tam.tch_id , tam.tch_name,
+(case when tam.attendance_status = 1 then 1 else 0 end) as present,
+(case when tam.attendance_status = 0 then 1 else 0 end) as absent 
+from 
+teacher_attendance.tch_attendance_master tam  
 join
 dimensions.district d on tam.district_id = d.district_id 
 join 
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and tam.school_id  = {school_id}
-group by tam.tch_id  ,tam.tch_name, da.attendance_status 
+where tam.date between startDate and endDate and tam.school_id  = {school_id}
+group by tam.tch_id  ,tam.tch_name, tam.attendance_status 
 order by 
 tam.tch_id;`,
           },
@@ -506,12 +494,12 @@ tam.tch_id;`,
         hierarchyLevel: "1",
         timeSeriesQueries: {
           bigNumber:
-            "select sum(case when da.attendance_status = '1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id where da.date between startDate and endDate;",
+            "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id where tam.date between startDate and endDate;",
         },
         actions: {
           queries: {
             bigNumber:
-              "select sum(case when da.attendance_status = '1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id where da.date between startDate and endDate;",
+              "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id where tam.date between startDate and endDate;",
           },
           level: "district",
         },
@@ -523,12 +511,12 @@ tam.tch_id;`,
         hierarchyLevel: "2",
         timeSeriesQueries: {
           bigNumber:
-            "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id where da.date between startDate and endDate and d.district_id = {district_id};",
+            "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id where tam.date between startDate and endDate and d.district_id = {district_id};",
         },
         actions: {
           queries: {
             bigNumber:
-              "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id where da.date between startDate and endDate and d.district_id = {district_id};",
+              "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id where tam.date between startDate and endDate and d.district_id = {district_id};",
           },
           level: "block",
         },
@@ -540,12 +528,12 @@ tam.tch_id;`,
         hierarchyLevel: "3",
         timeSeriesQueries: {
           bigNumber:
-            "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and b.block_id  = {block_id};",
+            "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and b.block_id  = {block_id};",
         },
         actions: {
           queries: {
             bigNumber:
-              "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and b.block_id  = {block_id};",
+              "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and b.block_id  = {block_id};",
           },
           level: "cluster",
         },
@@ -557,12 +545,12 @@ tam.tch_id;`,
         hierarchyLevel: "4",
         timeSeriesQueries: {
           bigNumber:
-            "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and c.cluster_id  = {cluster_id};",
+            "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and c.cluster_id  = {cluster_id}",
         },
         actions: {
           queries: {
             bigNumber:
-              "select sum(case when da.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and c.cluster_id  = {cluster_id};",
+              "select sum(case when tam.attendance_status='1' then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and c.cluster_id  = {cluster_id};",
           },
           level: "school",
         },
@@ -574,12 +562,12 @@ tam.tch_id;`,
         hierarchyLevel: "5",
         timeSeriesQueries: {
           bigNumber:
-            "select (case when da.attendance_status = 1 then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and tam.school_id  = {school_id};",
+            "select case when tam.attendance_status = 1 then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and tam.school_id  = {school_id};",
         },
         actions: {
           queries: {
             bigNumber:
-              "select (case when da.attendance_status = 1 then 1 else 0 end) as no_of_present_teachers from teacher_attendance.daily_attendance da join teacher_attendance.tch_attendance_master tam on da.tch_id = tam.tch_id join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where da.date between startDate and endDate and tam.school_id  = {school_id};",
+              "select case when tam.attendance_status = 1 then 1 else 0 end) as no_of_present_teachers from teacher_attendance.tch_attendance_master tam join dimensions.district d on tam.district_id = d.district_id join dimensions.block b on tam.block_id = b.block_id join dimensions.cluster c on tam.cluster_id = c.cluster_id where tam.date between startDate and endDate and tam.school_id  = {school_id};",
           },
           level: "school",
         },
