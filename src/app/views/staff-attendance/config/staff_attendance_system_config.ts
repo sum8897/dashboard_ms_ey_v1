@@ -497,7 +497,7 @@ tam.tch_id;`,
   //Big Number one
 
   overall_status_bignumberone: {
-    label: "Overall Status",
+    label: "Present Teachers",
     filters: [
       {
         name: "State",
