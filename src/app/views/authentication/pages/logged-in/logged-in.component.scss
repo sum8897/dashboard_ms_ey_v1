@@ -938,7 +938,7 @@ width: 170px;
   flex: 1 1 400px;
   color: #ecf0f1;
   padding-left: 40px;
-}
+  }
 
 .hero-text h1 {
   font-size: 3.1rem;
@@ -1029,4 +1029,11 @@ input::placeholder{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.back_header1{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
 }
