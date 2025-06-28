@@ -13,7 +13,7 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
   @Output() timeSeriesUpdated = new EventEmitter<any>();
   @Input() minDate: any;
   @Input() maxDate: any;
-  @Input() defaultSelectedDays: any = 2;
+  @Input() defaultSelectedDays: any = 1;
   range: FormGroup;
   reset: boolean = false;
   prevStartDate: any;
@@ -26,12 +26,11 @@ export class TimeSeriesFilterPanelComponent implements OnInit {
       end: [endDate]
     });
     if (this.defaultSelectedDays) {
-      endDate = new Date();
-      const days = endDate.getDate() - this.defaultSelectedDays;
-      startDate = new Date();
-      startDate.setDate(days);
-      this.range.setValue({ 'start': startDate, 'end': endDate });
-      this.emitTimeSeriesUpdated(startDate, endDate);
+     endDate = new Date();
+  startDate = new Date();
+  startDate.setDate(endDate.getDate() - (this.defaultSelectedDays - 1));
+  this.range.setValue({ start: startDate, end: endDate });
+  this.emitTimeSeriesUpdated(startDate, endDate);
     }
     combineLatest([
       this.range.controls['start'].valueChanges,

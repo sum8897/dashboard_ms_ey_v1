@@ -31,7 +31,7 @@ export class OverallStatusTabComponent implements OnInit {
   endDate: any;
   reportsData: any[] = [];
   rbacDetails: any;
-  defaultSelectedDays: any = 2;
+  defaultSelectedDays: any = -1;
   drillDownLevel: any = 1;
   hasTimeSeriesFilters: boolean = false;
   hasCommonFilters: boolean = true;
@@ -129,7 +129,7 @@ export class OverallStatusTabComponent implements OnInit {
     if (this.startDate === undefined && this.endDate === undefined) {
       console.log("hello");
       let endDate = new Date();
-      let days = endDate.getDate() - this.defaultSelectedDays;
+      let days = endDate.getDate() - (this.defaultSelectedDays + 1);
       let startDate = new Date();
       startDate.setDate(days);
       this.startDate = moment(startDate).format("YYYY-MM-DD");
@@ -218,7 +218,7 @@ export class OverallStatusTabComponent implements OnInit {
       this.endDate = endDate;
     } else {
       let endDate = new Date();
-      let days = endDate.getDate() - this.defaultSelectedDays;
+      let days = endDate.getDate() - (this.defaultSelectedDays + 1);
       let startDate = new Date();
       startDate.setDate(days);
       this.startDate = startDate?.toISOString().split("T")[0];
