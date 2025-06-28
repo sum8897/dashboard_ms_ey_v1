@@ -2,148 +2,31 @@
   "message": "Metric data returned successfully",
   "data": [
     {
-      "programName": "Teacher Attendance",
-      "tooltip": "This program entails indicators to monitor reporting of attendance and presence of teachers in the jurisdiction.",
-      "navigationUrl": "/teacher-attendance",
-      "imageUrl": "teacher_attendance.png",
-      "programID": "teacherAttendance",
-      "orderBy": "2"
-    },
-    {
-      "programName": "PGI",
-      "tooltip": "Perfomance Grading Index",
-      "navigationUrl": "/pgi",
-      "imageUrl": "pgi.png",
-      "programID": "pgi",
-      "orderBy": "4"
-    },
-    {
-      "programName": "PM POSHAN",
-      "tooltip": "Pradhan Mantri Poshan Shakti Nirman",
-      "navigationUrl": "/pmposhan",
-      "imageUrl": "pmposhan.png",
-      "programID": "pmPoshan",
-      "orderBy": "5"
-    },
-    {
-      "programName": "UDISE+",
-      "tooltip": "Unified District Information System for Education",
-      "navigationUrl": "/udise",
-      "imageUrl": "udise.png",
-      "programID": "udise",
-      "orderBy": "6"
-    },
-    {
-      "programName": "NAS",
-      "tooltip": "National Achievement Survey",
-      "navigationUrl": "/nas",
-      "imageUrl": "nas.png",
-      "programID": "nas",
-      "orderBy": "7"
-    },
-    {
-      "programName": "DIKSHA",
-      "tooltip": "Digital Infrastructure for Knowledge Sharing",
-      "navigationUrl": "/diksha",
-      "imageUrl": "diksha.png",
-      "programID": "diksha",
-      "orderBy": "8"
-    },
-    {
-      "programName": "NISHTHA",
-      "tooltip": "NISHTHA is a capacity building programme for \"Improving Quality of School Education through Integrated Teacher Training\". It aims to build competencies among all the teachers and school principals at the elementary stage.",
-      "navigationUrl": "/nishtha",
-      "imageUrl": "nishtha.png",
-      "programID": "nishtha",
-      "orderBy": "9"
-    },
-    {
-      "programName": "School Infrastructure",
-      "tooltip": "NISHTHA is a capacity building programme for \"Improving Quality of School Education through Integrated Teacher Training\". It aims to build competencies among all the teachers and school principals at the elementary stage.",
-      "navigationUrl": "/school-infrastructure",
-      "imageUrl": "infra.jpeg",
-      "programID": "schoolInfrastructure",
-      "orderBy": "10"
-    },
-    {
-      "programName": "Student Progression",
-      "tooltip": "This program details the compliance of schools in the state with UDISE infrastructure criteria.",
-      "navigationUrl": "/school-progression",
-      "imageUrl": "progression.jpeg",
-      "programID": "studentProgress",
-      "orderBy": "11"
-    },
-    {
-      "programName": "Student Assessments",
-      "tooltip": "Student Assessments",
-      "navigationUrl": "/student-assessments",
-      "imageUrl": "nishtha.png",
-      "programID": "studentAssessments",
-      "orderBy": "12"
-    },
-    {
-      "programName": "NCERT Quizes",
-      "tooltip": "National Curriculum Framework",
-      "navigationUrl": "/quizzes",
-      "imageUrl": "Quizzes.png",
-      "programID": "quiz",
-      "orderBy": "13"
-    },
-    {
-      "programName": "UDISE School Infrastructure",
-      "tooltip": "State Specifiy School Infra",
-      "navigationUrl": "/udise-schoolinfra",
-      "imageUrl": "udise.png",
-      "programID": "udiseschoolinfrastructure",
-      "orderBy": "14"
-    },
-    {
       "programName": "School General",
       "tooltip": "School General",
       "navigationUrl": "/school-general",
       "imageUrl": "school_general.png",
       "programID": "schoolGeneral",
-      "orderBy": "15"
+      "orderBy": "1"
     },
-    {
-      "programName": "PAS",
-      "tooltip": "PAS",
-      "navigationUrl": "/pas",
-      "imageUrl": "pass.png",
-      "programID": "pas",
-      "orderBy": "16"
-    },
+
     {
       "programName": "Staff and Students",
       "tooltip": "Staff&Students",
       "navigationUrl": "/staff-students",
       "imageUrl": "staff_student.png",
       "programID": "staffstudents",
-      "orderBy": "17"
+      "orderBy": "2"
     },
-    {
-      "programName": "PGI and School Safety",
-      "tooltip": "PGI and School Safety",
-      "navigationUrl": "/pgi-govt-aided",
-      "imageUrl": "teacher_attendance.png",
-      "programID": "pgiSchoolSafety",
-      "orderBy": "18"
-    },
-    {
-      "programName": "Staff",
-      "tooltip": "Staff",
-      "navigationUrl": "/staff",
-      "imageUrl": "school_general.png",
-      "programID": "staff",
-      "orderBy": "19"
-    },
+
+
     {
       "programName": "Student Attendance",
       "tooltip": "Student Attendance",
       "navigationUrl": "/Student-attendance",
       "imageUrl": "teacher_attendance.png",
       "programID": "StudentAttendance",
-      "orderBy": "20"
+      "orderBy": "3"
     },
     {
       "programName": "Staff Attendance",
@@ -151,8 +34,128 @@
       "navigationUrl": "/staff-attendance",
       "imageUrl": "teacher_attendance.png",
       "programID": "staffAttendance",
-      "orderBy": "21"
-    }
+      "orderBy": "4"
+    },
+        {
+      "programName": "Staff Details",
+      "tooltip": "Staff Details",
+      "navigationUrl": "/staff",
+      "imageUrl": "school_general.png",
+      "programID": "staff",
+      "orderBy": "5"
+    },
+        {
+      "programName": "PM POSHAN",
+      "tooltip": "Pradhan Mantri Poshan Shakti Nirman",
+      "navigationUrl": "/pmposhan",
+      "imageUrl": "pmposhan.png",
+      "programID": "pmPoshan",
+      "orderBy": "6"
+    },
+       {
+      "programName": "UDISE School Infrastructure",
+      "tooltip": "State Specifiy School Infra",
+      "navigationUrl": "/udise-schoolinfra",
+      "imageUrl": "udise.png",
+      "programID": "udiseschoolinfrastructure",
+      "orderBy": "7"
+    },
+        {
+      "programName": "NAS",
+      "tooltip": "National Achievement Survey",
+      "navigationUrl": "/nas",
+      "imageUrl": "nas.png",
+      "programID": "nas",
+      "orderBy": "8"
+    },
+        {
+      "programName": "PAS",
+      "tooltip": "PAS",
+      "navigationUrl": "/pas",
+      "imageUrl": "pass.png",
+      "programID": "pas",
+      "orderBy": "9"
+    },
+        {
+      "programName": "PGI and School Safety",
+      "tooltip": "PGI and School Safety",
+      "navigationUrl": "/pgi-govt-aided",
+      "imageUrl": "teacher_attendance.png",
+      "programID": "pgiSchoolSafety",
+      "orderBy": "10"
+    },
+    {
+      "programName": "PGI",
+      "tooltip": "Perfomance Grading Index",
+      "navigationUrl": "/pgi",
+      "imageUrl": "pgi.png",
+      "programID": "pgi",
+      "orderBy": "11"
+    },
+        {
+      "programName": "DIKSHA",
+      "tooltip": "Digital Infrastructure for Knowledge Sharing",
+      "navigationUrl": "/diksha",
+      "imageUrl": "diksha.png",
+      "programID": "diksha",
+      "orderBy": "12"
+    },
+    {
+      "programName": "NISHTHA",
+      "tooltip": "NISHTHA is a capacity building programme for \"Improving Quality of School Education through Integrated Teacher Training\". It aims to build competencies among all the teachers and school principals at the elementary stage.",
+      "navigationUrl": "/nishtha",
+      "imageUrl": "nishtha.png",
+      "programID": "nishtha",
+      "orderBy": "13"
+    },
+        {
+      "programName": "Student Assessments",
+      "tooltip": "Student Assessments",
+      "navigationUrl": "/student-assessments",
+      "imageUrl": "nishtha.png",
+      "programID": "studentAssessments",
+      "orderBy": "14"
+    },
+    {
+      "programName": "NCERT Quizes",
+      "tooltip": "National Curriculum Framework",
+      "navigationUrl": "/quizzes",
+      "imageUrl": "Quizzes.png",
+      "programID": "quiz",
+      "orderBy": "15"
+    },
+        {
+      "programName": "Student Progression",
+      "tooltip": "This program details the compliance of schools in the state with UDISE infrastructure criteria.",
+      "navigationUrl": "/school-progression",
+      "imageUrl": "progression.jpeg",
+      "programID": "studentProgress",
+      "orderBy": "16"
+    },
+        {
+      "programName": "UDISE+",
+      "tooltip": "Unified District Information System for Education",
+      "navigationUrl": "/udise",
+      "imageUrl": "udise.png",
+      "programID": "udise",
+      "orderBy": "17"
+    },
+        {
+      "programName": "Teacher Attendance",
+      "tooltip": "This program entails indicators to monitor reporting of attendance and presence of teachers in the jurisdiction.",
+      "navigationUrl": "/teacher-attendance",
+      "imageUrl": "teacher_attendance.png",
+      "programID": "teacherAttendance",
+      "orderBy": "18"
+    },
 
+    {
+      "programName": "School Infrastructure",
+      "tooltip": "NISHTHA is a capacity building programme for \"Improving Quality of School Education through Integrated Teacher Training\". It aims to build competencies among all the teachers and school principals at the elementary stage.",
+      "navigationUrl": "/school-infrastructure",
+      "imageUrl": "infra.jpeg",
+      "programID": "schoolInfrastructure",
+      "orderBy": "19"
+    }
   ]
 }
