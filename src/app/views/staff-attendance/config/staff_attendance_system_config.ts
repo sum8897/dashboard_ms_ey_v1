@@ -176,7 +176,7 @@ dimensions.cluster c on tam.cluster_id = c.cluster_id
 where da.date between startDate and endDate and b.block_id  = {block_id}
 group by tam.cluster_id  ,c.cluster_name
 order by 
-tam.cluster_id ;`,
+tam.cluster_id;`,
         },
         actions: {
           queries: {
@@ -225,7 +225,7 @@ join
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and c.cluster_id  = {cluster.id}
+where da.date between startDate and endDate and c.cluster_id  = {cluster_id}
 group by tam.school_id  ,tam.school_name 
 order by 
 tam.school_id ;`,
@@ -247,7 +247,7 @@ join
 dimensions.block b on tam.block_id = b.block_id 
 join 
 dimensions.cluster c on tam.cluster_id = c.cluster_id 
-where da.date between startDate and endDate and c.cluster_id  = {cluster.id}
+where da.date between startDate and endDate and c.cluster_id  = {cluster_id}
 group by tam.school_id  ,tam.school_name 
 order by 
 tam.school_id ;`,
@@ -261,7 +261,7 @@ tam.school_id ;`,
         valueProp: "school_id",
         hierarchyLevel: "5",
         timeSeriesQueries: {
-          table: `select tam.tch_id  ,tam.tch_name ,
+          table: `select tam.tch_id , tam.tch_name,
 (case when da.attendance_status = 1 then 1 else 0 end) as present,
 (case when da.attendance_status = 0 then 1 else 0 end) as absent 
 from teacher_attendance.daily_attendance da 
@@ -280,7 +280,7 @@ tam.tch_id;`,
         },
         actions: {
           queries: {
-            table: `select tam.tch_id  ,tam.tch_name ,
+            table: `select tam.tch_id, tam.tch_name,
 (case when da.attendance_status = 1 then 1 else 0 end) as present,
 (case when da.attendance_status = 0 then 1 else 0 end) as absent 
 from teacher_attendance.daily_attendance da 
@@ -427,7 +427,7 @@ tam.tch_id;`,
                 hierarchyLevel: 6,
                 linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [],
             },
           },
           {
