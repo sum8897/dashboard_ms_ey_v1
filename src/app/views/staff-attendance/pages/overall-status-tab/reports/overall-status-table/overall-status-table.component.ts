@@ -222,13 +222,9 @@ export class OverallStatusTableComponent implements OnInit {
       Object.keys(queries).forEach(async (key: any) => {
         if (this.startDate === undefined && this.endDate === undefined) {
           let endDate = new Date();
+          let days = endDate.getDate() - this.compareDateRange;
           let startDate = new Date();
-
-          if (this.compareDateRange && this.compareDateRange > 1) {
-            startDate.setDate(endDate.getDate() - (this.compareDateRange - 1));
-          } else {
-            startDate = new Date(); // today
-          }
+          startDate.setDate(days);
 
           onLoadQuery = parseTimeSeriesQuery(
             queries[key],
