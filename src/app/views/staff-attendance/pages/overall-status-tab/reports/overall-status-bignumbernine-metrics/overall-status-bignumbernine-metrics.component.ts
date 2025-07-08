@@ -10,26 +10,26 @@ import { config } from 'src/app/views/staff-attendance/config/staff_attendance_s
 import { OverallStatusTabComponent } from '../../overall-status-tab.component';
 
 @Component({
-  selector: 'app-overall-status-bignumberfive-metrics',
-  templateUrl: './overall-status-bignumberfive-metrics.component.html',
-  styleUrls: ['./overall-status-bignumberfive-metrics.component.scss']
+  selector: 'app-overall-status-bignumbernine-metrics',
+  templateUrl: './overall-status-bignumbernine-metrics.component.html',
+  styleUrls: ['./overall-status-bignumbernine-metrics.component.scss']
 })
-export class OverallStatusBignumberfiveMetricsComponent implements OnInit {
+export class OverallStatusBignumbernineMetricsComponent implements OnInit {
 
-  reportName: string = 'overall_status_bignumberfive';
+  reportName: string = 'overall_status_bignumbernine';
       filters: any = [];
       levels: any;
       tableReportData: any;
       bigNumberReportData: any = {
-        reportName: "Male Teachers Absent"
+        reportName: "Total Female Teachers"
       };
-      currentReportName: string = "Male Teachers ABsent";
+      currentReportName: string = "Total Female Teachers";
       minDate: any;
       maxDate: any;
       compareDateRange: any = 1;
       filterIndex: any;
       rbacDetails: any;
-      title = 'Male Teachers Absent %';
+      title = 'Total Female Teachers %';
       @Input() startDate: any;
       @Input() endDate: any;
       drillDownSubscription: any;
@@ -396,4 +396,4 @@ export class OverallStatusBignumberfiveMetricsComponent implements OnInit {
       }
     
     }
-    
+

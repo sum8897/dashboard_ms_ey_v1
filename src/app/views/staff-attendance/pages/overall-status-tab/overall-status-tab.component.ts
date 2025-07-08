@@ -16,6 +16,12 @@ import { OverallStatusBignumberMetricsComponent } from "./reports/overall-status
 import { OverallStatusBignumberoneMetricsComponent } from "./reports/overall-status-bignumberone-metrics/overall-status-bignumberone-metrics.component";
 import { OverallStatusBignumbertwoMetricsComponent } from "./reports/overall-status-bignumbertwo-metrics/overall-status-bignumbertwo-metrics.component";
 import { OverallStatusBignumberthreeMetricsComponent } from "./reports/overall-status-bignumberthree-metrics/overall-status-bignumberthree-metrics.component";
+import { OverallStatusBignumberfourMetricsComponent } from "./reports/overall-status-bignumberfour-metrics/overall-status-bignumberfour-metrics.component";
+import { OverallStatusBignumberfiveMetricsComponent } from "./reports/overall-status-bignumberfive-metrics/overall-status-bignumberfive-metrics.component";
+import { OverallStatusBignumbersixMetricsComponent } from "./reports/overall-status-bignumbersix-metrics/overall-status-bignumbersix-metrics.component";
+import { OverallStatusBignumbersevenMetricsComponent } from "./reports/overall-status-bignumberseven-metrics/overall-status-bignumberseven-metrics.component";
+import { OverallStatusBignumbereightMetricsComponent } from "./reports/overall-status-bignumbereight-metrics/overall-status-bignumbereight-metrics.component";
+import { OverallStatusBignumbernineMetricsComponent } from "./reports/overall-status-bignumbernine-metrics/overall-status-bignumbernine-metrics.component";
 
 @Component({
   selector: "app-overall-status-tab",
@@ -60,6 +66,18 @@ export class OverallStatusTabComponent implements OnInit {
   OverallStatusBignumberMetricsTwo: OverallStatusBignumbertwoMetricsComponent;
   @ViewChild("OverallStatusBignumberMetricsThree")
   OverallStatusBignumberMetricsThree: OverallStatusBignumberthreeMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsFour")
+  OverallStatusBignumberMetricsFour: OverallStatusBignumberfourMetricsComponent;  
+  @ViewChild("OverallStatusBignumberMetricsFive")
+  OverallStatusBignumberMetricsFive: OverallStatusBignumberfiveMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsSix")
+  OverallStatusBignumberMetricsSix: OverallStatusBignumbersixMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsSeven")
+  OverallStatusBignumberMetricsSeven: OverallStatusBignumbersevenMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsEight")
+  OverallStatusBignumberMetricsEight: OverallStatusBignumbereightMetricsComponent;
+  @ViewChild("OverallStatusBignumberMetricsNine")
+  OverallStatusBignumberMetricsNine: OverallStatusBignumbernineMetricsComponent;
   // @ViewChild('performingBigNumbercardtwo') performingBigNumbercardtwo: BigNumberTwoComponent;
   // @ViewChild('performingBigNumbercardthree') performingBigNumbercardthree: BigNumberThreeComponent;
   // @ViewChild('performingBigNumbercardfour') performingBigNumbercardfour: BigNumberFourComponent;
@@ -146,6 +164,90 @@ export class OverallStatusTabComponent implements OnInit {
         this.endDate
       );
       this.OverallStatusBignumberMetricsThree?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsFour?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsFive?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsSix?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsSeven?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsEight?.getReportData(
+        {
+          filterneed: this.hasCommonFilters,
+          filterValues: this.filters.map((filter) => {
+            return {
+              ...filter,
+              columnName: filter.valueProp,
+              filterType: filter.id,
+            };
+          }),
+        },
+        this.startDate,
+        this.endDate
+      );
+      this.OverallStatusBignumberMetricsNine?.getReportData(
         {
           filterneed: this.hasCommonFilters,
           filterValues: this.filters.map((filter) => {
@@ -255,6 +357,90 @@ export class OverallStatusTabComponent implements OnInit {
       this.endDate
     );
     this.OverallStatusBignumberMetricsThree?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsFour?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsFive?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsSix?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsSeven?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsEight?.getReportData(
+      {
+        filterneed: this.hasCommonFilters,
+        filterValues: this.filters.map((filter) => {
+          return {
+            ...filter,
+            columnName: filter.valueProp,
+            filterType: filter.id,
+          };
+        }),
+      },
+      this.startDate,
+      this.endDate
+    );
+    this.OverallStatusBignumberMetricsNine?.getReportData(
       {
         filterneed: this.hasCommonFilters,
         filterValues: this.filters.map((filter) => {

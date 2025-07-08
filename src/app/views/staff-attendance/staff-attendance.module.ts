@@ -18,6 +18,9 @@ import { OverallStatusBignumberfourMetricsComponent } from './pages/overall-stat
 import { OverallStatusBignumberfiveMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumberfive-metrics/overall-status-bignumberfive-metrics.component';
 import { OverallStatusBignumbersixMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbersix-metrics/overall-status-bignumbersix-metrics.component';
 import { OverallStatusBignumberoneMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumberone-metrics/overall-status-bignumberone-metrics.component';
+import { OverallStatusBignumbersevenMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumberseven-metrics/overall-status-bignumberseven-metrics.component';
+import { OverallStatusBignumbereightMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbereight-metrics/overall-status-bignumbereight-metrics.component';
+import { OverallStatusBignumbernineMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbernine-metrics/overall-status-bignumbernine-metrics.component';
 
 
 
@@ -32,7 +35,10 @@ import { OverallStatusBignumberoneMetricsComponent } from './pages/overall-statu
     OverallStatusBignumberfourMetricsComponent,
     OverallStatusBignumberfiveMetricsComponent,
     OverallStatusBignumbersixMetricsComponent,
-    OverallStatusBignumberoneMetricsComponent
+    OverallStatusBignumberoneMetricsComponent,
+    OverallStatusBignumbersevenMetricsComponent,
+    OverallStatusBignumbereightMetricsComponent,
+    OverallStatusBignumbernineMetricsComponent
   ],
   imports: [
     DashletModule.forRoot({
