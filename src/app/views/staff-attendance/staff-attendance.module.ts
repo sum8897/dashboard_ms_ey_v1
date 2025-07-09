@@ -21,6 +21,9 @@ import { OverallStatusBignumberoneMetricsComponent } from './pages/overall-statu
 import { OverallStatusBignumbersevenMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumberseven-metrics/overall-status-bignumberseven-metrics.component';
 import { OverallStatusBignumbereightMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbereight-metrics/overall-status-bignumbereight-metrics.component';
 import { OverallStatusBignumbernineMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbernine-metrics/overall-status-bignumbernine-metrics.component';
+import { ManagementTabComponent } from './pages/management-tab/management-tab.component';
+import { AttendanceTableComponent } from './pages/management-tab/attendance-table/attendance-table.component';
+//import { AttendanceGraphComponent } from './pages/management-tab/attedance-graph/attedance-graph.component';
 
 
 
@@ -38,7 +41,10 @@ import { OverallStatusBignumbernineMetricsComponent } from './pages/overall-stat
     OverallStatusBignumberoneMetricsComponent,
     OverallStatusBignumbersevenMetricsComponent,
     OverallStatusBignumbereightMetricsComponent,
-    OverallStatusBignumbernineMetricsComponent
+    OverallStatusBignumbernineMetricsComponent,
+    ManagementTabComponent,
+    AttendanceTableComponent,
+    //AttendanceGraphComponent
   ],
   imports: [
     DashletModule.forRoot({
