@@ -8,7 +8,7 @@ import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/r
 import { CriteriaService } from 'src/app/core/services/criteria.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { config } from 'src/app/views/staff-attendance/config/staff_attendance_system_config';
-import { ManagementTabComponent } from 'src/app/views/staff/pages/management-tab/management-tab.component';
+import { ManagementTabComponent } from '../../management-tab.component';
 
 @Component({
   selector: 'app-attendance-table',

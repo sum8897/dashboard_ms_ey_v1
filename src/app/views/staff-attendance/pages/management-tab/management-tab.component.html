@@ -20,6 +20,45 @@
                 </app-attendance-table>
 
 			</div>
+            <div class="reports-row w-full">
+        <div class="row-wrapper grid grid-cols-3 gap-4">
+          <div
+            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
+            id="bigNumberHeight"
+            *ngIf="checkReport('management_bignumberone', 'bigNumber')"
+          >
+            <app-management-bignumberone-metrics
+              #ManagementBignumberMetrics
+            ></app-management-bignumberone-metrics>
+          </div>
+          <div
+            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
+            id="bigNumberHeight"
+            *ngIf="checkReport('management_bignumbertwo', 'bigNumber')"
+          >
+            <app-management-bignumbertwo-metrics
+              #ManagementBignumberMetricsTwo
+            ></app-management-bignumbertwo-metrics>
+          </div>
+          <div
+            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
+            id="bigNumberHeight"
+            *ngIf="checkReport('management_bignumberthree', 'bigNumber')"
+          >
+            <app-management-bignumberthree-metrics
+              #ManagementBignumberMetricsThree
+            ></app-management-bignumberthree-metrics>
+          </div>
+          <div
+            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
+            id="bigNumberHeight"
+            *ngIf="checkReport('management_bignumberfour', 'bigNumber')"
+          >
+            <app-management-bignumberfour-metrics
+              #ManagementBignumberMetricsFour
+            ></app-management-bignumberfour-metrics>
+          </div>
+      
 			<!-- <div class="col-span-2 xmd:col-span-2 div-shadow"
 			 *ngIf="checkReport('enrollment_barchart', 'barChart')"
 				id="bar">

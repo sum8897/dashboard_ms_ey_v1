@@ -5,7 +5,12 @@ import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/r
 import { CommonService } from 'src/app/core/services/common/common.service';
 import moment from 'moment';
 import {config} from '../../config/staff_attendance_system_config';
-import { AttendanceTableComponent } from './attendance-table/attendance-table.component';
+import { AttendanceTableComponent } from './reports/attendance-table/attendance-table.component';
+import { ManagementBignumberMetricsComponent } from './reports/management-bignumber-metrics/management-bignumber-metrics.component';
+import { ManagementBignumberoneMetricsComponent } from './reports/management-bignumberone-metrics/management-bignumberone-metrics.component';
+import { ManagementBignumbertwoMetricsComponent } from './reports/management-bignumbertwo-metrics/management-bignumbertwo-metrics.component';
+import { ManagementBignumberthreeMetricsComponent } from './reports/management-bignumberthree-metrics/management-bignumberthree-metrics.component';
+import { ManagementBignumberfourMetricsComponent} from './reports/management-bignumberfour-metrics/management-bignumberfour-metrics.component';
 //import { AttendanceGraphComponent } from './attedance-graph/attedance-graph.component';
 
 @Component({
@@ -45,7 +50,16 @@ export class ManagementTabComponent implements OnInit {
       pagereportName = "Management"
       //
       @ViewChild('performing_wise_table_one') performing_wise_table_one: AttendanceTableComponent;
-        //@ViewChild('attendanceGraph') attendanceGraph:   AttendanceGraphComponent;
+      @ViewChild("ManagementBignumberMetrics")
+        ManagementBignumberMetrics: ManagementBignumberoneMetricsComponent;
+      @ViewChild("ManagementBignumberMetricsTwo")
+        ManagementBignumberMetricsTwo: ManagementBignumbertwoMetricsComponent;
+      @ViewChild("ManagementBignumberMetricsThree")
+        ManagementBignumberMetricsThree: ManagementBignumberthreeMetricsComponent;
+      @ViewChild("ManagementBignumberMetricsFour")
+        ManagementBignumberMetricsFour: ManagementBignumberfourMetricsComponent;
+         
+      //@ViewChild('attendanceGraph') attendanceGraph:   AttendanceGraphComponent;
       
       // @ViewChild('genderTable') genderTable:  AttendanceTableComponent;
       // @ViewChild('performingBigNumbercardone') performingBigNumbercardone: BigNumberPhotographsComponent;
@@ -58,177 +72,442 @@ export class ManagementTabComponent implements OnInit {
     
     
     
-      constructor(private _wrapperService: WrapperService,private readonly _commonService: CommonService, private _rbacService: RbacService, private readonly _reportDrilldownService: ReportDrilldownService) {
-        this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
-         
-          this.rbacDetails = rbacDetails;
-          this.drillDownLevel =rbacDetails.role
-        })
-        this.drillDownSubscription = this._reportDrilldownService.drilldownData.subscribe(data => {
-          if (data) {
-            this.drillDownLevel = data.hierarchyLevel || this.rbacDetails?.role
-            this.reportsData = []
-            this.schoolReportsData = []
-          }
-        })
-      }
-     
-    
-      ngOnInit(): void {
-        
-        // this._reportDrilldownService.emit()
-      }
-    
-      ngOnDestroy(): void {
-        this._reportDrilldownService.emit('reset')
-        this.drillDownSubscription.unsubscribe()
-      }
-    
-      async ngAfterViewInit(): Promise<void> {
+      constructor(
+          private _wrapperService: WrapperService,
+          private readonly _commonService: CommonService,
+          private _rbacService: RbacService,
+          private readonly _reportDrilldownService: ReportDrilldownService
+        ) {
+          this._rbacService.getRbacDetails().subscribe((rbacDetails: any) => {
+            this.rbacDetails = rbacDetails;
+            this.drillDownLevel = rbacDetails.role;
+          });
+          this.drillDownSubscription =
+            this._reportDrilldownService.drilldownData.subscribe((data) => {
+              if (data) {
+                this.drillDownLevel = data.hierarchyLevel || this.rbacDetails?.role;
+                this.reportsData = [];
+                this.schoolReportsData = [];
+              }
+            });
+        }
+      
+        ngOnInit(): void {
+          // this._reportDrilldownService.emit()
+        }
+      
+        ngOnDestroy(): void {
+          this._reportDrilldownService.emit("reset");
+          this.drillDownSubscription.unsubscribe();
+        }
+      
+        async ngAfterViewInit(): Promise<void> {
           if (this.hasCommonFilters) {
-              this.filters = await this._wrapperService.constructCommonFilters(config.filters,this.tabLabel);
-              console.log('line103- filters',this.filters)
-              this.performing_wise_table_one?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              //this.attendanceGraph?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardone?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardtwo?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardfour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardfive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-              // this.performingBigNumbercardsix?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    
-              // this.studentComparativeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    
-    
-              
-             
-              }
-          else if(this.hasCommonFilters===false){
-              // this.loWisePerformance?.getReportData({filterneed: this.hasCommonFilters});
-              
+            this.filters = await this._wrapperService.constructCommonFilters(
+              config.filters,
+              this.tabLabel
+            );
+            console.log("line103- filters", this.filters);
+            this.performing_wise_table_one?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetrics?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsTwo?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsThree?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsFour?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            // this.OverallStatusBignumberMetricsFive?.getReportData(
+            //   {
+            //     filterneed: this.hasCommonFilters,
+            //     filterValues: this.filters.map((filter) => {
+            //       return {
+            //         ...filter,
+            //         columnName: filter.valueProp,
+            //         filterType: filter.id,
+            //       };
+            //     }),
+            //   },
+            //   this.startDate,
+            //   this.endDate
+            // );
+            // this.OverallStatusBignumberMetricsSix?.getReportData(
+            //   {
+            //     filterneed: this.hasCommonFilters,
+            //     filterValues: this.filters.map((filter) => {
+            //       return {
+            //         ...filter,
+            //         columnName: filter.valueProp,
+            //         filterType: filter.id,
+            //       };
+            //     }),
+            //   },
+            //   this.startDate,
+            //   this.endDate
+            // );
+            // this.OverallStatusBignumberMetricsSeven?.getReportData(
+            //   {
+            //     filterneed: this.hasCommonFilters,
+            //     filterValues: this.filters.map((filter) => {
+            //       return {
+            //         ...filter,
+            //         columnName: filter.valueProp,
+            //         filterType: filter.id,
+            //       };
+            //     }),
+            //   },
+            //   this.startDate,
+            //   this.endDate
+            // );
+            // this.OverallStatusBignumberMetricsEight?.getReportData(
+            //   {
+            //     filterneed: this.hasCommonFilters,
+            //     filterValues: this.filters.map((filter) => {
+            //       return {
+            //         ...filter,
+            //         columnName: filter.valueProp,
+            //         filterType: filter.id,
+            //       };
+            //     }),
+            //   },
+            //   this.startDate,
+            //   this.endDate
+            // );
+            // this.OverallStatusBignumberMetricsNine?.getReportData(
+            //   {
+            //     filterneed: this.hasCommonFilters,
+            //     filterValues: this.filters.map((filter) => {
+            //       return {
+            //         ...filter,
+            //         columnName: filter.valueProp,
+            //         filterType: filter.id,
+            //       };
+            //     }),
+            //   },
+            //   this.startDate,
+            //   this.endDate
+            // );
+            // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+            // this.performingBigNumbercardfour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+            // this.performingBigNumbercardfive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+            // this.performingBigNumbercardsix?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+      
+            // this.studentComparativeBigNumber?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          } else if (this.hasCommonFilters === false) {
+            // this.loWisePerformance?.getReportData({filterneed: this.hasCommonFilters});
           }
-        if (this.startDate === undefined && this.endDate === undefined ) {
-          console.log('hello')
-          let endDate = new Date();
-          let days = endDate.getDate() - this.defaultSelectedDays;
-          let startDate = new Date();
-          startDate.setDate(days)
-           this.startDate = moment(startDate).format('YYYY-MM-DD');
-           this.endDate = moment(endDate).format('YYYY-MM-DD');
-           console.log('datess',startDate,endDate)
-          
-    
-          // this.getSchoolReportData()
-          this.updateReportsData()
+          if (this.startDate === undefined && this.endDate === undefined) {
+            console.log("hello");
+            let endDate = new Date();
+            let startDate = new Date();
+      
+            if (this.defaultSelectedDays && this.defaultSelectedDays > 1) {
+              startDate = new Date();
+              startDate.setDate(endDate.getDate() - (this.defaultSelectedDays - 1));
+            }
+      
+            this.startDate = moment(startDate).format("YYYY-MM-DD");
+            this.endDate = moment(endDate).format("YYYY-MM-DD");
+      
+            console.log("datess", this.startDate, this.endDate);
+      
+            // this.getSchoolReportData()
+            this.updateReportsData();
+          }
         }
-      }
-    
-    
-      checkReport(key: string, reportType: string): Boolean {
-        let reportConfig = config;
-        let flag = false;
-        reportConfig[key]?.filters?.forEach((filter: any) => {
-          if (Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) && Object.keys(filter?.actions?.queries).includes(reportType)) {
-            flag = true
+      
+        checkReport(key: string, reportType: string): Boolean {
+          let reportConfig = config;
+          let flag = false;
+          reportConfig[key]?.filters?.forEach((filter: any) => {
+            if (
+              Number(filter.hierarchyLevel) === Number(this.rbacDetails?.role) &&
+              Object.keys(filter?.actions?.queries).includes(reportType)
+            ) {
+              flag = true;
+            }
+          });
+          return flag;
+        }
+      
+        csvDownload(csvData: any) {
+          if (csvData) {
+            this.reportsData = [];
+            this.reportsData.push(csvData);
           }
-        })
-        return flag
-      }
-    
-      csvDownload(csvData: any) {
-        if (csvData) {
+        }
+      
+        updateReportsData(): void {
+          console.log("dttttttt", this.filters, this.startDate, this.endDate);
+      
+          this.performing_wise_table_one?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetrics?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsTwo?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsThree?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsFour?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          // this.OverallStatusBignumberMetricsFive?.getReportData(
+          //   {
+          //     filterneed: this.hasCommonFilters,
+          //     filterValues: this.filters.map((filter) => {
+          //       return {
+          //         ...filter,
+          //         columnName: filter.valueProp,
+          //         filterType: filter.id,
+          //       };
+          //     }),
+          //   },
+          //   this.startDate,
+          //   this.endDate
+          // );
+          // this.OverallStatusBignumberMetricsSix?.getReportData(
+          //   {
+          //     filterneed: this.hasCommonFilters,
+          //     filterValues: this.filters.map((filter) => {
+          //       return {
+          //         ...filter,
+          //         columnName: filter.valueProp,
+          //         filterType: filter.id,
+          //       };
+          //     }),
+          //   },
+          //   this.startDate,
+          //   this.endDate
+          // );
+          // this.OverallStatusBignumberMetricsSeven?.getReportData(
+          //   {
+          //     filterneed: this.hasCommonFilters,
+          //     filterValues: this.filters.map((filter) => {
+          //       return {
+          //         ...filter,
+          //         columnName: filter.valueProp,
+          //         filterType: filter.id,
+          //       };
+          //     }),
+          //   },
+          //   this.startDate,
+          //   this.endDate
+          // );
+          // this.OverallStatusBignumberMetricsEight?.getReportData(
+          //   {
+          //     filterneed: this.hasCommonFilters,
+          //     filterValues: this.filters.map((filter) => {
+          //       return {
+          //         ...filter,
+          //         columnName: filter.valueProp,
+          //         filterType: filter.id,
+          //       };
+          //     }),
+          //   },
+          //   this.startDate,
+          //   this.endDate
+          // );
+          // this.OverallStatusBignumberMetricsNine?.getReportData(
+          //   {
+          //     filterneed: this.hasCommonFilters,
+          //     filterValues: this.filters.map((filter) => {
+          //       return {
+          //         ...filter,
+          //         columnName: filter.valueProp,
+          //         filterType: filter.id,
+          //       };
+          //     }),
+          //   },
+          //   this.startDate,
+          //   this.endDate
+          // );
+          // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          // this.performingBigNumbercardfour?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          // this.performingBigNumbercardfive?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          // this.performingBigNumbercardsix?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+          // this.studentComparativeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
+        }
+        filtersUpdated(filters: any) {
           this.reportsData = [];
-          this.reportsData.push(csvData)
+          this.filters = filters;
+          this.updateReportsData();
         }
-      }
       
-    
-      updateReportsData( ): void {
-       
-        console.log('dttttttt',this.filters,this.startDate,this.endDate)
-    
-        this.performing_wise_table_one?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        //this.attendanceGraph?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardone?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardtwo?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardfour?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardfive?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.performingBigNumbercardsix?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-        // this.studentComparativeBigNumber?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
-    
-       
-       
-      
-    
-        }
-         filtersUpdated(filters: any) {
-          this.reportsData = [];
-          this.filters = filters
-          this.updateReportsData()
-              }
-       
-        
-    
-      timeSeriesUpdated(event: any): void {
-        if (event?.startDate !== null && event?.endDate !== null) {
-              this.reportsData = []
-              this.schoolReportsData = []
-        this.startDate = moment(event.startDate).format('YYYY-MM-DD');
-        this.endDate = moment(event.endDate).format('YYYY-MM-DD');
-        this.updateReportsData()
-        }
-       
-        
-      }
-      
-      
-      
-      schoolCsvDownload(csvData: any, hierarchyLevel: any) {
-        if (csvData && this.drillDownLevel == hierarchyLevel) {
-          this.schoolReportsData = [];
-          this.schoolReportsData.push(csvData)
-        }
-      }
-    
-      getSchoolReportData(startDate?: string, endDate?: string) {
-        let query;
-        if (startDate && endDate) {
-          this.startDate = startDate;
-          this.endDate = endDate;
-        }
-        else {
-          let endDate = new Date();
-          let days = endDate.getDate() - this.defaultSelectedDays;
-          let startDate = new Date();
-          startDate.setDate(days)
-          this.startDate = startDate?.toISOString().split('T')[0];
-          this.endDate = endDate?.toISOString().split('T')[0];
-        }
-       
-    
-    
-    
-        this._commonService.getReportDataNew(query).subscribe((res: any) => {
-          let d = { reportData: res, reportType: 'map', reportName: "teacher_present_school_wise" };
-          if (d.reportData.length > 0) {
-            this.schoolReportsData.push(d);
+        timeSeriesUpdated(event: any): void {
+          if (event?.startDate !== null && event?.endDate !== null) {
+            this.reportsData = [];
+            this.schoolReportsData = [];
+            this.startDate = moment(event.startDate).format("YYYY-MM-DD");
+            this.endDate = moment(event.endDate).format("YYYY-MM-DD");
+            this.updateReportsData();
           }
-        })
-      }
-    
-      settimeSeriesDates(dates: any) {
-        // this.minDate = (this.minDate === undefined || (dates?.minDate && this.minDate < dates.minDate)) ? dates?.minDate : this.minDate
-        // this.maxDate = (this.maxDate === undefined || (dates?.maxDate && this.maxDate > dates.maxDate)) ? dates.maxDate : this.maxDate
-      }
-      importBigNumberMetrics(bigNumberMetric: any) {
-        this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data
-        console.log(bigNumberMetric);
-    }
+        }
       
-    
-    }
-    
-    
-    
-    
+        schoolCsvDownload(csvData: any, hierarchyLevel: any) {
+          if (csvData && this.drillDownLevel == hierarchyLevel) {
+            this.schoolReportsData = [];
+            this.schoolReportsData.push(csvData);
+          }
+        }
+      
+        getSchoolReportData(startDate?: string, endDate?: string) {
+          let query;
+          if (startDate && endDate) {
+            this.startDate = startDate;
+            this.endDate = endDate;
+          } else {
+            let endDate = new Date();
+            let startDate = new Date();
+      
+            if (this.defaultSelectedDays && this.defaultSelectedDays > 1) {
+              startDate.setDate(endDate.getDate() - (this.defaultSelectedDays - 1));
+            }
+      
+            this.startDate = startDate.toISOString().split("T")[0];
+            this.endDate = endDate.toISOString().split("T")[0];
+      
+            console.log("datess", this.startDate, this.endDate);
+          }
+      
+          this._commonService.getReportDataNew(query).subscribe((res: any) => {
+            let d = {
+              reportData: res,
+              reportType: "map",
+              reportName: "teacher_present_school_wise",
+            };
+            if (d.reportData.length > 0) {
+              this.schoolReportsData.push(d);
+            }
+          });
+        }
+      
+        settimeSeriesDates(dates: any) {
+          // this.minDate = (this.minDate === undefined || (dates?.minDate && this.minDate < dates.minDate)) ? dates?.minDate : this.minDate
+          // this.maxDate = (this.maxDate === undefined || (dates?.maxDate && this.maxDate > dates.maxDate)) ? dates.maxDate : this.maxDate
+        }
+        importBigNumberMetrics(bigNumberMetric: any) {
+          this.bigNumberMetrics[bigNumberMetric.ind] = bigNumberMetric.data;
+          console.log(bigNumberMetric);
+        }
+      }
+      

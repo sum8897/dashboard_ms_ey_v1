@@ -22,7 +22,13 @@ import { OverallStatusBignumbersevenMetricsComponent } from './pages/overall-sta
 import { OverallStatusBignumbereightMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbereight-metrics/overall-status-bignumbereight-metrics.component';
 import { OverallStatusBignumbernineMetricsComponent } from './pages/overall-status-tab/reports/overall-status-bignumbernine-metrics/overall-status-bignumbernine-metrics.component';
 import { ManagementTabComponent } from './pages/management-tab/management-tab.component';
-import { AttendanceTableComponent } from './pages/management-tab/attendance-table/attendance-table.component';
+import { AttendanceTableComponent } from './pages/management-tab/reports/attendance-table/attendance-table.component';
+import { ManagementBignumberMetricsComponent } from './pages/management-tab/reports/management-bignumber-metrics/management-bignumber-metrics.component';
+import { ManagementBignumberoneMetricsComponent } from './pages/management-tab/reports/management-bignumberone-metrics/management-bignumberone-metrics.component';
+import { ManagementBignumbertwoMetricsComponent } from './pages/management-tab/reports/management-bignumbertwo-metrics/management-bignumbertwo-metrics.component';
+import { ManagementBignumberthreeMetricsComponent } from './pages/management-tab/reports/management-bignumberthree-metrics/management-bignumberthree-metrics.component';
+import { ManagementBignumberfourMetricsComponent } from './pages/management-tab/reports/management-bignumberfour-metrics/management-bignumberfour-metrics.component';
+import { ManagementBignumberfiveMetricsComponent } from './pages/management-tab/reports/management-bignumberfive-metrics/management-bignumberfive-metrics.component';
 //import { AttendanceGraphComponent } from './pages/management-tab/attedance-graph/attedance-graph.component';
 
 
@@ -44,6 +50,12 @@ import { AttendanceTableComponent } from './pages/management-tab/attendance-tabl
     OverallStatusBignumbernineMetricsComponent,
     ManagementTabComponent,
     AttendanceTableComponent,
+    ManagementBignumberMetricsComponent,
+    ManagementBignumberoneMetricsComponent,
+    ManagementBignumbertwoMetricsComponent,
+    ManagementBignumberthreeMetricsComponent,
+    ManagementBignumberfourMetricsComponent,
+    ManagementBignumberfiveMetricsComponent,
     //AttendanceGraphComponent
   ],
   imports: [
