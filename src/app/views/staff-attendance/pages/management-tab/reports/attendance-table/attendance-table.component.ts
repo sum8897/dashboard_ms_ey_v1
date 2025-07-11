@@ -1,12 +1,25 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonService } from 'src/app/core/services/common/common.service';
-import { DataService } from 'src/app/core/services/data.service';
-import { RbacService } from 'src/app/core/services/rbac-service.service';
-import { WrapperService } from 'src/app/core/services/wrapper.service';
-import { buildQuery, parseFilterToQuery, parseRbacFilter, parseTimeSeriesQuery } from 'src/app/utilities/QueryBuilder';
-import { ReportDrilldownService } from 'src/app/core/services/report-drilldown/report-drilldown.service';
-import { CriteriaService } from 'src/app/core/services/criteria.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
+import { CommonService } from "src/app/core/services/common/common.service";
+import { DataService } from "src/app/core/services/data.service";
+import { RbacService } from "src/app/core/services/rbac-service.service";
+import { WrapperService } from "src/app/core/services/wrapper.service";
+import {
+  buildQuery,
+  parseFilterToQuery,
+  parseRbacFilter,
+  parseTimeSeriesQuery,
+} from "src/app/utilities/QueryBuilder";
+import { ReportDrilldownService } from "src/app/core/services/report-drilldown/report-drilldown.service";
+import { CriteriaService } from "src/app/core/services/criteria.service";
+import { NgxSpinnerService } from "ngx-spinner";
 import { config } from 'src/app/views/staff-attendance/config/staff_attendance_system_config';
 import { ManagementTabComponent } from '../../management-tab.component';
 

@@ -11,6 +11,11 @@ import { ManagementBignumberoneMetricsComponent } from './reports/management-big
 import { ManagementBignumbertwoMetricsComponent } from './reports/management-bignumbertwo-metrics/management-bignumbertwo-metrics.component';
 import { ManagementBignumberthreeMetricsComponent } from './reports/management-bignumberthree-metrics/management-bignumberthree-metrics.component';
 import { ManagementBignumberfourMetricsComponent} from './reports/management-bignumberfour-metrics/management-bignumberfour-metrics.component';
+import { ManagementBignumberfiveMetricsComponent } from './reports/management-bignumberfive-metrics/management-bignumberfive-metrics.component';
+import { ManagementBignumbersixMetricsComponent } from './reports/management-bignumbersix-metrics/management-bignumbersix-metrics.component';
+import { ManagementBignumbersevenMetricsComponent } from './reports/management-bignumberseven-metrics/management-bignumberseven-metrics.component';
+import { ManagementBignumbereightMetricsComponent } from './reports/management-bignumbereight-metrics/management-bignumbereight-metrics.component';
+import { ManagementBignumbernineMetricsComponent } from './reports/management-bignumbernine-metrics/management-bignumbernine-metrics.component';
 //import { AttendanceGraphComponent } from './attedance-graph/attedance-graph.component';
 
 @Component({
@@ -58,7 +63,16 @@ export class ManagementTabComponent implements OnInit {
         ManagementBignumberMetricsThree: ManagementBignumberthreeMetricsComponent;
       @ViewChild("ManagementBignumberMetricsFour")
         ManagementBignumberMetricsFour: ManagementBignumberfourMetricsComponent;
-         
+      @ViewChild("ManagementBignumberMetricsFive")
+        ManagementBignumberMetricsFive: ManagementBignumberfiveMetricsComponent;         
+      @ViewChild("ManagementBignumberMetricsSix")
+        ManagementBignumberMetricsSix: ManagementBignumbersixMetricsComponent;         
+      @ViewChild("ManagementBignumberMetricsSeven")
+        ManagementBignumberMetricsSeven: ManagementBignumbersevenMetricsComponent;         
+      @ViewChild("ManagementBignumberMetricsEight")
+        ManagementBignumberMetricsEight: ManagementBignumbereightMetricsComponent;         
+      @ViewChild("ManagementBignumberMetricsNine")
+        ManagementBignumberMetricsNine: ManagementBignumbernineMetricsComponent;         
       //@ViewChild('attendanceGraph') attendanceGraph:   AttendanceGraphComponent;
       
       // @ViewChild('genderTable') genderTable:  AttendanceTableComponent;
@@ -178,76 +192,76 @@ export class ManagementTabComponent implements OnInit {
               this.startDate,
               this.endDate
             );
-            // this.OverallStatusBignumberMetricsFive?.getReportData(
-            //   {
-            //     filterneed: this.hasCommonFilters,
-            //     filterValues: this.filters.map((filter) => {
-            //       return {
-            //         ...filter,
-            //         columnName: filter.valueProp,
-            //         filterType: filter.id,
-            //       };
-            //     }),
-            //   },
-            //   this.startDate,
-            //   this.endDate
-            // );
-            // this.OverallStatusBignumberMetricsSix?.getReportData(
-            //   {
-            //     filterneed: this.hasCommonFilters,
-            //     filterValues: this.filters.map((filter) => {
-            //       return {
-            //         ...filter,
-            //         columnName: filter.valueProp,
-            //         filterType: filter.id,
-            //       };
-            //     }),
-            //   },
-            //   this.startDate,
-            //   this.endDate
-            // );
-            // this.OverallStatusBignumberMetricsSeven?.getReportData(
-            //   {
-            //     filterneed: this.hasCommonFilters,
-            //     filterValues: this.filters.map((filter) => {
-            //       return {
-            //         ...filter,
-            //         columnName: filter.valueProp,
-            //         filterType: filter.id,
-            //       };
-            //     }),
-            //   },
-            //   this.startDate,
-            //   this.endDate
-            // );
-            // this.OverallStatusBignumberMetricsEight?.getReportData(
-            //   {
-            //     filterneed: this.hasCommonFilters,
-            //     filterValues: this.filters.map((filter) => {
-            //       return {
-            //         ...filter,
-            //         columnName: filter.valueProp,
-            //         filterType: filter.id,
-            //       };
-            //     }),
-            //   },
-            //   this.startDate,
-            //   this.endDate
-            // );
-            // this.OverallStatusBignumberMetricsNine?.getReportData(
-            //   {
-            //     filterneed: this.hasCommonFilters,
-            //     filterValues: this.filters.map((filter) => {
-            //       return {
-            //         ...filter,
-            //         columnName: filter.valueProp,
-            //         filterType: filter.id,
-            //       };
-            //     }),
-            //   },
-            //   this.startDate,
-            //   this.endDate
-            // );
+            this.ManagementBignumberMetricsFive?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsSix?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsSeven?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsEight?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
+            this.ManagementBignumberMetricsNine?.getReportData(
+              {
+                filterneed: this.hasCommonFilters,
+                filterValues: this.filters.map((filter) => {
+                  return {
+                    ...filter,
+                    columnName: filter.valueProp,
+                    filterType: filter.id,
+                  };
+                }),
+              },
+              this.startDate,
+              this.endDate
+            );
             // this.performingBigNumbercardthree?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
             // this.performingBigNumbercardfour?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
             // this.performingBigNumbercardfive?.getReportData({filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
@@ -371,76 +385,76 @@ export class ManagementTabComponent implements OnInit {
             this.startDate,
             this.endDate
           );
-          // this.OverallStatusBignumberMetricsFive?.getReportData(
-          //   {
-          //     filterneed: this.hasCommonFilters,
-          //     filterValues: this.filters.map((filter) => {
-          //       return {
-          //         ...filter,
-          //         columnName: filter.valueProp,
-          //         filterType: filter.id,
-          //       };
-          //     }),
-          //   },
-          //   this.startDate,
-          //   this.endDate
-          // );
-          // this.OverallStatusBignumberMetricsSix?.getReportData(
-          //   {
-          //     filterneed: this.hasCommonFilters,
-          //     filterValues: this.filters.map((filter) => {
-          //       return {
-          //         ...filter,
-          //         columnName: filter.valueProp,
-          //         filterType: filter.id,
-          //       };
-          //     }),
-          //   },
-          //   this.startDate,
-          //   this.endDate
-          // );
-          // this.OverallStatusBignumberMetricsSeven?.getReportData(
-          //   {
-          //     filterneed: this.hasCommonFilters,
-          //     filterValues: this.filters.map((filter) => {
-          //       return {
-          //         ...filter,
-          //         columnName: filter.valueProp,
-          //         filterType: filter.id,
-          //       };
-          //     }),
-          //   },
-          //   this.startDate,
-          //   this.endDate
-          // );
-          // this.OverallStatusBignumberMetricsEight?.getReportData(
-          //   {
-          //     filterneed: this.hasCommonFilters,
-          //     filterValues: this.filters.map((filter) => {
-          //       return {
-          //         ...filter,
-          //         columnName: filter.valueProp,
-          //         filterType: filter.id,
-          //       };
-          //     }),
-          //   },
-          //   this.startDate,
-          //   this.endDate
-          // );
-          // this.OverallStatusBignumberMetricsNine?.getReportData(
-          //   {
-          //     filterneed: this.hasCommonFilters,
-          //     filterValues: this.filters.map((filter) => {
-          //       return {
-          //         ...filter,
-          //         columnName: filter.valueProp,
-          //         filterType: filter.id,
-          //       };
-          //     }),
-          //   },
-          //   this.startDate,
-          //   this.endDate
-          // );
+          this.ManagementBignumberMetricsFive?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsSix?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsSeven?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsEight?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
+          this.ManagementBignumberMetricsNine?.getReportData(
+            {
+              filterneed: this.hasCommonFilters,
+              filterValues: this.filters.map((filter) => {
+                return {
+                  ...filter,
+                  columnName: filter.valueProp,
+                  filterType: filter.id,
+                };
+              }),
+            },
+            this.startDate,
+            this.endDate
+          );
           // this.performingBigNumbercardthree?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           // this.performingBigNumbercardfour?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);
           // this.performingBigNumbercardfive?.getReportData({ filterneed: this.hasCommonFilters, filterValues: this.filters.map((filter) => { return { ...filter, columnName: filter.valueProp, filterType: filter.id } }) },this.startDate,this.endDate);

@@ -588,6 +588,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number two
   overall_status_bignumbertwo: {
     label: "Absent Teachers",
     filters: [
@@ -686,6 +687,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number three
   overall_status_bignumberthree: {
     label: "Total Teachers",
     filters: [
@@ -784,6 +786,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number four
    overall_status_bignumberfour: {
     label: "Male Teachers Present",
     filters: [
@@ -882,6 +885,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number five
   overall_status_bignumberfive: {
     label: "Male Teachers Absent",
     filters: [
@@ -980,6 +984,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number six
   overall_status_bignumbersix: {
     label: "Total Male Teachers",
     filters: [
@@ -1078,6 +1083,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number seven
   overall_status_bignumberseven: {
     label: "Female Teachers Present",
     filters: [
@@ -1176,6 +1182,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number eight
   overall_status_bignumbereight: {
     label: "Female Teachers Absent",
     filters: [
@@ -1274,6 +1281,7 @@ tam.tch_id;`,
     },
   },
 
+  //Big number nine
   overall_status_bignumbernine: {
     label: "Total Female Teachers",
     filters: [
@@ -1639,7 +1647,7 @@ tam.tch_id;`,
 	attendance_filters.school_type st on tam.level_id = st.level_id 
 	where tam.date between startDate and endDate and c.cluster_id = {cluster_id}
 	group by 
-	 tam.school_id  , tam.school_name, st.school_type `,
+	 tam.school_id  , tam.school_name, st.school_type`,
           },
           level: "school",
         },
@@ -1721,9 +1729,9 @@ tam.tch_id`,
               ],
               extraInfo: {
                 hierarchyLevel: 1,
-                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour"],
+                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive","management_bignumbersix","management_bignumberseven","management_bignumbereight","management_bignumbernine"],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -1742,9 +1750,9 @@ tam.tch_id`,
               ],
               extraInfo: {
                 hierarchyLevel: 2,
-                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour"],
+                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive","management_bignumbersix","management_bignumberseven","management_bignumbereight","management_bignumbernine"],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -1763,9 +1771,9 @@ tam.tch_id`,
               ],
               extraInfo: {
                 hierarchyLevel: 3,
-                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour"],
+                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive","management_bignumbersix","management_bignumberseven","management_bignumbereight","management_bignumbernine"],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -1784,9 +1792,9 @@ tam.tch_id`,
               ],
               extraInfo: {
                 hierarchyLevel: 4,
-                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour"],
+                linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive","management_bignumbersix","management_bignumberseven","management_bignumbereight","management_bignumbernine"],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -1807,7 +1815,7 @@ tam.tch_id`,
                 hierarchyLevel: 5,
                 linkedReports: [""],
               },
-              allowedLevels: [1, 2, 3, 4, 5, 6],
+              allowedLevels: [1, 2, 3, 4, 5],
             },
           },
           {
@@ -1934,6 +1942,566 @@ tam.tch_id`,
       },
     },
   },
+//   designation_first_table: {
+//     label: "Management",
+//     defaultLevel: "state",
+//     filters: [
+//       {
+//         name: "State",
+//         labelProp: "state_name",
+//         valueProp: "state_id",
+//         hierarchyLevel: "1",
+//         timeSeriesQueries: {
+//           table: `select 
+// 	tam.district_id,
+// 	d.district_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from  teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate
+// 	group by 
+// 	 tam.district_id , d.district_name
+// 	 order by tam.district_id`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// 	tam.district_id,
+// 	d.district_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from  teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate
+// 	group by 
+// 	 tam.district_id , d.district_name
+// 	 order by tam.district_id`,
+//           },
+//           level: "district",
+//         },
+//       },
+//       {
+//         name: "District",
+//         labelProp: "district_name",
+//         valueProp: "district_id",
+//         hierarchyLevel: "2",
+//         timeSeriesQueries: {
+//           table: `select 
+// 	tam.block_id,
+// 	b.block_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate and d.district_id = {district_id}
+// 	group by 
+// 	 tam.block_id , b.block_name`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// 	tam.block_id,
+// 	b.block_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate and d.district_id = {district_id}
+// 	group by 
+// 	 tam.block_id , b.block_name`,
+//           },
+//           level: "block",
+//         },
+//       },
+//       {
+//         name: "Block",
+//         labelProp: "block_name",
+//         valueProp: "block_id",
+//         hierarchyLevel: "3",
+//         timeSeriesQueries: {
+//           table: `select 
+// 	tam.cluster_id,
+// 	c.cluster_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate and b.block_id = {block_id}
+// 	group by 
+// 	 tam.cluster_id , c.cluster_name
+// 	 order by tam.cluster_id`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// 	tam.cluster_id,
+// 	c.cluster_name,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	where tam.date between startDate and endDate and b.block_id = {block_id}
+// 	group by 
+// 	 tam.cluster_id , c.cluster_name
+// 	 order by tam.cluster_id`,
+//           },
+//           level: "cluster",
+//         },
+//       },
+//       {
+//         name: "Cluster",
+//         labelProp: "cluster_name",
+//         valueProp: "cluster_id",
+//         hierarchyLevel: "4",
+//         timeSeriesQueries: {
+//           table: `select 
+// 	tam.school_id ,
+// 	tam.school_name,
+// 	st.school_type ,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	attendance_filters.school_type st on tam.level_id = st.level_id 
+// 	where tam.date between startDate and endDate and c.cluster_id = {cluster_id}
+// 	group by 
+// 	 tam.school_id  , tam.school_name, st.school_type`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// 	tam.school_id ,
+// 	tam.school_name,
+// 	st.school_type ,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '1' then 1 else 0 end) as govt_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '1' then 1 else 0 end) as govt_absent,
+// 	sum(case when tam.school_management_id = '1' then 1 else 0 end) as govt_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_absent,
+// 	sum(case when tam.school_management_id = '4' then 1 else 0 end) as govtaided_total,
+// 	sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_Present,
+// 	sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_absent,
+// 	sum(case when tam.school_management_id = '5' then 1 else 0 end) as private_total,
+// 	ROUND(100.0 * SUM(CASE WHEN tam.attendance_status = '1' AND tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END)
+//         / NULLIF(SUM(CASE WHEN tam.attendance_status in ('1','0') and tam.school_management_id in ('1','4','5') THEN 1 ELSE 0 END), 0), 2
+//     ) AS Attendance_Percentage
+// 	from teacher_attendance.tch_attendance_master tam  
+// 	left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id 
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	attendance_filters.school_type st on tam.level_id = st.level_id 
+// 	where tam.date between startDate and endDate and c.cluster_id = {cluster_id}
+// 	group by 
+// 	 tam.school_id  , tam.school_name, st.school_type `,
+//           },
+//           level: "school",
+//         },
+//       },
+//       {
+//         name: "School",
+//         labelProp: "school_name",
+//         valueProp: "school_id",
+//         hierarchyLevel: "5",
+//         timeSeriesQueries: {
+//           table: `select 
+// tam.tch_id,
+// tam.tch_name ,
+// sum(case when tam.attendance_status='1' then 1 else 0 end) as present,
+// sum(case when tam.attendance_status='0' then 1 else 0 end) as absent
+// from teacher_attendance.tch_attendance_master tam 
+// left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id  
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	dimensions.gender g on tam.gender_id = g.gender
+// 	where 
+// tam.date between startDate and endDate and tam.school_id  = {school_id}
+// group by 
+// tam.tch_id  , tam.tch_name  
+// order by 
+// tam.tch_id`,
+//         },
+//         actions: {
+//           queries: {
+//             table: `select 
+// tam.tch_id,
+// tam.tch_name ,
+// sum(case when tam.attendance_status='1' then 1 else 0 end) as present,
+// sum(case when tam.attendance_status='0' then 1 else 0 end) as absent
+// from teacher_attendance.tch_attendance_master tam 
+// left join
+// 	dimensions.district d on tam.district_id = d.district_id 
+// 	left join 
+// 	dimensions.block b on tam.block_id = b.block_id 
+// 	left join 
+// 	dimensions.cluster c on tam.cluster_id = c.cluster_id  
+// 	left join 
+// 	dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id 
+// 	left join 
+// 	dimensions.gender g on tam.gender_id = g.gender
+// 	where 
+// tam.date between startDate and endDate and tam.school_id  = {school_id}
+// group by 
+// tam.tch_id  , tam.tch_name  
+// order by 
+// tam.tch_id`,
+//           },
+//           level: "teacher",
+//         },
+//       },
+//     ],
+//     options: {
+//       table: {
+//         columns: [
+//           {
+//             name: "State",
+//             property: "state_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "state_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "state_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 1,
+//                 linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive"],
+//               },
+//               allowedLevels: [1, 2, 3, 4, 5, 6],
+//             },
+//           },
+//           {
+//             name: "District",
+//             property: "district_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "district_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "district_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 2,
+//                 linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive"],
+//               },
+//               allowedLevels: [1, 2, 3, 4, 5, 6],
+//             },
+//           },
+//           {
+//             name: "Block",
+//             property: "block_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "block_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "block_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 3,
+//                 linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive"],
+//               },
+//               allowedLevels: [1, 2, 3, 4, 5, 6],
+//             },
+//           },
+//           {
+//             name: "Cluster",
+//             property: "cluster_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "cluster_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "cluster_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 4,
+//                 linkedReports: ["management_bignumberone","management_bignumbertwo","management_bignumberthree","management_bignumberfour","management_bignumberfive"],
+//               },
+//               allowedLevels: [1, 2, 3, 4, 5, 6],
+//             },
+//           },
+//           {
+//             name: "School",
+//             property: "school_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "school_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "school_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 5,
+//                 linkedReports: [""],
+//               },
+//               allowedLevels: [1, 2, 3, 4, 5, 6],
+//             },
+//           },
+//           {
+//             name: "Teacher",
+//             property: "tch_name",
+//             class: "text-left",
+//             action: {
+//               dataProps: [
+//                 {
+//                   prop: "tch_id",
+//                   alias: "id",
+//                 },
+//                 {
+//                   prop: "tch_name",
+//                 },
+//               ],
+//               extraInfo: {
+//                 hierarchyLevel: 6,
+//                 linkedReports: [""],
+//               },
+//               allowedLevels: [],
+//             },
+//           },
+//           {
+//             name: "Govt Present",
+//             property: "govt_present",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Govt Absent",
+//             property: "govt_absent",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Govt Total",
+//             property: "govt_total",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Govt Aided Present",
+//             property: "govtaided_present",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Govt Aided absent",
+//             property: "govtaided_absent",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Govt Aided Total",
+//             property: "govtaided_total",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Private Present",
+//             property: "private_present",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Private Absent",
+//             property: "private_absent",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Private Total",
+//             property: "private_total",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Present",
+//             property: "present",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Absent",
+//             property: "absent",
+//             class: "text-center",
+//           },
+//                     {
+//             name: "Teacher Name",
+//             property: "tch_name",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Gender",
+//             property: "gender",
+//             class: "text-center",
+//           },
+//           {
+//             name: "School Type",
+//             property: "school_type",
+//             class: "text-center",
+//           },
+//           {
+//             name: "Attendance Percentage",
+//             property: "attendance_percentage",
+//             class: "text-center",
+//             valueSuffix: "",
+//             isHeatMapRequired: true,
+//             type: "number",
+//             color: {
+//               type: "percentage",
+//               values: [
+//                 {
+//                   color: "#007000",
+//                   breakPoint: 50,
+//                 },
+//                 {
+//                   color: "#FFBF00",
+//                   breakPoint: 1,
+//                 },
+//                 {
+//                   color: "#D2222D",
+//                   breakPoint: -10000,
+//                 },
+//               ],
+//             },
+//           },
+//         ],
+//       },
+//       bigNumber: {
+//         valueSuffix: "%",
+//         property: "perc_teachers",
+//       },
+//     },
+//   },
 
   management_bignumberone: {
     label: "Govt Teachers Present",
@@ -2323,6 +2891,496 @@ tam.tch_id`,
         title: "Govt Aided Teachers Present",
         valueSuffix: "",
         property: "govtaided_teachers_present",
+      },
+    },
+  },
+
+  management_bignumberfive: {
+    label: "Govt Aided Teachers Absent",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id}",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '4' then 1 else 0 end) as govtaided_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};",
+          },
+          level: "school",
+        },
+      },
+      // {
+      //   name: "School",
+      //   labelProp: "school_name",
+      //   valueProp: "school_id",
+      //   hierarchyLevel: "5",
+      //   timeSeriesQueries: {
+      //     bigNumber:
+      //       "select sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id}",
+      //   },
+      //   actions: {
+      //     queries: {
+      //       bigNumber:
+      //         "select sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id};",
+      //     },
+      //     level: "school",
+      //  },
+      //},
+    ],
+    options: {
+      bigNumber: {
+        title: "Govt Aided Teachers Absent",
+        valueSuffix: "",
+        property: "govtaided_teachers_absent",
+      },
+    },
+  },
+
+  management_bignumbersix: {
+    label: "Total Govt Aided Teachers",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id}",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '4' then 1 else 0 end) as total_govtaided_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};",
+          },
+          level: "school",
+        },
+      },
+      // {
+      //   name: "School",
+      //   labelProp: "school_name",
+      //   valueProp: "school_id",
+      //   hierarchyLevel: "5",
+      //   timeSeriesQueries: {
+      //     bigNumber:
+      //       "select sum(case when tam.attendance_status in ('1','0') then 1 else 0 end) as total_govt_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id}",
+      //   },
+      //   actions: {
+      //     queries: {
+      //       bigNumber:
+      //         "select sum(case when tam.attendance_status in ('1','0') then 1 else 0 end) as total_govt_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id};",
+      //     },
+      //     level: "school",
+      //  },
+      //},
+    ],
+    options: {
+      bigNumber: {
+        title: "Total Govt Aided Teachers",
+        valueSuffix: "",
+        property: "total_govtaided_teachers",
+      },
+    },
+  },
+
+  management_bignumberseven: {
+    label: "Private Teachers Present",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id}",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='1' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_present from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};",
+          },
+          level: "school",
+        },
+      },
+      // {
+      //   name: "School",
+      //   labelProp: "school_name",
+      //   valueProp: "school_id",
+      //   hierarchyLevel: "5",
+      //   timeSeriesQueries: {
+      //     bigNumber:
+      //       "select sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id}",
+      //   },
+      //   actions: {
+      //     queries: {
+      //       bigNumber:
+      //         "select sum(case when tam.attendance_status='1' then 1 else 0 end) as present_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id};",
+      //     },
+      //     level: "school",
+      //  },
+      //},
+    ],
+    options: {
+      bigNumber: {
+        title: "Private Teachers Present",
+        valueSuffix: "",
+        property: "private_teachers_present",
+      },
+    },
+  },
+
+  management_bignumbereight: {
+    label: "Private Teachers Absent",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id}",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status='0' and tam.school_management_id = '5' then 1 else 0 end) as private_teachers_absent from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};",
+          },
+          level: "school",
+        },
+      },
+      // {
+      //   name: "School",
+      //   labelProp: "school_name",
+      //   valueProp: "school_id",
+      //   hierarchyLevel: "5",
+      //   timeSeriesQueries: {
+      //     bigNumber:
+      //       "select sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id}",
+      //   },
+      //   actions: {
+      //     queries: {
+      //       bigNumber:
+      //         "select sum(case when tam.attendance_status='0' then 1 else 0 end) as absent_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id};",
+      //     },
+      //     level: "school",
+      //  },
+      //},
+    ],
+    options: {
+      bigNumber: {
+        title: "Private Teachers Absent",
+        valueSuffix: "",
+        property: "private_teachers_absent",
+      },
+    },
+  }, 
+
+  management_bignumbernine: {
+    label: "Total Private Teachers",
+    filters: [
+      {
+        name: "State",
+        labelProp: "state_name",
+        valueProp: "state_id",
+        hierarchyLevel: "1",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate;",
+          },
+          level: "district",
+        },
+      },
+      {
+        name: "District",
+        labelProp: "district_name",
+        valueProp: "district_id",
+        hierarchyLevel: "2",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and d.district_id = {district_id};",
+          },
+          level: "block",
+        },
+      },
+      {
+        name: "Block",
+        labelProp: "block_name",
+        valueProp: "block_id",
+        hierarchyLevel: "3",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and b.block_id = {block_id};",
+          },
+          level: "cluster",
+        },
+      },
+      {
+        name: "Cluster",
+        labelProp: "cluster_name",
+        valueProp: "cluster_id",
+        hierarchyLevel: "4",
+        timeSeriesQueries: {
+          bigNumber:
+            "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id}",
+        },
+        actions: {
+          queries: {
+            bigNumber:
+              "select sum(case when tam.attendance_status in ('1','0') and tam.school_management_id = '5' then 1 else 0 end) as total_private_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id left join dimensions.schoolmanagement s on tam.school_management_id = s.schoolmanagement_id where tam.date between startDate and endDate and c.cluster_id = {cluster_id};",
+          },
+          level: "school",
+        },
+      },
+      // {
+      //   name: "School",
+      //   labelProp: "school_name",
+      //   valueProp: "school_id",
+      //   hierarchyLevel: "5",
+      //   timeSeriesQueries: {
+      //     bigNumber:
+      //       "select sum(case when tam.attendance_status in ('1','0') then 1 else 0 end) as total_govt_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id}",
+      //   },
+      //   actions: {
+      //     queries: {
+      //       bigNumber:
+      //         "select sum(case when tam.attendance_status in ('1','0') then 1 else 0 end) as total_govt_teachers from teacher_attendance.tch_attendance_master tam left join dimensions.district d on tam.district_id = d.district_id left join dimensions.block b on tam.block_id = b.block_id left join dimensions.cluster c on tam.cluster_id = c.cluster_id  where tam.date between startDate and endDate and tam.school_id  = {school_id};",
+      //     },
+      //     level: "school",
+      //  },
+      //},
+    ],
+    options: {
+      bigNumber: {
+        title: "Total Private Teachers",
+        valueSuffix: "",
+        property: "total_private_teachers",
       },
     },
   },

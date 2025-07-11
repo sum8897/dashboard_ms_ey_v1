@@ -10,26 +10,26 @@ import { config } from 'src/app/views/staff-attendance/config/staff_attendance_s
 import { ManagementTabComponent } from '../../management-tab.component';
 
 @Component({
-  selector: 'app-management-bignumberfive-metrics',
-  templateUrl: './management-bignumberfive-metrics.component.html',
-  styleUrls: ['./management-bignumberfive-metrics.component.scss']
+  selector: 'app-management-bignumberseven-metrics',
+  templateUrl: './management-bignumberseven-metrics.component.html',
+  styleUrls: ['./management-bignumberseven-metrics.component.scss']
 })
-export class ManagementBignumberfiveMetricsComponent implements OnInit {
+export class ManagementBignumbersevenMetricsComponent implements OnInit {
 
-  reportName: string = 'management_bignumberfive';
+  reportName: string = 'management_bignumberseven';
         filters: any = [];
         levels: any;
         tableReportData: any;
         bigNumberReportData: any = {
-          reportName: "Govt Aided Teachers Absent"
+          reportName: "Private Teachers Present"
         };
-        currentReportName: string = "Govt Aided Teachers Absent";
+        currentReportName: string = "Private Teachers Present";
         minDate: any;
         maxDate: any;
         compareDateRange: any = 1;
         filterIndex: any;
         rbacDetails: any;
-        title = 'Govt Aided Teachers Absent %';
+        title = 'Private Teachers Present %';
         @Input() startDate: any;
         @Input() endDate: any;
         drillDownSubscription: any;

@@ -29,6 +29,10 @@ import { ManagementBignumbertwoMetricsComponent } from './pages/management-tab/r
 import { ManagementBignumberthreeMetricsComponent } from './pages/management-tab/reports/management-bignumberthree-metrics/management-bignumberthree-metrics.component';
 import { ManagementBignumberfourMetricsComponent } from './pages/management-tab/reports/management-bignumberfour-metrics/management-bignumberfour-metrics.component';
 import { ManagementBignumberfiveMetricsComponent } from './pages/management-tab/reports/management-bignumberfive-metrics/management-bignumberfive-metrics.component';
+import { ManagementBignumbersixMetricsComponent } from './pages/management-tab/reports/management-bignumbersix-metrics/management-bignumbersix-metrics.component';
+import { ManagementBignumbersevenMetricsComponent } from './pages/management-tab/reports/management-bignumberseven-metrics/management-bignumberseven-metrics.component';
+import { ManagementBignumbereightMetricsComponent } from './pages/management-tab/reports/management-bignumbereight-metrics/management-bignumbereight-metrics.component';
+import { ManagementBignumbernineMetricsComponent } from './pages/management-tab/reports/management-bignumbernine-metrics/management-bignumbernine-metrics.component';
 //import { AttendanceGraphComponent } from './pages/management-tab/attedance-graph/attedance-graph.component';
 
 
@@ -56,6 +60,10 @@ import { ManagementBignumberfiveMetricsComponent } from './pages/management-tab/
     ManagementBignumberthreeMetricsComponent,
     ManagementBignumberfourMetricsComponent,
     ManagementBignumberfiveMetricsComponent,
+    ManagementBignumbersixMetricsComponent,
+    ManagementBignumbersevenMetricsComponent,
+    ManagementBignumbereightMetricsComponent,
+    ManagementBignumbernineMetricsComponent,
     //AttendanceGraphComponent
   ],
   imports: [
