@@ -1,118 +1,128 @@
 <div class="col-span-full tab-wrapper">
-	<!-- <div class="filter-row grid grid-cols-12 my-5">
+  <!-- <div class="filter-row grid grid-cols-12 my-5">
 		<app-filter-panel [filters]="filters" (filtersUpdated)="filtersUpdated($event)"
 			class="col-span-12"></app-filter-panel>
 	</div> -->
-	 <div class="time-series-filter1 xmd:col-span-1 md:col-span-4 lg:col-span-3 col-span-3 gap-4 date-25">
-            <app-time-series-filter-panel (timeSeriesUpdated)="timeSeriesUpdated($event)" [minDate]="minDate"
-                [maxDate]="maxDate" [defaultSelectedDays]="defaultSelectedDays"></app-time-series-filter-panel>
-        </div>
-    <div class="reports-row">
-        <div class="md:col-span-2 col-span-4">
-			<app-breadcrumb-component></app-breadcrumb-component>
-		</div>
+  <div
+    class="time-series-filter1 xmd:col-span-1 md:col-span-4 lg:col-span-3 col-span-3 gap-4 date-25"
+  >
+    <app-time-series-filter-panel
+      (timeSeriesUpdated)="timeSeriesUpdated($event)"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [defaultSelectedDays]="defaultSelectedDays"
+    ></app-time-series-filter-panel>
+  </div>
+  <div class="reports-row">
+    <div class="md:col-span-2 col-span-4">
+      <app-breadcrumb-component></app-breadcrumb-component>
+    </div>
 
-		<div class="row-wrapper grid grid-cols-2 gap-4">
-			<div class="col-span-2 xmd:col-span-2 div-shadow" id="table1"
-				*ngIf="checkReport('designation_first_table', 'table')">
-				<app-attendance-table #performing_wise_table_one
-					(exportReportData)="csvDownload($event)">
-                </app-attendance-table>
+    <div class="row-wrapper grid grid-cols-2 gap-4">
+      <div
+        class="col-span-2 xmd:col-span-2 div-shadow"
+        id="table1"
+        *ngIf="checkReport('designation_first_table', 'table')"
+      >
+        <app-attendance-table
+          #performing_wise_table_one
+          (exportReportData)="csvDownload($event)"
+        >
+        </app-attendance-table>
+      </div>
+    </div>
+  </div>
+  <div class="reports-row w-full">
+    <div class="row-wrapper grid grid-cols-3 gap-4">
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumberone', 'bigNumber')"
+      >
+        <app-management-bignumberone-metrics
+          #ManagementBignumberMetrics
+        ></app-management-bignumberone-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumbertwo', 'bigNumber')"
+      >
+        <app-management-bignumbertwo-metrics
+          #ManagementBignumberMetricsTwo
+        ></app-management-bignumbertwo-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumberthree', 'bigNumber')"
+      >
+        <app-management-bignumberthree-metrics
+          #ManagementBignumberMetricsThree
+        ></app-management-bignumberthree-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumberfour', 'bigNumber')"
+      >
+        <app-management-bignumberfour-metrics
+          #ManagementBignumberMetricsFour
+        ></app-management-bignumberfour-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumberfive', 'bigNumber')"
+      >
+        <app-management-bignumberfive-metrics
+          #ManagementBignumberMetricsFive
+        ></app-management-bignumberfive-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumbersix', 'bigNumber')"
+      >
+        <app-management-bignumbersix-metrics
+          #ManagementBignumberMetricsSix
+        ></app-management-bignumbersix-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumberseven', 'bigNumber')"
+      >
+        <app-management-bignumberseven-metrics
+          #ManagementBignumberMetricsSeven
+        ></app-management-bignumberseven-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumbereight', 'bigNumber')"
+      >
+        <app-management-bignumbereight-metrics
+          #ManagementBignumberMetricsEight
+        ></app-management-bignumbereight-metrics>
+      </div>
+      <div
+        class="col-span-3 xmd:col-span-1 div-shadow bigNumber"
+        id="bigNumberHeight"
+        *ngIf="checkReport('management_bignumbernine', 'bigNumber')"
+      >
+        <app-management-bignumbernine-metrics
+          #ManagementBignumberMetricsNine
+        ></app-management-bignumbernine-metrics>
+      </div>
 
-			</div>
-            <div class="reports-row w-full">
-        <div class="row-wrapper grid grid-cols-3 gap-4">
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumberone', 'bigNumber')"
-          >
-            <app-management-bignumberone-metrics
-              #ManagementBignumberMetrics
-            ></app-management-bignumberone-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumbertwo', 'bigNumber')"
-          >
-            <app-management-bignumbertwo-metrics
-              #ManagementBignumberMetricsTwo
-            ></app-management-bignumbertwo-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumberthree', 'bigNumber')"
-          >
-            <app-management-bignumberthree-metrics
-              #ManagementBignumberMetricsThree
-            ></app-management-bignumberthree-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumberfour', 'bigNumber')"
-          >
-            <app-management-bignumberfour-metrics
-              #ManagementBignumberMetricsFour
-            ></app-management-bignumberfour-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumberfive', 'bigNumber')"
-          >
-            <app-management-bignumberfive-metrics
-              #ManagementBignumberMetricsFive
-            ></app-management-bignumberfive-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumbersix', 'bigNumber')"
-          >
-            <app-management-bignumbersix-metrics
-              #ManagementBignumberMetricsSix
-            ></app-management-bignumbersix-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumberseven', 'bigNumber')"
-          >
-            <app-management-bignumberseven-metrics
-              #ManagementBignumberMetricsSeven
-            ></app-management-bignumberseven-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumbereight', 'bigNumber')"
-          >
-            <app-management-bignumbereight-metrics
-              #ManagementBignumberMetricsEight
-            ></app-management-bignumbereight-metrics>
-          </div>
-          <div
-            class="col-span-3 sm:col-span-3 md:col-span-1 lg:col-span-1 xl:col-span-1 div-shadow"
-            id="bigNumberHeight"
-            *ngIf="checkReport('management_bignumbernine', 'bigNumber')"
-          >
-            <app-management-bignumbernine-metrics
-              #ManagementBignumberMetricsNine
-            ></app-management-bignumbernine-metrics>
-          </div>
-      
-			<!-- <div class="col-span-2 xmd:col-span-2 div-shadow"
+      <!-- <div class="col-span-2 xmd:col-span-2 div-shadow"
 			 *ngIf="checkReport('enrollment_barchart', 'barChart')"
 				id="bar">
 				<app-attendance-graph #attendanceGraph
 					(exportReportData)="csvDownload($event)">
 				</app-attendance-graph>
 			</div> -->
-		</div>
-
-
     </div>
-    </div>
+  </div>
+</div>

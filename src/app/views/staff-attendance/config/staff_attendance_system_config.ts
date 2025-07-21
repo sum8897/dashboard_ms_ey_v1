@@ -1894,11 +1894,6 @@ tam.tch_id`,
             property: "absent",
             class: "text-center",
           },
-                    {
-            name: "Teacher Name",
-            property: "tch_name",
-            class: "text-center",
-          },
           {
             name: "Gender",
             property: "gender",
