@@ -160,7 +160,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct school_id) as total
                     from
-                    school_general.keyindicators sd 
+                    school_general.school_master sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -178,7 +178,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct school_id) as total
                         from
-                        school_general.keyindicators sd 
+                        school_general.school_master sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -203,7 +203,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.keyindicators sd 
+                    school_general.school_master sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -224,7 +224,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.keyindicators sd 
+                        school_general.school_master sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -252,7 +252,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.keyindicators sd 
+                    school_general.school_master sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -275,7 +275,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.keyindicators sd 
+                        school_general.school_master sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -305,7 +305,7 @@ export const config = {
                     count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                     count(distinct sd.school_id) as total
                     from
-                    school_general.keyindicators sd 
+                    school_general.school_master sd 
                     left join
                     dimensions.district d on sd.district_id = d.district_id 
                     left join 
@@ -333,7 +333,7 @@ export const config = {
                         count(distinct case when sd.sch_loc_r_u = 2 then sd.school_id end) as urban,
                         count(distinct sd.school_id) as total
                         from
-                        school_general.keyindicators sd 
+                        school_general.school_master sd 
                         left join
                         dimensions.district d on sd.district_id = d.district_id 
                         left join 
@@ -1730,7 +1730,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.keyindicators sd
+                    school_general.school_master sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN 
@@ -1755,7 +1755,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN 
@@ -1788,7 +1788,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.keyindicators sd
+                    school_general.school_master sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1817,7 +1817,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -1852,7 +1852,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.keyindicators sd
+                    school_general.school_master sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1882,7 +1882,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -1919,7 +1919,7 @@ group by sub.district_name`,
                     sm.schoolmanagement_name,
                     COUNT(DISTINCT sd.school_id) AS no_of_schools
                 FROM 
-                    school_general.keyindicators sd
+                    school_general.school_master sd
                 LEFT JOIN
                     dimensions.district d ON sd.district_id = d.district_id 
                 LEFT JOIN
@@ -1953,7 +1953,7 @@ group by sub.district_name`,
                         sm.schoolmanagement_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2084,7 +2084,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN 
@@ -2118,7 +2118,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.keyindicators sd
+                            school_general.school_master sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN 
@@ -2160,7 +2160,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2197,7 +2197,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.keyindicators sd
+                            school_general.school_master sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
@@ -2240,7 +2240,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2278,7 +2278,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.keyindicators sd
+                            school_general.school_master sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
@@ -2323,7 +2323,7 @@ group by sub.district_name`,
                         scr.category_name,
                         COUNT(DISTINCT sd.school_id) AS no_of_schools
                     FROM 
-                        school_general.keyindicators sd
+                        school_general.school_master sd
                     LEFT JOIN
                         dimensions.district d ON sd.district_id = d.district_id 
                     LEFT JOIN
@@ -2364,7 +2364,7 @@ group by sub.district_name`,
                             scr.category_name,
                             COUNT(DISTINCT sd.school_id) AS no_of_schools
                         FROM 
-                            school_general.keyindicators sd
+                            school_general.school_master sd
                         LEFT JOIN
                             dimensions.district d ON sd.district_id = d.district_id 
                         LEFT JOIN
@@ -5438,7 +5438,7 @@ gross_enroll_table: {
              FROM
                     school_general.sch_enr_fresh sef
                 JOIN
-                    school_general.student_total st ON sef.state_id = st.state_id
+                    school_general.student_total st ON sef.ac_year = st.ac_year
                 JOIN 
                     dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                 
@@ -5489,7 +5489,7 @@ gross_enroll_table: {
                  FROM
                         school_general.sch_enr_fresh sef
                     JOIN
-                        school_general.student_total st ON sef.state_id = st.state_id
+                        school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN 
                         dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                     
@@ -5547,7 +5547,7 @@ gross_enroll_table: {
              FROM
                     school_general.sch_enr_fresh sef
                 JOIN
-                    school_general.student_total st ON sef.state_id = st.state_id
+                    school_general.student_total st ON sef.ac_year = st.ac_year
                 JOIN 
                     dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                 
@@ -5597,7 +5597,7 @@ gross_enroll_table: {
                  FROM
                         school_general.sch_enr_fresh sef
                     JOIN
-                        school_general.student_total st ON sef.state_id = st.state_id
+                        school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN 
                         dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                     
@@ -5654,7 +5654,7 @@ gross_enroll_table: {
              FROM
                     school_general.sch_enr_fresh sef
                 JOIN
-                    school_general.student_total st ON sef.state_id = st.state_id
+                    school_general.student_total st ON sef.ac_year = st.ac_year
                 JOIN 
                     dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                 
@@ -5704,7 +5704,7 @@ gross_enroll_table: {
                  FROM
                         school_general.sch_enr_fresh sef
                     JOIN
-                        school_general.student_total st ON sef.state_id = st.state_id
+                        school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN 
                         dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                     
@@ -5761,7 +5761,7 @@ gross_enroll_table: {
              FROM
                     school_general.sch_enr_fresh sef
                 JOIN
-                    school_general.student_total st ON sef.state_id = st.state_id
+                    school_general.student_total st ON sef.ac_year = st.ac_year
                 JOIN 
                     dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                 
@@ -5814,7 +5814,7 @@ gross_enroll_table: {
                  FROM
                         school_general.sch_enr_fresh sef
                     JOIN
-                        school_general.student_total st ON sef.state_id = st.state_id
+                        school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN 
                         dimensions.academic_year ay ON sef.ac_year = ay.ac_year 
                     
@@ -6161,34 +6161,34 @@ net_enroll_table: {
     ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
 from (
 select
-	SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+	SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
             ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
         st.age6_10_b AS pri_t_b,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
             ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
          st.age11_13_b as upr_t_b,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+        SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
         st.age14_15_b as sec_t_b,
-    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+    SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
        st.age16_17_b as hsec_t_b,
-       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+       SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
             ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
         st.age6_10_g AS pri_t_g,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
             ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
         st.age11_13_g AS upr_t_g,
-    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
         st.age14_15_g as sec_t_g,
-       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+       SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
        st.age16_17_g as hsec_t_g,
        st.age6_10_t AS pri_t,
        st.age11_13_t AS upr_t,
        st.age14_15_t as sec_t,
        st.age16_17_t as hsec_t
 FROM 
-        school_general.keyindicators ki 
+        school_general.sch_enr_agewise ki 
     JOIN
-        school_general.student_total st ON ki.state_id = st.state_id 
+        school_general.student_total st ON ki.ac_year = st.ac_year 
     JOIN 
         dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
     
@@ -6218,34 +6218,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
     ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
 from (
 select
-	SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+	SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
             ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
         st.age6_10_b AS pri_t_b,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
             ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
          st.age11_13_b as upr_t_b,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+        SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
         st.age14_15_b as sec_t_b,
-    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+    SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
        st.age16_17_b as hsec_t_b,
-       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+       SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
             ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
         st.age6_10_g AS pri_t_g,
-        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
             ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
         st.age11_13_g AS upr_t_g,
-    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
         st.age14_15_g as sec_t_g,
-       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+       SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
        st.age16_17_g as hsec_t_g,
        st.age6_10_t AS pri_t,
        st.age11_13_t AS upr_t,
        st.age14_15_t as sec_t,
        st.age16_17_t as hsec_t
 FROM 
-        school_general.keyindicators ki 
+        school_general.sch_enr_agewise ki 
     JOIN
-        school_general.student_total st ON ki.state_id = st.state_id 
+        school_general.student_total st ON ki.ac_year = st.ac_year 
     JOIN 
         dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
     
@@ -6281,34 +6281,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
             from (
             select
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                         ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                     st.age6_10_b AS pri_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                         ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                      st.age11_13_b as upr_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                     st.age14_15_b as sec_t_b,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                    st.age16_17_b as hsec_t_b,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                   SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                         ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                     st.age6_10_g AS pri_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                         ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                     st.age11_13_g AS upr_t_g,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                     st.age14_15_g as sec_t_g,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                   SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                    st.age16_17_g as hsec_t_g,
                    st.age6_10_t AS pri_t,
                    st.age11_13_t AS upr_t,
                    st.age14_15_t as sec_t,
                    st.age16_17_t as hsec_t
             FROM 
-                    school_general.keyindicators ki 
+                    school_general.sch_enr_agewise ki 
                 JOIN
-                    school_general.student_total st ON ki.state_id = st.state_id 
+                    school_general.student_total st ON ki.ac_year = st.ac_year 
                 JOIN 
                     dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                 
@@ -6336,34 +6336,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
                 from (
                 select
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                             ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                         st.age6_10_b AS pri_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                             ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                          st.age11_13_b as upr_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                        SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                         st.age14_15_b as sec_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                        st.age16_17_b as hsec_t_b,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                       SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                             ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                         st.age6_10_g AS pri_t_g,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                             ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                         st.age11_13_g AS upr_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                         st.age14_15_g as sec_t_g,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                       SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                        st.age16_17_g as hsec_t_g,
                        st.age6_10_t AS pri_t,
                        st.age11_13_t AS upr_t,
                        st.age14_15_t as sec_t,
                        st.age16_17_t as hsec_t
                 FROM 
-                        school_general.keyindicators ki 
+                        school_general.sch_enr_agewise ki 
                     JOIN
-                        school_general.student_total st ON ki.state_id = st.state_id 
+                        school_general.student_total st ON ki.ac_year = st.ac_year 
                     JOIN 
                         dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                     
@@ -6399,34 +6399,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
             from (
             select
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                         ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                     st.age6_10_b AS pri_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                         ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                      st.age11_13_b as upr_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                     st.age14_15_b as sec_t_b,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                    st.age16_17_b as hsec_t_b,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                   SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                         ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                     st.age6_10_g AS pri_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                         ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                     st.age11_13_g AS upr_t_g,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                     st.age14_15_g as sec_t_g,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                   SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                    st.age16_17_g as hsec_t_g,
                    st.age6_10_t AS pri_t,
                    st.age11_13_t AS upr_t,
                    st.age14_15_t as sec_t,
                    st.age16_17_t as hsec_t
             FROM 
-                    school_general.keyindicators ki 
+                    school_general.sch_enr_agewise ki 
                 JOIN
-                    school_general.student_total st ON ki.state_id = st.state_id 
+                    school_general.student_total st ON ki.ac_year = st.ac_year 
                 JOIN 
                     dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                 
@@ -6455,34 +6455,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
                 from (
                 select
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                             ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                         st.age6_10_b AS pri_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                             ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                          st.age11_13_b as upr_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                        SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                         st.age14_15_b as sec_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                        st.age16_17_b as hsec_t_b,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                       SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                             ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                         st.age6_10_g AS pri_t_g,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                             ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                         st.age11_13_g AS upr_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                         st.age14_15_g as sec_t_g,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                       SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                        st.age16_17_g as hsec_t_g,
                        st.age6_10_t AS pri_t,
                        st.age11_13_t AS upr_t,
                        st.age14_15_t as sec_t,
                        st.age16_17_t as hsec_t
                 FROM 
-                        school_general.keyindicators ki 
+                        school_general.sch_enr_agewise ki 
                     JOIN
-                        school_general.student_total st ON ki.state_id = st.state_id 
+                        school_general.student_total st ON ki.ac_year = st.ac_year 
                     JOIN 
                         dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                     
@@ -6518,34 +6518,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                 ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
             from (
             select
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                         ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                     st.age6_10_b AS pri_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                         ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                      st.age11_13_b as upr_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                     st.age14_15_b as sec_t_b,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                    st.age16_17_b as hsec_t_b,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                   SUM(distinct CASE ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                         ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                     st.age6_10_g AS pri_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                         ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                     st.age11_13_g AS upr_t_g,
-                SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                     st.age14_15_g as sec_t_g,
-                   SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                   SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                    st.age16_17_g as hsec_t_g,
                    st.age6_10_t AS pri_t,
                    st.age11_13_t AS upr_t,
                    st.age14_15_t as sec_t,
                    st.age16_17_t as hsec_t
             FROM 
-                    school_general.keyindicators ki 
+                    school_general.sch_enr_agewise ki 
                 JOIN
-                    school_general.student_total st ON ki.state_id = st.state_id 
+                    school_general.student_total st ON ki.ac_year = st.ac_year 
                 JOIN 
                     dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                 
@@ -6575,34 +6575,34 @@ pri_t_b,pri_t_g,pri_t,upr_t_b,upr_t_g, upr_t, sec_t_b,sec_t_g,sec_t,hsec_t_b,hse
                     ROUND((SUM(hsec_b)+ SUM(hsec_g))* 100 / hsec_t ,0) AS hrsecondary_level
                 from (
                 select
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
+                    SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_b_sch_enr_age + ki.c2_b_sch_enr_age +
                             ki.c3_b_sch_enr_age + ki.c4_b_sch_enr_age + ki.c5_b_sch_enr_age ELSE 0 END) AS pri_b,
                         st.age6_10_b AS pri_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_b_sch_enr_age + ki.c7_b_sch_enr_age +
                             ki.c8_b_sch_enr_age ELSE 0 END) AS upr_b,
                          st.age11_13_b as upr_t_b,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
+                        SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_b_sch_enr_age + ki.c10_b_sch_enr_age ELSE 0 END) AS sec_b,
                         st.age14_15_b as sec_t_b,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
+                    SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_b_sch_enr_age + ki.c12_b_sch_enr_age ELSE 0 END) AS hsec_b,
                        st.age16_17_b as hsec_t_b,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
+                       SUM(distinct CASE WHEN ki.age_id IN (5,6,7,8,9) THEN ki.c1_g_sch_enr_age + ki.c2_g_sch_enr_age +
                             ki.c3_g_sch_enr_age + ki.c4_g_sch_enr_age + ki.c5_g_sch_enr_age ELSE 0 END) AS pri_g,
                         st.age6_10_g AS pri_t_g,
-                        SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
+                        SUM(distinct CASE WHEN ki.age_id IN (10,11,12) THEN ki.c6_g_sch_enr_age + ki.c7_g_sch_enr_age +
                             ki.c8_g_sch_enr_age ELSE 0 END) AS upr_g,
                         st.age11_13_g AS upr_t_g,
-                    SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
+                    SUM(distinct CASE WHEN ki.age_id IN (13,14) THEN ki.c9_g_sch_enr_age + ki.c10_g_sch_enr_age ELSE 0 END) AS sec_g,
                         st.age14_15_g as sec_t_g,
-                       SUM(distinct CASE WHEN ki.item_group = '1' AND ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
+                       SUM(distinct CASE WHEN ki.age_id IN (15,16) THEN ki.c11_g_sch_enr_age + ki.c12_g_sch_enr_age ELSE 0 END) AS hsec_g,
                        st.age16_17_g as hsec_t_g,
                        st.age6_10_t AS pri_t,
                        st.age11_13_t AS upr_t,
                        st.age14_15_t as sec_t,
                        st.age16_17_t as hsec_t
                 FROM 
-                        school_general.keyindicators ki 
+                        school_general.sch_enr_agewise ki 
                     JOIN
-                        school_general.student_total st ON ki.state_id = st.state_id 
+                        school_general.student_total st ON ki.ac_year = st.ac_year 
                     JOIN 
                         dimensions.academic_year ay ON ki.ac_year = ay.ac_year 
                     
@@ -6966,7 +6966,7 @@ gender_parity_barchart:{
                         SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                     FROM
                         school_general.sch_enr_fresh sef
-                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                         JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                     GROUP BY
                         sef.ac_year
@@ -7020,7 +7020,7 @@ gender_parity_barchart:{
                     SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                 FROM
                     school_general.sch_enr_fresh sef
-                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                 GROUP BY
                     sef.ac_year
@@ -7066,7 +7066,7 @@ gender_parity_barchart:{
                         SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                     FROM
                         school_general.sch_enr_fresh sef
-                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                         JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                     GROUP BY
                         sef.ac_year
@@ -7118,7 +7118,7 @@ gender_parity_barchart:{
                     SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                 FROM
                     school_general.sch_enr_fresh sef
-                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                 GROUP BY
                     sef.ac_year
@@ -7163,7 +7163,7 @@ gender_parity_barchart:{
                         SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                     FROM
                         school_general.sch_enr_fresh sef
-                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                         JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                     GROUP BY
                         sef.ac_year
@@ -7215,7 +7215,7 @@ gender_parity_barchart:{
                     SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                 FROM
                     school_general.sch_enr_fresh sef
-                    JOIN school_general.student_total st ON sef.state_id = st.state_id
+                    JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                     JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                 GROUP BY
                     sef.ac_year
@@ -7262,7 +7262,7 @@ gender_parity_barchart:{
                         SUM(CASE WHEN item_group = '1' THEN c11_g + c12_g ELSE 0 END) AS hsec_g
                     FROM
                         school_general.sch_enr_fresh sef
-                        JOIN school_general.student_total st ON sef.state_id = st.state_id
+                        JOIN school_general.student_total st ON sef.ac_year = st.ac_year
                         JOIN dimensions.academic_year ay ON sef.ac_year = ay.ac_year
                     GROUP BY
                         sef.ac_year
@@ -7470,19 +7470,21 @@ school_details_bignumber_card_one: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber": `select sum(state_teacher_count) as teaching_staff
+                "bigNumber": ` select sum(state_teacher_count) as teaching_staff
 from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
 FROM school_general.tch_profile tp
 left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
+where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)
 GROUP BY school_id) as sub_query`
             },
             "actions": {
                 "queries": {
-                    "bigNumber":  `select sum(state_teacher_count) as teaching_staff
-                    from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
-                    FROM school_general.tch_profile tp
-                    left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
-                    GROUP BY school_id) as sub_query`
+                    "bigNumber":  ` select sum(state_teacher_count) as teaching_staff
+from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
+FROM school_general.tch_profile tp
+left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
+where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)
+GROUP BY school_id) as sub_query`
                 },
                 "level": "district"
             }
@@ -7511,7 +7513,8 @@ sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g 
 sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
 sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
 ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
-left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year
+where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)`
             },
             "actions": {
                 "queries": {
@@ -7520,7 +7523,8 @@ sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g 
 sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
 sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
 ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
-left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year
+where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)`
                 },
                 "level": "district"
             }
@@ -7544,12 +7548,12 @@ school_details_bignumber_card_three: {
             "valueProp": "state_id",
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
-                "bigNumber": `select count(distinct school_id) as active_schools from school_general.enrolment_info sef
+                "bigNumber": `select count(distinct school_id) as active_schools from school_general.sch_enr_fresh sef
                               left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
             },
             "actions": {
                 "queries": {
-                    "bigNumber": `select count(distinct school_id) as active_schools from school_general.enrolment_info sef
+                    "bigNumber": `select count(distinct school_id) as active_schools from school_general.sch_enr_fresh sef
                                   left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
                 },
                 "level": "district"
@@ -7575,12 +7579,12 @@ school_details_bignumber_card_four: {
             "hierarchyLevel": "1",
             "timeSeriesQueries": {
                 "bigNumber": `SELECT COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
-                              FROM school_general.enrolment_info sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
+                              FROM school_general.school_master sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
             },
             "actions": {
                 "queries": {
                     "bigNumber": `SELECT COUNT(DISTINCT CASE WHEN sd.rte_25p_admission_yn = '1' THEN school_id END) AS rte_compliant_schools
-                                   FROM school_general.enrolment_info sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
+                                   FROM school_general.school_master sd left join dimensions.academic_year ay on sd.ac_year = ay.ac_year`
                 },
                 "level": "district"
             }

@@ -366,71 +366,52 @@ export const config = {
 			"timeSeriesQueries": {
 				"table": `select tp.district_id,
 d.district_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
     FROM
     staff_details.tch_profile tp
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id
 JOIN
     dimensions.district d ON tp.district_id = d.district_id
 JOIN
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join
-  dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id
-join
-  dimensions.school_type st on tp.level_id = st.level_id
-join
-  dimensions.gender g on g.gender = tp.gender
-join
-  dimensions.social_category sc on tp.social_cat = sc.social_cat
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 GROUP BY
     tp.district_id,d.district_name
 order by 
-tp.district_id`,
+tp.district_id
+`,
 			},
 			"actions": {
 				"queries": {
 					"table": `select tp.district_id,
 d.district_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
     FROM
     staff_details.tch_profile tp
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id
 JOIN
     dimensions.district d ON tp.district_id = d.district_id
 JOIN
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join
-  dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id
-join
-  dimensions.school_type st on tp.level_id = st.level_id
-join
-  dimensions.gender g on g.gender = tp.gender
-join
-  dimensions.social_category sc on tp.social_cat = sc.social_cat
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 GROUP BY
@@ -449,35 +430,25 @@ tp.district_id`,
 			"timeSeriesQueries": {
 				"table": `select tp.block_id,
 b.block_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
 	dimensions.block b on tp.block_id = b.block_id 
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -491,43 +462,34 @@ order by
 				"queries": {
 					"table": `select tp.block_id,
 b.block_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
 	dimensions.block b on tp.block_id = b.block_id 
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
-tp.district_id = {district_id}
+ tp.district_id = {district_id}
 GROUP BY 
     tp.block_id,b.block_name
 order by 
- tp.block_id`,
+ tp.block_id
+`,
 				},
 				"level": "block"
 			}
@@ -540,21 +502,19 @@ order by
 			"timeSeriesQueries": {
 				"table": ` select tp.cluster_id,
 c.cluster_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -563,14 +523,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -584,21 +536,19 @@ tp.cluster_id`,
 				"queries": {
 					"table": ` select tp.cluster_id,
 c.cluster_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='1' then 1  end) as head_teacher,
+count(case when tp.tch_type='2' then 1  end) as acting_head_teacher,
+count(case when tp.tch_type='3' then 1 end) as teacher,
+count(case when tp.tch_type='4' then 1  end) as para_teacher,
+count(case when tp.tch_type='6' then 1 end) as principal,
+count(case when tp.tch_type='7' then 1  end) as vice_principal,
+count(case when tp.tch_type='8' then 1 end) as lecturer_ev,
+count(case when tp.tch_type='10' then 1 end) as pst,
+count(case when tp.tch_type='11' then 1 end) as tgt,
+count(case when tp.tch_type='12' then 1 end) as pet,
+count(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -607,18 +557,10 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
- tp.block_id = {block_id}
+tp.block_id = {block_id}
 GROUP BY 
     tp.cluster_id,c.cluster_name
 order by 
@@ -633,91 +575,69 @@ tp.cluster_id`,
 			"valueProp": "cluster_id",
 			"hierarchyLevel": "4",
 			"timeSeriesQueries": {
-				"table": `select tp.school_id,
-sm.school_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+				"table": `SELECT 
+    tp.school_id,
+    sm.school_name,
+    COUNT(CASE WHEN tp.tch_type = '1' THEN 1 END) AS head_teacher,
+    COUNT(CASE WHEN tp.tch_type = '2' THEN 1 END) AS acting_head_teacher,
+    COUNT(CASE WHEN tp.tch_type = '3' THEN 1 END) AS teacher,
+    COUNT(CASE WHEN tp.tch_type = '4' THEN 1 END) AS para_teacher,
+    COUNT(CASE WHEN tp.tch_type = '6' THEN 1 END) AS principal,
+    COUNT(CASE WHEN tp.tch_type = '7' THEN 1 END) AS vice_principal,
+    COUNT(CASE WHEN tp.tch_type = '8' THEN 1 END) AS lecturer_ev,
+    COUNT(CASE WHEN tp.tch_type = '10' THEN 1 END) AS pst,
+    COUNT(CASE WHEN tp.tch_type = '11' THEN 1 END) AS tgt,
+    COUNT(CASE WHEN tp.tch_type = '12' THEN 1 END) AS pet,
+    COUNT(CASE WHEN tp.tch_type IN ('1','2','3','4','6','7','8','10','11','12') THEN 1 END) AS total_teachers
 FROM
-    staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
-JOIN 
-    dimensions.district d ON tp.district_id = d.district_id 
-join 
-	dimensions.block b on tp.block_id = b.block_id 
-join 
-	dimensions.cluster c on tp.cluster_id = c.cluster_id
-JOIN 
-    dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
-JOIN
-    dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
- tp.cluster_id = {cluster_id}
-GROUP BY 
-    tp.school_id,sm.school_name
-order by 
-tp.school_id`
+    staff_details.tch_profile tp
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+JOIN dimensions.district d ON tp.district_id = d.district_id 
+JOIN dimensions.block b ON tp.block_id = b.block_id 
+JOIN dimensions.cluster c ON tp.cluster_id = c.cluster_id
+JOIN dimensions.teacher_designation td ON tp.tch_type = td.tch_type
+JOIN dimensions.academic_year ay ON tp.ac_year = ay.ac_year
+WHERE 
+    tp.cluster_id = {cluster_id}
+GROUP BY tp.school_id, sm.school_name
+ORDER BY tp.school_id;`
 			},
 			"actions": {
 				"queries": {
-					"table": `select tp.school_id,
-sm.school_name,
-sum(case when tp.tch_type='1' then 1 else 0 end) as head_teacher,
-sum(case when tp.tch_type='2' then 1 else 0 end) as acting_head_teacher,
-sum(case when tp.tch_type='3' then 1 else 0 end) as teacher,
-sum(case when tp.tch_type='4' then 1 else 0 end) as para_teacher,
-sum(case when tp.tch_type='6' then 1 else 0 end) as principal,
-sum(case when tp.tch_type='7' then 1 else 0 end) as vice_principal,
-sum(case when tp.tch_type='8' then 1 else 0 end) as lecturer_ev,
-sum(case when tp.tch_type='10' then 1 else 0 end) as pst,
-sum(case when tp.tch_type='11' then 1 else 0 end) as tgt,
-sum(case when tp.tch_type='12' then 1 else 0 end) as pet,
-sum(case when tp.tch_type in ('1','2','3','4','6','7','8','10','11','12') then 1 else 0 end) as total_teachers
+					"table": `SELECT 
+    tp.school_id,
+    sm.school_name,
+    COUNT(CASE WHEN tp.tch_type = '1' THEN 1 END) AS head_teacher,
+    COUNT(CASE WHEN tp.tch_type = '2' THEN 1 END) AS acting_head_teacher,
+    COUNT(CASE WHEN tp.tch_type = '3' THEN 1 END) AS teacher,
+    COUNT(CASE WHEN tp.tch_type = '4' THEN 1 END) AS para_teacher,
+    COUNT(CASE WHEN tp.tch_type = '6' THEN 1 END) AS principal,
+    COUNT(CASE WHEN tp.tch_type = '7' THEN 1 END) AS vice_principal,
+    COUNT(CASE WHEN tp.tch_type = '8' THEN 1 END) AS lecturer_ev,
+    COUNT(CASE WHEN tp.tch_type = '10' THEN 1 END) AS pst,
+    COUNT(CASE WHEN tp.tch_type = '11' THEN 1 END) AS tgt,
+    COUNT(CASE WHEN tp.tch_type = '12' THEN 1 END) AS pet,
+    COUNT(CASE WHEN tp.tch_type IN ('1','2','3','4','6','7','8','10','11','12') THEN 1 END) AS total_teachers
 FROM
-    staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
-JOIN 
-    dimensions.district d ON tp.district_id = d.district_id 
-join 
-	dimensions.block b on tp.block_id = b.block_id 
-join 
-	dimensions.cluster c on tp.cluster_id = c.cluster_id
-JOIN 
-    dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
-JOIN
-    dimensions.academic_year ay on tp.ac_year = ay.ac_year
-WHERE
-tp.cluster_id = {cluster_id}
-GROUP BY 
-    tp.school_id,sm.school_name
-order by 
-tp.school_id`,
+    staff_details.tch_profile tp
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+JOIN dimensions.district d ON tp.district_id = d.district_id 
+JOIN dimensions.block b ON tp.block_id = b.block_id 
+JOIN dimensions.cluster c ON tp.cluster_id = c.cluster_id
+JOIN dimensions.teacher_designation td ON tp.tch_type = td.tch_type
+JOIN dimensions.academic_year ay ON tp.ac_year = ay.ac_year
+WHERE 
+    tp.cluster_id = {cluster_id}
+GROUP BY tp.school_id, sm.school_name
+ORDER BY tp.school_id;`,
 				},
 				"level": "school"
 			}
@@ -737,8 +657,6 @@ td.designation,
 sc.category
 from
 staff_details.tch_profile tp
-join
-staff_details.schoolmaster sm on tp.school_id = sm.school_id
 JOIN
   dimensions.district d ON tp.district_id = d.district_id
 join
@@ -747,10 +665,6 @@ join
     dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join
-    dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id
-join
-    dimensions.school_type st on tp.level_id = st.level_id
 join
     dimensions.gender g on g.gender = tp.gender
 join
@@ -775,8 +689,6 @@ td.designation,
 sc.category
 from
 staff_details.tch_profile tp
-join
-staff_details.schoolmaster sm on tp.school_id = sm.school_id
 JOIN
   dimensions.district d ON tp.district_id = d.district_id
 join
@@ -785,10 +697,6 @@ join
     dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join
-    dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id
-join
-    dimensions.school_type st on tp.level_id = st.level_id
 join
     dimensions.gender g on g.gender = tp.gender
 join
@@ -1048,35 +956,25 @@ designation_second_table: {
 			"timeSeriesQueries": {
 				"table": ` select tp.district_id,
 d.district_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 GROUP BY 
@@ -1088,35 +986,25 @@ tp.district_id`
 				"queries": {
 					"table": ` select tp.district_id,
 d.district_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 GROUP BY 
@@ -1135,37 +1023,27 @@ tp.district_id`,
 			"timeSeriesQueries": {
 				"table": `select tp.block_id,
 b.block_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
    dimensions.block b on tp.block_id = b.block_id 
 JOIN 
    dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-   dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-  dimensions.school_type st on tp.level_id = st.level_id
-join
-  dimensions.gender g on g.gender = tp.gender
-join 
-  dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
   dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -1179,37 +1057,27 @@ tp.block_id`
 				"queries": {
 					"table": `select tp.block_id,
 b.block_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
    dimensions.block b on tp.block_id = b.block_id 
 JOIN 
    dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-   dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-  dimensions.school_type st on tp.level_id = st.level_id
-join
-  dimensions.gender g on g.gender = tp.gender
-join 
-  dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
   dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -1230,23 +1098,21 @@ tp.block_id`,
 			"timeSeriesQueries": {
 				"table": `select tp.cluster_id,
 c.cluster_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -1255,14 +1121,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -1276,23 +1134,21 @@ tp.cluster_id`
 				"queries": {
 					"table": `select tp.cluster_id,
 c.cluster_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
 FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -1301,14 +1157,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-	dimensions.gender g on g.gender = tp.gender
-join 
-	dimensions.social_category sc on tp.social_cat = sc.social_cat 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 WHERE
@@ -1329,23 +1177,26 @@ tp.cluster_id`,
 			"timeSeriesQueries": {
 				"table": `select tp.school_id,
 sm.school_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
  FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -1375,23 +1226,26 @@ tp.school_id`
 				"queries": {
 					"table": `select tp.school_id,
 sm.school_name,
-sum(case when tp.tch_type='13' then 1 else 0 end) as music_teacher,
-sum(case when tp.tch_type='14' then 1 else 0 end) as drawing_teacher,
-sum(case when tp.tch_type='15' then 1 else 0 end) as craft_teacher,
-sum(case when tp.tch_type='16' then 1 else 0 end) as sewing_teacher,
-sum(case when tp.tch_type='17' then 1 else 0 end) as librarian,
-sum(case when tp.tch_type='18' then 1 else 0 end) as head_master_primary,
-sum(case when tp.tch_type='19' then 1 else 0 end) as head_master_grade2,
-sum(case when tp.tch_type='20' then 1 else 0 end) as head_master_grade1,
-sum(case when tp.tch_type='21' then 1 else 0 end) as lecturer,
-sum(case when tp.tch_type='22' then 1 else 0 end) as ppst,
-sum(case when tp.tch_type='23' then 1 else 0 end) as Computer_instructor,
-sum(case when tp.tch_type='24' then 1 else 0 end) as vocal_instructor,
-sum(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 else 0 end) as total_teachers
+count(case when tp.tch_type='13' then 1 end) as music_teacher,
+count(case when tp.tch_type='14' then 1 end) as drawing_teacher,
+count(case when tp.tch_type='15' then 1 end) as craft_teacher,
+count(case when tp.tch_type='16' then 1 end) as sewing_teacher,
+count(case when tp.tch_type='17' then 1 end) as librarian,
+count(case when tp.tch_type='18' then 1 end) as head_master_primary,
+count(case when tp.tch_type='19' then 1 end) as head_master_grade2,
+count(case when tp.tch_type='20' then 1 end) as head_master_grade1,
+count(case when tp.tch_type='21' then 1 end) as lecturer,
+count(case when tp.tch_type='22' then 1 end) as ppst,
+count(case when tp.tch_type='23' then 1 end) as Computer_instructor,
+count(case when tp.tch_type='24' then 1 end) as vocal_instructor,
+count(case when tp.tch_type in ('13','14','15','16','17','18','19','20','21','22','23','24') then 1 end) as total_teachers
  FROM
     staff_details.tch_profile tp 
-JOIN
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 JOIN 
     dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -1559,16 +1413,8 @@ JOIN
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -1592,16 +1438,8 @@ JOIN
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -1634,16 +1472,8 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  tp.district_id = {district_id}
 GROUP BY 
@@ -1671,16 +1501,8 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  tp.district_id = {district_id}
 GROUP BY 
@@ -1717,16 +1539,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  b.block_id = {block_id}
 GROUP BY 
@@ -1756,16 +1570,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  b.block_id = {block_id}
 GROUP BY 
@@ -1800,20 +1606,15 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 c.cluster_id = {cluster_id}
 GROUP BY 
@@ -1841,20 +1642,15 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    staff_details.schoolmaster sm ON tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 JOIN 
     dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 c.cluster_id = {cluster_id}
 GROUP BY 
@@ -1880,8 +1676,6 @@ tp.school_id `,
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -1917,8 +1711,6 @@ tp.teacher_id`,
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -2161,18 +1953,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name   
 order by 
@@ -2201,18 +1981,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name   
 order by 
@@ -2250,18 +2018,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  d.district_id = {district_id}
 GROUP BY 
@@ -2294,18 +2050,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  d.district_id = {district_id}
 GROUP BY 
@@ -2347,18 +2091,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  b.block_id = {block_id}
 GROUP BY 
@@ -2393,18 +2125,6 @@ join
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  b.block_id = {block_id}
 GROUP BY 
@@ -2442,24 +2162,15 @@ join
 	dimensions.block b on tp.block_id = b.block_id
 join 
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
-join 
-	staff_details.schoolmaster sm on tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 join 
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 c.cluster_id = {cluster_id}
 GROUP BY 
@@ -2490,24 +2201,15 @@ join
 	dimensions.block b on tp.block_id = b.block_id
 join 
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
-join 
-	staff_details.schoolmaster sm on tp.school_id = sm.school_id 
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
 join 
 	dimensions.io io on tp.io_id = io.io_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join
-	dimensions.school_type st on tp.level_id = st.level_id
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.class_level cl on tp.class_taught  = cl.class_taught  
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 c.cluster_id = {cluster_id}
 GROUP BY 
@@ -2534,8 +2236,6 @@ td.designation,
 sc.category
 from
 staff_details.tch_profile tp
-join
-staff_details.schoolmaster sm on tp.school_id = sm.school_id
 JOIN
   dimensions.district d ON tp.district_id = d.district_id
 join
@@ -2573,8 +2273,6 @@ td.designation,
 sc.category
 from
 staff_details.tch_profile tp
-join
-staff_details.schoolmaster sm on tp.school_id = sm.school_id
 JOIN
   dimensions.district d ON tp.district_id = d.district_id
 join
@@ -2640,7 +2338,7 @@ tp.teacher_id`,
 							hierarchyLevel: 2,
 							linkedReports: [""]
 						},
-						allowedLevels: [1, 2, 3, 4, 5, 6]
+						allowedLevels: [1, 2, 3, 4,5, 6]
 					}
 				},
 				{
@@ -2828,14 +2526,6 @@ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -2859,14 +2549,6 @@ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -2898,15 +2580,7 @@ JOIN
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+    dimensions.school_type st on tp.level_id = st.level_id
 WHERE
  tp.district_id = {district_id}
 GROUP BY 
@@ -2933,15 +2607,7 @@ JOIN
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
+  	dimensions.school_type st on tp.level_id = st.level_id
 WHERE
  tp.district_id = {district_id}
 GROUP BY 
@@ -2976,16 +2642,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
   b.block_id = {block_id}
 GROUP BY 
@@ -3013,16 +2671,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 b.block_id = {block_id}
 GROUP BY 
@@ -3041,7 +2691,7 @@ ORDER BY
 			"timeSeriesQueries": {
 				"table": `select
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.level_id = '1' THEN 1 else 0 END) AS primary_school,
     sum(CASE WHEN tp.level_id = '2' THEN 1 else 0 END) AS middle_school,
     sum(CASE WHEN tp.level_id = '3' THEN 1 else 0 END) AS high_school,
@@ -3055,24 +2705,19 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
-    tp.school_id,sch.school_name
+    tp.school_id,sm.school_name
 ORDER BY
     tp.school_id`
 			},
@@ -3080,7 +2725,7 @@ ORDER BY
 				"queries": {
 					"table": `select
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.level_id = '1' THEN 1 else 0 END) AS primary_school,
     sum(CASE WHEN tp.level_id = '2' THEN 1 else 0 END) AS middle_school,
     sum(CASE WHEN tp.level_id = '3' THEN 1 else 0 END) AS high_school,
@@ -3094,24 +2739,19 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
 join 
 	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
-    tp.school_id,sch.school_name
+    tp.school_id,sm.school_name
 ORDER BY
     tp.school_id`,
 				},
@@ -3134,8 +2774,6 @@ ORDER BY
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -3173,8 +2811,6 @@ tp.teacher_id`,
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -3399,15 +3035,7 @@ JOIN
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 join 
-	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -3428,15 +3056,7 @@ JOIN
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
 join 
-	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
     tp.district_id,d.district_name
 ORDER BY
@@ -3465,16 +3085,8 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 tp.district_id = {district_id}
 GROUP BY 
@@ -3498,16 +3110,8 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 tp.district_id = {district_id}
 GROUP BY 
@@ -3540,16 +3144,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 b.block_id = {block_id}
 GROUP BY 
@@ -3575,16 +3171,8 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
 b.block_id = {block_id}
 GROUP BY 
@@ -3603,7 +3191,7 @@ ORDER BY
 			"timeSeriesQueries": {
 				"table": `select 
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.gender = '1' THEN 1 else 0 END) AS male,
     sum(CASE WHEN tp.gender = '2' THEN 1 else 0 END) AS female,
     SUM(CASE WHEN tp.gender in ('1','2') THEN 1 else 0 END) AS total_teachers
@@ -3615,24 +3203,19 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
-    tp.school_id,sch.school_name
+    tp.school_id,sm.school_name
 ORDER BY
     tp.school_id`
 			},
@@ -3640,7 +3223,7 @@ ORDER BY
 				"queries": {
 					"table": `select 
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.gender = '1' THEN 1 else 0 END) AS male,
     sum(CASE WHEN tp.gender = '2' THEN 1 else 0 END) AS female,
     SUM(CASE WHEN tp.gender in ('1','2') THEN 1 else 0 END) AS total_teachers
@@ -3652,20 +3235,15 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
 join 
 	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-join
-dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
@@ -3692,8 +3270,6 @@ ORDER BY
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -3702,10 +3278,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 	dimensions.gender g on g.gender = tp.gender
 join 
@@ -3730,8 +3302,6 @@ WHERE
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -3740,10 +3310,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 	dimensions.gender g on g.gender = tp.gender
 join 
@@ -3949,14 +3515,6 @@ JOIN
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
@@ -3980,14 +3538,6 @@ JOIN
     dimensions.district d ON tp.district_id = d.district_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type  
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 GROUP BY 
@@ -4020,14 +3570,6 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
@@ -4055,14 +3597,6 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
@@ -4099,14 +3633,6 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
@@ -4136,14 +3662,6 @@ JOIN
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
 JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
@@ -4164,7 +3682,7 @@ ORDER BY
 			"timeSeriesQueries": {
 				"table": `select 
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.social_cat = '1' THEN 1 else 0 END) AS gen_eral,
    sum(CASE WHEN tp.social_cat = '4' THEN 1 else 0 END) AS obc,
    sum(CASE WHEN tp.social_cat = '2' THEN 1 else 0 END) AS sc,
@@ -4178,24 +3696,19 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
-    tp.school_id,sch.school_name
+    tp.school_id,sm.school_name
 ORDER BY
     tp.school_id`
 			},
@@ -4203,7 +3716,7 @@ ORDER BY
 				"queries": {
 					"table": `select 
    tp.school_id,
-   sch.school_name,
+   sm.school_name,
    sum(CASE WHEN tp.social_cat = '1' THEN 1 else 0 END) AS gen_eral,
    sum(CASE WHEN tp.social_cat = '4' THEN 1 else 0 END) AS obc,
    sum(CASE WHEN tp.social_cat = '2' THEN 1 else 0 END) AS sc,
@@ -4217,24 +3730,19 @@ JOIN
     dimensions.block b ON tp.block_id = b.block_id 
 JOIN 
     dimensions.cluster c ON tp.cluster_id = c.cluster_id 
-JOIN 
-    dimensions.school sch ON tp.school_id = sch.school_id 
-JOIN
+LEFT JOIN (
+    SELECT school_id, MAX(school_name) AS school_name
+    FROM staff_details.schoolmaster
+    GROUP BY school_id
+) sm ON tp.school_id = sm.school_id
+ JOIN
     dimensions.academic_year ay on tp.ac_year = ay.ac_year
-JOIN 
-    dimensions.schoolmanagement m ON tp.sch_mgmt_id = m.schoolmanagement_id
-join 
-	dimensions.gender g on tp.gender = g.gender
-join 
-	dimensions.teacher_designation td on tp.tch_type=td.tch_type 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 dimensions.social_category sc on tp.social_cat  = sc.social_cat 
 WHERE
  c.cluster_id = {cluster_id}
 GROUP BY 
-    tp.school_id,sch.school_name
+    tp.school_id,sm.school_name
 ORDER BY
     tp.school_id`,
 				},
@@ -4256,8 +3764,6 @@ ORDER BY
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -4266,10 +3772,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 	dimensions.gender g on g.gender = tp.gender
 join 
@@ -4294,8 +3796,6 @@ tp.teacher_id`,
  sc.category 
  from
  staff_details.tch_profile tp 
- join
- staff_details.schoolmaster sm on tp.school_id = sm.school_id 
  JOIN 
   dimensions.district d ON tp.district_id = d.district_id 
 join 
@@ -4304,10 +3804,6 @@ join
 	dimensions.cluster c on tp.cluster_id = c.cluster_id
 JOIN 
     dimensions.teacher_designation td  ON tp.tch_type = td.tch_type
-join 
-	dimensions.schoolmanagement m on tp.sch_mgmt_id= m.schoolmanagement_id 
-join 
-	dimensions.school_type st on tp.level_id = st.level_id
 join
 	dimensions.gender g on g.gender = tp.gender
 join 
