@@ -7474,7 +7474,6 @@ school_details_bignumber_card_one: {
 from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
 FROM school_general.tch_profile tp
 left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
-where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)
 GROUP BY school_id) as sub_query`
             },
             "actions": {
@@ -7483,7 +7482,6 @@ GROUP BY school_id) as sub_query`
 from (SELECT COUNT(DISTINCT CONCAT(school_id, '_', tch_name)) AS state_teacher_count
 FROM school_general.tch_profile tp
 left join dimensions.academic_year ay on tp.ac_year = ay.ac_year
-where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)
 GROUP BY school_id) as sub_query`
                 },
                 "level": "district"
@@ -7513,8 +7511,7 @@ sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g 
 sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
 sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
 ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
-left join dimensions.academic_year ay on sef.ac_year = ay.ac_year
-where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)`
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
             },
             "actions": {
                 "queries": {
@@ -7523,8 +7520,7 @@ sef.pp1_b+sef.pp1_g+sef.pp2_b+sef.pp2_g+sef.pp3_b+sef.pp3_g+sef.c1_b + sef.c1_g 
 sef.c6_b + sef.c6_g + sef.c7_b + sef.c7_g + sef.c8_b + sef.c8_g+sef.c9_b + sef.c9_g + sef.c10_b + sef.c10_g+
 sef.c11_b + sef.c11_g + sef.c12_b + sef.c12_g
 ELSE 0 END) AS total_students FROM school_general.sch_enr_fresh sef
-left join dimensions.academic_year ay on sef.ac_year = ay.ac_year
-where ay.ac_year = (select max(tp.ac_year) from school_general.tch_profile tp)`
+left join dimensions.academic_year ay on sef.ac_year = ay.ac_year`
                 },
                 "level": "district"
             }
